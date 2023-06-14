@@ -13,7 +13,7 @@ data class NetworkUser(
 
 fun NetworkUser.asEntity(): UserEntity {
     return UserEntity(
-        id = id,
+        userId = id,
         name = name
     )
 }

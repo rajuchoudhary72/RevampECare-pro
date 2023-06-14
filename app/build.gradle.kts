@@ -2,8 +2,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.firebaseCrashlytics)
     kotlin("kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 kapt {
@@ -43,6 +44,18 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    flavorDimensions += listOf("build")
+    productFlavors {
+        create("dev") {
+            dimension = "build"
+            applicationIdSuffix = ".dev"
+        }
+        create("prod") {
+            dimension = "build"
+        }
+    }
+
 }
 
 dependencies {
@@ -70,6 +83,12 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    /* Firebase */
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.cloud.messaging)
 
 
     testImplementation(libs.junit)
