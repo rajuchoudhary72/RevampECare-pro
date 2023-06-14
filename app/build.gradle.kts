@@ -94,12 +94,12 @@ dependencies {
     /* Pin View */
     implementation(libs.otpview)
 
+    /* Epoxy Recycler View */
     implementation(libs.epoxy)
     kapt(libs.epoxy.processor)
     implementation(libs.epoxy.databinding)
 
     implementation(libs.decorator)
-
 
 
     testImplementation(libs.junit)

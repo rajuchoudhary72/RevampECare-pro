@@ -48,19 +48,18 @@ class SearchInstitutionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.addSystemWindowInsetToPadding(
-            topWindowInsetToPadding = true,
+        binding.toolbar.addSystemWindowInsetToPadding(
+            topWindowInsetToPadding = true
+        )
+        binding.recyclerViewInstitute.addSystemWindowInsetToPadding(
             bottomWindowInsetToPadding = true
         )
 
         binding.btnClose.setOnClickListener { findNavController().popBackStack() }
 
         binding.recyclerViewInstitute.addItemDecoration(
-            LinearMarginDecoration(
-                topMargin = resources.getDimensionPixelSize(R.dimen.vertical_margin),
-                bottomMargin = resources.getDimensionPixelSize(R.dimen.vertical_margin),
-                leftMargin = resources.getDimensionPixelSize(R.dimen.horizontal_margin),
-                rightMargin = resources.getDimensionPixelSize(R.dimen.horizontal_margin)
+            LinearMarginDecoration.create(
+                margin = resources.getDimensionPixelSize(R.dimen.horizontal_margin),
             )
         )
 
