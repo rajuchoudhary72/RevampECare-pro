@@ -1,47 +1,50 @@
-package com.app.ecarepro.ui.splash
+package com.app.ecarepro.ui.institutioncode
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.FragmentSplashBinding
+import com.app.ecarepro.databinding.FragmentInstitutionCodeBinding
+import com.app.ecarepro.utils.addSystemWindowInsetToPadding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 
 @AndroidEntryPoint
-class SplashFragment : Fragment() {
+class InstitutionCodeFragment : Fragment() {
 
-    private var _binding: FragmentSplashBinding? = null
+    private var _binding: FragmentInstitutionCodeBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val mViewModel: InstitutionCodeViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSplashBinding.inflate(inflater, container, false)
+        _binding = FragmentInstitutionCodeBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            findNavController().navigate(R.id.action_splashFragment_to_schoolCodeFragment)
+        view.addSystemWindowInsetToPadding(topWindowInsetToPadding = true)
+
+        binding.btnFindSchoolCollege.setOnClickListener {
+            findNavController().navigate(R.id.searchInstitutionFragment)
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

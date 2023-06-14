@@ -32,8 +32,8 @@
     </style>
 
     <style name="TextAppearance.ECarePro.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/ubuntu_regular</item>
-        <item name="android:fontFamily">@font/ubuntu_regular</item>
+        <item name="fontFamily">@font/ubuntu_medium</item>
+        <item name="android:fontFamily">@font/ubuntu_medium</item>
     </style>
 
     <style name="TextAppearance.ECarePro.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
@@ -62,18 +62,18 @@
     </style>
 
     <style name="TextAppearance.ECarePro.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
-        <item name="fontFamily">@font/ubuntu_medium</item>
-        <item name="android:fontFamily">@font/ubuntu_medium</item>
+        <item name="fontFamily">@font/ubuntu_light</item>
+        <item name="android:fontFamily">@font/ubuntu_light</item>
     </style>
 
     <style name="TextAppearance.ECarePro.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
-        <item name="fontFamily">@font/ubuntu_medium</item>
-        <item name="android:fontFamily">@font/ubuntu_medium</item>
+        <item name="fontFamily">@font/ubuntu_light</item>
+        <item name="android:fontFamily">@font/ubuntu_light</item>
     </style>
 
     <style name="TextAppearance.ECarePro.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
-        <item name="fontFamily">@font/ubuntu_medium</item>
-        <item name="android:fontFamily">@font/ubuntu_medium</item>
+        <item name="fontFamily">@font/ubuntu_light</item>
+        <item name="android:fontFamily">@font/ubuntu_light</item>
     </style>
 
 

@@ -15,7 +15,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.franciscan.ecare_pro"
+        applicationId = "com.franciscan.ecare_pro.dev"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -42,6 +42,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -70,6 +71,16 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    /* Pin View */
+    implementation(libs.otpview)
+
+    implementation(libs.epoxy)
+    kapt(libs.epoxy.processor)
+    implementation(libs.epoxy.databinding)
+
+    implementation(libs.decorator)
+
 
 
     testImplementation(libs.junit)
