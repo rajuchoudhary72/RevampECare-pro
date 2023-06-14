@@ -2,8 +2,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.firebaseCrashlytics)
     kotlin("kapt")
-    id("com.google.dagger.hilt.android")
 }
 
 kapt {
@@ -15,7 +16,7 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.franciscan.ecare_pro.dev"
+        applicationId = "com.franciscan.ecare_pro"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -44,6 +45,18 @@ android {
         viewBinding = true
         dataBinding = true
     }
+
+    flavorDimensions += listOf("build")
+    productFlavors {
+        create("dev") {
+            dimension = "build"
+            applicationIdSuffix = ".dev"
+        }
+        create("prod") {
+            dimension = "build"
+        }
+    }
+
 }
 
 dependencies {
@@ -71,6 +84,12 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+
+    /* Firebase */
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.cloud.messaging)
 
     /* Pin View */
     implementation(libs.otpview)
