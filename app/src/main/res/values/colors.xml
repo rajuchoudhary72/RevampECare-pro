@@ -61,4 +61,14 @@
     <color name="md_theme_dark_surfaceTint">#3CE44A</color>
     <color name="md_theme_dark_outlineVariant">#42493F</color>
     <color name="md_theme_dark_scrim">#000000</color>
+
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF352F</color>
+
+
+    <color name="immersive_sys_ui">#33000000</color>
+    <color name="nav_bar">@color/immersive_sys_ui</color>
+    <color name="transparent">#00000000</color>
 </resources>

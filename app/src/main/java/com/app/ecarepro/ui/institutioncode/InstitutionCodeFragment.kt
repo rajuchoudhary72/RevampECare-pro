@@ -12,17 +12,12 @@ import com.app.ecarepro.databinding.FragmentInstitutionCodeBinding
 import com.app.ecarepro.utils.addSystemWindowInsetToPadding
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 
 @AndroidEntryPoint
 class InstitutionCodeFragment : Fragment() {
 
     private var _binding: FragmentInstitutionCodeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     private val mViewModel: InstitutionCodeViewModel by viewModels()
@@ -39,6 +34,10 @@ class InstitutionCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.addSystemWindowInsetToPadding(topWindowInsetToPadding = true)
+
+        binding.btnContinue.setOnClickListener {
+            findNavController().navigate(R.id.signInFragment)
+        }
 
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(R.id.searchInstitutionFragment)

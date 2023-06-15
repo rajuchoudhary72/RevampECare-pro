@@ -99,8 +99,11 @@ dependencies {
     kapt(libs.epoxy.processor)
     implementation(libs.epoxy.databinding)
 
+    /* RecyclerView Item Decorations */
     implementation(libs.decorator)
 
+    /* Page indicator */
+    implementation (libs.scrollingpagerindicator)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

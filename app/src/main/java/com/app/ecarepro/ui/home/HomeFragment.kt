@@ -9,17 +9,14 @@ import androidx.fragment.app.viewModels
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+   
     private val binding get() = _binding!!
 
     private val mViewModel: HomeViewModel by viewModels()

@@ -1,44 +1,40 @@
-package com.app.ecarepro.ui.splash
+package com.app.ecarepro.ui.forgotpassword
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.app.ecarepro.R
-import com.app.ecarepro.databinding.FragmentSplashBinding
+import com.app.ecarepro.databinding.FragmentForgotPasswordBinding
+import com.app.ecarepro.utils.addSystemWindowInsetToMargin
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
-
 
 @AndroidEntryPoint
-class SplashFragment : Fragment() {
+class ForgotPasswordFragment : Fragment() {
 
-    private var _binding: FragmentSplashBinding? = null
-
-   
+    private var _binding: FragmentForgotPasswordBinding? = null
     private val binding get() = _binding!!
+
+    private val mViewModel: ForgotPasswordViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSplashBinding.inflate(inflater, container, false)
+        _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            findNavController().navigate(R.id.action_splashFragment_to_schoolCodeFragment)
-        }
+        binding.img.addSystemWindowInsetToMargin(topWindowInsetToMargin = true)
+
+        binding.btnClose.setOnClickListener { findNavController().popBackStack() }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

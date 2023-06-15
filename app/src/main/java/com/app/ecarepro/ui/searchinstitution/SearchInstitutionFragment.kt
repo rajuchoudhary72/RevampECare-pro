@@ -18,17 +18,14 @@ import com.rubensousa.decorator.LinearDividerDecoration
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
+
 
 @AndroidEntryPoint
 class SearchInstitutionFragment : Fragment() {
 
     private var _binding: FragmentSearchInstitutionBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+   
     private val binding get() = _binding!!
 
     private val mViewModel: SearchInstitutionViewModel by viewModels()

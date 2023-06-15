@@ -35,11 +35,15 @@
         android:id="@+id/schoolCodeFragment"
         android:name="com.app.ecarepro.ui.institutioncode.InstitutionCodeFragment"
         android:label="SchoolCodeFragment"
-        tools:layout="@layout/fragment_institution_code" >
+        tools:layout="@layout/fragment_institution_code">
 
         <action
             android:id="@+id/action_schoolCodeFragment_to_searchInstitutionFragment"
             app:destination="@id/searchInstitutionFragment" />
+
+        <action
+            android:id="@+id/action_schoolCodeFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
 
     </fragment>
 
@@ -48,5 +52,21 @@
         android:name="com.app.ecarepro.ui.searchinstitution.SearchInstitutionFragment"
         android:label="SearchInstitutionFragment"
         tools:layout="@layout/fragment_search_institution" />
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.app.ecarepro.ui.signin.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.app.ecarepro.ui.forgotpassword.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password" />
 
 </navigation>

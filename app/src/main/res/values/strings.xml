@@ -9,4 +9,11 @@
     <string name="continue_">Continue</string>
     <string name="search_your_school_college">Search Your School/College</string>
     <string name="enter_your_search_query_here">Enter your search query here…</string>
+    <string name="welcome_to">Welcome To</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forget_password"><u>Forget Password?</u></string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="forgot_password_">Forgot Password?</string>
 </resources>
