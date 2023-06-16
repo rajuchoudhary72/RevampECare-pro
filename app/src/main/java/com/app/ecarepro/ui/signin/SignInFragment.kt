@@ -69,6 +69,10 @@ class SignInFragment : Fragment() {
             findNavController().navigate(R.id.forgotPasswordFragment)
         }
 
+        binding.btnHelp.setOnClickListener {
+            findNavController().navigate(R.id.helpFragment)
+        }
+
     }
 
 

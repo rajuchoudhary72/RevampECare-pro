@@ -7,7 +7,16 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
+import androidx.databinding.BindingAdapter
 
+
+@BindingAdapter(
+    "leftWindowInsetToPadding",
+    "topWindowInsetToPadding",
+    "rightWindowInsetToPadding",
+    "bottomWindowInsetToPadding",
+    requireAll = false
+)
 fun View.addSystemWindowInsetToPadding(
     leftWindowInsetToPadding: Boolean = false,
     topWindowInsetToPadding: Boolean = false,
@@ -30,6 +39,13 @@ fun View.addSystemWindowInsetToPadding(
     }
 }
 
+@BindingAdapter(
+    "leftWindowInsetToMargin",
+    "topWindowInsetToMargin",
+    "rightWindowInsetToMargin",
+    "bottomWindowInsetToMargin",
+    requireAll = false
+)
 fun View.addSystemWindowInsetToMargin(
     leftWindowInsetToMargin: Boolean = false,
     topWindowInsetToMargin: Boolean = false,

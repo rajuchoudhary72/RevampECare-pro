@@ -42,6 +42,9 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(R.id.searchInstitutionFragment)
         }
+        binding.btnHelp.setOnClickListener {
+            findNavController().navigate(R.id.helpFragment)
+        }
     }
 
 

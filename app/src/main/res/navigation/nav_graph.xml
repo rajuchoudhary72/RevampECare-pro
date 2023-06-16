@@ -69,4 +69,16 @@
         android:label="ForgotPasswordFragment"
         tools:layout="@layout/fragment_forgot_password" />
 
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.app.ecarepro.ui.help.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help" />
+
+    <fragment
+        tools:layout="@layout/fragment_web_view"
+        android:id="@+id/webViewFragment"
+        android:name="com.app.ecarepro.ui.webview.WebViewFragment"
+        android:label="WebViewFragment" />
+
 </navigation>
