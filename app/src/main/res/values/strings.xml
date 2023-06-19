@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ECarePro</string>
+    <string name="action_settings">Settings</string>
+
+    <!--School/College Code-->
+    <string name="help">Help</string>
+    <string name="please_enter_school_college_code">Please Enter School/College Code</string>
+    <string name="find_your_school_college_code"><u>Find Your School/College Code</u></string>
+    <string name="continue_">Continue</string>
+    <string name="search_your_school_college">Search Your School/College</string>
+    <string name="enter_your_search_query_here">Enter your search query here…</string>
+    <string name="welcome_to">Welcome To</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="forget_password"><u>Forget Password?</u></string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="forgot_password_">Forgot Password?</string>
+    <string name="faqs">FAQs</string>
+    <string name="contact_no">Contact No :</string>
+    <string name="email">Email :</string>
+</resources>

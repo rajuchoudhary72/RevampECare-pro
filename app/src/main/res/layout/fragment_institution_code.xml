@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_help"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/ubuntu_light"
+        android:text="@string/help"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        app:icon="@drawable/outline_help_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_ecare_logo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="64dp"
+        android:src="@drawable/ic_ecare_pro_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_help"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/label_please_enter_school_college_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ubuntu_medium"
+        android:text="@string/please_enter_school_college_code"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_ecare_logo" />
+
+    <com.mukeshsolanki.OtpView
+        android:id="@+id/text_institution_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:focusableInTouchMode="true"
+        android:fontFamily="@font/ubuntu_medium"
+        android:includeFontPadding="false"
+        android:inputType="text"
+        android:itemBackground="@drawable/bg_outline_round_corner_green"
+        android:textAllCaps="true"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="20sp"
+        app:OtpItemCount="6"
+        app:OtpItemSpacing="6dp"
+        app:OtpViewType="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_please_enter_school_college_code" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_find_school_college"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/ubuntu_light"
+        android:text="@string/find_your_school_college_code"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_institution_code" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/ubuntu_medium"
+        android:text="@string/continue_"
+        android:textAppearance="?attr/textAppearanceLabelLarge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_find_school_college" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.app.ecarepro.ui.splash.SplashFragment"
+        tools:layout="@layout/fragment_splash">
+
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_splashFragment_to_schoolCodeFragment"
+            app:destination="@id/schoolCodeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.app.ecarepro.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/schoolCodeFragment"
+        android:name="com.app.ecarepro.ui.institutioncode.InstitutionCodeFragment"
+        android:label="SchoolCodeFragment"
+        tools:layout="@layout/fragment_institution_code">
+
+        <action
+            android:id="@+id/action_schoolCodeFragment_to_searchInstitutionFragment"
+            app:destination="@id/searchInstitutionFragment" />
+
+        <action
+            android:id="@+id/action_schoolCodeFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchInstitutionFragment"
+        android:name="com.app.ecarepro.ui.searchinstitution.SearchInstitutionFragment"
+        android:label="SearchInstitutionFragment"
+        tools:layout="@layout/fragment_search_institution" />
+
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.app.ecarepro.ui.signin.SignInFragment"
+        android:label="SignInFragment"
+        tools:layout="@layout/fragment_sign_in">
+        <action
+            android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.app.ecarepro.ui.forgotpassword.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password" />
+
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.app.ecarepro.ui.help.HelpFragment"
+        android:label="HelpFragment"
+        tools:layout="@layout/fragment_help" />
+
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.app.ecarepro.ui.webview.WebViewFragment"
+        android:label="WebViewFragment"
+        tools:layout="@layout/fragment_web_view" />
+
+</navigation>
