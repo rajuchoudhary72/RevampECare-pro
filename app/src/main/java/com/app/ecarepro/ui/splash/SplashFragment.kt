@@ -36,7 +36,7 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.action_splashFragment_to_schoolCodeFragment)
+            findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
         }
     }
 

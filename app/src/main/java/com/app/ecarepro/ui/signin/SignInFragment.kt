@@ -73,6 +73,11 @@ class SignInFragment : Fragment() {
             findNavController().navigate(R.id.helpFragment)
         }
 
+        binding.btnNext.setOnClickListener {
+            findNavController().navigate(R.id.homeFragment)
+        }
+
+
     }
 
 
