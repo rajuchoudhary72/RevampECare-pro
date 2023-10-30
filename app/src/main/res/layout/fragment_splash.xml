@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.splash.SplashFragment">
 
-    <View
+    <ImageView
         android:id="@+id/background_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/splash_gradient" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
