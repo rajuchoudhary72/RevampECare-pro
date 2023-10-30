@@ -10,6 +10,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         app:strokeWidth="1dp"
+        app:cardBackgroundColor="@color/white"
         app:contentPadding="10dp"
         app:strokeColor="@color/green_10"
         android:layout_height="wrap_content">

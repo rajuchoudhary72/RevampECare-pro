@@ -20,4 +20,15 @@
     <string name="contact_no">Contact No :</string>
     <string name="email">Email :</string>
     <string name="welcome">Welcome <b>Pooja Verma!</b></string>
+
+
+    <string name="onboarding_title_1">School ERP on\nyour’s finger tips</string>
+    <string name="onboarding_description_1">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
+
+
+
+    <string name="onboarding_title_2">Manage your School\nManagement</string>
+    <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
+
+
 </resources>
