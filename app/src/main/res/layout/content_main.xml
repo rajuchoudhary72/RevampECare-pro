@@ -29,6 +29,7 @@
             android:layout_width="match_parent"
             tools:visibility="visible"
             app:cbn_bg="?attr/colorPrimary"
+            bottomWindowInsetToPadding="@{true}"
             app:cbn_fabBg="?attr/colorPrimary"
             app:cbn_selectedColor="@color/white"
             app:cbn_unSelectedColor="@color/grey_40"

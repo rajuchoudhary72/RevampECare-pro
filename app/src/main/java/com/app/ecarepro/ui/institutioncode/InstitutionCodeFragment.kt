@@ -33,7 +33,6 @@ class InstitutionCodeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.addSystemWindowInsetToPadding(topWindowInsetToPadding = true)
 
         binding.btnContinue.setOnClickListener {
             findNavController().navigate(R.id.signInFragment)
