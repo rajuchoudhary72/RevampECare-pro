@@ -111,7 +111,7 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_find_school_college"
+            android:id="@+id/btn_forgot_password"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -137,7 +137,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_find_school_college"
+            app:layout_constraintTop_toBottomOf="@+id/btn_forgot_password"
             app:layout_constraintVertical_bias="0.0"
             app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium"
             app:strokeColor="@color/brand_color" />
@@ -154,7 +154,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_previous"
-            app:layout_constraintTop_toBottomOf="@+id/btn_find_school_college"
+            app:layout_constraintTop_toBottomOf="@+id/btn_forgot_password"
             app:layout_constraintVertical_bias="0.0"
             app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
 

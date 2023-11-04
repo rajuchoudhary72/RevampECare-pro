@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
@@ -106,6 +107,9 @@ class HomeFragment : Fragment() {
             viewAllWidget {
                 id("view_all_widget")
                 spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                clickListener{_ ->
+                    findNavController().navigate(R.id.widgetsFragment)
+                }
             }
 
             labelCenter {

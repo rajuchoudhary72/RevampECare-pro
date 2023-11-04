@@ -37,7 +37,6 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnContinue.setOnClickListener {
             findNavController().navigate(R.id.signInFragment)
         }
-
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(R.id.searchInstitutionFragment)
         }

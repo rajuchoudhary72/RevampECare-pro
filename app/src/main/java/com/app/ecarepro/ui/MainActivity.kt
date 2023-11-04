@@ -12,8 +12,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.cardOption
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
+import com.app.ecarepro.utils.slideVisibility
+import com.rubensousa.decorator.ColumnProvider
+import com.rubensousa.decorator.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-    private val navController:NavController by lazy {
+    private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
 
@@ -44,6 +48,27 @@ class MainActivity : AppCompatActivity() {
 
         setUpBottomNavigationView()
 
+        setUpMoreOptions()
+
+    }
+
+    private fun setUpMoreOptions() {
+
+        binding.contentMain.recyclerViewMoreOptions.addItemDecoration(GridMarginDecoration.create(
+            margin = resources.getDimensionPixelOffset(R.dimen.vertical_margin),
+            columnProvider = object : ColumnProvider {
+                override fun getNumberOfColumns(): Int {
+                    return 3
+                }
+
+            }
+        ))
+
+        binding.contentMain.recyclerViewMoreOptions.withModels {
+            (0..16).forEach {
+                cardOption { id(it) }
+            }
+        }
     }
 
     private fun setUpBottomNavigationView() {
@@ -52,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_home,
                 R.drawable.avd_home,
                 R.id.homeFragment
-            ),/*
+            ),
             CbnMenuItem(
                 R.drawable.ic_settings,
                 R.drawable.avd_settings,
@@ -72,10 +97,14 @@ class MainActivity : AppCompatActivity() {
                 R.drawable.ic_profile,
                 R.drawable.avd_profile,
                 R.id.helpFragment
-            )*/
+            )
         )
-        binding.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
+        binding.contentMain.bottomNavigationView.setMenuItems(menuItems, 2)
         binding.contentMain.bottomNavigationView.setupWithNavController(navController)
+
+        binding.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, _ ->
+            binding.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

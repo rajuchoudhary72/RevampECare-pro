@@ -29,14 +29,14 @@
             app:destination="@id/onboardingFragment"
             app:launchSingleTop="true"
             app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
 
     </fragment>
 
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.app.ecarepro.ui.onboarding.OnboardingFragment"
-        android:label="OnboardingFragment" >
+        android:label="OnboardingFragment">
 
         <action
             android:id="@+id/action_onboardingFragment_to_homeFragment"
@@ -81,6 +81,14 @@
         <action
             android:id="@+id/action_signInFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
+
+
+        <action
+            android:id="@+id/action_signInFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/signInFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -96,10 +104,15 @@
         tools:layout="@layout/fragment_help" />
 
     <fragment
-        tools:layout="@layout/fragment_web_view"
         android:id="@+id/webViewFragment"
         android:name="com.app.ecarepro.ui.webview.WebViewFragment"
-        android:label="WebViewFragment" />
+        android:label="WebViewFragment"
+        tools:layout="@layout/fragment_web_view" />
 
+    <fragment
+        android:id="@+id/widgetsFragment"
+        android:name="com.app.ecarepro.ui.widget.WidgetsFragment"
+        android:label="WidgetsFragment"
+        tools:layout="@layout/fragment_widgets" />
 
 </navigation>
