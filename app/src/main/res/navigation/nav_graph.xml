@@ -115,4 +115,16 @@
         android:label="WidgetsFragment"
         tools:layout="@layout/fragment_widgets" />
 
+    <fragment
+        android:id="@+id/favouritesFragment"
+        tools:layout="@layout/fragment_favourites"
+        android:name="com.app.ecarepro.ui.favourites.FavouritesFragment"
+        android:label="FavouritesFragment" />
+
+    <fragment
+        android:id="@+id/notificationFragment"
+        tools:layout="@layout/fragment_notification"
+        android:name="com.app.ecarepro.ui.notification.NotificationFragment"
+        android:label="NotificationFragment" />
+
 </navigation>

@@ -1,4 +1,5 @@
 [versions]
+activity-ktx = "1.8.0"
 agp = "8.0.0"
 datastore-preferences = "1.0.0"
 decorator = "2.0.0"
@@ -25,6 +26,7 @@ firebase-bom = "32.1.0"
 scrollingpagerindicator = "1.2.4"
 
 [libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }

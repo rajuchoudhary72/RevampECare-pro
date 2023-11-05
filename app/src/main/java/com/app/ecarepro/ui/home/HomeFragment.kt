@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
@@ -13,6 +14,7 @@ import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.labelCenter
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.viewAllWidget
 import com.rubensousa.decorator.ColumnProvider
@@ -26,11 +28,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-
     private val binding get() = _binding!!
 
     private val mViewModel: HomeViewModel by viewModels()
+
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +45,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
 
         mViewModel.insertUser()
 
@@ -120,6 +124,9 @@ class HomeFragment : Fragment() {
             (12..22).forEach {
                 cardOption {
                     id(it)
+                    clickListener{_ ->
+                        findNavController().navigate(R.id.favouritesFragment)
+                    }
                 }
             }
         }

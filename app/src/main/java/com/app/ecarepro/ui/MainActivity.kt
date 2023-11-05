@@ -3,6 +3,7 @@ package com.app.ecarepro.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
@@ -14,6 +15,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.databinding.ActivityMainBinding
+import com.app.ecarepro.drawerFooter
+import com.app.ecarepro.drawerHeader
+import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.slideVisibility
 import com.rubensousa.decorator.ColumnProvider
@@ -26,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private val systemViewModel: SystemViewModel by viewModels()
+
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
@@ -37,34 +43,65 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(binding.appBarMain.toolbar)
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.contentMain.bottomNavigationView.isVisible = destination.id == R.id.homeFragment
+            binding.appBarMain.contentMain.bottomNavigationView.isVisible =
+                destination.id == R.id.homeFragment
         }
+
+        setUpDrawer()
 
         setUpBottomNavigationView()
 
         setUpMoreOptions()
 
+
+    }
+
+    private fun setUpDrawer() {
+        systemViewModel.openNavigationDrawer.observe(this) { open ->
+            if (open) {
+                binding.drawerLayout.open()
+            } else {
+                binding.drawerLayout.close()
+            }
+        }
+
+
+        binding.recyclerViewNavView.withModels {
+            drawerHeader {
+                id(R.id.drawer_header)
+            }
+            (0..6).forEach {
+                drawerItem {
+                    id(it)
+                }
+            }
+            drawerFooter {
+                id(R.id.drawer_footer)
+            }
+        }
+        binding.drawerLayout.open()
     }
 
     private fun setUpMoreOptions() {
 
-        binding.contentMain.recyclerViewMoreOptions.addItemDecoration(GridMarginDecoration.create(
-            margin = resources.getDimensionPixelOffset(R.dimen.vertical_margin),
-            columnProvider = object : ColumnProvider {
-                override fun getNumberOfColumns(): Int {
-                    return 3
+        binding.appBarMain.contentMain.recyclerViewMoreOptions.addItemDecoration(
+            GridMarginDecoration.create(
+                margin = resources.getDimensionPixelOffset(R.dimen.vertical_margin),
+                columnProvider = object : ColumnProvider {
+                    override fun getNumberOfColumns(): Int {
+                        return 3
+                    }
+
                 }
+            ))
 
-            }
-        ))
-
-        binding.contentMain.recyclerViewMoreOptions.withModels {
+        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
             (0..16).forEach {
                 cardOption { id(it) }
             }
@@ -99,11 +136,20 @@ class MainActivity : AppCompatActivity() {
                 R.id.helpFragment
             )
         )
-        binding.contentMain.bottomNavigationView.setMenuItems(menuItems, 2)
-        binding.contentMain.bottomNavigationView.setupWithNavController(navController)
+        binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems)
+        binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
-        binding.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, _ ->
-            binding.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
+        binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
+            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
+
+            when (position) {
+                0 -> {}
+                1 -> {}
+                3 -> {
+                    navController.navigate(R.id.notificationFragment)
+                }
+                4 -> {}
+            }
         }
     }
 

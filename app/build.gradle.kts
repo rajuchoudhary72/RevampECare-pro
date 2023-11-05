@@ -67,7 +67,7 @@ dependencies {
     implementation (libs.androidx.recyclerview)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-
+    implementation (libs.androidx.activity.ktx)
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
