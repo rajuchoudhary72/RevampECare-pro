@@ -5,24 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyTouchHelper
-import com.airbnb.epoxy.EpoxyTouchHelper.DragCallbacks
-import com.app.ecarepro.DashboardCardBindingModel_
-import com.app.ecarepro.R
-import com.app.ecarepro.dashboardCard
-import com.app.ecarepro.databinding.FragmentNotificationBinding
-import com.app.ecarepro.databinding.FragmentWidgetsBinding
-import com.app.ecarepro.notificationCard
-import com.rubensousa.decorator.LinearMarginDecoration
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.app.ecarepro.databinding.FragmentMessageBinding
+import com.app.ecarepro.ui.message.inbox.InboxMessageFragment
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class MessageFragment : Fragment() {
 
-    private var _binding: FragmentNotificationBinding? = null
+    private var _binding: FragmentMessageBinding? = null
 
     private val binding get() = _binding!!
 
@@ -30,12 +23,35 @@ class MessageFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentNotificationBinding.inflate(inflater, container, false)
+        _binding = FragmentMessageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpViewPager()
+    }
+
+    private fun setUpViewPager() {
+
+        val tabItem = mutableListOf("Inbox", "Sent")
+
+        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount(): Int {
+                return tabItem.size
+            }
+
+            override fun createFragment(position: Int): Fragment {
+                return InboxMessageFragment()
+            }
+
+        }
+
+        TabLayoutMediator(
+            binding.tabLayout, binding.viewPager
+        ) { tab, position ->
+            tab.text = tabItem[position]
+        }.attach()
 
     }
 

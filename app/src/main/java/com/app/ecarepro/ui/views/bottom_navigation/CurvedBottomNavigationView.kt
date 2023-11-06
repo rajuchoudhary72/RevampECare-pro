@@ -109,7 +109,7 @@ class CurvedBottomNavigationView @JvmOverloads constructor(
                 invalidate()
             }
         }
-    var navBackgroundColor = Color.WHITE
+    var navBackgroundColor = Color.TRANSPARENT
         set(value) {
             field = value
             navPaint.color = value

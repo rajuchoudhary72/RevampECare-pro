@@ -36,6 +36,13 @@ class MainActivity : AppCompatActivity() {
         findNavController(R.id.nav_host_fragment_content_main)
     }
 
+    private val topLevelFragments = mutableListOf(
+        R.id.homeFragment,
+        R.id.dashboardFragment,
+        R.id.notificationFragment,
+        R.id.messageFragment,
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -49,8 +56,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.appBarMain.contentMain.bottomNavigationView.isVisible =
-                destination.id == R.id.homeFragment
+            binding.appBarMain.contentMain.bottomNavigationView.isVisible = topLevelFragments.contains(destination.id)
         }
 
         setUpDrawer()
@@ -58,8 +64,6 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
-
-
     }
 
     private fun setUpDrawer() {
@@ -118,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             CbnMenuItem(
                 R.drawable.ic_settings,
                 R.drawable.avd_settings,
-                R.id.signInFragment
+                R.id.dashboardFragment
             ),
             CbnMenuItem(
                 R.drawable.ic_dashboard,
@@ -128,12 +132,12 @@ class MainActivity : AppCompatActivity() {
             CbnMenuItem(
                 R.drawable.ic_notification,
                 R.drawable.avd_notification,
-                R.id.forgotPasswordFragment
+                R.id.notificationFragment
             ),
             CbnMenuItem(
                 R.drawable.ic_profile,
                 R.drawable.avd_profile,
-                R.id.helpFragment
+                R.id.messageFragment
             )
         )
         binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems)
@@ -143,12 +147,18 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
 
             when (position) {
-                0 -> {}
-                1 -> {}
+                0 -> {
+                    navController.navigate(R.id.homeFragment)
+                }
+                1 -> {
+                    navController.navigate(R.id.dashboardFragment)
+                }
                 3 -> {
                     navController.navigate(R.id.notificationFragment)
                 }
-                4 -> {}
+                4 -> {
+                    navController.navigate(R.id.messageFragment)
+                }
             }
         }
     }

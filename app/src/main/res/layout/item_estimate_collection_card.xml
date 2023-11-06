@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isExpanded"
+            type="java.lang.Boolean" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:contentPadding="16dp"
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="24dp"
+        app:strokeColor="#DFE5DB">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+            <ImageView
+                android:id="@+id/image_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="@{isExpanded ? 90:0}"
+                android:src="@drawable/ic_arrow_right_black"
+                app:layout_constraintBottom_toBottomOf="@+id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:drawablePadding="6dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center_vertical"
+                android:paddingVertical="5dp"
+                android:text="Estimated Collection"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_arrow"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".5" />
+
+
+            <ImageView
+                android:id="@+id/img_estimated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_estimated"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barChart"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_estimated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_regular"
+                android:layout_marginStart="10dp"
+                android:text="Estimated"
+                android:textColor="@color/grey_40"
+                app:layout_constraintBottom_toTopOf="@+id/text_estimated_amount"
+                app:layout_constraintStart_toEndOf="@+id/img_estimated"
+                app:layout_constraintTop_toTopOf="@+id/img_estimated" />
+
+            <TextView
+                android:id="@+id/text_estimated_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:text="₹3,43,90,000"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/img_estimated"
+                app:layout_constraintStart_toEndOf="@+id/img_estimated"
+                app:layout_constraintTop_toBottomOf="@+id/text_estimated" />
+
+
+            <ImageView
+                android:id="@+id/img_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cash"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:layout_constraintTop_toTopOf="@+id/img_estimated"
+                app:layout_constraintBottom_toBottomOf="@+id/img_estimated"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Received"
+                android:fontFamily="@font/ubuntu_regular"
+                android:textColor="@color/grey_40"
+                app:layout_constraintBottom_toTopOf="@+id/text_received_amount"
+                app:layout_constraintStart_toEndOf="@+id/img_received"
+                app:layout_constraintTop_toTopOf="@+id/img_received" />
+
+            <TextView
+                android:id="@+id/text_received_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="₹3,43,90,000"
+                android:textColor="@color/black"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                app:layout_constraintBottom_toBottomOf="@id/img_received"
+                app:layout_constraintStart_toEndOf="@+id/img_received"
+                app:layout_constraintTop_toBottomOf="@+id/text_received" />
+
+
+            <ImageView
+                android:id="@+id/img_concession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/concession"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_estimated"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_concession"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_regular"
+                android:layout_marginStart="10dp"
+                android:text="Concession"
+                android:textColor="@color/grey_40"
+                app:layout_constraintBottom_toTopOf="@+id/text_concession_amount"
+                app:layout_constraintStart_toEndOf="@+id/img_concession"
+                app:layout_constraintTop_toTopOf="@+id/img_concession" />
+
+            <TextView
+                android:id="@+id/text_concession_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:text="₹3,43,90,000"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@id/img_concession"
+                app:layout_constraintStart_toEndOf="@+id/img_concession"
+                app:layout_constraintTop_toBottomOf="@+id/text_concession" />
+
+
+            <ImageView
+                android:id="@+id/img_due"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/due"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:layout_constraintTop_toTopOf="@+id/img_concession"
+                app:layout_constraintBottom_toBottomOf="@+id/img_concession"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_due"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Due"
+                android:fontFamily="@font/ubuntu_regular"
+                android:textColor="@color/grey_40"
+                app:layout_constraintBottom_toTopOf="@+id/text_due_amount"
+                app:layout_constraintStart_toEndOf="@+id/img_due"
+                app:layout_constraintTop_toTopOf="@+id/img_due" />
+
+            <TextView
+                android:id="@+id/text_due_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="₹3,43,90,000"
+                android:textColor="@color/black"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                app:layout_constraintBottom_toBottomOf="@id/img_due"
+                app:layout_constraintStart_toEndOf="@+id/img_due"
+                app:layout_constraintTop_toBottomOf="@+id/text_due" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

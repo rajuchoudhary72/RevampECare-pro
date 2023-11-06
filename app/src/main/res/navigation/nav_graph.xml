@@ -117,14 +117,25 @@
 
     <fragment
         android:id="@+id/favouritesFragment"
-        tools:layout="@layout/fragment_favourites"
         android:name="com.app.ecarepro.ui.favourites.FavouritesFragment"
-        android:label="FavouritesFragment" />
+        android:label="FavouritesFragment"
+        tools:layout="@layout/fragment_favourites" />
 
     <fragment
         android:id="@+id/notificationFragment"
-        tools:layout="@layout/fragment_notification"
         android:name="com.app.ecarepro.ui.notification.NotificationFragment"
-        android:label="NotificationFragment" />
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification" />
+
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.app.ecarepro.ui.message.MessageFragment"
+        android:label="MessageFragment"
+        tools:layout="@layout/fragment_message" />
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.app.ecarepro.ui.dashbord.DashboardFragment"
+        android:label="DashboardFragment" />
 
 </navigation>

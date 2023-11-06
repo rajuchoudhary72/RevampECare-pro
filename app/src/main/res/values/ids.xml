@@ -2,4 +2,6 @@
 <resources>
     <item name="drawer_header" type="id"/>
     <item name="drawer_footer" type="id"/>
+    <item name="today_mode_collection" type="id"/>
+    <item name="epoxy_viewbinding" type="id"/>
 </resources>

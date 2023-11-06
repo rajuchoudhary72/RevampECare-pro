@@ -103,6 +103,8 @@ dependencies {
     /* RecyclerView Item Decorations */
     implementation(libs.decorator)
 
+    implementation ("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
+
     /* Page indicator */
     implementation (libs.scrollingpagerindicator)
     implementation(libs.dotsindicator)

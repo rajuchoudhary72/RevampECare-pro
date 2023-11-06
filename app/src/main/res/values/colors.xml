@@ -63,12 +63,13 @@
 
 
 
-    <color name="brand_color">#5FA150</color>
+    <color name="brand_color">#4DAC3C</color>
+    <color name="brand_color2">#5FA150</color>
     <color name="component_color">#FFD786</color>
     <color name="accent_color">#5570F1</color>
 
 
-    <color name="green">#5FA150</color>
+    <color name="green">#4DAC3C</color>
     <color name="green_80">#CC5FA150</color>
     <color name="green_60">#995FA150</color>
     <color name="green_40">#665FA150</color>
@@ -85,7 +86,9 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_green">#F5FBF2</color>
     <color name="red">#FF352F</color>
+    <color name="light_background_color">#F4F4FC</color>
 
 
     <color name="immersive_sys_ui">#33000000</color>
