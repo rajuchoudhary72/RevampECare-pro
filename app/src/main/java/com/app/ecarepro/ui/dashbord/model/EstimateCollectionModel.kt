@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.dashbord.model
 
+import androidx.core.view.isVisible
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemEstimateCollectionCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
@@ -9,7 +10,14 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 
 class EstimateCollectionModel :
     ViewBindingKotlinModel<ItemEstimateCollectionCardBinding>(R.layout.item_estimate_collection_card) {
+        private var isExpanded = false
     override fun ItemEstimateCollectionCardBinding.bind() {
+        isExpanded = this@EstimateCollectionModel.isExpanded
+        title.setOnClickListener {
+            this@EstimateCollectionModel.isExpanded = this@EstimateCollectionModel.isExpanded.not()
+            groupExpanded.isVisible = this@EstimateCollectionModel.isExpanded
+            groupCollapsed.isVisible = this@EstimateCollectionModel.isExpanded.not()
+        }
         barChart.aa_drawChartWithChartModel(getBarChartModel())
         lineChart.aa_drawChartWithChartModel(getLineChartModel())
     }

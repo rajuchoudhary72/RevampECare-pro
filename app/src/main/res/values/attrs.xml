@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="CurvedBottomNavigationView">
         <attr name="cbn_selectedColor" format="color" />
         <attr name="cbn_unSelectedColor" format="color" />
@@ -8,5 +9,12 @@
         <attr name="cbn_elevation" format="dimension"/>
         <attr name="cbn_fabBg" format="color" />
         <attr name="cbn_bg" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="LegendView">
+        <attr name="lv_text" format="string" />
+        <attr name="lv_sub_text" format="string" />
+        <attr name="lv_image" format="reference" />
+        <attr name="lv_image_tint" format="color" />
     </declare-styleable>
 </resources>
