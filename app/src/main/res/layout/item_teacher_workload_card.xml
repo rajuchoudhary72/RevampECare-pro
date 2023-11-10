@@ -53,70 +53,63 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
                 android:paddingVertical="5dp"
-                android:text="Staff Attendance"
+                android:text="Recent Photos"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/lv_present"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_class"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/lv_absent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category1"
-                app:lv_sub_text="600"
-                app:lv_text="Present" />
+                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
 
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/lv_absent"
-                android:layout_width="wrap_content"
+                <AutoCompleteTextView
+                    android:padding="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="Class"
+                    android:inputType="none"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_section"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/lv_leave"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/lv_present"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category2"
-                app:lv_sub_text="1011"
-                app:lv_text="Absent" />
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toEndOf="@+id/text_input_class"
+                app:layout_constraintTop_toTopOf="@id/text_input_class"
+                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
 
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/lv_leave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/lv_absent"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category3"
-                app:lv_sub_text="1011"
-                app:lv_text="Leave" />
+                <AutoCompleteTextView
+                    android:padding="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="Section"
+                    android:inputType="none"
+                    android:textSize="12sp" />
 
-            <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                android:id="@+id/chartView"
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.app.ecarepro.ui.views.CarouselNoSnap
+                android:id="@+id/carousel"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupCollapsed"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="lv_present,lv_absent,lv_leave" />
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/text_input_class"
+                tools:listitem="@layout/item_teacher_class_overload_card" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

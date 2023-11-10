@@ -1,23 +1,26 @@
 package com.app.ecarepro.ui.dashbord.model
 
 import androidx.core.view.isVisible
+import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.ItemBankBalanceCardBinding
-import com.app.ecarepro.databinding.ItemFeeDefaulterCardBinding
+import com.app.ecarepro.databinding.ItemFeedsCardBinding
+import com.app.ecarepro.databinding.ItemStatudentStatusticCardBinding
+import com.app.ecarepro.notificationCard
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 
-class BankBalanceModel :
-    ViewBindingKotlinModel<ItemBankBalanceCardBinding>(R.layout.item_bank_balance_card) {
+class StudentStatisticModel :
+    ViewBindingKotlinModel<ItemStatudentStatusticCardBinding>(R.layout.item_statudent_statustic_card) {
     private var isExpanded = false
-    override fun ItemBankBalanceCardBinding.bind() {
-        isExpanded = this@BankBalanceModel.isExpanded
+
+    override fun ItemStatudentStatusticCardBinding.bind() {
+        isExpanded = this@StudentStatisticModel.isExpanded
         title.setOnClickListener {
-            this@BankBalanceModel.isExpanded = this@BankBalanceModel.isExpanded.not()
-            chartView.isVisible = this@BankBalanceModel.isExpanded
-            groupCollapsed.isVisible = this@BankBalanceModel.isExpanded.not()
+            this@StudentStatisticModel.isExpanded = this@StudentStatisticModel.isExpanded.not()
+            chartView.isVisible = this@StudentStatisticModel.isExpanded
+            groupCollapsed.isVisible = this@StudentStatisticModel.isExpanded.not()
         }
 
         chartView.aa_drawChartWithChartModel(getBarChartModel())
@@ -34,9 +37,9 @@ class BankBalanceModel :
                 .borderWidth(0) //描边的宽度
                 .allowPointSelect(false) //是否允许在点击数据点标记(扇形图点击选中的块发生位移)
                 .data(arrayOf(
-                    arrayOf("Firefox", 80.2),
-                    arrayOf("Chrome ",    26.8),
+                    arrayOf("Hindu", 80.2),
+                    arrayOf("Muslim ",    26.8),
+                    arrayOf("Christian ",    26.8),
                 )))
         )
-
 }

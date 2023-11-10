@@ -8,11 +8,21 @@ import androidx.fragment.app.Fragment
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentDashboardBinding
 import com.app.ecarepro.todayModeWiseCollectionCard
+import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
+import com.app.ecarepro.ui.dashbord.model.FeedsModel
+import com.app.ecarepro.ui.dashbord.model.LibraryBookStatusModel
+import com.app.ecarepro.ui.dashbord.model.LibraryFeeStatusModel
+import com.app.ecarepro.ui.dashbord.model.OnlineVsOfflineAdmissionModel
 import com.app.ecarepro.ui.dashbord.model.RecentPhotoCarouselModel
 import com.app.ecarepro.ui.dashbord.model.StaffAttendanceModel
+import com.app.ecarepro.ui.dashbord.model.StanderWiseStatisticModel
+import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
+import com.app.ecarepro.ui.dashbord.model.SubscriberModel
+import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
+import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -74,6 +84,46 @@ class DashboardFragment : Fragment() {
 
                 RecentPhotoCarouselModel()
                     .id("135")
+                    .addTo(this)
+
+                AdmissionComparisonModel()
+                    .id("1355")
+                    .addTo(this)
+
+                StanderWiseStatisticModel()
+                    .id("1e355")
+                    .addTo(this)
+
+                OnlineVsOfflineAdmissionModel()
+                    .id("1e3e55")
+                    .addTo(this)
+
+                TeacherWorkloadModel()
+                    .id("1e3er55")
+                    .addTo(this)
+
+                LibraryFeeStatusModel()
+                    .id("1ee3er55")
+                    .addTo(this)
+
+                LibraryBookStatusModel()
+                    .id("1ee36er55")
+                    .addTo(this)
+
+                SubscriberModel()
+                    .id("1ee36erfr55")
+                    .addTo(this)
+
+                FeedsModel()
+                    .id("1e5e36erfr55")
+                    .addTo(this)
+
+                StudentStatisticModel()
+                    .id("1e5e36eerfr55")
+                    .addTo(this)
+
+                TeachersBirthdayCarouselModel()
+                    .id("1e5e")
                     .addTo(this)
             }
         }

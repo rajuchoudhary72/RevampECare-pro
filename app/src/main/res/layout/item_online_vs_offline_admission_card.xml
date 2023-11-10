@@ -53,7 +53,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
                 android:paddingVertical="5dp"
-                android:text="Staff Attendance"
+                android:text="Online vs Offline Admission"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
@@ -61,49 +61,29 @@
 
 
             <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/lv_present"
-                android:layout_width="wrap_content"
+                android:id="@+id/lv_online"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/lv_absent"
+                app:layout_constraintEnd_toStartOf="@+id/lv_offline"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category1"
-                app:lv_sub_text="600"
-                app:lv_text="Present" />
+                app:lv_sub_text="₹ 1,26,37,980"
+                app:lv_text="Online" />
 
             <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/lv_absent"
-                android:layout_width="wrap_content"
+                android:id="@+id/lv_offline"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/lv_leave"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/lv_present"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category2"
-                app:lv_sub_text="1011"
-                app:lv_text="Absent" />
-
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/lv_leave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/lv_online"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/lv_absent"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category3"
-                app:lv_sub_text="1011"
-                app:lv_text="Leave" />
+                app:layout_constraintStart_toEndOf="@+id/lv_online"
+                app:lv_sub_text="₹ 1,26,37,980"
+                app:lv_text="Offline" />
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/chartView"
@@ -116,7 +96,7 @@
                 android:id="@+id/groupCollapsed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="lv_present,lv_absent,lv_leave" />
+                app:constraint_referenced_ids="lv_left,lv_repeater" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

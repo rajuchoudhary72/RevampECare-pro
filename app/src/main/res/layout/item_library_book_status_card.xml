@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isExpanded"
+            type="java.lang.Boolean" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="24dp"
+        app:contentPadding="16dp"
+        app:strokeColor="#DFE5DB"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center_vertical"
+                android:paddingVertical="5dp"
+                android:text="Library Book Status"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6" />
+
+            <TextView
+                android:id="@+id/circulatedBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/calibri_regular"
+                android:text="Circulated Book"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <TextView
+                android:id="@+id/circulatedBookCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/calibri_bold"
+                android:text="30"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/circulatedBook"
+                app:layout_constraintStart_toEndOf="@+id/guideline" />
+
+            <TextView
+                android:id="@+id/discardedBook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/calibri_regular"
+                android:text="Discarded Book"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/circulatedBook" />
+
+            <TextView
+                android:id="@+id/discardedBookCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/calibri_bold"
+                android:text="50"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/discardedBook"
+                app:layout_constraintStart_toEndOf="@+id/guideline" />
+
+            <TextView
+                android:id="@+id/total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/calibri_regular"
+                android:text="Total Book"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/discardedBook" />
+
+            <TextView
+                android:id="@+id/totalCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/calibri_bold"
+                android:text="80"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="@color/black"
+                app:layout_constraintBaseline_toBaselineOf="@+id/total"
+                app:layout_constraintStart_toEndOf="@+id/guideline" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

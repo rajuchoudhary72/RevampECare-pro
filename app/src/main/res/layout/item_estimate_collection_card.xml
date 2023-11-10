@@ -218,8 +218,9 @@
                 app:layout_constraintTop_toBottomOf="@id/title">
 
                 <AutoCompleteTextView
+                    android:padding="0dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:hint="All Fee Type"
                     android:inputType="none"
                     android:textSize="12sp" />
@@ -236,8 +237,9 @@
                 app:layout_constraintTop_toTopOf="@id/text_input_fee_type">
 
                 <AutoCompleteTextView
+                    android:padding="0dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:hint="This Year"
                     android:inputType="none"
                     android:textSize="12sp" />

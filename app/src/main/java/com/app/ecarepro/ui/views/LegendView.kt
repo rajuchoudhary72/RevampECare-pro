@@ -3,12 +3,11 @@ package com.app.ecarepro.ui.views
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LegendViewBinding
 
@@ -28,10 +27,10 @@ class LegendView @JvmOverloads constructor(
         attrs?.let {
             val typedArray =
                 context.obtainStyledAttributes(it, R.styleable.LegendView, 0, 0)
-            typedArray.getDrawable(R.styleable.LegendView_lv_image)?.let { drawable ->
+            typedArray.getDrawable(R.styleable.LegendView_lv_image).let { drawable ->
                 setImage(drawable)
             }
-            setImageTint(typedArray.getColor(R.styleable.LegendView_lv_image_tint, Color.BLACK))
+            setImageTint(typedArray.getColor(R.styleable.LegendView_lv_image_tint, -1))
 
             typedArray.getString(R.styleable.LegendView_lv_text)?.let { title ->
                 setTitle(title)
@@ -45,10 +44,12 @@ class LegendView @JvmOverloads constructor(
     }
 
     fun setImageTint(color: Int) {
-        binding.image.imageTintList = ColorStateList.valueOf(color)
+        if (color != -1 )
+            binding.image.imageTintList = ColorStateList.valueOf(color)
     }
 
-    fun setImage(drawable: Drawable) {
+    fun setImage(drawable: Drawable?) {
+        binding.image.isVisible = drawable!=null
         binding.image.setImageDrawable(drawable)
     }
 
