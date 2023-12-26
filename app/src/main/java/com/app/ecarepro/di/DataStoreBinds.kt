@@ -14,7 +14,7 @@ abstract class DataStoreBinds {
 
     @Binds
     abstract fun bindUserDataStore(
-        impl: UserDataStoreImpl,
+        impl: UserDataStoreImpl
     ): UserDataStore
 
 

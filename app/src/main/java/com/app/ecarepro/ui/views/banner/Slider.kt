@@ -25,7 +25,7 @@ typealias ModelCopier = (yours: EpoxyModel<*>) -> EpoxyModel<*>
 class Slider @JvmOverloads constructor(
     context: Context,
     attr: AttributeSet? = null,
-    defStyle: Int = 0,
+    defStyle: Int = 0
 ) : ConstraintLayout(context, attr, defStyle) {
 
     private val carousel: HorizontalCarousel

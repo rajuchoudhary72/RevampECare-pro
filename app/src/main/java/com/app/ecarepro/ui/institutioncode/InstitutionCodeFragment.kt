@@ -24,7 +24,7 @@ class InstitutionCodeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentInstitutionCodeBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,12 +33,10 @@ class InstitutionCodeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.addSystemWindowInsetToPadding(topWindowInsetToPadding = true)
 
         binding.btnContinue.setOnClickListener {
             findNavController().navigate(R.id.signInFragment)
         }
-
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(R.id.searchInstitutionFragment)
         }

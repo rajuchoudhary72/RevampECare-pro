@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isExpanded"
+            type="java.lang.Boolean" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="24dp"
+        app:contentPadding="16dp"
+        app:strokeColor="#DFE5DB"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".5" />
+
+            <ImageView
+                android:id="@+id/image_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="@{isExpanded ? 90:0}"
+                android:src="@drawable/ic_arrow_right_black"
+                app:layout_constraintBottom_toBottomOf="@+id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:drawablePadding="6dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center_vertical"
+                android:paddingVertical="5dp"
+                android:text="Bank Balance"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_arrow"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/img_pnb"
+                android:layout_width="65dp"
+                android:layout_height="26dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/punjab_national_bank_new_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_estimated_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="₹ 1,26,37,980"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/img_pnb"
+                app:layout_constraintTop_toBottomOf="@+id/img_pnb" />
+
+
+            <ImageView
+                android:id="@+id/img_axis"
+                android:layout_width="100dp"
+                android:layout_height="26dp"
+                android:src="@drawable/axis_bank_logo"
+                app:layout_constraintBottom_toBottomOf="@+id/img_pnb"
+                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
+                app:tint="@color/red"
+                tools:ignore="ContentDescription" />
+
+
+            <TextView
+                android:id="@+id/text_received_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="₹3,43,90,000"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="@+id/img_axis"
+                app:layout_constraintTop_toBottomOf="@+id/img_axis" />
+
+
+            <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                android:id="@+id/chartView"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupCollapsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="img_pnb,text_estimated_amount,img_axis,text_received_amount" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

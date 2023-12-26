@@ -10,7 +10,7 @@ import com.airbnb.epoxy.IllegalEpoxyUsage
 
 open class AsyncSimpleController @JvmOverloads constructor(
     enableAsyncModelBuilding: Boolean = true,
-    enableAsyncDiffing: Boolean = true,
+    enableAsyncDiffing: Boolean = true
 ) : EpoxyController(
     getHandler(enableAsyncModelBuilding),
     getHandler(enableAsyncDiffing)

@@ -13,12 +13,12 @@ kapt {
 
 android {
     namespace = "com.app.ecarepro"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -64,9 +64,10 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
+    implementation (libs.androidx.recyclerview)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-
+    implementation (libs.androidx.activity.ktx)
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -102,8 +103,11 @@ dependencies {
     /* RecyclerView Item Decorations */
     implementation(libs.decorator)
 
+    implementation ("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
+
     /* Page indicator */
-    implementation(libs.scrollingpagerindicator)
+    implementation (libs.scrollingpagerindicator)
+    implementation(libs.dotsindicator)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

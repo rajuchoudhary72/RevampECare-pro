@@ -5,7 +5,7 @@
     <!--School/College Code-->
     <string name="help">Help</string>
     <string name="please_enter_school_college_code">Please Enter School/College Code</string>
-    <string name="find_your_school_college_code"><u>Find Your School/College Code</u></string>
+    <string name="find_your_school_college_code"><u>Fine Your School Code</u></string>
     <string name="continue_">Continue</string>
     <string name="search_your_school_college">Search Your School/College</string>
     <string name="enter_your_search_query_here">Enter your search query here…</string>
@@ -19,4 +19,16 @@
     <string name="faqs">FAQs</string>
     <string name="contact_no">Contact No :</string>
     <string name="email">Email :</string>
+    <string name="welcome">Welcome <b>Pooja Verma!</b></string>
+
+
+    <string name="onboarding_title_1">School ERP on\nyour’s finger tips</string>
+    <string name="onboarding_description_1">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
+
+
+
+    <string name="onboarding_title_2">Manage your School\nManagement</string>
+    <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
+
+
 </resources>

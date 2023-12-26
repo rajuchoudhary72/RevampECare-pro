@@ -9,7 +9,7 @@ import com.app.ecarepro.model.User
 data class UserEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "user_id") val userId: Int,
-    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "name") val name: String
 )
 
 fun UserEntity.asExternalModel(): User {

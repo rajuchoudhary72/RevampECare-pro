@@ -6,7 +6,7 @@ import com.app.ecarepro.data.database.model.UserEntity
 import javax.inject.Inject
 
 class UserDatabaseImpl @Inject constructor(
-    private val userDao: UserDao,
+    private val userDao: UserDao
 ) : UserDatabase {
     override suspend fun insertUser(user: UserEntity) {
         userDao.insertUser(user)

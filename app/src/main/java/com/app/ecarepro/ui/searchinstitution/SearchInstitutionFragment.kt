@@ -19,12 +19,13 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 
+
 @AndroidEntryPoint
 class SearchInstitutionFragment : Fragment() {
 
     private var _binding: FragmentSearchInstitutionBinding? = null
 
-
+   
     private val binding get() = _binding!!
 
     private val mViewModel: SearchInstitutionViewModel by viewModels()
@@ -35,7 +36,7 @@ class SearchInstitutionFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSearchInstitutionBinding.inflate(inflater, container, false)
         return binding.root

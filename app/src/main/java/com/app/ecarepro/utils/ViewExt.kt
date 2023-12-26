@@ -21,7 +21,7 @@ fun View.addSystemWindowInsetToPadding(
     leftWindowInsetToPadding: Boolean = false,
     topWindowInsetToPadding: Boolean = false,
     rightWindowInsetToPadding: Boolean = false,
-    bottomWindowInsetToPadding: Boolean = false,
+    bottomWindowInsetToPadding: Boolean = false
 ) {
 
 
@@ -50,7 +50,7 @@ fun View.addSystemWindowInsetToMargin(
     leftWindowInsetToMargin: Boolean = false,
     topWindowInsetToMargin: Boolean = false,
     rightWindowInsetToMargin: Boolean = false,
-    bottomWindowInsetToMargin: Boolean = false,
+    bottomWindowInsetToMargin: Boolean = false
 ) {
 
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->

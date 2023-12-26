@@ -15,6 +15,6 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class DatabaseBinds {
     @Binds
     abstract fun bindUserDatabase(
-        impl: UserDatabaseImpl,
+        impl: UserDatabaseImpl
     ): UserDatabase
 }

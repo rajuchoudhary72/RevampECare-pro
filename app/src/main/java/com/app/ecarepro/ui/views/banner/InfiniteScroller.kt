@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 internal class InfiniteScroller(
     private val layoutManager: LinearLayoutManager,
-    private val size: Int,
+    private val size: Int
 ) : RecyclerView.OnScrollListener() {
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

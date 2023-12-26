@@ -16,7 +16,7 @@ object DatabaseModule {
 
     @Provides
     fun provideECareProDatabase(
-        @ApplicationContext applicationContext: Context,
+        @ApplicationContext applicationContext: Context
     ): ECareProDatabase {
         return Room.databaseBuilder(
             applicationContext,
@@ -26,7 +26,7 @@ object DatabaseModule {
 
     @Provides
     fun provideUserDao(
-        database: ECareProDatabase,
+        database: ECareProDatabase
     ): UserDao {
         return database.userDao()
     }

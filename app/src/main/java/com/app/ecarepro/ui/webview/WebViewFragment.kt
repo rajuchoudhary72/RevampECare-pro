@@ -25,7 +25,7 @@ class WebViewFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentWebViewBinding.inflate(inflater, container, false)
         return binding.root
@@ -62,7 +62,7 @@ class WebViewFragment : Fragment() {
 
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
-                request: WebResourceRequest?,
+                request: WebResourceRequest?
             ): Boolean {
                 return false
             }

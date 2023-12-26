@@ -13,7 +13,7 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class DataBinds {
     @Binds
     abstract fun bindUserRepository(
-        impl: UserRepositoryImpl,
+        impl: UserRepositoryImpl
     ): UserRepository
 
 }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InstitutionCodeViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
 }

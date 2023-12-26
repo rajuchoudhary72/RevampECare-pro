@@ -12,12 +12,12 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val userDatabase: UserDatabase,
     private val userService: UserService,
-    private val userDataStore: UserDataStore,
+    private val userDataStore: UserDataStore
 ) : UserRepository {
     override suspend fun insertUser(user: NetworkUser) {
         userDatabase.insertUser(user = user.asEntity())
         userDataStore.saveUser(user.asEntity().asExternalModel())
-        // userService.getUser()
+       // userService.getUser()
     }
 
 }

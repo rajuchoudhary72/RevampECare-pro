@@ -1,7 +1,9 @@
 [versions]
-agp = "7.3.1"
+activity-ktx = "1.8.0"
+agp = "8.2.0"
 datastore-preferences = "1.0.0"
 decorator = "2.0.0"
+dotsindicator = "5.0"
 epoxy = "4.6.2"
 hilt-android = "2.44"
 kotlin = "1.8.21"
@@ -10,12 +12,13 @@ junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 appcompat = "1.6.1"
-material = "1.9.0"
+material = "1.10.0"
 constraintlayout = "2.1.4"
 navigation-fragment-ktx = "2.5.3"
 navigation-ui-ktx = "2.5.3"
 okhttp = "5.0.0-alpha.9"
 otpview = "3.1.0"
+recyclerview = "1.3.2"
 retrofit = "2.9.0"
 room = "2.5.1"
 firebase-crashlytics = "2.9.4"
@@ -23,13 +26,16 @@ firebase-bom = "32.1.0"
 scrollingpagerindicator = "1.2.4"
 
 [libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 decorator = { module = "com.rubensousa:decorator", version.ref = "decorator" }
+dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 epoxy = { module = "com.airbnb.android:epoxy", version.ref = "epoxy" }
 epoxy-databinding = { module = "com.airbnb.android:epoxy-databinding", version.ref = "epoxy" }
 epoxy-processor = { module = "com.airbnb.android:epoxy-processor", version.ref = "epoxy" }

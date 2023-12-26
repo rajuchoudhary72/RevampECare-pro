@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface UserService {
     @GET("user/12")
-    suspend fun getUser(): NetworkUser
+   suspend fun getUser():NetworkUser
 
 }

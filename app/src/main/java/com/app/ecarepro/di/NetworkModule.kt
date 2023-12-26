@@ -31,7 +31,7 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
+        authInterceptor: AuthInterceptor
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
@@ -53,7 +53,7 @@ object NetworkModule {
 
     @Provides
     fun provideUserService(
-        retrofit: Retrofit,
+        retrofit: Retrofit
     ): UserService {
         return retrofit.create(UserService::class.java)
     }

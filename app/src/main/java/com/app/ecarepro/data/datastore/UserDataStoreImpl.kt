@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val gson: Gson,
+    private val gson: Gson
 ) : UserDataStore {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_datastore")

@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.app.ecarepro.ui.MainActivity">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home"
+        android:title="Home" />
+
+    <item
+        android:icon="@drawable/ic_settings"
+        android:id="@+id/settings"
+        android:title="Settings" />
+
+    <item
+        android:icon="@drawable/ic_home"
+        android:id="@+id/more"
+        android:title="More" />
+
+    <item
+        android:icon="@drawable/ic_notifications"
+        android:id="@+id/notification"
+        android:title="Notification" />
+
+    <item
+        android:icon="@drawable/ic_chat_bubble"
+        android:id="@+id/message"
+        android:title="Message" />
+
+</menu>

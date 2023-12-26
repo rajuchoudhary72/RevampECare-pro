@@ -9,7 +9,7 @@ import com.airbnb.epoxy.Carousel
 class HorizontalCarousel @JvmOverloads constructor(
     context: Context,
     attr: AttributeSet? = null,
-    defStyle: Int = 0,
+    defStyle: Int = 0
 ) : Carousel(context, attr, defStyle) {
 
     override fun createLayoutManager(): LayoutManager {
