@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network
 
 import com.app.ecarepro.data.datastore.UserDataStore
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
@@ -11,10 +12,13 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
 
-        requestBuilder.addHeader("Content-Type", "application/json")
-        requestBuilder.addHeader("accept", "application/json")
-        requestBuilder.addHeader("Authorization", "Bearer ")
+        val authToken = runBlocking { userDataStore.getAuthToken() ?: "Kq4IYAuSXLh4EsnexoTSfA==" }
+        requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
         return chain.proceed(requestBuilder.build())
+    }
+
+    companion object {
+        const val AUTH_TOKEN = "AuthToken"
     }
 }

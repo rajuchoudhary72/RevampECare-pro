@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSplashBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -20,6 +20,8 @@ class SplashFragment : Fragment() {
 
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
+
+    val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,8 +36,8 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         startAnimation()
         viewLifecycleOwner.lifecycleScope.launch {
-            delay(2000)
-            findNavController().navigate(R.id.action_splashFragment_to_schoolCodeFragment)
+            splashViewModel.getSliders()
+            findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
         }
     }
 

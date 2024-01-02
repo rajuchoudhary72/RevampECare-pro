@@ -3,7 +3,9 @@ package com.app.ecarepro.data
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asExternalModel
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.NetworkUser
+import com.app.ecarepro.data.network.model.VerifyUserDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
@@ -17,7 +19,28 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun insertUser(user: NetworkUser) {
         userDatabase.insertUser(user = user.asEntity())
         userDataStore.saveUser(user.asEntity().asExternalModel())
-       // userService.getUser()
+    }
+
+    override suspend fun verifyUser(schoolCode: String, username: String): VerifyUserDto {
+        return userService.verifyUser(schoolCode, username)
+    }
+
+    override suspend fun getCredentials(
+        schoolCode: String,
+        userType: Int,
+        rcvOn: String,
+        mobile: String,
+        email: String
+    ): VerifyUserDto {
+        return userService.getCredentials(
+            GetCredentialsRequest(
+                email,
+                mobile,
+                rcvOn,
+                schoolCode,
+                userType
+            )
+        )
     }
 
 }

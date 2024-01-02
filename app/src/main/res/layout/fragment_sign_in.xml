@@ -94,6 +94,7 @@
             app:shapeAppearanceOverlay="?shapeAppearanceCornerLarge">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -149,6 +150,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/ubuntu_medium"
             android:text="@string/continue_"
+            android:enabled="false"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
