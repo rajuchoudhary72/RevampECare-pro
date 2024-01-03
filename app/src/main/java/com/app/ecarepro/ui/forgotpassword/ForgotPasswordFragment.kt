@@ -1,6 +1,8 @@
 package com.app.ecarepro.ui.forgotpassword
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.app.ecarepro.databinding.FragmentForgotPasswordBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.addSystemWindowInsetToMargin
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment() {
@@ -53,12 +56,12 @@ class ForgotPasswordFragment : Fragment() {
             }
         }
         binding.toggleButtonUsing.addOnButtonCheckedListener { _, checkedId, _ ->
+            binding.textFiled.setText("")
             mViewModel.rcvOn = when (checkedId) {
                 R.id.btn_mobile -> {
                     binding.tilTextFiled.hint = "Mobile Number"
                     "mob"
                 }
-
                 else -> {
                     binding.tilTextFiled.hint = "Email Address"
                     "email"
@@ -68,7 +71,12 @@ class ForgotPasswordFragment : Fragment() {
 
 
         binding.textFiled.doAfterTextChanged {
-            binding.btnNext.isEnabled = it.isNullOrBlank().not()
+            if (mViewModel.rcvOn == "mob") {
+                binding.btnNext.isEnabled = it?.length == 10
+            } else {
+                binding.btnNext.isEnabled = isValidEmail(it)
+            }
+
         }
 
         binding.btnClose.setOnClickListener { findNavController().popBackStack() }
@@ -87,6 +95,10 @@ class ForgotPasswordFragment : Fragment() {
                 }
             }
         }
+    }
+
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
     }
 
 
