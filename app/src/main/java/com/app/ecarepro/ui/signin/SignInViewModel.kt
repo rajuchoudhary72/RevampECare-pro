@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.VerifyUserDto
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,17 @@ class SignInViewModel @Inject constructor(
     fun verifyUser(username: String, onResponse: (VerifyUserDto) -> Unit) {
         viewModelScope.launch {
             onResponse(userRepository.verifyUser(schoolCode = "DEMOIN", username = username))
+        }
+    }
+    fun login(username: String, password: String, onResponse: (LoginResponseDto) -> Unit) {
+        viewModelScope.launch {
+            onResponse(
+                userRepository.login(
+                    schoolCode = "DEMOIN",
+                    userName = username,
+                    password = password
+                )
+            )
         }
     }
 

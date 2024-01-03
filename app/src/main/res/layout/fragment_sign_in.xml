@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".5" />
+            app:layout_constraintGuide_percent=".4" />
 
 
         <ImageView
@@ -100,6 +100,26 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Password"
+            android:visibility="gone"
+            app:hintTextColor="@color/grey_40"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerLarge">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -108,7 +128,7 @@
             android:text="Remember Me"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -121,7 +141,7 @@
             android:text="@string/forget_password"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_previous"
@@ -148,9 +168,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:enabled="false"
             android:fontFamily="@font/ubuntu_medium"
             android:text="@string/continue_"
-            android:enabled="false"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"

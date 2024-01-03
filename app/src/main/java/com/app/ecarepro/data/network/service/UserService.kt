@@ -1,6 +1,8 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
+import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.VerifyUserDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,5 +20,10 @@ interface UserService {
     suspend fun getCredentials(
         @Body request: GetCredentialsRequest,
     ): VerifyUserDto
+
+    @POST("User/Login")
+    suspend fun login(
+        @Body request: UserLoginRequestDto,
+    ): LoginResponseDto
 
 }

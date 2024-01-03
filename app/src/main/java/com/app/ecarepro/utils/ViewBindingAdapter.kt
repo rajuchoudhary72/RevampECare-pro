@@ -2,6 +2,7 @@ package com.app.ecarepro.utils
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -26,11 +27,14 @@ fun View.showOrHide(invisible: Boolean) {
     isInvisible = invisible
 }
 
-@BindingAdapter("imageUrl")
-fun ImageView.imageUrl(url: String?) {
+@BindingAdapter("imageUrl", "placeholder", requireAll = false)
+fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
     load(url) {
         crossfade(true)
-        placeholder(R.drawable.img_school_placeholder)
+        if (placeholder != null) {
+            placeholder(placeholder)
+        } else
+            placeholder(R.drawable.img_school_placeholder)
     }
 }
 

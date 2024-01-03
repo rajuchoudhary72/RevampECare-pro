@@ -22,6 +22,7 @@ recyclerview = "1.3.2"
 retrofit = "2.9.0"
 room = "2.5.1"
 firebase-crashlytics = "2.9.4"
+google-services = "4.4.0"
 firebase-bom = "32.1.0"
 scrollingpagerindicator = "1.2.4"
 
@@ -64,6 +65,7 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 [bundles]
 
