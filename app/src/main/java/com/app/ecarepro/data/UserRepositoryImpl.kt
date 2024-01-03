@@ -29,8 +29,8 @@ class UserRepositoryImpl @Inject constructor(
         schoolCode: String,
         userType: Int,
         rcvOn: String,
-        mobile: String,
-        email: String
+        mobile: String?,
+        email: String?
     ): VerifyUserDto {
         return userService.getCredentials(
             GetCredentialsRequest(

@@ -11,7 +11,7 @@ interface UserRepository {
         schoolCode: String,
         userType: Int,
         rcvOn: String,
-        mobile: String,
-        email: String
+        mobile: String?,
+        email: String?
     ): VerifyUserDto
 }
