@@ -26,9 +26,12 @@
     <string name="onboarding_description_1">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
 
 
-
     <string name="onboarding_title_2">Manage your School\nManagement</string>
     <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Title</string>
 
 
 </resources>
