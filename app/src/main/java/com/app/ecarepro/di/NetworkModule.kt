@@ -1,6 +1,7 @@
 package com.app.ecarepro.di
 
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.UserService
 import com.google.gson.Gson
 import dagger.Module
@@ -45,7 +46,7 @@ object NetworkModule {
         okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://sandbox-api.coinmarketcap.com/")
+            .baseUrl("https://api.franciscanecare.net/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
@@ -56,6 +57,13 @@ object NetworkModule {
         retrofit: Retrofit
     ): UserService {
         return retrofit.create(UserService::class.java)
+    }
+
+    @Provides
+    fun provideSchoolService(
+        retrofit: Retrofit
+    ): SchoolService {
+        return retrofit.create(SchoolService::class.java)
     }
 
 }

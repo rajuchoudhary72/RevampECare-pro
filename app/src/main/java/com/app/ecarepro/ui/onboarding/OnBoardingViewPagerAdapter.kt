@@ -5,15 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemOnboardingBinding
-import com.app.ecarepro.model.OnboardingItem
+import com.app.ecarepro.model.Slide
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @FragmentScoped
 class OnBoardingViewPagerAdapter @Inject constructor() :
-    ListAdapter<OnboardingItem, OnBoardingViewPagerAdapter.OnboardingItemViewHolder>(
-        UserItemDiffCallback()
+    ListAdapter<Slide, OnBoardingViewPagerAdapter.OnboardingItemViewHolder>(
+        SlideItemDiffCallback()
     ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OnboardingItemViewHolder {
@@ -32,21 +33,21 @@ class OnBoardingViewPagerAdapter @Inject constructor() :
 
     class OnboardingItemViewHolder(val binding: ItemOnboardingBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: OnboardingItem) {
-            with(binding){
-                image.setImageResource(item.imageRes)
-                title.setText(item.title)
-                subTitle.setText(item.description)
+        fun bind(item: Slide) {
+            with(binding) {
+                image.setImageResource(R.drawable.img_onboarding_1)
+                title.text = item.heading
+                subTitle.text = item.text
             }
         }
     }
 }
 
-class UserItemDiffCallback : DiffUtil.ItemCallback<OnboardingItem>() {
-    override fun areItemsTheSame(oldItem: OnboardingItem, newItem: OnboardingItem): Boolean =
+class SlideItemDiffCallback : DiffUtil.ItemCallback<Slide>() {
+    override fun areItemsTheSame(oldItem: Slide, newItem: Slide): Boolean =
         oldItem == newItem
 
-    override fun areContentsTheSame(oldItem: OnboardingItem, newItem: OnboardingItem): Boolean =
+    override fun areContentsTheSame(oldItem: Slide, newItem: Slide): Boolean =
         oldItem == newItem
 
 }

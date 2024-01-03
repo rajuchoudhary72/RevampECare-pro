@@ -109,6 +109,8 @@ dependencies {
     implementation (libs.scrollingpagerindicator)
     implementation(libs.dotsindicator)
 
+    implementation("io.coil-kt:coil:2.5.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

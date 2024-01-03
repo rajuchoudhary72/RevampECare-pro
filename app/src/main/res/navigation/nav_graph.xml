@@ -44,6 +44,14 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/onboardingFragment"
             app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_onboardingFragment_to_schoolCodeFragment"
+            app:destination="@id/schoolCodeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/onboardingFragment"
+            app:popUpToInclusive="true" />
+
     </fragment>
 
     <fragment

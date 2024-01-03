@@ -112,6 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/ubuntu_medium"
+            android:enabled="false"
             android:text="@string/continue_"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintBottom_toTopOf="@+id/textView"

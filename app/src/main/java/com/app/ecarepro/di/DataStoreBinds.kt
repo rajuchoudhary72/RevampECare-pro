@@ -1,5 +1,7 @@
 package com.app.ecarepro.di
 
+import com.app.ecarepro.data.datastore.SchoolDataStore
+import com.app.ecarepro.data.datastore.SchoolDataStoreImpl
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.datastore.UserDataStoreImpl
 import dagger.Binds
@@ -16,6 +18,11 @@ abstract class DataStoreBinds {
     abstract fun bindUserDataStore(
         impl: UserDataStoreImpl
     ): UserDataStore
+
+    @Binds
+    abstract fun bindSchoolDataStore(
+        impl: SchoolDataStoreImpl
+    ): SchoolDataStore
 
 
 }
