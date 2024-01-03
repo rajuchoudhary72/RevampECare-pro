@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
@@ -19,6 +20,7 @@ import com.app.ecarepro.drawerFooter
 import com.app.ecarepro.drawerHeader
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
+import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -35,6 +37,9 @@ class MainActivity : AppCompatActivity() {
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
+
+    private var loader: AlertDialog? = null
+
 
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
@@ -56,7 +61,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.appBarMain.contentMain.bottomNavigationView.isVisible = topLevelFragments.contains(destination.id)
+            binding.appBarMain.contentMain.bottomNavigationView.isVisible =
+                topLevelFragments.contains(destination.id)
         }
 
         setUpDrawer()
@@ -140,8 +146,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.messageFragment
             )
         )
-        binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems)
-        binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
+        binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
+        //binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
@@ -150,12 +156,15 @@ class MainActivity : AppCompatActivity() {
                 0 -> {
                     navController.navigate(R.id.homeFragment)
                 }
+
                 1 -> {
                     navController.navigate(R.id.dashboardFragment)
                 }
+
                 3 -> {
                     navController.navigate(R.id.notificationFragment)
                 }
+
                 4 -> {
                     navController.navigate(R.id.messageFragment)
                 }
@@ -183,5 +192,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    fun showLoader(show: Boolean) {
+        loader?.apply {
+            dismiss()
+            loader = null
+        }
+        if (show)
+            loader = progressDialog()
     }
 }

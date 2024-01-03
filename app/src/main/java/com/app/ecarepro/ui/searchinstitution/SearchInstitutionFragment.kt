@@ -11,13 +11,11 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSearchInstitutionBinding
 import com.app.ecarepro.instituteView
+import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.addSystemWindowInsetToPadding
-import com.google.android.material.transition.MaterialFadeThrough
-import com.google.android.material.transition.MaterialSharedAxis
 import com.rubensousa.decorator.LinearDividerDecoration
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
-
 
 
 @AndroidEntryPoint
@@ -25,7 +23,6 @@ class SearchInstitutionFragment : Fragment() {
 
     private var _binding: FragmentSearchInstitutionBinding? = null
 
-   
     private val binding get() = _binding!!
 
     private val mViewModel: SearchInstitutionViewModel by viewModels()
@@ -72,10 +69,16 @@ class SearchInstitutionFragment : Fragment() {
             )
         )
 
-        binding.recyclerViewInstitute.withModels {
-            (1..100).forEach {
-                instituteView {
-                    id(it)
+        (requireActivity() as MainActivity).showLoader(true)
+
+        mViewModel.getSchools { schools ->
+            (requireActivity() as MainActivity).showLoader(false)
+            binding.recyclerViewInstitute.withModels {
+                schools.forEach { school ->
+                    instituteView {
+                        id(school.name)
+                        school(school)
+                    }
                 }
             }
         }
