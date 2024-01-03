@@ -13,6 +13,8 @@ class SearchInstitutionViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository
 ) : ViewModel() {
 
+    val schools = mutableListOf<School>()
+
     fun getSchools(onResponse: (List<School>) -> Unit) {
         viewModelScope.launch {
             onResponse(schoolRepository.getSchools())

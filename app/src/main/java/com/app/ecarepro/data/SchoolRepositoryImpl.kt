@@ -1,6 +1,7 @@
 package com.app.ecarepro.data
 
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.repository.SchoolRepository
@@ -23,13 +24,13 @@ class SchoolRepositoryImpl @Inject constructor(
         return userDataStore.getSlides()
     }
 
-    override fun validateSchoolCode(schoolCode: String): Flow<Boolean> {
+    override fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?> {
         return flow {
             try {
                 val response = schoolService.validateSchoolCode(schoolCode)
-                emit(response.errorCode == 0)
+                emit(response)
             } catch (e: Exception) {
-                emit(false)
+                emit(null)
             }
         }
     }

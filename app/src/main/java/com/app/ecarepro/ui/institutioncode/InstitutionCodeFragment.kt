@@ -43,10 +43,14 @@ class InstitutionCodeFragment : Fragment() {
             (requireActivity() as MainActivity).showLoader(true)
             institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
                 (requireActivity() as MainActivity).showLoader(false)
-                if (it)
+                if (it?.errorCode == 0)
                     findNavController().navigate(R.id.signInFragment)
                 else
-                    Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        it?.message ?: "Something went wrong",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
             }
         }
