@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentInstitutionCodeBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.searchinstitution.SearchInstitutionFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -55,6 +57,11 @@ class InstitutionCodeFragment : Fragment() {
             }
         }
         binding.btnFindSchoolCollege.setOnClickListener {
+            setFragmentResultListener(SearchInstitutionFragment.REQUEST_KEY_SCHOOL_CODE) { _, data ->
+                data.getString(SearchInstitutionFragment.PRAM_SCHOOL_CODE)?.let {
+                    binding.textInstitutionCode.setText(it)
+                }
+            }
             findNavController().navigate(R.id.searchInstitutionFragment)
         }
         binding.btnHelp.setOnClickListener {
