@@ -51,7 +51,6 @@ android {
     productFlavors {
         create("dev") {
             dimension = "build"
-            applicationIdSuffix = ".dev"
         }
         create("prod") {
             dimension = "build"
