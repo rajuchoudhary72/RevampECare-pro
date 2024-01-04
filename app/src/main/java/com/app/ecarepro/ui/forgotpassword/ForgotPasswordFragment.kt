@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.forgotpassword
 
 import android.os.Bundle
+import android.text.InputType
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -60,10 +61,13 @@ class ForgotPasswordFragment : Fragment() {
             mViewModel.rcvOn = when (checkedId) {
                 R.id.btn_mobile -> {
                     binding.tilTextFiled.hint = "Mobile Number"
+                    binding.textFiled.inputType = InputType.TYPE_CLASS_PHONE
                     "mob"
                 }
                 else -> {
                     binding.tilTextFiled.hint = "Email Address"
+                    binding.textFiled.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+
                     "email"
                 }
             }
