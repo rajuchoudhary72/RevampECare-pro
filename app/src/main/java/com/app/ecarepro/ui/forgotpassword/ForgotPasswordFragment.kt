@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.forgotpassword
 
 import android.os.Bundle
+import android.text.InputType
 import android.text.TextUtils
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -39,31 +40,30 @@ class ForgotPasswordFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.img.addSystemWindowInsetToMargin(topWindowInsetToMargin = true)
 
-        binding.toggleButtonPasswordRecoverFor.addOnButtonCheckedListener { _, checkedId, _ ->
-
-            mViewModel.userType = when (checkedId) {
+        binding.toggleButtonPasswordRecoverFor.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            mViewModel.userType = when (binding.toggleButtonPasswordRecoverFor.checkedButtonId) {
                 R.id.btn_parent -> {
                     2
                 }
-
                 R.id.btn_staff -> {
                     3
                 }
-
                 else -> {
                     1
                 }
             }
         }
-        binding.toggleButtonUsing.addOnButtonCheckedListener { _, checkedId, _ ->
+        binding.toggleButtonUsing.addOnButtonCheckedListener { _, checkedId, isChecked ->
             binding.textFiled.setText("")
-            mViewModel.rcvOn = when (checkedId) {
+            mViewModel.rcvOn = when (binding.toggleButtonUsing.checkedButtonId) {
                 R.id.btn_mobile -> {
                     binding.tilTextFiled.hint = "Mobile Number"
+                    binding.textFiled.inputType = InputType.TYPE_CLASS_PHONE
                     "mob"
                 }
                 else -> {
                     binding.tilTextFiled.hint = "Email Address"
+                    binding.textFiled.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
                     "email"
                 }
             }
