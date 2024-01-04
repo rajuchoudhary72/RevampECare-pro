@@ -77,7 +77,7 @@ class SearchInstitutionFragment : Fragment() {
                 schools.forEach { school ->
                     instituteView {
                         id(school.name)
-                        school(school)
+                        //school(school)
                     }
                 }
             }

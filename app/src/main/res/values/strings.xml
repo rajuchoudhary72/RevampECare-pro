@@ -32,6 +32,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
+    <string name="notice">Notice</string>
+    <string name="class_notice">Class Notice</string>
 
 
 </resources>
