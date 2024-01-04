@@ -11,7 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSplashBinding
+import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -35,9 +37,28 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startAnimation()
+
+        splashViewModel.school.observe(viewLifecycleOwner) { school ->
+            school?.let {
+                binding.apply {
+                    logo.imageUrl(
+                        school.logo,
+                        requireContext().getDrawable(R.drawable.img_school_logo)
+                    )
+                    textInstituteName.text = school.schoolName
+                    textInstituteAddress.text = school.city
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
-            splashViewModel.getSliders()
-            findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+            if (splashViewModel.isUserAuthenticated()) {
+                delay(2000)
+                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+            } else {
+                splashViewModel.getSliders()
+                findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+            }
         }
     }
 

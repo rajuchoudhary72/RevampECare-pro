@@ -29,6 +29,8 @@
 
     <string name="onboarding_title_2">Manage your School\nManagement</string>
     <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
+    <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
+    <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
 
 
 </resources>

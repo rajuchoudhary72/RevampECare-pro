@@ -4,7 +4,9 @@ import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asExternalModel
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkUser
+import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.VerifyUserDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.service.UserService
@@ -41,6 +43,23 @@ class UserRepositoryImpl @Inject constructor(
                 userType
             )
         )
+    }
+
+    override suspend fun login(
+        schoolCode: String,
+        userName: String,
+        password: String
+    ): LoginResponseDto {
+        return userService.login(
+            UserLoginRequestDto(
+                schCode = schoolCode,
+                username = userName,
+                password = password
+            )
+        ).also {
+            userDataStore.saveAuthToken(it.authToken ?: "")
+            userDataStore.setAsUserAuthenticated(it.authenticated ?: false)
+        }
     }
 
 }

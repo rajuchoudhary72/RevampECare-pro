@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +23,8 @@ class SignInFragment : Fragment() {
 
     private val mViewModel: SignInViewModel by viewModels()
 
+    private var userNameValid = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -37,15 +40,37 @@ class SignInFragment : Fragment() {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
 
+        binding.textPassword.doAfterTextChanged {
+            binding.btnContinue.isEnabled = it.isNullOrBlank().not()
+        }
+
         binding.btnContinue.setOnClickListener {
             (requireActivity() as MainActivity).showLoader(true)
-            mViewModel.verifyUser(binding.textUserName.text.toString()) {
-                (requireActivity() as MainActivity).showLoader(false)
-                if (it.errorCode == 0)
-                    findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
-                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+            if (userNameValid) {
+                mViewModel.login(
+                    binding.textUserName.text.toString(),
+                    binding.textPassword.text.toString(),
+                ) {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (it.errorCode == 0) {
+                        findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                    }
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                mViewModel.verifyUser(binding.textUserName.text.toString()) {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (it.errorCode == 0) {
+                        // findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                        userNameValid = true
+                        binding.textInputLayoutPassword.isVisible = true
+                        binding.textInputLayoutUserName.isEnabled = false
+                        binding.textUserName.isEnabled = false
+                        binding.textUserName.isClickable = false
+                    }
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
             }
-
         }
         binding.btnForgotPassword.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)

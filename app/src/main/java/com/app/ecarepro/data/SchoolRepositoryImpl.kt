@@ -28,6 +28,7 @@ class SchoolRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response = schoolService.validateSchoolCode(schoolCode)
+                userDataStore.saveSchoolData(response)
                 emit(response)
             } catch (e: Exception) {
                 emit(null)
