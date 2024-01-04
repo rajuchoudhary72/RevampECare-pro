@@ -1,11 +1,10 @@
 package com.app.ecarepro.data
 
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.NetworkNotice
- import com.app.ecarepro.data.network.model.asExternalModel
+import com.app.ecarepro.data.network.model.NetworkSchool
+import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.repository.SchoolRepository
-import com.app.ecarepro.model.Notice
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
@@ -25,13 +24,14 @@ class SchoolRepositoryImpl @Inject constructor(
         return userDataStore.getSlides()
     }
 
-    override fun validateSchoolCode(schoolCode: String): Flow<Boolean> {
+    override fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?> {
         return flow {
             try {
                 val response = schoolService.validateSchoolCode(schoolCode)
-                emit(response.errorCode == 0)
+                userDataStore.saveSchoolData(response)
+                emit(response)
             } catch (e: Exception) {
-                emit(false)
+                emit(null)
             }
         }
     }
@@ -39,10 +39,5 @@ class SchoolRepositoryImpl @Inject constructor(
     override suspend fun getSchools(): List<School> {
         return schoolService.getSchools().list.map { it.asExternalModel() }
     }
-
-    override suspend fun getNotice(pg: Int,classID: Int): List<Notice> {
-        return schoolService.getNotices(pg, classID).noticeList.map { it.asExternalModel() }
-    }
-
 
 }

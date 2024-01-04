@@ -9,10 +9,16 @@
             name="school"
             type="com.app.ecarepro.model.School" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:background="?selectableItemBackground"
+        android:onClick="@{clickListener}"
         android:layout_height="wrap_content">
 
 

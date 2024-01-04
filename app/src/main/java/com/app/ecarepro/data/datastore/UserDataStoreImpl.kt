@@ -3,9 +3,11 @@ package com.app.ecarepro.data.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.User
 import com.google.gson.Gson
@@ -35,6 +37,40 @@ class UserDataStoreImpl @Inject constructor(
         }.first()
     }
 
+    override suspend fun saveSchoolData(school: NetworkSchool) {
+        context.dataStore.edit { preferences ->
+            preferences[schoolDataKey] = gson.toJson(school)
+        }
+    }
+
+    override suspend fun getSchoolData(): NetworkSchool? {
+        return context.dataStore.data.map { preferences ->
+            val json = preferences[schoolDataKey]
+            if (json == null) {
+                null
+            } else
+                gson.fromJson(json, NetworkSchool::class.java)
+        }.first()
+    }
+
+    override suspend fun saveAuthToken(token: String) {
+        context.dataStore.edit { preferences ->
+            preferences[authTokenKey] = token
+        }
+    }
+
+    override suspend fun setAsUserAuthenticated(isAuthenticated: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[isAuthenticatedKey] = isAuthenticated
+        }
+    }
+
+    override suspend fun isUserAuthenticated(): Boolean {
+        return context.dataStore.data.map { preferences ->
+            preferences[isAuthenticatedKey] ?: false
+        }.first()
+    }
+
     override suspend fun getAuthToken(): String? {
         return context.dataStore.data.map { preferences ->
             preferences[authTokenKey]
@@ -56,8 +92,10 @@ class UserDataStoreImpl @Inject constructor(
 
 
     companion object {
+        private val schoolDataKey = stringPreferencesKey("schoolData")
         private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
+        private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }
