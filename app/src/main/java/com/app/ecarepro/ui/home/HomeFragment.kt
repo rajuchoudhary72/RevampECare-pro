@@ -111,7 +111,7 @@ class HomeFragment : Fragment() {
                 id("view_all_widget")
                 spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 clickListener{_ ->
-                    findNavController().navigate(R.id.widgetsFragment)
+                    findNavController().navigate(R.id.noticeListFragment)
                 }
             }
 

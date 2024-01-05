@@ -36,6 +36,11 @@
     <string name="title">Title</string>
     <string name="notice">Notice</string>
     <string name="class_notice">Class Notice</string>
+    <string name="pdf_details">  PDF Details :</string>
+    <string name="view">View</string>
+    <string name="clock_icon">Clock Icon</string>
+    <string name="date">Date :</string>
+    <string name="update_on">Update On :</string>
 
 
 </resources>

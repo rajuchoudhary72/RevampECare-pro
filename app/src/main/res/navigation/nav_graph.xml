@@ -146,5 +146,9 @@
         android:id="@+id/dashboardFragment"
         android:name="com.app.ecarepro.ui.dashbord.DashboardFragment"
         android:label="DashboardFragment" />
+    <fragment
+        android:id="@+id/noticeListFragment"
+        android:name="com.app.ecarepro.ui.notice.NoticeListFragment"
+        android:label="NoticeListFragment" />
 
 </navigation>

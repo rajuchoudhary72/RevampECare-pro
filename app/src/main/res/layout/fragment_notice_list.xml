@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="mnoticeViewModel"
+            type="com.app.ecarepro.ui.notice.NoticeViewModel" />
 
     </data>
 
@@ -45,7 +48,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/toggleButton_using"
+                android:id="@+id/toggleButton_type_noti"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="2"
@@ -58,7 +61,7 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_mobile"
+                    android:id="@+id/btn_noti"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -71,7 +74,7 @@
                     app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_email"
+                    android:id="@+id/btn_class_noti"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -85,28 +88,16 @@
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            <Spinner
+                android:id="@+id/spinnerClass"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:theme="@style/TextInputLayoutStyle"
+                android:layout_height="42dp"
+                android:background="@drawable/spinner_background"
+                 android:layout_marginHorizontal="10dp"
                 android:layout_marginBottom="10dp"
+                android:prompt="Select Class"
 
-                >
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    app:boxStrokeColor="@color/white"
-                    android:text="Select Class"
-                    android:textColor="@color/white"
-                    android:drawableTint="@color/white" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                />
 
 
         </LinearLayout>

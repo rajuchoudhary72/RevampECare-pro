@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.data.network.model.NetworkSchool
+import com.app.ecarepro.model.Notice
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
@@ -10,4 +11,5 @@ interface SchoolRepository {
     fun getOnboardingSlides(): Flow<List<Slide>>
     fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?>
     suspend fun getSchools(): List<School>
+    suspend fun getNotice(pg: Int,classID: Int): List<Notice>
 }
