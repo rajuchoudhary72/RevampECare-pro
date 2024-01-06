@@ -6,6 +6,7 @@ import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.StaffRepository
 import com.app.ecarepro.model.MyClasse
 import com.app.ecarepro.model.Notice
+import com.app.ecarepro.model.NoticeData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,6 +21,8 @@ class NoticeViewModel @Inject constructor(
                 onResponse(schoolRepository.getNotice(pg, classID))
             }
         }
+
+
 
       fun getMyClass(subID: Int, iD: Int, onResponse: (List<MyClasse>) -> Unit) {
 

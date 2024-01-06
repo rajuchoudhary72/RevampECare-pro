@@ -4,8 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+     <variable
+    name="noticeDetailsViewModel"
+    type="com.app.ecarepro.ui.notice.NoticeDetailsViewModel" />
+
+        <variable
+            name="noticeDetailData"
+            type="com.app.ecarepro.model.NoticeData" />
 
     </data>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,7 +48,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="@string/title"
+                android:text="@{noticeDetailData.heading }"
                 android:fontFamily="@font/ubuntu_bold"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textSize="16sp" />
@@ -72,7 +80,7 @@
                     android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" 24 Nov, 2023"
+                    android:text="@{noticeDetailData.heading }"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="5dp" />
 

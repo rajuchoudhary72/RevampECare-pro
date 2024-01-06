@@ -1,6 +1,9 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.model.MyClasse
+import dagger.Provides
+
+
 
 interface StaffRepository {
 

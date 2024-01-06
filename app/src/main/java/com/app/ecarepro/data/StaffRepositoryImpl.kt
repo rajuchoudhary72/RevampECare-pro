@@ -7,8 +7,7 @@ import com.app.ecarepro.di.annotations.UserDataStore
 import javax.inject.Inject
 
 class StaffRepositoryImpl @Inject constructor(
-    private val staffService: StaffService,
-    private val userDataStore: UserDataStore
+    private val staffService: StaffService
     ) : StaffRepository {
     override suspend fun getMyClass(subID: Int, iD: Int): List<MyClasse> {
         return  staffService.myClass(subID,iD).MyClasses.map { it.asExternalModel() }

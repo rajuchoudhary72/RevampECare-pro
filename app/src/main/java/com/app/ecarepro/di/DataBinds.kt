@@ -1,8 +1,10 @@
 package com.app.ecarepro.di
 
 import com.app.ecarepro.data.SchoolRepositoryImpl
+import com.app.ecarepro.data.StaffRepositoryImpl
 import com.app.ecarepro.data.UserRepositoryImpl
 import com.app.ecarepro.data.repository.SchoolRepository
+import com.app.ecarepro.data.repository.StaffRepository
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -22,5 +24,10 @@ abstract class DataBinds {
     abstract fun bindSchoolRepository(
         impl: SchoolRepositoryImpl
     ): SchoolRepository
+
+    @Binds
+    abstract fun bindStaffRepository(
+        impl: StaffRepositoryImpl
+    ): StaffRepository
 
 }

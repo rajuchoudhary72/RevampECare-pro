@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.model.NetworkNoticDetails
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
@@ -22,5 +23,11 @@ interface SchoolService {
         @Query("pg") pg: Int,
         @Query("ClassID") classID: Int,
     ): NetworkNotice
+
+    @GET("School/NoticeDTL")
+    suspend fun getNoticeDTL(
+        @Query("NtID") ntID: Int,
+        @Query("ID")  iD: Int,
+    ): NetworkNoticDetails
 
 }

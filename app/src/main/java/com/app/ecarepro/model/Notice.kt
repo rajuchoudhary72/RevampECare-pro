@@ -13,3 +13,4 @@ data class Notice(
     val ntID: Int,
     val updatedOn: String
 )
+

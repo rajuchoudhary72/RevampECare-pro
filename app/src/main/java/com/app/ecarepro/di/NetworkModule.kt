@@ -2,6 +2,7 @@ package com.app.ecarepro.di
 
 import com.app.ecarepro.data.network.AuthInterceptor
 import com.app.ecarepro.data.network.service.SchoolService
+import com.app.ecarepro.data.network.service.StaffService
 import com.app.ecarepro.data.network.service.UserService
 import com.google.gson.Gson
 import dagger.Module
@@ -64,6 +65,13 @@ object NetworkModule {
         retrofit: Retrofit
     ): SchoolService {
         return retrofit.create(SchoolService::class.java)
+    }
+
+    @Provides
+    fun provideStaffService(
+        retrofit: Retrofit
+    ): StaffService {
+        return retrofit.create(StaffService::class.java)
     }
 
 }
