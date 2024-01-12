@@ -1,15 +1,15 @@
 package com.app.ecarepro.model
 
 data class NoticeData(
-    val Detail: String,
-    val FilePath: String,
-    val FileSize: Double,
-    val Heading: String,
-    val ID: Any,
-    val NoticeDate: String,
-    val NtID: Int,
-    val UpdatedOn: String,
-    val hasAttachment: Int,
-    val isNew: Int,
-    val isRead: Int
+    val detail: String ,
+    val filePath: String,
+    val fileSize: String,
+    val hasAttachment: Boolean,
+    val heading: String,
+    val id: Any,
+    val isNew: Boolean,
+    val isRead: Boolean,
+    val noticeDate: String,
+    val ntID: Int,
+    val updatedOn: String
 )

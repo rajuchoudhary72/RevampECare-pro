@@ -1,12 +1,12 @@
 package com.app.ecarepro.data
 
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkNoticDetails
+import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.repository.SchoolRepository
-import com.app.ecarepro.model.Notice
-import com.app.ecarepro.model.NoticeData
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
@@ -42,12 +42,13 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getSchools().list.map { it.asExternalModel() }
     }
 
-    override suspend fun getNotice(pg: Int,classID: Int): List<Notice> {
-        return schoolService.getNotices(pg, classID).noticeList.map { it.asExternalModel() }
+    override suspend fun getNotice(pg: Int,classID: Int): NetworkNotice {
+        return schoolService.getNotices(pg, classID)
+
     }
 
-    override suspend fun getNoticeDTL(ntID: Int, iD: Int): NoticeData {
-        return schoolService.getNoticeDTL(ntID, iD).Notice.asExternalModel()
+    override suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails {
+        return schoolService.getNoticeDTL(ntID, iD)
     }
 
 }

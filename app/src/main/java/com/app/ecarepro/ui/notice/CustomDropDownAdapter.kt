@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.app.ecarepro.R
-import com.app.ecarepro.model.MyClasse
+import com.app.ecarepro.data.network.model.MyClasseItem
 
-class CustomDropDownAdapter(val context: Context, var listItemsTxt: List<MyClasse>) : BaseAdapter() {
+class CustomDropDownAdapter(val context: Context, var listItemsTxt: List<MyClasseItem>) : BaseAdapter() {
 
 
     val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -28,11 +28,11 @@ class CustomDropDownAdapter(val context: Context, var listItemsTxt: List<MyClass
 
         // setting adapter item height programatically.
 
-        val params = view.layoutParams
-        params.height = 60
-        view.layoutParams = params
+        /*val params = view.layoutParams
+        params.height = 120
+        view.layoutParams = params*/
 
-        vh.label.text = listItemsTxt[position].ClassName
+        vh.label.text = listItemsTxt[position].className
         return view
     }
 

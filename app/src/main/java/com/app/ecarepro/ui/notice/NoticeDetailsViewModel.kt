@@ -2,21 +2,37 @@ package com.app.ecarepro.ui.notice
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.NetworkNoticDetails
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.SchoolRepository
-import com.app.ecarepro.data.repository.StaffRepository
-import com.app.ecarepro.model.NoticeData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NoticeDetailsViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository
+
 ) : ViewModel() {
-    fun getNoticeDTL(ntID: Int, iD: Int ,onResponse: (NoticeData) -> Unit ){
-        viewModelScope.launch {
-            onResponse(schoolRepository.getNoticeDTL(ntID, iD))
+
+    private val noticeStateFlow: MutableStateFlow<NetworkResult<NetworkNoticDetails>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val _noticeStateFlow: StateFlow<NetworkResult<NetworkNoticDetails>> = noticeStateFlow
+    fun getNoticeDTL(ntID: Int, iD: Int   ) = viewModelScope.launch {
+
+        noticeStateFlow.value = NetworkResult.Loading( )
+
+        runCatching {
+            noticeStateFlow.value = NetworkResult.Loading()
+            schoolRepository.getNoticeDTL(ntID, iD)
+
+        }.onSuccess {
+            noticeStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            noticeStateFlow.value = NetworkResult.Error(it.message)
         }
-    }
+     }
 
 }

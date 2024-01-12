@@ -3,21 +3,21 @@ package com.app.ecarepro.data.network.model
 import com.app.ecarepro.model.MyClasse
 
 data class NetworkMyClass(
-    val EditMode: Boolean,
-    val ErrorCode: Int,
-    val Message: String,
-    val MyClasses: List<MyClasseItem>,
-    val OpenPreviousDay: Boolean,
-    val Status: String
+    val editMode: Boolean?,
+    val errorCode: Int?,
+    val message: String?,
+    val myClasses: List<MyClasseItem>?,
+    val openPreviousDay: Boolean?,
+    val status: String?
 )
 
 data class MyClasseItem(
-    val ClassID: Int,
-    val ClassName: String,
-    val ID: Any,
-    val isSelect: Boolean
+    val classID: Int?,
+    val className: String?,
+    val id: Any?,
+    val isSelect: Boolean?
 )
 
 fun MyClasseItem.asExternalModel()=MyClasse(
-    ClassID,ClassName,ID,isSelect
+    classID,className,id,isSelect
 )

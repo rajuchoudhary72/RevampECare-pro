@@ -41,6 +41,9 @@
     <string name="clock_icon">Clock Icon</string>
     <string name="date">Date :</string>
     <string name="update_on">Update On :</string>
+    <string name="updated_by">Update By\n</string>
+    <string name="like">Like\n</string>
+    <string name="no_notice_available">No Notice Available</string>
 
 
 </resources>

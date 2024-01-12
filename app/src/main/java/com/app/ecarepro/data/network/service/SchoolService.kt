@@ -6,6 +6,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
 import com.app.ecarepro.data.network.model.NetworkWalkThrough
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface SchoolService {
@@ -18,6 +19,7 @@ interface SchoolService {
     @GET("School/List")
     suspend fun getSchools(): NetworkSchoolsDto
 
+    @Headers("Accept: application/json")
     @GET("School/Notices")
     suspend fun getNotices(
         @Query("pg") pg: Int,

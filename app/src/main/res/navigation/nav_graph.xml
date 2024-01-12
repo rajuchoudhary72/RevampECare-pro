@@ -149,6 +149,31 @@
     <fragment
         android:id="@+id/noticeListFragment"
         android:name="com.app.ecarepro.ui.notice.NoticeListFragment"
-        android:label="NoticeListFragment" />
+        android:label="NoticeListFragment" >
+        <action
+            android:id="@+id/action_noticeListFragment_to_noticeDetailsFragment"
+            app:destination="@id/noticeDetailsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/thoughtsListFragment"
+        android:name="com.app.ecarepro.ui.thought.ThoughtsListFragment"
+        android:label="ThoughtsListFragment" />
+    <fragment
+        android:id="@+id/addThoughtsBlankFragment"
+        android:name="com.app.ecarepro.ui.thought.add_thoughts.AddThoughtsBlankFragment"
+        android:label="AddThoughtsBlankFragment" />
+    <fragment
+        android:id="@+id/noticeDetailsFragment"
+        android:name="com.app.ecarepro.ui.notice.NoticeDetailsFragment"
+        android:label="NoticeDetailsFragment" >
+        <action
+            android:id="@+id/action_noticeDetailsFragment_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/openPdfFragment"
+        android:name="com.app.ecarepro.ui.common.OpenPdfFragment"
+        android:label="OpenPdfFragment" />
 
 </navigation>
