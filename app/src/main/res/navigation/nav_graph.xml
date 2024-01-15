@@ -175,5 +175,21 @@
         android:id="@+id/openPdfFragment"
         android:name="com.app.ecarepro.ui.common.OpenPdfFragment"
         android:label="OpenPdfFragment" />
+    <fragment
+        android:id="@+id/circularFragment"
+        android:name="com.app.ecarepro.ui.circuler.CircularFragment"
+        android:label="CircularFragment" >
+        <action
+            android:id="@+id/action_circularFragment_to_circularDetailsFragment"
+            app:destination="@id/circularDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/circularDetailsFragment"
+        android:name="com.app.ecarepro.ui.circuler.CircularDetailsFragment"
+        android:label="CircularDetailsFragment" >
+        <action
+            android:id="@+id/action_circularDetailsFragment_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
 
 </navigation>

@@ -44,6 +44,7 @@
     <string name="updated_by">Update By\n</string>
     <string name="like">Like\n</string>
     <string name="no_notice_available">No Notice Available</string>
+    <string name="no_circuler_available">No Circular Available</string>
 
 
 </resources>

@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.data.network.model.NetworkCircular
+import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
@@ -13,5 +15,7 @@ interface SchoolRepository {
     fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?>
     suspend fun getSchools(): List<School>
     suspend fun getNotice(pg: Int,classID: Int): NetworkNotice
+    suspend fun getCirculars(pg: Int,yrID: Int,title :String): NetworkCircular
     suspend fun getNoticeDTL( ntID: Int, iD: Int ): NetworkNoticDetails
+    suspend fun getCircularDTL( cirID: Int, iD: Int ): NetworkCircularDetails
 }

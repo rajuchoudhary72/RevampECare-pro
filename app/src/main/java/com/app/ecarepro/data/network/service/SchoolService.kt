@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.model.NetworkCircular
+import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
@@ -26,10 +28,24 @@ interface SchoolService {
         @Query("ClassID") classID: Int,
     ): NetworkNotice
 
+    @Headers("Accept: application/json")
+    @GET("School/Circulars")
+    suspend fun getCirculars(
+        @Query("pg") pg: Int,
+        @Query("YrID") yrID: Int,
+        @Query("title") title: String
+    ): NetworkCircular
+
     @GET("School/NoticeDTL")
     suspend fun getNoticeDTL(
         @Query("NtID") ntID: Int,
         @Query("ID")  iD: Int,
     ): NetworkNoticDetails
+
+    @GET("School/CircularDTL")
+    suspend fun getCircularDTL(
+        @Query("CirID") cirID: Int,
+        @Query("ID")  iD: Int,
+    ): NetworkCircularDetails
 
 }

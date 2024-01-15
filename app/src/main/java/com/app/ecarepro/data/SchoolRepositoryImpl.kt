@@ -1,6 +1,8 @@
 package com.app.ecarepro.data
 
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkCircular
+import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
@@ -47,8 +49,16 @@ class SchoolRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getCirculars(pg: Int, yrID: Int,title :String): NetworkCircular {
+         return schoolService.getCirculars(pg, yrID,title)
+    }
+
     override suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails {
         return schoolService.getNoticeDTL(ntID, iD)
+    }
+
+    override suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails {
+        return schoolService.getCircularDTL(cirID, iD)
     }
 
 }
