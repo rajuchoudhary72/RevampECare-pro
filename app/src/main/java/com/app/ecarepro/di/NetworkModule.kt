@@ -1,6 +1,7 @@
 package com.app.ecarepro.di
 
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.service.LibraryService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.StaffService
 import com.app.ecarepro.data.network.service.ThoughtsService
@@ -80,6 +81,13 @@ object NetworkModule {
         retrofit: Retrofit
     ): ThoughtsService {
         return retrofit.create(ThoughtsService::class.java)
+    }
+
+    @Provides
+    fun provideLibraryService(
+        retrofit: Retrofit
+    ): LibraryService {
+        return retrofit.create(LibraryService::class.java)
     }
 
 }

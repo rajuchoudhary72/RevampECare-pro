@@ -191,5 +191,38 @@
             android:id="@+id/action_circularDetailsFragment_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/bookLibraryFragment"
+        android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
+        android:label="BookLibraryFragment" >
+        <action
+            android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/latestBookFragment"
+        android:name="com.app.ecarepro.ui.book_library.LatestBookFragment"
+        android:label="fragment_latest_book"
+        tools:layout="@layout/fragment_latest_book" >
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.app.ecarepro.ui.book_library.BookDetailsFragment"
+        android:label="BookDetailsFragment" />
+
+    <fragment
+        android:id="@+id/librarySearchFragment"
+        android:name="com.app.ecarepro.ui.book_library.LibrarySearchFragment"
+        android:label="fragment_library_search"
+        tools:layout="@layout/fragment_library_search" >
+        <action
+            android:id="@+id/action_librarySearchFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
 
 </navigation>
