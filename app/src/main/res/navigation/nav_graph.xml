@@ -224,5 +224,13 @@
             android:id="@+id/action_librarySearchFragment_to_bookDetailsFragment"
             app:destination="@id/bookDetailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/classSyllabus"
+        android:name="com.app.ecarepro.ui.syllabus.ClassSyllabus"
+        android:label="ClassSyllabus" >
+        <action
+            android:id="@+id/action_classSyllabus_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
 
 </navigation>

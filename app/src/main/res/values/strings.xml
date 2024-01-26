@@ -44,6 +44,7 @@
     <string name="updated_by">Update By\n</string>
     <string name="like">Like\n</string>
     <string name="no_notice_available">No Notice Available</string>
+    <string name="no_Syllabus_available">No Syllabus Available</string>
     <string name="no_latest_book_available">No Latest Book Available</string>
     <string name="no_book_available">No Book Available</string>
     <string name="no_circuler_available">No Circular Available</string>
@@ -55,11 +56,10 @@
     <string name="author">Author :</string>
     <string name="year_of_publication">Year of Publication :</string>
     <string name="lbl_subject">Subject :</string>
-     <string name="hint">Storage Hint :</string>
+    <string name="hint">Storage Hint :</string>
     <string name="lbl_book_no">Book No :</string>
     <string name="lbl_class_no">Class No :</string>
     <string name="issuable">Issuable :</string>
-
 
 
 </resources>

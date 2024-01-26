@@ -1,10 +1,12 @@
 package com.app.ecarepro.di
 
+import com.app.ecarepro.data.AcademicRepoImpl
 import com.app.ecarepro.data.LibraryRepoImpl
 import com.app.ecarepro.data.SchoolRepositoryImpl
 import com.app.ecarepro.data.StaffRepositoryImpl
 import com.app.ecarepro.data.ThoughtsRepoImpl
 import com.app.ecarepro.data.UserRepositoryImpl
+import com.app.ecarepro.data.repository.AcademicRepo
 import com.app.ecarepro.data.repository.LibraryRepo
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.StaffRepository
@@ -43,5 +45,10 @@ abstract class DataBinds {
     abstract fun bindLibraryRepository(
         impl: LibraryRepoImpl
     ): LibraryRepo
+
+    @Binds
+    abstract fun bindAcademicRepo(
+        impl: AcademicRepoImpl
+    ): AcademicRepo
 
 }
