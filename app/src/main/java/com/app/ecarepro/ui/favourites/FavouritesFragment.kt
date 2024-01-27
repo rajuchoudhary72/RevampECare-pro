@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.airbnb.epoxy.EpoxyTouchHelper.DragCallbacks
-import com.app.ecarepro.DashboardCardBindingModel_
 import com.app.ecarepro.FavouriteBindingModel_
 import com.app.ecarepro.R
-import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.databinding.FragmentWidgetsBinding
 import com.app.ecarepro.favourite
 import com.rubensousa.decorator.LinearMarginDecoration
@@ -41,6 +40,8 @@ class FavouritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var controller:EpoxyController? = null
+
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.recyclerView.apply {
 

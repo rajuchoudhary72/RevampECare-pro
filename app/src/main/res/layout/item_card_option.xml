@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="data"
+            type="com.app.ecarepro.data.network.model.Slider" />
+
+        <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
 
@@ -13,12 +17,12 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        app:strokeWidth="1dp"
-        app:cardBackgroundColor="@color/white"
+        android:layout_height="wrap_content"
         android:onClick="@{clickListener}"
+        app:cardBackgroundColor="@color/white"
         app:contentPadding="10dp"
         app:strokeColor="@color/green_10"
-        android:layout_height="wrap_content">
+        app:strokeWidth="1dp">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,9 +31,10 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_assignment"
+                imageUrl="@{data.imgPath}"
+                placeholder="@{@drawable/img_school_placeholder}"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,13 +42,14 @@
 
             <TextView
                 android:id="@+id/text_title"
-                android:layout_marginTop="6dp"
-                app:layout_constraintStart_toStartOf="@+id/image"
-                app:layout_constraintEnd_toEndOf="@+id/image"
-                app:layout_constraintTop_toBottomOf="@+id/image"
-                android:text="Assignment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@{data.module}"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/image"
+                app:layout_constraintTop_toBottomOf="@+id/image"
+                tools:text="Assignment" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

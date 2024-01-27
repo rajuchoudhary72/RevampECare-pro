@@ -65,41 +65,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_user_avatar" />
 
-        <View
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/background_view"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_top_rounded_corner"
-            app:layout_constraintBottom_toBottomOf="@id/recycler_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/recycler_view" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_dashboard_bg"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round.Top"
-            app:layout_constraintBottom_toBottomOf="@id/recycler_view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/recycler_view" />
-
-
-
-        <com.airbnb.epoxy.EpoxyRecyclerView
-            android:id="@+id/recycler_view"
-            android:clipToPadding="false"
-            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"
-            android:orientation="vertical"
-            android:paddingTop="20dp"
-            tools:listitem="@layout/item_card_option"
-            app:spanCount="3"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_user_name" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txt_user_name"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.TopRoundedCorner"
+            app:strokeWidth="0dp">
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_dashboard_bg"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round.Top" />
+
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/item_card_option" />
+
+        </com.google.android.material.card.MaterialCardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

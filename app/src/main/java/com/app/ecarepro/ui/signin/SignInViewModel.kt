@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.LoginResponseDto
-import com.app.ecarepro.data.network.model.VerifyUserDto
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ class SignInViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val userDataStore: UserDataStore
 ) : ViewModel() {
-    fun verifyUser(username: String, onResponse: (VerifyUserDto) -> Unit) {
+    fun verifyUser(username: String, onResponse: (NetworkUserDetailsDto) -> Unit) {
         viewModelScope.launch {
             onResponse(
                 userRepository.verifyUser(

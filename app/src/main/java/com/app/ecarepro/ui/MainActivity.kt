@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,6 +17,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerFooter
 import com.app.ecarepro.drawerHeader
@@ -22,9 +25,13 @@ import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -81,10 +88,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            systemViewModel.user.collectLatest { user ->
+                buildDrawerModels(user)
+            }
+        }
 
+        binding.drawerLayout.open()
+    }
+
+    private fun buildDrawerModels(user: NetworkUserDetailsDto) {
         binding.recyclerViewNavView.withModels {
             drawerHeader {
                 id(R.id.drawer_header)
+                user(user)
             }
             (0..6).forEach {
                 drawerItem {
@@ -93,9 +110,31 @@ class MainActivity : AppCompatActivity() {
             }
             drawerFooter {
                 id(R.id.drawer_footer)
+                appVersion("App Version 1.0.0")
+                clickListener { v ->
+                    systemViewModel.openDrawer(false)
+                    logout()
+                }
             }
         }
-        binding.drawerLayout.open()
+    }
+
+    private fun logout() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                systemViewModel.logout {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    Runtime.getRuntime().exit(0)
+                }
+            }
+            .setNegativeButton("No") { _, _ ->
+
+            }
+            .show()
     }
 
     private fun setUpMoreOptions() {

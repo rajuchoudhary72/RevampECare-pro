@@ -2,12 +2,12 @@ package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkUser
-import com.app.ecarepro.data.network.model.VerifyUserDto
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
 
-    suspend fun verifyUser(schoolCode: String, username: String): VerifyUserDto
+    suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
 
     suspend fun getCredentials(
         schoolCode: String,
@@ -15,7 +15,7 @@ interface UserRepository {
         rcvOn: String,
         mobile: String?,
         email: String?
-    ): VerifyUserDto
+    ): NetworkUserDetailsDto
     suspend fun login(
         schoolCode: String,
         userName: String,

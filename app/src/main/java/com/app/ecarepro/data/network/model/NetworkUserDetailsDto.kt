@@ -3,7 +3,7 @@ package com.app.ecarepro.data.network.model
 import com.google.gson.annotations.SerializedName
 
 
-data class VerifyUserDto(
+data class NetworkUserDetailsDto(
     @SerializedName("errorCode")
     val errorCode: Int?,
     @SerializedName("isVerified")
@@ -18,4 +18,10 @@ data class VerifyUserDto(
     val status: String?,
     @SerializedName("userType")
     val userType: Int?
-)
+) {
+    fun getUserTypeName() = when (userType) {
+        1 -> "Student"
+        2 -> "Parent"
+        else -> "Staff"
+    }
+}

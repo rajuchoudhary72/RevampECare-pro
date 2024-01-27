@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.app.ecarepro.ui.home.HomeFragment"
+        android:name="com.app.ecarepro.ui.home.HomeViewPagerFragment"
         tools:layout="@layout/fragment_home" />
 
     <fragment

@@ -10,4 +10,5 @@ interface SchoolRepository {
     fun getOnboardingSlides(): Flow<List<Slide>>
     fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?>
     suspend fun getSchools(): List<School>
+    fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool>
 }
