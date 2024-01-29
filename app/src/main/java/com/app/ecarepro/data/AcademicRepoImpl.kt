@@ -1,5 +1,6 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.service.AcademicService
 import com.app.ecarepro.data.repository.AcademicRepo
@@ -9,4 +10,9 @@ class AcademicRepoImpl @Inject constructor(private val academicService: Academic
     override suspend fun getClassSyllabus(): NetworkClassSyllabus {
          return academicService.getClassSyllabus()
     }
+
+    override suspend fun getActivityCaledar(): NetworkActivityCalender {
+       return  academicService.getActivityCaledar()
+    }
+
 }
