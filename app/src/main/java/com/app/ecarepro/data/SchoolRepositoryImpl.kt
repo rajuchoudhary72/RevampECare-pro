@@ -40,4 +40,10 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getSchools().list.map { it.asExternalModel() }
     }
 
+    override fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool> {
+        return flow {
+            emit(userDataStore.getSchoolData()!!)
+        }
+    }
+
 }

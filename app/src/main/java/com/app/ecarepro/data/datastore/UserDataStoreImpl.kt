@@ -8,8 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.app.ecarepro.data.network.model.NetworkSchool
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.model.Slide
-import com.app.ecarepro.model.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -25,16 +25,22 @@ class UserDataStoreImpl @Inject constructor(
     private val gson: Gson
 ) : UserDataStore {
 
-    override suspend fun saveUser(user: User) {
+    override suspend fun saveUser(user: NetworkUserDetailsDto) {
         context.dataStore.edit { preferences ->
             preferences[userPreferenceKey] = gson.toJson(user)
         }
     }
 
-    override suspend fun getUser(): User {
+    override suspend fun getUser(): NetworkUserDetailsDto {
         return context.dataStore.data.map { preferences ->
-            gson.fromJson(preferences[userPreferenceKey], User::class.java)
+            gson.fromJson(preferences[userPreferenceKey], NetworkUserDetailsDto::class.java)
         }.first()
+    }
+
+    override fun getUserAsFlow(): Flow<NetworkUserDetailsDto> {
+        return context.dataStore.data.map { preferences ->
+            gson.fromJson(preferences[userPreferenceKey], NetworkUserDetailsDto::class.java)
+        }
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
@@ -88,6 +94,10 @@ class UserDataStoreImpl @Inject constructor(
             val itemType = object : TypeToken<List<Slide>>() {}.type
             gson.fromJson<List<Slide>>(preferences[slidesKey], itemType)
         }
+    }
+
+    override suspend fun clear() {
+        context.dataStore.edit { it.clear() }
     }
 
 

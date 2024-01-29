@@ -43,7 +43,7 @@ data class NetworkSchool(
     @SerializedName("schoolName")
     val schoolName: String?,
     @SerializedName("slider")
-    val slider: List<Slider?>?,
+    val slider: List<Slider>?,
     @SerializedName("state")
     val state: Any?,
     @SerializedName("status")

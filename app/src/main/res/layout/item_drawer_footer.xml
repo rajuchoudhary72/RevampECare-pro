@@ -4,6 +4,14 @@
 
     <data>
 
+        <variable
+            name="appVersion"
+            type="java.lang.String" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +28,7 @@
             android:layout_marginHorizontal="20dp"
             android:text="Logout"
             app:icon="@drawable/ic_logout"
+            android:onClick="@{clickListener}"
             app:iconGravity="textStart"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
@@ -28,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="App Version 0.0.1"
+            android:text="@{appVersion}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_logout" />

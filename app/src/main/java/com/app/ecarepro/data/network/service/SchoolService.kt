@@ -13,6 +13,9 @@ interface SchoolService {
     @GET("School/DTL")
     suspend fun validateSchoolCode(@Query("SchCode") schoolCode: String): NetworkSchool
 
+    @GET("School/DTL")
+    suspend fun getSchoolDetails(@Query("SchCode") schoolCode: String): NetworkSchool
+
     @GET("School/List")
     suspend fun getSchools(): NetworkSchoolsDto
 

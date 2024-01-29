@@ -33,8 +33,11 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
         crossfade(true)
         if (placeholder != null) {
             placeholder(placeholder)
-        } else
+            error(placeholder)
+        } else {
             placeholder(R.drawable.img_school_placeholder)
+            error(R.drawable.img_school_placeholder)
+        }
     }
 }
 

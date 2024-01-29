@@ -3,7 +3,7 @@ package com.app.ecarepro.ui.forgotpassword
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.VerifyUserDto
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ class ForgotPasswordViewModel @Inject constructor(
     var userType = 1
     var rcvOn = "mob"
 
-    fun getCredentials(value: String, onResponse: (VerifyUserDto) -> Unit) {
+    fun getCredentials(value: String, onResponse: (NetworkUserDetailsDto) -> Unit) {
         viewModelScope.launch {
             onResponse(
                 userRepository.getCredentials(
