@@ -146,5 +146,91 @@
         android:id="@+id/dashboardFragment"
         android:name="com.app.ecarepro.ui.dashbord.DashboardFragment"
         android:label="DashboardFragment" />
+    <fragment
+        android:id="@+id/noticeListFragment"
+        android:name="com.app.ecarepro.ui.notice.NoticeListFragment"
+        android:label="NoticeListFragment" >
+        <action
+            android:id="@+id/action_noticeListFragment_to_noticeDetailsFragment"
+            app:destination="@id/noticeDetailsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/thoughtsListFragment"
+        android:name="com.app.ecarepro.ui.thought.ThoughtsListFragment"
+        android:label="ThoughtsListFragment" />
+    <fragment
+        android:id="@+id/addThoughtsBlankFragment"
+        android:name="com.app.ecarepro.ui.thought.add_thoughts.AddThoughtsBlankFragment"
+        android:label="AddThoughtsBlankFragment" />
+    <fragment
+        android:id="@+id/noticeDetailsFragment"
+        android:name="com.app.ecarepro.ui.notice.NoticeDetailsFragment"
+        android:label="NoticeDetailsFragment" >
+        <action
+            android:id="@+id/action_noticeDetailsFragment_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/openPdfFragment"
+        android:name="com.app.ecarepro.ui.common.OpenPdfFragment"
+        android:label="OpenPdfFragment" />
+    <fragment
+        android:id="@+id/circularFragment"
+        android:name="com.app.ecarepro.ui.circuler.CircularFragment"
+        android:label="CircularFragment" >
+        <action
+            android:id="@+id/action_circularFragment_to_circularDetailsFragment"
+            app:destination="@id/circularDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/circularDetailsFragment"
+        android:name="com.app.ecarepro.ui.circuler.CircularDetailsFragment"
+        android:label="CircularDetailsFragment" >
+        <action
+            android:id="@+id/action_circularDetailsFragment_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookLibraryFragment"
+        android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
+        android:label="BookLibraryFragment" >
+        <action
+            android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/latestBookFragment"
+        android:name="com.app.ecarepro.ui.book_library.LatestBookFragment"
+        android:label="fragment_latest_book"
+        tools:layout="@layout/fragment_latest_book" >
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/bookDetailsFragment"
+        android:name="com.app.ecarepro.ui.book_library.BookDetailsFragment"
+        android:label="BookDetailsFragment" />
+
+    <fragment
+        android:id="@+id/librarySearchFragment"
+        android:name="com.app.ecarepro.ui.book_library.LibrarySearchFragment"
+        android:label="fragment_library_search"
+        tools:layout="@layout/fragment_library_search" >
+        <action
+            android:id="@+id/action_librarySearchFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/classSyllabus"
+        android:name="com.app.ecarepro.ui.syllabus.ClassSyllabus"
+        android:label="ClassSyllabus" >
+        <action
+            android:id="@+id/action_classSyllabus_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
 
 </navigation>
