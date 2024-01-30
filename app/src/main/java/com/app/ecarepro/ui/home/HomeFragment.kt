@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
+import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
@@ -160,6 +162,7 @@ class HomeFragment : Fragment() {
                 cardOption {
                     id(favouriteSlider.module)
                     data(favouriteSlider)
+                    clickListener { _ -> navigateToFavourites(favouriteSlider) }
                 }
             }
 
@@ -169,6 +172,22 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(R.id.favouritesFragment)
                 }
             }
+        }
+    }
+
+    private fun navigateToFavourites(favouriteSlider: Slider) {
+        if (favouriteSlider.module.contains("notice", true)) {
+            findNavController().navigate(R.id.noticeListFragment)
+        } else if (favouriteSlider.module.contains("thought", true)) {
+            findNavController().navigate(R.id.thoughtsListFragment)
+        } else if (favouriteSlider.module.contains("circular", true)) {
+            findNavController().navigate(R.id.circularFragment)
+        } else if (favouriteSlider.module.contains("library", true)) {
+            findNavController().navigate(R.id.bookLibraryFragment)
+        } else if (favouriteSlider.module.contains("syllabus", true)) {
+            findNavController().navigate(R.id.classSyllabus)
+        } else {
+            Log.e("Home", favouriteSlider.toString())
         }
     }
 

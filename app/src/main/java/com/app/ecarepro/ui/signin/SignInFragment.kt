@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.signin
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SignInFragment : Fragment() {
+class SignInFragment  : Fragment() {
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
@@ -56,6 +57,7 @@ class SignInFragment : Fragment() {
                         findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                     }
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    Log.i("Token Aut",it.authToken.toString())
                 }
             } else {
                 mViewModel.verifyUser(binding.textUserName.text.toString()) {

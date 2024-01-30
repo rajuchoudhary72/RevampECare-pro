@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/too ls"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+    <variable
+    name="bookDetails"
+    type="com.app.ecarepro.model.BookDTL" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.book_library.BookDetailsFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/md_theme_light_primary"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="Book Details"
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+        <ScrollView
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp"
+                tools:ignore="RtlSymmetry">
+
+                <ImageView
+                    android:id="@+id/iv_cover_pic"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="7dp"
+                    app:srcCompat="@drawable/ic_library_big_image" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@string/accession_no__"
+
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_accession_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.accessionNumber}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/book_title"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_book_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.title}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.author}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_subject"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_subject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.subject}"
+                        app:fontFamily="@font/ubuntu_bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_storage_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.storageHint}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/year_of_publication"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_yr_of_publication"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.publicationYear}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_book_no"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_book_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.bookNo}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_class_no"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_class_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        android:text="@{bookDetails.classNo}"
+                        app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/issuable"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_issuable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="10dp"
+                        android:textSize="12sp"
+                         app:fontFamily="@font/ubuntu_light" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -86,7 +86,7 @@ class SearchInstitutionFragment : Fragment() {
                         instituteView {
                             id(school.name)
                             school(school)
-                            clickListener { _ ->
+                            clickListener {  _ ->
                                 setFragmentResult(
                                     REQUEST_KEY_SCHOOL_CODE,
                                     bundleOf(

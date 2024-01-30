@@ -10,9 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InstitutionCodeViewModel @Inject constructor(
-    private val schoolRepository: SchoolRepository
-) : ViewModel() {
+class InstitutionCodeViewModel @Inject constructor( private val schoolRepository: SchoolRepository ) : ViewModel() {
 
     fun validateSchoolCode(schoolCode: String, onResponse: (NetworkSchool?) -> Unit) {
         viewModelScope.launch {

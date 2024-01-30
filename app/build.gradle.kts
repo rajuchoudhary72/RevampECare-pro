@@ -108,6 +108,8 @@ dependencies {
     /* Page indicator */
     implementation (libs.scrollingpagerindicator)
     implementation(libs.dotsindicator)
+ 
+    implementation(libs.picasso)
 
     implementation("io.coil-kt:coil:2.5.0")
 

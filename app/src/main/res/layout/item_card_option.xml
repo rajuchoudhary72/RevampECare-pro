@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="@{data.module}"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="@+id/image"
                 app:layout_constraintStart_toStartOf="@+id/image"
                 app:layout_constraintTop_toBottomOf="@+id/image"
