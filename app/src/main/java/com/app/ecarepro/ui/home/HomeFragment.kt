@@ -186,6 +186,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.bookLibraryFragment)
         } else if (favouriteSlider.module.contains("syllabus", true)) {
             findNavController().navigate(R.id.classSyllabus)
+        } else if (favouriteSlider.module.contains("activity", true)) {
+            findNavController().navigate(R.id.calenderActivityNavHost)
         } else {
             Log.e("Home", favouriteSlider.toString())
         }
