@@ -45,6 +45,7 @@
     <string name="like">Like\n</string>
     <string name="no_notice_available">No Notice Available</string>
     <string name="no_Syllabus_available">No Syllabus Available</string>
+    <string name="no_activity_available">No Activity Available</string>
     <string name="no_latest_book_available">No Latest Book Available</string>
     <string name="no_book_available">No Book Available</string>
     <string name="no_circuler_available">No Circular Available</string>
@@ -60,6 +61,8 @@
     <string name="lbl_book_no">Book No :</string>
     <string name="lbl_class_no">Class No :</string>
     <string name="issuable">Issuable :</string>
+    <string name="triangle">Triangle</string>
+    <string name="_holiday_">(Holiday)</string>
 
 
 </resources>
