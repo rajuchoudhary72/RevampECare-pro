@@ -232,5 +232,13 @@
             android:id="@+id/action_classSyllabus_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/activityCalenderFragment"
+        android:name="com.app.ecarepro.ui.calender.ActivityCalenderFragment"
+        android:label="ActivityCalenderFragment" />
+    <fragment
+        android:id="@+id/calenderActivityNavHost"
+        android:name="com.app.ecarepro.ui.calender.CalenderActivityNavHost"
+        android:label="CalenderActivityNavHost" />
 
 </navigation>
