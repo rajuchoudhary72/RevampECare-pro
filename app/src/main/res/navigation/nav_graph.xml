@@ -240,5 +240,9 @@
         android:id="@+id/calenderActivityNavHost"
         android:name="com.app.ecarepro.ui.calender.CalenderActivityNavHost"
         android:label="CalenderActivityNavHost" />
+    <fragment
+        android:id="@+id/paySlipFragment"
+        android:name="com.app.ecarepro.ui.payslip.PaySlipFragment"
+        android:label="PaySlipFragment" />
 
 </navigation>

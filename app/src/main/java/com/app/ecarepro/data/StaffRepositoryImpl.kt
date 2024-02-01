@@ -1,5 +1,6 @@
 package com.app.ecarepro.data
 import com.app.ecarepro.data.network.model.NetworkMyClass
+import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.model.MyClasse
 import com.app.ecarepro.data.network.service.StaffService
@@ -12,6 +13,10 @@ class StaffRepositoryImpl @Inject constructor(
     ) : StaffRepository {
     override suspend fun getMyClass(subID: Int, iD: Int): NetworkMyClass {
         return  staffService.myClass()
+    }
+
+    override suspend fun getPayslip(): NetworkPaySlip {
+        return staffService.getPayslip()
     }
 
 }
