@@ -187,8 +187,11 @@ class HomeFragment : Fragment() {
         } else if (favouriteSlider.module.contains("syllabus", true)) {
             findNavController().navigate(R.id.classSyllabus)
         } else if (favouriteSlider.module.contains("activity", true)) {
+            findNavController().navigate(R.id.calenderActivityNavHost)
+        } else if (favouriteSlider.module.contains("pay slip", true)) {
             findNavController().navigate(R.id.paySlipFragment)
-        } else {
+        }
+        else {
             Log.e("Home", favouriteSlider.toString())
         }
     }
