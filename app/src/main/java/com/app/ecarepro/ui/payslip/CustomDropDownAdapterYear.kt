@@ -44,6 +44,9 @@ class CustomDropDownAdapterYear(val context: Context, private var listItemsTxt: 
 
     }
 
+    override fun isEnabled(position: Int): Boolean {
+        return position != 0
+    }
 
 
 
@@ -62,7 +65,7 @@ class CustomDropDownAdapterYear(val context: Context, private var listItemsTxt: 
         val label: TextView
 
         init {
-            this.label = row?.findViewById(R.id.txtDropDownLabel) as TextView
+            this.label = row?.findViewById(R.id.textView) as TextView
         }
     }
 }

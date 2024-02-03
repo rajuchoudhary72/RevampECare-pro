@@ -2,13 +2,16 @@ package com.app.ecarepro.ui.payslip
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.R
@@ -17,11 +20,11 @@ import com.app.ecarepro.data.network.model.Year
 import com.app.ecarepro.databinding.FragmentPaySlipBinding
 import com.app.ecarepro.model.MonthlyPaySlip
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.notice.CustomDropDownAdapter
 import com.app.ecarepro.utils.AndroidDownloader
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class PaySlipFragment : Fragment() {
@@ -31,6 +34,8 @@ class PaySlipFragment : Fragment() {
     private lateinit var monthSelectedData: MonthlyPaySlip
     private lateinit var monthData: List<MonthlyPaySlip>
     private lateinit var yearData: List<Year>
+    private   var yearDataString:   ArrayList<String> =  ArrayList( )
+    private   var monthDataString:   ArrayList<String> =  ArrayList( )
     private val paySlipViewModel : PaySlipViewModel by viewModels()
     private lateinit var binding : FragmentPaySlipBinding
     override fun onCreateView(
@@ -45,38 +50,35 @@ class PaySlipFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long ) {
-
-                monthData= yearData[position].monthlyPaySlip
-
-                if (monthData!=null) {
-                    val spinnerAdapter = CustomDropDownAdapterMonth(requireContext(),monthData)
-                    binding.spinnerMont.adapter = spinnerAdapter
-                }
 
 
+        binding.autoCompleteMonth.onItemClickListener= OnItemClickListener{parent,view,pos,id ->
+
+            monthSelectedData =monthData[pos]
+            downloadFileUrl=monthSelectedData.protectedFilePath
+
+            if (monthSelectedData.filePath.isNotEmpty()){
+                binding.wvPdf.loadUrl("https://docs.google.com/gview?embedded=true&url="+monthSelectedData.filePath)
             }
 
         }
 
-        binding.spinnerMont.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long ) {
+        binding.autoCompleteYear.onItemClickListener =
+            OnItemClickListener { parent, view, position, id ->
 
-                monthSelectedData =monthData[position]
-                downloadFileUrl=monthSelectedData.protectedFilePath
+                monthData= yearData[position].monthlyPaySlip
 
-                if (monthSelectedData.filePath.isNotEmpty()){
-                    binding.wvPdf.loadUrl("https://docs.google.com/gview?embedded=true&url="+monthSelectedData.filePath)
+                if (monthData!=null) {
+
+                    monthData.forEach { data ->
+                        monthDataString.add(data.month.toString())
+                    }
+
+                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,monthDataString)
+                    binding.autoCompleteMonth.setAdapter(arrayAdapter)
                 }
 
-          }
-
-        }
+            }
 
 
         lifecycleScope.launch {
@@ -96,8 +98,19 @@ class PaySlipFragment : Fragment() {
 
                             if (it.data.years!=null) {
                                 yearData=it.data.years
-                                 val spinnerAdapter = CustomDropDownAdapterYear(requireContext(), it.data.years)
-                                binding.spinnerYear.adapter = spinnerAdapter
+
+
+
+                                it.data.years.forEach { data ->
+                                    yearDataString.add(data.year.toString())
+                                }
+
+                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,yearDataString)
+                                binding.autoCompleteYear.setAdapter(arrayAdapter)
+
+
+
+
                             }
 
 

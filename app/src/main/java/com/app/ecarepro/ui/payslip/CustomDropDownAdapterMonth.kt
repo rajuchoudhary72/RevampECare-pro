@@ -58,7 +58,7 @@ class CustomDropDownAdapterMonth(val context: Context, private var listItemsTxt:
         val label: TextView
 
         init {
-            this.label = row?.findViewById(R.id.txtDropDownLabel) as TextView
+            this.label = row?.findViewById(R.id.textView) as TextView
         }
     }
 }
