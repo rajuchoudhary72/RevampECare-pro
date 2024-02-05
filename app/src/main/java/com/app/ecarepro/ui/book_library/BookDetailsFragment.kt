@@ -76,10 +76,6 @@ class BookDetailsFragment : Fragment() {
                             }else{
                                 binding.tvIssuable.text=  "False"
                             }
-
-
-
-
                         }
 
                     }

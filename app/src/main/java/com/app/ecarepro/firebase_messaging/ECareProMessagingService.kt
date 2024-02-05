@@ -1,4 +1,4 @@
-package com.app.ecarepro.messaging
+package com.app.ecarepro.firebase_messaging
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
