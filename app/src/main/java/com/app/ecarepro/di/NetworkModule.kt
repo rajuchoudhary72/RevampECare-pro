@@ -3,6 +3,7 @@ package com.app.ecarepro.di
 import com.app.ecarepro.data.network.AuthInterceptor
 import com.app.ecarepro.data.network.service.AcademicService
 import com.app.ecarepro.data.network.service.LibraryService
+import com.app.ecarepro.data.network.service.QuestionnaireService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.StaffService
 import com.app.ecarepro.data.network.service.ThoughtsService
@@ -96,6 +97,13 @@ object NetworkModule {
         retrofit: Retrofit
     ): AcademicService {
         return retrofit.create(AcademicService::class.java)
+    }
+
+    @Provides
+    fun provideQuestionnaireService(
+        retrofit: Retrofit
+    ): QuestionnaireService {
+        return retrofit.create(QuestionnaireService::class.java)
     }
 
 }
