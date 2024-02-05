@@ -20,12 +20,8 @@
     <string name="contact_no">Contact No :</string>
     <string name="email">Email :</string>
     <string name="welcome">Welcome <b>Pooja Verma!</b></string>
-
-
     <string name="onboarding_title_1">School ERP on\nyour’s finger tips</string>
     <string name="onboarding_description_1">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
-
-
     <string name="onboarding_title_2">Manage your School\nManagement</string>
     <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
@@ -49,10 +45,7 @@
     <string name="no_latest_book_available">No Latest Book Available</string>
     <string name="no_book_available">No Book Available</string>
     <string name="no_circuler_available">No Circular Available</string>
-
-
     <string name="accession_no__">"Accession No :"</string>
-
     <string name="book_title">Book Title :</string>
     <string name="author">Author :</string>
     <string name="year_of_publication">Year of Publication :</string>
@@ -63,6 +56,10 @@
     <string name="issuable">Issuable :</string>
     <string name="triangle">Triangle</string>
     <string name="_holiday_">(Holiday)</string>
-
-
+    <string name="enter_user_name">Enter User Name</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="powered_by">Powered by</string>
+    <string name="demo_school_name_franciscan_international_school">Franciscan International School</string>
+    <string name="demo_school_location_greater_noida">Greater Noida</string>
 </resources>
