@@ -24,15 +24,13 @@ interface SchoolService {
     @GET("School/List")
     suspend fun getSchools(): NetworkSchoolsDto
 
-    @Headers("Accept: application/json")
-    @GET("School/Notices")
+     @GET("School/Notices")
     suspend fun getNotices(
         @Query("pg") pg: Int,
         @Query("ClassID") classID: Int,
     ): NetworkNotice
 
-    @Headers("Accept: application/json")
-    @GET("School/Circulars")
+     @GET("School/Circulars")
     suspend fun getCirculars(
         @Query("pg") pg: Int,
         @Query("YrID") yrID: Int,

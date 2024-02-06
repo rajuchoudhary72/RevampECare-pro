@@ -1,4 +1,4 @@
-package com.app.ecarepro.data.network.post_data
+package com.app.ecarepro.data.network.model
 
 import com.google.gson.annotations.SerializedName
 

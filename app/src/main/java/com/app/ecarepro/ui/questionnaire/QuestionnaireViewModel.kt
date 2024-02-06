@@ -2,10 +2,9 @@ package com.app.ecarepro.ui.questionnaire
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.repository.QuestionnaireRepo
+import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionnaireViewModel @Inject constructor(
-    private val questionnaireRepo: QuestionnaireRepo
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
     private val questionnaireStateFlow: MutableStateFlow<NetworkResult<NetworkQuestionnaire>> = MutableStateFlow(
@@ -24,7 +23,7 @@ class QuestionnaireViewModel @Inject constructor(
     fun getQuestionnaireList( pg: Int, myque: Boolean )=viewModelScope.launch {
         runCatching {
             questionnaireStateFlow.value = NetworkResult.Loading( )
-            questionnaireRepo.getQuestionnaireList( pg, myque)
+            userRepository.getQuestionnaireList( pg, myque)
         }.onSuccess {
             questionnaireStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

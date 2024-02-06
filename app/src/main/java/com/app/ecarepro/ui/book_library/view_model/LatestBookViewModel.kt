@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.repository.LibraryRepo
+import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LatestBookViewModel @Inject constructor(
-    private val libraryRepo: LibraryRepo
+    private val  userRepository: UserRepository
+
 ) :  ViewModel() {
 
 
@@ -26,7 +27,7 @@ class LatestBookViewModel @Inject constructor(
     fun getLibraryDTL(  )=viewModelScope.launch {
         runCatching {
             latestBookStateFlow.value = NetworkResult.Loading()
-            libraryRepo.getLibraryDTL( )
+            userRepository.getLibraryDTL( )
         }.onSuccess {
             latestBookStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

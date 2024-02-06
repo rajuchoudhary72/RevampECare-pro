@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.repository.AcademicRepo
+import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActivityCalenderViewModel @Inject constructor(
-    private val  academicRepo: AcademicRepo
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
     private val calenderStateFlow: MutableStateFlow<NetworkResult<NetworkActivityCalender>> = MutableStateFlow(
@@ -24,7 +24,7 @@ class ActivityCalenderViewModel @Inject constructor(
     fun getActivityCaledar( )=viewModelScope.launch {
         runCatching {
             calenderStateFlow.value = NetworkResult.Loading()
-            academicRepo.getActivityCaledar( )
+            userRepository.getActivityCaledar( )
         }.onSuccess {
             calenderStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

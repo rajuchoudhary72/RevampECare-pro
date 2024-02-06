@@ -3,10 +3,8 @@ package com.app.ecarepro.ui.circuler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkCircular
-import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.SchoolRepository
-import com.app.ecarepro.data.repository.StaffRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -3,10 +3,8 @@ package com.app.ecarepro.ui.syllabus
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
-import com.app.ecarepro.data.network.model.NetworkMyClass
-import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.repository.AcademicRepo
+import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClassSyllabusViewModel @Inject constructor(
-    private   val academicRepo: AcademicRepo
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
     private val classSyllabusStateFlow: MutableStateFlow<NetworkResult<NetworkClassSyllabus>> = MutableStateFlow(
@@ -26,7 +24,7 @@ class ClassSyllabusViewModel @Inject constructor(
     fun getClassSyllabus( )=viewModelScope.launch {
         runCatching {
             classSyllabusStateFlow.value = NetworkResult.Loading()
-            academicRepo.getClassSyllabus( )
+            userRepository.getClassSyllabus( )
         }.onSuccess {
             classSyllabusStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

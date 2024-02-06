@@ -1,9 +1,20 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.NetworkActivityCalender
+import com.app.ecarepro.data.network.model.NetworkBookDetails
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkLatestBook
+import com.app.ecarepro.data.network.model.NetworkMyClass
+import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkQuestionnaire
+import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
+import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -25,5 +36,74 @@ interface UserService {
     suspend fun login(
         @Body request: UserLoginRequestDto,
     ): LoginResponseDto
+
+
+     @GET("Academic/ClassSyllabus")
+    suspend fun getClassSyllabus(  ): NetworkClassSyllabus
+
+     @GET("Academic/ActivityCaledar")
+    suspend fun getActivityCaledar(  ): NetworkActivityCalender
+
+
+     @GET("Library/DTL")
+    suspend fun getLibraryDTL(  ): NetworkLatestBook
+
+     @GET("Library/BookDTL")
+    suspend fun getBookDTL(
+        @Query("BookID") bookID: Int,
+        @Query("ID") id: Int,
+    ): NetworkBookDetails
+
+     @GET("Library/Search")
+    suspend fun getLibrarySearch(
+        @Query("query") query: String,
+        @Query("pg") pg: Int,
+    ): NetworkBookDetails
+
+     @GET("Questionnaire/List")
+    suspend fun getQuestionnaireList(
+        @Query("pg") pg: Int,
+        @Query("myque") myque: Boolean,
+    ): NetworkQuestionnaire
+
+     @GET("Staff/MyClass")
+    suspend fun myClass(
+        /* @Query("SubID") subID: Int,
+         @Query("ID") iD: Int*/
+    ): NetworkMyClass
+
+     @GET("Staff/Payslip")
+    suspend fun getPayslip( ): NetworkPaySlip
+
+     @GET("Thoughts/List")
+    suspend fun getThoughts(
+        @Query("pg") pg: Int,
+        @Query("dir") dir: Int,
+        @Query("mythoughts") mythoughts: Boolean
+    ): NetworkThoughts
+
+
+     @GET("Thoughts/Like")
+    suspend fun like(
+        @Query("ThID") thID: Int,
+        @Query("Like") like: Boolean
+    ): CommonResponse
+
+     @GET("Thoughts/WhoLiked")
+    suspend fun whoLiked(
+        @Query("ThID") thID: Int
+    ): NetworkWhoLike
+
+    @POST("Thoughts/Create")
+    suspend fun thoughtsCreate(
+        @Body request: AddThoughtsPostData,
+    ): CommonResponse
+
+     @GET("Thoughts/Delete")
+    suspend fun thoughtsDelete(
+        @Query("ThID") thID: Int
+    ): CommonResponse
+
+
 
 }
