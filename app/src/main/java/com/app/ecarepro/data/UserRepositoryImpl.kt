@@ -75,16 +75,16 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getClassSyllabus()
     }
 
-    override suspend fun getActivityCaledar(): NetworkActivityCalender {
+    override suspend fun getActivityCalender(): NetworkActivityCalender {
         return  userService.getActivityCaledar()
     }
 
-    override suspend fun getLibraryDTL(): NetworkLatestBook {
-        return userService.getLibraryDTL()
+    override suspend fun getLibraryDetails(): NetworkLatestBook {
+        return userService.getLibraryDetails()
     }
 
-    override suspend fun getBookDTL(bookID: Int, id: Int): NetworkBookDetails {
-        return userService.getBookDTL(bookID, id)
+    override suspend fun getBookDetails(bookID: Int, id: Int): NetworkBookDetails {
+        return userService.getBookDetails(bookID, id)
     }
 
     override suspend fun getLibrarySearch(query: String, pg: Int): NetworkBookDetails {
@@ -95,8 +95,8 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getQuestionnaireList(pg, myque)
     }
 
-    override suspend fun getMyClass(subID: Int, iD: Int): NetworkMyClass {
-        return  userService.myClass()
+    override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
+        return  userService.staffMyClass()
     }
 
     override suspend fun getPayslip(): NetworkPaySlip {
@@ -107,8 +107,8 @@ class UserRepositoryImpl @Inject constructor(
         return  userService.getThoughts(pg, dir, mythoughts)
     }
 
-    override suspend fun like(thID: Int, like: Boolean): CommonResponse {
-        return userService.like(thID, like)
+    override suspend fun thoughtsLike(thID: Int, like: Boolean): CommonResponse {
+        return userService.thoughtsLike(thID, like)
     }
 
     override suspend fun thoughtsDelete(thID: Int): CommonResponse {

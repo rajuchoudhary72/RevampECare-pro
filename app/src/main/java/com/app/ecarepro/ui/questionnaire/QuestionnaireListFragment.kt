@@ -50,7 +50,7 @@ class QuestionnaireListFragment : Fragment() {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = false
-                        Log.d("main", "Error" + it )
+                        Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {

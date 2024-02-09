@@ -27,11 +27,6 @@ class CustomDropDownAdapter(val context: Context, private var listItemsTxt: List
             vh = view.tag as ItemRowHolder
         }
 
-        // setting adapter item height programatically.
-
-        /*val params = view.layoutParams
-        params.height = 120
-        view.layoutParams = params*/
 
         vh.label.text = listItemsTxt[position].className
         return view

@@ -31,6 +31,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="notice">Notice</string>
+    <string name="circular">Circular</string>
+    <string name="payslip">PaySlip</string>
+    <string name="syallabus">Syllabus</string>
     <string name="class_notice">Class Notice</string>
     <string name="pdf_details">  PDF Details :</string>
     <string name="view">View</string>
@@ -62,4 +65,9 @@
     <string name="powered_by">Powered by</string>
     <string name="demo_school_name_franciscan_international_school">Franciscan International School</string>
     <string name="demo_school_location_greater_noida">Greater Noida</string>
+
+    <string name="false_value">False</string>
+    <string name="true_value">True</string>
+
+
 </resources>

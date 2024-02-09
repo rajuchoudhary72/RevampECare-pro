@@ -16,9 +16,8 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassSyllabusBinding
 import com.app.ecarepro.model.SyllabusLST
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.notice.NoticeListAdapter
-import com.app.ecarepro.ui.notice.NoticeViewModel
 import com.app.ecarepro.utils.AndroidDownloader
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -46,7 +45,7 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
 
 
         lifecycleScope.launch {
-            classSyllabusViewModel._classSyllabusStateFlow.collectLatest {
+            classSyllabusViewModel.classSyllabusStateFlow.collectLatest {
                 when (it) {
 
                     is NetworkResult.Loading -> {
@@ -57,7 +56,7 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerSyllabus.isVisible = false
-                        Log.d("main", "Error" + it)
+                        Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
@@ -88,7 +87,7 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
@@ -101,11 +100,11 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
         if (pos == 1) {
             findNavController().navigate(R.id.action_classSyllabus_to_openPdfFragment,
                 Bundle().apply {
-                    putString("url", t.filePath)
+                    putString(Constant.URL_ARGUMENT, t.filePath)
                 })
         } else if (pos == 2) {
             val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(t.filePath, "Syllabus")
+            androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
 
         }
     }

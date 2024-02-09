@@ -34,23 +34,23 @@ interface UserRepository {
 
 
     suspend fun getClassSyllabus( ): NetworkClassSyllabus
-    suspend fun getActivityCaledar(  ): NetworkActivityCalender
+    suspend fun getActivityCalender(  ): NetworkActivityCalender
 
-    suspend fun getLibraryDTL( ): NetworkLatestBook
-    suspend fun getBookDTL( bookID: Int,id: Int ): NetworkBookDetails
+    suspend fun getLibraryDetails( ): NetworkLatestBook
+    suspend fun getBookDetails(bookID: Int, id: Int ): NetworkBookDetails
     suspend fun getLibrarySearch( query: String,pg: Int ): NetworkBookDetails
 
     suspend fun getQuestionnaireList( pg: Int, myque: Boolean ): NetworkQuestionnaire
 
-    suspend fun getMyClass(subID: Int, iD: Int): NetworkMyClass
+    suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
     suspend fun getPayslip( ): NetworkPaySlip
 
     suspend fun getThoughts(pg: Int,
                             dir: Int,
                             mythoughts: Boolean): NetworkThoughts
 
-    suspend fun like( thID: Int,
-                      like: Boolean): CommonResponse
+    suspend fun thoughtsLike(thID: Int,
+                             like: Boolean): CommonResponse
     suspend fun thoughtsDelete( thID: Int ): CommonResponse
 
     suspend fun whoLiked( thID: Int ): NetworkWhoLike

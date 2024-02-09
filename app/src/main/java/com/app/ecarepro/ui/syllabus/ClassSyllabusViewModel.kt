@@ -17,18 +17,18 @@ class ClassSyllabusViewModel @Inject constructor(
     private val  userRepository: UserRepository
 ) : ViewModel() {
 
-    private val classSyllabusStateFlow: MutableStateFlow<NetworkResult<NetworkClassSyllabus>> = MutableStateFlow(
+    private val classSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<NetworkClassSyllabus>> = MutableStateFlow(
         NetworkResult.Loading())
-    val _classSyllabusStateFlow: StateFlow<NetworkResult<NetworkClassSyllabus>> = classSyllabusStateFlow
+    val classSyllabusStateFlow: StateFlow<NetworkResult<NetworkClassSyllabus>> = classSyllabusMutableStateFlow
 
     fun getClassSyllabus( )=viewModelScope.launch {
         runCatching {
-            classSyllabusStateFlow.value = NetworkResult.Loading()
+            classSyllabusMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getClassSyllabus( )
         }.onSuccess {
-            classSyllabusStateFlow.value = NetworkResult.Success(it)
+            classSyllabusMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            classSyllabusStateFlow.value = NetworkResult.Error(it.message)
+            classSyllabusMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }

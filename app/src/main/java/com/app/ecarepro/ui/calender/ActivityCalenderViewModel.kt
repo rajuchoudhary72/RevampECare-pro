@@ -3,7 +3,6 @@ package com.app.ecarepro.ui.calender
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
-import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +23,7 @@ class ActivityCalenderViewModel @Inject constructor(
     fun getActivityCaledar( )=viewModelScope.launch {
         runCatching {
             calenderStateFlow.value = NetworkResult.Loading()
-            userRepository.getActivityCaledar( )
+            userRepository.getActivityCalender( )
         }.onSuccess {
             calenderStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

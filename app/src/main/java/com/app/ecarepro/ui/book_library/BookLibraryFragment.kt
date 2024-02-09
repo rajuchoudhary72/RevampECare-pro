@@ -55,7 +55,7 @@ class BookLibraryFragment : Fragment() {
 
     private fun setUpViewPager() {
 
-        val tabItem = mutableListOf("Inbox", "Sent")
+        val tabItem = mutableListOf("Latest Book", "My Account")
 
         bookLibraryBinding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int {

@@ -41,7 +41,7 @@ class NoticeViewModel @Inject constructor(
       fun getMyClass(subID: Int, iD: Int  )=viewModelScope.launch {
           runCatching {
               myClassStateFlow.value =NetworkResult.Loading( )
-              userRepository.getMyClass(subID, iD)
+              userRepository.staffMyClass(subID, iD)
           }.onSuccess {
               myClassStateFlow.value =NetworkResult.Success(it)
           }.onFailure {

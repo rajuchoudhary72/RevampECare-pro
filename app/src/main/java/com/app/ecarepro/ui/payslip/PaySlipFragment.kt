@@ -21,6 +21,7 @@ import com.app.ecarepro.databinding.FragmentPaySlipBinding
 import com.app.ecarepro.model.MonthlyPaySlip
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.AndroidDownloader
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,7 +59,7 @@ class PaySlipFragment : Fragment() {
             downloadFileUrl=monthSelectedData.protectedFilePath
 
             if (monthSelectedData.filePath.isNotEmpty()){
-                binding.wvPdf.loadUrl("https://docs.google.com/gview?embedded=true&url="+monthSelectedData.filePath)
+                binding.wvPdf.loadUrl(Constant.WEBVIEW_PDF_BASE_URL+monthSelectedData.filePath)
             }
 
         }
@@ -119,7 +120,7 @@ class PaySlipFragment : Fragment() {
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
@@ -148,7 +149,7 @@ class PaySlipFragment : Fragment() {
 
         binding.fbDowload.setOnClickListener {
             val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(downloadFileUrl, "PaySlip")
+            androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
         }
 
     }

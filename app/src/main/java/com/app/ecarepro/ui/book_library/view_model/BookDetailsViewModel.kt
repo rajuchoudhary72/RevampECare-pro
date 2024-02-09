@@ -21,10 +21,10 @@ class BookDetailsViewModel @Inject constructor(
         NetworkResult.Loading())
     val _bookDetailsStateFlow: StateFlow<NetworkResult<NetworkBookDetails>> = bookDetailsStateFlow
 
-    fun getBookDTL( bookID: Int,id: Int  )=viewModelScope.launch {
+    fun getBookDetails(bookID: Int, id: Int  )=viewModelScope.launch {
         runCatching {
             bookDetailsStateFlow.value = NetworkResult.Loading()
-            userRepository.getBookDTL(bookID, id )
+            userRepository.getBookDetails(bookID, id )
         }.onSuccess {
             bookDetailsStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

@@ -6,15 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBookDetailsBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.book_library.view_model.BookDetailsViewModel
+import com.app.ecarepro.utils.Constant
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -34,8 +33,8 @@ class BookDetailsFragment : Fragment() {
 
         binding= FragmentBookDetailsBinding.inflate(inflater,container,false)
 
-        val bookID=  requireArguments().getInt("bookID")
-        bookDetailsViewModel.getBookDTL(bookID,0)
+        val bookID=  requireArguments().getInt(Constant.BOOK_ID_ARGUMENT)
+        bookDetailsViewModel.getBookDetails(bookID,Constant.DEFAULT_ID)
 
         return binding.root
 
@@ -54,7 +53,7 @@ class BookDetailsFragment : Fragment() {
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                         Log.d("main", "Error" + it )
+                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
@@ -71,21 +70,21 @@ class BookDetailsFragment : Fragment() {
                                 .into(binding.ivCoverPic)
 
 
-                            if (data.isIssuable==1){
-                                binding.tvIssuable.text=  "True"
+                            if (data.isIssuable==Constant.TRUE_VALUE){
+                                binding.tvIssuable.text=  R.string.true_value.toString()
                             }else{
-                                binding.tvIssuable.text=  "False"
+                                binding.tvIssuable.text=  R.string.false_value.toString()
                             }
                         }
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
 
-        bookDetailsViewModel.getBookDTL(1,0)
+        bookDetailsViewModel.getBookDetails(1,0)
 
 
     }

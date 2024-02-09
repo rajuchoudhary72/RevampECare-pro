@@ -46,10 +46,10 @@ interface UserService {
 
 
      @GET("Library/DTL")
-    suspend fun getLibraryDTL(  ): NetworkLatestBook
+    suspend fun getLibraryDetails(  ): NetworkLatestBook
 
      @GET("Library/BookDTL")
-    suspend fun getBookDTL(
+    suspend fun getBookDetails(
         @Query("BookID") bookID: Int,
         @Query("ID") id: Int,
     ): NetworkBookDetails
@@ -67,7 +67,7 @@ interface UserService {
     ): NetworkQuestionnaire
 
      @GET("Staff/MyClass")
-    suspend fun myClass(
+    suspend fun staffMyClass(
         /* @Query("SubID") subID: Int,
          @Query("ID") iD: Int*/
     ): NetworkMyClass
@@ -84,7 +84,7 @@ interface UserService {
 
 
      @GET("Thoughts/Like")
-    suspend fun like(
+    suspend fun thoughtsLike(
         @Query("ThID") thID: Int,
         @Query("Like") like: Boolean
     ): CommonResponse

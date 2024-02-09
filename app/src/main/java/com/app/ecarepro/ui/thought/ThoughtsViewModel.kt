@@ -51,7 +51,7 @@ class ThoughtsViewModel @Inject constructor(
       fun like(thID: Int, like: Boolean)=viewModelScope.launch {
           likeStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
-            userRepository.like(thID, like)
+            userRepository.thoughtsLike(thID, like)
         }.onSuccess {
             likeStateFlow.value = ResponseStateCreateTou.Success(it)
         }.onFailure {

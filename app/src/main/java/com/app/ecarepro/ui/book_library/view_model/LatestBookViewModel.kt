@@ -24,10 +24,10 @@ class LatestBookViewModel @Inject constructor(
         NetworkResult.Loading())
     val _latestBookStateFlow: StateFlow<NetworkResult<NetworkLatestBook>> = latestBookStateFlow
 
-    fun getLibraryDTL(  )=viewModelScope.launch {
+    fun getLibraryDetails(  )=viewModelScope.launch {
         runCatching {
             latestBookStateFlow.value = NetworkResult.Loading()
-            userRepository.getLibraryDTL( )
+            userRepository.getLibraryDetails( )
         }.onSuccess {
             latestBookStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

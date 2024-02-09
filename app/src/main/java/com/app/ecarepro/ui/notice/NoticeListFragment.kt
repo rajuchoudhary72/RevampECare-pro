@@ -21,6 +21,7 @@ import com.app.ecarepro.model.Notice
 import com.app.ecarepro.model.Thoughts
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.thought.ThoughtsAdapter
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +66,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerNotice.isVisible = false
-                        Log.d("main", "Error" + it )
+                        Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
@@ -124,7 +125,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
@@ -134,7 +135,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                 R.id.btn_noti -> {
 
                     binding.spinnerClass.visibility = View.GONE
-                    fetchNotices(1, 0)
+                    fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
                 }
 
                 else -> {
@@ -162,8 +163,8 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
         }
 
-        fetchNotices(1, 0)
-        getMyClass(0, 1)
+        fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
+        getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
 
     }
 
@@ -181,7 +182,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
     override fun onItemClick(t: Notice, pos: Int, boolean: Boolean) {
 
         findNavController().navigate(R.id.action_noticeListFragment_to_noticeDetailsFragment,Bundle( ).apply {
-            t.ntID?.let { putInt("NoticeID", it) }
+            t.ntID?.let { putInt(Constant.NOTICE_ID_ARGUMENT, it) }
         })
 
      }

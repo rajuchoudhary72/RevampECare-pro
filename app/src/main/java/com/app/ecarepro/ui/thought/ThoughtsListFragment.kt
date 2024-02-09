@@ -19,6 +19,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentThoughtsListBinding
 import com.app.ecarepro.model.Thoughts
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.ResponseStateCreateTou
 import com.app.ecarepro.utils.listener.ItemListener
@@ -61,11 +62,11 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
         fragmentThoughtsListBinding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (fragmentThoughtsListBinding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_all -> {
-                    getThoughts(1, 1, false)
+                    getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR, false)
                 }
 
                 else -> {
-                    getThoughts(1, 1, true)
+                    getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR,true)
                 }
             }
         }
@@ -75,7 +76,7 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
             findNavController().navigate(R.id.addThoughtsBlankFragment)
         }
 
-        getThoughts(1, 1, false)
+        getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR,false)
 
         lifecycleScope.launch {
             thoughtsViewModel._postStateFlow.collectLatest {
@@ -160,11 +161,11 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.who_liked_bottom_sheet, null)
 
-        val iv_close = view.findViewById<ImageView>(R.id.iv_close)
+        val ivClose = view.findViewById<ImageView>(R.id.iv_close)
         val like = view.findViewById<TextView>(R.id.like)
-        val recycler_view = view.findViewById<RecyclerView>(R.id.recycler_view)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 
-        iv_close.setOnClickListener {
+        ivClose.setOnClickListener {
             dialog.dismiss()
         }
 
@@ -176,22 +177,22 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
 
                         is NetworkResult.Loading -> {
                             (requireActivity() as MainActivity).showLoader(true)
-                            recycler_view.isVisible = false
+                            recyclerView.isVisible = false
                         }
 
                         is NetworkResult.Error -> {
                             (requireActivity() as MainActivity).showLoader(false)
-                            recycler_view.isVisible = false
+                            recyclerView.isVisible = false
                             Log.d("main", "Error$it")
                         }
 
                         is NetworkResult.Success -> {
                             (requireActivity() as MainActivity).showLoader(false)
-                            recycler_view.isVisible = true
+                            recyclerView.isVisible = true
 
                             if (it.data != null) {
                                 val whoLikedAdapter = WhoLikedAdapter(it.data.likeBy)
-                                recycler_view.apply {
+                                recyclerView.apply {
                                     setHasFixedSize(true)
                                     layoutManager = LinearLayoutManager(activity)
                                     adapter = whoLikedAdapter

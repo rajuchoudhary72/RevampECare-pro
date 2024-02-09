@@ -17,6 +17,7 @@ import com.app.ecarepro.databinding.FragmentLatestBookBinding
 import com.app.ecarepro.model.LatestBook
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.book_library.view_model.LatestBookViewModel
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -54,7 +55,7 @@ class LatestBookFragment : Fragment() , ItemListener<LatestBook> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         latestBookBinding.rvLatestBook.isVisible = false
-                        Log.d("main", "Error" + it )
+                        Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
@@ -84,19 +85,19 @@ class LatestBookFragment : Fragment() , ItemListener<LatestBook> {
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
 
-        latestBookViewModel.getLibraryDTL()
+        latestBookViewModel.getLibraryDetails()
 
 
     }
 
     override fun onItemClick(t: LatestBook, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.action_bookLibraryFragment_to_bookDetailsFragment,Bundle( ).apply {
-            putInt("bookID", t.bookID)
+            putInt(Constant.BOOK_ID_ARGUMENT, t.bookID)
         })
      }
 }

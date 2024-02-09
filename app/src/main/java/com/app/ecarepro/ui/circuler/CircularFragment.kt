@@ -10,8 +10,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
+ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,6 +22,7 @@ import com.app.ecarepro.databinding.FragmentCirculerBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.Circular
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,7 +51,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
         fragmentCircularBinding.ivSearch.setOnClickListener {
             if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
-                circularViewModel.getCirculars(1,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
             }else {
                  Toast.makeText(requireContext(),"Please enter title!!!",Toast.LENGTH_LONG ).show()
             }
@@ -119,18 +119,18 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
 
-        circularViewModel.getCirculars(1,selectedYearID,"")
+        circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"")
 
     }
 
     override fun onItemClick(t: Circular, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.action_circularFragment_to_circularDetailsFragment,Bundle( ).apply {
-            putInt("CircularID", t.cirID)
+            putInt(Constant.CIRCULAR_ID, t.cirID)
         })
      }
 
