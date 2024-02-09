@@ -15,15 +15,15 @@ import com.app.ecarepro.model.LikeBy
 import com.google.android.material.imageview.ShapeableImageView
 import com.squareup.picasso.Picasso
 
-class WhoLikedAdapter(private var likeByList : List<LikeBy> ) :
+class WhoLikedAdapter(private var likeByList: List<LikeBy>) :
     RecyclerView.Adapter<WhoLikedAdapter.WholikedViewHolder>() {
 
-        private lateinit var bindingm:   WhoLikedListItemBinding
-
+    private lateinit var bindingm: WhoLikedListItemBinding
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WholikedViewHolder {
-        bindingm=WhoLikedListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        bindingm =
+            WhoLikedListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return WholikedViewHolder(bindingm.root)
     }
 
@@ -31,17 +31,16 @@ class WhoLikedAdapter(private var likeByList : List<LikeBy> ) :
 
     override fun onBindViewHolder(holder: WholikedViewHolder, position: Int) {
 
-        val data= likeByList[position]
-        bindingm.tvName.text=data.name
+        val data = likeByList[position]
+        bindingm.tvName.text = data.name
 
-        Picasso.get().load(data.photo).
-        placeholder(R.drawable.default_profile)
+        Picasso.get().load(data.photo).placeholder(R.drawable.default_profile)
             .into(bindingm.userImg)
 
     }
 
 
-    class WholikedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class WholikedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 
     }
