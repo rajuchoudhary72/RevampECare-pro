@@ -72,6 +72,8 @@
     <string name="school_collage_library">School/Collage Library</string>
     <string name="latest_book">Latest Book</string>
     <string name="my_account">My Account</string>
+    <string name="date_">Date :</string>
+    <string name="update_on_">Update On :</string>
 
 
 </resources>
