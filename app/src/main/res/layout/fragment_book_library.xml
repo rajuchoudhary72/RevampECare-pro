@@ -104,7 +104,7 @@
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/ubuntu_regular"
-                                android:text="School/Collage Library"
+                                android:text="@string/school_collage_library"
                                 app:strokeColor="@color/white"
                                 app:rippleColor="@color/white"
 
@@ -117,7 +117,7 @@
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/ubuntu_regular"
-                                android:text="Mega e-book"
+                                android:text="@string/mega_e_book"
                                 app:strokeColor="@color/white"
                                 app:rippleColor="@color/white"
                                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
@@ -134,12 +134,12 @@
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Latest Book" />
+                                android:text="@string/latest_book" />
 
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="My Account" />
+                                android:text="@string/my_account" />
 
                         </com.google.android.material.tabs.TabLayout>
 

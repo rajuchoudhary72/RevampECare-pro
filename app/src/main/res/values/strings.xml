@@ -68,6 +68,10 @@
 
     <string name="false_value">False</string>
     <string name="true_value">True</string>
+    <string name="mega_e_book">Mega e-book</string>
+    <string name="school_collage_library">School/Collage Library</string>
+    <string name="latest_book">Latest Book</string>
+    <string name="my_account">My Account</string>
 
 
 </resources>
