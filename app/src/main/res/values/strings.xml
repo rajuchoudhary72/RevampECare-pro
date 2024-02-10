@@ -74,6 +74,13 @@
     <string name="my_account">My Account</string>
     <string name="date_">Date :</string>
     <string name="update_on_">Update On :</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">ok</string>
+    <string name="add_thoughts">Add Thoughts</string>
+    <string name="enter_thoughts_hint">Enter Thoughts</string>
+    <string name="enter_auther_hint">Enter Auther</string>
+    <string name="save">Save</string>
+    <string name="book_details_title">Book Details</string>
 
 
 </resources>

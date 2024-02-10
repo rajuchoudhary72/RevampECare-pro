@@ -57,7 +57,7 @@
                 android:fontFamily="@font/ubuntu_medium"
 
                 android:gravity="center"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:textAllCaps="true"
 
                 />
@@ -94,7 +94,7 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center"
-                android:text="ok"
+                android:text="@string/ok"
                 android:textAllCaps="true" />
         </RelativeLayout>
 
