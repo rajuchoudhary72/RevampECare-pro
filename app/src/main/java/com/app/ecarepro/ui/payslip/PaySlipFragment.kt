@@ -70,7 +70,7 @@ class PaySlipFragment : Fragment() {
                 monthData= yearData[position].monthlyPaySlip
 
                 if (monthData!=null) {
-
+                    monthDataString.clear()
                     monthData.forEach { data ->
                         monthDataString.add(data.month.toString())
                     }
