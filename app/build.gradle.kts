@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.firebaseCrashlytics)
+    alias(libs.plugins.googleServices)
     kotlin("kapt")
 }
 
@@ -17,7 +18,7 @@ android {
 
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -50,7 +51,6 @@ android {
     productFlavors {
         create("dev") {
             dimension = "build"
-            applicationIdSuffix = ".dev"
         }
         create("prod") {
             dimension = "build"
@@ -64,10 +64,10 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
-    implementation (libs.androidx.recyclerview)
+    implementation(libs.androidx.recyclerview)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-    implementation (libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity.ktx)
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -92,10 +92,10 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.cloud.messaging)
 
-    /* Pin View */
+    /* OTP Pin View */
     implementation(libs.otpview)
 
-    /* Epoxy Recycler View */
+    /* Epoxy Recycler View which   is  multiple  view   handle in  one  view  */
     implementation(libs.epoxy)
     kapt(libs.epoxy.processor)
     implementation(libs.epoxy.databinding)
@@ -103,11 +103,16 @@ dependencies {
     /* RecyclerView Item Decorations */
     implementation(libs.decorator)
 
-    implementation ("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
+    /*AAChartCore-Kotlin is a Kotlin library typically used in User Interface*/
+    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
 
     /* Page indicator */
-    implementation (libs.scrollingpagerindicator)
+    implementation(libs.scrollingpagerindicator)
     implementation(libs.dotsindicator)
+
+    /*An image loading library for Android backed by Kotlin Coroutines*/
+    implementation("io.coil-kt:coil:2.5.0")
+    implementation(libs.picasso)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

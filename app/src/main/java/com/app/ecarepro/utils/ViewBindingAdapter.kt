@@ -2,13 +2,17 @@ package com.app.ecarepro.utils
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import coil.load
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
 
@@ -21,6 +25,20 @@ fun View.showOrGone(visible: Boolean) {
 @BindingAdapter("isInvisible")
 fun View.showOrHide(invisible: Boolean) {
     isInvisible = invisible
+}
+
+@BindingAdapter("imageUrl", "placeholder", requireAll = false)
+fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
+    load(url) {
+        crossfade(true)
+        if (placeholder != null) {
+            placeholder(placeholder)
+            error(placeholder)
+        } else {
+            placeholder(R.drawable.img_school_placeholder)
+            error(R.drawable.img_school_placeholder)
+        }
+    }
 }
 
 @BindingAdapter("animateBetweenColorsOnExpand", "colorFrom", "colorTo", requireAll = true)
@@ -50,6 +68,7 @@ fun LinearLayout.addCollectionItems(collections: Boolean) {
         addView(binding.root)
 
     }
-    val footer = ItemCollectionCollectFooterBinding.inflate(LayoutInflater.from(context), null, false)
+    val footer =
+        ItemCollectionCollectFooterBinding.inflate(LayoutInflater.from(context), null, false)
     addView(footer.root)
 }

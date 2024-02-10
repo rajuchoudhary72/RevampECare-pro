@@ -1,27 +1,37 @@
 package com.app.ecarepro.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
+import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
+import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.labelCenter
+import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
+import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.DecorationLookup
 import com.rubensousa.decorator.GridMarginDecoration
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -45,11 +55,12 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpViews()
+        setUpObservers()
+    }
 
+    private fun setUpViews() {
         binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
-
-        mViewModel.insertUser()
-
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = resources.getDimensionPixelOffset(
@@ -62,7 +73,6 @@ class HomeFragment : Fragment() {
                 }
             )
         )
-
         binding.recyclerView.addItemDecoration(
             GridMarginDecoration.create(
                 margin = resources.getDimensionPixelOffset(
@@ -81,6 +91,33 @@ class HomeFragment : Fragment() {
                 }
             )
         )
+    }
+
+    private fun setUpObservers() {
+        lifecycleScope.launch {
+            mViewModel
+                .uiState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
+                .collectLatest { uiState ->
+                    handleUiState(uiState)
+                }
+        }
+    }
+
+    private fun handleUiState(uiState: HomeUiState) {
+        (requireActivity() as MainActivity).showLoader(uiState is HomeUiState.Loading)
+        if (uiState is HomeUiState.Success) {
+            buildUiModels(uiState)
+        }
+    }
+
+    private fun buildUiModels(uiState: HomeUiState.Success) {
+        uiState.user.let { user ->
+            binding.apply {
+                imgUserAvatar.imageUrl(user.photo)
+                txtUserName.text = user.name
+            }
+        }
 
         binding.recyclerView.withModels {
             carouselNoSnapBuilder {
@@ -111,7 +148,7 @@ class HomeFragment : Fragment() {
             viewAllWidget {
                 id("view_all_widget")
                 spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
-                clickListener{_ ->
+                clickListener { _ ->
                     findNavController().navigate(R.id.widgetsFragment)
                 }
             }
@@ -121,16 +158,42 @@ class HomeFragment : Fragment() {
                 spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
             }
 
-            (12..22).forEach {
+            uiState.favourites.forEach { favouriteSlider ->
                 cardOption {
-                    id(it)
-                    clickListener{_ ->
-                        findNavController().navigate(R.id.favouritesFragment)
-                    }
+                    id(favouriteSlider.module)
+                    data(favouriteSlider)
+                    clickListener { _ -> navigateToFavourites(favouriteSlider) }
+                }
+            }
+
+            addMoreFavourites {
+                id("add more")
+                clickListener { _ ->
+                    findNavController().navigate(R.id.favouritesFragment)
                 }
             }
         }
+    }
 
+    private fun navigateToFavourites(favouriteSlider: Slider) {
+        if (favouriteSlider.module.contains("notice", true)) {
+            findNavController().navigate(R.id.noticeListFragment)
+        } else if (favouriteSlider.module.contains("thought", true)) {
+            findNavController().navigate(R.id.thoughtsListFragment)
+        } else if (favouriteSlider.module.contains("circular", true)) {
+            findNavController().navigate(R.id.circularFragment)
+        } else if (favouriteSlider.module.contains("library", true)) {
+            findNavController().navigate(R.id.bookLibraryFragment)
+        } else if (favouriteSlider.module.contains("syllabus", true)) {
+            findNavController().navigate(R.id.classSyllabus)
+        } else if (favouriteSlider.module.contains("activity", true)) {
+            findNavController().navigate(R.id.calenderActivityNavHost)
+        } else if (favouriteSlider.module.contains("pay slip", true)) {
+            findNavController().navigate(R.id.paySlipFragment)
+        }
+        else {
+            Log.e("Home", favouriteSlider.toString())
+        }
     }
 
     override fun onDestroyView() {

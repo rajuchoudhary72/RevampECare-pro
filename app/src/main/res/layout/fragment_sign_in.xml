@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent=".5" />
+            app:layout_constraintGuide_percent=".4" />
 
 
         <ImageView
@@ -88,14 +88,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:hint="Enter User Name"
+            android:hint="@string/enter_user_name"
             app:hintTextColor="@color/grey_40"
             app:layout_constraintTop_toBottomOf="@+id/img_ecare_logo"
             app:shapeAppearanceOverlay="?shapeAppearanceCornerLarge">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/enter_password"
+            android:visibility="gone"
+            app:hintTextColor="@color/grey_40"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerLarge">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,10 +125,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:fontFamily="@font/ubuntu_regular"
-            android:text="Remember Me"
+            android:text="@string/remember_me"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -120,7 +141,7 @@
             android:text="@string/forget_password"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_previous"
@@ -147,6 +168,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:enabled="false"
             android:fontFamily="@font/ubuntu_medium"
             android:text="@string/continue_"
             android:textAppearance="?attr/textAppearanceLabelLarge"
@@ -166,7 +188,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:drawablePadding="8dp"
-            android:text="Powered by"
+            android:text="@string/powered_by"
             android:textAppearance="?attr/textAppearanceCaption"
             android:textColor="@color/grey_40"
             app:drawableEndCompat="@drawable/logo_franciscan_gray"

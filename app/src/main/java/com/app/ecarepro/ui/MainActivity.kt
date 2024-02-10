@@ -1,12 +1,15 @@
 package com.app.ecarepro.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,15 +17,21 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerFooter
 import com.app.ecarepro.drawerHeader
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
+import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -35,6 +44,9 @@ class MainActivity : AppCompatActivity() {
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
+
+    private var loader: AlertDialog? = null
+
 
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
@@ -56,7 +68,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.appBarMain.contentMain.bottomNavigationView.isVisible = topLevelFragments.contains(destination.id)
+            binding.appBarMain.contentMain.bottomNavigationView.isVisible =
+                topLevelFragments.contains(destination.id)
         }
 
         setUpDrawer()
@@ -75,10 +88,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            systemViewModel.user.collectLatest { user ->
+                buildDrawerModels(user)
+            }
+        }
 
+        binding.drawerLayout.open()
+    }
+
+    private fun buildDrawerModels(user: NetworkUserDetailsDto) {
         binding.recyclerViewNavView.withModels {
             drawerHeader {
                 id(R.id.drawer_header)
+                user(user)
             }
             (0..6).forEach {
                 drawerItem {
@@ -87,9 +110,31 @@ class MainActivity : AppCompatActivity() {
             }
             drawerFooter {
                 id(R.id.drawer_footer)
+                appVersion("App Version 1.0.0")
+                clickListener { v ->
+                    systemViewModel.openDrawer(false)
+                    logout()
+                }
             }
         }
-        binding.drawerLayout.open()
+    }
+
+    private fun logout() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure to logout?")
+            .setPositiveButton("Yes") { _, _ ->
+                systemViewModel.logout {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    startActivity(intent)
+                    Runtime.getRuntime().exit(0)
+                }
+            }
+            .setNegativeButton("No") { _, _ ->
+
+            }
+            .show()
     }
 
     private fun setUpMoreOptions() {
@@ -140,8 +185,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.messageFragment
             )
         )
-        binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems)
-        binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
+        binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
+        //binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
@@ -150,12 +195,15 @@ class MainActivity : AppCompatActivity() {
                 0 -> {
                     navController.navigate(R.id.homeFragment)
                 }
+
                 1 -> {
                     navController.navigate(R.id.dashboardFragment)
                 }
+
                 3 -> {
                     navController.navigate(R.id.notificationFragment)
                 }
+
                 4 -> {
                     navController.navigate(R.id.messageFragment)
                 }
@@ -183,5 +231,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    fun showLoader(show: Boolean) {
+        loader?.apply {
+            dismiss()
+            loader = null
+        }
+        if (show)
+            loader = progressDialog()
     }
 }

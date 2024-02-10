@@ -9,7 +9,6 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        app:bottomWindowInsetToPadding="@{true}"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -17,16 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:liftOnScroll="true"
-            topWindowInsetToPadding="@{true}"
             app:liftOnScrollTargetViewId="@id/recycler_view">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_arrow_back_24px"
                 app:title="All Widgets"
                 app:titleTextAppearance="?attr/titleTextAppearance"
-                app:titleTextColor="@color/white">
+                app:titleTextColor="@color/white"
+                app:topWindowInsetToPadding="@{true}">
 
 
                 <LinearLayout
@@ -69,6 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            app:bottomWindowInsetToPadding="@{true}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             tools:listitem="@layout/item_dashboard_card" />

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="user"
+            type="com.app.ecarepro.data.network.model.NetworkUserDetailsDto" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +22,8 @@
             android:layout_height="88dp"
             android:padding="2dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_splash_hexagon"
+            imageUrl="@{user.photo}"
+            placeholder="@{@drawable/img_school_placeholder}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +38,8 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:text="Pooja Verma"
+            android:text="@{user.name}"
+            tools:text="Pooja Verma"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +51,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:text="Student"
+            android:text="@{user.userTypeName}"
+            tools:text="Student"
             android:textColor="#B9D7B1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

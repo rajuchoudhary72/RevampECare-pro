@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+     <variable
+    name="noticeDetailsViewModel"
+    type="com.app.ecarepro.ui.notice.NoticeDetailsViewModel" />
+
+        <variable
+            name="noticeDetailData"
+            type="com.app.ecarepro.model.NoticeData" />
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".ui.notice.NoticeDetailsFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_notic_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Notice"
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:titleTextColor="@color/white"
+            app:titleCentered="true"
+            android:background="@color/md_theme_light_primary"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_notic_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_title_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@{noticeDetailData.heading }"
+                android:fontFamily="@font/ubuntu_bold"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_date"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/round_access_time_filled_24"
+                    app:tint="@color/md_theme_light_primary"
+                    android:contentDescription="@string/clock_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/ubuntu_bold"
+                    android:layout_marginHorizontal="5dp"
+                    android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{noticeDetailData.noticeDate }"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="5dp" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_update"
+                app:layout_constraintTop_toBottomOf="@+id/ll_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/round_access_time_filled_24"
+                    app:tint="@color/md_theme_light_primary"
+                    android:contentDescription="@string/clock_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/update_on"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/ubuntu_bold"
+
+                    android:layout_marginHorizontal="5dp"
+                    android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                <TextView
+                    android:id="@+id/tv_update_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_gravity="center"
+                    android:text="@{noticeDetailData.updatedOn }"
+                    android:layout_marginHorizontal="5dp" />
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_notice_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_update"
+                 android:layout_marginVertical="15dp"
+
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{noticeDetailData.detail }"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textSize="16sp" />
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/action_divider"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notice_details"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginVertical="10dp" />
+
+            <RelativeLayout
+                app:layout_constraintTop_toBottomOf="@+id/action_divider"
+                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/notice_pdf"
+                isVisible="@{noticeDetailData.hasAttachment}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:visibility="visible">
+
+
+                <RelativeLayout
+                    android:id="@+id/inner_rel"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/pdf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:textAlignment="center"
+                       android:drawablePadding="10dp"
+                        app:drawableLeftCompat="@drawable/pdf"
+                        android:text="@string/pdf_details"
+                        android:textStyle="bold"
+                        tools:ignore="UnknownIdInLayout" />
+
+                    <TextView
+                        android:id="@+id/pdf_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textAlignment="center"
+                        android:text="@{noticeDetailData.fileSize }"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/pdf" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/inner_rel"
+                    android:layout_marginTop="25dp">
+
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <RelativeLayout
+                            android:id="@+id/rel_view_"
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                app:srcCompat="@drawable/view"
+
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/view"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:text="@string/view"
+
+                                />
+
+                            <View
+                                android:layout_width="1.5sp"
+                                android:layout_height="50dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
+                                android:background="#efefef" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:id="@+id/rel_download_"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/download"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                app:srcCompat="@drawable/download_fill" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/download"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:text="Download" />
+                        </RelativeLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
