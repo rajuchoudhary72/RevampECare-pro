@@ -17,17 +17,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PostQuestionnaireFragment : Fragment() {
 
-    private lateinit var  binding : FragmentPostQustionnaireBinding
-    private val viewMode : PostQuestionViewModel by viewModels()
+    private lateinit var binding: FragmentPostQustionnaireBinding
+    private val viewMode: PostQuestionViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
+    ): View {
 
-        binding= FragmentPostQustionnaireBinding.inflate(inflater,container,false)
+        binding = FragmentPostQustionnaireBinding.inflate(inflater, container, false)
 
-         return binding.root
+        return binding.root
     }
 
 
@@ -35,15 +35,17 @@ class PostQuestionnaireFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-         binding.textFiledThoughts.doAfterTextChanged {
-             if (it != null) {
-                 binding.btnAdd.isEnabled = it.isNotEmpty()
-             }
-         }
+        binding.textFiledThoughts.doAfterTextChanged {
+            if (it != null) {
+                binding.btnAdd.isEnabled = it.isNotEmpty()
+            }
+        }
 
         binding.btnAdd.setOnClickListener {
-            viewMode.addQuestion(binding.textFiledThoughts.text.toString(),
-                "","","")
+            viewMode.addQuestion(
+                binding.textFiledThoughts.text.toString(),
+                "", "", ""
+            )
         }
 
     }
