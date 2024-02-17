@@ -244,5 +244,21 @@
         android:id="@+id/paySlipFragment"
         android:name="com.app.ecarepro.ui.payslip.PaySlipFragment"
         android:label="PaySlipFragment" />
+    <fragment
+        android:id="@+id/questionnaireListFragment"
+        android:name="com.app.ecarepro.ui.questionnaire.QuestionnaireListFragment"
+        android:label="QuestionnaireListFragment" >
+        <action
+            android:id="@+id/action_questionnaireListFragment_to_answerDetailsFragment"
+            app:destination="@id/answerDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/answerDetailsFragment"
+        android:name="com.app.ecarepro.ui.questionnaire.answer_details.AnswerDetailsFragment"
+        android:label="AnswerDetailsFragment" />
+    <fragment
+        android:id="@+id/postQuestionnaireFragment"
+        android:name="com.app.ecarepro.ui.questionnaire.post_questionnaire.PostQuestionnaireFragment"
+        android:label="PostQuestionnaireFragment" />
 
 </navigation>

@@ -41,9 +41,9 @@
     <string name="date">Date :</string>
     <string name="update_on">Update On :</string>
     <string name="updated_by">Update By\n</string>
-    <string name="like">Like\n</string>
+    <string name="like">Like </string>
     <string name="no_notice_available">No Notice Available</string>
-     <string name="no_Syllabus_available">No Syllabus Available</string>
+    <string name="no_Syllabus_available">No Syllabus Available</string>
     <string name="no_activity_available">No Activity Available</string>
     <string name="no_latest_book_available">No Latest Book Available</string>
     <string name="no_book_available">No Book Available</string>
@@ -79,8 +79,12 @@
     <string name="add_thoughts">Add Thoughts</string>
     <string name="enter_thoughts_hint">Enter Thoughts</string>
     <string name="enter_auther_hint">Enter Auther</string>
-    <string name="save">Save</string>
+
     <string name="book_details_title">Book Details</string>
+    <string name="answer">Answer</string>
+    <string name="please_type_ans">" Please Type Answer"</string>
+    <string name="save">Save</string>
+    <string name="type_your_question">Type your question</string>
 
 
 </resources>
