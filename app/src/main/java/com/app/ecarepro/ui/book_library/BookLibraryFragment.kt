@@ -143,7 +143,7 @@ class BookLibraryFragment : Fragment() {
 
     private fun setUpViewPager(data: NetworkLatestBook) {
 
-        val tabItem = mutableListOf("Latest Book", "My Account")
+        val tabItem = mutableListOf(getString(R.string.latest_book), getString(R.string.my_account))
 
         bookLibraryBinding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int {
