@@ -41,9 +41,9 @@
     <string name="date">Date :</string>
     <string name="update_on">Update On :</string>
     <string name="updated_by">Update By\n</string>
-    <string name="like">Like\n</string>
+    <string name="like">Like </string>
     <string name="no_notice_available">No Notice Available</string>
-     <string name="no_Syllabus_available">No Syllabus Available</string>
+    <string name="no_Syllabus_available">No Syllabus Available</string>
     <string name="no_activity_available">No Activity Available</string>
     <string name="no_latest_book_available">No Latest Book Available</string>
     <string name="no_book_available">No Book Available</string>
@@ -68,6 +68,10 @@
 
     <string name="false_value">False</string>
     <string name="true_value">True</string>
+    <string name="answer">Answer</string>
+    <string name="please_type_ans">" Please Type Answer"</string>
+    <string name="save">Save</string>
+    <string name="type_your_question">Type your question</string>
 
 
 </resources>
