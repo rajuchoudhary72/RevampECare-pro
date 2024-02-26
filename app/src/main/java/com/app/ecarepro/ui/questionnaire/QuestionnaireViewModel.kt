@@ -31,4 +31,14 @@ class QuestionnaireViewModel @Inject constructor(
         }
     }
 
+    fun questionnaireLike(qID: Int, like: Boolean)=viewModelScope.launch {
+        runCatching {
+             userRepository.questionnaireLike( qID, like)
+        }.onSuccess {
+         }.onFailure {
+         }
+    }
+
+
+
 }

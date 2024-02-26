@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="questionData"
+            type="com.app.ecarepro.model.Question" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"
+        tools:context=".ui.questionnaire.answer_details.AnswerDetailsFragment">
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/md_theme_light_primary"
+            android:elevation="8dp"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Questionnaire"
+            app:titleCentered="true"
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:titleTextColor="@color/white" />
+
+           <androidx.core.widget.NestedScrollView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
+
+
+                <RelativeLayout
+                    android:id="@+id/word_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp">
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_update"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/user_img"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_centerVertical="true"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                            app:strokeColor="?attr/colorOutlineVariant"
+                            app:strokeWidth="1dp"
+                            app:imageUrl="@{questionData.photo}"
+                            tools:src="@drawable/default_profile" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="8dp"
+                            android:layout_toEndOf="@+id/user_img"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/updated_by"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:gravity="center"
+                                android:text="@{questionData.updatedBy}"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/updated_on"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="3dp"
+                                android:text="@{questionData.updatedOn}"
+                                />
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/rel_img_dot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+
+                        <RelativeLayout
+                            android:id="@+id/rel_dot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="10dp"
+                            android:paddingStart="10dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/dot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/delete" />
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+
+                    <TextView
+                        android:id="@+id/tv_que"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_below="@+id/rel_update"
+
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:text="@{questionData.que}"
+                        android:layout_marginStart="40dp"
+                        android:textSize="16sp" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_que"
+                        android:gravity="center">
+
+                        <LinearLayout
+
+                            android:id="@+id/ll_answer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/unanswer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="15dp"
+                                android:text="@string/answer"
+                                android:visibility="gone"
+                               isInvisible="@{questionData.answered}"
+                                app:drawableLeftCompat="@drawable/like_hover" />
+
+                            <TextView
+                                android:id="@+id/answer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="15dp"
+                                android:text="@string/answer"
+                                android:visibility="gone"
+                                android:textColor="@color/md_theme_light_primary"
+                                isVisible="@{questionData.answered}"
+                                app:drawableLeftCompat="@drawable/like" />
+
+                            <TextView
+                                 android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:paddingLeft="25dp"
+                                android:paddingTop="3dp"
+                                android:paddingRight="25dp" />
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+
+                            android:id="@+id/rl_likes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/unkike"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="15dp"
+                                android:text="@string/like"
+                                android:visibility="visible"
+                                app:drawableLeftCompat="@drawable/like_hover" />
+
+                            <TextView
+                                android:id="@+id/like"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:paddingLeft="15dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="15dp"
+                                android:text="@string/like"
+                                android:visibility="gone"
+                                app:drawableLeftCompat="@drawable/like" />
+
+                            <TextView
+                                android:id="@+id/total_like"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:paddingLeft="25dp"
+                                android:paddingTop="3dp"
+                                android:paddingRight="25dp" />
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_thoughtStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_corner"
+                    android:backgroundTint="@color/red"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:paddingStart="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/answer_list_item"
+                android:layout_marginBottom="60dp"
+
+                />
+
+        </LinearLayout>
+
+           </androidx.core.widget.NestedScrollView>
+
+
+
+    </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rel_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/ed_around"
+            isInvisible="@{questionData.answered}"
+            android:background="@color/grey_10"
+            android:layout_alignParentBottom="true"
+             >
+
+            <EditText
+                android:id="@+id/et_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+
+                android:background="@drawable/edit_text_bg_post_answer"
+                android:fontFamily="@font/ubuntu_medium"
+                android:hint="@string/please_type_ans"
+                android:padding="7dp"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+            <RelativeLayout
+                android:id="@+id/img_post_answer"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp">
+
+                <ImageButton
+                    android:id="@+id/post_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:enabled="false"
+                    android:background="@color/white"
+                    android:src="@drawable/send_icon_light"
+                     />
+
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>

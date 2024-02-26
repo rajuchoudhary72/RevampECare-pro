@@ -10,7 +10,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
- import androidx.fragment.app.Fragment
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -59,6 +60,8 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
 
 
+
+
         return fragmentCircularBinding.root
 
     }
@@ -66,6 +69,15 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fragmentCircularBinding.edSearch.doAfterTextChanged {
+            if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+            }else {
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"" )
+
+            }
+        }
 
         lifecycleScope.launch {
             circularViewModel._circularsStateFlowStateFlow.collectLatest {

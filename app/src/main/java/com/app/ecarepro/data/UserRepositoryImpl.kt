@@ -19,6 +19,10 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
+import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
 import javax.inject.Inject
@@ -93,6 +97,31 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getQuestionnaireList(pg: Int, myque: Boolean ): NetworkQuestionnaire {
         return userService.getQuestionnaireList(pg, myque)
+    }
+
+    override suspend fun questionnaireLike(qID: Int, like: Boolean): CommonResponse {
+        return  userService.questionnaireLike(qID, like)
+    }
+
+    override suspend fun answerList(qID: Int): NetworkAnswerDetails {
+        return userService.answerList(qID)
+    }
+
+    override suspend fun postAnswer(qid: String, answer: String): CommonResponse {
+        return userService.postAnswer(PostAnswerPostData(qid, answer))
+    }
+
+    override suspend fun deleteAnswer(ansID: Int): CommonResponse {
+        return userService.deleteAnswer(ansID)
+    }
+
+    override suspend fun addQuestion(
+        question: String,
+        attachment: String,
+        fileURL: String,
+        fileExt: String
+    ): CommonResponse {
+        return userService.addQuestion(AddQuestionPostData(Attachment(attachment, fileExt, fileURL),question) )
     }
 
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {

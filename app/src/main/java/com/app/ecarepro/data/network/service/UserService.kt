@@ -15,6 +15,9 @@ import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -105,5 +108,30 @@ interface UserService {
     ): CommonResponse
 
 
+    @GET("Questionnaire/Like")
+    suspend fun questionnaireLike(
+        @Query("QID") qID: Int,
+        @Query("Like") like: Boolean
+    ): CommonResponse
+
+    @GET("Questionnaire/DeleteAnswer")
+    suspend fun deleteAnswer(
+        @Query("AnsID") ansID: Int
+    ): CommonResponse
+
+    @GET("Questionnaire/AnswerList")
+    suspend fun answerList(
+        @Query("QID") qID: Int
+    ): NetworkAnswerDetails
+
+    @POST("Questionnaire/PostAnswer")
+    suspend fun postAnswer(
+        @Body request: PostAnswerPostData,
+    ): CommonResponse
+
+    @POST("Questionnaire/AddQuestion")
+    suspend fun addQuestion(
+        @Body request: AddQuestionPostData,
+    ): CommonResponse
 
 }

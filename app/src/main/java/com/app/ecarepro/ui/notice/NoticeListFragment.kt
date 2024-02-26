@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +35,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
     private lateinit var mMyClass: List<MyClasseItem>
     private lateinit var binding: FragmentNoticeListBinding
+    private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
 
     private val noticeViewModel: NoticeViewModel by viewModels()
 
@@ -117,8 +119,13 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                         if (it.data!=null){
                             if (it.data.myClasses!=null) {
                                 mMyClass=it.data.myClasses
-                                val spinnerAdapter = CustomDropDownAdapter(requireContext(), mMyClass)
-                                binding.spinnerClass.adapter = spinnerAdapter
+
+                                mMyClass.forEach { data ->
+                                    mMyClassDataString.add(data.className.toString())
+                                }
+
+                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,mMyClassDataString)
+                                binding.autoCompleteClass.setAdapter(arrayAdapter)
                             }
                         }
 
@@ -134,12 +141,12 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_noti -> {
 
-                    binding.spinnerClass.visibility = View.GONE
+                    binding.autoInputClassInputLayout.visibility = View.GONE
                     fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
                 }
 
                 else -> {
-                    binding.spinnerClass.visibility = View.VISIBLE
+                    binding.autoInputClassInputLayout.visibility = View.VISIBLE
                 }
             }
         }
@@ -147,21 +154,13 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
 
 
-        binding.spinnerClass.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        binding.autoCompleteClass.onItemClickListener=
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+
+                mMyClass[pos].classID?.let { fetchNotices(0, it) }
 
             }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                mMyClass[position].classID?.let { fetchNotices(0, it) }
-            }
-
-        }
 
         fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
         getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)

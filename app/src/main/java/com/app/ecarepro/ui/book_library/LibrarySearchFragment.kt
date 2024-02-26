@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -90,9 +91,18 @@ class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
             }
         }
 
-        fragmentLibrarySearchBinding.ivSearch.setOnClickListener {
+       /* fragmentLibrarySearchBinding.ivSearch.setOnClickListener {
             if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
                 bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
+            }
+        }*/
+
+        fragmentLibrarySearchBinding.edSearch.doAfterTextChanged {
+            if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
+                bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
+            }else{
+                bookSearchViewModel.getLibrarySearch( "",Constant.PAGE_INDEX)
+
             }
         }
 

@@ -9,4 +9,7 @@
     <dimen name="cbn_layout_height">84dp</dimen>
     <dimen name="cbn_bottom_curve_offset">12dp</dimen>
     <dimen name="cbn_fab_top_offset">8dp</dimen>
+
+    <dimen name="ed_around">8dp</dimen>
+    <dimen name="ed_radioud">8dp</dimen>
 </resources>

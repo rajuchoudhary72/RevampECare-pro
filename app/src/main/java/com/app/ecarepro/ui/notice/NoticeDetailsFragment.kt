@@ -43,7 +43,7 @@ class NoticeDetailsFragment : Fragment() {
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
 
-        val noticeID=  requireArguments().getInt("NoticeID")
+        val noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
         _noticeDetailsViewModel.getNoticeDTL(noticeID,1)
 
 
