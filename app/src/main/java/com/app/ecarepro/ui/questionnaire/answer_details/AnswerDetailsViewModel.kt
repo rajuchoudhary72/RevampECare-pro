@@ -26,6 +26,10 @@ class AnswerDetailsViewModel @Inject constructor(
         NetworkResult.Loading())
     val postAnswerStateFlow: StateFlow<NetworkResult<CommonResponse>> = postAnswerMutableStateFlow
 
+    private val deleteAnswerMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val deleteAnswerStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAnswerMutableStateFlow
+
 
     fun getAnswerList(qID: Int )=viewModelScope.launch {
         runCatching {
@@ -48,6 +52,18 @@ class AnswerDetailsViewModel @Inject constructor(
          }.onFailure {
             postAnswerMutableStateFlow.value= NetworkResult.Error(it.message)
          }
+    }
+
+    fun deleteAnswer(ansID: Int )=viewModelScope.launch {
+        runCatching {
+            deleteAnswerMutableStateFlow.value= NetworkResult.Loading( )
+
+            userRepository.deleteAnswer(ansID)
+        }.onSuccess {
+            deleteAnswerMutableStateFlow.value= NetworkResult.Success(it)
+        }.onFailure {
+            deleteAnswerMutableStateFlow.value= NetworkResult.Error(it.message)
+        }
     }
 
 

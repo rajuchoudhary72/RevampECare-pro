@@ -1,9 +1,11 @@
 package com.app.ecarepro.ui.questionnaire
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.AnswerListItemBinding
 import com.app.ecarepro.model.Answer
 import com.app.ecarepro.ui.questionnaire.answer_details.AnswerDetailsFragment
@@ -26,8 +28,32 @@ class AnswerAdapter(private var answerList: List<Answer>,
     override fun onBindViewHolder(holder: AnswerAdapterViewHolder, position: Int) {
 
         bindingm.answerData=answerList[position]
+        bindingm.dot.setOnClickListener {
+
+
+            deleteAlert(position)
+        }
+
 
    }
+
+    private fun deleteAlert(position: Int) {
+        val builder = AlertDialog.Builder(answerDetailsFragment.context)
+        builder.setTitle("Delete Alert")
+        builder.setMessage("Are you sure, You want to delete")
+
+        builder.setPositiveButton( R.string.yes) { _, _ ->
+            answerDetailsFragment.onItemClick(answerList[position],1,false)
+
+        }
+
+        builder.setNegativeButton( R.string.cancel) { _, _ ->
+
+        }
+
+
+        builder.show()
+    }
 
 
 

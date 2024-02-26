@@ -14,16 +14,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentQuestionnaireDetailsBinding
+import com.app.ecarepro.model.Answer
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.questionnaire.AnswerAdapter
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AnswerDetailsFragment : Fragment() {
+class AnswerDetailsFragment : Fragment() , ItemListener<Answer> {
 
     private lateinit var binding: FragmentQuestionnaireDetailsBinding
     private val answerDetailsViewModel : AnswerDetailsViewModel  by viewModels()
@@ -64,6 +66,7 @@ class AnswerDetailsFragment : Fragment() {
 
         binding.postAnswer.setOnClickListener {
             answerDetailsViewModel.postAnswer(quesID.toString(),binding.etAnswer.text.toString())
+            answerDetailsViewModel.getAnswerList(quesID)
         }
 
         lifecycleScope.launch {
@@ -82,6 +85,33 @@ class AnswerDetailsFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.relSend.isVisible=false
+
+                        answerDetailsViewModel.getAnswerList(quesID)
+
+                    }
+
+
+                }
+            }
+
+        }
+
+        lifecycleScope.launch {
+            answerDetailsViewModel.deleteAnswerStateFlow.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                         answerDetailsViewModel.getAnswerList(quesID)
 
                     }
 
@@ -141,4 +171,10 @@ class AnswerDetailsFragment : Fragment() {
     }
 
         answerDetailsViewModel.getAnswerList(quesID)
-}}
+}
+
+    override fun onItemClick(t: Answer, pos: Int, boolean: Boolean) {
+         answerDetailsViewModel.deleteAnswer(t.anID)
+
+    }
+}
