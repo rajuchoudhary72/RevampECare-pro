@@ -14,7 +14,7 @@ import com.app.ecarepro.model.Question
 import com.google.android.material.imageview.ShapeableImageView
 import com.squareup.picasso.Picasso
 
-class QuestionnaireAdapter(private var questionsList: List<Question>,
+class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
                            private var questionnaireListFragment: QuestionnaireListFragment) :
     RecyclerView.Adapter<QuestionnaireAdapter.QuestionnaireViewHolder>() {
 
@@ -35,7 +35,7 @@ class QuestionnaireAdapter(private var questionsList: List<Question>,
 
         val data= questionsList[position]
 
-        var like = data.isILike
+        var like = !data.isILike
 
         setLikeDisLikeUi(like, holder)
         setAnswerUi(data.isAnswered, holder)
@@ -46,14 +46,21 @@ class QuestionnaireAdapter(private var questionsList: List<Question>,
          holder.total_like.text= data.likes.toString()+" Likes"
          holder.tv_total_answer.text= data.totalAnswer.toString()+" Answer"
 
+
         Picasso.get().load(questionsList[position].photo).
         placeholder(R.drawable.default_profile)
             .into(holder.user_img)
 
         if (!data.isVerified){
             holder.rl_likes.isVisible=false
+            holder.ll_anser.isVisible=false
             holder.tv_thoughtStatus.isVisible=true
             holder.tv_thoughtStatus.text="Pending"
+        }else{
+            holder.rl_likes.isVisible=true
+            holder.ll_anser.isVisible=true
+            holder.tv_thoughtStatus.isVisible=false
+            holder.tv_thoughtStatus.text=" "
         }
 
         var likeCount=data.likes
@@ -152,13 +159,18 @@ class QuestionnaireAdapter(private var questionsList: List<Question>,
         val user_img: ShapeableImageView = itemView.findViewById(R.id.user_img)
         val rel_dot: RelativeLayout = itemView.findViewById(R.id.rel_dot)
         val ll_main: LinearLayout = itemView.findViewById(R.id.ll_main)
+        val ll_anser: LinearLayout = itemView.findViewById(R.id.ll_anser)
         val tv_unanswer: TextView = itemView.findViewById(R.id.tv_unanswer)
         val tv_answer: TextView = itemView.findViewById(R.id.tv_answer)
 
     }
 
-    fun setData(thoughtsList : List<Question>){
-         this.questionsList= thoughtsList as ArrayList<Question>
+    fun setData(questionList : List<Question>){
+         this.questionsList.addAll(questionList)
+        notifyDataSetChanged()
+    }
+    fun clearData( ){
+        this.questionsList.clear()
         notifyDataSetChanged()
     }
 }

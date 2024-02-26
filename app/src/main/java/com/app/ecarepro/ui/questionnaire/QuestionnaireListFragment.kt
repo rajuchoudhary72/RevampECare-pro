@@ -5,12 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentQuestionnaireListBinding
@@ -24,16 +26,35 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class QuestionnaireListFragment : Fragment() , ItemListener<Question> {
+class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
+    private lateinit var noticeAdapter: QuestionnaireAdapter
+    private var isLoading:Boolean = true
+    private var myQues: Boolean = false
+    private var pageIndex: Int = 1
+    private var pastVisiblesItems: Int = 0
+    private var totalItemCount: Int = 0
+    private var visibleItemCount: Int = 0
     private lateinit var binding: FragmentQuestionnaireListBinding
     private val questionnaireViewModel: QuestionnaireViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
+    ): View {
 
-        binding=FragmentQuestionnaireListBinding.inflate(inflater,container,false)
+        binding = FragmentQuestionnaireListBinding.inflate(inflater, container, false)
+
+        noticeAdapter = QuestionnaireAdapter(
+            ArrayList(),
+            this@QuestionnaireListFragment
+        )
+
+        binding.recyclerQuestionnaire.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(activity)
+            adapter = noticeAdapter
+        }
+
         return binding.root
     }
 
@@ -41,15 +62,19 @@ class QuestionnaireListFragment : Fragment() , ItemListener<Question> {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toggleButtonTypeQuestion.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            when (binding.toggleButtonTypeQuestion.checkedButtonId) {
+            myQues = when (binding.toggleButtonTypeQuestion.checkedButtonId) {
                 R.id.btn_all_ques -> {
-                    questionnaireViewModel.getQuestionnaireList(Constant.PAGE_INDEX,false)
+                    noticeAdapter.clearData( )
 
+                    pageIndex=1
+                    questionnaireViewModel.getQuestionnaireList(pageIndex, false)
+                    false
                 }
-
                 else -> {
-                    questionnaireViewModel.getQuestionnaireList(Constant.PAGE_INDEX,true)
-
+                    pageIndex=1
+                    noticeAdapter.clearData( )
+                    questionnaireViewModel.getQuestionnaireList(pageIndex, true)
+                    true
                 }
             }
         }
@@ -59,75 +84,74 @@ class QuestionnaireListFragment : Fragment() , ItemListener<Question> {
                 when (it) {
 
                     is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                        binding.recyclerQuestionnaire.isVisible = false
+                         (requireActivity() as MainActivity).showLoader(true)
                     }
 
                     is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
+                        isLoading=true
+                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = false
                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
+                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
+                            isLoading=true
+                            if (it.data.questions != null) {
 
-                            if (it.data.questions!=null){
+                                binding.recyclerQuestionnaire.isVisible = true
+                                binding.tvNoData.isVisible = false
+                                noticeAdapter.setData(it.data.questions)
 
-                                binding.recyclerQuestionnaire.isVisible=true
-                                binding.tvNoData.isVisible=false
-
-                                val noticeAdapter = QuestionnaireAdapter(it.data.questions ,
-                                    this@QuestionnaireListFragment)
-
-                                binding.recyclerQuestionnaire.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = noticeAdapter
-                                }
-                            }else{
-                                binding.recyclerQuestionnaire.isVisible=false
-                                binding.tvNoData.isVisible=true
+                            } else {
+                                binding.recyclerQuestionnaire.isVisible = false
+                                binding.tvNoData.isVisible = true
                             }
 
                         }
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
 
         binding.fbAdd.setOnClickListener {
             findNavController().navigate(R.id.postQuestionnaireFragment)
+
         }
 
-        questionnaireViewModel.getQuestionnaireList(Constant.PAGE_INDEX,false)
+        questionnaireViewModel.getQuestionnaireList(Constant.PAGE_INDEX, false)
 
-        /*binding.recyclerQuestionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
+        binding.recyclerQuestionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
 
-                    if (linearLayoutManager != null &&
-                        linearLayoutManager.findLastCompletelyVisibleItemPosition() == rowsArrayList.size() - 1) {
-                        //bottom of list!
-                        loadMore()
-                        isLoading = true
+                if (linearLayoutManager != null) {
+                    if (dy > 0) {
+                        visibleItemCount = linearLayoutManager.childCount;
+                        totalItemCount = linearLayoutManager.itemCount;
+                        pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                         if ( isLoading){
+                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                 isLoading=false
+                                 pageIndex += 1
+                                 questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
+                              }
+                         }
+
                     }
-
+                }
             }
-        })*/
-
+        })
 
     }
 
@@ -136,10 +160,16 @@ class QuestionnaireListFragment : Fragment() , ItemListener<Question> {
             1 -> {
                 questionnaireViewModel.questionnaireLike(t.qid, boolean)
             }
-            4->{
-                findNavController().navigate(R.id.action_questionnaireListFragment_to_answerDetailsFragment,Bundle( ).apply {
-                    putInt(Constant.QUES_ID_ARGUMENT, t.qid)
-                })
+
+            4 -> {
+                if (t.isVerified){
+                    findNavController().navigate(
+                        R.id.action_questionnaireListFragment_to_answerDetailsFragment,
+                        Bundle().apply {
+                            putInt(Constant.QUES_ID_ARGUMENT, t.qid)
+                        })
+                }
+
             }
 
 

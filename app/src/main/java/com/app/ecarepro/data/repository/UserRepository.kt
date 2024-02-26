@@ -65,6 +65,8 @@ interface UserRepository {
     suspend fun answerList(qID: Int ): NetworkAnswerDetails
 
     suspend fun postAnswer (qid:String,answer:String): CommonResponse
+
+    suspend fun deleteAnswer(ansID: Int ): CommonResponse
     suspend fun addQuestion (question:String,attachment:String,fileURL:String,fileExt:String ): CommonResponse
 
 

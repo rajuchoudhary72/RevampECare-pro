@@ -115,7 +115,7 @@ interface UserService {
     ): CommonResponse
 
     @GET("Questionnaire/DeleteAnswer")
-    suspend fun questionnaireDelete(
+    suspend fun deleteAnswer(
         @Query("AnsID") ansID: Int
     ): CommonResponse
 

@@ -38,6 +38,11 @@
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />
 
+           <androidx.core.widget.NestedScrollView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -151,6 +156,7 @@
                         android:layout_marginBottom="15dp"
                         android:fontFamily="@font/ubuntu_light"
                         android:text="@{questionData.que}"
+                        android:layout_marginStart="40dp"
                         android:textSize="16sp" />
 
 
@@ -275,18 +281,21 @@
 
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
-                android:layout_height="1dp" />
+                android:layout_height="1dp"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/answer_list_item"
+                android:layout_marginBottom="60dp"
+
+                />
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:listitem="@layout/answer_list_item"
-            android:layout_marginBottom="60dp"
-
-            />
+           </androidx.core.widget.NestedScrollView>
 
 
 
@@ -311,7 +320,9 @@
                 android:background="@drawable/edit_text_bg_post_answer"
                 android:fontFamily="@font/ubuntu_medium"
                 android:hint="@string/please_type_ans"
-                android:padding="7dp" />
+                android:padding="7dp"
+                android:importantForAutofill="no"
+                android:inputType="text" />
 
             <RelativeLayout
                 android:id="@+id/img_post_answer"
