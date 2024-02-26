@@ -15,6 +15,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentPostQustionnaireBinding
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,9 +52,10 @@ class PostQuestionnaireFragment : Fragment() {
         binding.btnAdd.setOnClickListener {
             viewMode.addQuestion(
                 binding.textFiledThoughts.text.toString(),
-                imageString, "", imageExt  )
+                imageString, "", imageExt
+            )
 
-            Toast.makeText(activity,"Successfully!!!", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, getString(R.string .successfully), Toast.LENGTH_LONG).show()
             findNavController().popBackStack()
         }
 
@@ -62,23 +64,24 @@ class PostQuestionnaireFragment : Fragment() {
         }
 
 
-
     }
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            "Take Photo", "Choose from Library",
-            "Cancel"
+            getString(R.string.take_photo),
+            getString(R.string.choose_library),
+            getString(R.string.cancel)
+
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Photo!")
+        builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
-            FileAccess.checkPermission( this@PostQuestionnaireFragment)
-            if (items[item] == "Take Photo") {
-                cameraLauncher.launch(FileAccess.cameraIntent( ))
-             } else if (items[item] == "Choose from Library") {
-                galleryLauncher.launch(FileAccess.galleryIntent( ))
-            } else if (items[item] == "Cancel") {
+            FileAccess.checkPermission(this@PostQuestionnaireFragment)
+            if (items[item] == getString(R.string.take_photo)) {
+                cameraLauncher.launch(FileAccess.cameraIntent())
+            } else if (items[item] == getString(R.string.choose_library)) {
+                galleryLauncher.launch(FileAccess.galleryIntent())
+            } else if (items[item] == getString(R.string.cancel)) {
                 dialog.dismiss()
             }
         })
@@ -94,11 +97,11 @@ class PostQuestionnaireFragment : Fragment() {
                 val imgUri = data?.data
                 binding.ivAddedImage.setImageURI(imgUri)
 
-                val bitmap=  FileAccess.bitmapFromUri(requireContext(),imgUri)
+                val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
 
-                imageString = FileAccess. bitmapToByteArrayBase64String(bitmap)
+                imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                imageExt = FileAccess.getImageExtFromUri(requireContext(),bitmap).toString()
+                imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
             }
         }
@@ -107,22 +110,17 @@ class PostQuestionnaireFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result?.data != null) {
-                   val   bitmap = result.data?.extras?.get("data") as Bitmap
+                    val bitmap = result.data?.extras?.get("data") as Bitmap
                     binding.ivAddedImage.setImageBitmap(bitmap)
 
-                  imageString = FileAccess. bitmapToByteArrayBase64String(bitmap)
+                    imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                    imageExt = FileAccess.getImageExtFromUri(requireContext(),bitmap).toString()
+                    imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
 
                 }
             }
         }
-
-
-
-
-
 
 
 }

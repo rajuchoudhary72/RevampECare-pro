@@ -39,8 +39,8 @@ class AnswerAdapter(private var answerList: List<Answer>,
 
     private fun deleteAlert(position: Int) {
         val builder = AlertDialog.Builder(answerDetailsFragment.context)
-        builder.setTitle("Delete Alert")
-        builder.setMessage("Are you sure, You want to delete")
+        builder.setTitle(answerDetailsFragment.getString(R.string.delete_alert))
+        builder.setMessage(answerDetailsFragment.getString(R.string.delete_alert_are_you_sure))
 
         builder.setPositiveButton( R.string.yes) { _, _ ->
             answerDetailsFragment.onItemClick(answerList[position],1,false)

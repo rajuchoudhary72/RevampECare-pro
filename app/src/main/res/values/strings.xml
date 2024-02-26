@@ -27,8 +27,7 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="notice">Notice</string>
     <string name="circular">Circular</string>
@@ -77,8 +76,17 @@
     <string name="latest_book">Latest Book</string>
     <string name="my_account">My Account</string>
     <string name="yes">OK</string>
+     <string name="add_image">Add Image</string>
+    <string name="pending">Pending</string>
+    <string name="add_photo">Add Photo!</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_library">Choose from Library</string>
     <string name="cancel">Cancel</string>
-    <string name="add_image">Add Image</string>
+    <string name="successfully">Successfully!!!</string>
+    <string name="delete_alert">Delete Alert</string>
+    <string name="delete_alert_are_you_sure">Are you sure, You want to delete</string>
+     <array name="pic_type_pick">"Take Photo", "Choose from Library",
+         "Cancel"</array>
 
 
 </resources>
