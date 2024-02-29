@@ -1,7 +1,6 @@
 package com.app.ecarepro.ui.circuler
 
-import android.app.DownloadManager
-import android.os.Bundle
+ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +13,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentCirculerDetailsBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.AndroidDownloader
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,8 +34,8 @@ class CircularDetailsFragment : Fragment() {
 
         binding= FragmentCirculerDetailsBinding.inflate(inflater,container,false)
 
-        val circularID=  requireArguments().getInt("CircularID")
-        circularDetailsViewModel.getCircularDTL(circularID,1)
+        val circularID=  requireArguments().getInt(Constant.CIRCULAR_ID)
+        circularDetailsViewModel.getCircularDTL(circularID,Constant.DEFAULT_ID_CIRCULAR)
 
          return binding.root
     }
@@ -45,13 +45,13 @@ class CircularDetailsFragment : Fragment() {
 
         binding.relView.setOnClickListener {
             findNavController().navigate(R.id.action_circularDetailsFragment_to_openPdfFragment,Bundle( ).apply {
-                putString("url", fileSource)
+                putString(Constant.URL_ARGUMENT, fileSource)
             })
         }
 
         binding.relDownload.setOnClickListener {
             val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, "Notice")
+            androidDownloader.downloadFile(fileSource, getString(R.string.circular))
         }
 
         lifecycleScope.launch {
@@ -74,7 +74,7 @@ class CircularDetailsFragment : Fragment() {
                         }
                     }
 
-                    else -> {}
+
                 }
             }
         }

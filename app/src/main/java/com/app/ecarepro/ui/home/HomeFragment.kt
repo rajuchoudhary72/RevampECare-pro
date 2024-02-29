@@ -186,7 +186,14 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.bookLibraryFragment)
         } else if (favouriteSlider.module.contains("syllabus", true)) {
             findNavController().navigate(R.id.classSyllabus)
-        } else {
+        } else if (favouriteSlider.module.contains("activity", true)) {
+            findNavController().navigate(R.id.calenderActivityNavHost)
+        } else if (favouriteSlider.module.contains("pay slip", true)) {
+            findNavController().navigate(R.id.paySlipFragment)
+        }else if (favouriteSlider.module.contains("Questionnaire", true)) {
+            findNavController().navigate(R.id.questionnaireListFragment)
+        }
+        else {
             Log.e("Home", favouriteSlider.toString())
         }
     }

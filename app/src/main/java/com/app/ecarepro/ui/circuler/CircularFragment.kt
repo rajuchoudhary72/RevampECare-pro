@@ -23,6 +23,7 @@ import com.app.ecarepro.databinding.FragmentCirculerBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.Circular
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,11 +52,13 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
         fragmentCircularBinding.ivSearch.setOnClickListener {
             if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
-                circularViewModel.getCirculars(1,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
             }else {
                  Toast.makeText(requireContext(),"Please enter title!!!",Toast.LENGTH_LONG ).show()
             }
         }
+
+
 
 
 
@@ -66,6 +69,15 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        fragmentCircularBinding.edSearch.doAfterTextChanged {
+            if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+            }else {
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"" )
+
+            }
+        }
 
         lifecycleScope.launch {
             circularViewModel._circularsStateFlowStateFlow.collectLatest {
@@ -119,18 +131,18 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
 
-        circularViewModel.getCirculars(1,selectedYearID,"")
+        circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"")
 
     }
 
     override fun onItemClick(t: Circular, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.action_circularFragment_to_circularDetailsFragment,Bundle( ).apply {
-            putInt("CircularID", t.cirID)
+            putInt(Constant.CIRCULAR_ID, t.cirID)
         })
      }
 

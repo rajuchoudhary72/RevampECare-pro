@@ -153,6 +153,7 @@
                         android:paddingRight="15dp"
                         android:paddingTop="10dp"
                         android:text="@string/like"
+
                         android:visibility="visible"
                          app:drawableLeftCompat="@drawable/like_hover" />
 

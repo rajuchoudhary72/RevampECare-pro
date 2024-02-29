@@ -35,7 +35,7 @@ class SearchInstitutionFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSearchInstitutionBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -73,7 +73,7 @@ class SearchInstitutionFragment : Fragment() {
                 rightMargin = resources.getDimensionPixelSize(R.dimen.horizontal_margin),
             )
         )
-
+        /*fetch all school list */
         fetchSchools()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -86,7 +86,7 @@ class SearchInstitutionFragment : Fragment() {
                         instituteView {
                             id(school.name)
                             school(school)
-                            clickListener {  _ ->
+                            clickListener { _ ->
                                 setFragmentResult(
                                     REQUEST_KEY_SCHOOL_CODE,
                                     bundleOf(

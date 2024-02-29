@@ -2,11 +2,9 @@ package com.app.ecarepro.ui.thought
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkWhoLike
-import com.app.ecarepro.data.repository.ThoughtsRepo
-import com.app.ecarepro.model.Notice
+import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.ResponseStateCreateTou
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ThoughtsViewModel @Inject constructor(
-    private val  thoughtsRepo: ThoughtsRepo
+    private val  userRepository: UserRepository
+
 ) : ViewModel() {
 
     private val postStateFlow:MutableStateFlow<ResponseState> = MutableStateFlow(ResponseState.Empty)
@@ -39,7 +38,7 @@ class ThoughtsViewModel @Inject constructor(
                     mythoughts: Boolean)=viewModelScope.launch {
         postStateFlow.value = ResponseState.Loading
         runCatching {
-            thoughtsRepo.getThoughts(pg, dir, mythoughts)
+            userRepository.getThoughts(pg, dir, mythoughts)
               }.onSuccess {
                   postStateFlow.value=ResponseState.Success(it)
         }.onFailure {
@@ -52,7 +51,7 @@ class ThoughtsViewModel @Inject constructor(
       fun like(thID: Int, like: Boolean)=viewModelScope.launch {
           likeStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
-            thoughtsRepo.like(thID, like)
+            userRepository.thoughtsLike(thID, like)
         }.onSuccess {
             likeStateFlow.value = ResponseStateCreateTou.Success(it)
         }.onFailure {
@@ -63,7 +62,7 @@ class ThoughtsViewModel @Inject constructor(
     fun thoughtsDelete(thID: Int)=viewModelScope.launch {
         thoughtsDeleteStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
-            thoughtsRepo.thoughtsDelete(thID )
+            userRepository.thoughtsDelete(thID )
         }.onSuccess {
             thoughtsDeleteStateFlow.value = ResponseStateCreateTou.Success(it)
         }.onFailure {
@@ -74,7 +73,7 @@ class ThoughtsViewModel @Inject constructor(
     fun whoLiked(thID: Int)=viewModelScope.launch {
         whoLikeStateFlow.value = NetworkResult.Loading()
         runCatching {
-            thoughtsRepo.whoLiked(thID )
+            userRepository.whoLiked(thID )
         }.onSuccess {
             whoLikeStateFlow.value =NetworkResult.Success(it)
         }.onFailure {
@@ -85,7 +84,7 @@ class ThoughtsViewModel @Inject constructor(
     fun thoughtsCreate(quotation:String,author:String)=viewModelScope.launch {
         createToutStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
-            thoughtsRepo.thoughtsCreate(quotation, author)
+            userRepository.thoughtsCreate(quotation, author)
         }.onSuccess {
             createToutStateFlow.value=ResponseStateCreateTou.Success(it)
         }.onFailure {

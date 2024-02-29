@@ -69,4 +69,5 @@ data class Slider(
     val imgPath: String?,
     @SerializedName("module")
     val module: String
+
 )

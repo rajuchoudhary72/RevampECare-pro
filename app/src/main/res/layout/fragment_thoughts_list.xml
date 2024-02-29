@@ -95,10 +95,10 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/ubuntu_bold"
                                 android:text="All"
-                                app:rippleColor="@color/white"
-                                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
 
-                                app:strokeColor="@color/white" />
+                                app:rippleColor="@color/white"
+                                  app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
+                                 app:strokeColor="@color/white" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_my"
@@ -108,7 +108,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/ubuntu_bold"
                                 android:text="My"
-                                app:rippleColor="@color/white"
+                                 app:rippleColor="@color/white"
                                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                                 app:strokeColor="@color/white" />
 

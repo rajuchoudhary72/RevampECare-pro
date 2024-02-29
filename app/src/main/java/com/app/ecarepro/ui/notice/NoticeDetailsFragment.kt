@@ -17,6 +17,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentNoticeDetailsBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.AndroidDownloader
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,7 +43,7 @@ class NoticeDetailsFragment : Fragment() {
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
 
-        val noticeID=  requireArguments().getInt("NoticeID")
+        val noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
         _noticeDetailsViewModel.getNoticeDTL(noticeID,1)
 
 
@@ -55,13 +56,13 @@ class NoticeDetailsFragment : Fragment() {
 
         noticeDetailsBinding.relView.setOnClickListener {
             findNavController().navigate(R.id.action_noticeDetailsFragment_to_openPdfFragment,Bundle( ).apply {
-                putString("url", fileSource)
+                putString(Constant.URL_ARGUMENT, fileSource)
             })
         }
 
         noticeDetailsBinding.relDownload.setOnClickListener {
            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, "Notice")
+            androidDownloader.downloadFile(fileSource, getString(R.string.notice) )
         }
 
         lifecycleScope.launch {
@@ -84,7 +85,7 @@ class NoticeDetailsFragment : Fragment() {
                           }
                         }
 
-                    else -> {}
+
                 }
             }
         }

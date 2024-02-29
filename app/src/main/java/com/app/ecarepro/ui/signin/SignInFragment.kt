@@ -63,7 +63,6 @@ class SignInFragment  : Fragment() {
                 mViewModel.verifyUser(binding.textUserName.text.toString()) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        // findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                         userNameValid = true
                         binding.textInputLayoutPassword.isVisible = true
                         binding.textInputLayoutUserName.isEnabled = false

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.repository.LibraryRepo
+import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookSearchViewModel  @Inject constructor(
-    private val libraryRepo: LibraryRepo
+    private val  userRepository: UserRepository
+
 ) : ViewModel() {
 
 
@@ -25,7 +26,7 @@ class BookSearchViewModel  @Inject constructor(
     fun getLibrarySearch( query: String,pg: Int  )=viewModelScope.launch {
         runCatching {
             bookSearchStateFlow.value = NetworkResult.Loading()
-            libraryRepo.getLibrarySearch(query, pg)
+            userRepository.getLibrarySearch(query, pg)
         }.onSuccess {
             bookSearchStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

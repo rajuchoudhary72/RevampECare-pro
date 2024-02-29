@@ -1,7 +1,8 @@
 package com.app.ecarepro.ui.notice
 
 import android.content.Context
- import android.view.LayoutInflater
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -9,10 +10,10 @@ import android.widget.TextView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 
-class CustomDropDownAdapter(val context: Context, var listItemsTxt: List<MyClasseItem>) : BaseAdapter() {
+class CustomDropDownAdapter(val context: Context, private var listItemsTxt: List<MyClasseItem>) : BaseAdapter() {
 
 
-    val mInflater: LayoutInflater = LayoutInflater.from(context)
+    private val mInflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
@@ -26,13 +27,26 @@ class CustomDropDownAdapter(val context: Context, var listItemsTxt: List<MyClass
             vh = view.tag as ItemRowHolder
         }
 
-        // setting adapter item height programatically.
-
-        /*val params = view.layoutParams
-        params.height = 120
-        view.layoutParams = params*/
 
         vh.label.text = listItemsTxt[position].className
+        return view
+    }
+
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val view: View
+        if (position == 0) {
+            view = mInflater.inflate(R.layout.header_country, parent, false)
+            view.setOnClickListener {
+                val root = parent.rootView
+                root.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_BACK))
+                root.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_BACK))
+            }
+        } else {
+            view = mInflater.inflate(R.layout.view_drop_down_menu, parent, false)
+            getItem(position)?.let { country ->
+               // setItemForCountry(view, country)
+            }
+        }
         return view
     }
 

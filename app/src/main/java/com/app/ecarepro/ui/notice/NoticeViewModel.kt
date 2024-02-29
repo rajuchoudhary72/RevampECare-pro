@@ -6,7 +6,7 @@ import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.SchoolRepository
-import com.app.ecarepro.data.repository.StaffRepository
+import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NoticeViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
-    private val staffRepository: StaffRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
     private val noticeStateFlow: MutableStateFlow<NetworkResult<NetworkNotice>> = MutableStateFlow(
@@ -41,7 +41,7 @@ class NoticeViewModel @Inject constructor(
       fun getMyClass(subID: Int, iD: Int  )=viewModelScope.launch {
           runCatching {
               myClassStateFlow.value =NetworkResult.Loading( )
-              staffRepository.getMyClass(subID, iD)
+              userRepository.staffMyClass(subID, iD)
           }.onSuccess {
               myClassStateFlow.value =NetworkResult.Success(it)
           }.onFailure {

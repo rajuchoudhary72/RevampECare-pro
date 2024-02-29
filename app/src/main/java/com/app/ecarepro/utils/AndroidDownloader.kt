@@ -13,7 +13,7 @@ class AndroidDownloader(context:Context ) : Downloader{
     override fun downloadFile(url: String,  downloadType:String): Long {
         fileName = url.substring(url.lastIndexOf('/') + 1, url.length)
         val request= DownloadManager.Request(url.toUri())
-            .setMimeType("application/pdf")
+            .setMimeType(Constant.PDF_Mime_Type)
              .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setTitle(fileName)
             .setDescription(downloadType)

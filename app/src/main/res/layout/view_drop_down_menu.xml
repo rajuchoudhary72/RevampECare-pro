@@ -1,23 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TextView
-        android:id="@+id/txtDropDownLabel"
+ <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:gravity="center"
-        android:text="Residential"
         android:fontFamily="@font/ubuntu_light"
+        android:gravity="center"
+        android:text="Select Option"
         android:textAppearance="?attr/textAppearanceBodyMedium"
-        android:textSize="16dp"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:textSize="18sp"
+     android:layout_marginStart="15dp"
+       android:layout_gravity="center"
+        />

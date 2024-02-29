@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import com.app.ecarepro.model.Notice
 import com.app.ecarepro.model.Thoughts
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.thought.ThoughtsAdapter
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +35,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
     private lateinit var mMyClass: List<MyClasseItem>
     private lateinit var binding: FragmentNoticeListBinding
+    private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
 
     private val noticeViewModel: NoticeViewModel by viewModels()
 
@@ -65,7 +68,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerNotice.isVisible = false
-                        Log.d("main", "Error" + it )
+                        Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
@@ -116,15 +119,20 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                         if (it.data!=null){
                             if (it.data.myClasses!=null) {
                                 mMyClass=it.data.myClasses
-                                val spinnerAdapter = CustomDropDownAdapter(requireContext(), mMyClass)
-                                binding.spinnerClass.adapter = spinnerAdapter
+
+                                mMyClass.forEach { data ->
+                                    mMyClassDataString.add(data.className.toString())
+                                }
+
+                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,mMyClassDataString)
+                                binding.autoCompleteClass.setAdapter(arrayAdapter)
                             }
                         }
 
 
                     }
 
-                    else -> {}
+
                 }
             }
         }
@@ -133,12 +141,12 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_noti -> {
 
-                    binding.spinnerClass.visibility = View.GONE
-                    fetchNotices(1, 0)
+                    binding.autoInputClassInputLayout.visibility = View.GONE
+                    fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
                 }
 
                 else -> {
-                    binding.spinnerClass.visibility = View.VISIBLE
+                    binding.autoInputClassInputLayout.visibility = View.VISIBLE
                 }
             }
         }
@@ -146,24 +154,16 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
 
 
-        binding.spinnerClass.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        binding.autoCompleteClass.onItemClickListener=
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+
+                mMyClass[pos].classID?.let { fetchNotices(0, it) }
 
             }
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                mMyClass[position].classID?.let { fetchNotices(0, it) }
-            }
-
-        }
-
-        fetchNotices(1, 0)
-        getMyClass(0, 1)
+        fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
+        getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
 
     }
 
@@ -181,7 +181,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
     override fun onItemClick(t: Notice, pos: Int, boolean: Boolean) {
 
         findNavController().navigate(R.id.action_noticeListFragment_to_noticeDetailsFragment,Bundle( ).apply {
-            t.ntID?.let { putInt("NoticeID", it) }
+            t.ntID?.let { putInt(Constant.NOTICE_ID_ARGUMENT, it) }
         })
 
      }
