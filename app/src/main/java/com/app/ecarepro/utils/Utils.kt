@@ -10,8 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.app.ecarepro.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.caverock.androidsvg.SVG;
-import com.caverock.androidsvg.SVGParseException;
 import android.widget.ImageView;
 import java.io.StringReader;
 fun Int.toPx(context: Context) =
@@ -27,22 +25,3 @@ fun Context.progressDialog(): AlertDialog {
         .show()
 }
 
-fun loadSvgFromApi(svgData: String, imageView: ImageView) {
-    try {
-        // Parse the SVG data string
-        val svg = SVG.getFromString(svgData)
-
-        // Set the dimensions of the SVG image
-        svg.setDocumentWidth("100%")
-        svg.setDocumentHeight("100%")
-
-        // Create a new PictureDrawable from the SVG
-        val pictureDrawable = svg.renderToPicture().let { PictureDrawable(it) }
-
-        // Set the PictureDrawable to the ImageView
-        imageView.setImageDrawable(pictureDrawable)
-    } catch (e: SVGParseException) {
-        e.printStackTrace()
-        // Handle SVG parsing error
-    }
-}
