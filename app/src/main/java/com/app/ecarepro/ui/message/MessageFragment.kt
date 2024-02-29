@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.app.ecarepro.databinding.FragmentMessageBinding
 import com.app.ecarepro.ui.message.inbox.InboxMessageFragment
+import com.app.ecarepro.ui.message.sent.SentMessageFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +22,8 @@ class MessageFragment : Fragment() {
     private var _binding: FragmentMessageBinding? = null
 
     private val binding get() = _binding!!
+
+    private val messageViewModel: MessageViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +36,10 @@ class MessageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViewPager()
+
+        binding.btnFilter.setOnClickListener {
+            messageViewModel.showDateRangePicker()
+        }
     }
 
     private fun setUpViewPager() {
@@ -42,7 +52,11 @@ class MessageFragment : Fragment() {
             }
 
             override fun createFragment(position: Int): Fragment {
-                return InboxMessageFragment()
+                return if (position == 0) {
+                    InboxMessageFragment()
+                } else {
+                    SentMessageFragment()
+                }
             }
 
         }
@@ -53,7 +67,18 @@ class MessageFragment : Fragment() {
             tab.text = tabItem[position]
         }.attach()
 
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                binding.btnFilter.isVisible = position == 1
+            }
+        })
+
     }
+
+
+
+
 
 
     override fun onDestroyView() {

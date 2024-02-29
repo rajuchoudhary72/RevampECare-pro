@@ -5,12 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemOnboardingBinding
 import com.app.ecarepro.model.Slide
-import com.app.ecarepro.utils.imageUrl
-import com.app.ecarepro.utils.loadSvgFromApi
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
