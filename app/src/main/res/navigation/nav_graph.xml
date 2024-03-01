@@ -265,4 +265,15 @@
         android:name="com.app.ecarepro.ui.questionnaire.post_questionnaire.PostQuestionnaireFragment"
         android:label="PostQuestionnaireFragment" />
 
+    <fragment
+        android:id="@+id/conversationFragment"
+        android:name="com.app.ecarepro.ui.message.conversation.ConversationFragment"
+        android:label="ConversationFragment">
+
+        <argument
+            android:name="ID"
+            app:argType="string" />
+
+    </fragment>
+
 </navigation>

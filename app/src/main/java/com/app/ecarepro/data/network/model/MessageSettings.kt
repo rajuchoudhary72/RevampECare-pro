@@ -15,12 +15,14 @@ data class MessageSettings(
     @SerializedName("message")
     val message: String?,
     @SerializedName("msgWithSMS")
-    val msgWithSMS: Boolean?,
+    val msgWithSMS: Boolean,
     @SerializedName("onlyMsg")
-    val onlyMsg: Boolean?,
+    val onlyMsg: Boolean,
     @SerializedName("status")
     val status: String?
-)
+) {
+    fun isBothOptionVisible() = onlyMsg && msgWithSMS
+}
 
 data class Media(
     @SerializedName("browseAudio")

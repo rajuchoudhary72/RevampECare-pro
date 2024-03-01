@@ -1,6 +1,7 @@
 package com.app.ecarepro.data
 
 import com.app.ecarepro.data.network.model.InboxMessage
+import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.SentMessage
 import com.app.ecarepro.data.network.service.MessageService
@@ -52,6 +53,29 @@ class MessageRepositoryImpl @Inject constructor(
                 val response = messageService.getSentMessages(pg, fromDate, tillDate)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.sentMessages ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getConversation(
+        pg: Int,
+        id: String,
+        query: String?
+    ): Flow<Result<MessageFormDto>> {
+        return flow {
+            try {
+                val response =
+                    if (query.isNullOrEmpty())
+                        messageService.getConversation(pg, id)
+                    else
+                        messageService.searchConversation(pg, id, query)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

@@ -87,6 +87,11 @@
     <string name="type_your_question">Type your question</string>
     <string name="yes">OK</string>
     <string name="add_image">Add Image</string>
+    <string name="no_data_found">No data found</string>
+    <string name="clear_filter">Clear Filter</string>
+    <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
+    <string name="only_app_message">Only App Message</string>
+    <string name="search">Search…</string>
 
 
 </resources>

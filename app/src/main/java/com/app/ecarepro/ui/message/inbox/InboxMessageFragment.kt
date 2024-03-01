@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentInboxFragmentBinding
+import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.recentMessageCard
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.E_MMM_DD_YYYY_HH_MM_A
@@ -76,7 +79,12 @@ class InboxMessageFragment : Fragment() {
         if (uiState is InboxMessageUiState.Success || uiState == InboxMessageUiState.EmptyInbox) {
             binding.recyclerView.withModels {
                 when (uiState) {
-                    InboxMessageUiState.EmptyInbox -> {}
+                    InboxMessageUiState.EmptyInbox -> {
+                        noDataFoundView {
+                            id(R.id.empty_view)
+                        }
+                    }
+
                     is InboxMessageUiState.Success -> {
                         uiState.messages.forEach { message ->
                             recentMessageCard {
@@ -87,6 +95,12 @@ class InboxMessageFragment : Fragment() {
                                 date(message.sentOn)
                                 time(formatDate(message.sentOn, E_MMM_DD_YYYY_HH_MM_A, HH_MM_A))
                                 unReadMessageCount(message.unread)
+                                clickListener { _ ->
+                                    findNavController().navigate(
+                                        R.id.conversationFragment,
+                                        bundleOf("ID" to message.id)
+                                    )
+                                }
                             }
                         }
                     }

@@ -6,7 +6,9 @@ import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.repository.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,22 +16,27 @@ import javax.inject.Inject
 class MessageViewModel @Inject constructor(
     private val messageRepository: MessageRepository
 ) : ViewModel() {
+    private val _showChatOption = MutableStateFlow(false)
+    val showChatOption = _showChatOption
+
     private val _showDateRangePicker = MutableSharedFlow<Boolean>()
     val showDateRangePicker = _showDateRangePicker
 
-    private val messageSettings = MutableSharedFlow<MessageSettings>()
+    private val _clearFilter = MutableSharedFlow<Boolean>()
+    val clearFilter = _clearFilter
 
-    init {
-        getMessageSettings()
-    }
+    val messageSettings = MutableStateFlow<MessageSettings?>(null)
 
-    private fun getMessageSettings() {
+    val isFilterApplied = MutableStateFlow(false)
+
+
+    fun fetchMessageSettings() {
         viewModelScope.launch {
             messageRepository
                 .getMessageSettings()
                 .collectLatest { result ->
-                    result.onSuccess {
-                        messageSettings.emit(it)
+                    result.onSuccess { settings ->
+                        messageSettings.update { settings }
                     }
                 }
         }
@@ -39,6 +46,18 @@ class MessageViewModel @Inject constructor(
     fun showDateRangePicker() {
         viewModelScope.launch {
             _showDateRangePicker.emit(true)
+        }
+    }
+
+    fun toggleChatOption() {
+        viewModelScope.launch {
+            _showChatOption.update { it.not() }
+        }
+    }
+
+    fun clearFilter() {
+        viewModelScope.launch {
+            _clearFilter.emit(true)
         }
     }
 }

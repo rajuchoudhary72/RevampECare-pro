@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.app.ecarepro.ui.message.sent.SentMessageViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,9 +17,10 @@
 
         <TextView
             android:id="@+id/dateFrom"
+            isVisible="@{viewModel.isFilterApplied()}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
+            android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
             android:padding="10dp"
             android:textSize="16sp"
@@ -26,10 +31,21 @@
             tools:text="19 May, 2024" />
 
         <TextView
+            isVisible="@{viewModel.isFilterApplied()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
+            app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/dateFrom" />
+
+        <TextView
             android:id="@+id/dateTo"
+            isVisible="@{viewModel.isFilterApplied()}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
+            android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
             android:padding="10dp"
             android:textSize="16sp"

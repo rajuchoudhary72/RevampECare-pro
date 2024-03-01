@@ -43,8 +43,16 @@ class SentMessageViewModel @Inject constructor(
             )
     val uiState = _uiState
 
+    val isFilterApplied = filters
+        .map { filter -> filter.second.isNullOrBlank().not() }
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = false,
+            started = SharingStarted.WhileSubscribed(200)
+        )
 
-    fun updateDateFilter(from: String, to: String) {
+
+    fun updateDateFilter(from: String?, to: String?) {
         viewModelScope.launch {
             filters.update {
                 Triple(

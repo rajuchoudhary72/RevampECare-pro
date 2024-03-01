@@ -10,14 +10,6 @@
             type="java.lang.String" />
 
         <variable
-            name="photo"
-            type="java.lang.String" />
-
-        <variable
-            name="recipients"
-            type="java.lang.String" />
-
-        <variable
             name="abbreviation"
             type="java.lang.String" />
 
@@ -26,42 +18,60 @@
             type="java.lang.String" />
 
         <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
+            name="msgType"
+            type="java.lang.String" />
 
+        <variable
+            name="msgTypeImageRes"
+            type="java.lang.Integer" />
 
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp"
-        android:onClick="@{clickListener}"
+        app:cardBackgroundColor="@color/white"
         app:contentPadding="12dp"
-        app:strokeColor="@color/grey_60"
+        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall"
+        app:strokeColor="@color/grey_20"
         app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/calibri_light"
+                android:gravity="center"
+                android:text="@{date}"
+                android:textColor="#9FA297"
+                android:textSize="12sp"
+                app:drawableTint="#9FA297"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="23 May 2034 " />
+
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
-                imageUrl="@{photo}"
-                placeholder="@{@drawable/default_profile}"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="5dp"
+                imageUrl="@{}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_conversation"
+                android:tint="@color/green_40"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
-                tools:src="@drawable/default_profile" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
+                android:fontFamily="@font/calibri_bold"
                 android:text="@{name}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 app:layout_constraintEnd_toStartOf="@+id/date"
@@ -73,43 +83,43 @@
                 android:id="@+id/sub_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@{recipients}"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="@color/grey_60"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/title"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                tools:text="Principal" />
-
-            <TextView
-                android:id="@+id/lastMessage"
-                isVisible="@{abbreviation!=null}"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:fontFamily="@font/calibri_regular"
                 android:maxLines="1"
                 android:text="@{abbreviation}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/grey_60"
+                app:layout_constraintBaseline_toBaselineOf="@+id/typeText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/title"
-                app:layout_constraintTop_toBottomOf="@id/sub_title"
+                app:layout_constraintStart_toEndOf="@+id/typeText"
                 tools:text="Principal" />
 
+            <ImageView
+                android:id="@+id/typeImage"
+                imageRes="@{msgTypeImageRes}"
+                isVisible="@{msgTypeImageRes!=null}"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:tint="@color/grey_20"
+                tools:src="@drawable/ic_sms" />
+
             <TextView
-                android:id="@+id/date"
+                android:id="@+id/typeText"
+                isVisible="@{msgType!=null}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawablePadding="4dp"
-                android:gravity="center"
-                android:text="@{date}"
-                android:textColor="#9FA297"
-                android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="23 May 2034 " />
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/calibri_light"
+                android:text="@{msgType}"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_60"
+                app:layout_constraintBottom_toBottomOf="@id/typeImage"
+                app:layout_constraintStart_toEndOf="@+id/typeImage"
+                app:layout_constraintTop_toTopOf="@id/typeImage"
+                tools:text="Principal" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,12 +33,17 @@
             name="unReadMessageCount"
             type="java.lang.Integer" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
+        android:onClick="@{clickListener}"
+        app:cardBackgroundColor="@{unReadMessageCount>0 ? @color/grey_10 : @color/white}"
         app:cardCornerRadius="16dp"
         app:contentPadding="12dp"
         app:strokeColor="@color/grey_60"

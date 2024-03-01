@@ -41,6 +41,13 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
     }
 }
 
+@BindingAdapter("imageRes")
+fun ImageView.imageRes(res: Int?) {
+    res?.let {
+        setImageResource(res)
+    }
+}
+
 @BindingAdapter("animateBetweenColorsOnExpand", "colorFrom", "colorTo", requireAll = true)
 fun CardView.animateBetweenColorsOnExpand(
     isExpanded: Boolean,

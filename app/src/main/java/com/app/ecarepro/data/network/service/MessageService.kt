@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.InboxMessageDto
+import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.SentMessageDto
 import retrofit2.http.GET
@@ -19,5 +20,18 @@ interface MessageService {
         @Query("fromDate") fromDate: String? = null,
         @Query("TillDate") tillDate: String? = null,
     ): SentMessageDto
+
+    @GET("Message/From")
+    suspend fun getConversation(
+        @Query("pg") pg: Int,
+        @Query("ID") id: String
+    ): MessageFormDto
+
+    @GET("Message/SearchInbox")
+    suspend fun searchConversation(
+        @Query("pg") pg: Int,
+        @Query("ID") id: String,
+        @Query("Query") query: String? = null,
+    ): MessageFormDto
 
 }
