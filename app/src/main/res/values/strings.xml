@@ -27,7 +27,7 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
 
-     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="notice">Notice</string>
     <string name="circular">Circular</string>
@@ -42,6 +42,7 @@
     <string name="updated_by">Update By\n</string>
     <string name="like">Like </string>
     <string name="no_notice_available">No Notice Available</string>
+    <string name="no_history_available">No Leave History</string>
     <string name="no_Syllabus_available">No Syllabus Available</string>
     <string name="no_activity_available">No Activity Available</string>
     <string name="no_latest_book_available">No Latest Book Available</string>
@@ -76,7 +77,7 @@
     <string name="latest_book">Latest Book</string>
     <string name="my_account">My Account</string>
     <string name="yes">OK</string>
-     <string name="add_image">Add Image</string>
+    <string name="add_image">Add Image</string>
     <string name="pending">Pending</string>
     <string name="add_photo">Add Photo!</string>
     <string name="take_photo">Take Photo</string>
@@ -85,8 +86,34 @@
     <string name="successfully">Successfully!!!</string>
     <string name="delete_alert">Delete Alert</string>
     <string name="delete_alert_are_you_sure">Are you sure, You want to delete</string>
-     <array name="pic_type_pick">"Take Photo", "Choose from Library",
-         "Cancel"</array>
+    <string name="lbl_total_leaves_1">Total Leaves: 1</string>
+    <string name="name">Name</string>
+    <array name="pic_type_pick">"Take Photo", "Choose from Library",
+        "Cancel"
+    </array>
+
+    <string name="to_">To:</string>
+
+    <string name="from_">From:</string>
+    <string name="leave_history">Leave History</string>
+    <string name="leave_request">Leave Request</string>
+    <string name="status">Status</string>
+    <string name="day_s">Day(s)</string>
+    <string name="day_s_1">1 Day(s)</string>
+    <string name="suggested">Suggested</string>
+    <string name="select_reason">Select Reason</string>
+    <string name="enter_your_reason">Enter Your Reason</string>
+    <string name="select_proof">Select Proof</string>
+    <string name="select_attachment">Select Attachment</string>
+    <string name="i_agree">I agree</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="_02">02</string>
+    <string name="submit">Submit</string>
+    <string name="leave_setting">Leave Setting</string>
+    <string name="done">Done</string>
+    <string name="appley_for_leave">Apply For Leave</string>
+    <string name="apply_for_leave">Apply For Leave</string>
+    <string name="approved_by">Approved By:</string>
 
 
 </resources>

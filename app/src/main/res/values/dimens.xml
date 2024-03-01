@@ -11,5 +11,6 @@
     <dimen name="cbn_fab_top_offset">8dp</dimen>
 
     <dimen name="ed_around">8dp</dimen>
+    <dimen name="ed_around_5">5dp</dimen>
     <dimen name="ed_radioud">8dp</dimen>
 </resources>

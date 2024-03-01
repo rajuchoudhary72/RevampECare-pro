@@ -7,6 +7,8 @@ import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkLatestBook
+import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
+import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
@@ -14,6 +16,7 @@ import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
@@ -68,6 +71,24 @@ interface UserRepository {
 
     suspend fun deleteAnswer(ansID: Int ): CommonResponse
     suspend fun addQuestion (question:String,attachment:String,fileURL:String,fileExt:String ): CommonResponse
+
+
+    suspend fun leaveListStatus( ): NetworkLeaveListStatus
+
+    suspend fun leaveApply (leaveID: Int,
+                            fromDate: String,
+                            tillDate:String,
+                            duration:Int,
+                            halfdayDTL: List<HalfdayDTL>,
+                            reason:String,
+                            attachment:String,
+                            fileExt:String
+                             ): CommonResponse
+
+    suspend fun leaveSetting( ): NetworkLeaveSetting
+
+    suspend fun leaveDelete(lvID: Int ): CommonResponse
+
 
 
 

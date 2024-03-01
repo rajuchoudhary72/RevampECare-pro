@@ -54,8 +54,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
             layoutManager = LinearLayoutManager(activity)
             adapter = noticeAdapter
         }
-
-        return binding.root
+          return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
