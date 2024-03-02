@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="name"
+            type="java.lang.String" />
+
+        <variable
+            name="abbreviation"
+            type="java.lang.String" />
+
+        <variable
+            name="date"
+            type="java.lang.String" />
+
+        <variable
+            name="msgType"
+            type="java.lang.String" />
+
+        <variable
+            name="msgTypeImageRes"
+            type="java.lang.Integer" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:contentPadding="12dp"
+        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall"
+        app:strokeColor="@color/grey_20"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/calibri_light"
+                android:gravity="center"
+                android:text="@{date}"
+                android:textColor="#9FA297"
+                android:textSize="12sp"
+                app:drawableTint="#9FA297"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="23 May 2034 " />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                imageUrl="@{}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_conversation"
+                android:tint="@color/green_40"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:fontFamily="@font/calibri_bold"
+                android:text="@{name}"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintStart_toEndOf="@+id/image"
+                app:layout_constraintTop_toTopOf="@id/image"
+                tools:text="Carole Beatty" />
+
+            <TextView
+                android:id="@+id/sub_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/calibri_regular"
+                android:maxLines="1"
+                android:text="@{abbreviation}"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_60"
+                app:layout_constraintBaseline_toBaselineOf="@+id/typeText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/typeText"
+                tools:text="Principal" />
+
+            <ImageView
+                android:id="@+id/typeImage"
+                imageRes="@{msgTypeImageRes}"
+                isVisible="@{msgTypeImageRes!=null}"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:tint="@color/grey_20"
+                tools:src="@drawable/ic_sms" />
+
+            <TextView
+                android:id="@+id/typeText"
+                isVisible="@{msgType!=null}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/calibri_light"
+                android:text="@{msgType}"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_60"
+                app:layout_constraintBottom_toBottomOf="@id/typeImage"
+                app:layout_constraintStart_toEndOf="@+id/typeImage"
+                app:layout_constraintTop_toTopOf="@id/typeImage"
+                tools:text="Principal" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

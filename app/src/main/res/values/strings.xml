@@ -85,13 +85,13 @@
     <string name="please_type_ans">" Please Type Answer"</string>
     <string name="save">Save</string>
     <string name="type_your_question">Type your question</string>
-    <string name="school_collage_library">School/Collae Library</string>
-    <string name="mega_e_book">Mega E-Book</string>
-    <string name="latest_book">Latest Book</string>
-    <string name="my_account">My Account</string>
     <string name="yes">OK</string>
-    <string name="cancel">Cancel</string>
     <string name="add_image">Add Image</string>
+    <string name="no_data_found">No data found</string>
+    <string name="clear_filter">Clear Filter</string>
+    <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
+    <string name="only_app_message">Only App Message</string>
+    <string name="search">Search…</string>
 
 
 </resources>

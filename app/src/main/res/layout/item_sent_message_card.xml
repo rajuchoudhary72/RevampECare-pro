@@ -14,11 +14,11 @@
             type="java.lang.String" />
 
         <variable
-            name="designation"
+            name="recipients"
             type="java.lang.String" />
 
         <variable
-            name="lastMessage"
+            name="abbreviation"
             type="java.lang.String" />
 
         <variable
@@ -26,25 +26,17 @@
             type="java.lang.String" />
 
         <variable
-            name="time"
-            type="java.lang.String" />
-
-        <variable
-            name="unReadMessageCount"
-            type="java.lang.Integer" />
-
-        <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
+
 
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{clickListener}"
-        app:cardBackgroundColor="@{unReadMessageCount>0 ? @color/grey_10 : @color/white}"
         app:cardCornerRadius="16dp"
+        android:onClick="@{clickListener}"
         app:contentPadding="12dp"
         app:strokeColor="@color/grey_60"
         app:strokeWidth="1dp">
@@ -59,6 +51,7 @@
                 placeholder="@{@drawable/default_profile}"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
@@ -71,7 +64,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:text="@{name}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                app:layout_constraintEnd_toStartOf="@+id/text_badge_count"
+                app:layout_constraintEnd_toStartOf="@+id/date"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="@id/image"
                 tools:text="Carole Beatty" />
@@ -80,7 +73,9 @@
                 android:id="@+id/sub_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{designation}"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{recipients}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/grey_60"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,10 +85,12 @@
 
             <TextView
                 android:id="@+id/lastMessage"
-                isVisible="@{lastMessage!=null}"
+                isVisible="@{abbreviation!=null}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{lastMessage}"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{abbreviation}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/grey_60"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -105,48 +102,14 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:drawablePadding="4dp"
                 android:gravity="center"
                 android:text="@{date}"
                 android:textColor="#9FA297"
-                app:drawableTint="#9FA297"
-                android:textSize="12sp"
-                app:layout_constraintStart_toStartOf="@+id/title"
-                app:layout_constraintTop_toBottomOf="@+id/lastMessage"
-                tools:text="23 May 2034 " />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:drawablePadding="4dp"
-                android:gravity="center"
-                android:text="@{time}"
-                android:textColor="#9FA297"
-                android:visibility="gone"
-                app:drawableStartCompat="@drawable/ic_schedule_24px"
-                app:drawableTint="#9FA297"
-                app:layout_constraintStart_toEndOf="@+id/date"
-                app:layout_constraintTop_toBottomOf="@+id/lastMessage"
-                tools:text="10:00 PM" />
-
-            <TextView
-                android:id="@+id/text_badge_count"
-                isVisible="@{unReadMessageCount > 0}"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/bg_circle"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="@{String.valueOf(unReadMessageCount)}"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="@color/white"
+                android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="24" />
+                tools:text="23 May 2034 " />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
