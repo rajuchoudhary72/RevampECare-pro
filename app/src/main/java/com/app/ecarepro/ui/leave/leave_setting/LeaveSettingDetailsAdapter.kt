@@ -17,6 +17,7 @@ class LeaveSettingDetailsAdapter(private var leaveDetailList: List<LeaveDetail>,
     RecyclerView.Adapter<LeaveSettingDetailsAdapter.LeaveHistoryViewHolder>() {
 
         private lateinit var binding:   LeaveSettingListItemBinding
+    var hide= true
 
 
 
@@ -34,7 +35,7 @@ class LeaveSettingDetailsAdapter(private var leaveDetailList: List<LeaveDetail>,
         val leftLeave=data.total-data.taken
         binding.tvLeaveResult.text= "$leftLeave/${data.total}"
 
-        var hide= true
+
         binding.ivShowHide.setOnClickListener {
 
             if (hide){
@@ -58,6 +59,8 @@ class LeaveSettingDetailsAdapter(private var leaveDetailList: List<LeaveDetail>,
             append("Total Balance : ")
             append(leftLeave) }
 
+        binding.leaveProgress.max=data.total.toInt()
+        binding.leaveProgress.progress=data.taken.toInt()
 
 
 

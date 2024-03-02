@@ -16,6 +16,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentLeaveListBinding
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -116,6 +117,13 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
             leaveHistoryViewModel.leaveDelete(t.lvID)
 
+        }
+        if (pos==2 ){
+            findNavController().navigate(
+                R.id.action_leaveHistoryFragment_to_openImageFragment,
+                Bundle().apply {
+                     putString(Constant.URL_ARGUMENT, t.attachment)
+                })
         }
     }
 }

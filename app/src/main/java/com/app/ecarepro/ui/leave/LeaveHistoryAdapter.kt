@@ -52,6 +52,9 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
             append(data.actionOn)
 
         }
+        binding.relViewAttac.setOnClickListener {
+            leaveHistoryFragment.onItemClick(leaveList[position],2,false)
+        }
 
 
 

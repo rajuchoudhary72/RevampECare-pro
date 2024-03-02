@@ -264,10 +264,15 @@
         android:id="@+id/postQuestionnaireFragment"
         android:name="com.app.ecarepro.ui.questionnaire.post_questionnaire.PostQuestionnaireFragment"
         android:label="PostQuestionnaireFragment" />
+
     <fragment
         android:id="@+id/leaveHistoryFragment"
         android:name="com.app.ecarepro.ui.leave.LeaveHistoryFragment"
-        android:label="LeaveHistoryFragment"   />
+        android:label="LeaveHistoryFragment"   >
+        <action
+            android:id="@+id/action_leaveHistoryFragment_to_openImageFragment"
+            app:destination="@id/openImageFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/leaveSettingFragment"
@@ -285,5 +290,9 @@
         android:id="@+id/staffApplyLeaveFragment"
         android:name="com.app.ecarepro.ui.leave.staff.StaffApplyLeaveFragment"
         android:label="StaffApplyLeaveFragment" />
+    <fragment
+        android:id="@+id/openImageFragment"
+        android:name="com.app.ecarepro.ui.common.OpenImageFragment"
+        android:label="OpenImageFragment" />
 
 </navigation>
