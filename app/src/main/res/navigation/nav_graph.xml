@@ -276,4 +276,14 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.app.ecarepro.ui.message.chat.ChatFragment"
+        android:label="ChatFragment" />
+
+    <fragment
+        android:id="@+id/photoViewFragmentFragment"
+        android:name="com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment"
+        android:label="PhotoViewFragmentFragment" />
+
 </navigation>

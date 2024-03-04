@@ -1,9 +1,10 @@
 package com.app.ecarepro.data
 
-import com.app.ecarepro.data.network.model.InboxMessage
+import com.app.ecarepro.data.network.model.ConversationDetailsDto
+import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
-import com.app.ecarepro.data.network.model.SentMessage
+import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.repository.MessageRepository
 import kotlinx.coroutines.flow.Flow
@@ -28,12 +29,12 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getInboxMessages(pg: Int): Flow<Result<List<InboxMessage>>> {
+    override fun getInboxMessages(pg: Int): Flow<Result<InboxMessageDto>> {
         return flow {
             try {
                 val response = messageService.getInboxMessages(pg)
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.sender ?: emptyList()))
+                    emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
@@ -47,12 +48,12 @@ class MessageRepositoryImpl @Inject constructor(
         pg: Int,
         fromDate: String?,
         tillDate: String?
-    ): Flow<Result<List<SentMessage>>> {
+    ): Flow<Result<SentMessageDto>> {
         return flow {
             try {
                 val response = messageService.getSentMessages(pg, fromDate, tillDate)
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.sentMessages ?: emptyList()))
+                    emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
@@ -74,6 +75,21 @@ class MessageRepositoryImpl @Inject constructor(
                         messageService.getConversation(pg, id)
                     else
                         messageService.searchConversation(pg, id, query)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getConversationDetails(id: String): Flow<Result<ConversationDetailsDto>> {
+        return flow {
+            try {
+                val response = messageService.getConversationDetails(id)
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {

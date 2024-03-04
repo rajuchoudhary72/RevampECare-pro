@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
@@ -33,5 +34,10 @@ interface MessageService {
         @Query("ID") id: String,
         @Query("Query") query: String? = null,
     ): MessageFormDto
+
+    @GET("Message/MsgDTL")
+    suspend fun getConversationDetails(
+        @Query("ID") id: String
+    ): ConversationDetailsDto
 
 }

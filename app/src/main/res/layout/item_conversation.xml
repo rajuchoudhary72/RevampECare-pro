@@ -25,10 +25,16 @@
             name="msgTypeImageRes"
             type="java.lang.Integer" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:onClick="@{clickListener}"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/white"
         app:contentPadding="12dp"

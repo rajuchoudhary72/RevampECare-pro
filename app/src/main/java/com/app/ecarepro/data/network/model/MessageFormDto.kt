@@ -15,7 +15,7 @@ data class MessageFormDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("total")
-    val total: Int?
+    val total: Int
 )
 
 data class Conversation(
@@ -24,7 +24,7 @@ data class Conversation(
     @SerializedName("hasRead")
     val hasRead: Boolean?,
     @SerializedName("id")
-    val id: Any?,
+    val id: String?,
     @SerializedName("msgID")
     val msgID: Int?,
     @SerializedName("msgType")

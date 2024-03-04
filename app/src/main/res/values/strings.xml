@@ -92,6 +92,7 @@
     <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
     <string name="only_app_message">Only App Message</string>
     <string name="search">Search…</string>
+    <string name="retry">Retry</string>
 
 
 </resources>

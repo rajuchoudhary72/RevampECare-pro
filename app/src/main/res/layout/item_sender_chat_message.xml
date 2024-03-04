@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="message"
+            type="java.lang.String" />
+
+        <variable
+            name="image"
+            type="java.lang.String" />
+
+        <variable
+            name="date"
+            type="java.lang.String" />
+
+        <variable
+            name="onClickPhoto"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/background_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="-16dp"
+            android:background="@drawable/bg_round_corner_green"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toEndOf="@+id/message"
+            app:layout_constraintStart_toStartOf="@+id/message"
+            app:layout_constraintTop_toTopOf="@+id/message" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/calibri_regular"
+            android:padding="17dp"
+            android:text="@{message}"
+            android:textColor="@color/white"
+            android:textIsSelectable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Vanjhali Waja | Angrej | Amrinder Gill | Full Music Video | Releasing on 31st July 2015" />
+
+        <ImageView
+            android:id="@+id/image"
+            imageUrl="@{image}"
+            isVisible="@{image!=null}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            android:onClick="@{onClickPhoto}"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="@+id/message"
+            app:layout_constraintStart_toStartOf="@+id/message"
+            app:layout_constraintTop_toBottomOf="@+id/message"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/frame_192" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/calibri_light"
+            android:text="@{date}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/background_view"
+            tools:text="12 Jan 3032" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

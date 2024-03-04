@@ -5,4 +5,5 @@
     <item name="today_mode_collection" type="id"/>
     <item name="epoxy_viewbinding" type="id"/>
     <item name="empty_view" type="id" />
+    <item name="load_more_view" type="id" />
 </resources>
