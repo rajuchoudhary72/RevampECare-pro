@@ -192,7 +192,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.paySlipFragment)
         }else if (favouriteSlider.module.contains("Questionnaire", true)) {
             findNavController().navigate(R.id.questionnaireListFragment)
+        }else if (favouriteSlider.module.contains("Leave Request", true)) {
+            findNavController().navigate(R.id.leaveHistoryFragment)
         }
+
         else {
             Log.e("Home", favouriteSlider.toString())
         }

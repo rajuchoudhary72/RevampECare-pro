@@ -43,8 +43,8 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
         holder.tv_que.text=data.que
         holder.updated_by.text=data.updatedBy
         holder.updated_on.text=data.updatedOn
-         holder.total_like.text= data.likes.toString()+" Likes"
-         holder.tv_total_answer.text= data.totalAnswer.toString()+" Answer"
+         holder.total_like.text= data.likes.toString()+" "+ questionnaireListFragment.getString(R.string.like)
+         holder.tv_total_answer.text= data.totalAnswer.toString()+" "+ questionnaireListFragment.getString(R.string.answer)
 
 
         Picasso.get().load(questionsList[position].photo).
@@ -55,7 +55,7 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
             holder.rl_likes.isVisible=false
             holder.ll_anser.isVisible=false
             holder.tv_thoughtStatus.isVisible=true
-            holder.tv_thoughtStatus.text="Pending"
+            holder.tv_thoughtStatus.text=questionnaireListFragment.getString(R.string.pending)
         }else{
             holder.rl_likes.isVisible=true
             holder.ll_anser.isVisible=true
@@ -78,7 +78,7 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
                 like=true
            }
             setLikeDisLikeUi(like,holder)
-            holder.total_like.text = "$likeCount Likes"
+            holder.total_like.text = "$likeCount"+" "+ questionnaireListFragment.getString(R.string.like)
          }
 
         holder.like.setOnClickListener {
@@ -94,7 +94,7 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
 
             }
             setLikeDisLikeUi(like, holder)
-            holder.total_like.text="$likeCount Likes"
+            holder.total_like.text="$likeCount"+" "+ questionnaireListFragment.getString(R.string.like)
         }
 
         holder.total_like.setOnClickListener {
