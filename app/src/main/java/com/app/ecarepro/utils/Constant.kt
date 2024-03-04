@@ -1,5 +1,12 @@
 package com.app.ecarepro.utils
 
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
 class Constant {
     companion object {
         const val BASE_URL = "https://api.franciscanecare.net/"
@@ -11,6 +18,8 @@ class Constant {
         const val URL_ARGUMENT = "url"
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val QUES_ID_ARGUMENT = "QuesID"
+        const val LEAVE_ID_ARGUMENT = "LeaveID"
+        const val NAME = "name"
 
         const val CIRCULAR_ID = "CircularID"
         const val DEFAULT_ID = 0
@@ -23,6 +32,35 @@ class Constant {
         const val TRUE_VALUE = 1
         const val FALSE_VALUE = 0
 
+
+
+
+        fun getLongTimeDate(sessionStart: String?): Long {
+            val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            try {
+                val parse = simpleDateFormat.parse(sessionStart.toString())
+                return parse!!.time
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            return 0
+        }
+
+
+
+        fun dateToShow(inputDateStr:String):String {
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault() )
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
+             val date: Date? = inputFormat.parse(inputDateStr)
+            return  outputFormat.format(date!!)
+        }
+
+        fun currentDate():String{
+            val c: Date = Calendar.getInstance().time
+
+            val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            return df.format(c)
+        }
 
 
 

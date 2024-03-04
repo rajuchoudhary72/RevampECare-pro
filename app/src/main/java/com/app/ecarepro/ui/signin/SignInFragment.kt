@@ -54,7 +54,13 @@ class SignInFragment  : Fragment() {
                 ) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                        if (it.authenticated == true) {
+                            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                        }else{
+                            Toast.makeText(requireContext(), "Authenticated "+it.authenticated, Toast.LENGTH_SHORT).show()
+
+                        }
+
                     }
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     Log.i("Token Aut",it.authToken.toString())

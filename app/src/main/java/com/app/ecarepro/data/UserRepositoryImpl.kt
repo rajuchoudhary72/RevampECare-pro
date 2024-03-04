@@ -20,7 +20,12 @@ import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
+import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
+import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
+import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.service.UserService
@@ -70,8 +75,11 @@ class UserRepositoryImpl @Inject constructor(
                 password = password
             )
         ).also {
-            userDataStore.saveAuthToken(it.authToken ?: "")
-            userDataStore.setAsUserAuthenticated(it.authenticated ?: false)
+            if (it.authenticated==true){
+                userDataStore.saveAuthToken(it.authToken ?: "")
+                userDataStore.setAsUserAuthenticated(it.authenticated ?: false)
+            }
+
         }
     }
 
@@ -122,6 +130,38 @@ class UserRepositoryImpl @Inject constructor(
         fileExt: String
     ): CommonResponse {
         return userService.addQuestion(AddQuestionPostData(Attachment(attachment, fileExt, fileURL),question) )
+    }
+
+    override suspend fun leaveListStatus(): NetworkLeaveListStatus {
+       return userService.leaveListStatus()
+    }
+
+    override suspend fun leaveApply(
+        leaveID: Int,
+        fromDate: String,
+        tillDate: String,
+        duration: Int,
+        halfdayDTL: List<HalfdayDTL>,
+        reason: String,
+        attachment: String,
+        fileExt: String
+    ): CommonResponse {
+         return userService.leaveApply(LeaveRequestData(duration,
+             FileAttachment(attachment,fileExt,""),
+             fromDate,
+             halfdayDTL,
+             leaveID,
+             reason,
+             tillDate
+         ))
+    }
+
+    override suspend fun leaveSetting(): NetworkLeaveSetting {
+        return userService.leaveSetting()
+    }
+
+    override suspend fun leaveDelete(lvID: Int): CommonResponse {
+       return userService.leaveDelete(lvID)
     }
 
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {

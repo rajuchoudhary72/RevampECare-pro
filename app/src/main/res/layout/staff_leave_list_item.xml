@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="data"
+            type="com.app.ecarepro.model.Dtl" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:id="@+id/rel_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:padding="10dp"
+             >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/user_img"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+                tools:src="@drawable/default_profile"
+                 imageUrl="@{data.applicantPhoto}"
+                placeholder="@{@drawable/default_profile}"
+                />
+
+
+             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/user_img"
+                >
+
+                <TextView
+                    android:id="@+id/tv_leave_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                     android:text="@{data.leaveType}"
+                    android:fontFamily="@font/ubuntu_medium"
+                     />
+
+                <TextView
+                    android:id="@+id/tv_applied_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                     android:fontFamily="@font/ubuntu_medium"
+
+                    />
+
+            </LinearLayout>
+
+
+
+
+            <ImageView
+                android:id="@+id/dot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                isInvisible="@{data.status.equals(`Approved`)}"
+                app:srcCompat="@drawable/delete" />
+
+
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/ll_start"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/cbn_height"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_from"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/from_" />
+
+
+                <TextView
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@{data.fromDate}"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="12sp"
+                android:layout_height="1.5dp"
+                android:layout_gravity="center"
+                android:background="@color/grey_60" />
+
+            <LinearLayout
+                android:id="@+id/ll_end"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/cbn_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_to"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/to_" />
+
+
+                <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_end_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:text="@{data.tillDate}"
+                    android:layout_gravity="center"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_ttl_leaves"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_margin"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_margin"
+             />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+             android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tv_bg_rounded_status_blue"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="8dp"
+                android:text="@{data.status}"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp" />
+
+            <TextView
+                android:id="@+id/tv_action_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="8dp"
+                 android:layout_marginEnd="10dp"
+                android:layout_toEndOf="@+id/tv_status"
+                isVisible="@{data.status.equals(`Approved`)}"
+                />
+
+            <RelativeLayout
+                android:layout_alignParentEnd="true"
+                android:id="@+id/rel_view_attac"
+                android:layout_width="wrap_content"
+                isVisible="@{data.attachment != null  ? true : false}"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_height="fill_parent">
+
+                <ImageView
+                    android:id="@+id/iv_show_attachment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/view" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_show_attachment"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/view" />
+
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rel_approve_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+
+            isVisible="@{data.status.equals(`Approved`)}"
+             >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/im_approve_by"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+                 imageUrl="@{data.photo}"
+                placeholder="@{@drawable/default_profile}"
+                tools:src="@drawable/default_profile"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp"
+                 android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/im_approve_by"
+                >
+                <TextView
+                    android:id="@+id/tv_approve_by_older"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/approved_by"
+                    android:fontFamily="@font/ubuntu_bold"
+                     />
+
+                <TextView
+                    android:id="@+id/tv_approve_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                      android:text="@{data.teacherName}"
+                     />
+            </LinearLayout>
+
+
+
+
+
+        </RelativeLayout>
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+
+    </LinearLayout>
+</layout>

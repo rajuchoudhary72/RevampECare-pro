@@ -16,7 +16,10 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
+import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -132,6 +135,22 @@ interface UserService {
     @POST("Questionnaire/AddQuestion")
     suspend fun addQuestion(
         @Body request: AddQuestionPostData,
+    ): CommonResponse
+
+    @GET("Leave/Status")
+    suspend fun leaveListStatus( ): NetworkLeaveListStatus
+
+    @POST("Leave/Apply")
+    suspend fun leaveApply(
+        @Body request: LeaveRequestData,
+    ): CommonResponse
+
+    @GET("Leave/Setting")
+    suspend fun leaveSetting( ): NetworkLeaveSetting
+
+    @GET("Leave/Delete")
+    suspend fun leaveDelete(
+        @Query("LvID") lvID: Int
     ): CommonResponse
 
 }
