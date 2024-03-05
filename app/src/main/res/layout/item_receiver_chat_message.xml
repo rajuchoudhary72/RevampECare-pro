@@ -19,7 +19,13 @@
 
         <variable
             name="onClickPhoto"
-            type="android.view.View.OnClickListener" />
+            type="com.app.ecarepro.utils.FileClickListener" />
+
+        <import type="java.util.List" />
+
+        <variable
+            name="files"
+            type="List&lt;String>" />
 
     </data>
 
@@ -34,7 +40,7 @@
             android:layout_marginBottom="-16dp"
             android:background="@drawable/bg_round_corner_green"
             android:backgroundTint="@color/green_10"
-            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintBottom_toBottomOf="@+id/barrier2"
             app:layout_constraintEnd_toEndOf="@+id/message"
             app:layout_constraintStart_toStartOf="@+id/message"
             app:layout_constraintTop_toTopOf="@+id/message" />
@@ -47,7 +53,10 @@
             android:padding="17dp"
             android:text="@{message}"
             android:textColor="@color/black"
+            android:enabled="true"
             android:textIsSelectable="true"
+            android:focusable="true"
+            android:longClickable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Vanjhali Waja | Angrej | Amrinder Gill | Full Music Video | Releasing on 31st July 2015" />
@@ -59,12 +68,30 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="16dp"
-            android:onClick="@{onClickPhoto}"
+            android:onClick="@{v -> onClickPhoto.onClick(image)}"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="@+id/message"
             app:layout_constraintStart_toStartOf="@+id/message"
             app:layout_constraintTop_toBottomOf="@+id/message"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/frame_192" />
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/files"
+            clickListener="@{onClickPhoto}"
+            files="@{files}"
+            isVisible="@{files.size() > 0}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:orientation="vertical"
+            android:scaleType="centerCrop"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="@+id/message"
+            app:layout_constraintStart_toStartOf="@+id/message"
+            app:layout_constraintTop_toBottomOf="@+id/message"
+            app:spanCount="3"
             tools:ignore="ContentDescription"
             tools:src="@drawable/frame_192" />
 
@@ -78,6 +105,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/background_view"
             tools:text="12 Jan 3032" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="files, image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

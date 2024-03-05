@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentPhotoViewBinding
+import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,6 +38,13 @@ class PhotoViewFragmentFragment : Fragment() {
             binding.photoView.imageUrl(photo)
         }
 
+        binding.btnDownload.setOnClickListener {
+            arguments?.getString(PHOTO)?.let { photo ->
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(photo, "Photo", "image/jpeg")
+            }
+
+        }
 
     }
 

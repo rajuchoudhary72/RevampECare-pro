@@ -45,16 +45,36 @@
                 android:layout_height="match_parent"
                 android:background="@color/grey_10">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_subject"
+                    app:layout_constraintTop_toTopOf="@+id/tv_subject" />
+
                 <TextView
                     android:id="@+id/tv_subject"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:fontFamily="@font/calibri_bold"
                     android:padding="@dimen/horizontal_margin"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_recipient"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:textSize="18sp"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Sub: TEsting meesage" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_recipient"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/calibri_regular"
+                    android:text="@string/recipient_s"
+                    android:textSize="17sp"
+                    android:visibility="gone"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/tv_subject"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <com.airbnb.epoxy.EpoxyRecyclerView
                     android:id="@+id/recycler_view"
@@ -71,6 +91,7 @@
                     tools:listitem="@layout/item_sender_chat_message" />
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/send_message_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -90,14 +111,16 @@
                         android:minHeight="42dp"
                         android:paddingHorizontal="10dp"
                         android:scrollbars="vertical"
+                        android:text="@={viewModel.messageBody}"
                         tools:ignore="LabelFor" />
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_reply_message"
                         style="@style/Widget.Material3.Button.Icon"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:layout_marginStart="10dp"
-                        android:backgroundTint="?attr/colorPrimary"
+                        android:enabled="@{viewModel.messageBody.length()>0}"
                         android:gravity="center_vertical"
                         android:insetTop="0dp"
                         android:insetBottom="0dp"

@@ -4,7 +4,9 @@ import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.ui.message.chat.MessageType
 import kotlinx.coroutines.flow.Flow
 
 interface MessageRepository {
@@ -26,5 +28,10 @@ interface MessageRepository {
 
     fun getConversationDetails(
         id: String,
+        messageType: MessageType
     ): Flow<Result<ConversationDetailsDto>>
+
+    fun replyMessage(
+        request: ReplyMessageRequestDto
+    ): Flow<Result<String>>
 }

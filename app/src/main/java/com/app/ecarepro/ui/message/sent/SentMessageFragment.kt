@@ -22,6 +22,7 @@ import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.sentMessageCard
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.message.MessageViewModel
+import com.app.ecarepro.ui.message.chat.MessageType
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.rubensousa.decorator.LinearMarginDecoration
@@ -206,8 +207,11 @@ class SentMessageFragment : Fragment() {
                                 date(message.sentOn)
                                 clickListener { _ ->
                                     findNavController().navigate(
-                                        R.id.conversationFragment,
-                                        bundleOf("ID" to message.id)
+                                        R.id.chatFragment,
+                                        bundleOf(
+                                            "ID" to message.id,
+                                            "MessageType" to MessageType.SENT.value
+                                        )
                                     )
                                 }
                             }

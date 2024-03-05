@@ -57,8 +57,8 @@
                 android:textColor="#9FA297"
                 android:textSize="12sp"
                 app:drawableTint="#9FA297"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/typeImage"
+                app:layout_constraintTop_toBottomOf="@+id/barrier3"
                 tools:text="23 May 2034 " />
 
 
@@ -80,7 +80,7 @@
                 android:fontFamily="@font/calibri_bold"
                 android:text="@{name}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="@id/image"
                 tools:text="Carole Beatty" />
@@ -96,9 +96,9 @@
                 android:text="@{abbreviation}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/grey_60"
-                app:layout_constraintBaseline_toBaselineOf="@+id/typeText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/typeText"
+                app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:text="Principal" />
 
             <ImageView
@@ -127,6 +127,12 @@
                 app:layout_constraintTop_toTopOf="@id/typeImage"
                 tools:text="Principal" />
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="sub_title,typeImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

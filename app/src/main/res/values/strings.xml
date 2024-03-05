@@ -93,6 +93,9 @@
     <string name="only_app_message">Only App Message</string>
     <string name="search">Search…</string>
     <string name="retry">Retry</string>
+    <string name="share">Share</string>
+    <string name="download">Download</string>
+    <string name="recipient_s">Recipient(s)</string>
 
 
 </resources>

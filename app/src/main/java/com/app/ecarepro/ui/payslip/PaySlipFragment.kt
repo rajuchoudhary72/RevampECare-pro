@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -150,6 +149,11 @@ class PaySlipFragment : Fragment() {
         binding.fbDowload.setOnClickListener {
             val androidDownloader = AndroidDownloader(requireContext())
             androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
+            Toast.makeText(
+                requireContext(),
+                "Download started, check you status bar for more information.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }

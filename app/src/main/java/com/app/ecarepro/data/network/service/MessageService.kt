@@ -4,8 +4,12 @@ import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
+import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface MessageService {
@@ -39,5 +43,15 @@ interface MessageService {
     suspend fun getConversationDetails(
         @Query("ID") id: String
     ): ConversationDetailsDto
+
+    @GET("Message/SentMsgDTL")
+    suspend fun getSentConversationDetails(
+        @Query("ID") id: String
+    ): ConversationDetailsDto
+
+    @POST("Message/ReplyMessage")
+    suspend fun replyMessage(
+        @Body request: ReplyMessageRequestDto
+    ): ReplyMessageResponseDto
 
 }

@@ -4,9 +4,11 @@ import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.repository.MessageRepository
+import com.app.ecarepro.ui.message.chat.MessageType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -86,12 +88,33 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getConversationDetails(id: String): Flow<Result<ConversationDetailsDto>> {
+    override fun getConversationDetails(
+        id: String,
+        messageType: MessageType
+    ): Flow<Result<ConversationDetailsDto>> {
         return flow {
             try {
-                val response = messageService.getConversationDetails(id)
+                val response =
+                    if (messageType == MessageType.INBOX) messageService.getConversationDetails(id) else messageService.getSentConversationDetails(
+                        id
+                    )
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun replyMessage(request: ReplyMessageRequestDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = messageService.replyMessage(request)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message!!))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

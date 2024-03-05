@@ -12,6 +12,8 @@ data class ConversationDetailsDto(
     val message: String?,
     @SerializedName("msgDTL")
     val msgDTL: List<Message>?,
+    @SerializedName("recipients")
+    val recipients: List<Recipient>?,
     @SerializedName("msgID")
     val msgID: Int?,
     @SerializedName("readCount")
@@ -20,8 +22,6 @@ data class ConversationDetailsDto(
     val receiverID: Int?,
     @SerializedName("receiverType")
     val receiverType: Int?,
-    @SerializedName("recipients")
-    val recipients: Any?,
     @SerializedName("status")
     val status: String?,
     @SerializedName("subject")
