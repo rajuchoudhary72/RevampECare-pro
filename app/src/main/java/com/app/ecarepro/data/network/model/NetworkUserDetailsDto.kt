@@ -12,6 +12,8 @@ data class NetworkUserDetailsDto(
     val message: String?,
     @SerializedName("name")
     val name: String?,
+    @SerializedName("userID")
+    val userId: Int?,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("status")

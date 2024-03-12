@@ -12,13 +12,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentInboxFragmentBinding
+import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.recentMessageCard
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.E_MMM_DD_YYYY_HH_MM_A
 import com.app.ecarepro.utils.HH_MM_A
+import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.formatDate
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,12 +62,30 @@ class InboxMessageFragment : Fragment() {
     }
 
     private fun setUpViews() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            inboxMessageViewModel.refresh()
+        }
         binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
             )
+
+            addOnScrollListener(object :
+                PaginationScrollListener(layoutManager as LinearLayoutManager) {
+                override fun loadMoreItems() {
+                    inboxMessageViewModel.loadNextPage()
+                }
+
+                override val totalPageCount: Int
+                    get() = inboxMessageViewModel.totalPageCount()
+                override val isLastPage: Boolean
+                    get() = inboxMessageViewModel.isLastPage()
+                override val isLoading: Boolean
+                    get() = inboxMessageViewModel.isLoading()
+            })
         }
 
     }
@@ -103,14 +124,24 @@ class InboxMessageFragment : Fragment() {
                                 }
                             }
                         }
+
+                        if (uiState.showLoadMoreView || uiState.loadMoreError != null) {
+                            loadMoreView {
+                                id(R.id.load_more_view)
+                                isLoading(uiState.showLoadMoreView)
+                                errorMessage(uiState.loadMoreError?.message)
+                                onClickRetry { _ ->
+                                    inboxMessageViewModel.loadNextPage(true)
+                                }
+                            }
+                        }
+
                     }
 
                     else -> {}
                 }
             }
         }
-
-
     }
 
 

@@ -15,7 +15,7 @@ data class SentMessageDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("total")
-    val total: Int?
+    val total: Int
 )
 
 data class SentMessage(

@@ -11,61 +11,68 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/dateFrom"
-            isVisible="@{viewModel.isFilterApplied()}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:gravity="center"
-            android:padding="10dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@+id/dateTo"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="19 May, 2024" />
-
-        <TextView
-            isVisible="@{viewModel.isFilterApplied()}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/dateFrom" />
-
-        <TextView
-            android:id="@+id/dateTo"
-            isVisible="@{viewModel.isFilterApplied()}"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:gravity="center"
-            android:padding="10dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/dateFrom"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="19 May, 2024" />
-
-        <com.airbnb.epoxy.EpoxyRecyclerView
-            android:id="@+id/recycler_view"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateFrom"
-            tools:listitem="@layout/item_recent_message_card" />
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/dateFrom"
+                isVisible="@{viewModel.isFilterApplied()}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@+id/dateTo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19 May, 2024" />
+
+            <TextView
+                isVisible="@{viewModel.isFilterApplied()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                app:layout_constraintBottom_toBottomOf="@+id/dateFrom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dateFrom" />
+
+            <TextView
+                android:id="@+id/dateTo"
+                isVisible="@{viewModel.isFilterApplied()}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/dateFrom"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19 May, 2024" />
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dateFrom"
+                tools:listitem="@layout/item_recent_message_card" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </layout>

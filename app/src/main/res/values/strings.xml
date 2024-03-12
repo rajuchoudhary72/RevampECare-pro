@@ -75,7 +75,6 @@
     <string name="my_account">My Account</string>
     <string name="date_">Date :</string>
     <string name="update_on_">Update On :</string>
-    <string name="cancel">Cancel</string>
     <string name="ok">ok</string>
     <string name="add_thoughts">Add Thoughts</string>
     <string name="enter_thoughts_hint">Enter Thoughts</string>
@@ -129,6 +128,9 @@
     <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
     <string name="only_app_message">Only App Message</string>
     <string name="search">Search…</string>
-
+    <string name="retry">Retry</string>
+    <string name="share">Share</string>
+    <string name="download">Download</string>
+    <string name="recipient_s">Recipient(s)</string>
 
 </resources>

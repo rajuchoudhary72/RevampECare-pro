@@ -13,7 +13,7 @@ data class InboxMessageDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("total")
-    val total: Int?
+    val total: Int
 )
 
 data class InboxMessage(

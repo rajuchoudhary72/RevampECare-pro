@@ -6,19 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.conversation
 import com.app.ecarepro.data.network.model.Conversation
 import com.app.ecarepro.data.network.model.Sender
 import com.app.ecarepro.databinding.FragmentConversationBinding
+import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.imageUrl
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,12 +66,30 @@ class ConversationFragment : Fragment() {
     private fun setUpViews() {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            conversationViewModel.refresh()
+        }
+
         binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
             )
+            addOnScrollListener(object :
+                PaginationScrollListener(layoutManager as LinearLayoutManager) {
+                override fun loadMoreItems() {
+                    conversationViewModel.loadNextPage()
+                }
+
+                override val totalPageCount: Int
+                    get() = conversationViewModel.totalPageCount()
+                override val isLastPage: Boolean
+                    get() = conversationViewModel.isLastPage()
+                override val isLoading: Boolean
+                    get() = conversationViewModel.isLoading()
+            })
         }
 
     }
@@ -89,6 +111,8 @@ class ConversationFragment : Fragment() {
                     }
 
                     is ConversationMessageUiState.Success -> {
+                        setUpToolbar(uiState.sender)
+
                         uiState.messages.forEach { message: Conversation ->
                             conversation {
                                 id(message.msgID)
@@ -117,10 +141,25 @@ class ConversationFragment : Fragment() {
                                         null
                                     }
                                 )
+                                clickListener { _ ->
+                                    findNavController().navigate(
+                                        R.id.chatFragment,
+                                        bundleOf("ID" to message.id)
+                                    )
+                                }
                             }
                         }
 
-                        setUpToolbar(uiState.sender)
+                        if (uiState.showLoadMoreView || uiState.loadMoreError != null) {
+                            loadMoreView {
+                                id(R.id.load_more_view)
+                                isLoading(uiState.showLoadMoreView)
+                                errorMessage(uiState.loadMoreError?.message)
+                                onClickRetry { _ ->
+                                    conversationViewModel.loadNextPage(true)
+                                }
+                            }
+                        }
                     }
 
                     else -> {}

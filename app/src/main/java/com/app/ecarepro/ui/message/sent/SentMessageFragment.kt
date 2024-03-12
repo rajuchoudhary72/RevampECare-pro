@@ -13,13 +13,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.SentMessage
 import com.app.ecarepro.databinding.FragmentSentMessageBinding
+import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.sentMessageCard
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.message.MessageViewModel
+import com.app.ecarepro.ui.message.chat.MessageType
+import com.app.ecarepro.utils.PaginationScrollListener
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -131,12 +135,33 @@ class SentMessageFragment : Fragment() {
             dateFrom.setOnClickListener { pickDateRange() }
             dateTo.setOnClickListener { pickDateRange() }
         }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            sentMessageViewModel.refresh()
+        }
+
         binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
             )
+
+            addOnScrollListener(object :
+                PaginationScrollListener(layoutManager as LinearLayoutManager) {
+                override fun loadMoreItems() {
+                    sentMessageViewModel.loadNextPage()
+                }
+
+                override val totalPageCount: Int
+                    get() = sentMessageViewModel.totalPageCount()
+                override val isLastPage: Boolean
+                    get() = sentMessageViewModel.isLastPage()
+                override val isLoading: Boolean
+                    get() = sentMessageViewModel.isLoading()
+
+            })
         }
 
     }
@@ -182,9 +207,23 @@ class SentMessageFragment : Fragment() {
                                 date(message.sentOn)
                                 clickListener { _ ->
                                     findNavController().navigate(
-                                        R.id.conversationFragment,
-                                        bundleOf("ID" to message.id)
+                                        R.id.chatFragment,
+                                        bundleOf(
+                                            "ID" to message.id,
+                                            "MessageType" to MessageType.SENT.value
+                                        )
                                     )
+                                }
+                            }
+                        }
+
+                        if (uiState.showLoadMoreView || uiState.loadMoreError != null) {
+                            loadMoreView {
+                                id(R.id.load_more_view)
+                                isLoading(uiState.showLoadMoreView)
+                                errorMessage(uiState.loadMoreError?.message)
+                                onClickRetry { _ ->
+                                    sentMessageViewModel.loadNextPage(true)
                                 }
                             }
                         }
