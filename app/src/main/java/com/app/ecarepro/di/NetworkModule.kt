@@ -2,6 +2,7 @@ package com.app.ecarepro.di
 
 import android.content.Context
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.service.AppService
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.UserService
@@ -80,6 +81,13 @@ object NetworkModule {
         retrofit: Retrofit
     ): MessageService {
         return retrofit.create(MessageService::class.java)
+    }
+
+    @Provides
+    fun provideAppService(
+        retrofit: Retrofit
+    ): AppService {
+        return retrofit.create(AppService::class.java)
     }
 
 

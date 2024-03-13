@@ -7,12 +7,12 @@
 
         <variable
             name="user"
-            type="com.app.ecarepro.data.network.model.NetworkUserDetailsDto" />
+            type="com.app.ecarepro.data.network.model.UserInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:paddingVertical="30dp"
+        android:paddingVertical="50dp"
         android:background="@drawable/bg_drawer_header"
         android:layout_height="wrap_content">
 
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:text="@{user.userTypeName}"
+            android:text="@{user.otherInfo}"
             tools:text="Student"
             android:textColor="#B9D7B1"
             app:layout_constraintEnd_toEndOf="parent"
