@@ -1,8 +1,10 @@
 package com.app.ecarepro.di
 
+import com.app.ecarepro.data.AppRepositoryImpl
 import com.app.ecarepro.data.MessageRepositoryImpl
 import com.app.ecarepro.data.SchoolRepositoryImpl
 import com.app.ecarepro.data.UserRepositoryImpl
+import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
@@ -30,6 +32,9 @@ abstract class DataBinds {
         impl: MessageRepositoryImpl
     ): MessageRepository
 
-
+    @Binds
+    abstract fun bindAppRepository(
+        impl: AppRepositoryImpl
+    ): AppRepository
 
 }

@@ -4,11 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,10 +20,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
-import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
-import com.app.ecarepro.drawerFooter
-import com.app.ecarepro.drawerHeader
+import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.progressDialog
@@ -46,6 +47,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var loader: AlertDialog? = null
+
+    private var expandedMenuId: Int = -1
 
 
     private val topLevelFragments = mutableListOf(
@@ -89,31 +92,75 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            systemViewModel.user.collectLatest { user ->
-                buildDrawerModels(user)
+            systemViewModel.uiState
+                .flowWithLifecycle(lifecycle)
+                .collectLatest { uiState ->
+                    uiState.getValueOrNull()?.let { data ->
+                        buildDrawerModels(data.menus)
+                        binding.itemDrawerHeader.user = data.userInfo
+                    }
+                }
+        }
+
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+
             }
+
+            override fun onDrawerOpened(drawerView: View) {
+
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                if (expandedMenuId != -1) {
+                    expandedMenuId = -1
+                    binding.recyclerViewNavView.requestModelBuild()
+                }
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+
+            }
+        })
+
+        binding.itemDrawerFooter.appVersion = "App Version 1.0.0"
+        binding.itemDrawerFooter.setClickListener {
+            logout()
         }
 
         binding.drawerLayout.open()
     }
 
-    private fun buildDrawerModels(user: NetworkUserDetailsDto) {
+    private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
-            drawerHeader {
-                id(R.id.drawer_header)
-                user(user)
-            }
-            (0..6).forEach {
+            menu.forEach { parentMenu ->
                 drawerItem {
-                    id(it)
+                    id(parentMenu.menuID)
+                    title(parentMenu.title)
+                    icon(parentMenu.icon)
+                    hasChildMenu(parentMenu.childMenus.isNullOrEmpty().not())
+                    clickListener { _ ->
+                        expandedMenuId = if (expandedMenuId == parentMenu.menuID) {
+                            -1
+                        } else {
+                            parentMenu.menuID
+                        }
+                        this@withModels.requestModelBuild()
+                    }
                 }
-            }
-            drawerFooter {
-                id(R.id.drawer_footer)
-                appVersion("App Version 1.0.0")
-                clickListener { v ->
-                    systemViewModel.openDrawer(false)
-                    logout()
+
+                if (expandedMenuId == parentMenu.menuID) {
+                    parentMenu.childMenus?.forEach { menu ->
+                        drawerChildItem {
+                            id(parentMenu.menuID, menu.menuID)
+                            title(menu.title)
+                            icon(menu.icon)
+                            hasChildMenu(menu.childMenus.isNullOrEmpty().not())
+                            clickListener { _ ->
+                            }
+                        }
+                    }
+
                 }
             }
         }
