@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="name"
+            type="java.lang.String" />
+
+        <variable
+            name="photo"
+            type="java.lang.String" />
+
+        <variable
+            name="recipients"
+            type="java.lang.String" />
+
+        <variable
+            name="abbreviation"
+            type="java.lang.String" />
+
+        <variable
+            name="date"
+            type="java.lang.String" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        android:onClick="@{clickListener}"
+        app:contentPadding="12dp"
+        app:strokeColor="@color/grey_60"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                imageUrl="@{photo}"
+                placeholder="@{@drawable/default_profile}"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                tools:src="@drawable/default_profile" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:text="@{name}"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintStart_toEndOf="@+id/image"
+                app:layout_constraintTop_toTopOf="@id/image"
+                tools:text="Carole Beatty" />
+
+            <TextView
+                android:id="@+id/sub_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{recipients}"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_60"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="Principal" />
+
+            <TextView
+                android:id="@+id/lastMessage"
+                isVisible="@{abbreviation!=null}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{abbreviation}"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="@color/grey_60"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@id/sub_title"
+                tools:text="Principal" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center"
+                android:text="@{date}"
+                android:textColor="#9FA297"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="23 May 2034 " />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

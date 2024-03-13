@@ -5,19 +5,20 @@ import android.content.Context
 import android.os.Environment
 import androidx.core.net.toUri
 
-class AndroidDownloader(context:Context ) : Downloader{
+class AndroidDownloader(context: Context) : Downloader {
 
     private var fileName: String? = null
 
-    private val _downloadManager= context.getSystemService(DownloadManager::class.java)
-    override fun downloadFile(url: String,  downloadType:String): Long {
+    private val _downloadManager = context.getSystemService(DownloadManager::class.java)
+    override fun downloadFile(url: String, downloadType: String, mimeType: String): Long {
         fileName = url.substring(url.lastIndexOf('/') + 1, url.length)
-        val request= DownloadManager.Request(url.toUri())
-            .setMimeType(Constant.PDF_Mime_Type)
-             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        val request = DownloadManager.Request(url.toUri())
+            .setMimeType(mimeType)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             .setTitle(fileName)
             .setDescription(downloadType)
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+            .setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_DOWNLOADS,
                 "/eCarePro Download/$downloadType/$fileName"
             )
 

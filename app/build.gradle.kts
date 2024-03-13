@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
@@ -117,5 +119,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.caverock:androidsvg:1.4")
+
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
 }

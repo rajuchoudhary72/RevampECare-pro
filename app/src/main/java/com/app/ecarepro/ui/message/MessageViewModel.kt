@@ -1,0 +1,63 @@
+package com.app.ecarepro.ui.message
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.data.repository.MessageRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class MessageViewModel @Inject constructor(
+    private val messageRepository: MessageRepository
+) : ViewModel() {
+    private val _showChatOption = MutableStateFlow(false)
+    val showChatOption = _showChatOption
+
+    private val _showDateRangePicker = MutableSharedFlow<Boolean>()
+    val showDateRangePicker = _showDateRangePicker
+
+    private val _clearFilter = MutableSharedFlow<Boolean>()
+    val clearFilter = _clearFilter
+
+    val messageSettings = MutableStateFlow<MessageSettings?>(null)
+
+    val isFilterApplied = MutableStateFlow(false)
+
+
+    fun fetchMessageSettings() {
+        viewModelScope.launch {
+            messageRepository
+                .getMessageSettings()
+                .collectLatest { result ->
+                    result.onSuccess { settings ->
+                        messageSettings.update { settings }
+                    }
+                }
+        }
+    }
+
+
+    fun showDateRangePicker() {
+        viewModelScope.launch {
+            _showDateRangePicker.emit(true)
+        }
+    }
+
+    fun toggleChatOption() {
+        viewModelScope.launch {
+            _showChatOption.update { it.not() }
+        }
+    }
+
+    fun clearFilter() {
+        viewModelScope.launch {
+            _clearFilter.emit(true)
+        }
+    }
+}

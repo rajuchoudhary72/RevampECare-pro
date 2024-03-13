@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="title"
+            type="java.lang.String" />
+
+        <variable
+            name="icon"
+            type="java.lang.String" />
+
+        <variable
+            name="hasChildMenu"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/bg_drawer_item"
-        android:backgroundTint="@color/transparent"
+        android:onClick="@{clickListener}"
         android:paddingVertical="10dp">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            imageUrl="@{icon}"
+            android:layout_width="24dp"
             android:layout_marginStart="40dp"
-            android:src="@drawable/ic_time_table"
+            android:layout_height="24dp"
+            tools:src="@drawable/ic_time_table"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,10 +44,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Time Table"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{title}"
+            tools:text="Time Table"
             android:textAppearance="?attr/textAppearanceBodyLarge"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            isVisible="@{hasChildMenu}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:src="@drawable/ic_arrow_right_black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
