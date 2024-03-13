@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:fitsSystemWindows="true"
-        tools:context=".ui.discipline_log.infraction.add_infraction.AddInfractionFragment">
+        tools:context=".ui.discipline_log.infraction.appreciation.AddAppreciationFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -22,14 +22,12 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
             app:layout_collapseMode="pin"
-             app:titleCentered="true"
+            app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Add Infrection"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:theme="@style/MyThemeOverlay_Toolbar"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-             />
+            app:titleTextColor="@color/white" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -113,8 +111,7 @@
                                     android:id="@+id/tv_admission_no"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/ubuntu_light"
-                                     />
+                                    android:fontFamily="@font/ubuntu_light" />
 
                             </LinearLayout>
 
@@ -132,8 +129,7 @@
                                     android:id="@+id/tv_class_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/ubuntu_light"
-                                     />
+                                    android:fontFamily="@font/ubuntu_light" />
 
                             </LinearLayout>
 
@@ -149,8 +145,7 @@
                                     android:id="@+id/tv_father_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/ubuntu_light"
-                                     />
+                                    android:fontFamily="@font/ubuntu_light" />
 
                             </LinearLayout>
 
@@ -166,8 +161,7 @@
                                     android:id="@+id/tv_contact"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="@font/ubuntu_light"
-                                     />
+                                    android:fontFamily="@font/ubuntu_light" />
 
                             </LinearLayout>
 
@@ -187,7 +181,7 @@
 
 
                     <TextView
-                        android:id="@+id/tv_select_infraction_cate"
+                        android:id="@+id/tv_select_apprec_cate"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
@@ -196,13 +190,13 @@
                         android:gravity="center_vertical"
                         android:padding="13dp"
                         android:layout_marginVertical="5dp"
-                        android:text="@string/select_infraction_category"
+                        android:text="@string/select_apprec_category"
                         android:visibility="visible"
                         app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
 
                     <TextView
-                        android:id="@+id/tv_select_sub_infraction"
+                        android:id="@+id/tv_select_sub_apprec"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
@@ -211,7 +205,7 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:padding="13dp"
-                        android:text="@string/select_infraction_subcategory"
+                        android:text="@string/select_apprec_subcategory"
                         android:visibility="visible"
                         app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
@@ -235,7 +229,7 @@
                             android:visibility="visible" />
 
                         <TextView
-                            android:id="@+id/tv_select_cons"
+                            android:id="@+id/tv_select_reward"
                             android:layout_width="0dp"
                             android:layout_height="52dp"
                             android:layout_weight="1"
@@ -245,7 +239,7 @@
                             android:gravity="center_vertical"
                             android:padding="13dp"
                             android:layout_marginVertical="5dp"
-                            android:text="@string/select_consequences"
+                            android:text="@string/select_reward"
                             android:visibility="visible"
                             app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
@@ -254,7 +248,7 @@
 
 
                     <EditText
-                        android:id="@+id/et_plan_name"
+                        android:id="@+id/et_remark"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
@@ -262,7 +256,7 @@
                         android:paddingHorizontal="10dp"
                         android:background="@drawable/edit_text_box_des_log"
                         android:fontFamily="@font/ubuntu_light"
-                        android:hint="@string/enter_corrective_action"
+                        android:hint="@string/enter_remark"
                         android:visibility="visible" />
 
 
@@ -342,7 +336,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/ubuntu_italic"
                         android:gravity="center"
-                        android:text="@string/lbl_message_create_new_inferaction"
+                        android:text="@string/lbl_message_create_new_apprec"
                         android:textColor="#545454"
                         android:textSize="12sp"
                         android:layout_marginBottom="70dp"
@@ -353,6 +347,7 @@
 
             </LinearLayout>
         </ScrollView>
+
 
     </LinearLayout>
 </layout>

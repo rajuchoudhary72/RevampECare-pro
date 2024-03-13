@@ -294,5 +294,45 @@
         android:id="@+id/openImageFragment"
         android:name="com.app.ecarepro.ui.common.OpenImageFragment"
         android:label="OpenImageFragment" />
+    <fragment
+        android:id="@+id/addInfractionFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.add_infraction.AddInfractionFragment"
+        android:label="AddInfractionFragment" >
+        <action
+            android:id="@+id/action_addInfractionFragment_to_infractionListFragment"
+            app:destination="@id/infractionListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infractionListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment"
+        android:label="InfractionListFragment" />
+    <fragment
+        android:id="@+id/studentListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:label="StudentListFragment" >
+        <action
+            android:id="@+id/action_studentListFragment_to_addInfractionFragment"
+            app:destination="@id/addInfractionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAppreciationFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.AddAppreciationFragment"
+        android:label="AddAppreciationFragment" >
+        <action
+            android:id="@+id/action_addAppreciationFragment_to_appreciationListFragment"
+            app:destination="@id/appreciationListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appreciationListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.appreciation_list.AppreciationListFragment"
+        android:label="AppreciationListFragment" />
+    <fragment
+        android:id="@+id/studentListFragment2"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:label="StudentListFragment" >
+        <action
+            android:id="@+id/action_studentListFragment2_to_addAppreciationFragment"
+            app:destination="@id/addAppreciationFragment" />
+    </fragment>
 
 </navigation>

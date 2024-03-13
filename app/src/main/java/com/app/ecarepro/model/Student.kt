@@ -1,0 +1,15 @@
+package com.app.ecarepro.model
+
+data class Student(
+    val admissionNumber: String,
+    val `class`: String,
+    val contactMob: String,
+    val contactPerson: String,
+    val dob: String,
+    val fatherName: String,
+    val isSelected: Boolean,
+    val name: String,
+    val photo: String,
+    val rollNumber: String,
+    val stID: Int
+)

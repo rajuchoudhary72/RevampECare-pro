@@ -17,8 +17,10 @@
     <string name="next">Next</string>
     <string name="forgot_password_">Forgot Password?</string>
     <string name="faqs">FAQs</string>
-    <string name="contact_no">Contact No :</string>
-    <string name="email">Email :</string>
+    <string name="contact_no">"Contact No:  "</string>
+    <string name="contact_person">"Contact Person:  "</string>
+    <string name="classes">"Class: "</string>
+    <string name="email">"Email: "</string>
     <string name="welcome">Welcome <b>Pooja Verma!</b></string>
     <string name="onboarding_title_1">School ERP on\nyour’s finger tips</string>
     <string name="onboarding_description_1">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
@@ -114,6 +116,32 @@
     <string name="appley_for_leave">Apply For Leave</string>
     <string name="apply_for_leave">Apply For Leave</string>
     <string name="approved_by">Approved By:</string>
+    <string name="lbl_message_create_new_inferaction">*Note : Please select Category, Subcategory and Consequences first</string>
+    <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
+    <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
+    <string name="select_infraction_category">Select Infraction Category</string>
+    <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
+
+    <string name="select_apprec_category">Select Appreciation Category</string>
+    <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
+
+    <string name="instance">Instance</string>
+    <string name="instance_wit">"Instance: "</string>
+    <string name="infraction_on">"Infraction on : "</string>
+    <string name="appreciatin_on">"Appreciation on : "</string>
+    <string name="select_consequences">Select Consequences</string>
+    <string name="select_reward">Select Reward</string>
+    <string name="enter_corrective_action">Enter Corrective Action</string>
+    <string name="enter_remark">Enter Remark</string>
+    <string name="subcategory">Subcategory:</string>
+    <string name="consequences">Consequences:</string>
+    <string name="corrective_action">Corrective Action:</string>
+    <string name="issue_by">Issue by:</string>
+    <string name="category">"Category: "</string>
+    <string name="admission_no">"Admission No: "</string>
+    <string name="no_data">No Data</string>
+    <string name="reward">Reward:</string>
+    <string name="remark">Remark:</string>
 
 
 </resources>
