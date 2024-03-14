@@ -70,6 +70,15 @@
 
     <string name="false_value">False</string>
     <string name="true_value">True</string>
+
+    <string name="date_">Date :</string>
+    <string name="update_on_">Update On :</string>
+    <string name="ok">OK</string>
+    <string name="add_thoughts">Add Thoughts</string>
+    <string name="enter_thoughts_hint">Enter Thoughts</string>
+    <string name="enter_auther_hint">Enter Author</string>
+
+    <string name="book_details_title">Book Details</string>
     <string name="answer">Answer</string>
     <string name="please_type_ans">" Please Type Answer"</string>
     <string name="save">Save</string>
@@ -142,6 +151,19 @@
     <string name="no_data">No Data</string>
     <string name="reward">Reward:</string>
     <string name="remark">Remark:</string>
+
+    <string name="enter_thoughts">Enter Thoughts</string>
+    <string name="enter_auther">Enter Author</string>
+    <string name="book_details">Book Details</string>
+    <string name="no_data_found">No data found</string>
+    <string name="clear_filter">Clear Filter</string>
+    <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
+    <string name="only_app_message">Only App Message</string>
+    <string name="search">Search…</string>
+    <string name="retry">Retry</string>
+    <string name="share">Share</string>
+    <string name="download">Download</string>
+    <string name="recipient_s">Recipient(s)</string>
 
 
 </resources>
