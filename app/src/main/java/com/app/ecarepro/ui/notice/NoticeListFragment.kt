@@ -169,12 +169,10 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
 
     private fun fetchNotices(pg: Int, classID: Int) {
-
         noticeViewModel.getNotice(pg, classID)
     }
 
     private fun getMyClass(subID: Int, iD: Int  ) {
-
         noticeViewModel.getMyClass(subID, iD)
     }
 

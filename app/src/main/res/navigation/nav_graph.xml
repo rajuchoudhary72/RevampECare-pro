@@ -286,4 +286,9 @@
         android:name="com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment"
         android:label="PhotoViewFragmentFragment" />
 
+    <fragment
+        android:id="@+id/classPromotionFragment"
+        android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
+        android:label="ClassPromotionFragment"
+        />
 </navigation>

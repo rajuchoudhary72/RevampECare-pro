@@ -96,6 +96,7 @@
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="recipient_s">Recipient(s)</string>
+    <string name="no_record_found">No record found</string>
 
 
 </resources>
