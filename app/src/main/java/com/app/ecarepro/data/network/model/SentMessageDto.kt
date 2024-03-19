@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 
 data class SentMessageDto(
@@ -37,6 +38,7 @@ data class SentMessage(
     val subject: String?
 )
 
+
 data class Recipient(
     @SerializedName("admissionNo")
     val admissionNo: Any?,
@@ -66,4 +68,8 @@ data class Recipient(
     val receiverType: Int?,
     @SerializedName("rollNumber")
     val rollNumber: Any?
-)
+) : Serializable
+
+data class RecipientDto(
+    val recipients: List<Recipient>
+) : Serializable

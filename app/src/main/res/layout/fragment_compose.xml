@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true"
+            app:liftOnScrollTargetViewId="@id/recycler_view">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_arrow_back_24px"
+                app:title="Compose Message"
+                app:titleTextAppearance="?attr/textAppearanceTitleMedium"
+                app:titleTextColor="@color/white"
+                app:topWindowInsetToPadding="@{true}">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_recipient"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="Add Recipients"
+                    android:textColor="@color/white"
+                    app:icon="@drawable/baseline_add_reaction_24"
+                    app:iconTint="@color/white"
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium"
+                    app:strokeColor="@color/white" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_pager"
+            bottomWindowInsetToPadding="@{true}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/recipient_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0D5FA150"
+                android:padding="@dimen/horizontal_margin"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Raju Choudhary"
+                    app:chipIcon="@drawable/img_message_user"
+                    app:chipMinTouchTargetSize="0dp" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Raju "
+                    app:chipIcon="@drawable/img_message_user"
+                    app:chipMinTouchTargetSize="0dp" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Raju "
+                    app:chipIcon="@drawable/img_message_user"
+                    app:chipMinTouchTargetSize="0dp" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Widget.Material3.Chip.Input"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Raju"
+                    app:chipIcon="@drawable/img_message_user"
+                    app:chipMinTouchTargetSize="0dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <EditText
+                android:id="@+id/txtSubject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:layout_marginTop="@dimen/horizontal_margin"
+                android:autofillHints="true"
+                android:background="@drawable/bg_outline_round_corner_green_10"
+                android:fontFamily="@font/calibri_regular"
+                android:hint="Subject Line..."
+                android:inputType="text"
+                android:maxLines="4"
+                android:minHeight="42dp"
+                android:paddingHorizontal="10dp"
+                android:scrollbars="vertical"
+                app:layout_constraintTop_toBottomOf="@id/recipient_chip_group"
+                tools:ignore="LabelFor" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAttachmentOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:layout_marginBottom="@dimen/horizontal_margin"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="2dp"
+                app:contentPadding="10dp"
+                app:layout_constraintBottom_toTopOf="@id/send_message_layout"
+                app:strokeWidth="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCamera"
+                        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Camera"
+                        app:icon="@drawable/ic_camera"
+                        app:iconGravity="textTop"
+                        app:iconPadding="5dp"
+                        app:layout_constraintEnd_toStartOf="@+id/btnGallery"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnGallery"
+                        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Browse Photo"
+                        app:icon="@drawable/ic_add_photo"
+                        app:iconGravity="textTop"
+                        app:iconPadding="5dp"
+                        app:layout_constraintEnd_toStartOf="@+id/btnRecord"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/btnCamera"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRecord"
+                        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Record"
+                        app:icon="@drawable/ic_mic"
+                        app:iconGravity="textTop"
+                        app:iconPadding="5dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/btnGallery"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBrowseAudio"
+                        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Browse Audio"
+                        app:icon="@drawable/ic_add_audio"
+                        app:iconGravity="textTop"
+                        app:iconPadding="5dp"
+                        app:layout_constraintEnd_toEndOf="@+id/btnCamera"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/btnCamera"
+                        app:layout_constraintTop_toBottomOf="@+id/btnCamera"
+                        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBrowsePdf"
+                        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:insetLeft="0dp"
+                        android:insetTop="0dp"
+                        android:insetRight="0dp"
+                        android:insetBottom="0dp"
+                        android:text="Browse PDF"
+                        app:icon="@drawable/ic_add_pdf"
+                        app:iconGravity="textTop"
+                        app:iconPadding="5dp"
+                        app:layout_constraintEnd_toEndOf="@+id/btnGallery"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/btnGallery"
+                        app:layout_constraintTop_toBottomOf="@+id/btnCamera"
+                        app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/send_message_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0D5FA150"
+
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <EditText
+                    android:id="@+id/message"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:autofillHints="true"
+                    android:background="@drawable/bg_outline_round_corner_green_10"
+                    android:inputType="text"
+                    android:maxLines="4"
+                    android:minHeight="42dp"
+                    android:paddingHorizontal="10dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_reply_message"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="LabelFor" />
+
+                <ImageView
+                    android:id="@+id/btnAddAttachment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:src="@drawable/baseline_attach_file_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/message"
+                    app:layout_constraintEnd_toEndOf="@+id/message"
+                    app:layout_constraintTop_toTopOf="@+id/message"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_reply_message"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:gravity="center_vertical"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    app:cornerRadius="10dp"
+                    app:icon="@drawable/ic_sent"
+                    app:iconTint="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

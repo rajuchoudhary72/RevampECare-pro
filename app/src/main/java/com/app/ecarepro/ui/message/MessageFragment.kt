@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMessageBinding
 import com.app.ecarepro.ui.message.inbox.InboxMessageFragment
 import com.app.ecarepro.ui.message.sent.SentMessageFragment
@@ -46,7 +47,9 @@ class MessageFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-
+        binding.btnSendSmsAppMessage.setOnClickListener {
+            findNavController().navigate(R.id.composeFragment)
+        }
         binding.btnFilter.setOnClickListener {
             messageViewModel.showDateRangePicker()
         }

@@ -110,6 +110,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/btn_send_sms_app_message"
                         isVisible="@{viewModel.messageSettings.msgWithSMS}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

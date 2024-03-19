@@ -314,5 +314,12 @@
         android:id="@+id/photoViewFragmentFragment"
         android:name="com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment"
         android:label="PhotoViewFragmentFragment" />
-
+    <fragment
+        android:id="@+id/composeFragment"
+        android:name="com.app.ecarepro.ui.message.compose.ComposeFragment"
+        android:label="ComposeFragment" />
+    <fragment
+        android:id="@+id/selectRecipientsFragment"
+        android:name="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment"
+        android:label="SelectRecipientsFragment" />
 </navigation>

@@ -59,7 +59,7 @@ class ChatViewModel @Inject constructor(
                             receiverID = response.receiverID,
                             receiverType = response.receiverType,
                             canReply = response.canReply,
-                            recipients = response.recipients,
+                            recipients = response.recipients ?: emptyList(),
                             subject = response.subject
                         )
                     }
@@ -141,7 +141,7 @@ sealed interface ChatUiState {
 
     data class Success(
         val messages: List<Message>,
-        val recipients: List<Recipient>?,
+        val recipients: List<Recipient>,
         val msgID: Int?,
         val readCount: Int?,
         val receiverID: Int?,
