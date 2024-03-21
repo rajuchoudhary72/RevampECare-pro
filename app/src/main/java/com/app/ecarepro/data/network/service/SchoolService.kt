@@ -8,9 +8,13 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
 import com.app.ecarepro.data.network.model.NetworkWalkThrough
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Query
-
+import com.app.ecarepro.model.AppResponse
+import com.app.ecarepro.model.ClassPromotionModel
+import com.app.ecarepro.model.PromotionModel
+import com.app.ecarepro.model.RequestClassPromotion
+import retrofit2.http.Body
 interface SchoolService {
     @GET("School/WalkThrough")
     suspend fun getWalkThroughData(): NetworkWalkThrough
@@ -48,5 +52,13 @@ interface SchoolService {
         @Query("CirID") cirID: Int,
         @Query("ID")  iD: Int,
     ): NetworkCircularDetails
+    @GET("Staff/ClassTeacherOf")
+    suspend fun getClassTeacherOf(): ClassPromotionModel
 
+    @GET("Student/ClassPromotion")
+    suspend fun getClassPromotion(@Query("ClassId") classId: String): PromotionModel
+
+
+    @POST("Student/SaveClassPromotion")
+    suspend fun saveClassPromotion(@Body body: RequestClassPromotion): AppResponse
 }

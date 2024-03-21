@@ -362,4 +362,9 @@
         android:id="@+id/selectRecipientsFragment"
         android:name="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment"
         android:label="SelectRecipientsFragment" />
+    <fragment
+        android:id="@+id/classPromotionFragment"
+        android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
+        android:label="ClassPromotionFragment"
+        />
 </navigation>

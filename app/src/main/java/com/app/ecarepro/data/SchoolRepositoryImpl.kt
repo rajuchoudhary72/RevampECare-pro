@@ -14,6 +14,10 @@ import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import com.app.ecarepro.model.AppResponse
+import com.app.ecarepro.model.ClassPromotionModel
+import com.app.ecarepro.model.PromotionModel
+import com.app.ecarepro.model.RequestClassPromotion
 
 class SchoolRepositoryImpl @Inject constructor(
     private val schoolService: SchoolService,
@@ -66,5 +70,16 @@ class SchoolRepositoryImpl @Inject constructor(
     override suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails {
         return schoolService.getCircularDTL(cirID, iD)
     }
+    override suspend fun getClass(): ClassPromotionModel {
+        return schoolService.getClassTeacherOf()
+    }
 
+    override suspend fun getClassPromotions(classId: String): PromotionModel {
+        return schoolService.getClassPromotion(classId)
+
+    }
+
+    override suspend fun submitClassPromotions(request: RequestClassPromotion): AppResponse {
+        return schoolService.saveClassPromotion(request)
+    }
 }

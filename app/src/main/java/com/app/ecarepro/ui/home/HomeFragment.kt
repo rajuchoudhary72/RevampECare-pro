@@ -179,7 +179,7 @@ class HomeFragment : Fragment() {
         if (favouriteSlider.module.contains("notice", true)) {
             findNavController().navigate(R.id.noticeListFragment)
         } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.studentListFragment2)
+            findNavController().navigate(R.id.thoughtsListFragment)
         } else if (favouriteSlider.module.contains("circular", true)) {
             findNavController().navigate(R.id.circularFragment)
         } else if (favouriteSlider.module.contains("library", true)) {
@@ -194,6 +194,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.questionnaireListFragment)
         }else if (favouriteSlider.module.contains("Leave Request", true)) {
             findNavController().navigate(R.id.leaveHistoryFragment)
+        }else if (favouriteSlider.module.contains("Appreciation", true)) {
+            findNavController().navigate(R.id.studentListFragment2)
+        }else if (favouriteSlider.module.contains("Class Promotion", true)) {
+            findNavController().navigate(R.id.classPromotionFragment)
         }
 
         else {

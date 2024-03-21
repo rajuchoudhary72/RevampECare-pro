@@ -38,17 +38,9 @@ class StudentListAdapter(private var studentList: List<Student>,
             append(data.admissionNumber)
         }
 
-
-
         bindingm.llMain.setOnClickListener {
             studentListFragment.onItemClick(data,1,false)
         }
-
-
-
-
-
-
            }
 
     class CircularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
