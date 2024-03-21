@@ -15,12 +15,31 @@ import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.NetworkAddAppreciation
+import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkInfractionInstance
+import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkStaffAttendence
+import com.app.ecarepro.data.network.model.NetworkStudentList
+import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
+import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
+import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
+import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
+import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
+import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
+import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
+import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -152,5 +171,116 @@ interface UserService {
     suspend fun leaveDelete(
         @Query("LvID") lvID: Int
     ): CommonResponse
+
+    @GET("DisciplineLog/InfractionTypes")
+    suspend fun infractionTypes(  ): NetworkInfractionTypes
+
+    @GET("DisciplineLog/SubInfractionTypes")
+    suspend fun subInfractionTypes(
+        @Query("InfrTypeID") infrTypeID: Int
+    ): NetworkSubInfractionTypes
+
+    @GET("DisciplineLog/InfractionInstance")
+    suspend fun infractionInstance(
+        @Query("InfrTypeID") infrTypeID: Int,
+        @Query("InfrSubTypeID") InfrSubTypeID: Int,
+        @Query("InfrTypeID") InfrTypeID: Int
+    ): NetworkInfractionInstance
+
+
+    @GET("DisciplineLog/AddInfraction")
+    suspend fun addInfraction(
+        @Query("StID") stID: Int
+    ): NetworkAddInfraction
+
+
+    @POST("DisciplineLog/SaveInfraction")
+    suspend fun saveInfraction(
+        @Body request: PostSaveInfraction,
+    ): CommonResponse
+
+    @GET("Report/StudentList")
+    suspend fun getStudentList(
+        @Query("ScholarType") scholarType: Int,
+        @Query("ShowAll") showAll: Boolean
+    ): NetworkStudentList
+
+    @GET("DisciplineLog/AddAppreciation")
+    suspend fun addAppreciation(
+        @Query("StID") stID: Int
+    ): NetworkAddAppreciation
+
+    @GET("DisciplineLog/SubAppreciationTypes")
+    suspend fun subAppreciationTypes(
+        @Query("AprID") aprID: Int
+    ): NetworkSubAppreciationTypes
+
+    @GET("DisciplineLog/AppreciationInstance")
+    suspend fun appreciationInstance(
+        @Query("AprSubID") aprSubID: Int,
+        @Query("StID") stID: Int,
+    ): NetworkAppreciationInstance
+
+
+    @POST("DisciplineLog/SaveAppreciation")
+    suspend fun saveAppreciation(
+        @Body request: PostSaveAppreciation
+    ): CommonResponse
+
+    @GET("Academic/Assignment")
+    suspend fun assignment( ): NetworkAssignments
+
+    @POST("Academic/SubmitAssignment")
+    suspend fun submitAssignment(
+        @Body request: PostSubmitAssignment,
+    ): CommonResponse
+
+
+    @GET("Academic/TeachersAssignment")
+    suspend fun teachersAssignment( ): NetworkTeacherAssignment
+
+    @GET("Academic/DeleteAssignment")
+    suspend fun deleteAssignment(
+        @Query("ID") iD: String,
+    ): CommonResponse
+
+    @GET("Staff/MySubjects")
+    suspend fun mySubjects( ): NetworkMySubjects
+
+    @POST("Academic/CreateAssignment")
+    suspend fun createAssignment(
+        @Body request: PostCreateAssignment,
+    ): CommonResponse
+
+    @GET("Academic/ViewAssignment")
+    suspend fun viewAssignment(
+        @Query("ID") iD: String,
+    ): NetworkViewAssignment
+
+    @GET("Academic/AssignmnetSubmissionRPT")
+    suspend fun assignmnetSubmissionRPT(
+        @Query("ID") iD: String,
+        @Query("NotSubmitted") notSubmitted: Boolean,
+    ): NetworkSubmitAssignReport
+
+    @GET("Academic/OfflineSubmited")
+    suspend fun offlineSubmited(
+        @Query("ID") iD: String,
+        @Query("StID") stID: Int,
+        @Query("SubmissitedOn") submissitedOn: String,
+    ): CommonResponse
+
+    @GET("Staff/Attendance")
+    suspend fun staffAttendance(
+        @Query("Month") month: Int,
+        @Query("Year") year: Int,
+    ): NetworkStaffAttendence
+
+    @GET("Academic/TeachersTimetable")
+    suspend fun teachersTimetable(
+        @Query("ID") id: String
+    ): NetworkTeachersTimetable
+
+
 
 }

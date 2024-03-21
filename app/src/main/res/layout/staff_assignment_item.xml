@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="assignmentData"
+            type="com.app.ecarepro.model.TeacherAssignment" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_light"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+
+            <RelativeLayout
+                android:id="@+id/word_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+
+                >
+
+
+                <LinearLayout
+                    android:id="@+id/linear2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rel_img_dot"
+                    android:layout_alignParentEnd="true"
+                    android:background="@color/brand_color"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="1">
+
+                    <RelativeLayout
+                        android:id="@+id/rel_all_visible"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/all"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="center"
+                            android:text="@string/view"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/my_visible_rel"
+                        android:layout_width="0dp"
+                        android:layout_height="45dp"
+                        android:layout_weight="1"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/my"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="center"
+                            android:text="@string/download"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+
+                            />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:visibility="gone" />
+
+                <RelativeLayout
+                    android:id="@+id/rel_img_dot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+
+                    <LinearLayout
+                        android:id="@+id/llStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/date_rel3"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:drawablePadding="4dp"
+                            android:text="Status: "
+                             />
+
+                        <TextView
+                            android:id="@+id/tvStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:paddingTop="3dp"
+                            android:textColor="@color/grey_40"
+                            android:layout_marginStart="5dp"
+                            app:fontFamily="@font/ubuntu_medium   " />
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/date_rel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rel">
+
+                        <TextView
+                            android:id="@+id/clock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="4dp"
+                            android:drawablePadding="3dp"
+                            android:text="@string/update_on"
+                            android:textColor="@color/grey_40"
+                            app:fontFamily="@font/ubuntu_light" />
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="2dp"
+                            android:layout_toEndOf="@+id/clock"
+                            android:paddingTop="3dp"
+                            android:layout_marginStart="5dp"
+                            android:textColor="@color/grey_40"
+                            android:text="@{assignmentData.uploadedOn}"
+                             app:fontFamily="@font/ubuntu_light" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/date_rel2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/date_rel"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/clock2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="3dp"
+                            android:drawablePadding="3dp"
+                            android:text="@string/assigned_on"
+                             />
+
+                        <TextView
+                            android:id="@+id/date2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_toEndOf="@+id/clock2"
+                            android:paddingTop="3dp"
+                            android:layout_marginStart="5dp"
+                            android:text="@{assignmentData.uploadedOn}"
+                            android:textColor="@color/grey_40"
+
+                            app:fontFamily="@font/ubuntu_medium" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/date_rel3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/date_rel2">
+
+                        <TextView
+                            android:id="@+id/clock3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="3dp"
+                            android:drawablePadding="3dp"
+
+                            android:text="@string/submitted_on"
+                             />
+
+                        <TextView
+                            android:id="@+id/date3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="3dp"
+                            android:layout_toEndOf="@+id/clock3"
+                            android:paddingTop="3dp"
+                            android:textColor="@color/grey_40"
+                            android:layout_marginStart="5dp"
+                            android:text="@{assignmentData.submitDate}"
+                            app:fontFamily="@font/ubuntu_medium" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/word"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{assignmentData.title}"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/word_space"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/word"
+                            android:text="@string/syb"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/name_subject"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/word_space"
+                            android:textColor="@color/brand_color"
+                            android:text="@{assignmentData.subject}"
+                            android:textSize="14sp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/date_rel4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/llStatus"
+                        android:layout_marginTop="8dp">
+
+
+                        <TextView
+                            android:id="@+id/updated_by"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_toEndOf="@+id/user_img"
+                            android:text="@string/updated_by"
+                            android:textSize="8dp"
+                            app:fontFamily="@font/ubuntu_light"
+                            />
+
+                        <TextView
+                            android:id="@+id/updated_by_person"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/updated_by"
+                            android:layout_marginStart="3dp"
+                            android:text="You"
+                             android:layout_toEndOf="@+id/user_img"
+                            app:fontFamily="@font/ubuntu_medium" />
+
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/user_img"
+                              android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:visibility="gone"
+                            android:layout_centerVertical="true"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle" />
+
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/progress_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/progress"
+                    android:textAlignment="center"
+                    android:visibility="gone" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llEditDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:weightSum="1.5">
+
+            <LinearLayout
+                android:id="@+id/llView"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="0.5"
+                android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="View"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/view_white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEdit"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="0.5"
+                android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Edit"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/ic_edit_pencil" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llDelete"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="0.5"
+                android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Delete"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/delete_white" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/grey_light" />
+
+
+    </LinearLayout>
+</layout>

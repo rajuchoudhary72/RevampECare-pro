@@ -150,6 +150,11 @@ class PaySlipFragment : Fragment() {
         binding.fbDowload.setOnClickListener {
             val androidDownloader = AndroidDownloader(requireContext())
             androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
+            Toast.makeText(
+                requireContext(),
+                "Download started, check you status bar for more information.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
     }

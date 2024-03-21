@@ -24,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title=" Add Thoughts"
+            app:title="@string/add_thoughts"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -83,7 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:hint="Enter Thoughts"
+                    android:hint="@string/enter_thoughts"
 
                     >
 
@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:hint="Enter Auther"
+                    android:hint="@string/enter_auther"
 
                     >
 
@@ -127,7 +127,7 @@
                     android:enabled="false"
                     android:layout_gravity="center"
                     android:paddingHorizontal="100dp"
-                    android:text="Save"
+                    android:text="@string/save"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/til_text_filed" />

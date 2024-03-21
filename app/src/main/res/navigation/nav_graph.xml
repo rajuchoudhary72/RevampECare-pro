@@ -294,5 +294,105 @@
         android:id="@+id/openImageFragment"
         android:name="com.app.ecarepro.ui.common.OpenImageFragment"
         android:label="OpenImageFragment" />
+    <fragment
+        android:id="@+id/addInfractionFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.add_infraction.AddInfractionFragment"
+        android:label="AddInfractionFragment" >
+        <action
+            android:id="@+id/action_addInfractionFragment_to_infractionListFragment"
+            app:destination="@id/infractionListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infractionListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment"
+        android:label="InfractionListFragment" />
+    <fragment
+        android:id="@+id/studentListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:label="StudentListFragment" >
+        <action
+            android:id="@+id/action_studentListFragment_to_addInfractionFragment"
+            app:destination="@id/addInfractionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAppreciationFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.AddAppreciationFragment"
+        android:label="AddAppreciationFragment" >
+        <action
+            android:id="@+id/action_addAppreciationFragment_to_appreciationListFragment"
+            app:destination="@id/appreciationListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appreciationListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.appreciation_list.AppreciationListFragment"
+        android:label="AppreciationListFragment" />
+    <fragment
+        android:id="@+id/studentListFragment2"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:label="StudentListFragment" >
+        <action
+            android:id="@+id/action_studentListFragment2_to_addAppreciationFragment"
+            app:destination="@id/addAppreciationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/conversationFragment"
+        android:name="com.app.ecarepro.ui.message.conversation.ConversationFragment"
+        android:label="ConversationFragment">
+
+        <argument
+            android:name="ID"
+            app:argType="string" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.app.ecarepro.ui.message.chat.ChatFragment"
+        android:label="ChatFragment" />
+
+    <fragment
+        android:id="@+id/photoViewFragmentFragment"
+        android:name="com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment"
+        android:label="PhotoViewFragmentFragment" />
+    <fragment
+        android:id="@+id/assignmentNavHostFragment"
+        android:name="com.app.ecarepro.ui.assignment.AssignmentNavHostFragment"
+        android:label="AssignmentNavHostFragment" />
+    <fragment
+        android:id="@+id/staffAssignmentsListFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListFragment"
+        android:label="StaffAssignmentsListFragment" >
+        <action
+            android:id="@+id/action_staffAssignmentsListFragment_to_viewAssignmentFragment"
+            app:destination="@id/viewAssignmentFragment" />
+        <action
+            android:id="@+id/action_staffAssignmentsListFragment_to_editAssignmentFragment"
+            app:destination="@id/editAssignmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.viewAssignment.ViewAssignmentFragment"
+        android:label="fragment_view_assignment"
+        tools:layout="@layout/fragment_view_assignment" >
+        <action
+            android:id="@+id/action_viewAssignmentFragment_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.postAssignment.PostAssignmentFragment"
+        android:label="PostAssignmentFragment" />
+    <fragment
+        android:id="@+id/editAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.editAssignment.EditAssignmentFragment"
+        android:label="EditAssignmentFragment" />
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.app.ecarepro.ui.staffAttendence.AttendanceFragment"
+        android:label="AttendanceFragment" />
+    <fragment
+        android:id="@+id/timeTableNavHostFragment"
+        android:name="com.app.ecarepro.ui.timeTable.TimeTableNavHostFragment"
+        android:label="TimeTableNavHostFragment" />
 
 </navigation>

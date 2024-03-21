@@ -12,9 +12,11 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import coil.load
+import com.airbnb.epoxy.EpoxyRecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
+import com.app.ecarepro.messageFilePreview
 
 
 @BindingAdapter("isVisible")
@@ -38,6 +40,13 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(R.drawable.img_school_placeholder)
             error(R.drawable.img_school_placeholder)
         }
+    }
+}
+
+@BindingAdapter("imageRes")
+fun ImageView.imageRes(res: Int?) {
+    res?.let {
+        setImageResource(res)
     }
 }
 
@@ -71,4 +80,25 @@ fun LinearLayout.addCollectionItems(collections: Boolean) {
     val footer =
         ItemCollectionCollectFooterBinding.inflate(LayoutInflater.from(context), null, false)
     addView(footer.root)
+}
+
+@BindingAdapter("files", "clickListener", requireAll = false)
+fun EpoxyRecyclerView.buildFilesModel(files: List<String>, clickListener: FileClickListener) {
+
+    withModels {
+        files.forEach {
+            messageFilePreview {
+                id(it)
+                image(it)
+                onClickPhoto { _ ->
+                    clickListener.onClick(it)
+                }
+            }
+        }
+    }
+
+}
+
+interface FileClickListener {
+    fun onClick(file: String)
 }

@@ -25,7 +25,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Book Details"
+            app:title="@string/book_details"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />

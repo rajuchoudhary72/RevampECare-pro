@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemOnboardingBinding
 import com.app.ecarepro.model.Slide
+import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
@@ -35,7 +35,7 @@ class OnBoardingViewPagerAdapter @Inject constructor() :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Slide) {
             with(binding) {
-                image.setImageResource(R.drawable.img_onboarding_1)
+                image.imageUrl(item.imageURL)
                 title.text = item.heading
                 subTitle.text = item.text
             }

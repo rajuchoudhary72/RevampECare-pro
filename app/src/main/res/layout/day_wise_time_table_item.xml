@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+<variable
+    name="timeData"
+    type="com.app.ecarepro.model.TimeTable" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp">
+
+
+            <TextView
+                android:id="@+id/tv_no_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(timeData.period)}"
+                android:textSize="21sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/brand_color"
+                android:fontFamily="@font/ubuntu_medium"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_st"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 app:layout_constraintStart_toEndOf="@+id/tv_no_day"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/brand_color"
+                android:fontFamily="@font/ubuntu_light"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/tv_older_peroid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peroid"
+                android:textColor="@color/grey_60"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_no_day"
+                android:textSize="12sp" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toEndOf="@+id/tv_older_peroid"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="15dp">
+
+                <TextView
+                    android:id="@+id/tv_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{timeData.className}"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/ubuntu_medium"
+
+                    />
+
+                <TextView
+                    android:id="@+id/cv_subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@{timeData.subject}"
+                    android:textColor="@color/grey_40"
+                    android:textAllCaps="true"
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_round_access_time_24"
+                        app:tint="@color/grey_40" />
+
+                    <TextView
+                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:text="@{timeData.time}"
+                        android:layout_marginStart="2dp"
+                        android:textColor="@color/grey_40"
+                        android:textAllCaps="true"
+
+                        />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

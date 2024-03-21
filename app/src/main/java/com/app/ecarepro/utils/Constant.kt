@@ -17,11 +17,13 @@ class Constant {
         const val BOOK_ID_ARGUMENT = "bookID"
         const val URL_ARGUMENT = "url"
         const val NOTICE_ID_ARGUMENT = "NoticeID"
+        const val STUDENT_ID_ARGUMENT = "StudentID"
         const val QUES_ID_ARGUMENT = "QuesID"
         const val LEAVE_ID_ARGUMENT = "LeaveID"
         const val NAME = "name"
 
         const val CIRCULAR_ID = "CircularID"
+        const val ASSIGNMENT_ID = "AssiID"
         const val DEFAULT_ID = 0
         const val SUB_ID = 0
         const val MY_CLASS_ID = 1
