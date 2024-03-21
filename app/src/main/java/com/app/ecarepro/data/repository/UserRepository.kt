@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
@@ -15,15 +16,22 @@ import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
+import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
+import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
+import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
+import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.create_assignment.Attachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import retrofit2.http.Body
@@ -166,6 +174,69 @@ interface UserRepository {
         remark:String,
 
         ): CommonResponse
+
+    suspend fun assignment( ): NetworkAssignments
+
+    suspend fun submitAssignment(
+        id: String,
+        asgID: Int,
+        data: String,
+        fileName: String,
+        attachment: String,
+        fileURL: String,
+        fileExt: String
+    ): CommonResponse
+
+    suspend fun teachersAssignment( ): NetworkTeacherAssignment
+
+    suspend fun deleteAssignment(  iD: String  ): CommonResponse
+
+    suspend fun mySubjects( ): NetworkMySubjects
+
+    suspend fun createAssignment(
+          asgDate: String,
+          asgID: Int,
+          attachment: String,
+          fileExt: String,
+          fileURL: String,
+          classID: Int,
+          classIDs: String,
+          `data`: String,
+          `file`: String,
+          id: String,
+          isActive: Boolean,
+          isFileRemoved: Boolean,
+          multipleSubmission: Boolean,
+
+          subjectID: Int,
+          submitDate: String,
+          title: String
+
+        ): CommonResponse
+
+    suspend fun viewAssignment(
+          iD: String,
+    ): NetworkViewAssignment
+
+    suspend fun assignmnetSubmissionRPT(
+          iD: String,
+          notSubmitted: Boolean,
+    ): NetworkSubmitAssignReport
+
+    suspend fun offlineSubmited(
+         iD: String,
+          stID: Int,
+         submissitedOn: String,
+    ): CommonResponse
+
+    suspend fun staffAttendance(
+          month: Int,
+          year: Int,
+    ): NetworkStaffAttendence
+
+    suspend fun teachersTimetable(
+         id: String
+    ): NetworkTeachersTimetable
 
 
 }

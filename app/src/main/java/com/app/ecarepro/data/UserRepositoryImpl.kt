@@ -23,14 +23,22 @@ import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
+import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
+import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
+import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
@@ -38,6 +46,7 @@ import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
+import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
 import javax.inject.Inject
@@ -238,6 +247,88 @@ class UserRepositoryImpl @Inject constructor(
     ): CommonResponse {
         return userService.saveAppreciation(PostSaveAppreciation(action, appreciationOn, aprSubID, instance, remark, rwdID, stID))
     }
+
+    override suspend fun assignment(): NetworkAssignments {
+        return userService.assignment()
+    }
+
+    override suspend fun submitAssignment(
+        id: String,
+        asgID: Int,
+        data: String,
+        fileName: String,
+        attachment: String,
+        fileURL: String,
+        fileExt: String
+    ): CommonResponse {
+        return userService.submitAssignment(PostSubmitAssignment(asgID,
+            com.app.ecarepro.data.network.model.submit_assignment.Attachment(attachment,fileExt, fileURL),
+            data, fileName, id
+        ))
+    }
+
+    override suspend fun teachersAssignment(): NetworkTeacherAssignment {
+        return userService.teachersAssignment()
+    }
+
+    override suspend fun deleteAssignment(iD: String): CommonResponse {
+        return userService.deleteAssignment(iD)
+    }
+
+    override suspend fun mySubjects(): NetworkMySubjects {
+        return userService.mySubjects()
+    }
+
+    override suspend fun createAssignment(
+          asgDate: String,
+          asgID: Int,
+          attachment: String,
+          fileExt: String,
+          fileURL: String,
+          classID: Int,
+          classIDs: String,
+          `data`: String,
+          `file`: String,
+          id: String,
+          isActive: Boolean,
+          isFileRemoved: Boolean,
+          multipleSubmission: Boolean,
+
+          subjectID: Int,
+          submitDate: String,
+          title: String
+    ): CommonResponse {
+        return userService.createAssignment(PostCreateAssignment( asgDate, asgID, Attachment(attachment, fileExt, fileURL), classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title))
+
+    }
+
+    override suspend fun viewAssignment(iD: String): NetworkViewAssignment {
+       return userService.viewAssignment(iD)
+    }
+
+    override suspend fun assignmnetSubmissionRPT(
+        iD: String,
+        notSubmitted: Boolean
+    ): NetworkSubmitAssignReport {
+        return userService.assignmnetSubmissionRPT(iD, notSubmitted)
+    }
+
+    override suspend fun offlineSubmited(
+        iD: String,
+        stID: Int,
+        submissitedOn: String
+    ): CommonResponse {
+        return userService.offlineSubmited(iD, stID, submissitedOn)
+    }
+
+    override suspend fun staffAttendance(month: Int, year: Int): NetworkStaffAttendence {
+        return userService.staffAttendance(month, year)
+    }
+
+    override suspend fun teachersTimetable(id: String): NetworkTeachersTimetable {
+        return userService.teachersTimetable(id)
+    }
+
 
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
         return  userService.staffMyClass()
