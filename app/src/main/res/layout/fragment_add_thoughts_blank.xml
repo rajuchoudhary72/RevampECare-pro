@@ -83,7 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:hint="@string/enter_thoughts_hint"
+                    android:hint="@string/enter_thoughts"
 
                     >
 
@@ -104,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20sp"
-                    android:hint="@string/enter_auther_hint"
+                    android:hint="@string/enter_auther"
 
                     >
 

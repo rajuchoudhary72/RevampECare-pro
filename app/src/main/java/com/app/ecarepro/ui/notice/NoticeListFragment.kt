@@ -39,6 +39,8 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
     private val noticeViewModel: NoticeViewModel by viewModels()
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

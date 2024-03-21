@@ -19,15 +19,25 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.NetworkAddAppreciation
+import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkInfractionInstance
+import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkStudentList
+import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
+import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
+import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
+import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
 import javax.inject.Inject
@@ -162,6 +172,71 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun leaveDelete(lvID: Int): CommonResponse {
        return userService.leaveDelete(lvID)
+    }
+
+    override suspend fun getInfractionTypes(): NetworkInfractionTypes {
+        return userService.infractionTypes()
+    }
+
+    override suspend fun getSubInfractionTypes(infrTypeID: Int): NetworkSubInfractionTypes {
+        return userService.subInfractionTypes(infrTypeID)
+    }
+
+    override suspend fun infractionInstance(
+        infrTypeID: Int,
+        InfrSubTypeID: Int,
+        InfrTypeID: Int
+    ): NetworkInfractionInstance {
+        return userService.infractionInstance(infrTypeID, InfrSubTypeID, InfrTypeID)
+    }
+
+    override suspend fun addInfraction(stID: Int): NetworkAddInfraction {
+        return userService.addInfraction(stID)
+    }
+
+    override suspend fun saveInfraction(
+        action: Int,
+        stID: Int,
+        infrSubTypeID: Int,
+        consID: Int,
+        instance: Int,
+        infractionOn: String,
+        correctiveAction: String
+    ): CommonResponse {
+      return  userService.saveInfraction(PostSaveInfraction(
+            action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID
+        ))
+    }
+
+    override suspend fun getStudentList(scholarType: Int, showAll: Boolean): NetworkStudentList {
+       return userService.getStudentList(scholarType, showAll)
+    }
+
+    override suspend fun addAppreciation(stID: Int): NetworkAddAppreciation {
+        return userService.addAppreciation(stID)
+    }
+
+    override suspend fun subAppreciationTypes(aprID: Int): NetworkSubAppreciationTypes {
+        return userService.subAppreciationTypes(aprID)
+    }
+
+    override suspend fun appreciationInstance(
+        aprSubID: Int,
+        stID: Int
+    ): NetworkAppreciationInstance {
+        return userService.appreciationInstance(aprSubID, stID)
+    }
+
+    override suspend fun saveAppreciation(
+        action: Int,
+        stID: Int,
+        aprSubID: Int,
+        rwdID: Int,
+        instance: Int,
+        appreciationOn: String,
+        remark: String
+    ): CommonResponse {
+        return userService.saveAppreciation(PostSaveAppreciation(action, appreciationOn, aprSubID, instance, remark, rwdID, stID))
     }
 
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {

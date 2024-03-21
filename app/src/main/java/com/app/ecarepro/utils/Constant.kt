@@ -17,6 +17,7 @@ class Constant {
         const val BOOK_ID_ARGUMENT = "bookID"
         const val URL_ARGUMENT = "url"
         const val NOTICE_ID_ARGUMENT = "NoticeID"
+        const val STUDENT_ID_ARGUMENT = "StudentID"
         const val QUES_ID_ARGUMENT = "QuesID"
         const val LEAVE_ID_ARGUMENT = "LeaveID"
         const val NAME = "name"

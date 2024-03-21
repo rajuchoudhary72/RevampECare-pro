@@ -17,8 +17,10 @@
     <string name="next">Next</string>
     <string name="forgot_password_">Forgot Password?</string>
     <string name="faqs">FAQs</string>
-    <string name="contact_no">Contact No :</string>
-    <string name="email">Email :</string>
+    <string name="contact_no">"Contact No:  "</string>
+    <string name="contact_person">"Contact Person:  "</string>
+    <string name="classes">"Class: "</string>
+    <string name="email">"Email: "</string>
     <string name="welcome">Welcome <b>Pooja Verma!</b></string>
     <string name="onboarding_title_1">School ERP on\nyour’s finger tips</string>
     <string name="onboarding_description_1">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
@@ -27,7 +29,6 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="notice">Notice</string>
@@ -69,22 +70,23 @@
 
     <string name="false_value">False</string>
     <string name="true_value">True</string>
-    <string name="mega_e_book">Mega e-book</string>
-    <string name="school_collage_library">School/Collage Library</string>
-    <string name="latest_book">Latest Book</string>
-    <string name="my_account">My Account</string>
+
     <string name="date_">Date :</string>
     <string name="update_on_">Update On :</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="add_thoughts">Add Thoughts</string>
     <string name="enter_thoughts_hint">Enter Thoughts</string>
-    <string name="enter_auther_hint">Enter Auther</string>
+    <string name="enter_auther_hint">Enter Author</string>
 
     <string name="book_details_title">Book Details</string>
     <string name="answer">Answer</string>
     <string name="please_type_ans">" Please Type Answer"</string>
     <string name="save">Save</string>
     <string name="type_your_question">Type your question</string>
+    <string name="school_collage_library">School/Collae Library</string>
+    <string name="mega_e_book">Mega E-Book</string>
+    <string name="latest_book">Latest Book</string>
+    <string name="my_account">My Account</string>
     <string name="yes">OK</string>
     <string name="add_image">Add Image</string>
     <string name="pending">Pending</string>
@@ -123,6 +125,36 @@
     <string name="appley_for_leave">Apply For Leave</string>
     <string name="apply_for_leave">Apply For Leave</string>
     <string name="approved_by">Approved By:</string>
+    <string name="lbl_message_create_new_inferaction">*Note : Please select Category, Subcategory and Consequences first</string>
+    <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
+    <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
+    <string name="select_infraction_category">Select Infraction Category</string>
+    <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
+
+    <string name="select_apprec_category">Select Appreciation Category</string>
+    <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
+
+    <string name="instance">Instance</string>
+    <string name="instance_wit">"Instance: "</string>
+    <string name="infraction_on">"Infraction on : "</string>
+    <string name="appreciatin_on">"Appreciation on : "</string>
+    <string name="select_consequences">Select Consequences</string>
+    <string name="select_reward">Select Reward</string>
+    <string name="enter_corrective_action">Enter Corrective Action</string>
+    <string name="enter_remark">Enter Remark</string>
+    <string name="subcategory">Subcategory:</string>
+    <string name="consequences">Consequences:</string>
+    <string name="corrective_action">Corrective Action:</string>
+    <string name="issue_by">Issue by:</string>
+    <string name="category">"Category: "</string>
+    <string name="admission_no">"Admission No: "</string>
+    <string name="no_data">No Data</string>
+    <string name="reward">Reward:</string>
+    <string name="remark">Remark:</string>
+
+    <string name="enter_thoughts">Enter Thoughts</string>
+    <string name="enter_auther">Enter Author</string>
+    <string name="book_details">Book Details</string>
     <string name="no_data_found">No data found</string>
     <string name="clear_filter">Clear Filter</string>
     <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
@@ -132,5 +164,6 @@
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="recipient_s">Recipient(s)</string>
+
 
 </resources>
