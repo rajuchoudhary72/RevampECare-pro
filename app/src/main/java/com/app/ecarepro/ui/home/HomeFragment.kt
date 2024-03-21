@@ -46,7 +46,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -190,19 +190,17 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.calenderActivityNavHost)
         } else if (favouriteSlider.module.contains("pay slip", true)) {
             findNavController().navigate(R.id.paySlipFragment)
-        }else if (favouriteSlider.module.contains("Questionnaire", true)) {
+        } else if (favouriteSlider.module.contains("Questionnaire", true)) {
             findNavController().navigate(R.id.questionnaireListFragment)
-        }else if (favouriteSlider.module.contains("Leave Request", true)) {
+        } else if (favouriteSlider.module.contains("Leave Request", true)) {
             findNavController().navigate(R.id.leaveHistoryFragment)
-        }else if (favouriteSlider.module.contains("Appreciation", true)) {
+        } else if (favouriteSlider.module.contains("Appreciation", true)) {
             findNavController().navigate(R.id.studentListFragment2)
-        }else if (favouriteSlider.module.contains("Class Promotion", true)) {
+        } else if (favouriteSlider.module.contains("Class Promotion", true)) {
             findNavController().navigate(R.id.classPromotionFragment)
-        }else if (favouriteSlider.module.contains("thought", true)) {
+        } else if (favouriteSlider.module.contains("Timetable", true)) {
             findNavController().navigate(R.id.timeTableNavHostFragment)
-        }
-
-        else {
+        } else {
             Log.e("Home", favouriteSlider.toString())
         }
     }
