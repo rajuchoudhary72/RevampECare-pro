@@ -116,7 +116,7 @@ class ClassPromotionsAdapter(
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "Add Message Here", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Select Any  New Class First", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -155,7 +155,7 @@ class ClassPromotionsAdapter(
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "Add Message Here", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Select Any  Section First", Toast.LENGTH_LONG).show()
             }
         }
     }
