@@ -1,18 +1,43 @@
 package com.app.ecarepro.ui.message.selectRecipients
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.app.ecarepro.model.RecipientsType
+import com.app.ecarepro.data.network.model.Contact
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectRecipientsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val recipientsType = savedStateHandle.getStateFlow(
-        SelectRecipientPagerFragment.RECIPIENTS_TYPE,
-        RecipientsType.PARENTS
-    )
+    private val selectedContacts = mutableListOf<Contact>()
+
+    fun getSelectedContacts() = selectedContacts
+
+    fun addContact(contact: Contact) {
+        selectedContacts.add(contact)
+    }
+
+    fun addContacts(contact: List<Contact>) {
+        selectedContacts.addAll(contact)
+    }
+
+    fun removeContact(contact: Contact) {
+        selectedContacts.remove(contact)
+    }
+
+    fun removeContacts(contacts: List<Contact>) {
+        selectedContacts.removeAll(contacts)
+    }
+
+    fun isContactSelected(contact: Contact): Boolean {
+        return selectedContacts.contains(contact)
+    }
+
+    fun isContactsSelected(contacts: List<Contact>): Boolean {
+        return selectedContacts.containsAll(contacts)
+    }
+
+    fun clearAllSelectedContact() {
+        selectedContacts.clear()
+    }
 }
