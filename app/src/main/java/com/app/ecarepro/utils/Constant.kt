@@ -23,6 +23,7 @@ class Constant {
         const val NAME = "name"
 
         const val CIRCULAR_ID = "CircularID"
+        const val ASSIGNMENT_ID = "AssiID"
         const val DEFAULT_ID = 0
         const val SUB_ID = 0
         const val MY_CLASS_ID = 1
