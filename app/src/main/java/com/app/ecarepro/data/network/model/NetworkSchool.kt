@@ -7,7 +7,7 @@ data class NetworkSchool(
     @SerializedName("active")
     val active: Int?,
     @SerializedName("assessmentMarksURL")
-    val assessmentMarksURL: Any?,
+    val assessmentMarksURL: String?,
     @SerializedName("city")
     val city: String?,
     @SerializedName("contactEmail")

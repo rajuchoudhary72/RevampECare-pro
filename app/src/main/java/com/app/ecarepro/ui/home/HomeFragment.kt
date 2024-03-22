@@ -17,6 +17,8 @@ import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
+import com.app.ecarepro.data.network.model.NetworkSchool
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.labelCenter
@@ -37,6 +39,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
+    private  var schoolData: NetworkSchool?=null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -102,17 +105,22 @@ class HomeFragment : Fragment() {
                     handleUiState(uiState)
                 }
         }
+        mViewModel.schoolData.observe(viewLifecycleOwner){
+            schoolData=it
+        }
     }
 
     private fun handleUiState(uiState: HomeUiState) {
         (requireActivity() as MainActivity).showLoader(uiState is HomeUiState.Loading)
         if (uiState is HomeUiState.Success) {
             buildUiModels(uiState)
+
         }
     }
 
     private fun buildUiModels(uiState: HomeUiState.Success) {
         uiState.user.let { user ->
+
             binding.apply {
                 imgUserAvatar.imageUrl(user.photo)
                 txtUserName.text = user.name
@@ -194,6 +202,38 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.questionnaireListFragment)
         } else if (favouriteSlider.module.contains("Class Promotion", true)) {
             findNavController().navigate(R.id.classPromotionFragment)
+        }else if (favouriteSlider.module.contains("Website", true)) {
+            schoolData?.let {
+                it.webSite?.let { url ->
+                    val bundle = Bundle()
+                    bundle.putString("title", "Website")
+                    bundle.putString("url", "$url")
+                    findNavController().navigate(R.id.webViewFragment, bundle)
+                }
+            }
+
+        }else if (favouriteSlider.module.contains("Marks Entry", true)) {
+            schoolData?.let {
+                it.marksEntryURL?.let { url ->
+
+                    val bundle = Bundle()
+                    bundle.putString("title", "Marks Entry")
+                    bundle.putString("url", url)
+                    findNavController().navigate(R.id.webViewFragment, bundle)
+                }
+            }
+
+        }else if (favouriteSlider.module.contains("Assessment", true)) {
+            schoolData?.let {
+                it.assessmentMarksURL?.let {url->
+                    val bundle = Bundle()
+                    bundle.putString("title", "Assessment")
+                    bundle.putString("url", url)
+                    findNavController().navigate(R.id.webViewFragment,bundle)
+                }
+
+            }
+
         } else {
             Log.e("Home", favouriteSlider.toString())
         }

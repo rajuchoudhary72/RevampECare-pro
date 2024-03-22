@@ -1,8 +1,10 @@
 package com.app.ecarepro.ui.home
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkSchool
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,17 +16,23 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val userDataStore: UserDataStore
 ) : ViewModel() {
+     val schoolData = MutableLiveData<NetworkSchool>()
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             _uiState.update {
+
                 HomeUiState.Success(
                     favourites = userDataStore.getSchoolData()?.slider ?: emptyList(),
                     user = userDataStore.getUser()
                 )
             }
+        }
+
+        viewModelScope.launch {
+            schoolData.postValue(userDataStore.getSchoolData())
         }
     }
 }

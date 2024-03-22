@@ -116,7 +116,16 @@
         android:id="@+id/webViewFragment"
         android:name="com.app.ecarepro.ui.webview.WebViewFragment"
         android:label="WebViewFragment"
-        tools:layout="@layout/fragment_web_view" />
+        tools:layout="@layout/fragment_web_view" >
+        <argument
+            android:name="url"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/widgetsFragment"
@@ -291,4 +300,5 @@
         android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
         android:label="ClassPromotionFragment"
         />
+
 </navigation>

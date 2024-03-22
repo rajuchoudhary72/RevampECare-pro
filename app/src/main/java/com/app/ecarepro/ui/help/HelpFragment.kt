@@ -34,7 +34,10 @@ class HelpFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.btnFaq.setOnClickListener {
-            findNavController().navigate(R.id.webViewFragment)
+            val bundle = Bundle()
+            bundle.putString("title", "Help")
+            bundle.putString("url", "https://www.franciscansolutions.com/faq-v2.aspx")
+            findNavController().navigate(R.id.webViewFragment,bundle)
         }
 
     }
