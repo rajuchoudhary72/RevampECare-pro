@@ -34,6 +34,11 @@ class Constant {
         const val TRUE_VALUE = 1
         const val FALSE_VALUE = 0
 
+        const val STUDENT_TYPE = 1
+        const val PARENT_TYPE = 2
+        const val STAFF_TYPE = 3
+
+
 
 
 
