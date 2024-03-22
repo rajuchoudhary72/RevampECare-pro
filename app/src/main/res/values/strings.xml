@@ -19,7 +19,7 @@
     <string name="faqs">FAQs</string>
     <string name="contact_no">"Contact No:  "</string>
     <string name="contact_person">"Contact Person:  "</string>
-    <string name="classes">"Class: "</string>
+    <string name="classes">"Class : "</string>
     <string name="email">"Email: "</string>
     <string name="welcome">Welcome <b>Pooja Verma!</b></string>
     <string name="onboarding_title_1">School ERP on\nyour’s finger tips</string>
@@ -201,6 +201,14 @@
     <string name="select_year">Select Year</string>
     <string name="select_month">Select Month</string>
     <string name="peroid">Peroid</string>
+    <string name="select_date">Select Date</string>
+    <string name="student">Student</string>
+    <string name="staff">Staff</string>
+    <string name="birthday_on">"Birthday On : "</string>
+    <string name="name_s">"Name : "</string>
+    <string name="father_name">"Father Name : "</string>
+    <string name="mother_name">"Mother Name : "</string>
+
 
 
 </resources>

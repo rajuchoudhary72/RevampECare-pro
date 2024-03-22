@@ -156,8 +156,8 @@ class  ApplyLeaveFragment : Fragment() {
             if (validateData()){
                 leaveApplyLeaveViewModel.leaveApply(
                     selectedLeaveTypeID,
-                    binding.tvFrom.text.toString(),
-                    binding.tvTo.text.toString(),
+                    binding.tvStartDate.text.toString(),
+                    binding.tvEndDate.text.toString(),
                     binding.tvNumberDays.text.toString().toInt(),
                     halfdayDTL,
                     binding.textFiledReason.text.toString(),

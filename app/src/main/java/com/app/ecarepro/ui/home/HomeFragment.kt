@@ -179,7 +179,7 @@ class HomeFragment : Fragment() {
         if (favouriteSlider.module.contains("notice", true)) {
             findNavController().navigate(R.id.noticeListFragment)
         } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.timeTableNavHostFragment)
+            findNavController().navigate(R.id.birthdayFragment)
         } else if (favouriteSlider.module.contains("circular", true)) {
             findNavController().navigate(R.id.circularFragment)
         } else if (favouriteSlider.module.contains("library", true)) {

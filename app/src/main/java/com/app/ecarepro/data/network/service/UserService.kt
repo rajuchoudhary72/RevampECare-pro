@@ -20,6 +20,7 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -280,6 +281,14 @@ interface UserService {
     suspend fun teachersTimetable(
         @Query("ID") id: String
     ): NetworkTeachersTimetable
+
+    @GET("Report/Birthday")
+    suspend fun birthday(
+        @Query("UserType") userType: Int,
+        @Query("RptType") rptType: Int,
+        @Query("MonthNo") monthNo: Int,
+        @Query("Date") date: String,
+    ): NetworkBirthday
 
 
 
