@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     alias(libs.plugins.firebaseCrashlytics)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.safeArgs)
     kotlin("kapt")
 }
 

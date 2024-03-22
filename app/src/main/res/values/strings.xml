@@ -211,5 +211,8 @@
 
 
     <string name="no_record_found">No record found</string>
+    <string name="website_txt">Website</string>
+    <string name="marks_entry_heading">Marks Entry</string>
+    <string name="assessment_headling">Assessment</string>
 
 </resources>

@@ -32,10 +32,11 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import com.app.ecarepro.data.network.model.NetworkSchool
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+    private var schoolData: NetworkSchool? = null
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -101,6 +102,9 @@ class HomeFragment : Fragment() {
                 .collectLatest { uiState ->
                     handleUiState(uiState)
                 }
+        }
+        mViewModel.schoolData.observe(viewLifecycleOwner) {
+            schoolData = it
         }
     }
 
@@ -179,7 +183,7 @@ class HomeFragment : Fragment() {
         if (favouriteSlider.module.contains("notice", true)) {
             findNavController().navigate(R.id.noticeListFragment)
         } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.timeTableNavHostFragment)
+            findNavController().navigate(R.id.thoughtsListFragment)
         } else if (favouriteSlider.module.contains("circular", true)) {
             findNavController().navigate(R.id.circularFragment)
         } else if (favouriteSlider.module.contains("library", true)) {
@@ -200,9 +204,36 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.classPromotionFragment)
         } else if (favouriteSlider.module.contains("Timetable", true)) {
             findNavController().navigate(R.id.timeTableNavHostFragment)
+        } else if (favouriteSlider.module.contains("Birthday", true)) {
+            findNavController().navigate(R.id.birthdayFragment)
+        } else if (favouriteSlider.module.contains("Website", true)) {
+            schoolData?.let {
+                it.webSite?.let { url ->
+                    webViewCall(url, getString(R.string.website_txt))
+                }
+            }
+        } else if (favouriteSlider.module.contains("Marks Entry", true)) {
+            schoolData?.let {
+                it.marksEntryURL?.let { url ->
+                    webViewCall(url, getString(R.string.marks_entry_heading))
+                }
+            }
+        } else if (favouriteSlider.module.contains("Assessment", true)) {
+            schoolData?.let {
+                it.assessmentMarksURL?.let { url ->
+                    webViewCall(url, getString(R.string.assessment_headling))
+                }
+            }
         } else {
             Log.e("Home", favouriteSlider.toString())
         }
+    }
+
+    private fun webViewCall(url: String, title: String) {
+        val bundle = Bundle()
+        bundle.putString("title", "$title")
+        bundle.putString("url", "$url")
+        findNavController().navigate(R.id.webViewFragment, bundle)
     }
 
     override fun onDestroyView() {

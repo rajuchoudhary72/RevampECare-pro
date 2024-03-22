@@ -9,11 +9,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.lifecycle.MutableLiveData
+import com.app.ecarepro.data.network.model.NetworkSchool
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userDataStore: UserDataStore
 ) : ViewModel() {
+    val schoolData = MutableLiveData<NetworkSchool>()
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
@@ -25,6 +28,9 @@ class HomeViewModel @Inject constructor(
                     user = userDataStore.getUser()
                 )
             }
+        }
+        viewModelScope.launch {
+            schoolData.postValue(userDataStore.getSchoolData())
         }
     }
 }
