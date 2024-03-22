@@ -206,6 +206,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.timeTableNavHostFragment)
         } else if (favouriteSlider.module.contains("Birthday", true)) {
             findNavController().navigate(R.id.birthdayFragment)
+        } else if (favouriteSlider.module.contains("Assignment", true)) {
+            findNavController().navigate(R.id.staffAssignmentsListFragment)
+        }else if (favouriteSlider.module.contains("Attendance", true)) {
+            findNavController().navigate(R.id.attendanceFragment)
         } else if (favouriteSlider.module.contains("Website", true)) {
             schoolData?.let {
                 it.webSite?.let { url ->
