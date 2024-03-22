@@ -1,11 +1,14 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.data.network.model.StaffContactsDto
+import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.ui.message.chat.MessageType
@@ -115,6 +118,54 @@ class MessageRepositoryImpl @Inject constructor(
                 val response = messageService.replyMessage(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message!!))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getStaffTypes(): Flow<Result<List<StaffType>>> {
+        return flow {
+            try {
+                val response = messageService.getStaffTypes()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.staffType ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getStaffContacts(): Flow<Result<StaffContactsDto>> {
+        return flow {
+            try {
+                val response = messageService.getStaffContacts()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getClassContacts(
+        ofUserType: Int,
+        scholarType: Int,
+    ): Flow<Result<List<ClassContact>>> {
+        return flow {
+            try {
+                val response = messageService.getContactsWithClasses(ofUserType, scholarType)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.classContacts ?: emptyList()))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

@@ -231,8 +231,8 @@ class HomeFragment : Fragment() {
 
     private fun webViewCall(url: String, title: String) {
         val bundle = Bundle()
-        bundle.putString("title", "$title")
-        bundle.putString("url", "$url")
+        bundle.putString("title", title)
+        bundle.putString("url", url)
         findNavController().navigate(R.id.webViewFragment, bundle)
     }
 

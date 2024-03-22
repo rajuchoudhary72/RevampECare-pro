@@ -28,7 +28,19 @@
                 app:titleCentered="true"
                 app:titleTextAppearance="?attr/textAppearanceTitleMedium"
                 app:titleTextColor="@color/white"
-                app:topWindowInsetToPadding="@{true}" />
+                app:topWindowInsetToPadding="@{true}">
+
+                <ImageView
+                    android:id="@+id/btnDone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="8dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_done"
+                    app:tint="@color/white" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"

@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.model.ContactWithClassDto
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
@@ -7,6 +8,8 @@ import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.data.network.model.StaffContactsDto
+import com.app.ecarepro.data.network.model.StaffTypeDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -53,5 +56,17 @@ interface MessageService {
     suspend fun replyMessage(
         @Body request: ReplyMessageRequestDto
     ): ReplyMessageResponseDto
+
+    @GET("Staff/Types")
+    suspend fun getStaffTypes(): StaffTypeDto
+
+    @GET("Message/StaffContact")
+    suspend fun getStaffContacts(): StaffContactsDto
+
+    @GET("Message/StudentParentContactClassWise")
+    suspend fun getContactsWithClasses(
+        @Query("OfUserType") ofUserType: Int,
+        @Query("ScholarType") scholarType: Int,
+    ): ContactWithClassDto
 
 }

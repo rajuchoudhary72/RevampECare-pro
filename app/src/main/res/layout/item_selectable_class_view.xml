@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="isSelected"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="className"
+            type="java.lang.String" />
+
+        <variable
+            name="onClickViewAll"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="selectClass"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{selectClass}"
         android:paddingHorizontal="10dp">
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/calibri_bold"
-            android:text="Class 9"
+            android:checked="@{isSelected}"
+            android:clickable="false"
+            android:text="@{className}"
+            tools:text="Class 9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View All"
+            android:onClick="@{onClickViewAll}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
