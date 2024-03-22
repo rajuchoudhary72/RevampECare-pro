@@ -208,27 +208,33 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.birthdayFragment)
         } else if (favouriteSlider.module.contains("Assignment", true)) {
             findNavController().navigate(R.id.staffAssignmentsListFragment)
-        }else if (favouriteSlider.module.contains("Attendance", true)) {
+        } else if (favouriteSlider.module.contains("Attendance", true)) {
             findNavController().navigate(R.id.attendanceFragment)
-        } else if (favouriteSlider.module.contains("Website", true)) {
+        }
+        /*start Web view module call  from here */
+        else if (favouriteSlider.module.contains("Website", true)) {
             schoolData?.let {
                 it.webSite?.let { url ->
                     webViewCall(url, getString(R.string.website_txt))
                 }
             }
-        } else if (favouriteSlider.module.contains("Marks Entry", true)) {
+        }
+        else if (favouriteSlider.module.contains("Marks Entry", true)) {
             schoolData?.let {
                 it.marksEntryURL?.let { url ->
                     webViewCall(url, getString(R.string.marks_entry_heading))
                 }
             }
-        } else if (favouriteSlider.module.contains("Assessment", true)) {
+        }
+        else if (favouriteSlider.module.contains("Assessment", true)) {
             schoolData?.let {
                 it.assessmentMarksURL?.let { url ->
                     webViewCall(url, getString(R.string.assessment_headling))
                 }
             }
-        } else {
+        }
+        /*end Web view module call  from here */
+        else {
             Log.e("Home", favouriteSlider.toString())
         }
     }
