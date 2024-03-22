@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
@@ -237,6 +238,13 @@ interface UserRepository {
     suspend fun teachersTimetable(
          id: String
     ): NetworkTeachersTimetable
+
+    suspend fun birthday(
+          userType: Int,
+         rptType: Int,
+         monthNo: Int,
+          date: String,
+    ): NetworkBirthday
 
 
 }

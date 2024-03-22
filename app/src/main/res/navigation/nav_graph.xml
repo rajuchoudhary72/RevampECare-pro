@@ -394,6 +394,10 @@
         android:id="@+id/timeTableNavHostFragment"
         android:name="com.app.ecarepro.ui.timeTable.TimeTableNavHostFragment"
         android:label="TimeTableNavHostFragment" />
+    <fragment
+        android:id="@+id/birthdayFragment"
+        android:name="com.app.ecarepro.ui.birthday.BirthdayFragment"
+        android:label="BirthdayFragment" />
 
     <fragment
         android:id="@+id/composeFragment"

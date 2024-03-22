@@ -24,6 +24,7 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -327,6 +328,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun teachersTimetable(id: String): NetworkTeachersTimetable {
         return userService.teachersTimetable(id)
+    }
+
+    override suspend fun birthday(userType: Int, rptType: Int, monthNo: Int, date:String): NetworkBirthday {
+        return userService.birthday(userType, rptType, monthNo,date)
     }
 
 
