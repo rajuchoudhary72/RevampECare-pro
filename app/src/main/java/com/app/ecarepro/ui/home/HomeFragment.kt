@@ -32,10 +32,11 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import com.app.ecarepro.data.network.model.NetworkSchool
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+    private var schoolData: NetworkSchool? = null
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -46,7 +47,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -101,6 +102,9 @@ class HomeFragment : Fragment() {
                 .collectLatest { uiState ->
                     handleUiState(uiState)
                 }
+        }
+        mViewModel.schoolData.observe(viewLifecycleOwner) {
+            schoolData = it
         }
     }
 
@@ -179,7 +183,7 @@ class HomeFragment : Fragment() {
         if (favouriteSlider.module.contains("notice", true)) {
             findNavController().navigate(R.id.noticeListFragment)
         } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.birthdayFragment)
+            findNavController().navigate(R.id.thoughtsListFragment)
         } else if (favouriteSlider.module.contains("circular", true)) {
             findNavController().navigate(R.id.circularFragment)
         } else if (favouriteSlider.module.contains("library", true)) {
@@ -190,15 +194,56 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.calenderActivityNavHost)
         } else if (favouriteSlider.module.contains("pay slip", true)) {
             findNavController().navigate(R.id.paySlipFragment)
-        }else if (favouriteSlider.module.contains("Questionnaire", true)) {
+        } else if (favouriteSlider.module.contains("Questionnaire", true)) {
             findNavController().navigate(R.id.questionnaireListFragment)
-        }else if (favouriteSlider.module.contains("Leave Request", true)) {
+        } else if (favouriteSlider.module.contains("Leave Request", true)) {
             findNavController().navigate(R.id.leaveHistoryFragment)
+        } else if (favouriteSlider.module.contains("Appreciation", true)) {
+            findNavController().navigate(R.id.studentListFragment2)
+        } else if (favouriteSlider.module.contains("Class Promotion", true)) {
+            findNavController().navigate(R.id.classPromotionFragment)
+        } else if (favouriteSlider.module.contains("Timetable", true)) {
+            findNavController().navigate(R.id.timeTableNavHostFragment)
+        } else if (favouriteSlider.module.contains("Birthday", true)) {
+            findNavController().navigate(R.id.birthdayFragment)
+        } else if (favouriteSlider.module.contains("Assignment", true)) {
+            findNavController().navigate(R.id.staffAssignmentsListFragment)
+        } else if (favouriteSlider.module.contains("Attendance", true)) {
+            findNavController().navigate(R.id.attendanceFragment)
         }
-
+        /*start Web view module call  from here */
+        else if (favouriteSlider.module.contains("Website", true)) {
+            schoolData?.let {
+                it.webSite?.let { url ->
+                    webViewCall(url, getString(R.string.website_txt))
+                }
+            }
+        }
+        else if (favouriteSlider.module.contains("Marks Entry", true)) {
+            schoolData?.let {
+                it.marksEntryURL?.let { url ->
+                    webViewCall(url, getString(R.string.marks_entry_heading))
+                }
+            }
+        }
+        else if (favouriteSlider.module.contains("Assessment", true)) {
+            schoolData?.let {
+                it.assessmentMarksURL?.let { url ->
+                    webViewCall(url, getString(R.string.assessment_headling))
+                }
+            }
+        }
+        /*end Web view module call  from here */
         else {
             Log.e("Home", favouriteSlider.toString())
         }
+    }
+
+    private fun webViewCall(url: String, title: String) {
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("url", url)
+        findNavController().navigate(R.id.webViewFragment, bundle)
     }
 
     override fun onDestroyView() {

@@ -21,6 +21,7 @@ fun Context.getColorRes(@ColorRes colorId: Int) = ContextCompat.getColor(this, c
 fun Context.progressDialog(): AlertDialog {
     return MaterialAlertDialogBuilder(this)
         .setView(R.layout.loading_bar)
+        .setCancelable(false)
         .setBackground(ColorDrawable(Color.TRANSPARENT))
         .show()
 }

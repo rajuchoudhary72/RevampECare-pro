@@ -116,7 +116,16 @@
         android:id="@+id/webViewFragment"
         android:name="com.app.ecarepro.ui.webview.WebViewFragment"
         android:label="WebViewFragment"
-        tools:layout="@layout/fragment_web_view" />
+        tools:layout="@layout/fragment_web_view" >
+        <argument
+            android:name="url"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/widgetsFragment"
@@ -418,4 +427,17 @@
         android:label="HomeFragment" />
 
 
+    <fragment
+        android:id="@+id/composeFragment"
+        android:name="com.app.ecarepro.ui.message.compose.ComposeFragment"
+        android:label="ComposeFragment" />
+    <fragment
+        android:id="@+id/selectRecipientsFragment"
+        android:name="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment"
+        android:label="SelectRecipientsFragment" />
+    <fragment
+        android:id="@+id/classPromotionFragment"
+        android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
+        android:label="ClassPromotionFragment"
+        />
 </navigation>
