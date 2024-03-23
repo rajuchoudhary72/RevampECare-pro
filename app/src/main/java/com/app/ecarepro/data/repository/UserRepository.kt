@@ -20,6 +20,7 @@ import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
+import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
@@ -245,6 +246,10 @@ interface UserRepository {
          monthNo: Int,
           date: String,
     ): NetworkBirthday
+
+    suspend fun reportCardDTL(
+        stID: Int
+    ): NetworkReportCardDetails
 
 
 }

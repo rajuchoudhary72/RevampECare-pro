@@ -208,7 +208,12 @@
     <string name="name_s">"Name : "</string>
     <string name="father_name">"Father Name : "</string>
     <string name="mother_name">"Mother Name : "</string>
-
+    <string name="front_view">Front View</string>
+    <string name="front_downlaod">Front Downlaod</string>
+    <string name="back_view">Back View</string>
+    <string name="back_downlaod">Back Downlaod</string>
+    <string name="view_appreciation">View Appreciation</string>
+    <string name="add_appreciation">Add Appreciation</string>
 
 
 </resources>

@@ -26,6 +26,7 @@ import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
@@ -289,6 +290,11 @@ interface UserService {
         @Query("MonthNo") monthNo: Int,
         @Query("Date") date: String,
     ): NetworkBirthday
+
+    @GET("ReportCard/DTL")
+    suspend fun reportCardDTL(
+        @Query("StID") stID: Int
+    ): NetworkReportCardDetails
 
 
 

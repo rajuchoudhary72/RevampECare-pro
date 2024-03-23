@@ -30,6 +30,7 @@ import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
@@ -332,6 +333,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun birthday(userType: Int, rptType: Int, monthNo: Int, date:String): NetworkBirthday {
         return userService.birthday(userType, rptType, monthNo,date)
+    }
+
+    override suspend fun reportCardDTL(stID: Int): NetworkReportCardDetails {
+        return userService.reportCardDTL(stID)
     }
 
 

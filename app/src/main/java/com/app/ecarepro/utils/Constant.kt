@@ -21,6 +21,7 @@ class Constant {
         const val QUES_ID_ARGUMENT = "QuesID"
         const val LEAVE_ID_ARGUMENT = "LeaveID"
         const val NAME = "name"
+        const val TO = "to"
 
         const val CIRCULAR_ID = "CircularID"
         const val ASSIGNMENT_ID = "AssiID"
