@@ -34,6 +34,7 @@ class SelectRecipientsViewModel @Inject constructor(
     }
 
     fun isContactsSelected(contacts: List<Contact>): Boolean {
+        if (contacts.isEmpty()) return false
         return selectedContacts.containsAll(contacts)
     }
 

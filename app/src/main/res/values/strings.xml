@@ -96,6 +96,11 @@
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="recipient_s">Recipient(s)</string>
+    <string name="all">All</string>
+    <string name="boarding">Boarding</string>
+    <string name="day_scholar">Day Scholar</string>
+    <string name="select_all">Select All</string>
+    <string name="select_staff_type">Select Staff Type</string>
     <string name="no_record_found">No record found</string>
     <string name="print">Print</string>
 

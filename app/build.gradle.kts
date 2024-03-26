@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.googleServices)
     alias(libs.plugins.safeArgs)
     kotlin("kapt")
-
 }
 
 kapt {
@@ -124,6 +123,9 @@ dependencies {
     implementation("com.caverock:androidsvg:1.4")
 
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
+
+
+    implementation("com.github.Mindinventory:Lassi:1.3.0")
 
 
     implementation("com.intuit.sdp:sdp-android:1.0.5")

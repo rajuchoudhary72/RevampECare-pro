@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -26,9 +27,12 @@ import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.selectableClassView
 import com.app.ecarepro.selectableRecipient
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.message.MessageViewModel
 import com.rubensousa.decorator.LinearDividerDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,6 +44,10 @@ class SelectRecipientPagerFragment : Fragment() {
     private val selectRecipientsPagerViewModel: SelectRecipientsPagerViewModel by viewModels()
 
     private val selectRecipientsViewModel: SelectRecipientsViewModel by activityViewModels()
+
+    private val messageViewModel: MessageViewModel by activityViewModels()
+
+    private var searchQuery: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,6 +74,27 @@ class SelectRecipientPagerFragment : Fragment() {
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
+
+            launch {
+                messageViewModel.messageSettings.collectLatest { settings ->
+                    binding.filterRadioGroup.isVisible =
+                        settings?.isBoardingSchool == true && selectRecipientsPagerViewModel.recipientsType.value != RecipientsType.STAFFS
+                }
+            }
+
+            launch {
+                selectRecipientsPagerViewModel
+                    .searchQuery
+                    .debounce(300)
+                    .distinctUntilChanged()
+                    .collectLatest { query ->
+                        if (query != null) {
+                            searchQuery = query
+                            binding.recyclerView.requestModelBuild()
+                        }
+                    }
+            }
+
             launch {
                 selectRecipientsPagerViewModel.uiState.flowWithLifecycle(
                     viewLifecycleOwner.lifecycle,
@@ -146,23 +175,31 @@ class SelectRecipientPagerFragment : Fragment() {
                 }
 
                 is SelectRecipientsUiState.StaffContact -> {
-                    uiState.contacts.forEach { contact ->
-                        selectableRecipient {
-                            id(contact.receiverID)
-                            isSelected(selectRecipientsViewModel.isContactSelected(contact))
-                            photo(contact.photo)
-                            name(contact.name)
-                            textLine1(contact.designation)
-                            clickListener { _ ->
-                                if (selectRecipientsViewModel.isContactSelected(contact)) {
-                                    selectRecipientsViewModel.removeContact(contact)
-                                } else {
-                                    selectRecipientsViewModel.addContact(contact)
+                    uiState
+                        .contacts
+                        .filter { contact ->
+                            contact.name.contains(
+                                searchQuery?.toLowerCase() ?: "",
+                                true
+                            )
+                        }
+                        .forEach { contact ->
+                            selectableRecipient {
+                                id(contact.receiverID)
+                                isSelected(selectRecipientsViewModel.isContactSelected(contact))
+                                photo(contact.photo)
+                                name(contact.name)
+                                textLine1(contact.designation)
+                                clickListener { _ ->
+                                    if (selectRecipientsViewModel.isContactSelected(contact)) {
+                                        selectRecipientsViewModel.removeContact(contact)
+                                    } else {
+                                        selectRecipientsViewModel.addContact(contact)
+                                    }
+                                    this@withModels.requestModelBuild()
                                 }
-                                this@withModels.requestModelBuild()
                             }
                         }
-                    }
                 }
 
                 else -> {}
@@ -176,41 +213,55 @@ class SelectRecipientPagerFragment : Fragment() {
         isParent: Boolean
     ) {
         if (selectedClassID == null) {
-            contacts.forEach { classContact ->
-                selectableClassView {
-                    id(classContact.classID)
-                    className(classContact.className)
-                    isSelected(
-                        selectRecipientsViewModel.isContactsSelected(
-                            classContact.contacts ?: emptyList()
+            contacts
+                .filter { contact ->
+                    contact.className?.contains(
+                        searchQuery?.toLowerCase() ?: "",
+                        true
+                    ) ?: true
+                }
+                .forEach { classContact ->
+                    selectableClassView {
+                        id(classContact.classID)
+                        className(classContact.className)
+                        isSelected(
+                            selectRecipientsViewModel.isContactsSelected(
+                                classContact.contacts ?: emptyList()
+                            )
                         )
-                    )
-                    onClickViewAll { _ ->
-                        selectRecipientsPagerViewModel.setSelectedClassId(classId = classContact.classID)
-                        this@buildClassWithContactModels.requestModelBuild()
-                    }
-                    selectClass { _ ->
-                        if (selectRecipientsViewModel.isContactsSelected(
-                                classContact.contacts ?: emptyList()
-                            )
-                        ) {
-                            selectRecipientsViewModel.removeContacts(
-                                classContact.contacts ?: emptyList()
-                            )
-                        } else {
-                            selectRecipientsViewModel.addContacts(
-                                classContact.contacts ?: emptyList()
-                            )
+                        onClickViewAll { _ ->
+                            selectRecipientsPagerViewModel.setSelectedClassId(classId = classContact.classID)
+                            this@buildClassWithContactModels.requestModelBuild()
                         }
+                        selectClass { _ ->
+                            if (selectRecipientsViewModel.isContactsSelected(
+                                    classContact.contacts ?: emptyList()
+                                )
+                            ) {
+                                selectRecipientsViewModel.removeContacts(
+                                    classContact.contacts ?: emptyList()
+                                )
+                            } else {
+                                selectRecipientsViewModel.addContacts(
+                                    classContact.contacts ?: emptyList()
+                                )
+                            }
 
-                        this@buildClassWithContactModels.requestModelBuild()
+                            this@buildClassWithContactModels.requestModelBuild()
+                        }
                     }
                 }
-            }
         } else {
             contacts
                 .firstOrNull { it.classID == selectedClassID }
-                ?.contacts?.forEach { contact ->
+                ?.contacts
+                ?.filter { contact ->
+                    contact.name.contains(
+                        searchQuery?.toLowerCase() ?: "",
+                        true
+                    )
+                }
+                ?.forEach { contact ->
                     selectableRecipient {
                         id(contact.receiverID)
                         isSelected(selectRecipientsViewModel.isContactSelected(contact))
