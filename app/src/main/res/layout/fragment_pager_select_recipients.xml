@@ -7,6 +7,8 @@
 
         <import type="com.app.ecarepro.model.RecipientsType" />
 
+        <import type="com.app.ecarepro.ui.message.selectRecipients.ScholarType" />
+
         <variable
             name="viewModel"
             type="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsPagerViewModel" />
@@ -14,8 +16,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
         bottomWindowInsetToPadding="@{true}"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,6 +31,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
+                android:text="@={viewModel.searchQuery}"
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -49,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:onClick="@{ v -> viewModel.clearSearchQuery()}"
                 android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/round_close_24"
                 app:layout_constraintBottom_toBottomOf="@+id/search_bar"
@@ -61,33 +65,39 @@
 
         <RadioGroup
             android:id="@+id/filterRadioGroup"
-            isVisible="@{viewModel.recipientsType != RecipientsType.STAFFS}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_margin"
+            android:checkedButton="@id/btnAll"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintTop_toBottomOf="@id/search_view">
 
             <RadioButton
+                android:id="@+id/btnAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:fontFamily="@font/calibri_bold"
-                android:text="All"
+                android:onClick="@{ v -> viewModel.changeScholarType(ScholarType.ALL)}"
+                android:text="@string/all"
                 android:textSize="16sp" />
 
             <RadioButton
+                android:id="@+id/btnBoarding"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/calibri_bold"
-                android:text="Boarding"
+                android:onClick="@{ v -> viewModel.changeScholarType(ScholarType.BOARDING)}"
+                android:text="@string/boarding"
                 android:textSize="16sp" />
 
             <RadioButton
+                android:id="@+id/btnDayScholar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/calibri_bold"
-                android:text="Day Scholar"
+                android:onClick="@{ v -> viewModel.changeScholarType(ScholarType.DAY_SCHOLAR)}"
+                android:text="@string/day_scholar"
                 android:textSize="16sp" />
 
         </RadioGroup>
@@ -100,6 +110,7 @@
             android:layout_marginHorizontal="@dimen/horizontal_margin"
             android:layout_marginTop="15dp"
             android:background="@drawable/bg_outline_round_corner_green"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/filterRadioGroup">
 
             <Spinner
@@ -107,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:paddingHorizontal="10dp"
-                android:text="Select Staff Type" />
+                android:text="@string/select_staff_type" />
 
         </RelativeLayout>
 
@@ -117,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_bold"
-            android:text="Select All"
+            android:text="@string/select_all"
             android:textSize="16sp"
             android:translationX="-6dp"
             app:layout_constraintStart_toStartOf="parent"

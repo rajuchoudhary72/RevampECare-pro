@@ -2,10 +2,10 @@ package com.app.ecarepro.model
 
 import java.io.Serializable
 
-enum class RecipientsType(val title: String) {
-    PARENTS("Parent's"),
-    STUDENTS("Student's"),
-    STAFFS("Staff's");
+enum class RecipientsType(val title: String, val id: Int) {
+    PARENTS("Parent's", 2),
+    STUDENTS("Student's", 1),
+    STAFFS("Staff's", 0);
 
 
     companion object : Serializable {

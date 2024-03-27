@@ -12,11 +12,15 @@ import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -31,8 +35,11 @@ class SelectRecipientsPagerViewModel @Inject constructor(
         RecipientsType.PARENTS
     )
 
-    private var selectedClassId: Int? = null
+    private val scholarType = MutableStateFlow(ScholarType.ALL)
 
+    val searchQuery = MutableStateFlow<String?>(null)
+
+    private var selectedClassId: Int? = null
 
     val staffTypes: Flow<Result<List<StaffType>>> =
         recipientsType
@@ -42,22 +49,30 @@ class SelectRecipientsPagerViewModel @Inject constructor(
             }
 
 
-    val uiState = recipientsType.flatMapLatest { recipientsType ->
-        when (recipientsType) {
-            RecipientsType.STAFFS -> {
-                getStaffContacts()
-            }
+    val uiState =
 
-            else -> {
-                getClassContacts(recipientsType)
-            }
+        combine(flow = recipientsType, flow2 = scholarType) { recipientsType, scholarType ->
+            Pair(recipientsType, scholarType)
         }
-    }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = SelectRecipientsUiState.Loading,
-            started = SharingStarted.WhileSubscribed(500)
-        )
+            .flatMapLatest { (recipientsType, scholarType) ->
+                when (recipientsType) {
+
+                    RecipientsType.STAFFS -> {
+                        getStaffContacts()
+                    }
+
+                    else -> {
+                        getClassContacts(recipientsType, scholarType)
+                    }
+
+                }
+            }
+            .onEach { SelectRecipientsUiState.Loading }
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = SelectRecipientsUiState.Loading,
+                started = SharingStarted.WhileSubscribed(500)
+            )
 
 
     private fun getStaffContacts(): Flow<SelectRecipientsUiState> {
@@ -81,13 +96,13 @@ class SelectRecipientsPagerViewModel @Inject constructor(
         }
     }
 
-    private fun getClassContacts(recipientsType: RecipientsType): Flow<SelectRecipientsUiState> {
+    private fun getClassContacts(
+        recipientsType: RecipientsType,
+        scholarType: ScholarType
+    ): Flow<SelectRecipientsUiState> {
         return messageRepository.getClassContacts(
-            if (recipientsType == RecipientsType.PARENTS)
-                2
-            else
-                1,
-            2
+            recipientsType.id,
+            scholarType.id
         ).map { result ->
             if (result.isSuccess) {
                 val classContacts = result.getOrNull()
@@ -120,6 +135,20 @@ class SelectRecipientsPagerViewModel @Inject constructor(
     }
 
     fun getSelectedClassId() = selectedClassId
+
+    fun changeScholarType(scholarType: ScholarType) {
+        this.scholarType.update { scholarType }
+    }
+
+    fun clearSearchQuery() {
+        searchQuery.update { "" }
+    }
+}
+
+enum class ScholarType(val id: Int) {
+    ALL(2),
+    BOARDING(1),
+    DAY_SCHOLAR(0)
 }
 
 
