@@ -40,7 +40,7 @@ interface MessageRepository {
 
     fun getStaffTypes(): Flow<Result<List<StaffType>>>
 
-    fun getStaffContacts(): Flow<Result<StaffContactsDto>>
+    fun getStaffContacts(staffTypeIDs: List<Int>?): Flow<Result<StaffContactsDto>>
 
     fun getClassContacts(
         ofUserType: Int, scholarType: Int,

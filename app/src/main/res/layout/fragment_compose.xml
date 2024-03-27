@@ -56,38 +56,36 @@
             android:animateLayoutChanges="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <HorizontalScrollView
-                android:id="@+id/chipScrollView"
+
+            <com.airbnb.epoxy.Carousel
+                android:id="@+id/recipientsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/horizontal_margin"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/recipient_chip_group"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#0D5FA150" />
-
-            </HorizontalScrollView>
-
+                android:layout_margin="@dimen/horizontal_margin"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toTopOf="parent"
+                app:spanCount="3"
+                tools:layout_editor_absoluteX="16dp" />
 
             <EditText
+                android:layout_marginTop="@dimen/horizontal_margin"
                 android:id="@+id/txtSubject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
-                android:layout_marginTop="@dimen/horizontal_margin"
                 android:autofillHints="true"
                 android:background="@drawable/bg_outline_round_corner_green_10"
                 android:fontFamily="@font/calibri_regular"
-                android:hint="Subject Line..."
+                android:hint="@string/subject_line"
                 android:inputType="text"
                 android:maxLines="4"
                 android:minHeight="42dp"
                 android:paddingHorizontal="10dp"
                 android:scrollbars="vertical"
-                app:layout_constraintTop_toBottomOf="@id/chipScrollView"
+                app:layout_constraintTop_toBottomOf="@id/recipientsRecyclerView"
                 tools:ignore="LabelFor" />
 
             <com.google.android.material.card.MaterialCardView
@@ -216,9 +214,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#0D5FA150"
-
                 android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toTopOf="@+id/attachments">
 
                 <EditText
                     android:id="@+id/message"
@@ -230,7 +227,9 @@
                     android:background="@drawable/bg_outline_round_corner_green_10"
                     android:inputType="text"
                     android:maxLines="4"
+                    android:fontFamily="@font/calibri_regular"
                     android:minHeight="42dp"
+                    android:hint="Enter your message here..."
                     android:paddingHorizontal="10dp"
                     android:scrollbars="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -265,6 +264,15 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.airbnb.epoxy.Carousel
+                android:id="@+id/attachments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#0D5FA150"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

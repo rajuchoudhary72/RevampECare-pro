@@ -142,10 +142,11 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getStaffContacts(): Flow<Result<StaffContactsDto>> {
+    override fun getStaffContacts(staffTypeIDs: List<Int>?): Flow<Result<StaffContactsDto>> {
         return flow {
             try {
-                val response = messageService.getStaffContacts()
+                val response =
+                    messageService.getStaffContacts(staffTypeIDs?.joinToString { it.toString() })
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {

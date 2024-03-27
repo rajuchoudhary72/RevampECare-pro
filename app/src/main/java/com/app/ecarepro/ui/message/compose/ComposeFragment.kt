@@ -16,35 +16,40 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.app.ecarepro.R
+import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.ContactsDto
 import com.app.ecarepro.databinding.FragmentComposeBinding
+import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
-import com.google.android.material.chip.Chip
 import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
 import com.lassi.domain.media.MediaType
 import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class ComposeFragment : Fragment() {
 
     private var _binding: FragmentComposeBinding? = null
-
     private val binding get() = _binding!!
 
     private val composeViewModel: ComposeViewModel by viewModels()
 
+    private var lastClickAttachmentType: AttachmentType? = null
+
     private val mPermissionSettingResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            requestPermissionForPdf()
+            requestExternalStoragePermission()
         }
 
 
@@ -53,11 +58,7 @@ class ComposeFragment : Fragment() {
             if (it.resultCode == Activity.RESULT_OK) {
                 val selectedMedia =
                     it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
-
-                if (selectedMedia.isNotEmpty()) {
-                    /* binding.ivEmpty.isVisible = selectedMedia.isEmpty()
-                     selectedMediaAdapter.setList(selectedMedia)*/
-                }
+                composeViewModel.setAttachments(selectedMedia)
             }
         }
 
@@ -74,14 +75,46 @@ class ComposeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpViews()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            launch {
+                composeViewModel.attachments.collectLatest { attachments ->
+                    buildAttachmentModels(attachments)
+                }
+            }
+            launch {
+                composeViewModel.contacts.collectLatest { contacts ->
+                    buildChipGroup(contacts)
+                }
+            }
+        }
+
+    }
+
+    private fun buildAttachmentModels(attachments: List<MiMedia>) {
+        binding.attachments.isVisible = attachments.isNotEmpty()
+        binding.attachments.withModels {
+            attachments.forEach { attachment ->
+                attachment {
+                    id(attachment.id)
+                    image(attachment.path)
+                    onClickRemove { _ ->
+                        composeViewModel.removeAttachment(attachment)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setUpViews() {
         binding.btnAddRecipient.setOnClickListener {
 
             setFragmentResultListener(SelectRecipientsFragment.SELECT_CONTACT_REQUEST_KEY) { requestKey, bundle ->
                 if (bundle.containsKey(SelectRecipientsFragment.SELECTED_CONTACT)) {
                     val contacts: ContactsDto =
                         bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
-
-                    buildChipGroup(contacts.contacts)
+                    composeViewModel.setContacts(contacts.contacts)
                 }
             }
 
@@ -92,28 +125,36 @@ class ComposeFragment : Fragment() {
             binding.cardAttachmentOptions.isVisible = binding.cardAttachmentOptions.isVisible.not()
         }
 
-        binding.btnBrowsePdf.setOnClickListener { requestPermissionForPdf() }
+        binding.btnBrowsePdf.setOnClickListener {
+            lastClickAttachmentType = AttachmentType.PDF
+            requestExternalStoragePermission()
+        }
 
+        binding.btnBrowseAudio.setOnClickListener {
+            lastClickAttachmentType = AttachmentType.AUDIO
+            requestExternalStoragePermission()
+        }
+
+        binding.btnGallery.setOnClickListener {
+            lastClickAttachmentType = AttachmentType.GALLERY
+            requestExternalStoragePermission()
+        }
     }
 
     private fun buildChipGroup(contacts: List<Contact>) {
-        binding.recipientChipGroup.apply {
-            removeAllViews()
+        binding.recipientsRecyclerView.isVisible = contacts.isNotEmpty()
+        binding.recipientsRecyclerView.withModels {
             contacts.forEach { contact ->
-                addView(
-                    Chip(requireContext()).apply {
-                        text = contact.name
-                        setTextAppearance(R.style.TextAppearance_ECarePro_BodyMedium)
-                        isCloseIconVisible = true
-                        /*convertUrlToDrawable(contact.photo) {
-                            chipIcon = it
-                        }*/
-                        setEnsureMinTouchTargetSize(false)
+                recipientChip {
+                    id(contact.receiverID)
+                    text(contact.name)
+                    image(contact.photo)
+                    closeClickistener { _ ->
+                        composeViewModel.removeContacts(contact)
                     }
-                )
+                }
             }
         }
-
     }
 
     private fun convertUrlToDrawable(url: String?, result: (Drawable) -> Unit) {
@@ -132,11 +173,12 @@ class ComposeFragment : Fragment() {
      *   If Android device SDK is >= 30 and wants to access document (only for choose the non media file)
      *   then ask for "android.permission.MANAGE_EXTERNAL_STORAGE" permission
      */
-    private fun requestPermissionForPdf() {
+    private fun requestExternalStoragePermission() {
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
                 if (Environment.isExternalStorageManager()) {
-                    launchPdfPicker()
+                    launchPicker()
+
                 } else {
                     try {
                         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
@@ -154,18 +196,33 @@ class ComposeFragment : Fragment() {
             }
 
             else -> {
+                launchPicker()
+            }
+        }
+    }
+
+    private fun launchPicker() {
+        when (lastClickAttachmentType) {
+            AttachmentType.GALLERY -> {
+                launchPhotoPicker()
+            }
+
+            AttachmentType.AUDIO -> {
+                launchAudioPicker()
+            }
+
+            AttachmentType.PDF -> {
                 launchPdfPicker()
             }
+
+            else -> {}
         }
     }
 
     private fun launchPhotoPicker() {
         val intent = getLasiIntent()
             .setMediaType(MediaType.IMAGE)
-            .setMaxCount(1)
-            .setSupportedFileTypes(
-                "pdf"
-            )
+            .setMaxCount(7)
             .build()
         receiveData.launch(intent)
     }
@@ -174,9 +231,6 @@ class ComposeFragment : Fragment() {
         val intent = getLasiIntent()
             .setMediaType(MediaType.AUDIO)
             .setMaxCount(1)
-            .setSupportedFileTypes(
-                "pdf"
-            )
             .build()
         receiveData.launch(intent)
     }
@@ -217,4 +271,12 @@ class ComposeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+enum class AttachmentType {
+    CAMERA,
+    GALLERY,
+    RECORDING,
+    AUDIO,
+    PDF
 }
