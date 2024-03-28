@@ -61,7 +61,9 @@ interface MessageService {
     suspend fun getStaffTypes(): StaffTypeDto
 
     @GET("Message/StaffContact")
-    suspend fun getStaffContacts(): StaffContactsDto
+    suspend fun getStaffContacts(
+        @Query("StaffTypeIDs") ofUserType: String? = null,
+    ): StaffContactsDto
 
     @GET("Message/StudentParentContactClassWise")
     suspend fun getContactsWithClasses(

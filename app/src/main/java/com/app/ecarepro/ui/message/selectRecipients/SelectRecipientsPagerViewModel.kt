@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.message.selectRecipients
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.Contact
@@ -37,28 +38,35 @@ class SelectRecipientsPagerViewModel @Inject constructor(
 
     private val scholarType = MutableStateFlow(ScholarType.ALL)
 
+    private val selectedStaffTypes = MutableStateFlow<List<StaffType>?>(null)
+
     val searchQuery = MutableStateFlow<String?>(null)
 
-    private var selectedClassId: Int? = null
+    var selectedClassId = MutableStateFlow<Pair<Int, String>?>(null)
 
-    val staffTypes: Flow<Result<List<StaffType>>> =
+    val staffTypes =
         recipientsType
             .filter { recipientsType -> recipientsType == RecipientsType.STAFFS }
             .flatMapLatest {
                 messageRepository.getStaffTypes()
             }
+            .asLiveData()
 
 
     val uiState =
 
-        combine(flow = recipientsType, flow2 = scholarType) { recipientsType, scholarType ->
-            Pair(recipientsType, scholarType)
+        combine(
+            flow = recipientsType,
+            flow2 = scholarType,
+            flow3 = selectedStaffTypes
+        ) { recipientsType, scholarType, selectedStaffTypes ->
+            Triple(recipientsType, scholarType, selectedStaffTypes)
         }
-            .flatMapLatest { (recipientsType, scholarType) ->
+            .flatMapLatest { (recipientsType, scholarType, selectedStaffTypes) ->
                 when (recipientsType) {
 
                     RecipientsType.STAFFS -> {
-                        getStaffContacts()
+                        getStaffContacts(selectedStaffTypes)
                     }
 
                     else -> {
@@ -75,25 +83,26 @@ class SelectRecipientsPagerViewModel @Inject constructor(
             )
 
 
-    private fun getStaffContacts(): Flow<SelectRecipientsUiState> {
-        return messageRepository.getStaffContacts().map { result ->
-            if (result.isSuccess) {
-                val response = result.getOrNull()
-                if (response?.contacts.isNullOrEmpty()) {
-                    SelectRecipientsUiState.EmptyContact
+    private fun getStaffContacts(selectedStaffTypes: List<StaffType>?): Flow<SelectRecipientsUiState> {
+        return messageRepository.getStaffContacts(selectedStaffTypes?.map { it.staffTypeID })
+            .map { result ->
+                if (result.isSuccess) {
+                    val response = result.getOrNull()
+                    if (response?.contacts.isNullOrEmpty()) {
+                        SelectRecipientsUiState.EmptyContact
+                    } else {
+                        SelectRecipientsUiState.StaffContact(
+                            contacts = response?.contacts ?: emptyList()
+                        )
+                    }
                 } else {
-                    SelectRecipientsUiState.StaffContact(
-                        contacts = response?.contacts ?: emptyList()
+                    SelectRecipientsUiState.Error(
+                        error = result.exceptionOrNull() ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
                     )
                 }
-            } else {
-                SelectRecipientsUiState.Error(
-                    error = result.exceptionOrNull() ?: IllegalArgumentException(
-                        UNKNOWN_ERROR_MESSAGE
-                    )
-                )
             }
-        }
     }
 
     private fun getClassContacts(
@@ -130,11 +139,16 @@ class SelectRecipientsPagerViewModel @Inject constructor(
         }
     }
 
-    fun setSelectedClassId(classId: Int) {
-        selectedClassId = classId
+    fun setSelectedClassId(classId: Int?, className: String?) {
+        selectedClassId.update {
+            if (classId == null || className == null) {
+                null
+            } else
+                Pair(classId, className)
+        }
     }
 
-    fun getSelectedClassId() = selectedClassId
+    fun getSelectedClassIds() = selectedClassId.value?.first
 
     fun changeScholarType(scholarType: ScholarType) {
         this.scholarType.update { scholarType }
@@ -143,6 +157,14 @@ class SelectRecipientsPagerViewModel @Inject constructor(
     fun clearSearchQuery() {
         searchQuery.update { "" }
     }
+
+    fun setSelectedStaffType(types: List<StaffType>) {
+        selectedStaffTypes.update { types }
+    }
+
+    fun getSelectedStaffType() =
+        selectedStaffTypes.value
+
 }
 
 enum class ScholarType(val id: Int) {
@@ -179,4 +201,13 @@ sealed interface SelectRecipientsUiState {
     fun isLoading() = this == Loading
 
     fun getErrorOrNull() = if (this is Error) this.error else null
+
+    fun getStaffContactOrNull() = if (this is StaffContact) this.contacts else null
+
+    fun getStudentContactOrNull() =
+        if (this is StudentContact) this.contacts else null
+
+    fun getParentContactOrNull() =
+        if (this is ParentContact) this.contacts else null
 }
+
