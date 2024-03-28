@@ -40,4 +40,6 @@
     </style>
 
     <style name="Theme.ECarePro" parent="Base.Theme.ECarePro" />
+
+
 </resources>
