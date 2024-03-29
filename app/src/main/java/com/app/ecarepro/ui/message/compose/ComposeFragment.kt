@@ -156,9 +156,11 @@ class ComposeFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerTemplate.apply {
                 this.adapter = adapter
+                binding.message.setText(templates.first().template)
                 setSelection(0)
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        binding.message.setText(templates[p2].template)
                     }
 
                     override fun onNothingSelected(p0: AdapterView<*>?) {

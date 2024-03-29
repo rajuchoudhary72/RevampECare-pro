@@ -27,8 +27,11 @@ class ComposeViewModel @Inject constructor(
     val composeMessageType =
         savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.SMS_AND_APP_MESSAGE)
 
-    val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
-    val contacts = MutableStateFlow<List<Contact>>(emptyList())
+    private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
+    private val contacts = MutableStateFlow<List<Contact>>(emptyList())
+
+    val message = MutableStateFlow("")
+
 
     val uiState =
         combine(
