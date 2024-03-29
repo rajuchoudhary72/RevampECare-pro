@@ -153,7 +153,7 @@ class ComposeFragment : Fragment() {
             android.R.layout.simple_spinner_item,
             templates.map { it.template ?: "" },
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.item_multiline_spinner_dropdown)
             binding.spinnerTemplate.apply {
                 this.adapter = adapter
                 binding.message.setText(templates.first().template)

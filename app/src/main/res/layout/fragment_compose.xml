@@ -272,7 +272,7 @@
                     android:maxLines="4"
                     android:text="@={viewModel.message}"
                     android:minHeight="42dp"
-                    android:paddingHorizontal="10dp"
+                    android:padding="10dp"
                     android:scrollbars="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_reply_message"
