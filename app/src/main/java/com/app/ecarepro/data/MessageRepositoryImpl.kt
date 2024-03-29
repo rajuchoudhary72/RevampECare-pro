@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.service.MessageService
@@ -172,6 +173,21 @@ class MessageRepositoryImpl @Inject constructor(
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getSmsTemplates(): Flow<Result<List<SmsType>>> {
+        return flow {
+            try {
+                val response = messageService.getSmsTemplates()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.smsType ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                // emit(Result.failure(error))
             }
         }
     }

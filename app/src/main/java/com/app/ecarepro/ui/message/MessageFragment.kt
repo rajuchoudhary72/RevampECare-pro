@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -12,6 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMessageBinding
+import com.app.ecarepro.model.ComposeMessageType
 import com.app.ecarepro.ui.message.inbox.InboxMessageFragment
 import com.app.ecarepro.ui.message.sent.SentMessageFragment
 import com.google.android.material.tabs.TabLayoutMediator
@@ -49,7 +51,17 @@ class MessageFragment : Fragment() {
         }
 
         binding.btnSendSmsAppMessage.setOnClickListener {
-            findNavController().navigate(R.id.composeFragment)
+            findNavController().navigate(
+                R.id.composeFragment,
+                bundleOf("composeMessageType" to ComposeMessageType.SMS_AND_APP_MESSAGE)
+            )
+        }
+
+        binding.btnOnlyAppMessage.setOnClickListener {
+            findNavController().navigate(
+                R.id.composeFragment,
+                bundleOf("composeMessageType" to ComposeMessageType.ONLY_APP_MESSAGE)
+            )
         }
 
         binding.btnFilter.setOnClickListener {

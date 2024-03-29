@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.data.network.model.SmsTemplatesDto
 import com.app.ecarepro.data.network.model.StaffContactsDto
 import com.app.ecarepro.data.network.model.StaffTypeDto
 import retrofit2.http.Body
@@ -70,5 +71,9 @@ interface MessageService {
         @Query("OfUserType") ofUserType: Int,
         @Query("ScholarType") scholarType: Int,
     ): ContactWithClassDto
+
+    @GET("Message/SMSTemplates")
+    suspend fun getSmsTemplates(
+    ): SmsTemplatesDto
 
 }
