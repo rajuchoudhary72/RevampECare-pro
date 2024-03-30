@@ -128,9 +128,11 @@ class ComposeFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerSmsType.apply {
                 this.adapter = adapter
+                composeViewModel.smsType = smsTypes.first()
                 setSelection(0)
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        composeViewModel.smsType = smsTypes[p2]
                         setUpTemplates(smsTypes[p2].templates ?: emptyList())
                     }
 
@@ -156,10 +158,12 @@ class ComposeFragment : Fragment() {
             adapter.setDropDownViewResource(R.layout.item_multiline_spinner_dropdown)
             binding.spinnerTemplate.apply {
                 this.adapter = adapter
+                composeViewModel.template = templates.first()
                 binding.message.setText(templates.first().template)
                 setSelection(0)
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        composeViewModel.template = templates[p2]
                         binding.message.setText(templates[p2].template)
                     }
 
@@ -189,6 +193,19 @@ class ComposeFragment : Fragment() {
     private fun setUpViews() {
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
+        binding.btnReplyMessage.setOnClickListener {
+            (requireActivity() as MainActivity).showLoader(true)
+            composeViewModel.sendMessage { result ->
+                (requireActivity() as MainActivity).showLoader(false)
+                result.onSuccess {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }.onFailure {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         binding.btnAddRecipient.setOnClickListener {
 

@@ -101,7 +101,7 @@
                 android:layout_margin="@dimen/horizontal_margin"
                 android:background="@drawable/bg_outline_round_corner_green_10"
                 android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/recipientsRecyclerView">
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinnerSmsType"
@@ -299,6 +299,7 @@
                     android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:insetTop="0dp"
+                    android:enabled="@{viewModel.message.length()>0}"
                     android:insetBottom="0dp"
                     app:cornerRadius="10dp"
                     app:icon="@drawable/ic_sent"

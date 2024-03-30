@@ -1,7 +1,9 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
+import com.app.ecarepro.data.network.model.GenerateTokenRequestDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
@@ -188,6 +190,29 @@ class MessageRepositoryImpl @Inject constructor(
                 }
             } catch (error: Throwable) {
                 // emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val token = messageService.generateToken(
+                    "http://sms.franciscanecare.com/api/Token/Generate",
+                    GenerateTokenRequestDto()
+                )
+                val response = messageService.sendBulkMessage(
+                    "http://sms.franciscanecare.com/api/SMSService/BulkSMS",
+                    token.authenticationToken,
+                    request
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
             }
         }
     }

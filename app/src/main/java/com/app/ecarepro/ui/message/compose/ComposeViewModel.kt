@@ -1,26 +1,37 @@
 package com.app.ecarepro.ui.message.compose
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.Contact
+import com.app.ecarepro.data.network.model.Data
 import com.app.ecarepro.data.network.model.SmsType
+import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.model.ComposeMessageType
+import com.app.ecarepro.ui.message.chat.getDeviceIpAddress
 import com.lassi.data.media.MiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ComposeViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val messageRepository: MessageRepository,
+    private val userDataStore: UserDataStore,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -31,6 +42,9 @@ class ComposeViewModel @Inject constructor(
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
 
     val message = MutableStateFlow("")
+
+    var smsType: SmsType? = null
+    var template: Template? = null
 
 
     val uiState =
@@ -68,7 +82,7 @@ class ComposeViewModel @Inject constructor(
             .stateIn(
                 scope = viewModelScope,
                 initialValue = ComposeUiState.Loading,
-                started = SharingStarted.WhileSubscribed(300)
+                started = SharingStarted.Lazily
             )
 
 
@@ -86,6 +100,58 @@ class ComposeViewModel @Inject constructor(
 
     fun removeAttachment(attachment: MiMedia) {
         attachments.update { current -> current.filterNot { it == attachment } }
+    }
+
+    fun sendMessage(result: (Result<String>) -> Unit) {
+        viewModelScope.launch {
+            if (composeMessageType.value == ComposeMessageType.SMS_AND_APP_MESSAGE) {
+                messageRepository
+                    .sendBulkMessage(
+                        BulkMessageRequestDto(
+                            data = generateDataFromSelectedContacts(),
+                            iPAddress = context.getDeviceIpAddress(),
+                            schCode = userDataStore.getSchoolData()?.schoolCode,
+                            isBulk = if (message.value.contains("____")) 0 else 1,
+                            sMSType = smsType?.typeID,
+                            geoCoordinate = "26.9332265,75.7440641",
+                            uID = /*userDataStore.getUser().userId*/ 32,
+                            uType = userDataStore.getUser().userType
+                        )
+                    )
+                    .collectLatest { result(it) }
+            }
+        }
+    }
+
+    private fun generateDataFromSelectedContacts(): List<Data>? {
+        val data = mutableListOf<Data>()
+
+        contacts.value.forEach { contact ->
+            data.add(
+                Data(
+                    mobile = contact.mobile,
+                    rCPTID = contact.receiverID,
+                    rCPTType = contact.receiverType,
+                    templateID = template?.templateID,
+                    sMS =
+                    if (contact.isParent()) {
+                        template?.template?.replace("R____", contact.name)
+                            ?.replace("S____", contact.childName ?: "")
+                            ?.replace("C____", contact.className ?: "")
+                            ?.replace("ADNo____", contact.admissionNo ?: "")
+                    } else if (contact.isStaff()) {
+                        template?.template?.replace("R____", "")?.replace("S____", contact.name)
+                            ?.replace("C____", contact.className ?: "")
+                            ?.replace("ADNo____", contact.admissionNo ?: "")
+
+                    } else {
+                        template?.template?.replace("R____", contact.name)
+                    }
+                )
+            )
+        }
+
+        return data
     }
 }
 

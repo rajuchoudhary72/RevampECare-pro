@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
@@ -48,4 +49,6 @@ interface MessageRepository {
     ): Flow<Result<List<ClassContact>>>
 
     fun getSmsTemplates(): Flow<Result<List<SmsType>>>
+
+    fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>>
 }
