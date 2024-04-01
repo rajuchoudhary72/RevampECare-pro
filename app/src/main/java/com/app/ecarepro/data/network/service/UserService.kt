@@ -141,8 +141,13 @@ interface UserService {
         @Body request: ChangeUserNameRequestDto,
     ): CommonResponse
 
-    @GET("User/UsernameAvailability")
+    @POST("User/ChangePassword")
     suspend fun changePassword(
+        @Body request: ChangeUserNameRequestDto,
+    ): CommonResponse
+
+    @GET("User/UsernameAvailability")
+    suspend fun checkUsernameAvailability(
         @Query("NewUsername") newUsername: String
     ): CommonResponse
 

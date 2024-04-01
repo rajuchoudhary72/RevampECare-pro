@@ -9,12 +9,15 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.SystemViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
 class SignInFragment  : Fragment() {
@@ -25,6 +28,8 @@ class SignInFragment  : Fragment() {
     private val mViewModel: SignInViewModel by viewModels()
 
     private var userNameValid = false
+
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -54,6 +59,7 @@ class SignInFragment  : Fragment() {
                 ) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
+                        systemViewModel.refresh.update { true }
                         findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                     }
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()

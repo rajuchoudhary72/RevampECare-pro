@@ -14,8 +14,8 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@{notification.hasSeen ? @color/white : @color/grey_10`}"
         app:contentPadding="12dp"
         app:strokeColor="@color/grey_10"
         app:strokeWidth="1dp">

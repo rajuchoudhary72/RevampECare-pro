@@ -41,7 +41,8 @@ interface UserRepository {
     ): Flow<Result<CommonResponse>>
 
     suspend fun changePassword(
-        password: String
+        password: String,
+        confirmPassword: String
     ): Flow<Result<CommonResponse>>
 
 

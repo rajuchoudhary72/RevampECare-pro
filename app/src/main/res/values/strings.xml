@@ -119,6 +119,7 @@
  - Once Username will be successfully changed, you will be redirect to Login Page.</string>
     <string name="existing_username">Existing Username</string>
     <string name="new_username">New Username</string>
+    <string name="rate_us">Rate Us</string>
     <string name="no_record_found">No record found</string>
     <string name="print">Print</string>
 

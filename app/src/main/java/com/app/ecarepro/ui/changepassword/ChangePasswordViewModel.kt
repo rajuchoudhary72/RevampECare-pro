@@ -25,14 +25,14 @@ class ChangePasswordViewModel @Inject constructor(
         flow2 = newPassword,
         flow3 = confirmPassword,
     ) { current, new, confirm ->
-        current.isNotEmpty() && new.isNotEmpty() && confirm.isNotEmpty()
+        (current.isNotEmpty() && new.isNotEmpty() && confirm.isNotEmpty()) && new == confirm
     }.asLiveData()
 
 
     fun changePassword(result: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository
-                .changePassword(confirmPassword.value)
+                .changePassword(confirmPassword.value, confirmPassword.value)
                 .collectLatest { result ->
                     if (result.isSuccess) {
                         result(true, result.getOrNull()?.message ?: "Success")

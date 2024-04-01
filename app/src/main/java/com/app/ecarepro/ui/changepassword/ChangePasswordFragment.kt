@@ -38,9 +38,9 @@ class ChangePasswordFragment : Fragment() {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
             btnContinue.setOnClickListener {
-                (requireContext() as MainActivity).showLoader(true)
+                (requireActivity() as MainActivity).showLoader(true)
                 changePasswordViewModel.changePassword { isSuccess, message ->
-                    (requireContext() as MainActivity).showLoader(false)
+                    (requireActivity() as MainActivity).showLoader(false)
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
             }

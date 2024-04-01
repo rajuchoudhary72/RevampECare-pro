@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.changeusername
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +31,12 @@ class ChangeUsernameViewModel @Inject constructor(
     fun changeUsername(result: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository
-                .changePassword(newUsername.value)
+                .changeUserName(
+                    ChangeUserNameRequestDto(
+                        currentUsername = currentUsername.value,
+                        newUsername = newUsername.value
+                    )
+                )
                 .collectLatest { result ->
                     if (result.isSuccess) {
                         result(true, result.getOrNull()?.message ?: "Success")

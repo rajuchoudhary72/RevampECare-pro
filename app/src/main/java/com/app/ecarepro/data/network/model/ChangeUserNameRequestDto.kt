@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class ChangeUserNameRequestDto(
     @SerializedName("currentUsername")
-    val currentUsername: String?,
+    val currentUsername: String? = null,
     @SerializedName("newPassword")
-    val newPassword: String?,
+    val newPassword: String? = null,
     @SerializedName("newUsername")
-    val newUsername: String?
+    val newUsername: String? = null
 )

@@ -82,22 +82,38 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
         return flow {
             try {
-                val response = userService.changeUsername(changeUserNameRequestDto)
-                if (response.errorCode == 0) {
-                    emit(Result.success(response))
+                val checkUserName =
+                    userService.checkUsernameAvailability(changeUserNameRequestDto.newUsername!!)
+                if (checkUserName.errorCode == 0) {
+                    val response = userService.changeUsername(changeUserNameRequestDto)
+                    if (response.errorCode == 0) {
+                        emit(Result.success(response))
+                    } else {
+                        emit(Result.failure(IllegalArgumentException(response.message)))
+                    }
                 } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+                    emit(Result.failure(IllegalArgumentException(checkUserName.message)))
                 }
+
             } catch (error: Throwable) {
                 emit(Result.failure(error))
             }
         }
     }
 
-    override suspend fun changePassword(password: String): Flow<Result<CommonResponse>> {
+    override suspend fun changePassword(
+        password: String,
+        confirmPassword: String
+    ): Flow<Result<CommonResponse>> {
         return flow {
             try {
-                val response = userService.changePassword(password)
+                val response = userService.changePassword(
+                    ChangeUserNameRequestDto(
+                        newPassword = password,
+                        newUsername = confirmPassword,
+                        currentUsername = "SF129"
+                    )
+                )
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
