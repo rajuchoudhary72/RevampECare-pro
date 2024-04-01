@@ -104,6 +104,21 @@
     <string name="select_staff_types">Select staff types</string>
     <string name="subject_line">Subject Line...</string>
     <string name="enter_your_message_here">Enter your message here...</string>
+    <string name="settings">Settings</string>
+    <string name="change_username">Change Username</string>
+    <string name="change_password">Change Password</string>
+    <string name="sync">Sync</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="change_password_note"><b>Note:</b>\n\n<![CDATA[ - Password must be between 5 to 10 characters.\n - Your password should be including at least 1 number or special character except for # and &.\n - Once Password will be successfully changed, you\'ll be redirect to Login Page.]]></string>
+    <string name="change_username_notes"><b>Note:</b>\n\n
+ - Usernames must consist of alphanumeric characters (A-Z,a–z, 0–9)\n
+ - No Special Characters allowed in username.\n
+ - Username must be between 5 to 10 characters.\n
+ - Once Username will be successfully changed, you will be redirect to Login Page.</string>
+    <string name="existing_username">Existing Username</string>
+    <string name="new_username">New Username</string>
     <string name="no_record_found">No record found</string>
     <string name="print">Print</string>
 

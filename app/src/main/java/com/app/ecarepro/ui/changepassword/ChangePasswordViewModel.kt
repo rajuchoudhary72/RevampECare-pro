@@ -1,0 +1,45 @@
+package com.app.ecarepro.ui.changepassword
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ChangePasswordViewModel @Inject constructor(
+    private val userRepository: UserRepository
+) : ViewModel() {
+    val currentPassword = MutableStateFlow("")
+    val newPassword = MutableStateFlow("")
+    val confirmPassword = MutableStateFlow("")
+
+    val isPasswordValid = combine(
+        flow = currentPassword,
+        flow2 = newPassword,
+        flow3 = confirmPassword,
+    ) { current, new, confirm ->
+        current.isNotEmpty() && new.isNotEmpty() && confirm.isNotEmpty()
+    }.asLiveData()
+
+
+    fun changePassword(result: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            userRepository
+                .changePassword(confirmPassword.value)
+                .collectLatest { result ->
+                    if (result.isSuccess) {
+                        result(true, result.getOrNull()?.message ?: "Success")
+                    } else {
+                        result(false, result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE)
+                    }
+                }
+        }
+    }
+}

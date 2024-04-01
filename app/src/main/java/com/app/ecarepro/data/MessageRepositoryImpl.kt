@@ -198,11 +198,11 @@ class MessageRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val token = messageService.generateToken(
-                    "http://sms.franciscanecare.com/api/Token/Generate",
+                    SMS_TOKEN_URL,
                     GenerateTokenRequestDto()
                 )
                 val response = messageService.sendBulkMessage(
-                    "http://sms.franciscanecare.com/api/SMSService/BulkSMS",
+                    SMS_BULK_MSG_URL,
                     token.authenticationToken,
                     request
                 )
@@ -217,3 +217,6 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 }
+
+private const val SMS_TOKEN_URL = "http://sms.franciscanecare.com/api/Token/Generate"
+private const val SMS_BULK_MSG_URL = "http://sms.franciscanecare.com/api/SMSService/BulkSMS"

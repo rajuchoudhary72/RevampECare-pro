@@ -23,6 +23,9 @@ class Constant {
         const val TRUE_VALUE = 1
         const val FALSE_VALUE = 0
 
+        const val SMS_USER_PASSWORD = "07Pro2019"
+        const val SMS_USER_USER_NAME = "FSPL"
+
 
 
 

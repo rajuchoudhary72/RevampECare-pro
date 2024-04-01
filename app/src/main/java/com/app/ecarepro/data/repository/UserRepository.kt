@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
@@ -14,6 +15,7 @@ import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserRepository {
@@ -33,6 +35,14 @@ interface UserRepository {
         userName: String,
         password: String
     ): LoginResponseDto
+
+    suspend fun changeUserName(
+        changeUserNameRequestDto: ChangeUserNameRequestDto
+    ): Flow<Result<CommonResponse>>
+
+    suspend fun changePassword(
+        password: String
+    ): Flow<Result<CommonResponse>>
 
 
     suspend fun getClassSyllabus( ): NetworkClassSyllabus

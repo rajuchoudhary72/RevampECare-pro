@@ -3,9 +3,12 @@ package com.app.ecarepro.ui.message.compose
 import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -41,6 +44,9 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
 import com.lassi.domain.media.MediaType
@@ -76,6 +82,10 @@ class ComposeFragment : Fragment() {
                 composeViewModel.setAttachments(selectedMedia)
             }
         }
+
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,8 +138,12 @@ class ComposeFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.spinnerSmsType.apply {
                 this.adapter = adapter
-                composeViewModel.smsType = smsTypes.first()
-                setSelection(0)
+                if (composeViewModel.smsType == null) {
+                    composeViewModel.smsType = smsTypes.first()
+                    setSelection(0)
+                } else {
+                    setSelection(smsTypes.indexOf(composeViewModel.smsType))
+                }
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                         composeViewModel.smsType = smsTypes[p2]
@@ -158,9 +172,17 @@ class ComposeFragment : Fragment() {
             adapter.setDropDownViewResource(R.layout.item_multiline_spinner_dropdown)
             binding.spinnerTemplate.apply {
                 this.adapter = adapter
-                composeViewModel.template = templates.first()
-                binding.message.setText(templates.first().template)
-                setSelection(0)
+                if (composeViewModel.template == null) {
+                    composeViewModel.template = templates.first()
+                    binding.message.setText(templates.first().template)
+                    setSelection(0)
+                } else {
+                    val index = templates.indexOf(composeViewModel.template)
+                    if (index != -1) {
+                        binding.message.setText(templates[index].template)
+                        setSelection(index)
+                    }
+                }
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                         composeViewModel.template = templates[p2]
@@ -425,6 +447,12 @@ class ComposeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT)
                     .show()
             }
+        } else if (requestCode == 120) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationFetch()
+            } else {
+                Toast.makeText(requireContext(), "GPS permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -458,6 +486,64 @@ class ComposeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startLocationFetch()
+    }
+
+
+    private fun startLocationFetch() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                120
+            )
+            return
+        }
+        if (isGPSEnabled().not()) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Turn On GPS")
+                .setCancelable(false)
+                .setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setPositiveButton("No") { d, _ ->
+                    d.dismiss()
+                    findNavController().popBackStack()
+                }
+                .setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                    d.dismiss()
+                    val callGPSSettingIntent = Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                    )
+                    startActivity(callGPSSettingIntent)
+                }
+                .show()
+        } else {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    composeViewModel.currentLocation =
+                        Pair(location?.altitude ?: 0.0, location?.longitude ?: 0.0)
+                }
+        }
+    }
+
+
+    private fun isGPSEnabled(): Boolean {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     companion object {

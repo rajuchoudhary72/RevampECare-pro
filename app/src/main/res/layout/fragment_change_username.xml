@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.app.ecarepro.ui.changeusername.ChangeUsernameViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:title="@string/change_username"
+            app:titleTextAppearance="?attr/textAppearanceTitleMedium"
+            app:titleTextColor="@color/white"
+            app:topWindowInsetToPadding="@{true}" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutExistingUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:hint="@string/existing_username"
+            app:hintTextColor="@color/grey_40"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerLarge">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/existing_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@={viewModel.currentUsername}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutNewUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:hint="@string/new_username"
+            app:hintTextColor="@color/grey_40"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutExistingUsername"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerLarge">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@={viewModel.newUsername}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_continue"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:enabled="@{viewModel.isUsernameValid()}"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/continue_"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayoutNewUsername"
+            app:layout_constraintVertical_bias="0.0"
+            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@string/change_username_notes"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_continue" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

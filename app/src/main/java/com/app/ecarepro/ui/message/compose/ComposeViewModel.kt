@@ -41,6 +41,8 @@ class ComposeViewModel @Inject constructor(
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
 
+    var currentLocation: Pair<Double, Double>? = null
+
     val message = MutableStateFlow("")
 
     var smsType: SmsType? = null
@@ -87,7 +89,8 @@ class ComposeViewModel @Inject constructor(
 
 
     fun setContacts(contacts: List<Contact>) {
-        this@ComposeViewModel.contacts.update { contacts }
+        if (contacts.isNotEmpty())
+            this@ComposeViewModel.contacts.update { contacts }
     }
 
     fun removeContacts(contact: Contact) {
@@ -113,7 +116,8 @@ class ComposeViewModel @Inject constructor(
                             schCode = userDataStore.getSchoolData()?.schoolCode,
                             isBulk = if (message.value.contains("____")) 0 else 1,
                             sMSType = smsType?.typeID,
-                            geoCoordinate = "26.9332265,75.7440641",
+                            geoCoordinate = currentLocation.toString().replace("(", "")
+                                .replace(")", ""),
                             uID = /*userDataStore.getUser().userId*/ 32,
                             uType = userDataStore.getUser().userType
                         )

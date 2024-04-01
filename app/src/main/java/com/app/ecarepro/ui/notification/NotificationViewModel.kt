@@ -1,13 +1,56 @@
 package com.app.ecarepro.ui.notification
 
 import androidx.lifecycle.ViewModel
-import com.app.ecarepro.data.repository.UserRepository
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.Notification
+import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    appRepository: AppRepository
 ) : ViewModel() {
 
+    val uiState = appRepository
+        .getNotifications()
+        .map { result ->
+            if (result.isSuccess) {
+                val notifications = result.getOrNull() ?: emptyList()
+                NotificationUiState.Success(notifications)
+            } else {
+                NotificationUiState.Error(
+                    result.exceptionOrNull() ?: IllegalArgumentException(
+                        UNKNOWN_ERROR_MESSAGE
+                    )
+                )
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = NotificationUiState.Loading,
+            started = SharingStarted.WhileSubscribed(400)
+        )
+
+}
+
+sealed interface NotificationUiState {
+
+    object Loading : NotificationUiState
+
+    data class Success(
+        val notifications: List<Notification>
+    ) : NotificationUiState
+
+    data class Error(
+        val error: Throwable
+    ) : NotificationUiState
+
+    fun isLoading() = this == Loading
+
+    fun getErrorOrNull() = if (this is Error) this.error else null
 }

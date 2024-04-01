@@ -2,10 +2,13 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
+import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkLatestBook
@@ -16,15 +19,15 @@ import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
-import com.app.ecarepro.data.network.model.AddThoughtsPostData
-import com.app.ecarepro.data.network.model.NetworkAnswerDetails
-import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import javax.inject.Inject
 
@@ -76,6 +79,36 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val response = userService.changeUsername(changeUserNameRequestDto)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override suspend fun changePassword(password: String): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val response = userService.changePassword(password)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
     override suspend fun getClassSyllabus(): NetworkClassSyllabus {
         return userService.getClassSyllabus()
     }
@@ -122,7 +155,12 @@ class UserRepositoryImpl @Inject constructor(
         fileURL: String,
         fileExt: String
     ): CommonResponse {
-        return userService.addQuestion(AddQuestionPostData(Attachment(attachment, fileExt, fileURL),question) )
+        return userService.addQuestion(
+            AddQuestionPostData(
+                Attachment(attachment, fileExt, fileURL),
+                question
+            )
+        )
     }
 
     override suspend fun excellenceAward(): ExcellenceAwardResponse {

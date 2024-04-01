@@ -28,6 +28,7 @@ firebase-bom = "32.1.0"
 scrollingpagerindicator = "1.2.4"
 picasso="2.8"
 swiperefreshlayout = "1.2.0-alpha01"
+play-services-location = "21.2.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
@@ -65,6 +66,7 @@ firebase-cloud-messaging = { group = "com.google.firebase", name = "firebase-mes
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 scrollingpagerindicator = { module = "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator", version.ref = "scrollingpagerindicator" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso"}
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

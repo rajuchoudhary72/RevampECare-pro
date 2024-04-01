@@ -313,5 +313,18 @@
         android:id="@+id/selectRecipientsFragment"
         android:name="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment"
         android:label="SelectRecipientsFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.app.ecarepro.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.app.ecarepro.ui.changepassword.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+    <fragment
+        android:id="@+id/changeUsernameFragment"
+        android:name="com.app.ecarepro.ui.changeusername.ChangeUsernameFragment"
+        android:label="ChangeUsernameFragment" />
 
 </navigation>
