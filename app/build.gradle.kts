@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
+    implementation(libs.play.services.location)
     kapt(libs.hilt.android.compiler)
 
     /* Database */

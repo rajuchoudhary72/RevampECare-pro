@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
-        R.id.dashboardFragment,
+        R.id.settingsFragment,
         R.id.notificationFragment,
         R.id.messageFragment,
     )
@@ -244,7 +244,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 1 -> {
-                    navController.navigate(R.id.dashboardFragment)
+                    navController.navigate(R.id.settingsFragment)
                 }
 
                 3 -> {

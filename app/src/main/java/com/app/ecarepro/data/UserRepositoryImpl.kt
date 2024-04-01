@@ -51,6 +51,9 @@ import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignmen
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import kotlinx.coroutines.flow.flow
 
 class UserRepositoryImpl @Inject constructor(
     private val userDatabase: UserDatabase,
@@ -102,13 +105,58 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
+    override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val checkUserName =
+                    userService.checkUsernameAvailability(changeUserNameRequestDto.newUsername!!)
+                if (checkUserName.errorCode == 0) {
+                    val response = userService.changeUsername(changeUserNameRequestDto)
+                    if (response.errorCode == 0) {
+                        emit(Result.success(response))
+                    } else {
+                        emit(Result.failure(IllegalArgumentException(response.message)))
+                    }
+                } else {
+                    emit(Result.failure(IllegalArgumentException(checkUserName.message)))
+                }
+
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override suspend fun changePassword(
+        password: String,
+        confirmPassword: String
+    ): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val response = userService.changePassword(
+                    ChangeUserNameRequestDto(
+                        newPassword = password,
+                        newUsername = confirmPassword,
+                        currentUsername = "SF129"
+                    )
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
 
     override suspend fun getClassSyllabus(): NetworkClassSyllabus {
         return userService.getClassSyllabus()
     }
 
     override suspend fun getActivityCalender(): NetworkActivityCalender {
-        return  userService.getActivityCaledar()
+        return userService.getActivityCaledar()
     }
 
     override suspend fun getLibraryDetails(): NetworkLatestBook {

@@ -45,6 +45,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 
 interface UserService {
     @GET("User/Verify")
@@ -290,6 +291,20 @@ interface UserService {
         @Query("Date") date: String,
     ): NetworkBirthday
 
+    @POST("User/ChangeUsername")
+    suspend fun changeUsername(
+        @Body request: ChangeUserNameRequestDto,
+    ): CommonResponse
+
+    @POST("User/ChangePassword")
+    suspend fun changePassword(
+        @Body request: ChangeUserNameRequestDto,
+    ): CommonResponse
+
+    @GET("User/UsernameAvailability")
+    suspend fun checkUsernameAvailability(
+        @Query("NewUsername") newUsername: String
+    ): CommonResponse
 
 
 }

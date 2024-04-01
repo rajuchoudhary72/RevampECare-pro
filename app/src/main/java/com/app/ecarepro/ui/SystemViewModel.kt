@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
@@ -25,9 +27,12 @@ class SystemViewModel @Inject constructor(
     val openNavigationDrawer = _openNavigationDrawer
 
     val user = userDataStore.getUserAsFlow()
+    val refresh = MutableStateFlow(false)
 
     val uiState =
-        appRepository.getAppLayout()
+        refresh.flatMapLatest {
+            appRepository.getAppLayout()
+        }
             .map { result ->
                 if (result.isSuccess) {
                     val response = result.getOrNull()!!
