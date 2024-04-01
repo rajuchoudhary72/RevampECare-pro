@@ -15,6 +15,8 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -23,14 +25,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.ContactsDto
+import com.app.ecarepro.data.network.model.SmsType
+import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.databinding.FragmentComposeBinding
 import com.app.ecarepro.recipientChip
+import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
@@ -76,6 +83,7 @@ class ComposeFragment : Fragment() {
     ): View? {
         _binding = FragmentComposeBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = composeViewModel
         }
         return binding.root
     }
@@ -86,18 +94,85 @@ class ComposeFragment : Fragment() {
         setUpViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            launch {
-                composeViewModel.attachments.collectLatest { attachments ->
-                    buildAttachmentModels(attachments)
+            composeViewModel
+                .uiState
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
+                .collectLatest { uiState: ComposeUiState ->
+                    handleUiState(uiState)
                 }
-            }
-            launch {
-                composeViewModel.contacts.collectLatest { contacts ->
-                    buildChipGroup(contacts)
+        }
+    }
+
+    private fun handleUiState(uiState: ComposeUiState) {
+        (requireActivity() as MainActivity).showLoader(uiState.isLoading())
+
+        uiState.getErrorOrNull()?.let { error ->
+            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+        }
+
+        if (uiState is ComposeUiState.Success) {
+            buildAttachmentModels(uiState.attachments)
+            buildChipGroup(uiState.contacts)
+            setUpSmsTypes(uiState.smsTypes)
+        }
+    }
+
+    private fun setUpSmsTypes(smsTypes: List<SmsType>) {
+        binding.spinnerSmsTypeLayout.isVisible = smsTypes.isNotEmpty()
+        if (smsTypes.isEmpty()) return
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            smsTypes.map { it.subject ?: "" },
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerSmsType.apply {
+                this.adapter = adapter
+                composeViewModel.smsType = smsTypes.first()
+                setSelection(0)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        composeViewModel.smsType = smsTypes[p2]
+                        setUpTemplates(smsTypes[p2].templates ?: emptyList())
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                    }
                 }
             }
         }
 
+        setUpTemplates(smsTypes.first().templates ?: emptyList())
+    }
+
+    private fun setUpTemplates(templates: List<Template>) {
+        binding.spinnerTemplateLayout.isVisible = templates.isNotEmpty()
+        if (templates.isEmpty()) return
+
+        ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            templates.map { it.template ?: "" },
+        ).also { adapter ->
+            adapter.setDropDownViewResource(R.layout.item_multiline_spinner_dropdown)
+            binding.spinnerTemplate.apply {
+                this.adapter = adapter
+                composeViewModel.template = templates.first()
+                binding.message.setText(templates.first().template)
+                setSelection(0)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                        composeViewModel.template = templates[p2]
+                        binding.message.setText(templates[p2].template)
+                    }
+
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                    }
+                }
+            }
+        }
     }
 
     private fun buildAttachmentModels(attachments: List<MiMedia>) {
@@ -116,6 +191,22 @@ class ComposeFragment : Fragment() {
     }
 
     private fun setUpViews() {
+
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
+        binding.btnReplyMessage.setOnClickListener {
+            (requireActivity() as MainActivity).showLoader(true)
+            composeViewModel.sendMessage { result ->
+                (requireActivity() as MainActivity).showLoader(false)
+                result.onSuccess {
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                }.onFailure {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         binding.btnAddRecipient.setOnClickListener {
 
             setFragmentResultListener(SelectRecipientsFragment.SELECT_CONTACT_REQUEST_KEY) { requestKey, bundle ->

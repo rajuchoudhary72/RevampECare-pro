@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="com.app.ecarepro.model.ComposeMessageType" />
+
+        <variable
+            name="viewModel"
+            type="com.app.ecarepro.ui.message.compose.ComposeViewModel" />
+
 
     </data>
 
@@ -71,11 +77,11 @@
                 tools:layout_editor_absoluteX="16dp" />
 
             <EditText
-                android:layout_marginTop="@dimen/horizontal_margin"
                 android:id="@+id/txtSubject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
+                android:layout_marginTop="@dimen/horizontal_margin"
                 android:autofillHints="true"
                 android:background="@drawable/bg_outline_round_corner_green_10"
                 android:fontFamily="@font/calibri_regular"
@@ -87,6 +93,41 @@
                 android:scrollbars="vertical"
                 app:layout_constraintTop_toBottomOf="@id/recipientsRecyclerView"
                 tools:ignore="LabelFor" />
+
+            <RelativeLayout
+                android:id="@+id/spinnerSmsTypeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/horizontal_margin"
+                android:background="@drawable/bg_outline_round_corner_green_10"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/recipientsRecyclerView">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinnerSmsType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="45dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/spinnerTemplateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/horizontal_margin"
+                android:background="@drawable/bg_outline_round_corner_green_10"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerSmsTypeLayout">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/spinnerTemplate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="45dp" />
+
+            </RelativeLayout>
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAttachmentOptions"
@@ -225,12 +266,13 @@
                     android:layout_weight="1"
                     android:autofillHints="true"
                     android:background="@drawable/bg_outline_round_corner_green_10"
-                    android:inputType="text"
-                    android:maxLines="4"
                     android:fontFamily="@font/calibri_regular"
+                    android:hint="@string/enter_your_message_here"
+                    android:inputType="textMultiLine"
+                    android:maxLines="4"
+                    android:text="@={viewModel.message}"
                     android:minHeight="42dp"
-                    android:hint="Enter your message here..."
-                    android:paddingHorizontal="10dp"
+                    android:padding="10dp"
                     android:scrollbars="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_reply_message"
@@ -240,6 +282,7 @@
 
                 <ImageView
                     android:id="@+id/btnAddAttachment"
+                    isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
@@ -256,10 +299,12 @@
                     android:layout_height="45dp"
                     android:gravity="center_vertical"
                     android:insetTop="0dp"
+                    android:enabled="@{viewModel.message.length()>0}"
                     android:insetBottom="0dp"
                     app:cornerRadius="10dp"
                     app:icon="@drawable/ic_sent"
                     app:iconTint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -273,6 +318,14 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group"
+                isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="recipientsRecyclerView,txtSubject,attachments"
+                tools:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

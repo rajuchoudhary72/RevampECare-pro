@@ -44,7 +44,11 @@ data class Contact(
     val receiverType: Int?,
     @SerializedName("rollNumber")
     val rollNumber: String?
-) : Serializable
+) : Serializable {
+
+    fun isParent() = childName.isNullOrBlank().not()
+    fun isStaff() = designation.isNullOrBlank().not()
+}
 
 data class ContactsDto(
     val contacts: List<Contact>

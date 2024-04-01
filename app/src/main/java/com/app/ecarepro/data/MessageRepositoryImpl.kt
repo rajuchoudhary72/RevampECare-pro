@@ -1,12 +1,15 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
+import com.app.ecarepro.data.network.model.GenerateTokenRequestDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.service.MessageService
@@ -167,6 +170,44 @@ class MessageRepositoryImpl @Inject constructor(
                 val response = messageService.getContactsWithClasses(ofUserType, scholarType)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.classContacts ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getSmsTemplates(): Flow<Result<List<SmsType>>> {
+        return flow {
+            try {
+                val response = messageService.getSmsTemplates()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.smsType ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                // emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val token = messageService.generateToken(
+                    "http://sms.franciscanecare.com/api/Token/Generate",
+                    GenerateTokenRequestDto()
+                )
+                val response = messageService.sendBulkMessage(
+                    "http://sms.franciscanecare.com/api/SMSService/BulkSMS",
+                    token.authenticationToken,
+                    request
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
