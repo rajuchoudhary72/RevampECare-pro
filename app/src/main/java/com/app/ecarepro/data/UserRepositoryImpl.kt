@@ -21,6 +21,7 @@ import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
@@ -186,6 +187,21 @@ class UserRepositoryImpl @Inject constructor(
                 val response = userService.getUserProfile()
                 if (response.errorCode == 0) {
                     emit(Result.success(response.profile))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = userService.uploadProfileIMG(uploadPhotoRequest)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

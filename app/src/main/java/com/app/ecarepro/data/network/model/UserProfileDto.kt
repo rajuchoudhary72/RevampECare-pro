@@ -216,7 +216,7 @@ data class StudentProfile(
     @SerializedName("bloodGroup")
     val bloodGroup: String?,
     @SerializedName("canChangeCoverImg")
-    val canChangeCoverImg: Any?,
+    val canChangeCoverImg: Boolean?,
     @SerializedName("caste")
     val caste: String?,
     @SerializedName("category")

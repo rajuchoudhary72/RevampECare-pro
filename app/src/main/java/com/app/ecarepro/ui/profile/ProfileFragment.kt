@@ -40,6 +40,8 @@ class ProfileFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModels()
 
+    private lateinit var photoType: PhotoType
+
     private val galleryLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -55,8 +57,22 @@ class ProfileFragment : Fragment() {
 
                 val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
+                uploadPhoto(imageString, imageExt)
+
             }
         }
+
+    private fun uploadPhoto(imageString: String, imageExt: String) {
+        (requireActivity() as MainActivity).showLoader(true)
+        profileViewModel.uploadPhoto(
+            photoType = photoType,
+            base64Text = imageString,
+            ext = imageExt
+        ) { _, message ->
+            (requireActivity() as MainActivity).showLoader(false)
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -70,6 +86,7 @@ class ProfileFragment : Fragment() {
                     val imageExt =
                         FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
+                    uploadPhoto(imageString, imageExt)
 
                 }
             }
@@ -122,10 +139,12 @@ class ProfileFragment : Fragment() {
                     clickListener { v: View ->
                         when (v.id) {
                             R.id.fabBannerImage -> {
+                                photoType = PhotoType.COVER_PHOTO
                                 selectImageOptionDialog()
                             }
 
                             R.id.fabProfileImage -> {
+                                photoType = PhotoType.PROFILE_PHOTO
                                 selectImageOptionDialog()
                             }
                         }
@@ -367,6 +386,10 @@ class ProfileFragment : Fragment() {
         profileWardDetails {
             id(profile.name)
             studentProfile(profile.studentProfile)
+            clickListener { _ ->
+                photoType = PhotoType.CHILD_PHOTO
+                selectImageOptionDialog()
+            }
         }
     }
 
@@ -376,9 +399,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+enum class PhotoType(val type: Int) {
+    PROFILE_PHOTO(1),
+    COVER_PHOTO(2),
+    CHILD_PHOTO(3)
 }
