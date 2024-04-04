@@ -1,10 +1,15 @@
 package com.app.ecarepro.ui.profile
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,6 +26,7 @@ import com.app.ecarepro.profileItem
 import com.app.ecarepro.profileLogout
 import com.app.ecarepro.profileWardDetails
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,6 +39,41 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val profileViewModel: ProfileViewModel by viewModels()
+
+    private val galleryLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                // binding.ivAddedImage.setImageURI(imgUri)
+
+                val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
+
+                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
+                val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+
+            }
+        }
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                if (result?.data != null) {
+                    val bitmap = result.data?.extras?.get("data") as Bitmap
+                    // binding.ivAddedImage.setImageBitmap(bitmap)
+
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
+                    val imageExt =
+                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+
+
+                }
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,13 +119,23 @@ class ProfileFragment : Fragment() {
                     contactNumber(uiState.profile.emergencyContactNo)
                     canEditBannerImage(uiState.profile.canChangeCoverImg)
                     canEditProfileImage(uiState.profile.canChangeProfileImg)
+                    clickListener { v: View ->
+                        when (v.id) {
+                            R.id.fabBannerImage -> {
+                                selectImageOptionDialog()
+                            }
+
+                            R.id.fabProfileImage -> {
+                                selectImageOptionDialog()
+                            }
+                        }
+                    }
                 }
 
                 if (profileViewModel.isParent()) {
                     buildParentModels(uiState.profile)
                 } else if (profileViewModel.isStudent()) {
-                    //buildStudentModels()
-                    buildStaffModels(uiState.profile)
+                    buildStudentModels(uiState.profile)
                 } else {
                     buildStaffModels(uiState.profile)
                 }
@@ -101,6 +152,26 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun selectImageOptionDialog() {
+        val items = arrayOf<CharSequence>(
+            "Take Photo", "Choose from Library",
+            "Cancel"
+        )
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Photo!")
+        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+            FileAccess.checkPermission(this)
+            if (items[item] == "Take Photo") {
+                cameraLauncher.launch(FileAccess.cameraIntent())
+            } else if (items[item] == "Choose from Library") {
+                galleryLauncher.launch(FileAccess.galleryIntent())
+            } else if (items[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        })
+        builder.show()
     }
 
     private fun EpoxyController.buildStaffModels(profile: Profile) {
@@ -208,7 +279,75 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun buildStudentModels() {
+    private fun EpoxyController.buildStudentModels(profile: Profile) {
+        profileItem {
+            id(R.string.admission_number)
+            iconRes(R.drawable.ic_baseline_menu_book_24)
+            title(getString(R.string.admission_number))
+            subTitle(profile.admissionNo)
+        }
+
+        profileItem {
+            id(R.string.date_of_admission)
+            iconRes(R.drawable.ic_date_of_aniversery)
+            title(getString(R.string.date_of_admission))
+            subTitle(profile.admissionDate)
+        }
+
+        profileItem {
+            id(R.string.date_of_birth)
+            iconRes(R.drawable.ic_date_of_birth)
+            title(getString(R.string.date_of_birth))
+            subTitle(profile.dob)
+        }
+        profileItem {
+            id(R.string.permanent_education_number)
+            iconRes(R.drawable.avd_dashboard)
+            title(getString(R.string.permanent_education_number))
+            subTitle(profile.admissionNo)
+        }
+        profileItem {
+            id(R.string.permanent_education_number)
+            iconRes(R.drawable.avd_dashboard)
+            title(getString(R.string.permanent_education_number))
+            subTitle(profile.admissionNo)
+        }
+        profileItem {
+            id(R.string.fathers_name)
+            iconRes(R.drawable.ic_person)
+            title(getString(R.string.fathers_name))
+            subTitle(profile.fatherName)
+        }
+        profileItem {
+            id(R.string.mothers_name)
+            iconRes(R.drawable.ic_person)
+            title(getString(R.string.mothers_name))
+            subTitle(profile.motherName)
+        }
+        profileItem {
+            id(R.string.blood_group)
+            iconRes(R.drawable.ic_chat_bubble)
+            title(getString(R.string.blood_group))
+            subTitle(profile.bloodGroup)
+        }
+        profileItem {
+            id(R.string.house_name)
+            iconRes(R.drawable.outline_help_outline_24)
+            title(getString(R.string.house_name))
+            subTitle(profile.house)
+        }
+        profileItem {
+            id(R.string.address)
+            iconRes(R.drawable.ic_address)
+            title(getString(R.string.address))
+            subTitle(profile.address)
+        }
+        profileItem {
+            id(R.string.contact_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.contact_number))
+            subTitle(profile.contactMobile)
+        }
     }
 
     private fun EpoxyController.buildParentModels(profile: Profile) {
@@ -236,6 +375,7 @@ class ProfileFragment : Fragment() {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

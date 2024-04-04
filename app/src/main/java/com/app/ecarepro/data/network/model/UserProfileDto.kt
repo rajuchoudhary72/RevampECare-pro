@@ -84,7 +84,109 @@ data class Profile(
     @SerializedName("studentProfile")
     val studentProfile: StudentProfile?,
     @SerializedName("className")
-    val className: String?
+    val className: String?,
+    @SerializedName("aadhaarNumber")
+    val aadhaarNumber: String?,
+    @SerializedName("additionalMobile")
+    val additionalMobile: Any?,
+    @SerializedName("admissionDate")
+    val admissionDate: String?,
+    @SerializedName("admissionNo")
+    val admissionNo: String?,
+    @SerializedName("billNumber")
+    val billNumber: Any?,
+    @SerializedName("birthPlace")
+    val birthPlace: String?,
+    @SerializedName("bloodGroup")
+    val bloodGroup: String?,
+    @SerializedName("caste")
+    val caste: String?,
+    @SerializedName("category")
+    val category: String?,
+    @SerializedName("city")
+    val city: String?,
+    @SerializedName("classification")
+    val classification: String?,
+    @SerializedName("contactEmailID")
+    val contactEmailID: String?,
+    @SerializedName("contactMobile")
+    val contactMobile: String?,
+    @SerializedName("contactPerson")
+    val contactPerson: String?,
+    @SerializedName("diseNo")
+    val diseNo: String?,
+    @SerializedName("fatherAadhaarNumber")
+    val fatherAadhaarNumber: String?,
+    @SerializedName("fatherAnnualIncome")
+    val fatherAnnualIncome: String?,
+    @SerializedName("fatherDOB")
+    val fatherDOB: Any?,
+    @SerializedName("fatherDesignation")
+    val fatherDesignation: String?,
+    @SerializedName("fatherDesignationID")
+    val fatherDesignationID: Any?,
+    @SerializedName("fatherEmail_1")
+    val fatherEmail1: String?,
+    @SerializedName("fatherEmail_2")
+    val fatherEmail2: String?,
+    @SerializedName("fatherMob_1")
+    val fatherMob1: String?,
+    @SerializedName("fatherMob_2")
+    val fatherMob2: String?,
+    @SerializedName("fatherName")
+    val fatherName: String?,
+    @SerializedName("fatherOfficeAddress")
+    val fatherOfficeAddress: String?,
+    @SerializedName("fatherProfession")
+    val fatherProfession: String?,
+    @SerializedName("fatherResidentialAddress")
+    val fatherResidentialAddress: String?,
+    @SerializedName("house")
+    val house: String?,
+    @SerializedName("isBoarding")
+    val isBoarding: Boolean?,
+    @SerializedName("motherAadhaarNumber")
+    val motherAadhaarNumber: String?,
+    @SerializedName("motherAnnualIncome")
+    val motherAnnualIncome: String?,
+    @SerializedName("motherDOB")
+    val motherDOB: Any?,
+    @SerializedName("motherDesignation")
+    val motherDesignation: String?,
+    @SerializedName("motherEmail_1")
+    val motherEmail1: String?,
+    @SerializedName("motherEmail_2")
+    val motherEmail2: String?,
+    @SerializedName("motherMob_1")
+    val motherMob1: String?,
+    @SerializedName("motherMob_2")
+    val motherMob2: String?,
+    @SerializedName("motherName")
+    val motherName: String?,
+    @SerializedName("motherOfficeAddress")
+    val motherOfficeAddress: String?,
+    @SerializedName("motherProfession")
+    val motherProfession: String?,
+    @SerializedName("motherResidentialAddress")
+    val motherResidentialAddress: String?,
+    @SerializedName("parentAnniversaryDate")
+    val parentAnniversaryDate: Any?,
+    @SerializedName("parentStaus")
+    val parentStaus: String?,
+    @SerializedName("permanentAddress")
+    val permanentAddress: String?,
+    @SerializedName("permanentCity")
+    val permanentCity: String?,
+    @SerializedName("permanentState")
+    val permanentState: String?,
+    @SerializedName("previousSchoolDTL")
+    val previousSchoolDTL: PreviousSchoolDTL?,
+    @SerializedName("rollNo")
+    val rollNo: String?,
+    @SerializedName("state")
+    val state: String?,
+    @SerializedName("transport")
+    val transport: String?
 )
 
 data class UserImgReq(
@@ -104,7 +206,7 @@ data class StudentProfile(
     @SerializedName("address")
     val address: String?,
     @SerializedName("admissionDate")
-    val admissionDate: Any?,
+    val admissionDate: String?,
     @SerializedName("admissionNo")
     val admissionNo: String?,
     @SerializedName("billNumber")
