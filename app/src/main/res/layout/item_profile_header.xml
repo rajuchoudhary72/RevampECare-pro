@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bannerImage"
+            type="java.lang.String" />
+
+        <variable
+            name="profileImage"
+            type="java.lang.String" />
+
+        <variable
+            name="canEditBannerImage"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="canEditProfileImage"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="name"
+            type="java.lang.String" />
+
+        <variable
+            name="designation"
+            type="java.lang.String" />
+
+        <variable
+            name="username"
+            type="java.lang.String" />
+
+        <variable
+            name="contactNumber"
+            type="java.lang.String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp">
+
+        <ImageView
+            android:id="@+id/bannerImage"
+            imageUrl="@{bannerImage}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="H,16:7.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/frame_192" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            imageUrl="@{profileImage}"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/bannerImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bannerImage"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+            app:strokeColor="@color/green_20"
+            app:strokeWidth="1dp"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/img_message_user" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/calibri_bold"
+            android:text="@{name}"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileImage"
+            tools:text="@string/change_password" />
+
+        <TextView
+            android:id="@+id/designation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{designation}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="Principle" />
+
+        <TextView
+            android:id="@+id/userId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/calibri_regular"
+            android:text='@{"@"+username}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/designation"
+            tools:text="SF320" />
+
+        <TextView
+            android:id="@+id/mobileNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="phone"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{contactNumber}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userId"
+            tools:text="+918798698778" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/fabProfileImage"
+            isVisible="@{canEditProfileImage}"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@color/green"
+            android:padding="3dp"
+            android:src="@drawable/baseline_add_24"
+            android:tint="@color/white"
+            app:contentPadding="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/profileImage"
+            app:layout_constraintEnd_toEndOf="@id/profileImage"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+            app:strokeColor="@color/white"
+            app:strokeWidth="3dp"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabBannerImage"
+            isVisible="@{canEditBannerImage}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:backgroundTint="@color/green"
+            android:src="@drawable/ic_edit"
+            app:fabCustomSize="36dp"
+            app:layout_constraintBottom_toBottomOf="@id/bannerImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerMedium"
+            tools:ignore="ContentDescription" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

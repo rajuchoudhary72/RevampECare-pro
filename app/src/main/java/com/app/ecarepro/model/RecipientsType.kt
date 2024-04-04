@@ -12,5 +12,15 @@ enum class RecipientsType(val title: String, val id: Int) {
         fun getRecipientsType(title: String): RecipientsType {
             return values().firstOrNull { it.title == title } ?: PARENTS
         }
+
+        fun getRecipientTypes(userType: Int): List<RecipientsType> {
+            return if (userType == 3) {
+                values().toList()
+            } else {
+                listOf(STAFFS)
+            }
+        }
+
+
     }
 }

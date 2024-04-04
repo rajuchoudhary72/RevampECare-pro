@@ -37,8 +37,8 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(placeholder)
             error(placeholder)
         } else {
-            placeholder(R.drawable.img_school_placeholder)
-            error(R.drawable.img_school_placeholder)
+            placeholder(R.drawable.img_placeholder)
+            error(R.drawable.img_placeholder)
         }
     }
 }

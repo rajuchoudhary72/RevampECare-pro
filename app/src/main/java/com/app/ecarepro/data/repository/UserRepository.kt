@@ -15,6 +15,7 @@ import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.Profile
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
@@ -82,6 +83,6 @@ interface UserRepository {
     suspend fun addQuestion (question:String,attachment:String,fileURL:String,fileExt:String ): CommonResponse
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
-
+    fun getUserProfile(): Flow<Result<Profile>>
 
 }

@@ -18,6 +18,7 @@ import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
+import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import retrofit2.http.Body
@@ -150,6 +151,11 @@ interface UserService {
     suspend fun checkUsernameAvailability(
         @Query("NewUsername") newUsername: String
     ): CommonResponse
+
+    @GET("User/MyProfile")
+    suspend fun getUserProfile(
+        @Query("Edit") edit: Boolean = true
+    ): UserProfileDto
 
     @GET("Academic/ExcellenceAward")
     suspend fun excellenceAward(

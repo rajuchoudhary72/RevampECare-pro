@@ -47,6 +47,9 @@
         <activity
             android:name="com.lassi.presentation.mediadirectory.LassiMediaPickerActivity"
             android:exported="false" />
+        <activity
+            android:name="com.lassi.presentation.videopreview.VideoPreviewActivity"
+            android:exported="false" />
 
         <service
             android:name=".firebase_messaging.ECareProMessagingService"

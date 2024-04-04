@@ -20,6 +20,7 @@ import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
@@ -130,7 +131,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getActivityCalender(): NetworkActivityCalender {
-        return  userService.getActivityCaledar()
+        return userService.getActivityCaledar()
     }
 
     override suspend fun getLibraryDetails(): NetworkLatestBook {
@@ -142,15 +143,15 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLibrarySearch(query: String, pg: Int): NetworkBookDetails {
-        return   userService.getLibrarySearch(query, pg)
+        return userService.getLibrarySearch(query, pg)
     }
 
-    override suspend fun getQuestionnaireList(pg: Int, myque: Boolean ): NetworkQuestionnaire {
+    override suspend fun getQuestionnaireList(pg: Int, myque: Boolean): NetworkQuestionnaire {
         return userService.getQuestionnaireList(pg, myque)
     }
 
     override suspend fun questionnaireLike(qID: Int, like: Boolean): CommonResponse {
-        return  userService.questionnaireLike(qID, like)
+        return userService.questionnaireLike(qID, like)
     }
 
     override suspend fun answerList(qID: Int): NetworkAnswerDetails {
@@ -179,12 +180,23 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun excellenceAward(): ExcellenceAwardResponse {
-        return userService.excellenceAward()
+    override fun getUserProfile(): Flow<Result<Profile>> {
+        return flow {
+            try {
+                val response = userService.getUserProfile()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.profile))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
     }
 
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
-        return  userService.staffMyClass()
+        return userService.staffMyClass()
     }
 
     override suspend fun getPayslip(): NetworkPaySlip {
@@ -192,7 +204,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getThoughts(pg: Int, dir: Int, mythoughts: Boolean): NetworkThoughts {
-        return  userService.getThoughts(pg, dir, mythoughts)
+        return userService.getThoughts(pg, dir, mythoughts)
     }
 
     override suspend fun thoughtsLike(thID: Int, like: Boolean): CommonResponse {
@@ -200,11 +212,11 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun thoughtsDelete(thID: Int): CommonResponse {
-        return userService.thoughtsDelete(thID )
+        return userService.thoughtsDelete(thID)
     }
 
     override suspend fun whoLiked(thID: Int): NetworkWhoLike {
-        return  userService.whoLiked(thID)
+        return userService.whoLiked(thID)
     }
 
     override suspend fun thoughtsCreate(quotation: String, author: String): CommonResponse {

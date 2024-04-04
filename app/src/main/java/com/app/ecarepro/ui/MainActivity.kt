@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun logout() {
+    fun logout() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Logout")
             .setMessage("Are you sure to logout?")

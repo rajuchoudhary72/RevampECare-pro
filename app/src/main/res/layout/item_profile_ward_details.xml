@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="studentProfile"
+            type="com.app.ecarepro.data.network.model.StudentProfile" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/wardDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_10"
+            android:fontFamily="@font/calibri_bold"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/ward_details"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/titlePermanentEducationNumber"
+            app:layout_constraintTop_toBottomOf="@id/wardDetails" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profileImage"
+            imageUrl="@{studentProfile.photo}"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wardDetails"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+            app:strokeColor="@color/green_20"
+            app:strokeWidth="1dp"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/img_message_user" />
+
+        <TextView
+            android:id="@+id/title_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/calibri_light"
+            android:text="Name:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wardDetails" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.name}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/title_name"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/title_name"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/title_dob"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="DOB:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_name" />
+
+        <TextView
+            android:id="@+id/dob"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.dob}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/title_dob"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/title_dob"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/title_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="Class:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_dob" />
+
+        <TextView
+            android:id="@+id/classs"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.className}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/title_class"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/title_class"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titleRollNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="Roll No:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_class" />
+
+        <TextView
+            android:id="@+id/rollNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.rollNo}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleRollNo"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleRollNo"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titleAdmissionNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="Admission No:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleRollNo" />
+
+        <TextView
+            android:id="@+id/AdmissionNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.admissionNo}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleAdmissionNo"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleAdmissionNo"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titleBloodGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="Blood Group:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleAdmissionNo" />
+
+        <TextView
+            android:id="@+id/bloodGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.bloodGroup}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleBloodGroup"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleBloodGroup"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titleHouse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="House:"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleBloodGroup" />
+
+        <TextView
+            android:id="@+id/house"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.house}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleHouse"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleHouse"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titleHaadharCardNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="@string/aadharCardNo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleHouse" />
+
+        <TextView
+            android:id="@+id/aadharCardNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.aadhaarNumber}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleHaadharCardNo"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleHaadharCardNo"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titlePermanentEducationNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:paddingBottom="15dp"
+            android:text="Permanent Education Number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleHaadharCardNo" />
+
+        <TextView
+            android:id="@+id/permanentEducationNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.aadhaarNumber}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titlePermanentEducationNumber"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titlePermanentEducationNumber"
+            tools:text="Raju" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
