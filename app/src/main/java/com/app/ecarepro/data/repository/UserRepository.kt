@@ -33,6 +33,8 @@ import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.create_assignment.Attachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
@@ -115,6 +117,8 @@ interface UserRepository {
         fileExt: String
     ): CommonResponse
 
+    fun getUserProfile(): Flow<Result<Profile>>
+    fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
 

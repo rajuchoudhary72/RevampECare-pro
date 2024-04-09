@@ -54,6 +54,8 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import kotlinx.coroutines.flow.flow
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
 
 class UserRepositoryImpl @Inject constructor(
     private val userDatabase: UserDatabase,
@@ -382,7 +384,34 @@ class UserRepositoryImpl @Inject constructor(
         return userService.birthday(userType, rptType, monthNo,date)
     }
 
-
+    override fun getUserProfile(): Flow<Result<Profile>> {
+        return flow {
+            try {
+                val response = userService.getUserProfile()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.profile))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = userService.uploadProfileIMG(uploadPhotoRequest)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
         return  userService.staffMyClass()
     }

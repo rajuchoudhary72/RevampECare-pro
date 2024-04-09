@@ -46,6 +46,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.UserProfileDto
 
 interface UserService {
     @GET("User/Verify")
@@ -306,5 +308,13 @@ interface UserService {
         @Query("NewUsername") newUsername: String
     ): CommonResponse
 
+    @GET("User/MyProfile")
+    suspend fun getUserProfile(
+        @Query("Edit") edit: Boolean = true
+    ): UserProfileDto
 
+    @POST("User/UploadProfileIMG")
+    suspend fun uploadProfileIMG(
+        @Body request: UploadPhotoRequest
+    ): CommonResponse
 }
