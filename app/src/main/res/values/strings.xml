@@ -147,6 +147,7 @@
     <string name="mothers_name">Mother\'s Name</string>
     <string name="blood_group">Blood Group</string>
     <string name="house_name">House Name</string>
+    <string name="marital_status">Marital Status</string>
     <string name="no_record_found">No record found</string>
     <string name="print">Print</string>
 

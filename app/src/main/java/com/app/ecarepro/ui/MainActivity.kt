@@ -140,12 +140,16 @@ class MainActivity : AppCompatActivity() {
                     icon(parentMenu.icon)
                     hasChildMenu(parentMenu.childMenus.isNullOrEmpty().not())
                     clickListener { _ ->
-                        expandedMenuId = if (expandedMenuId == parentMenu.menuID) {
-                            -1
+                        if (parentMenu.childMenus.isNullOrEmpty().not()) {
+                            expandedMenuId = if (expandedMenuId == parentMenu.menuID) {
+                                -1
+                            } else {
+                                parentMenu.menuID
+                            }
+                            this@withModels.requestModelBuild()
                         } else {
-                            parentMenu.menuID
+                            getFragmentId(parentMenu.menuID)?.let { navController.navigate(it) }
                         }
-                        this@withModels.requestModelBuild()
                     }
                 }
 
@@ -157,11 +161,54 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             hasChildMenu(menu.childMenus.isNullOrEmpty().not())
                             clickListener { _ ->
+                                getFragmentId(
+                                    parentMenu.menuID,
+                                    menu.chMenuID
+                                )?.let {
+                                    navController.navigate(
+                                        it
+                                    )
+                                }
                             }
                         }
                     }
 
                 }
+            }
+        }
+    }
+
+    private fun getFragmentId(menuID: Int): Int? {
+        return when (menuID) {
+            5 -> R.id.classSyllabus
+            10 -> R.id.calenderActivityNavHost
+            13 -> R.id.bookLibraryFragment
+            14 -> R.id.questionnaireListFragment
+            15 -> R.id.thoughtsListFragment
+            else -> null
+        }
+    }
+
+    private fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
+        return when (menuID) {
+            6 -> {
+                return when (childMenuId) {
+                    7 -> R.id.composeFragment
+                    8 -> R.id.messageFragment
+                    9 -> R.id.messageFragment
+                    else -> null
+                }
+            }
+
+            11 -> {
+                return when (childMenuId) {
+                    20 -> R.id.paySlipFragment
+                    else -> null
+                }
+            }
+
+            else -> {
+                null
             }
         }
     }

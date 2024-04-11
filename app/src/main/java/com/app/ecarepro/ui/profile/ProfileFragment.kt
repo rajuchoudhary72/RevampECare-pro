@@ -128,10 +128,10 @@ class ProfileFragment : Fragment() {
             binding.recyclerView.withModels {
                 profileHeader {
                     id(uiState.profile.username)
-                    bannerImage(uiState.profile.coverImg)
+                    bannerImage(if (profileViewModel.isParent()) uiState.profile.studentProfile?.coverImg else uiState.profile.coverImg)
                     profileImage(uiState.profile.photo)
                     name(uiState.profile.name)
-                    designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) uiState.profile.className else uiState.profile.designation)
+                    designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
                     contactNumber(uiState.profile.emergencyContactNo)
                     canEditBannerImage(uiState.profile.canChangeCoverImg)
@@ -206,6 +206,12 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_date_of_aniversery)
             title(getString(R.string.date_of_joining))
             subTitle(profile.doj)
+        }
+        profileItem {
+            id(R.string.marital_status)
+            iconRes(R.drawable.ic_material_status)
+            title(getString(R.string.marital_status))
+            subTitle(profile.maritalStatus)
         }
         profileItem {
             id(R.string.spouse_name)
@@ -318,12 +324,6 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_date_of_birth)
             title(getString(R.string.date_of_birth))
             subTitle(profile.dob)
-        }
-        profileItem {
-            id(R.string.permanent_education_number)
-            iconRes(R.drawable.avd_dashboard)
-            title(getString(R.string.permanent_education_number))
-            subTitle(profile.admissionNo)
         }
         profileItem {
             id(R.string.permanent_education_number)
