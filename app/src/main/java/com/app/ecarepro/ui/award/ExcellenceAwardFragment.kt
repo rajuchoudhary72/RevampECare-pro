@@ -63,7 +63,7 @@ class ExcellenceAwardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observers()
         mViewModel.getAwardData()
-        binding.fbPrint.setOnClickListener {
+        binding.tvPrint.setOnClickListener {
 
                 createPDF()
 
