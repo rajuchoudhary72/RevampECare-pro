@@ -25,6 +25,7 @@ import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -122,6 +123,10 @@ class UserRepositoryImpl @Inject constructor(
         fileExt: String
     ): CommonResponse {
         return userService.addQuestion(AddQuestionPostData(Attachment(attachment, fileExt, fileURL),question) )
+    }
+
+    override suspend fun excellenceAward(): ExcellenceAwardResponse {
+        return userService.excellenceAward()
     }
 
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {

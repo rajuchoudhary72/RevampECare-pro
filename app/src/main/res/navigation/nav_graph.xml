@@ -111,12 +111,17 @@
         android:name="com.app.ecarepro.ui.help.HelpFragment"
         android:label="HelpFragment"
         tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/excellenceAwardFragment"
+        android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
+        android:label="ExcellenceAwardFragment"
+        tools:layout="@layout/fragment_excellence_award" />
 
     <fragment
         android:id="@+id/webViewFragment"
         android:name="com.app.ecarepro.ui.webview.WebViewFragment"
         android:label="WebViewFragment"
-        tools:layout="@layout/fragment_web_view" >
+        tools:layout="@layout/fragment_web_view">
         <argument
             android:name="url"
             app:argType="string"
@@ -158,7 +163,7 @@
     <fragment
         android:id="@+id/noticeListFragment"
         android:name="com.app.ecarepro.ui.notice.NoticeListFragment"
-        android:label="NoticeListFragment" >
+        android:label="NoticeListFragment">
         <action
             android:id="@+id/action_noticeListFragment_to_noticeDetailsFragment"
             app:destination="@id/noticeDetailsFragment" />
@@ -175,7 +180,7 @@
     <fragment
         android:id="@+id/noticeDetailsFragment"
         android:name="com.app.ecarepro.ui.notice.NoticeDetailsFragment"
-        android:label="NoticeDetailsFragment" >
+        android:label="NoticeDetailsFragment">
         <action
             android:id="@+id/action_noticeDetailsFragment_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
@@ -187,7 +192,7 @@
     <fragment
         android:id="@+id/circularFragment"
         android:name="com.app.ecarepro.ui.circuler.CircularFragment"
-        android:label="CircularFragment" >
+        android:label="CircularFragment">
         <action
             android:id="@+id/action_circularFragment_to_circularDetailsFragment"
             app:destination="@id/circularDetailsFragment" />
@@ -195,7 +200,7 @@
     <fragment
         android:id="@+id/circularDetailsFragment"
         android:name="com.app.ecarepro.ui.circuler.CircularDetailsFragment"
-        android:label="CircularDetailsFragment" >
+        android:label="CircularDetailsFragment">
         <action
             android:id="@+id/action_circularDetailsFragment_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
@@ -203,7 +208,7 @@
     <fragment
         android:id="@+id/bookLibraryFragment"
         android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
-        android:label="BookLibraryFragment" >
+        android:label="BookLibraryFragment">
         <action
             android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
             app:destination="@id/bookDetailsFragment" />
@@ -213,10 +218,9 @@
         android:id="@+id/latestBookFragment"
         android:name="com.app.ecarepro.ui.book_library.LatestBookFragment"
         android:label="fragment_latest_book"
-        tools:layout="@layout/fragment_latest_book" >
+        tools:layout="@layout/fragment_latest_book">
 
     </fragment>
-
 
 
     <fragment
@@ -228,7 +232,7 @@
         android:id="@+id/librarySearchFragment"
         android:name="com.app.ecarepro.ui.book_library.LibrarySearchFragment"
         android:label="fragment_library_search"
-        tools:layout="@layout/fragment_library_search" >
+        tools:layout="@layout/fragment_library_search">
         <action
             android:id="@+id/action_librarySearchFragment_to_bookDetailsFragment"
             app:destination="@id/bookDetailsFragment" />
@@ -236,7 +240,7 @@
     <fragment
         android:id="@+id/classSyllabus"
         android:name="com.app.ecarepro.ui.syllabus.ClassSyllabus"
-        android:label="ClassSyllabus" >
+        android:label="ClassSyllabus">
         <action
             android:id="@+id/action_classSyllabus_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
@@ -256,7 +260,7 @@
     <fragment
         android:id="@+id/questionnaireListFragment"
         android:name="com.app.ecarepro.ui.questionnaire.QuestionnaireListFragment"
-        android:label="QuestionnaireListFragment" >
+        android:label="QuestionnaireListFragment">
         <action
             android:id="@+id/action_questionnaireListFragment_to_answerDetailsFragment"
             app:destination="@id/answerDetailsFragment" />
@@ -269,7 +273,7 @@
         android:name="com.app.ecarepro.ui.questionnaire.answer_details.AnswerDetailsFragment"
         android:label="AnswerDetailsFragment" />
 
-     <fragment
+    <fragment
         android:id="@+id/postQuestionnaireFragment"
         android:name="com.app.ecarepro.ui.questionnaire.post_questionnaire.PostQuestionnaireFragment"
         android:label="PostQuestionnaireFragment" />
@@ -298,7 +302,6 @@
     <fragment
         android:id="@+id/classPromotionFragment"
         android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
-        android:label="ClassPromotionFragment"
-        />
+        android:label="ClassPromotionFragment" />
 
 </navigation>

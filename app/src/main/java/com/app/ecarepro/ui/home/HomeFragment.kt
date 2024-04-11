@@ -219,7 +219,9 @@ class HomeFragment : Fragment() {
                     val bundle = Bundle()
                     bundle.putString("title", "Marks Entry")
                     bundle.putString("url", url)
-                    findNavController().navigate(R.id.webViewFragment, bundle)
+                    //findNavController().navigate(R.id.webViewFragment, bundle)
+                    findNavController().navigate(R.id.excellenceAwardFragment, bundle)
+
                 }
             }
 

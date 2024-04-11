@@ -18,6 +18,7 @@ import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -41,44 +42,44 @@ interface UserService {
     ): LoginResponseDto
 
 
-     @GET("Academic/ClassSyllabus")
-    suspend fun getClassSyllabus(  ): NetworkClassSyllabus
+    @GET("Academic/ClassSyllabus")
+    suspend fun getClassSyllabus(): NetworkClassSyllabus
 
-     @GET("Academic/ActivityCaledar")
-    suspend fun getActivityCaledar(  ): NetworkActivityCalender
+    @GET("Academic/ActivityCaledar")
+    suspend fun getActivityCaledar(): NetworkActivityCalender
 
 
-     @GET("Library/DTL")
-    suspend fun getLibraryDetails(  ): NetworkLatestBook
+    @GET("Library/DTL")
+    suspend fun getLibraryDetails(): NetworkLatestBook
 
-     @GET("Library/BookDTL")
+    @GET("Library/BookDTL")
     suspend fun getBookDetails(
         @Query("BookID") bookID: Int,
         @Query("ID") id: Int,
     ): NetworkBookDetails
 
-     @GET("Library/Search")
+    @GET("Library/Search")
     suspend fun getLibrarySearch(
         @Query("query") query: String,
         @Query("pg") pg: Int,
     ): NetworkBookDetails
 
-     @GET("Questionnaire/List")
+    @GET("Questionnaire/List")
     suspend fun getQuestionnaireList(
         @Query("pg") pg: Int,
         @Query("myque") myque: Boolean,
     ): NetworkQuestionnaire
 
-     @GET("Staff/MyClass")
+    @GET("Staff/MyClass")
     suspend fun staffMyClass(
         /* @Query("SubID") subID: Int,
          @Query("ID") iD: Int*/
     ): NetworkMyClass
 
-     @GET("Staff/Payslip")
-    suspend fun getPayslip( ): NetworkPaySlip
+    @GET("Staff/Payslip")
+    suspend fun getPayslip(): NetworkPaySlip
 
-     @GET("Thoughts/List")
+    @GET("Thoughts/List")
     suspend fun getThoughts(
         @Query("pg") pg: Int,
         @Query("dir") dir: Int,
@@ -86,13 +87,13 @@ interface UserService {
     ): NetworkThoughts
 
 
-     @GET("Thoughts/Like")
+    @GET("Thoughts/Like")
     suspend fun thoughtsLike(
         @Query("ThID") thID: Int,
         @Query("Like") like: Boolean
     ): CommonResponse
 
-     @GET("Thoughts/WhoLiked")
+    @GET("Thoughts/WhoLiked")
     suspend fun whoLiked(
         @Query("ThID") thID: Int
     ): NetworkWhoLike
@@ -102,7 +103,7 @@ interface UserService {
         @Body request: AddThoughtsPostData,
     ): CommonResponse
 
-     @GET("Thoughts/Delete")
+    @GET("Thoughts/Delete")
     suspend fun thoughtsDelete(
         @Query("ThID") thID: Int
     ): CommonResponse
@@ -133,5 +134,9 @@ interface UserService {
     suspend fun addQuestion(
         @Body request: AddQuestionPostData,
     ): CommonResponse
+
+    @GET("Academic/ExcellenceAward")
+    suspend fun excellenceAward(
+    ): ExcellenceAwardResponse
 
 }

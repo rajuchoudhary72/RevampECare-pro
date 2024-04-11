@@ -14,6 +14,7 @@ import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
@@ -68,6 +69,7 @@ interface UserRepository {
 
     suspend fun deleteAnswer(ansID: Int ): CommonResponse
     suspend fun addQuestion (question:String,attachment:String,fileURL:String,fileExt:String ): CommonResponse
+    suspend fun excellenceAward (): ExcellenceAwardResponse
 
 
 
