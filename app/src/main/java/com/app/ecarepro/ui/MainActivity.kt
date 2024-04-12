@@ -180,6 +180,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFragmentId(menuID: Int): Int? {
         return when (menuID) {
+            3 -> R.id.staffAssignmentsListFragment
+            4 -> R.id.timeTableNavHostFragment
             5 -> R.id.classSyllabus
             10 -> R.id.calenderActivityNavHost
             12 -> R.id.bookLibraryFragment
@@ -199,10 +201,27 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+            7 -> {
+                return when (childMenuId) {
+                    10 -> R.id.circularFragment
+                    11 -> R.id.noticeListFragment
+                    12-> R.id.noticeListFragment
+                    else -> null
+                }
+            }
+
 
             11 -> {
                 return when (childMenuId) {
+                    18 -> R.id.attendanceFragment
                     20 -> R.id.paySlipFragment
+                    else -> null
+                }
+            }
+            18 -> {
+                return when (childMenuId) {
+                    21 -> R.id.studentListFragment2
+                    22 -> R.id.studentListFragment
                     else -> null
                 }
             }
