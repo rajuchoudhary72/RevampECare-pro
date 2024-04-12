@@ -269,5 +269,6 @@
     <string name="cancel_">Cancel</string>
     <string name="add_photo_">Add Photo!</string>
     <string name="take_photo__">Take Photo</string>
+    <string name="marital_status">Marital Status</string>
 
 </resources>

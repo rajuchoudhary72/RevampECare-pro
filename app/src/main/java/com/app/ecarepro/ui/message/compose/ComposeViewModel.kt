@@ -37,7 +37,8 @@ class ComposeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val composeMessageType =
-        savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.SMS_AND_APP_MESSAGE)
+        savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.ONLY_APP_MESSAGE)
+
 
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())

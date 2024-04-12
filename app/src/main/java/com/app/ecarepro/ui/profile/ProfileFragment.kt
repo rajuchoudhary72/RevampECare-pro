@@ -128,10 +128,10 @@ class ProfileFragment : Fragment() {
             binding.recyclerView.withModels {
                 profileHeader {
                     id(uiState.profile.username)
-                    bannerImage(uiState.profile.coverImg)
+                    bannerImage(if (profileViewModel.isParent()) uiState.profile.studentProfile?.coverImg else uiState.profile.coverImg)
                     profileImage(uiState.profile.photo)
                     name(uiState.profile.name)
-                    designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) uiState.profile.className else uiState.profile.designation)
+                    designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
                     contactNumber(uiState.profile.emergencyContactNo)
                     canEditBannerImage(uiState.profile.canChangeCoverImg)
@@ -175,18 +175,18 @@ class ProfileFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo_), getString(R.string.choose_from_library),
-            getString(R.string.cancel_)
+            "Take Photo", "Choose from Library",
+            "Cancel"
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo_))
+        builder.setTitle("Add Photo!")
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this)
-            if (items[item] == getString(R.string.take_photo__)) {
+            if (items[item] == "Take Photo") {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] ==  getString(R.string.choose_from_library)) {
+            } else if (items[item] == "Choose from Library") {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] ==  getString(R.string.cancel_)) {
+            } else if (items[item] == "Cancel") {
                 dialog.dismiss()
             }
         })
@@ -206,6 +206,12 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_date_of_aniversery)
             title(getString(R.string.date_of_joining))
             subTitle(profile.doj)
+        }
+        profileItem {
+            id(R.string.marital_status)
+            iconRes(R.drawable.ic_material_status)
+            title(getString(R.string.marital_status))
+            subTitle(profile.maritalStatus)
         }
         profileItem {
             id(R.string.spouse_name)
@@ -318,12 +324,6 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_date_of_birth)
             title(getString(R.string.date_of_birth))
             subTitle(profile.dob)
-        }
-        profileItem {
-            id(R.string.permanent_education_number)
-            iconRes(R.drawable.avd_dashboard)
-            title(getString(R.string.permanent_education_number))
-            subTitle(profile.admissionNo)
         }
         profileItem {
             id(R.string.permanent_education_number)

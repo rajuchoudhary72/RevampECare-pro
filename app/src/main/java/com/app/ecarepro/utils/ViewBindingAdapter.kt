@@ -3,10 +3,12 @@ package com.app.ecarepro.utils
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.graphics.drawable.Drawable
+import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -98,7 +100,15 @@ fun EpoxyRecyclerView.buildFilesModel(files: List<String>, clickListener: FileCl
     }
 
 }
-
+@BindingAdapter("autoLinkText")
+fun TextView.autoLink(textValue: String) {
+    text = textValue
+    if (textValue.all { it.isDigit() } && textValue.length == 10) {
+        Linkify.addLinks(this, Linkify.PHONE_NUMBERS)
+    } else if (android.util.Patterns.EMAIL_ADDRESS.matcher(textValue).matches()) {
+        Linkify.addLinks(this, Linkify.EMAIL_ADDRESSES)
+    }
+}
 interface FileClickListener {
     fun onClick(file: String)
 }
