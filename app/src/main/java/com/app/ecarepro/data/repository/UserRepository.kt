@@ -42,6 +42,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
 import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
@@ -258,6 +259,7 @@ interface UserRepository {
          monthNo: Int,
           date: String,
     ): NetworkBirthday
+    suspend fun excellenceAward (): ExcellenceAwardResponse
 
 
 }

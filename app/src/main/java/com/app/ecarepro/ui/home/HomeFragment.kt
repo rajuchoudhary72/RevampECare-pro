@@ -212,6 +212,9 @@ class HomeFragment : Fragment() {
         } else if (favouriteSlider.module.contains("Attendance", true)) {
             findNavController().navigate(R.id.attendanceFragment)
         }
+        else if (favouriteSlider.module.contains("Excellence Award", true)) {
+            findNavController().navigate(R.id.excellenceAwardFragment)
+        }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {
             schoolData?.let {

@@ -48,6 +48,7 @@ import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserProfileDto
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserService {
     @GET("User/Verify")
@@ -317,4 +318,8 @@ interface UserService {
     suspend fun uploadProfileIMG(
         @Body request: UploadPhotoRequest
     ): CommonResponse
+
+    @GET("Academic/ExcellenceAward")
+    suspend fun excellenceAward(
+    ): ExcellenceAwardResponse
 }

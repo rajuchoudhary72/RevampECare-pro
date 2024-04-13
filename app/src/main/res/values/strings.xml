@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ECarePro</string>
     <string name="action_settings">Settings</string>
-
     <!--School/College Code-->
     <string name="help">Help</string>
     <string name="please_enter_school_college_code">Please Enter School/College Code</string>
@@ -28,7 +27,6 @@
     <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="notice">Notice</string>
@@ -69,17 +67,14 @@
     <string name="powered_by">Powered by</string>
     <string name="demo_school_name_franciscan_international_school">Franciscan International School</string>
     <string name="demo_school_location_greater_noida">Greater Noida</string>
-
     <string name="false_value">False</string>
     <string name="true_value">True</string>
-
     <string name="date_">Date :</string>
     <string name="update_on_">Update On :</string>
     <string name="ok">OK</string>
     <string name="add_thoughts">Add Thoughts</string>
     <string name="enter_thoughts_hint">Enter Thoughts</string>
     <string name="enter_auther_hint">Enter Author</string>
-
     <string name="book_details_title">Book Details</string>
     <string name="answer">Answer</string>
     <string name="please_type_ans">" Please Type Answer"</string>
@@ -104,9 +99,7 @@
     <array name="pic_type_pick">"Take Photo", "Choose from Library",
         "Cancel"
     </array>
-
     <string name="to_">To:</string>
-
     <string name="from_">From:</string>
     <string name="leave_history">Leave History</string>
     <string name="leave_request">Leave Request</string>
@@ -134,10 +127,8 @@
     <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
     <string name="select_infraction_category">Select Infraction Category</string>
     <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
-
     <string name="select_apprec_category">Select Appreciation Category</string>
     <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
-
     <string name="instance">Instance</string>
     <string name="instance_wit">"Instance: "</string>
     <string name="infraction_on">"Infraction on : "</string>
@@ -155,7 +146,6 @@
     <string name="no_data">No Data</string>
     <string name="reward">Reward:</string>
     <string name="remark">Remark:</string>
-
     <string name="enter_thoughts">Enter Thoughts</string>
     <string name="enter_auther">Enter Author</string>
     <string name="book_details">Book Details</string>
@@ -207,8 +197,6 @@
     <string name="name_s">"Name : "</string>
     <string name="father_name">"Father Name : "</string>
     <string name="mother_name">"Mother Name : "</string>
-
-
     <string name="no_record_found">No record found</string>
     <string name="website_txt">Website</string>
     <string name="marks_entry_heading">Marks Entry</string>
@@ -270,5 +258,9 @@
     <string name="add_photo_">Add Photo!</string>
     <string name="take_photo__">Take Photo</string>
     <string name="marital_status">Marital Status</string>
+    <string name="logout">Logout</string>
+    <string name="are_you_sure_to_logout">Are you sure to logout?</string>
+    <string name="no">No</string>
+    <string name="print">Print</string>
 
 </resources>

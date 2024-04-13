@@ -187,6 +187,7 @@ class MainActivity : AppCompatActivity() {
             12 -> R.id.bookLibraryFragment
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
+            51 -> R.id.excellenceAwardFragment
             else -> null
         }
     }
@@ -235,9 +236,9 @@ class MainActivity : AppCompatActivity() {
 
     fun logout() {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Logout")
-            .setMessage("Are you sure to logout?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle(getString(R.string.logout))
+            .setMessage(getString(R.string.are_you_sure_to_logout))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 systemViewModel.logout {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -245,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                     Runtime.getRuntime().exit(0)
                 }
             }
-            .setNegativeButton("No") { _, _ ->
+            .setNegativeButton(getString(R.string.no)) { _, _ ->
 
             }
             .show()

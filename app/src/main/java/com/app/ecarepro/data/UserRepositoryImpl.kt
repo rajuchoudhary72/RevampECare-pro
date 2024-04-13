@@ -56,6 +56,7 @@ import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 class UserRepositoryImpl @Inject constructor(
     private val userDatabase: UserDatabase,
@@ -439,5 +440,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun thoughtsCreate(quotation: String, author: String): CommonResponse {
         return userService.thoughtsCreate(AddThoughtsPostData(quotation, author))
     }
-
+    override suspend fun excellenceAward(): ExcellenceAwardResponse {
+        return userService.excellenceAward()
+    }
 }
