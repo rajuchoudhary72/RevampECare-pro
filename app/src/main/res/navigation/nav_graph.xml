@@ -111,17 +111,12 @@
         android:name="com.app.ecarepro.ui.help.HelpFragment"
         android:label="HelpFragment"
         tools:layout="@layout/fragment_help" />
-    <fragment
-        android:id="@+id/excellenceAwardFragment"
-        android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
-        android:label="ExcellenceAwardFragment"
-        tools:layout="@layout/fragment_excellence_award" />
 
     <fragment
         android:id="@+id/webViewFragment"
         android:name="com.app.ecarepro.ui.webview.WebViewFragment"
         android:label="WebViewFragment"
-        tools:layout="@layout/fragment_web_view">
+        tools:layout="@layout/fragment_web_view" >
         <argument
             android:name="url"
             app:argType="string"
@@ -280,6 +275,76 @@
         android:label="PostQuestionnaireFragment" />
 
     <fragment
+        android:id="@+id/leaveHistoryFragment"
+        android:name="com.app.ecarepro.ui.leave.LeaveHistoryFragment"
+        android:label="LeaveHistoryFragment"   >
+        <action
+            android:id="@+id/action_leaveHistoryFragment_to_openImageFragment"
+            app:destination="@id/openImageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/leaveSettingFragment"
+        android:name="com.app.ecarepro.ui.leave.leave_setting.LeaveSettingFragment"
+        android:label="LeaveSettingFragment" >
+        <action
+            android:id="@+id/action_leaveSettingFragment_to_staffApplyLeaveFragment"
+            app:destination="@id/staffApplyLeaveFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/applyLeaveFragment"
+        android:name="com.app.ecarepro.ui.leave.apply_leave.ApplyLeaveFragment"
+        android:label="ApplyLeaveFragment" />
+    <fragment
+        android:id="@+id/staffApplyLeaveFragment"
+        android:name="com.app.ecarepro.ui.leave.staff.StaffApplyLeaveFragment"
+        android:label="StaffApplyLeaveFragment" />
+    <fragment
+        android:id="@+id/openImageFragment"
+        android:name="com.app.ecarepro.ui.common.OpenImageFragment"
+        android:label="OpenImageFragment" />
+    <fragment
+        android:id="@+id/addInfractionFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.add_infraction.AddInfractionFragment"
+        android:label="AddInfractionFragment" >
+        <action
+            android:id="@+id/action_addInfractionFragment_to_infractionListFragment"
+            app:destination="@id/infractionListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/infractionListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment"
+        android:label="InfractionListFragment" />
+    <fragment
+        android:id="@+id/studentListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:label="StudentListFragment" >
+        <action
+            android:id="@+id/action_studentListFragment_to_addInfractionFragment"
+            app:destination="@id/addInfractionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAppreciationFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.AddAppreciationFragment"
+        android:label="AddAppreciationFragment" >
+        <action
+            android:id="@+id/action_addAppreciationFragment_to_appreciationListFragment"
+            app:destination="@id/appreciationListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appreciationListFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.appreciation_list.AppreciationListFragment"
+        android:label="AppreciationListFragment" />
+    <fragment
+        android:id="@+id/studentListFragment2"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:label="StudentListFragment" >
+        <action
+            android:id="@+id/action_studentListFragment2_to_addAppreciationFragment"
+            app:destination="@id/addAppreciationFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/conversationFragment"
         android:name="com.app.ecarepro.ui.message.conversation.ConversationFragment"
         android:label="ConversationFragment">
@@ -289,7 +354,6 @@
             app:argType="string" />
 
     </fragment>
-
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.app.ecarepro.ui.message.chat.ChatFragment"
@@ -300,19 +364,63 @@
         android:name="com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment"
         android:label="PhotoViewFragmentFragment" />
     <fragment
+        android:id="@+id/assignmentNavHostFragment"
+        android:name="com.app.ecarepro.ui.assignment.AssignmentNavHostFragment"
+        android:label="AssignmentNavHostFragment" />
+    <fragment
+        android:id="@+id/staffAssignmentsListFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListFragment"
+        android:label="StaffAssignmentsListFragment" >
+        <action
+            android:id="@+id/action_staffAssignmentsListFragment_to_viewAssignmentFragment"
+            app:destination="@id/viewAssignmentFragment" />
+        <action
+            android:id="@+id/action_staffAssignmentsListFragment_to_editAssignmentFragment"
+            app:destination="@id/editAssignmentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.viewAssignment.ViewAssignmentFragment"
+        android:label="fragment_view_assignment"
+        tools:layout="@layout/fragment_view_assignment" >
+        <action
+            android:id="@+id/action_viewAssignmentFragment_to_openPdfFragment"
+            app:destination="@id/openPdfFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.postAssignment.PostAssignmentFragment"
+        android:label="PostAssignmentFragment" />
+    <fragment
+        android:id="@+id/editAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.editAssignment.EditAssignmentFragment"
+        android:label="EditAssignmentFragment" />
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.app.ecarepro.ui.staffAttendence.AttendanceFragment"
+        android:label="AttendanceFragment" />
+    <fragment
+        android:id="@+id/timeTableNavHostFragment"
+        android:name="com.app.ecarepro.ui.timeTable.TimeTableNavHostFragment"
+        android:label="TimeTableNavHostFragment" />
+    <fragment
+        android:id="@+id/birthdayFragment"
+        android:name="com.app.ecarepro.ui.birthday.BirthdayFragment"
+        android:label="BirthdayFragment" />
+
+    <fragment
         android:id="@+id/composeFragment"
         android:name="com.app.ecarepro.ui.message.compose.ComposeFragment"
         android:label="ComposeFragment" />
-
-    <fragment
-        android:id="@+id/classPromotionFragment"
-        android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
-        android:label="ClassPromotionFragment" />
-
     <fragment
         android:id="@+id/selectRecipientsFragment"
         android:name="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment"
         android:label="SelectRecipientsFragment" />
+    <fragment
+        android:id="@+id/classPromotionFragment"
+        android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
+        android:label="ClassPromotionFragment"
+        />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.app.ecarepro.ui.settings.SettingsFragment"
@@ -322,15 +430,17 @@
         android:id="@+id/changePasswordFragment"
         android:name="com.app.ecarepro.ui.changepassword.ChangePasswordFragment"
         android:label="ChangePasswordFragment" />
-
     <fragment
         android:id="@+id/changeUsernameFragment"
         android:name="com.app.ecarepro.ui.changeusername.ChangeUsernameFragment"
         android:label="ChangeUsernameFragment" />
-
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.app.ecarepro.ui.profile.ProfileFragment"
         android:label="ProfileFragment" />
-
+    <fragment
+        android:id="@+id/excellenceAwardFragment"
+        android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
+        android:label="ExcellenceAwardFragment"
+        tools:layout="@layout/fragment_excellence_award" />
 </navigation>

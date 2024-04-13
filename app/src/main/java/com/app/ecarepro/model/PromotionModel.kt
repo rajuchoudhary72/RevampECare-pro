@@ -11,11 +11,11 @@ data class PromotionModel(
     val nextSession: String?,
     val session: String?,
     val status: String?,
-    val students: MutableList<Student?>,
+    val students: MutableList<StudentPro?>,
     val yrID: Int?
 )
 
-data class Student(
+data class StudentPro(
     val admissionNumber: String?,
     val `class`: String?,
     val fatherName: String?,

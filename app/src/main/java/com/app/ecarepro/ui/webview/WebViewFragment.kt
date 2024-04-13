@@ -1,14 +1,7 @@
 package com.app.ecarepro.ui.webview
 
-import android.Manifest
-import android.app.DownloadManager
-import android.content.Context.DOWNLOAD_SERVICE
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +9,19 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentWebViewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import android.Manifest
+import android.app.DownloadManager
+import android.content.Context.DOWNLOAD_SERVICE
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.widget.Toast
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
@@ -46,6 +46,7 @@ class WebViewFragment : Fragment() {
         binding.toolbar.title = title
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
+       // loadUrl("https://www.franciscansolutions.com/faq-v2.aspx")
         loadUrl(url)
     }
 
@@ -60,7 +61,7 @@ class WebViewFragment : Fragment() {
             cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         }
         /*wv_url.getSettings().setDisplayZoomControls(true);
-        wv_url.getSettings().setBuiltInZoomControls(true);*/
+               wv_url.getSettings().setBuiltInZoomControls(true);*/
         binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             if (isStoragePermission()) if (url.endsWith(".pdf") || url.endsWith(".PDF")) {
@@ -120,5 +121,8 @@ class WebViewFragment : Fragment() {
         return true
     }
 
-
+   /* override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }*/
 }

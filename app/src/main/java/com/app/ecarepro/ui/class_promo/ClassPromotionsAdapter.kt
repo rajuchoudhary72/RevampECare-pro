@@ -19,11 +19,12 @@ import com.app.ecarepro.model.NextSessionClasse
 import com.app.ecarepro.model.Section
 
 import com.app.ecarepro.model.Student
+import com.app.ecarepro.model.StudentPro
 import com.squareup.picasso.Picasso
 
 
 class ClassPromotionsAdapter(
-    private var studentMutableList: MutableList<Student>
+    private var studentMutableList: MutableList<StudentPro>
 ) :
     RecyclerView.Adapter<ClassPromotionsAdapter.ClassPromotionsHolder>() {
 
@@ -115,7 +116,7 @@ class ClassPromotionsAdapter(
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "Add Message Here", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Select Any  New Class First", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -154,7 +155,7 @@ class ClassPromotionsAdapter(
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {
-                Toast.makeText(context, "Add Message Here", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Select Any  Section First", Toast.LENGTH_LONG).show()
             }
         }
     }

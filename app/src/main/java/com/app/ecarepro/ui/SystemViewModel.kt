@@ -9,13 +9,13 @@ import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
@@ -26,9 +26,8 @@ class SystemViewModel @Inject constructor(
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
-    val refresh = MutableStateFlow(false)
-
     val user = userDataStore.getUserAsFlow()
+    val refresh = MutableStateFlow(false)
 
     val uiState =
         refresh.flatMapLatest {

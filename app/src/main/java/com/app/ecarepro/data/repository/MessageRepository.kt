@@ -43,12 +43,10 @@ interface MessageRepository {
     fun getStaffTypes(): Flow<Result<List<StaffType>>>
 
     fun getStaffContacts(staffTypeIDs: List<Int>?): Flow<Result<StaffContactsDto>>
-
     fun getClassContacts(
         ofUserType: Int, scholarType: Int,
     ): Flow<Result<List<ClassContact>>>
-
     fun getSmsTemplates(): Flow<Result<List<SmsType>>>
-
     fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>>
+
 }

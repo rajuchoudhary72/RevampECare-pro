@@ -9,15 +9,15 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.repository.SchoolRepository
-import com.app.ecarepro.model.AppResponse
-import com.app.ecarepro.model.ClassPromotionModel
-import com.app.ecarepro.model.PromotionModel
-import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import com.app.ecarepro.model.AppResponse
+import com.app.ecarepro.model.ClassPromotionModel
+import com.app.ecarepro.model.PromotionModel
+import com.app.ecarepro.model.RequestClassPromotion
 
 class SchoolRepositoryImpl @Inject constructor(
     private val schoolService: SchoolService,
@@ -54,13 +54,13 @@ class SchoolRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNotice(pg: Int, classID: Int): NetworkNotice {
+    override suspend fun getNotice(pg: Int,classID: Int): NetworkNotice {
         return schoolService.getNotices(pg, classID)
 
     }
 
-    override suspend fun getCirculars(pg: Int, yrID: Int, title: String): NetworkCircular {
-        return schoolService.getCirculars(pg, yrID, title)
+    override suspend fun getCirculars(pg: Int, yrID: Int,title :String): NetworkCircular {
+         return schoolService.getCirculars(pg, yrID,title)
     }
 
     override suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails {
@@ -70,7 +70,6 @@ class SchoolRepositoryImpl @Inject constructor(
     override suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails {
         return schoolService.getCircularDTL(cirID, iD)
     }
-
     override suspend fun getClass(): ClassPromotionModel {
         return schoolService.getClassTeacherOf()
     }
@@ -83,5 +82,4 @@ class SchoolRepositoryImpl @Inject constructor(
     override suspend fun submitClassPromotions(request: RequestClassPromotion): AppResponse {
         return schoolService.saveClassPromotion(request)
     }
-
 }

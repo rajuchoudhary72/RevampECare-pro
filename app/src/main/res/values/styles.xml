@@ -5,11 +5,4 @@
         <item name="boxStrokeColor">@color/white</item>
         <item name="boxStrokeWidth">2dp</item>
     </style>
-
-    <style name="ECarePro.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
-
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">@android:color/white</item>
-        <item name="actionMenuTextColor">@color/colorAccent</item>
-    </style>
 </resources>

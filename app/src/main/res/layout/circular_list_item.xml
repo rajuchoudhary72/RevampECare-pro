@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="5dp"
-                        android:text="@string/date_"
+                        android:text="Date : "
                         android:textAppearance="?attr/textAppearanceBodyMedium" />
 
                     <TextView
@@ -93,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="5dp"
-                        android:text="@string/update_on_"
+                        android:text="Update On : "
                         android:textAppearance="?attr/textAppearanceBodyMedium" />
 
                     <TextView

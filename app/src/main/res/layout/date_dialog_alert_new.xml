@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:background="@drawable/shape_dialog"
+    android:minWidth="390dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/brand_color"
+            android:gravity="center"
+            android:text="Submitted Offline"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:fontFamily="@font/ubuntu_medium" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/grey_light" />
+        
+        
+        <LinearLayout
+            android:id="@+id/ll_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:orientation="horizontal"
+            android:background="@drawable/black_line"
+            android:layout_margin="15dp"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/activity_calender"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="15dp"
+                app:tint="@color/grey_40"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+
+                android:layout_gravity="center"
+                android:text="Submitted Date : "
+                app:fontFamily="@font/ubuntu_medium" />
+
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+
+                android:layout_gravity="center"
+                app:fontFamily="@font/ubuntu_bold" />
+
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_canel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_dialog_bottom_main"
+            android:minHeight="40dp"
+            android:text="@string/cancel"
+            app:fontFamily="@font/ubuntu_medium"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@color/brand_color"
+            android:minHeight="40dp"
+            android:text="@string/submit"
+            android:textColor="@color/white"
+             app:fontFamily="@font/ubuntu_medium" />
+
+    </LinearLayout>
+
+</LinearLayout>

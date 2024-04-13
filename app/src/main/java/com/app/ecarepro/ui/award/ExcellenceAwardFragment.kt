@@ -64,7 +64,6 @@ class ExcellenceAwardFragment : Fragment() {
         observers()
         mViewModel.getAwardData()
         binding.tvPrint.setOnClickListener {
-
                 createPDF()
 
         }
@@ -166,8 +165,6 @@ class ExcellenceAwardFragment : Fragment() {
                 printManager.print("Document", printAdapter, PrintAttributes.Builder().build())
             }
         }
-
-
 
     }
 

@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         setUpMoreOptions()
     }
 
-    private fun setUpDrawer() {
+     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
                 binding.drawerLayout.open()
@@ -180,11 +180,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFragmentId(menuID: Int): Int? {
         return when (menuID) {
+            3 -> R.id.staffAssignmentsListFragment
+            4 -> R.id.timeTableNavHostFragment
             5 -> R.id.classSyllabus
             10 -> R.id.calenderActivityNavHost
-            13 -> R.id.bookLibraryFragment
+            12 -> R.id.bookLibraryFragment
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
+            51 -> R.id.excellenceAwardFragment
             else -> null
         }
     }
@@ -199,10 +202,27 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+            7 -> {
+                return when (childMenuId) {
+                    10 -> R.id.circularFragment
+                    11 -> R.id.noticeListFragment
+                    12-> R.id.noticeListFragment
+                    else -> null
+                }
+            }
+
 
             11 -> {
                 return when (childMenuId) {
+                    18 -> R.id.attendanceFragment
                     20 -> R.id.paySlipFragment
+                    else -> null
+                }
+            }
+            18 -> {
+                return when (childMenuId) {
+                    21 -> R.id.studentListFragment2
+                    22 -> R.id.studentListFragment
                     else -> null
                 }
             }
@@ -213,11 +233,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     fun logout() {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Logout")
-            .setMessage("Are you sure to logout?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle(getString(R.string.logout))
+            .setMessage(getString(R.string.are_you_sure_to_logout))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 systemViewModel.logout {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -225,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                     Runtime.getRuntime().exit(0)
                 }
             }
-            .setNegativeButton("No") { _, _ ->
+            .setNegativeButton(getString(R.string.no)) { _, _ ->
 
             }
             .show()
@@ -261,7 +282,7 @@ class MainActivity : AppCompatActivity() {
             CbnMenuItem(
                 R.drawable.ic_settings,
                 R.drawable.avd_settings,
-                R.id.settingsFragment
+                R.id.dashboardFragment
             ),
             CbnMenuItem(
                 R.drawable.ic_dashboard,

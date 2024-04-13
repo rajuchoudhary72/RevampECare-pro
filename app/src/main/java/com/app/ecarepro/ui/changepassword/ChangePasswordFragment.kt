@@ -41,7 +41,7 @@ class ChangePasswordFragment : Fragment() {
                 (requireActivity() as MainActivity).showLoader(true)
                 changePasswordViewModel.changePassword { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -15,6 +15,7 @@ import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.ui.message.chat.MessageType
+import com.app.ecarepro.utils.Constant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -198,11 +199,11 @@ class MessageRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val token = messageService.generateToken(
-                    SMS_TOKEN_URL,
+                    Constant.SMS_TOKEN_URL,
                     GenerateTokenRequestDto()
                 )
                 val response = messageService.sendBulkMessage(
-                    SMS_BULK_MSG_URL,
+                    Constant.SMS_BULK_MSG_URL,
                     token.authenticationToken,
                     request
                 )
@@ -218,5 +219,4 @@ class MessageRepositoryImpl @Inject constructor(
     }
 }
 
-private const val SMS_TOKEN_URL = "http://sms.franciscanecare.com/api/Token/Generate"
-private const val SMS_BULK_MSG_URL = "http://sms.franciscanecare.com/api/SMSService/BulkSMS"
+

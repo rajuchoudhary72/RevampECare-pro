@@ -10,7 +10,6 @@ interface AppService {
     suspend fun getAppLayout(
         @Query("Device") device: Int = 1,
     ): AppLayoutDto
-
     @GET("App/Notifications")
     suspend fun getNotifications(): NotificationsDto
 }

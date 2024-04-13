@@ -100,7 +100,6 @@ fun EpoxyRecyclerView.buildFilesModel(files: List<String>, clickListener: FileCl
     }
 
 }
-
 @BindingAdapter("autoLinkText")
 fun TextView.autoLink(textValue: String) {
     text = textValue
@@ -110,8 +109,6 @@ fun TextView.autoLink(textValue: String) {
         Linkify.addLinks(this, Linkify.EMAIL_ADDRESSES)
     }
 }
-
 interface FileClickListener {
     fun onClick(file: String)
 }
-

@@ -3,7 +3,6 @@ package com.app.ecarepro.ui.message.compose
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.BulkMessageRequestDto
@@ -27,6 +26,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.lifecycle.asLiveData
 
 @HiltViewModel
 class ComposeViewModel @Inject constructor(
@@ -39,16 +39,15 @@ class ComposeViewModel @Inject constructor(
     val composeMessageType =
         savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.ONLY_APP_MESSAGE)
 
+
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
-
     val attachmentVisible = combine(
         flow = composeMessageType,
         flow2 = userDataStore.getUserAsFlow()
     ) { messageType, user ->
         messageType == ComposeMessageType.ONLY_APP_MESSAGE && user.userType == 3
     }.asLiveData()
-
     var currentLocation: Pair<Double, Double>? = null
 
     val message = MutableStateFlow("")

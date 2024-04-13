@@ -28,7 +28,6 @@ class SignInFragment  : Fragment() {
     private val mViewModel: SignInViewModel by viewModels()
 
     private var userNameValid = false
-
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -60,7 +59,13 @@ class SignInFragment  : Fragment() {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.update { true }
-                        findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                        if (it.authenticated == true) {
+                            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                        }else{
+                            Toast.makeText(requireContext(), "Authenticated "+it.authenticated, Toast.LENGTH_SHORT).show()
+
+                        }
+
                     }
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     Log.i("Token Aut",it.authToken.toString())

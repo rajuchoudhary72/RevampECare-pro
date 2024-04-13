@@ -39,6 +39,8 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
     private val noticeViewModel: NoticeViewModel by viewModels()
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -169,10 +171,12 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
 
     private fun fetchNotices(pg: Int, classID: Int) {
+
         noticeViewModel.getNotice(pg, classID)
     }
 
     private fun getMyClass(subID: Int, iD: Int  ) {
+
         noticeViewModel.getMyClass(subID, iD)
     }
 

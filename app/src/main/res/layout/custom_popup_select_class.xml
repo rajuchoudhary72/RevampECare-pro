@@ -1,105 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="10dp"
-    android:background="@color/white"
-    android:maxHeight="300dp"
-    android:minWidth="300dp"
-    android:orientation="vertical"
-     >
-
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="@color/md_theme_light_primary">
-
-        <TextView
-            android:id="@+id/tv_heading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-    </RelativeLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_year"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:minHeight="100dp" />
-
-
-    <LinearLayout
-        android:id="@+id/llOkCancel"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:baselineAligned="false"
-        android:background="@color/md_theme_light_surfaceVariant"
-        android:orientation="horizontal">
-
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/white"
+        android:maxHeight="300dp"
+        android:minWidth="300dp"
+        android:orientation="vertical"
+        >
 
         <RelativeLayout
-            android:id="@+id/rel_cancel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.9"
-            android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/md_theme_light_primary">
 
             <TextView
-                android:id="@+id/tv_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:fontFamily="@font/ubuntu_medium"
-
-                android:gravity="center"
-                android:text="@string/cancel"
-                android:textAllCaps="true"
-
-                />
+                android:id="@+id/tv_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.005"
-            android:background="@color/white"
-            android:gravity="center">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_year"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:minHeight="100dp" />
 
-            <View
-                android:id="@+id/view"
+
+        <LinearLayout
+            android:id="@+id/llOkCancel"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:baselineAligned="false"
+            android:background="@color/md_theme_light_surfaceVariant"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:id="@+id/rel_cancel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.9"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:fontFamily="@font/ubuntu_medium"
+
+                    android:gravity="center"
+                    android:text="@string/cancel"
+                    android:textAllCaps="true"
+
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.005"
                 android:background="@color/white"
+                android:gravity="center">
 
-                />
-        </RelativeLayout>
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
 
-        <RelativeLayout
-            android:id="@+id/rel_ok"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.9"
-            android:gravity="center">
+                    />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_ok"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/rel_ok"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="center"
-                android:text="@string/ok"
-                android:textAllCaps="true" />
-        </RelativeLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.9"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_ok"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:text="@string/ok"
+                    android:textAllCaps="true" />
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
 </layout>

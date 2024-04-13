@@ -16,6 +16,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassPromotionBinding
 import com.app.ecarepro.model.MyClasseX
 import com.app.ecarepro.model.Student
+import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentPromotedClass
 import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 class ClassPromotionFragment : Fragment() {
     private var classModel: MyClasseX? = null
     private lateinit var binding: FragmentClassPromotionBinding
-    private var studentListArrayList = mutableListOf<Student>()
+    private var studentListArrayList = mutableListOf<StudentPro>()
     private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList) }
     private val classAdapter by lazy {
         ArrayAdapter<MyClasseX>(requireContext(), R.layout.simple_spinner_item).apply {

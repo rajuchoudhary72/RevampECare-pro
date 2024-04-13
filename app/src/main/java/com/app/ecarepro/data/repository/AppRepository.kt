@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
     fun getAppLayout(): Flow<Result<AppLayoutDto>>
-
     fun getNotifications(): Flow<Result<List<Notification>>>
+
 }
