@@ -307,30 +307,21 @@
         android:id="@+id/addInfractionFragment"
         android:name="com.app.ecarepro.ui.discipline_log.infraction.add_infraction.AddInfractionFragment"
         android:label="AddInfractionFragment" >
-        <action
-            android:id="@+id/action_addInfractionFragment_to_infractionListFragment"
-            app:destination="@id/infractionListFragment" />
-    </fragment>
+     </fragment>
     <fragment
         android:id="@+id/infractionListFragment"
         android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment"
         android:label="InfractionListFragment" />
     <fragment
         android:id="@+id/studentListFragment"
-        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:name="com.app.ecarepro.ui.students_list.StudentListFragment"
         android:label="StudentListFragment" >
-        <action
-            android:id="@+id/action_studentListFragment_to_addInfractionFragment"
-            app:destination="@id/addInfractionFragment" />
-    </fragment>
+     </fragment>
     <fragment
         android:id="@+id/addAppreciationFragment"
         android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.AddAppreciationFragment"
         android:label="AddAppreciationFragment" >
-        <action
-            android:id="@+id/action_addAppreciationFragment_to_appreciationListFragment"
-            app:destination="@id/appreciationListFragment" />
-    </fragment>
+     </fragment>
 
     <fragment
         android:id="@+id/appreciationSelectionFragment"
@@ -340,7 +331,7 @@
             android:id="@+id/action_appreciationSelectionFragment_to_studentListFragment2"
             app:destination="@id/studentListFragment2"
             app:launchSingleTop="true"
-            app:popUpTo="@+id/homeFragment"
+            app:popUpTo="@+id/homeFragment2"
             app:popUpToInclusive="true"
             />
     </fragment>
@@ -351,11 +342,20 @@
         android:label="AppreciationListFragment" />
     <fragment
         android:id="@+id/studentListFragment2"
-        android:name="com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListFragment"
+        android:name="com.app.ecarepro.ui.students_list.StudentListFragment"
         android:label="StudentListFragment" >
         <action
             android:id="@+id/action_studentListFragment2_to_addAppreciationFragment"
             app:destination="@id/addAppreciationFragment" />
+        <action
+            android:id="@+id/action_studentListFragment2_to_appreciationListFragment"
+            app:destination="@id/appreciationListFragment" />
+        <action
+            android:id="@+id/action_studentListFragment2_to_addInfractionFragment"
+            app:destination="@id/addInfractionFragment" />
+        <action
+            android:id="@+id/action_studentListFragment2_to_infractionListFragment"
+            app:destination="@id/infractionListFragment" />
     </fragment>
 
     <fragment
@@ -440,4 +440,101 @@
         android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
         android:label="ClassPromotionFragment"
         />
+    <fragment
+        android:id="@+id/infractionSelectFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionSelectFragment"
+        android:label="InfractionSelectFragment" >
+        <action
+            android:id="@+id/action_infractionSelectFragment_to_studentListFragment2"
+            app:destination="@id/studentListFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/stuMarkAttendanceFragment"
+        android:name="com.app.ecarepro.ui.markAttendence.StuMarkAttendanceFragment"
+        android:label="StuMarkAttendanceFragment" />
+    <fragment
+        android:id="@+id/selectMarkAttendanceFragment"
+        android:name="com.app.ecarepro.ui.markAttendence.SelectMarkAttendanceFragment"
+        android:label="SelectMarkAttendanceFragment" >
+        <action
+            android:id="@+id/action_selectMarkAttendanceFragment_to_stuMarkAttendanceFragment"
+            app:destination="@id/stuMarkAttendanceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/staffListFragment"
+        android:name="com.app.ecarepro.ui.staffList.StaffListFragment"
+        android:label="StaffListFragment" >
+        <action
+            android:id="@+id/action_staffListFragment_to_staffProfileNavHostFragment"
+            app:destination="@id/staffProfileNavHostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileAtteFragment"
+        android:name="com.app.ecarepro.ui.staffProfile.ProfileAtteFragment"
+        android:label="ProfileAtteFragment" />
+    <fragment
+        android:id="@+id/profileSalaryStrFragment"
+        android:name="com.app.ecarepro.ui.staffProfile.ProfileSalaryStrFragment"
+        android:label="ProfileSalaryStrFragment" />
+    <fragment
+        android:id="@+id/profileTimeTableFragment"
+        android:name="com.app.ecarepro.ui.staffProfile.ProfileTimeTableFragment"
+        android:label="ProfileTimeTableFragment" />
+    <fragment
+        android:id="@+id/staffProfileFragment"
+        android:name="com.app.ecarepro.ui.staffProfile.StaffProfileFragment"
+        android:label="StaffProfileFragment" />
+    <fragment
+        android:id="@+id/staffProfileNavHostFragment"
+        android:name="com.app.ecarepro.ui.staffProfile.StaffProfileNavHostFragment"
+        android:label="StaffProfileNavHostFragment" />
+    <fragment
+        android:id="@+id/studentAttendanceReportFragment"
+        android:name="com.app.ecarepro.ui.report.StudentAttendanceSummeryFragment"
+        android:label="StudentAttendanceReportFragment" >
+        <action
+            android:id="@+id/action_studentAttendanceReportFragment_to_classAttendanceFragment"
+            app:destination="@id/classAttendanceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/classAttendanceFragment"
+        android:name="com.app.ecarepro.ui.report.class_report.ClassAttendanceFragment"
+        android:label="fragment_class_attendance"
+        tools:layout="@layout/fragment_class_attendance" >
+        <action
+            android:id="@+id/action_classAttendanceFragment_to_studentAttRepoFragment2"
+            app:destination="@id/studentAttRepoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lessonPlanListFragment"
+        android:name="com.app.ecarepro.ui.lessonPlan.LessonPlanListFragment"
+        android:label="LessonPlanListFragment" >
+        <action
+            android:id="@+id/action_lessonPlanListFragment_to_viewLessonPlanFragment"
+            app:destination="@id/viewLessonPlanFragment" />
+        <action
+            android:id="@+id/action_lessonPlanListFragment_to_addLessonFragment"
+            app:destination="@id/addLessonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewLessonPlanFragment"
+        android:name="com.app.ecarepro.ui.lessonPlan.view.ViewLessonPlanFragment"
+        android:label="ViewLessonPlanFragment" />
+    <fragment
+        android:id="@+id/addLessonFragment"
+        android:name="com.app.ecarepro.ui.lessonPlan.add_lesson.AddLessonFragment"
+        android:label="AddLessonFragment" />
+    <fragment
+        android:id="@+id/studentAttRepoFragment"
+        android:name="com.app.ecarepro.ui.report.student_att_report.StudentAttRepoFragment"
+        android:label="StudentAttRepoFragment" />
+    <fragment
+        android:id="@+id/classAttSubFragment"
+        android:name="com.app.ecarepro.ui.report.class_report.ClassAttSubFragment"
+        android:label="ClassAttSubFragment" >
+        <action
+            android:id="@+id/action_classAttSubFragment_to_studentAttRepoFragment"
+            app:destination="@id/studentAttRepoFragment" />
+    </fragment>
+
 </navigation>

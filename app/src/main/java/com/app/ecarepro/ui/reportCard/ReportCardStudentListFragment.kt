@@ -14,7 +14,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
  import com.app.ecarepro.databinding.FragmentReportCardStudentListBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list.StudentListViewModel
+import com.app.ecarepro.ui.students_list.StudentListViewModel
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -100,6 +100,8 @@ class ReportCardStudentListFragment : Fragment(), ItemListener<Student> {
     }
 
     override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
+
+
 
     }
 }

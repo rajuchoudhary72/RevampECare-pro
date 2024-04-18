@@ -363,9 +363,9 @@ class AddInfractionFragment : Fragment() {
                      } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                    findNavController().navigate(R.id.action_addInfractionFragment_to_infractionListFragment,Bundle( ).apply {
+                   /* findNavController().navigate(R.id.action_addInfractionFragment_to_infractionListFragment,Bundle( ).apply {
                         putInt(Constant.STUDENT_ID_ARGUMENT, studentID)
-                    })
+                    })*/
                      }
                  }
             }

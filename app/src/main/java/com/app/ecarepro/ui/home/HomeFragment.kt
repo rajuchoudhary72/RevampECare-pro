@@ -183,7 +183,7 @@ class HomeFragment : Fragment() {
         if (favouriteSlider.module.contains("notice", true)) {
             findNavController().navigate(R.id.noticeListFragment)
         } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.thoughtsListFragment)
+            findNavController().navigate(R.id.studentAttendanceReportFragment)
         } else if (favouriteSlider.module.contains("circular", true)) {
             findNavController().navigate(R.id.circularFragment)
         } else if (favouriteSlider.module.contains("library", true)) {
@@ -199,7 +199,7 @@ class HomeFragment : Fragment() {
         } else if (favouriteSlider.module.contains("Leave Request", true)) {
             findNavController().navigate(R.id.leaveHistoryFragment)
         } else if (favouriteSlider.module.contains("Appreciation", true)) {
-            findNavController().navigate(R.id.studentListFragment2)
+            findNavController().navigate(R.id.appreciationSelectionFragment)
         } else if (favouriteSlider.module.contains("Class Promotion", true)) {
             findNavController().navigate(R.id.classPromotionFragment)
         } else if (favouriteSlider.module.contains("Timetable", true)) {
@@ -210,6 +210,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.staffAssignmentsListFragment)
         } else if (favouriteSlider.module.contains("Attendance", true)) {
             findNavController().navigate(R.id.attendanceFragment)
+        }else if (favouriteSlider.module.contains("Infraction", true)) {
+            findNavController().navigate(R.id.infractionSelectFragment)
         }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {

@@ -13,8 +13,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
-        android:backgroud="@android:color/transparent"
-        tools:context=".ui.discipline_log.infraction.appreciation.AppreciationSelectionFragment">
+         tools:context=".ui.discipline_log.infraction.appreciation.AppreciationSelectionFragment">
 
 
         <TextView

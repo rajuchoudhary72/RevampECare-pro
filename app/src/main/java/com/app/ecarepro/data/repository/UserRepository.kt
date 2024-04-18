@@ -8,21 +8,32 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
+import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
+import com.app.ecarepro.data.network.model.NetworkLessonPlanList
+import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
+import com.app.ecarepro.data.network.model.NetworkStaffList
+import com.app.ecarepro.data.network.model.NetworkStaffProfile
+import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
 import com.app.ecarepro.data.network.model.NetworkStudentList
+import com.app.ecarepro.data.network.model.NetworkStudentListToMarkAtt
+import com.app.ecarepro.data.network.model.NetworkStudentProfile
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
@@ -35,6 +46,9 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.create_assignment.Attachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
+import com.app.ecarepro.data.network.model.post_lesson.ActionOnLesson
+import com.app.ecarepro.data.network.model.post_lesson.PostLesson
+import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -193,7 +207,7 @@ interface UserRepository {
 
     suspend fun deleteAssignment(  iD: String  ): CommonResponse
 
-    suspend fun mySubjects( ): NetworkMySubjects
+    suspend fun mySubjects( classID :Int): NetworkMySubjects
 
     suspend fun createAssignment(
           asgDate: String,
@@ -251,5 +265,92 @@ interface UserRepository {
         stID: Int
     ): NetworkReportCardDetails
 
+    suspend fun markAttendance( ): NetworkMarkAttendance
+
+    suspend fun getStudentListToMarkAtt(
+         classID: Int,
+          subID: Int,
+          attDate: String
+    ): NetworkStudentListToMarkAtt
+
+    suspend fun postMarkAttedance(
+        classID:Int,
+        subID:Int,
+        mode:Int,
+        attDate:String,
+         stuList:List<StudentAtt>
+    ): CommonResponse
+
+    suspend fun getLessonPlanList(page :Int ): NetworkLessonPlanList
+
+    suspend fun getLessonPlanFilter(
+        filter: String,
+        from: String,
+         till: String,
+          classIds: String,
+         subIds: String,
+         status: Int,
+
+
+        ): NetworkLessonPlanList
+
+    suspend fun getLessonPlanDTL(
+          id: String,
+          teacherID: Int
+    ): NetworkLessonPlanDTL
+
+    suspend fun getStaffList( ): NetworkStaffList
+
+    suspend fun getStaffProfile( sId: Int ): NetworkStaffProfile
+
+    suspend fun postLessonPlan(
+        attachment: String,
+        fileExt: String,
+        fileURL: String,
+          auditory: String,
+          classIds: String,
+          closure: String,
+          extensionTopic: String,
+          fileName: String,
+          fromDate: String,
+          introduction: String,
+          kinestheticActivity: String,
+          lPlnID: Int,
+          learningOutcomes: String,
+          objective: String,
+          otherResources: String,
+          resources: String,
+          showToStudent: Boolean,
+          subID: Int,
+          tillDate: String,
+          topic: String,
+          youtubeLinks: String
+    ): CommonResponse
+
+    suspend fun createLessonPlan( ): NetworkCreateLesson
+
+    suspend fun getStudentProfile(  sId: Int  ): NetworkStudentProfile
+
+    suspend fun getAttendanceSummary(
+        attDate: String
+    ): NetworkAttedanceSummary
+
+    suspend fun getClassAttendance(
+          id: String,
+          attDate: String
+    ): NetworkClassAttendance
+
+    suspend fun getStudentAttendance(
+          from: String,
+         till: String,
+         yrID: String,
+         iD: String,
+    ): NetworkStudentAttRepo
+
+    suspend fun lessonPlanAction(
+        lPlnID: Int,
+        action: Int,
+        rejectionComments: String,
+    ): CommonResponse
 
 }
