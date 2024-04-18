@@ -62,6 +62,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
         binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
+        binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = resources.getDimensionPixelOffset(
@@ -212,6 +213,9 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.attendanceFragment)
         }else if (favouriteSlider.module.contains("Infraction", true)) {
             findNavController().navigate(R.id.infractionSelectFragment)
+        }
+        else if (favouriteSlider.module.contains("Excellence Award", true)) {
+            findNavController().navigate(R.id.excellenceAwardFragment)
         }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {

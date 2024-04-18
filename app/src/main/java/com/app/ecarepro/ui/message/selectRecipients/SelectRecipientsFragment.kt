@@ -5,16 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.ContactsDto
 import com.app.ecarepro.databinding.FragmentSelectRecipientsBinding
 import com.app.ecarepro.model.RecipientsType
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SelectRecipientsFragment : Fragment() {
@@ -23,6 +29,9 @@ class SelectRecipientsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val selectRecipientsViewModel: SelectRecipientsViewModel by activityViewModels()
+
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +50,13 @@ class SelectRecipientsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpViewPager()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userDataStore.getUserAsFlow().collectLatest {
+                setUpViewPager(it.userType)
+            }
+        }
+
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
@@ -55,9 +70,11 @@ class SelectRecipientsFragment : Fragment() {
         }
     }
 
-    private fun setUpViewPager() {
+    private fun setUpViewPager(userType: Int) {
 
-        val recipientsTypes = RecipientsType.values()
+        val recipientsTypes = RecipientsType.getRecipientTypes(userType)
+
+        binding.tabLayout.isVisible = recipientsTypes.size > 1
 
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int {

@@ -54,7 +54,7 @@ data class UserInfo(
 
 data class ChildMenu(
     @SerializedName("chMenuID")
-    val chMenuID: Int?,
+    val chMenuID: Int,
     @SerializedName("childMenus")
     val childMenus: List<ChildMenu>?,
     @SerializedName("icon")

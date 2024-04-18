@@ -56,7 +56,12 @@
         <item name="android:background">@drawable/spinner_background_att</item>
     </style>
 
+    <style name="ECarePro.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
 
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="actionMenuTextColor">@color/colorAccent</item>
+    </style>
 
 
 </resources>

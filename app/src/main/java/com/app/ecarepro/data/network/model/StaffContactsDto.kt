@@ -33,7 +33,7 @@ data class Contact(
     @SerializedName("mobile")
     val mobile: String?,
     @SerializedName("name")
-    val name: String?,
+    val name: String,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("readAt")
@@ -44,7 +44,11 @@ data class Contact(
     val receiverType: Int?,
     @SerializedName("rollNumber")
     val rollNumber: String?
-) : Serializable
+) : Serializable {
+
+    fun isParent() = childName.isNullOrBlank().not()
+    fun isStaff() = designation.isNullOrBlank().not()
+}
 
 data class ContactsDto(
     val contacts: List<Contact>

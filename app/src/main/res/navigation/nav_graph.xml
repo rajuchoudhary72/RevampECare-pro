@@ -537,4 +537,26 @@
             app:destination="@id/studentAttRepoFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.app.ecarepro.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.app.ecarepro.ui.changepassword.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+    <fragment
+        android:id="@+id/changeUsernameFragment"
+        android:name="com.app.ecarepro.ui.changeusername.ChangeUsernameFragment"
+        android:label="ChangeUsernameFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.app.ecarepro.ui.profile.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/excellenceAwardFragment"
+        android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
+        android:label="ExcellenceAwardFragment"
+        tools:layout="@layout/fragment_excellence_award" />
 </navigation>

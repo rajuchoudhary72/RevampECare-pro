@@ -60,6 +60,10 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.UserProfileDto
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserService {
     @GET("User/Verify")
@@ -357,6 +361,15 @@ interface UserService {
     suspend fun getStaffProfile(
         @Query("SID") sId: Int
     ): NetworkStaffProfile
+    @POST("User/ChangeUsername")
+    suspend fun changeUsername(
+        @Body request: ChangeUserNameRequestDto,
+    ): CommonResponse
+
+    @POST("User/ChangePassword")
+    suspend fun changePassword(
+        @Body request: ChangeUserNameRequestDto,
+    ): CommonResponse
 
     @POST("Staff/PostLessonPlan")
     suspend fun postLessonPlan(
@@ -396,5 +409,22 @@ interface UserService {
     suspend fun lessonPlanAction(
         @Body request: ActionOnLesson,
     ): CommonResponse
+    @GET("User/UsernameAvailability")
+    suspend fun checkUsernameAvailability(
+        @Query("NewUsername") newUsername: String
+    ): CommonResponse
 
+    @GET("User/MyProfile")
+    suspend fun getUserProfile(
+        @Query("Edit") edit: Boolean = true
+    ): UserProfileDto
+
+    @POST("User/UploadProfileIMG")
+    suspend fun uploadProfileIMG(
+        @Body request: UploadPhotoRequest
+    ): CommonResponse
+
+    @GET("Academic/ExcellenceAward")
+    suspend fun excellenceAward(
+    ): ExcellenceAwardResponse
 }

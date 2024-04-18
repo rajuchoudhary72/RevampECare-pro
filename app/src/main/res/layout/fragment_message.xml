@@ -101,12 +101,12 @@
             <com.google.android.material.card.MaterialCardView
                 isVisible="@{viewModel.showChatOption}"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                app:contentPadding="10dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -127,6 +127,7 @@
                         android:layout_marginVertical="10dp" />
 
                     <TextView
+                        android:id="@+id/btn_only_app_message"
                         isVisible="@{viewModel.messageSettings.onlyMsg}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

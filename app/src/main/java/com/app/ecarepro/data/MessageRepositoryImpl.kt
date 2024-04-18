@@ -1,17 +1,21 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
+import com.app.ecarepro.data.network.model.GenerateTokenRequestDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SentMessageDto
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.ui.message.chat.MessageType
+import com.app.ecarepro.utils.Constant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -142,10 +146,11 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getStaffContacts(): Flow<Result<StaffContactsDto>> {
+    override fun getStaffContacts(staffTypeIDs: List<Int>?): Flow<Result<StaffContactsDto>> {
         return flow {
             try {
-                val response = messageService.getStaffContacts()
+                val response =
+                    messageService.getStaffContacts(staffTypeIDs?.joinToString { it.toString() })
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
@@ -174,4 +179,44 @@ class MessageRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override fun getSmsTemplates(): Flow<Result<List<SmsType>>> {
+        return flow {
+            try {
+                val response = messageService.getSmsTemplates()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.smsType ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                // emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val token = messageService.generateToken(
+                    Constant.SMS_TOKEN_URL,
+                    GenerateTokenRequestDto()
+                )
+                val response = messageService.sendBulkMessage(
+                    Constant.SMS_BULK_MSG_URL,
+                    token.authenticationToken,
+                    request
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
 }
+
+

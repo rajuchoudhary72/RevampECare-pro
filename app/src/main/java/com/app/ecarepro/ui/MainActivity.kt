@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
-        R.id.dashboardFragment,
+        R.id.settingsFragment,
         R.id.notificationFragment,
         R.id.messageFragment,
     )
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         setUpMoreOptions()
     }
 
-    private fun setUpDrawer() {
+     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
                 binding.drawerLayout.open()
@@ -140,12 +140,16 @@ class MainActivity : AppCompatActivity() {
                     icon(parentMenu.icon)
                     hasChildMenu(parentMenu.childMenus.isNullOrEmpty().not())
                     clickListener { _ ->
-                        expandedMenuId = if (expandedMenuId == parentMenu.menuID) {
-                            -1
+                        if (parentMenu.childMenus.isNullOrEmpty().not()) {
+                            expandedMenuId = if (expandedMenuId == parentMenu.menuID) {
+                                -1
+                            } else {
+                                parentMenu.menuID
+                            }
+                            this@withModels.requestModelBuild()
                         } else {
-                            parentMenu.menuID
+                            getFragmentId(parentMenu.menuID)?.let { navController.navigate(it) }
                         }
-                        this@withModels.requestModelBuild()
                     }
                 }
 
@@ -157,6 +161,14 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             hasChildMenu(menu.childMenus.isNullOrEmpty().not())
                             clickListener { _ ->
+                                getFragmentId(
+                                    parentMenu.menuID,
+                                    menu.chMenuID
+                                )?.let {
+                                    navController.navigate(
+                                        it
+                                    )
+                                }
                             }
                         }
                     }
@@ -166,11 +178,67 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun logout() {
+    private fun getFragmentId(menuID: Int): Int? {
+        return when (menuID) {
+            3 -> R.id.staffAssignmentsListFragment
+            4 -> R.id.timeTableNavHostFragment
+            5 -> R.id.classSyllabus
+            10 -> R.id.calenderActivityNavHost
+            12 -> R.id.bookLibraryFragment
+            14 -> R.id.questionnaireListFragment
+            15 -> R.id.thoughtsListFragment
+            51 -> R.id.excellenceAwardFragment
+            else -> null
+        }
+    }
+
+    private fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
+        return when (menuID) {
+            6 -> {
+                return when (childMenuId) {
+                    7 -> R.id.composeFragment
+                    8 -> R.id.messageFragment
+                    9 -> R.id.messageFragment
+                    else -> null
+                }
+            }
+            7 -> {
+                return when (childMenuId) {
+                    10 -> R.id.circularFragment
+                    11 -> R.id.noticeListFragment
+                    12-> R.id.noticeListFragment
+                    else -> null
+                }
+            }
+
+
+            11 -> {
+                return when (childMenuId) {
+                    18 -> R.id.attendanceFragment
+                    20 -> R.id.paySlipFragment
+                    else -> null
+                }
+            }
+            18 -> {
+                return when (childMenuId) {
+                    21 -> R.id.studentListFragment2
+                    22 -> R.id.studentListFragment
+                    else -> null
+                }
+            }
+
+            else -> {
+                null
+            }
+        }
+    }
+
+
+    fun logout() {
         MaterialAlertDialogBuilder(this)
-            .setTitle("Logout")
-            .setMessage("Are you sure to logout?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle(getString(R.string.logout))
+            .setMessage(getString(R.string.are_you_sure_to_logout))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 systemViewModel.logout {
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -178,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                     Runtime.getRuntime().exit(0)
                 }
             }
-            .setNegativeButton("No") { _, _ ->
+            .setNegativeButton(getString(R.string.no)) { _, _ ->
 
             }
             .show()
@@ -244,7 +312,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 1 -> {
-                    navController.navigate(R.id.dashboardFragment)
+                    navController.navigate(R.id.settingsFragment)
                 }
 
                 3 -> {

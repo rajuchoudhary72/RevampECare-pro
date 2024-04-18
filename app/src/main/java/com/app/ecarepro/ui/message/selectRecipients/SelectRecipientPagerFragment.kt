@@ -5,11 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,16 +18,21 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.ClassContact
+import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.StaffType
+import com.app.ecarepro.data.network.model.StaffTypeDto
 import com.app.ecarepro.databinding.FragmentPagerSelectRecipientsBinding
 import com.app.ecarepro.model.RecipientsType
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.selectableClassView
 import com.app.ecarepro.selectableRecipient
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.message.MessageViewModel
 import com.rubensousa.decorator.LinearDividerDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,6 +44,10 @@ class SelectRecipientPagerFragment : Fragment() {
     private val selectRecipientsPagerViewModel: SelectRecipientsPagerViewModel by viewModels()
 
     private val selectRecipientsViewModel: SelectRecipientsViewModel by activityViewModels()
+
+    private val messageViewModel: MessageViewModel by activityViewModels()
+
+    private var searchQuery: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +63,33 @@ class SelectRecipientPagerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.checkboxSelectAll.setOnClickListener {
+            handleSelectAllContacts(binding.checkboxSelectAll.isChecked)
+        }
+
+        binding.selectClassId.setOnClickListener {
+            selectRecipientsPagerViewModel.setSelectedClassId(null, null)
+            binding.recyclerView.requestModelBuild()
+        }
+
+        binding.spinnerLayout.setOnClickListener {
+            SelectStaffTypesFragment
+                .getInstance(
+                    StaffTypeDto(
+                        staffType = selectRecipientsPagerViewModel.staffTypes.value?.getOrNull()
+                            ?: emptyList(),
+                        selectedStaffType = selectRecipientsPagerViewModel.getSelectedStaffType()
+                    )
+
+                )
+                .onContactSelected {
+                    binding.spinnerLayout.text = ""
+                    binding.spinnerLayout.text = it.joinToString { it.staffType ?: "" }
+                    selectRecipientsPagerViewModel.setSelectedStaffType(it)
+                }
+                .show(childFragmentManager, "")
+        }
+
         binding.recyclerView.addItemDecoration(
             LinearDividerDecoration.create(
                 color = ContextCompat.getColor(
@@ -66,6 +101,27 @@ class SelectRecipientPagerFragment : Fragment() {
         )
 
         viewLifecycleOwner.lifecycleScope.launch {
+
+            launch {
+                messageViewModel.messageSettings.collectLatest { settings ->
+                    binding.filterRadioGroup.isVisible =
+                        settings?.isBoardingSchool == true && selectRecipientsPagerViewModel.recipientsType.value != RecipientsType.STAFFS
+                }
+            }
+
+            launch {
+                selectRecipientsPagerViewModel
+                    .searchQuery
+                    .debounce(300)
+                    .distinctUntilChanged()
+                    .collectLatest { query ->
+                        if (query != null) {
+                            searchQuery = query
+                            binding.recyclerView.requestModelBuild()
+                        }
+                    }
+            }
+
             launch {
                 selectRecipientsPagerViewModel.uiState.flowWithLifecycle(
                     viewLifecycleOwner.lifecycle,
@@ -77,40 +133,168 @@ class SelectRecipientPagerFragment : Fragment() {
             }
 
             launch {
-                selectRecipientsPagerViewModel.staffTypes.flowWithLifecycle(
-                    viewLifecycleOwner.lifecycle,
-                    Lifecycle.State.CREATED
-                )
-                    .collectLatest { result ->
-                        result.getOrNull()?.let { staffTypes ->
-                            setUpStaffTypeSpinner(staffTypes)
+
+            }
+
+        }
+        selectRecipientsPagerViewModel.staffTypes.observe(
+            viewLifecycleOwner
+
+        ) { result ->
+            result.getOrNull()?.let { staffTypes ->
+                //setUpStaffTypeSpinner(staffTypes)
+            }
+        }
+    }
+
+    private fun handleSelectAllContacts(isChecked: Boolean) {
+        when (selectRecipientsPagerViewModel.recipientsType.value) {
+            RecipientsType.PARENTS -> {
+                selectRecipientsPagerViewModel.uiState.value.getParentContactOrNull()
+                    ?.let { classContacts ->
+                        val selectedClassID =
+                            selectRecipientsPagerViewModel.getSelectedClassIds()
+                        if (selectedClassID != null) {
+                            classContacts.firstOrNull { it.classID == selectedClassID }
+                                ?.let { contact ->
+                                    if (isChecked) {
+                                        selectRecipientsViewModel.addContacts(
+                                            contact.contacts ?: emptyList()
+                                        )
+                                    } else {
+                                        selectRecipientsViewModel.removeContacts(
+                                            contact.contacts ?: emptyList()
+                                        )
+                                    }
+                                }
+                        } else {
+                            classContacts.forEach { contact ->
+                                if (isChecked) {
+                                    selectRecipientsViewModel.addContacts(
+                                        contact.contacts ?: emptyList()
+                                    )
+                                } else {
+                                    selectRecipientsViewModel.removeContacts(
+                                        contact.contacts ?: emptyList()
+                                    )
+                                }
+                            }
                         }
                     }
             }
 
+            RecipientsType.STUDENTS -> {
+                selectRecipientsPagerViewModel.uiState.value.getStudentContactOrNull()
+                    ?.let { classContacts ->
+                        val selectedClassID =
+                            selectRecipientsPagerViewModel.getSelectedClassIds()
+                        if (selectedClassID != null) {
+                            classContacts.firstOrNull { it.classID == selectedClassID }
+                                ?.let { contact ->
+                                    if (isChecked) {
+                                        selectRecipientsViewModel.addContacts(
+                                            contact.contacts ?: emptyList()
+                                        )
+                                    } else {
+                                        selectRecipientsViewModel.removeContacts(
+                                            contact.contacts ?: emptyList()
+                                        )
+                                    }
+                                }
+                        } else {
+                            classContacts.forEach { contact ->
+                                if (isChecked) {
+                                    selectRecipientsViewModel.addContacts(
+                                        contact.contacts ?: emptyList()
+                                    )
+                                } else {
+                                    selectRecipientsViewModel.removeContacts(
+                                        contact.contacts ?: emptyList()
+                                    )
+                                }
+                            }
+                        }
+                    }
+            }
+
+            RecipientsType.STAFFS -> {
+                selectRecipientsPagerViewModel.uiState.value.getStaffContactOrNull()
+                    ?.let { contacts ->
+                        if (isChecked) {
+                            selectRecipientsViewModel.addContacts(contacts)
+                        } else {
+                            selectRecipientsViewModel.removeContacts(contacts)
+                        }
+                    }
+            }
+        }
+        binding.recyclerView.requestModelBuild()
+    }
+
+    private fun checkSelectAllButton() {
+        when (selectRecipientsPagerViewModel.recipientsType.value) {
+            RecipientsType.PARENTS -> {
+                selectRecipientsPagerViewModel.uiState.value.getParentContactOrNull()
+                    ?.let { classContacts ->
+                        val selectedClassID =
+                            selectRecipientsPagerViewModel.getSelectedClassIds()
+                        if (selectedClassID != null) {
+                            classContacts
+                                .firstOrNull { it.classID == selectedClassID }
+                                ?.let { contact ->
+                                    binding.checkboxSelectAll.isChecked =
+                                        selectRecipientsViewModel.isContactsSelected(
+                                            contact.contacts ?: emptyList()
+                                        )
+                                }
+                        } else {
+                            val contacts = mutableListOf<Contact>()
+                            classContacts.forEach { contact ->
+                                contacts.addAll(contact.contacts ?: emptyList())
+                            }
+                            binding.checkboxSelectAll.isChecked =
+                                selectRecipientsViewModel.isContactsSelected(contacts)
+                        }
+                    }
+            }
+
+            RecipientsType.STUDENTS -> {
+                selectRecipientsPagerViewModel.uiState.value.getStudentContactOrNull()
+                    ?.let { classContacts ->
+                        val selectedClassID =
+                            selectRecipientsPagerViewModel.getSelectedClassIds()
+                        if (selectedClassID != null) {
+                            classContacts
+                                .firstOrNull { it.classID == selectedClassID }
+                                ?.let { contact ->
+                                    binding.checkboxSelectAll.isChecked =
+                                        selectRecipientsViewModel.isContactsSelected(
+                                            contact.contacts ?: emptyList()
+                                        )
+                                }
+                        } else {
+                            val contacts = mutableListOf<Contact>()
+                            classContacts.forEach { contact ->
+                                contacts.addAll(contact.contacts ?: emptyList())
+                            }
+                            binding.checkboxSelectAll.isChecked =
+                                selectRecipientsViewModel.isContactsSelected(contacts)
+                        }
+                    }
+            }
+
+            RecipientsType.STAFFS -> {
+                selectRecipientsPagerViewModel.uiState.value.getStaffContactOrNull()
+                    ?.let { contacts ->
+                        binding.checkboxSelectAll.isChecked =
+                            selectRecipientsViewModel.isContactsSelected(contacts)
+                    }
+            }
         }
     }
 
     private fun setUpStaffTypeSpinner(staffTypes: List<StaffType>) {
-        val adapter = ArrayAdapter<String>(
-            requireContext(),
-            android.R.layout.simple_spinner_item,
-            staffTypes.map { it.staffType }
-        )
-        adapter.setDropDownViewResource(
-            android.R.layout
-                .simple_spinner_dropdown_item
-        )
-        binding.spinner.adapter = adapter
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
 
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-        }
     }
 
     private fun handleUiState(uiState: SelectRecipientsUiState) {
@@ -131,7 +315,7 @@ class SelectRecipientPagerFragment : Fragment() {
 
                 is SelectRecipientsUiState.StudentContact -> {
                     buildClassWithContactModels(
-                        selectRecipientsPagerViewModel.getSelectedClassId(),
+                        selectRecipientsPagerViewModel.getSelectedClassIds(),
                         uiState.contacts,
                         false
                     )
@@ -139,30 +323,39 @@ class SelectRecipientPagerFragment : Fragment() {
 
                 is SelectRecipientsUiState.ParentContact -> {
                     buildClassWithContactModels(
-                        selectRecipientsPagerViewModel.getSelectedClassId(),
+                        selectRecipientsPagerViewModel.getSelectedClassIds(),
                         uiState.contacts,
                         true
                     )
                 }
 
                 is SelectRecipientsUiState.StaffContact -> {
-                    uiState.contacts.forEach { contact ->
-                        selectableRecipient {
-                            id(contact.receiverID)
-                            isSelected(selectRecipientsViewModel.isContactSelected(contact))
-                            photo(contact.photo)
-                            name(contact.name)
-                            textLine1(contact.designation)
-                            clickListener { _ ->
-                                if (selectRecipientsViewModel.isContactSelected(contact)) {
-                                    selectRecipientsViewModel.removeContact(contact)
-                                } else {
-                                    selectRecipientsViewModel.addContact(contact)
+                    uiState
+                        .contacts
+                        .filter { contact ->
+                            contact.name.contains(
+                                searchQuery?.toLowerCase() ?: "",
+                                true
+                            )
+                        }
+                        .forEach { contact ->
+                            selectableRecipient {
+                                id(contact.receiverID)
+                                isSelected(selectRecipientsViewModel.isContactSelected(contact))
+                                photo(contact.photo)
+                                name(contact.name)
+                                textLine1(contact.designation)
+                                clickListener { _ ->
+                                    if (selectRecipientsViewModel.isContactSelected(contact)) {
+                                        selectRecipientsViewModel.removeContact(contact)
+                                    } else {
+                                        selectRecipientsViewModel.addContact(contact)
+                                    }
+                                    this@withModels.requestModelBuild()
+                                    checkSelectAllButton()
                                 }
-                                this@withModels.requestModelBuild()
                             }
                         }
-                    }
                 }
 
                 else -> {}
@@ -176,41 +369,59 @@ class SelectRecipientPagerFragment : Fragment() {
         isParent: Boolean
     ) {
         if (selectedClassID == null) {
-            contacts.forEach { classContact ->
-                selectableClassView {
-                    id(classContact.classID)
-                    className(classContact.className)
-                    isSelected(
-                        selectRecipientsViewModel.isContactsSelected(
-                            classContact.contacts ?: emptyList()
+            contacts
+                .filter { contact ->
+                    contact.className?.contains(
+                        searchQuery?.toLowerCase() ?: "",
+                        true
+                    ) ?: true
+                }
+                .forEach { classContact ->
+                    selectableClassView {
+                        id(classContact.classID)
+                        className(classContact.className)
+                        isSelected(
+                            selectRecipientsViewModel.isContactsSelected(
+                                classContact.contacts ?: emptyList()
+                            )
                         )
-                    )
-                    onClickViewAll { _ ->
-                        selectRecipientsPagerViewModel.setSelectedClassId(classId = classContact.classID)
-                        this@buildClassWithContactModels.requestModelBuild()
-                    }
-                    selectClass { _ ->
-                        if (selectRecipientsViewModel.isContactsSelected(
-                                classContact.contacts ?: emptyList()
+                        onClickViewAll { _ ->
+                            selectRecipientsPagerViewModel.setSelectedClassId(
+                                classId = classContact.classID,
+                                className = classContact.className ?: ""
                             )
-                        ) {
-                            selectRecipientsViewModel.removeContacts(
-                                classContact.contacts ?: emptyList()
-                            )
-                        } else {
-                            selectRecipientsViewModel.addContacts(
-                                classContact.contacts ?: emptyList()
-                            )
+                            this@buildClassWithContactModels.requestModelBuild()
                         }
+                        selectClass { _ ->
+                            if (selectRecipientsViewModel.isContactsSelected(
+                                    classContact.contacts ?: emptyList()
+                                )
+                            ) {
+                                selectRecipientsViewModel.removeContacts(
+                                    classContact.contacts ?: emptyList()
+                                )
+                            } else {
+                                selectRecipientsViewModel.addContacts(
+                                    classContact.contacts ?: emptyList()
+                                )
+                            }
 
-                        this@buildClassWithContactModels.requestModelBuild()
+                            this@buildClassWithContactModels.requestModelBuild()
+                            checkSelectAllButton()
+                        }
                     }
                 }
-            }
         } else {
             contacts
                 .firstOrNull { it.classID == selectedClassID }
-                ?.contacts?.forEach { contact ->
+                ?.contacts
+                ?.filter { contact ->
+                    contact.name.contains(
+                        searchQuery?.toLowerCase() ?: "",
+                        true
+                    )
+                }
+                ?.forEach { contact ->
                     selectableRecipient {
                         id(contact.receiverID)
                         isSelected(selectRecipientsViewModel.isContactSelected(contact))
@@ -231,10 +442,10 @@ class SelectRecipientPagerFragment : Fragment() {
                                 selectRecipientsViewModel.addContact(contact)
                             }
                             this@buildClassWithContactModels.requestModelBuild()
+                            checkSelectAllButton()
                         }
                     }
                 }
-
         }
     }
 

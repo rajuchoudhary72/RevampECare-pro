@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <variable
+            name="notification"
+            type="com.app.ecarepro.data.network.model.Notification" />
 
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@{notification.hasSeen ? @color/white : @color/grey_10`}"
         app:contentPadding="12dp"
         app:strokeColor="@color/grey_10"
         app:strokeWidth="1dp">
@@ -20,12 +25,14 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                imageUrl="@{notification.icon}"
                 android:id="@+id/image"
+                placeholder="@{@drawable/ic_horne}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_horne"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/title"
@@ -33,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/calibri_bold"
                 android:layout_marginStart="5dp"
-                android:text="Notice"
+                android:text="@{notification.title}"
+                tools:text="Notice"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"
@@ -43,7 +51,8 @@
                 android:id="@+id/sub_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Lorem ipsum dolor sit amet..."
+                android:text="@{notification.body}"
+                tools:text="Lorem ipsum dolor sit amet..."
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:fontFamily="@font/calibri_regular"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +67,8 @@
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/calibri_light"
                 android:gravity="center"
-                android:text="23 May 2034 "
+                android:text="@{notification.sentOn}"
+                tools:text="23 May 2034"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="#9FA297"
                 app:layout_constraintStart_toStartOf="@+id/title"
@@ -75,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawablePadding="4dp"
+                android:visibility="gone"
                 android:gravity="center"
                 android:text="23 May 2034 "
                 android:textColor="#9FA297"
@@ -89,7 +100,7 @@
                 android:drawableEnd="@drawable/ic_arrow_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:drawablePadding="8dp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/time"
+                app:layout_constraintTop_toBottomOf="@+id/time"
                 android:fontFamily="@font/calibri_regular"
                 android:text="View"
                 android:layout_width="wrap_content"

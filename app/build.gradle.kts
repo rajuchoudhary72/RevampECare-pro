@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
+    implementation(libs.play.services.location)
     kapt(libs.hilt.android.compiler)
 
     /* Database */
@@ -125,5 +126,7 @@ dependencies {
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.intuit.sdp:sdp-android:1.0.5")
     implementation("de.hdodenhof:circleimageview:2.2.0")
+    implementation("com.github.Mindinventory:Lassi:1.3.0")
+    implementation("com.github.AsynctaskCoffee:VoiceRecorder:beta-0.5")
 
 }

@@ -67,6 +67,12 @@ import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignmen
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
 import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import kotlinx.coroutines.flow.flow
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 class UserRepositoryImpl @Inject constructor(
     private val userDatabase: UserDatabase,
@@ -118,13 +124,58 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
+    override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val checkUserName =
+                    userService.checkUsernameAvailability(changeUserNameRequestDto.newUsername!!)
+                if (checkUserName.errorCode == 0) {
+                    val response = userService.changeUsername(changeUserNameRequestDto)
+                    if (response.errorCode == 0) {
+                        emit(Result.success(response))
+                    } else {
+                        emit(Result.failure(IllegalArgumentException(response.message)))
+                    }
+                } else {
+                    emit(Result.failure(IllegalArgumentException(checkUserName.message)))
+                }
+
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override suspend fun changePassword(
+        password: String,
+        confirmPassword: String
+    ): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val response = userService.changePassword(
+                    ChangeUserNameRequestDto(
+                        newPassword = password,
+                        newUsername = confirmPassword,
+                        currentUsername = "SF129"
+                    )
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
 
     override suspend fun getClassSyllabus(): NetworkClassSyllabus {
         return userService.getClassSyllabus()
     }
 
     override suspend fun getActivityCalender(): NetworkActivityCalender {
-        return  userService.getActivityCaledar()
+        return userService.getActivityCaledar()
     }
 
     override suspend fun getLibraryDetails(): NetworkLatestBook {
@@ -468,6 +519,34 @@ class UserRepositoryImpl @Inject constructor(
     }
 
 
+    override fun getUserProfile(): Flow<Result<Profile>> {
+        return flow {
+            try {
+                val response = userService.getUserProfile()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.profile))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = userService.uploadProfileIMG(uploadPhotoRequest)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
         return  userService.staffMyClass()
     }
@@ -495,5 +574,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun thoughtsCreate(quotation: String, author: String): CommonResponse {
         return userService.thoughtsCreate(AddThoughtsPostData(quotation, author))
     }
-
+    override suspend fun excellenceAward(): ExcellenceAwardResponse {
+        return userService.excellenceAward()
+    }
 }
