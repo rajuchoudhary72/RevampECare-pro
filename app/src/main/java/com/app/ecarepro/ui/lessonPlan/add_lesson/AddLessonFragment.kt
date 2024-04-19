@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
+    private var lPlanId: String= ""
     private lateinit var auditorSelectDat: AuditorLst
     private lateinit var classData: NetworkMyClass
     private var isClassSelected: Boolean = false
@@ -55,6 +56,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     ): View {
         binding=FragmentAddLessonBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+         lPlanId= requireArguments().getString(Constant.LESSON_ID_ARGUMENT).toString()
          return binding.root
     }
 
@@ -125,6 +127,11 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                  binding.etTopic.text.toString(),
                  binding.etLink.text.toString()
              )
+        }
+
+
+        if (lPlanId.isNotEmpty()){
+            getLessonPlanDTL(lPlanId,0)
         }
 
 
@@ -342,6 +349,53 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
         builder.setCanceledOnTouchOutside(false)
         builder.show()
+    }
+
+
+    private fun getLessonPlanDTL(
+        id: String,
+        teacherID: Int
+    ) {
+
+        lifecycleScope.launch {
+            addLessonViewModel.viewLessonPlanStateFlow.collectLatest {  when (it) {
+                is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                    if (it.data != null) {
+
+                        if (it.data.lessonPlans != null) {
+                            val data= it.data.lessonPlans
+                            auditorSelectDat=AuditorLst( data.auditoryIds, data.auditoryTxt )
+                            selectClassData=MyClasseItem(0,data.classesName,data.classIds,false   )
+                            binding.etClosure.setText(data.closure)
+                            binding.tvExtensionReq.text = data.extensionTopic
+                            lPlanId=data.id
+                            binding.ctvFromDate.text=data.fromDate
+                            binding.etIntroduction.setText(data.introduction)
+                            binding.etActivity.setText(data.kinestheticActivity)
+                            binding.tvLearningOutcomesReq.text=data.learningOutcomes
+                            binding.etObjective.setText(data.objective)
+                            binding.etOtherResources.setText(data.otherResources)
+                            binding.etResources.setText(data.resources)
+                            binding.cbOpenStudent.isChecked=data.showToStudent
+                            selectSubjectData=MySubject("",data.subID,data.subject)
+                            binding.ctvToDate.text =data.tillDate
+                            binding.etTopic.setText(data.topic)
+                            binding.etLink.setText(data.youtubeLinks)
+
+                        }
+
+                    }
+
+                } }  } }
+        addLessonViewModel.getLessonPlanDTL( id, teacherID)
+
+
     }
 
 

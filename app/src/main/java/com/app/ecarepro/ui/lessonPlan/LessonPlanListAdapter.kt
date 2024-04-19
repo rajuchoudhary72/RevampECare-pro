@@ -56,7 +56,7 @@ class LessonPlanListAdapter(private var lessonPlanList: MutableList<LessonPlan>,
                 lessonPlanListFragment.onItemClick(data,1,false)
             }
              llEdit.setOnClickListener {
-
+                 lessonPlanListFragment.onItemClick(data,2,false)
             }
              llDelete.setOnClickListener {
                 lessonPlanListFragment.onItemClick(data,3,false)

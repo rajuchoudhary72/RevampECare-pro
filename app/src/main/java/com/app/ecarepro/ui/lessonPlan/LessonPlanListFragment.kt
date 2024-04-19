@@ -377,6 +377,15 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                 })
 
         }
+        else if (pos == 2) {
+
+            findNavController().navigate(
+                R.id.action_lessonPlanListFragment_to_addLessonFragment,
+                Bundle().apply {
+                    putString(Constant.LESSON_ID_ARGUMENT, t.id)
+                })
+
+        }
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -450,7 +459,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         subIds: String,
         status: Int,
 
-    ) {
+        ) {
 
         lessonPlanListAdapter.clearData()
 
@@ -462,7 +471,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
             subIds,
             status,
 
-        )
+            )
 
         isNotFilterList = false
     }

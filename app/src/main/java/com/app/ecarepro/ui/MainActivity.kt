@@ -167,7 +167,11 @@ class MainActivity : AppCompatActivity() {
                                 )?.let {
                                     navController.navigate(
                                         it
-                                    )
+                                    ).apply {
+                                        Bundle().apply {
+
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -194,6 +198,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
         return when (menuID) {
+            1 -> {
+                return when (childMenuId) {
+                    1 -> R.id.studentListFragment else -> null
+                }
+            }
             6 -> {
                 return when (childMenuId) {
                     7 -> R.id.composeFragment

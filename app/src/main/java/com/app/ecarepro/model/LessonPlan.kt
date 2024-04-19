@@ -3,7 +3,7 @@ package com.app.ecarepro.model
 data class LessonPlan(
     val actionTakenBy: Any,
     val attachment: Any,
-    val auditoryIds: Any,
+    val auditoryIds: Int,
     val auditoryTxt: String,
     val classIds: String,
     val classesName: String,

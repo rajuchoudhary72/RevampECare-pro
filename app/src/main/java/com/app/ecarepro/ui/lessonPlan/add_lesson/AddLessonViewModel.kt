@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
+import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
 import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMyClass
@@ -41,6 +42,12 @@ class AddLessonViewModel @Inject constructor(
             NetworkResult.Loading()
         )
     val myClassStateFlow: StateFlow<NetworkResult<NetworkMyClass>> = myClassMutableStateFlow
+
+
+
+    private val viewLessonPlanMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLessonPlanDTL>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val viewLessonPlanStateFlow: StateFlow<NetworkResult<NetworkLessonPlanDTL>> = viewLessonPlanMutableStateFlow
 
 
     fun postLessonPlan(
@@ -119,6 +126,27 @@ class AddLessonViewModel @Inject constructor(
             myClassMutableStateFlow.value = NetworkResult.Error(it.message)
         }
     }
+
+
+    fun getLessonPlanDTL(
+        id: String,
+        teacherID: Int
+    )=viewModelScope.launch {
+        runCatching {
+            viewLessonPlanMutableStateFlow.value =NetworkResult.Loading( )
+            userRepository.getLessonPlanDTL( id, teacherID)
+        }.onSuccess {
+            viewLessonPlanMutableStateFlow.value =NetworkResult.Success(it)
+        }.onFailure {
+            viewLessonPlanMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+    }
+
+
+
+
+
+    
 
 
 
