@@ -13,6 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import coil.decode.SvgDecoder
 import coil.load
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.app.ecarepro.R
@@ -34,6 +35,7 @@ fun View.showOrHide(invisible: Boolean) {
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
     load(url) {
+        decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
         crossfade(true)
         if (placeholder != null) {
             placeholder(placeholder)

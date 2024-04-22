@@ -10,6 +10,7 @@ import java.util.Locale
 class Constant {
     companion object {
         const val BASE_URL = "https://api.franciscanecare.net/"
+        const val BASE_URL_COM = "https://app.franciscanecare.com"
         const val AUTH_BEFORE_LOGIN ="Kq4IYAuSXLh4EsnexoTSfA=="
         const val PDF_Mime_Type = "application/pdf"
         const val WEBVIEW_PDF_BASE_URL = "https://docs.google.com/gview?embedded=true&url="

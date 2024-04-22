@@ -2,34 +2,29 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
-import com.app.ecarepro.data.network.model.NetworkBookDetails
-import com.app.ecarepro.data.network.model.NetworkClassSyllabus
-import com.app.ecarepro.data.network.model.NetworkLatestBook
-import com.app.ecarepro.data.network.model.NetworkMyClass
-import com.app.ecarepro.data.network.model.NetworkPaySlip
-import com.app.ecarepro.data.network.model.NetworkQuestionnaire
-import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
-import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.NetworkWhoLike
-import com.app.ecarepro.data.network.model.UserLoginRequestDto
-import com.app.ecarepro.data.network.model.asEntity
-import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkBirthday
+import com.app.ecarepro.data.network.model.NetworkBookDetails
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
@@ -37,8 +32,17 @@ import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
+import com.app.ecarepro.data.network.model.NetworkThoughts
+import com.app.ecarepro.data.network.model.NetworkUser
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
+import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UserLoginRequestDto
+import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
@@ -50,13 +54,10 @@ import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfracti
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
-import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
-import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
-import kotlinx.coroutines.flow.flow
-import com.app.ecarepro.data.network.model.Profile
-import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userDatabase: UserDatabase,
@@ -442,5 +443,21 @@ class UserRepositoryImpl @Inject constructor(
     }
     override suspend fun excellenceAward(): ExcellenceAwardResponse {
         return userService.excellenceAward()
+    }
+
+    override fun getUserDashboard(): Flow<Result<UserDashboardDto>> {
+        return flow {
+            try {
+                val response = userService.getUserDashboard()
+                if (response.errorCode == 0) {
+                    userDataStore.saveDashboardData(response)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
     }
 }

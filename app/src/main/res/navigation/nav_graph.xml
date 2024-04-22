@@ -443,4 +443,8 @@
         android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
         android:label="ExcellenceAwardFragment"
         tools:layout="@layout/fragment_excellence_award" />
+    <fragment
+        android:id="@+id/attendanceFragment2"
+        android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
+        android:label="AttendanceFragment" />
 </navigation>

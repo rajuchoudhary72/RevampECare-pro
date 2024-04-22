@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.app.ecarepro.databinding.FragmentHomeViewPagerBinding
+import com.app.ecarepro.ui.attendance.AttendanceFragment
 import com.app.ecarepro.ui.dashbord.DashboardFragment
-import com.app.ecarepro.ui.notification.NotificationFragment
+import com.app.ecarepro.ui.feed.FeedsFragment
 import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
 import com.app.ecarepro.utils.SwipeDirection
@@ -25,7 +26,8 @@ class HomeViewPagerFragment : Fragment() {
         mutableListOf(
             HomeFragment(),
             DashboardFragment(),
-            NotificationFragment()
+            AttendanceFragment(),
+            FeedsFragment()
         )
     }
 

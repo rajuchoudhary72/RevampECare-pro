@@ -35,14 +35,10 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
-import com.app.ecarepro.data.network.model.create_assignment.Attachment
+import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
-import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Query
-import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
@@ -261,5 +257,5 @@ interface UserRepository {
     ): NetworkBirthday
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
-
+    fun getUserDashboard(): Flow<Result<UserDashboardDto>>
 }
