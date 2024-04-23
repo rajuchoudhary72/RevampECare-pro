@@ -2,34 +2,29 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
-import com.app.ecarepro.data.network.model.NetworkBookDetails
-import com.app.ecarepro.data.network.model.NetworkClassSyllabus
-import com.app.ecarepro.data.network.model.NetworkLatestBook
-import com.app.ecarepro.data.network.model.NetworkMyClass
-import com.app.ecarepro.data.network.model.NetworkPaySlip
-import com.app.ecarepro.data.network.model.NetworkQuestionnaire
-import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
-import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.NetworkWhoLike
-import com.app.ecarepro.data.network.model.UserLoginRequestDto
-import com.app.ecarepro.data.network.model.asEntity
-import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkBirthday
+import com.app.ecarepro.data.network.model.NetworkBookDetails
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
@@ -37,8 +32,17 @@ import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
+import com.app.ecarepro.data.network.model.NetworkThoughts
+import com.app.ecarepro.data.network.model.NetworkUser
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
+import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UserLoginRequestDto
+import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
@@ -50,6 +54,9 @@ import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfracti
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -102,13 +109,58 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
+    override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val checkUserName =
+                    userService.checkUsernameAvailability(changeUserNameRequestDto.newUsername!!)
+                if (checkUserName.errorCode == 0) {
+                    val response = userService.changeUsername(changeUserNameRequestDto)
+                    if (response.errorCode == 0) {
+                        emit(Result.success(response))
+                    } else {
+                        emit(Result.failure(IllegalArgumentException(response.message)))
+                    }
+                } else {
+                    emit(Result.failure(IllegalArgumentException(checkUserName.message)))
+                }
+
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override suspend fun changePassword(
+        password: String,
+        confirmPassword: String
+    ): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val response = userService.changePassword(
+                    ChangeUserNameRequestDto(
+                        newPassword = password,
+                        newUsername = confirmPassword,
+                        currentUsername = "SF129"
+                    )
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
 
     override suspend fun getClassSyllabus(): NetworkClassSyllabus {
         return userService.getClassSyllabus()
     }
 
     override suspend fun getActivityCalender(): NetworkActivityCalender {
-        return  userService.getActivityCaledar()
+        return userService.getActivityCaledar()
     }
 
     override suspend fun getLibraryDetails(): NetworkLatestBook {
@@ -334,7 +386,34 @@ class UserRepositoryImpl @Inject constructor(
         return userService.birthday(userType, rptType, monthNo,date)
     }
 
-
+    override fun getUserProfile(): Flow<Result<Profile>> {
+        return flow {
+            try {
+                val response = userService.getUserProfile()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.profile))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = userService.uploadProfileIMG(uploadPhotoRequest)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
         return  userService.staffMyClass()
     }
@@ -362,5 +441,23 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun thoughtsCreate(quotation: String, author: String): CommonResponse {
         return userService.thoughtsCreate(AddThoughtsPostData(quotation, author))
     }
+    override suspend fun excellenceAward(): ExcellenceAwardResponse {
+        return userService.excellenceAward()
+    }
 
+    override fun getUserDashboard(): Flow<Result<UserDashboardDto>> {
+        return flow {
+            try {
+                val response = userService.getUserDashboard()
+                if (response.errorCode == 0) {
+                    userDataStore.saveDashboardData(response)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
 }

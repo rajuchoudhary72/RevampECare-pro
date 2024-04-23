@@ -67,6 +67,9 @@ class ChatFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+        binding.btnRecipient.setOnClickListener {
+            showRecipients()
+        }
 
         binding.btnReplyMessage.setOnClickListener {
             chatViewModel.replyMessage { _, message ->
@@ -87,7 +90,12 @@ class ChatFragment : Fragment() {
         }
 
     }
-
+    private fun showRecipients() {
+        RecipientsDialog.getInstance(
+            (chatViewModel.uiState.value as ChatUiState.Success).recipients
+        )
+            .show(childFragmentManager, "")
+    }
     private fun handleUiState(uiState: ChatUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 

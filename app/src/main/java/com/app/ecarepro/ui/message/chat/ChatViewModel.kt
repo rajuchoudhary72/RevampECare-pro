@@ -59,7 +59,7 @@ class ChatViewModel @Inject constructor(
                             receiverID = response.receiverID,
                             receiverType = response.receiverType,
                             canReply = response.canReply,
-                            recipients = response.recipients,
+                            recipients = response.recipients ?: emptyList(),
                             subject = response.subject
                         )
                     }
@@ -97,7 +97,7 @@ class ChatViewModel @Inject constructor(
                 .replyMessage(
                     ReplyMessageRequestDto(
                         body = messageBody.value.trim(),
-                        ipAddress = getDeviceIpAddress(),
+                        ipAddress = context.getDeviceIpAddress(),
                         msgType = 1,
                         receiverType = uiState.receiverType,
                         receiverID = uiState.receiverID,
@@ -118,20 +118,20 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getDeviceIpAddress(): String {
-        val wifiMan =
-            context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val wifiInf = wifiMan.connectionInfo
-        val ipAddress = wifiInf.ipAddress
-        return String.format(
-            "%d.%d.%d.%d",
-            (ipAddress and 0xff),
-            (ipAddress shr 8 and 0xff),
-            (ipAddress shr 16 and 0xff),
-            (ipAddress shr 24 and 0xff)
-        )
-    }
 
+}
+
+fun Context.getDeviceIpAddress(): String {
+    val wifiMan = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+    val wifiInf = wifiMan.connectionInfo
+    val ipAddress = wifiInf.ipAddress
+    return String.format(
+        "%d.%d.%d.%d",
+        (ipAddress and 0xff),
+        (ipAddress shr 8 and 0xff),
+        (ipAddress shr 16 and 0xff),
+        (ipAddress shr 24 and 0xff)
+    )
 }
 
 sealed interface ChatUiState {
@@ -141,7 +141,7 @@ sealed interface ChatUiState {
 
     data class Success(
         val messages: List<Message>,
-        val recipients: List<Recipient>?,
+        val recipients: List<Recipient>,
         val msgID: Int?,
         val readCount: Int?,
         val receiverID: Int?,

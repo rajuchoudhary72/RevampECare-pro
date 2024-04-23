@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
@@ -32,12 +33,12 @@ import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
-import com.app.ecarepro.data.network.model.create_assignment.Attachment
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
-import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Query
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
@@ -58,7 +59,14 @@ interface UserRepository {
         password: String
     ): LoginResponseDto
 
+    suspend fun changeUserName(
+        changeUserNameRequestDto: ChangeUserNameRequestDto
+    ): Flow<Result<CommonResponse>>
 
+    suspend fun changePassword(
+        password: String,
+        confirmPassword: String
+    ): Flow<Result<CommonResponse>>
     suspend fun getClassSyllabus(): NetworkClassSyllabus
     suspend fun getActivityCalender(): NetworkActivityCalender
 
@@ -106,6 +114,8 @@ interface UserRepository {
         fileExt: String
     ): CommonResponse
 
+    fun getUserProfile(): Flow<Result<Profile>>
+    fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
 
@@ -245,6 +255,7 @@ interface UserRepository {
          monthNo: Int,
           date: String,
     ): NetworkBirthday
+    suspend fun excellenceAward (): ExcellenceAwardResponse
 
-
+    fun getUserDashboard(): Flow<Result<UserDashboardDto>>
 }

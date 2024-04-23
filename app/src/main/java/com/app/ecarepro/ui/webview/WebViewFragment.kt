@@ -14,6 +14,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentWebViewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import android.Manifest
+import android.app.DownloadManager
+import android.content.Context.DOWNLOAD_SERVICE
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.widget.Toast
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
@@ -22,7 +30,8 @@ class WebViewFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val mViewModel: WebViewViewModel by viewModels()
-
+    private val title by lazy { WebViewFragmentArgs.fromBundle(requireArguments()).title }
+    private val url by lazy { WebViewFragmentArgs.fromBundle(requireArguments()).url }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,10 +43,11 @@ class WebViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.toolbar.title = title
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        loadUrl("https://www.franciscansolutions.com/faq-v2.aspx")
+       // loadUrl("https://www.franciscansolutions.com/faq-v2.aspx")
+        loadUrl(url)
     }
 
     private fun loadUrl(url: String) {
@@ -46,9 +56,31 @@ class WebViewFragment : Fragment() {
             builtInZoomControls = false
             displayZoomControls = false
             javaScriptEnabled = true
+            loadWithOverviewMode=true
+            useWideViewPort=true
             cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         }
-
+        /*wv_url.getSettings().setDisplayZoomControls(true);
+               wv_url.getSettings().setBuiltInZoomControls(true);*/
+        binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+            //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            if (isStoragePermission()) if (url.endsWith(".pdf") || url.endsWith(".PDF")) {
+                //Toast.makeText(context, url.toString(), Toast.LENGTH_SHORT).show();
+                val request = DownloadManager.Request(Uri.parse(url))
+                request.allowScanningByMediaScanner()
+                Environment.getExternalStorageDirectory()
+                requireActivity().filesDir.path
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                request.setDestinationInExternalPublicDir(
+                    Environment.DIRECTORY_DOWNLOADS,
+                    "download"
+                )
+                val dm =   requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+                dm.enqueue(request)
+                Toast.makeText(requireActivity(), "Downloading...", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
         binding.webView.webViewClient = object : WebViewClient() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
@@ -68,10 +100,29 @@ class WebViewFragment : Fragment() {
             }
         }
     }
+    private fun isStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            true
+        } else {
+            val permission = arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            storagePermission(permission)
+        }
+    }
+    private fun storagePermission(permission: Array<String>): Boolean {
+        for (s in permission) {
+            if (PackageManager.PERMISSION_GRANTED != requireActivity().checkSelfPermission(s)) {
+                requestPermissions(permission, 100)
+                return false
+            }
+        }
+        return true
+    }
 
-
-    override fun onDestroyView() {
+   /* override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
+    }*/
 }

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">ECarePro</string>
     <string name="action_settings">Settings</string>
-
     <!--School/College Code-->
     <string name="help">Help</string>
     <string name="please_enter_school_college_code">Please Enter School/College Code</string>
@@ -28,7 +27,6 @@
     <string name="onboarding_description_2">Don\'t wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement.</string>
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
-
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title</string>
     <string name="notice">Notice</string>
@@ -69,17 +67,14 @@
     <string name="powered_by">Powered by</string>
     <string name="demo_school_name_franciscan_international_school">Franciscan International School</string>
     <string name="demo_school_location_greater_noida">Greater Noida</string>
-
     <string name="false_value">False</string>
     <string name="true_value">True</string>
-
     <string name="date_">Date :</string>
     <string name="update_on_">Update On :</string>
     <string name="ok">OK</string>
     <string name="add_thoughts">Add Thoughts</string>
     <string name="enter_thoughts_hint">Enter Thoughts</string>
     <string name="enter_auther_hint">Enter Author</string>
-
     <string name="book_details_title">Book Details</string>
     <string name="answer">Answer</string>
     <string name="please_type_ans">" Please Type Answer"</string>
@@ -104,9 +99,7 @@
     <array name="pic_type_pick">"Take Photo", "Choose from Library",
         "Cancel"
     </array>
-
     <string name="to_">To:</string>
-
     <string name="from_">From:</string>
     <string name="leave_history">Leave History</string>
     <string name="leave_request">Leave Request</string>
@@ -134,10 +127,8 @@
     <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
     <string name="select_infraction_category">Select Infraction Category</string>
     <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
-
     <string name="select_apprec_category">Select Appreciation Category</string>
     <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
-
     <string name="instance">Instance</string>
     <string name="instance_wit">"Instance: "</string>
     <string name="infraction_on">"Infraction on : "</string>
@@ -155,7 +146,6 @@
     <string name="no_data">No Data</string>
     <string name="reward">Reward:</string>
     <string name="remark">Remark:</string>
-
     <string name="enter_thoughts">Enter Thoughts</string>
     <string name="enter_auther">Enter Author</string>
     <string name="book_details">Book Details</string>
@@ -171,7 +161,6 @@
     <string name="assigned_on">Assigned On:</string>
     <string name="to_be_submitted_on">To Be Submitted On:</string>
     <string name="space" />
-    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="subject">"Subject: "</string>
     <string name="type_your_message_with_word_limit">Type Your Message(Word limit 200 Words)</string>
@@ -208,7 +197,70 @@
     <string name="name_s">"Name : "</string>
     <string name="father_name">"Father Name : "</string>
     <string name="mother_name">"Mother Name : "</string>
-
-
+    <string name="no_record_found">No record found</string>
+    <string name="website_txt">Website</string>
+    <string name="marks_entry_heading">Marks Entry</string>
+    <string name="assessment_headling">Assessment</string>
+    <string name="all">All</string>
+    <string name="boarding">Boarding</string>
+    <string name="day_scholar">Day Scholar</string>
+    <string name="select_all">Select All</string>
+    <string name="select_staff_type">Select Staff Type</string>
+    <string name="select_staff_types">Select staff types</string>
+    <string name="subject_line">Subject Line...</string>
+    <string name="enter_your_message_here">Enter your message here...</string>
+    <string name="settings">Settings</string>
+    <string name="change_username">Change Username</string>
+    <string name="change_password">Change Password</string>
+    <string name="sync">Sync</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="change_password_note"><b>Note:</b>\n\n<![CDATA[ - Password must be between 5 to 10 characters.\n - Your password should be including at least 1 number or special character except for # and &.\n - Once Password will be successfully changed, you\'ll be redirect to Login Page.]]></string>
+    <string name="change_username_notes"><b>Note:</b>\n\n
+ - Usernames must consist of alphanumeric characters (A-Z,a–z, 0–9)\n
+ - No Special Characters allowed in username.\n
+ - Username must be between 5 to 10 characters.\n
+ - Once Username will be successfully changed, you will be redirect to Login Page.</string>
+    <string name="existing_username">Existing Username</string>
+    <string name="new_username">New Username</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="profile">Profile</string>
+    <string name="edit">Edit</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="date_of_joining">Date of Joining</string>
+    <string name="date_of_anniversary">Date of Anniversary</string>
+    <string name="spouse_name">Spouse Name</string>
+    <string name="spouse_contact_number">Spouse Contact Number</string>
+    <string name="gender">Gender</string>
+    <string name="nationality">Nationality</string>
+    <string name="religion">Religion</string>
+    <string name="qualification">Qualification</string>
+    <string name="address">Address</string>
+    <string name="pAddress">Permanent Address</string>
+    <string name="aadharCardNo">Aadhar Card Number</string>
+    <string name="paNNumber">PAN Card Number</string>
+    <string name="bank_account_number">Bank Account Number</string>
+    <string name="uan_account_number">UAN Number</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="email_id">email ID</string>
+    <string name="ward_details">Ward Details</string>
+    <string name="admission_number">Admission Number</string>
+    <string name="permanent_education_number">Permanent Education Number</string>
+    <string name="fathers_name">Father\'s Name</string>
+    <string name="mothers_name">Mother\'s Name</string>
+    <string name="blood_group">Blood Group</string>
+    <string name="house_name">House Name</string>
+    <string name="date_of_admission">Date of Admission</string>
+    <string name="take_photo_">Take Photo</string>
+    <string name="choose_from_library">Choose from Library</string>
+    <string name="cancel_">Cancel</string>
+    <string name="add_photo_">Add Photo!</string>
+    <string name="take_photo__">Take Photo</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="logout">Logout</string>
+    <string name="are_you_sure_to_logout">Are you sure to logout?</string>
+    <string name="no">No</string>
+    <string name="print">Print</string>
 
 </resources>

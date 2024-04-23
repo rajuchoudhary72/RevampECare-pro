@@ -116,7 +116,16 @@
         android:id="@+id/webViewFragment"
         android:name="com.app.ecarepro.ui.webview.WebViewFragment"
         android:label="WebViewFragment"
-        tools:layout="@layout/fragment_web_view" />
+        tools:layout="@layout/fragment_web_view" >
+        <argument
+            android:name="url"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/widgetsFragment"
@@ -399,4 +408,43 @@
         android:name="com.app.ecarepro.ui.birthday.BirthdayFragment"
         android:label="BirthdayFragment" />
 
+    <fragment
+        android:id="@+id/composeFragment"
+        android:name="com.app.ecarepro.ui.message.compose.ComposeFragment"
+        android:label="ComposeFragment" />
+    <fragment
+        android:id="@+id/selectRecipientsFragment"
+        android:name="com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment"
+        android:label="SelectRecipientsFragment" />
+    <fragment
+        android:id="@+id/classPromotionFragment"
+        android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
+        android:label="ClassPromotionFragment"
+        />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.app.ecarepro.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.app.ecarepro.ui.changepassword.ChangePasswordFragment"
+        android:label="ChangePasswordFragment" />
+    <fragment
+        android:id="@+id/changeUsernameFragment"
+        android:name="com.app.ecarepro.ui.changeusername.ChangeUsernameFragment"
+        android:label="ChangeUsernameFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.app.ecarepro.ui.profile.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/excellenceAwardFragment"
+        android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
+        android:label="ExcellenceAwardFragment"
+        tools:layout="@layout/fragment_excellence_award" />
+    <fragment
+        android:id="@+id/attendanceFragment2"
+        android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
+        android:label="AttendanceFragment" />
 </navigation>
