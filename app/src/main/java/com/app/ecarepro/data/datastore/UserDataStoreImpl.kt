@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -59,6 +60,23 @@ class UserDataStoreImpl @Inject constructor(
         }.first()
     }
 
+    override suspend fun saveDashboardData(school: UserDashboardDto) {
+        context.dataStore.edit { preferences ->
+            preferences[dashboardData] = gson.toJson(school)
+        }
+    }
+
+    override fun getDashboardData(): Flow<UserDashboardDto?> {
+        return context.dataStore.data.map { preferences ->
+            val json = preferences[dashboardData]
+            if (json == null) {
+                null
+            } else
+                gson.fromJson(json, UserDashboardDto::class.java)
+        }
+    }
+
+
     override suspend fun saveAuthToken(token: String) {
         context.dataStore.edit { preferences ->
             preferences[authTokenKey] = token
@@ -103,6 +121,7 @@ class UserDataStoreImpl @Inject constructor(
 
     companion object {
         private val schoolDataKey = stringPreferencesKey("schoolData")
+        private val dashboardData = stringPreferencesKey("dashboardData")
         private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")

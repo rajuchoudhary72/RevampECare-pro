@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LegendViewBinding
 
@@ -60,4 +61,9 @@ class LegendView @JvmOverloads constructor(
     fun setSubTitle(value: String?) {
         binding.subTitle.text = value
     }
+}
+
+@BindingAdapter("subTitle")
+fun LegendView.subTitle(subTitle: String?) {
+    setSubTitle(subTitle)
 }

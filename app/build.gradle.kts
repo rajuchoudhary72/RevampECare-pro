@@ -115,13 +115,17 @@ dependencies {
     implementation(libs.dotsindicator)
 
     /*An image loading library for Android backed by Kotlin Coroutines*/
-    implementation("io.coil-kt:coil:2.5.0")
+    //noinspection UseTomlInstead
+    implementation("io.coil-kt:coil:2.6.0")
+    //noinspection UseTomlInstead
+    implementation("io.coil-kt:coil-svg:2.6.0")
+
     implementation(libs.picasso)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.caverock:androidsvg:1.4")
+    //implementation("com.caverock:androidsvg:1.4")
 
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.intuit.sdp:sdp-android:1.0.5")
