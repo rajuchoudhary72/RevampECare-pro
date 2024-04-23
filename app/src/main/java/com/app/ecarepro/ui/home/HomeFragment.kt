@@ -228,8 +228,6 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.attendanceFragment)
         }else if (favouriteSlider.module.contains("Infraction", true)) {
             findNavController().navigate(R.id.infractionSelectFragment)
-        }
-        else if (favouriteSlider.module.contains("Excellence Award", true)) {
         } else if (favouriteSlider.module.contains("Excellence Award", true)) {
             findNavController().navigate(R.id.excellenceAwardFragment)
         }
