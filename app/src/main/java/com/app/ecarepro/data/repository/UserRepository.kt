@@ -3,6 +3,7 @@ package com.app.ecarepro.data.repository
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
@@ -19,6 +20,7 @@ import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
@@ -26,6 +28,7 @@ import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
@@ -45,6 +48,7 @@ import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.create_assignment.Attachment
@@ -53,6 +57,7 @@ import com.app.ecarepro.data.network.model.post_lesson.ActionOnLesson
 import com.app.ecarepro.data.network.model.post_lesson.PostLesson
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
+import com.app.ecarepro.model.FeeSummery
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -137,6 +142,20 @@ interface UserRepository {
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
+
+    suspend fun leaveReport(
+        status: Int,
+         ord: Int,
+         applType: Int,
+          pg: Int
+    ): NetworkLeaveReport
+
+    suspend fun leaveAction(
+        applType:Int,
+        lvID:Int,
+        action:Int,
+        forwardedTo:Int,
+    ): CommonResponse
 
     suspend fun leaveApply(
         leaveID: Int,
@@ -345,6 +364,21 @@ interface UserRepository {
     suspend fun createLessonPlan( ): NetworkCreateLesson
 
     suspend fun getStudentProfile(  sId: Int  ): NetworkStudentProfile
+
+    suspend fun getSAttendanceYrID(
+          sId: Int,
+          yrID: Int
+    ): NetworkProfileAttendanceDTL
+
+    suspend fun getFeeSummaryYrID(
+          sId: Int,
+          yrID: Int
+    ): FeeSummery
+
+    suspend fun getAcademicPerformance(
+         sId: Int,
+         yrID: Int
+    ): NetworkAcademicPerformance
 
     suspend fun getAttendanceSummary(
         attDate: String

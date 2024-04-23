@@ -31,12 +31,20 @@ class StudentProfileLibraryTransFragment(val library: Library) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.libraryDaata=library
+
         with(binding) {
              tvViewPendingBooks.setOnClickListener {
-                 popUpLibraryTransaction(library.libraryTransaction)
+                 if (library.libraryTransaction!=null){
+                     popUpLibraryTransaction(library.libraryTransaction)
+                 }
+
              }
             tvViewFineDetails.setOnClickListener {
-                popUpLibraryFine(library.libraryFineDTL)
+                if(library.libraryFineDTL!=null){
+                    popUpLibraryFine(library.libraryFineDTL)
+                }
+
             }
 
         }

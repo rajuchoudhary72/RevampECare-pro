@@ -163,7 +163,7 @@
     <string name="assigned_on">Assigned On:</string>
     <string name="to_be_submitted_on">To Be Submitted On:</string>
     <string name="space" />
-     <string name="delete">Delete</string>
+    <string name="delete">Delete</string>
     <string name="subject">"Subject: "</string>
     <string name="type_your_message_with_word_limit">Type Your Message(Word limit 200 Words)</string>
     <string name="camera_amp_browse_photo"><![CDATA[Camera & Browse Photo]]></string>
@@ -261,13 +261,13 @@
     <string name="please_provide_the_introduction_of_the_topics_covered_in_this_lesson_plan">Please provide the introduction of the Topics covered in this Lesson Plan</string>
     <string name="direct_instruction">Direct Instruction:</string>
     <string name="designation">Designation:</string>
-     <string name="doj">DOJ:</string>
+    <string name="doj">DOJ:</string>
     <string name="father_spouse_name">Father/Spouse Name</string>
     <string name="father_spouse_mobile_no">Father/Spouse Mobile No</string>
-     <string name="marital_status">Marital Status</string>
-     <string name="aadhar_card_number">Aadhar Card Number</string>
+    <string name="marital_status">Marital Status</string>
+    <string name="aadhar_card_number">Aadhar Card Number</string>
     <string name="pan_card_number">Pan Card Number</string>
-     <string name="sp">:</string>
+    <string name="sp">:</string>
     <string name="early_out">Early Out</string>
     <string name="late_in">Late In</string>
     <string name="total_absent">Total Absent</string>
@@ -437,9 +437,27 @@
     <string name="cancel_">Cancel</string>
     <string name="add_photo_">Add Photo!</string>
     <string name="take_photo__">Take Photo</string>
-     <string name="logout">Logout</string>
+    <string name="logout">Logout</string>
     <string name="are_you_sure_to_logout">Are you sure to logout?</string>
     <string name="no">No</string>
     <string name="print">Print</string>
+    <string name="driver_name">Driver Name</string>
+    <string name="vehicle_name">Vehicle Name</string>
+    <string name="route_no">Route No</string>
+    <string name="route_incharge_name">Route Incharge Name</string>
+    <string name="route_incharge_mobile_no">Route Incharge Mobile No.</string>
+    <string name="marks">Marks</string>
+    <string name="max">Max</string>
+    <string name="exam">Exam</string>
+    <string name="approved">Approved</string>
+    <string name="rejected">Rejected</string>
+    <string name="total_leave_s">Total Leave(s):</string>
+    <string name="view_halfday_details">View HalfDay Details</string>
+    <string name="reason">Reason:</string>
+    <string name="applicant">Applicant:</string>
+    <string name="leave_forwarded">Leave Forwarded</string>
+    <string name="approve">Approve</string>
+    <string name="reject">Reject</string>
+    <string name="forward">Forward</string>
 
 </resources>

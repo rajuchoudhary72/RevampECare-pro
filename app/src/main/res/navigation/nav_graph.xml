@@ -356,6 +356,9 @@
         <action
             android:id="@+id/action_studentListFragment2_to_infractionListFragment"
             app:destination="@id/infractionListFragment" />
+        <action
+            android:id="@+id/action_studentListFragment2_to_studentProfileNavHostFragment"
+            app:destination="@id/studentProfileNavHostFragment" />
     </fragment>
 
     <fragment
@@ -559,4 +562,12 @@
         android:name="com.app.ecarepro.ui.award.ExcellenceAwardFragment"
         android:label="ExcellenceAwardFragment"
         tools:layout="@layout/fragment_excellence_award" />
+    <fragment
+        android:id="@+id/studentProfileNavHostFragment"
+        android:name="com.app.ecarepro.ui.studentProfile.StudentProfileNavHostFragment"
+        android:label="StudentProfileNavHostFragment" />
+    <fragment
+        android:id="@+id/leaveReportFragment"
+        android:name="com.app.ecarepro.ui.leave.leave_report.LeaveReportFragment"
+        android:label="LeaveReportFragment" />
 </navigation>

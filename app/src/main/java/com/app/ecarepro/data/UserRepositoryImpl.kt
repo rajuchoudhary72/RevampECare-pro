@@ -69,9 +69,14 @@ import com.app.ecarepro.data.repository.UserRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 class UserRepositoryImpl @Inject constructor(
@@ -221,6 +226,24 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun leaveListStatus(): NetworkLeaveListStatus {
        return userService.leaveListStatus()
+    }
+
+    override suspend fun leaveReport(
+        status: Int,
+        ord: Int,
+        applType: Int,
+        pg: Int
+    ): NetworkLeaveReport {
+        return userService.leaveReport(status, ord, applType, pg)
+    }
+
+    override suspend fun leaveAction(
+        applType: Int,
+        lvID: Int,
+        action: Int,
+        forwardedTo: Int
+    ): CommonResponse {
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID))
     }
 
     override suspend fun leaveApply(
@@ -444,6 +467,18 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getStudentProfile(sId: Int): NetworkStudentProfile {
         return userService.getStudentProfile(sId)
+    }
+
+    override suspend fun getSAttendanceYrID(sId: Int, yrID: Int): NetworkProfileAttendanceDTL {
+        return userService.getSAttendanceYrID(sId, yrID)
+    }
+
+    override suspend fun getFeeSummaryYrID(sId: Int, yrID: Int): FeeSummery {
+        return userService.getFeeSummaryYrID(sId, yrID)
+    }
+
+    override suspend fun getAcademicPerformance(sId: Int, yrID: Int): NetworkAcademicPerformance {
+        return userService.getAcademicPerformance(sId, yrID)
     }
 
     override suspend fun getAttendanceSummary(attDate: String): NetworkAttedanceSummary {

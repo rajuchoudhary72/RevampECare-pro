@@ -24,6 +24,7 @@ import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -164,15 +165,7 @@ class MainActivity : AppCompatActivity() {
                                 getFragmentId(
                                     parentMenu.menuID,
                                     menu.chMenuID
-                                )?.let {
-                                    navController.navigate(
-                                        it
-                                    ).apply {
-                                        Bundle().apply {
-
-                                        }
-                                    }
-                                }
+                                )
                             }
                         }
                     }
@@ -196,49 +189,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
-        return when (menuID) {
+    private fun getFragmentId(menuID: Int, childMenuId: Int)   {
+          when (menuID) {
             1 -> {
-                return when (childMenuId) {
-                    1 -> R.id.studentListFragment else -> null
-                }
+                  when (childMenuId) {
+
+                    1 -> {  navController.navigate(  R.id.studentListFragment2 ).apply {
+                        Bundle().apply { putString(Constant.FROM,Constant.PROFILE_FRA_STU)  } } }
+
+                      3 -> {  navController.navigate(  R.id.leaveReportFragment )  }
+
+                  }
+
+
             }
             6 -> {
-                return when (childMenuId) {
+                  when (childMenuId) {
                     7 -> R.id.composeFragment
                     8 -> R.id.messageFragment
                     9 -> R.id.messageFragment
-                    else -> null
-                }
+                 }
             }
             7 -> {
-                return when (childMenuId) {
+                  when (childMenuId) {
                     10 -> R.id.circularFragment
                     11 -> R.id.noticeListFragment
                     12-> R.id.noticeListFragment
-                    else -> null
-                }
+                 }
             }
 
 
             11 -> {
-                return when (childMenuId) {
+                  when (childMenuId) {
                     18 -> R.id.attendanceFragment
                     20 -> R.id.paySlipFragment
-                    else -> null
-                }
+                 }
             }
             18 -> {
-                return when (childMenuId) {
+                  when (childMenuId) {
                     21 -> R.id.studentListFragment2
                     22 -> R.id.studentListFragment
-                    else -> null
-                }
+                 }
             }
 
-            else -> {
-                null
-            }
+
         }
     }
 

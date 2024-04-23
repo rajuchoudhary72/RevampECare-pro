@@ -68,16 +68,24 @@
                     android:paddingBottom="@dimen/_5sdp"
                     android:text="@string/view_paid_transaction"
                     android:textColor="@color/white"
+                    android:visibility="gone"
                     android:textSize="@dimen/_12sdp" />
             </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_main"
+                android:layout_below="@+id/llSelectYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
 
 
             <LinearLayout
                 android:id="@+id/llHeading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/llSelectYear"
-                android:layout_margin="@dimen/_2sdp"
+                 android:layout_margin="@dimen/_2sdp"
                 android:background="@color/grey_light"
                 android:paddingTop="@dimen/_5sdp"
                 android:visibility="visible"
@@ -241,7 +249,7 @@
                     android:layout_weight="1.3"
                     android:gravity="center_vertical"
                     android:orientation="vertical"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -342,20 +350,25 @@
                 android:layout_height="@dimen/_30sdp"
                 android:layout_below="@+id/llPieChart" />
 
+
+        </RelativeLayout>
+
+
             <TextView
                 android:id="@+id/tvNoData"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/no_record_found"
-                android:layout_centerVertical="true"
+               android:layout_centerInParent="true"
                 android:visibility="gone"
-                android:layout_below="@+id/llSelectYear"
-                android:gravity="center"
+                 android:gravity="center"
                 android:fontFamily="@font/ubuntu_medium"
                 android:textSize="@dimen/_14sdp"
                 android:textColor="@color/red"
                 android:layout_marginTop="@dimen/_100sdp"
                 android:layout_centerHorizontal="true" />
+
+
 
         </RelativeLayout>
 

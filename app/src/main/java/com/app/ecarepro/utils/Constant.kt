@@ -30,6 +30,14 @@ class Constant {
         const val NAME = "name"
         const val TO = "to"
 
+        const val FROM = "from"
+    const val LEAVE_ACTION_APPROVE = 1
+    const val LEAVE_ACTION_REJECT = 2
+
+        const val PROFILE_FRA_STU = "ProfileFragmentStudent"
+
+
+
         const val CIRCULAR_ID = "CircularID"
         const val ASSIGNMENT_ID = "AssiID"
         const val DEFAULT_ID = 0

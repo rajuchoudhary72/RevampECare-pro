@@ -7,10 +7,10 @@ data class TransDetails(
     val driverAdd: Any,
     val driverDrivingLNo: Any,
     val driverMob: Any,
-    val driverName: Any,
+    val driverName: String,
     val driverVoterIDNo: Any,
     val key: Any,
-    val routeNumber: Any,
+    val routeNumber: String,
     val schCode: Any,
     val schoolTransport: SchoolTransport,
     val stID: Int,
@@ -22,7 +22,7 @@ data class TransDetails(
     val transporterMob: Any,
     val transporterName: Any,
     val transporterVoterIDNo: Any,
-    val vehicleNumber: Any,
-    val vehicleType: Any,
+    val vehicleNumber: String,
+    val vehicleType: String,
     val vehicleTypeID: Int
 )

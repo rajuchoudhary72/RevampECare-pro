@@ -61,8 +61,14 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserProfileDto
+import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserService {
@@ -182,6 +188,19 @@ interface UserService {
     @POST("Leave/Apply")
     suspend fun leaveApply(
         @Body request: LeaveRequestData,
+    ): CommonResponse
+
+    @GET("Leave/Report")
+    suspend fun leaveReport(
+        @Query("Status") status: Int,
+        @Query("ord") ord: Int,
+        @Query("ApplType") applType: Int,
+        @Query("pg") pg: Int
+    ): NetworkLeaveReport
+
+    @POST("Leave/Action")
+    suspend fun leaveAction(
+        @Body request: PostLeaveAction,
     ): CommonResponse
 
     @GET("Leave/Setting")
@@ -383,6 +402,24 @@ interface UserService {
     suspend fun getStudentProfile(
         @Query("StID") sId: Int
     ): NetworkStudentProfile
+
+    @GET("Report/AttendanceYrID")
+    suspend fun getSAttendanceYrID(
+        @Query("StID") sId: Int,
+        @Query("YrID") yrID: Int
+    ): NetworkProfileAttendanceDTL
+
+    @GET("Report/FeeSummaryYrID")
+    suspend fun getFeeSummaryYrID(
+        @Query("StID") sId: Int,
+        @Query("YrID") yrID: Int
+    ): FeeSummery
+
+    @GET("Student/AcademicPerformance")
+    suspend fun getAcademicPerformance(
+        @Query("StID") sId: Int,
+        @Query("YrID") yrID: Int
+    ): NetworkAcademicPerformance
 
     @GET("Report/AttendanceSummary")
     suspend fun getAttendanceSummary(

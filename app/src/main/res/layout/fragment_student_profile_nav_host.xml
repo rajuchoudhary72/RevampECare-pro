@@ -12,6 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.studentProfile.StudentProfileNavHostFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -124,6 +125,7 @@
                                         android:fontFamily="@font/ubuntu_medium"
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
+                                        android:layout_marginStart="8dp"
                                         android:text="@{userData.className}" />
                                 </LinearLayout>
 
@@ -147,6 +149,7 @@
                                         android:fontFamily="@font/ubuntu_medium"
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
+                                        android:layout_marginStart="8dp"
                                         android:text="@{userData.gender}" />
                                 </LinearLayout>
 
@@ -170,6 +173,7 @@
                                         android:fontFamily="@font/ubuntu_medium"
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
+                                        android:layout_marginStart="8dp"
                                         android:text="@{userData.dob}" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -196,20 +200,15 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
-
-            </LinearLayout>
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

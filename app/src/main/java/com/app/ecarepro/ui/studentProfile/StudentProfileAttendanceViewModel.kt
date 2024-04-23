@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.studentProfile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStaffProfile
 import com.app.ecarepro.data.network.model.NetworkStudentProfile
@@ -13,18 +14,21 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StudentProfileNavHostViewModel @Inject constructor(
+class StudentProfileAttendanceViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val studentProfileMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStudentProfile>> = MutableStateFlow(
+    private val studentProfileMutableStateFlow: MutableStateFlow<NetworkResult<NetworkProfileAttendanceDTL>> = MutableStateFlow(
         NetworkResult.Loading())
-    val studentProfileStateFlow: StateFlow<NetworkResult<NetworkStudentProfile>> = studentProfileMutableStateFlow
+    val studentProfileStateFlow: StateFlow<NetworkResult<NetworkProfileAttendanceDTL>> = studentProfileMutableStateFlow
 
-    fun   getStudentProfile(  sId: Int  )=viewModelScope.launch {
+    fun  getSAttendanceYrID(
+        sId: Int,
+        yrID: Int
+    )=viewModelScope.launch {
         runCatching {
             studentProfileMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getStudentProfile(sId)
+            userRepository.getSAttendanceYrID(sId, yrID)
         }.onSuccess {
             studentProfileMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -32,8 +36,6 @@ class StudentProfileNavHostViewModel @Inject constructor(
         }
 
     }
-
-
 
 }
 

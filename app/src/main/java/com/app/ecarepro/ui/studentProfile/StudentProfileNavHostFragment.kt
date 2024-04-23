@@ -12,6 +12,8 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerformanceNavHostFragment
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -22,15 +24,19 @@ import kotlinx.coroutines.launch
 class StudentProfileNavHostFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileNavHostBinding
-    private val studentProfileNavHostViewModel : StudentProfileNavHostViewModel by viewModels()
-
+    private val studentProfileNavHostViewModel: StudentProfileNavHostViewModel by viewModels()
+    private var studentID: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentStudentProfileNavHostBinding.inflate(inflater,container,false)
-         return binding.root
+    ): View {
+        binding = FragmentStudentProfileNavHostBinding.inflate(inflater, container, false)
+        try {
+            studentID = requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        } catch (_: Exception) {
+        }
+        return binding.root
     }
 
 
@@ -39,7 +45,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
         lifecycleScope.launch {
 
-
+            studentProfile(studentID)
 
         }
 
@@ -62,19 +68,20 @@ class StudentProfileNavHostFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            binding.userData=it.data.profile
+                            binding.userData = it.data.profile
 
-                            val fragmentList : ArrayList<Fragment> = ArrayList();
+                            val fragmentList: ArrayList<Fragment> = ArrayList();
 
 
                             fragmentList.add(StudentProfileDetailsFragment(it.data.profile))
-                            fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL))
-                            fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery))
+                            fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID))
+                            fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery,it.data.academicYears,studentID))
                             fragmentList.add(StudentProfileLibraryTransFragment(it.data.library))
                             fragmentList.add(StudentProfileMedicineIssuedFragment(it.data.medicineIssued))
-
+                            fragmentList.add(StudentProfileTransportDetailsFragment(it.data.transDetails))
+                            fragmentList.add(AcademicPerformanceNavHostFragment(it.data.academicYears,studentID ))
 
 
                             val viewPagerAdapter = ViewPagerAdapter(
@@ -91,14 +98,32 @@ class StudentProfileNavHostFragment : Fragment() {
 
                                 when (position) {
                                     0 -> {
-                                        tab.text = "Teacher's Profile"
-                                    } 1 -> {
-                                    tab.text = "Attendance"
-                                }   2 -> {
-                                    tab.text = "TimeTable"
-                                } 3 -> {
-                                    tab.text = "Current Salary Structure"
-                                } }
+                                        tab.text = "Full Profile"
+                                    }
+
+                                    1 -> {
+                                        tab.text = "Attendance"
+                                    }
+
+                                    2 -> {
+                                        tab.text = "Fee Details"
+                                    }
+
+                                    3 -> {
+                                        tab.text = "Library Transaction Details"
+                                    }
+
+                                    4 -> {
+                                        tab.text = "Infirmary Visit"
+                                    }
+                                    5 -> {
+                                        tab.text = "Transport Details"
+                                    }
+                                    6 -> {
+                                        tab.text = "Academic Performance"
+                                    }
+
+                                }
                             }.attach()
                         }
 

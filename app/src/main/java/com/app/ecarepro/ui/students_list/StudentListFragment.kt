@@ -28,7 +28,7 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
 
     private   var studentList: List<Student>? = null
     private lateinit var studentListFilter: List<Student>
-    private var destination: String= ""
+    private var fromFragment: String= ""
     private lateinit var binding : FragmentStudentListBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
 
@@ -41,7 +41,9 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
             viewModel = studentListViewModel
         }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        destination= requireArguments().getString(Constant.TO).toString()
+           try {
+               fromFragment= requireArguments().getString(Constant.FROM).toString()
+           }catch (_:Exception){}
          return binding.root
     }
 
@@ -129,8 +131,13 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
     }
 
     override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
-        when (destination) {
-            getString(R.string.add_appreciation) -> {
+
+        findNavController().navigate(R.id.action_studentListFragment2_to_studentProfileNavHostFragment,Bundle( ).apply {
+            putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+        })
+
+        when (fromFragment) {
+           /* getString(R.string.add_appreciation) -> {
                 findNavController().navigate(R.id.action_studentListFragment2_to_addAppreciationFragment,Bundle( ).apply {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
@@ -150,6 +157,12 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
             }
+            */
+           /* Constant.PROFILE_FRA_STU -> {
+                findNavController().navigate(R.id.action_studentListFragment2_to_studentProfileNavHostFragment,Bundle( ).apply {
+                    putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                })
+            }*/
         }
 
     }
