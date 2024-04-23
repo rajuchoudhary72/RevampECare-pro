@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -17,6 +19,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
+import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.labelCenter
@@ -32,7 +35,6 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.data.network.model.NetworkSchool
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -116,65 +118,78 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun buildUiModels(uiState: HomeUiState.Success) {
-        uiState.user.let { user ->
-            binding.apply {
-                imgUserAvatar.imageUrl(user.photo)
-                txtUserName.text = user.name
-            }
+    private fun buildUiModels(uiState: HomeUiState) {
+
+        (requireActivity() as MainActivity).showLoader(uiState.isLoading())
+
+        uiState.getErrorOrNull()?.let { error ->
+            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
         }
 
-        binding.recyclerView.withModels {
-            carouselNoSnapBuilder {
-                id("carousel")
-                numViewsToShowOnScreen(1.2f)
-                spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
-                padding(
-                    Carousel.Padding(
-                        150,
-                        resources.getDimensionPixelOffset(
-                            R.dimen.horizontal_margin
-                        ), 150,
-                        resources.getDimensionPixelOffset(
-                            R.dimen.horizontal_margin
-                        ),
-                        resources.getDimensionPixelOffset(
-                            R.dimen.horizontal_margin
+        if (uiState is HomeUiState.Success) {
+            uiState.user.let { user ->
+                binding.apply {
+                    imgUserAvatar.imageUrl(user.photo)
+                    txtUserName.text = user.name
+                }
+            }
+
+            binding.recyclerView.withModels {
+                carouselNoSnapBuilder {
+                    id("carousel")
+                    numViewsToShowOnScreen(1.2f)
+                    spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                    padding(
+                        Carousel.Padding(
+                            150,
+                            resources.getDimensionPixelOffset(
+                                R.dimen.horizontal_margin
+                            ), 150,
+                            resources.getDimensionPixelOffset(
+                                R.dimen.horizontal_margin
+                            ),
+                            resources.getDimensionPixelOffset(
+                                R.dimen.horizontal_margin
+                            )
                         )
                     )
-                )
-                (0..7).forEach {
-                    dashboardCard {
-                        id(it)
+                    uiState.cards.forEach { card ->
+                        dashboardCard {
+                            id(card.link)
+                            card(card)
+                        }
                     }
                 }
-            }
 
-            viewAllWidget {
-                id("view_all_widget")
-                spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
-                clickListener { _ ->
-                    findNavController().navigate(R.id.widgetsFragment)
+                viewAllWidget {
+                    id("view_all_widget")
+                    spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                    clickListener { _ ->
+                        findNavController().navigate(
+                            R.id.widgetsFragment,
+                            bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
+                        )
+                    }
                 }
-            }
 
-            labelCenter {
-                id("fav")
-                spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
-            }
-
-            uiState.favourites.forEach { favouriteSlider ->
-                cardOption {
-                    id(favouriteSlider.module)
-                    data(favouriteSlider)
-                    clickListener { _ -> navigateToFavourites(favouriteSlider) }
+                labelCenter {
+                    id("fav")
+                    spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
-            }
 
-            addMoreFavourites {
-                id("add more")
-                clickListener { _ ->
-                    findNavController().navigate(R.id.favouritesFragment)
+                uiState.favourites.forEach { favouriteSlider ->
+                    cardOption {
+                        id(favouriteSlider.module)
+                        data(favouriteSlider)
+                        clickListener { _ -> navigateToFavourites(favouriteSlider) }
+                    }
+                }
+
+                addMoreFavourites {
+                    id("add more")
+                    clickListener { _ ->
+                        findNavController().navigate(R.id.favouritesFragment)
+                    }
                 }
             }
         }
@@ -184,7 +199,7 @@ class HomeFragment : Fragment() {
         if (favouriteSlider.module.contains("notice", true)) {
             findNavController().navigate(R.id.noticeListFragment)
         } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.studentAttendanceReportFragment)
+            findNavController().navigate(R.id.thoughtsListFragment)
         } else if (favouriteSlider.module.contains("circular", true)) {
             findNavController().navigate(R.id.circularFragment)
         } else if (favouriteSlider.module.contains("library", true)) {
@@ -213,8 +228,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.attendanceFragment)
         }else if (favouriteSlider.module.contains("Infraction", true)) {
             findNavController().navigate(R.id.infractionSelectFragment)
-        }
-        else if (favouriteSlider.module.contains("Excellence Award", true)) {
+        } else if (favouriteSlider.module.contains("Excellence Award", true)) {
             findNavController().navigate(R.id.excellenceAwardFragment)
         }
         /*start Web view module call  from here */
@@ -224,15 +238,13 @@ class HomeFragment : Fragment() {
                     webViewCall(url, getString(R.string.website_txt))
                 }
             }
-        }
-        else if (favouriteSlider.module.contains("Marks Entry", true)) {
+        } else if (favouriteSlider.module.contains("Marks Entry", true)) {
             schoolData?.let {
                 it.marksEntryURL?.let { url ->
                     webViewCall(url, getString(R.string.marks_entry_heading))
                 }
             }
-        }
-        else if (favouriteSlider.module.contains("Assessment", true)) {
+        } else if (favouriteSlider.module.contains("Assessment", true)) {
             schoolData?.let {
                 it.assessmentMarksURL?.let { url ->
                     webViewCall(url, getString(R.string.assessment_headling))

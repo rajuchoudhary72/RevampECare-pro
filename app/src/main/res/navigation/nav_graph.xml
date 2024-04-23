@@ -570,4 +570,8 @@
         android:id="@+id/leaveReportFragment"
         android:name="com.app.ecarepro.ui.leave.leave_report.LeaveReportFragment"
         android:label="LeaveReportFragment" />
+    <fragment
+        android:id="@+id/attendanceFragment2"
+        android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
+        android:label="AttendanceFragment" />
 </navigation>

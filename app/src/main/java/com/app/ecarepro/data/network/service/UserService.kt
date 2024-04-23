@@ -1,20 +1,11 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
-import com.app.ecarepro.data.network.model.NetworkBookDetails
-import com.app.ecarepro.data.network.model.NetworkClassSyllabus
-import com.app.ecarepro.data.network.model.NetworkLatestBook
-import com.app.ecarepro.data.network.model.NetworkMyClass
-import com.app.ecarepro.data.network.model.NetworkPaySlip
-import com.app.ecarepro.data.network.model.NetworkQuestionnaire
-import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.NetworkWhoLike
-import com.app.ecarepro.data.network.model.UserLoginRequestDto
-import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
@@ -22,16 +13,22 @@ import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
+import com.app.ecarepro.data.network.model.NetworkBookDetails
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
 import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMySubjects
+import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStaffList
@@ -45,8 +42,15 @@ import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
+import com.app.ecarepro.data.network.model.NetworkThoughts
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
+import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UserLoginRequestDto
+import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
 import com.app.ecarepro.data.network.model.post_lesson.ActionOnLesson
@@ -56,6 +60,7 @@ import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -464,4 +469,8 @@ interface UserService {
     @GET("Academic/ExcellenceAward")
     suspend fun excellenceAward(
     ): ExcellenceAwardResponse
+
+    @GET("User/Dashboard")
+    suspend fun getUserDashboard(
+    ): UserDashboardDto
 }
