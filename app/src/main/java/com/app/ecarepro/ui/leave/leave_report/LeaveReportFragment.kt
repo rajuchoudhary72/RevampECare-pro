@@ -14,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.FragmentLeaveReportBinding
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.model.LessonPlan
@@ -26,9 +28,12 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class LeaveReportFragment : Fragment(), ItemListener<Dtl> {
+class LeaveReportFragment @Inject constructor(
+    private val userDataStore: UserDataStore,
+) : Fragment(), ItemListener<Dtl> {
 
     private lateinit var leaveReportAdapter: LeaveReportAdapter
     private lateinit var binding:  FragmentLeaveReportBinding
@@ -36,13 +41,15 @@ class LeaveReportFragment : Fragment(), ItemListener<Dtl> {
     private var leaveReportList = mutableListOf<Dtl>()
 
     private var status = 0
-    private val order = 2
-    private val applType = 1
+    private var order = 2
+    private var applType = 1
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
+    private lateinit var user: NetworkUserDetailsDto
+
 
 
 
@@ -56,6 +63,13 @@ class LeaveReportFragment : Fragment(), ItemListener<Dtl> {
         leaveReportAdapter = LeaveReportAdapter(leaveReportList, this)
         with(binding) {
             recyclerLeaveReport.adapter = leaveReportAdapter
+        }
+        lifecycleScope.launch {
+            user = userDataStore.getUser()
+            if (user.userType==Constant.STAFF_TYPE){
+                applType=3
+                order=1
+            }
         }
         return binding.root
 

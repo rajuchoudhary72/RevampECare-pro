@@ -470,6 +470,9 @@
         <action
             android:id="@+id/action_staffListFragment_to_staffProfileNavHostFragment"
             app:destination="@id/staffProfileNavHostFragment" />
+        <action
+            android:id="@+id/action_staffListFragment_to_staffAssignmentsListFragment"
+            app:destination="@id/staffAssignmentsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileAtteFragment"
@@ -574,4 +577,8 @@
         android:id="@+id/attendanceFragment2"
         android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
         android:label="AttendanceFragment" />
+    <fragment
+        android:id="@+id/classTeacherFragment"
+        android:name="com.app.ecarepro.ui.classteacher.ClassTeacherFragment"
+        android:label="ClassTeacherFragment" />
 </navigation>

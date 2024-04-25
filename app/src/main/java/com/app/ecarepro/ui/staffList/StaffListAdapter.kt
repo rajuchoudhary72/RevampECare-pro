@@ -3,9 +3,13 @@ package com.app.ecarepro.ui.staffList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffListItemBinding
 import com.app.ecarepro.model.Staff
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 
 class StaffListAdapter(private var staffList: List<Staff>,
                        private var staffListFragment: StaffListFragment
@@ -20,30 +24,40 @@ class StaffListAdapter(private var staffList: List<Staff>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StaffListViewHolder {
         bindingm=StaffListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return StaffListViewHolder(bindingm.root)
+        return StaffListViewHolder(bindingm )
     }
 
     override fun getItemCount(): Int = staffList.size
 
     override fun onBindViewHolder(holder: StaffListViewHolder, position: Int) {
 
-        bindingm.staffData=staffList[position]
-        val data= staffList[position]
+        val binding = DataBindingUtil.getBinding<StaffListItemBinding>(holder.itemView)
+         with(binding!!) {
+             staffData=staffList[position]
+            val data= staffList[position]
 
-        bindingm.tvClassName.text= buildString {
-            append("( ")
-            append(data.designation)
-            append(" )")
+            tvClassName.text= buildString {
+                append("( ")
+                append(data.designation)
+                append(" )")
+            }
+            llMain.setOnClickListener {
+                staffListFragment.onItemClick(data,1,false)
+            }
+
+             Picasso.get().
+             load(data.photo)
+                 .placeholder(R.drawable.default_profile)
+                 .  into(circleImageViewProfile)
+
+
         }
 
 
 
-        bindingm.llMain.setOnClickListener {
-            staffListFragment.onItemClick(data,1,false)
-        }
            }
 
-    class StaffListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class StaffListViewHolder(itemView: StaffListItemBinding) : RecyclerView.ViewHolder(itemView.root){
   }
 
 

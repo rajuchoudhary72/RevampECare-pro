@@ -3,7 +3,6 @@ package com.app.ecarepro.data
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
-import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
@@ -50,8 +49,6 @@ import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
-import com.app.ecarepro.data.network.model.Profile
-import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.asEntity
@@ -70,10 +67,10 @@ import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfracti
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.UserRepository
-import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
@@ -363,8 +360,8 @@ class UserRepositoryImpl @Inject constructor(
         ))
     }
 
-    override suspend fun teachersAssignment(): NetworkTeacherAssignment {
-        return userService.teachersAssignment()
+    override suspend fun teachersAssignment(iD: String,): NetworkTeacherAssignment {
+        return userService.teachersAssignment(iD)
     }
 
     override suspend fun deleteAssignment(iD: String): CommonResponse {
@@ -509,6 +506,10 @@ class UserRepositoryImpl @Inject constructor(
         rejectionComments: String
     ): CommonResponse {
         return userService.lessonPlanAction(ActionOnLesson(action, lPlnID, rejectionComments))
+    }
+
+    override suspend fun getClassTeacher(): NetworkClassTeacher {
+        return userService.getClassTeacher()
     }
 
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {

@@ -5,7 +5,7 @@ Staff(
     val designation: String,
     val email: String,
     val gender: String,
-    val id: Any,
+    val id: String,
     val isSelected: Boolean,
     val maritialStatus: String,
     val mobile: String,

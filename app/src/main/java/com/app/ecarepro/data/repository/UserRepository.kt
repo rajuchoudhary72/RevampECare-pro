@@ -15,6 +15,7 @@ import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
@@ -63,6 +64,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import retrofit2.http.GET
 
 interface UserRepository {
     suspend fun insertUser(user: NetworkUser)
@@ -236,7 +238,9 @@ interface UserRepository {
         fileExt: String
     ): CommonResponse
 
-    suspend fun teachersAssignment( ): NetworkTeacherAssignment
+    suspend fun teachersAssignment(
+        iD: String,
+    ): NetworkTeacherAssignment
 
     suspend fun deleteAssignment(  iD: String  ): CommonResponse
 
@@ -402,5 +406,8 @@ interface UserRepository {
         action: Int,
         rejectionComments: String,
     ): CommonResponse
+
+     suspend fun getClassTeacher(
+    ): NetworkClassTeacher
 
 }

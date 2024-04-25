@@ -60,18 +60,15 @@ import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
-import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
-import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
-import com.app.ecarepro.data.network.model.UploadPhotoRequest
-import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
@@ -281,7 +278,9 @@ interface UserService {
 
 
     @GET("Academic/TeachersAssignment")
-    suspend fun teachersAssignment( ): NetworkTeacherAssignment
+    suspend fun teachersAssignment(
+        @Query("ID") iD: String,
+    ): NetworkTeacherAssignment
 
     @GET("Academic/DeleteAssignment")
     suspend fun deleteAssignment(
@@ -473,4 +472,9 @@ interface UserService {
     @GET("User/Dashboard")
     suspend fun getUserDashboard(
     ): UserDashboardDto
+
+
+    @GET("Report/Classteacher")
+    suspend fun getClassTeacher(
+    ): NetworkClassTeacher
 }

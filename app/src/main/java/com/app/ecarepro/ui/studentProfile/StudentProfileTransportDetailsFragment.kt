@@ -11,7 +11,7 @@ import com.app.ecarepro.databinding.FragmentTransportDetailsBinding
 import com.app.ecarepro.model.TransDetails
 
 
-class StudentProfileTransportDetailsFragment(private val transDetails: TransDetails) : Fragment() {
+class StudentProfileTransportDetailsFragment(private val transDetails: TransDetails? ) : Fragment() {
 
     private lateinit var binding : FragmentTransportDetailsBinding
 

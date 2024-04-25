@@ -36,6 +36,9 @@ class Constant {
     const val LEAVE_ACTION_REJECT = 2
 
         const val PROFILE_FRA_STU = "ProfileFragmentStudent"
+        const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
+        const val FRA_LEAVE = "FragmentLeave"
+        const val FRA_ASSI = "FragmentAssignment"
 
 
 

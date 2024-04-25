@@ -20,6 +20,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.students_list.StudentListAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,19 +31,21 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
 
     private lateinit var binding: FragmentStaffListBinding
     private val staffListViewModel: StaffListViewModel by viewModels()
-
+    private var toFragment: String= ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStaffListBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            toFragment= requireArguments().getString(Constant.TO).toString()
+        }catch (_:Exception){}
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         getStaffList()
 
@@ -109,8 +112,15 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
     }
 
     override fun onItemClick(t: Staff, pos: Int, boolean: Boolean) {
-        findNavController().navigate(R.id.action_staffListFragment_to_staffProfileNavHostFragment,Bundle( ).apply {
-            putInt(Constant.STAFF_ID_ARGUMENT, t.sid)
-        })
+        if (toFragment==Constant.FRA_ASSI){
+            findNavController().navigate(R.id.action_staffListFragment_to_staffProfileNavHostFragment,Bundle( ).apply {
+                putInt(Constant.STAFF_ID_ARGUMENT, t.sid)
+            })
+        }else{
+            findNavController().navigate(R.id.action_staffListFragment_to_staffAssignmentsListFragment,Bundle( ).apply {
+                putString(Constant.STAFF_ID_ARGUMENT, t.id)
+            })
+        }
+
     }
 }

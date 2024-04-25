@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +19,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentListBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,11 +55,25 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.rbGroupSchoolType.setOnCheckedChangeListener(
+            RadioGroup.OnCheckedChangeListener { group, checkedId ->
+                when (checkedId) {
+                    R.id.rb_all -> {
+
+                           }
+                    R.id.rb_boarding -> {
+                          }
+                    R.id.rb_day_scolar -> {
+                          }
+
+                }
+            })
+
         lifecycleScope.launch {
             studentListViewModel.searchQuery.collectLatest {
 
                 if (it.isNotEmpty() && studentList!=null){
-                    studentListFilter = studentList!!.filter { s -> s.name.contains(it)   }
+                    studentListFilter = studentList!!.filter { s -> s .name.lowercase().contains(it.lowercase())   }
                     setupRecycleViewStudentList(studentListFilter)
                 }else{
                     studentList?.let { it1 -> setupRecycleViewStudentList(it1) }

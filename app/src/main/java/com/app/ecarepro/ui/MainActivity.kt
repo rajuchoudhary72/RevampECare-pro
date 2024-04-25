@@ -20,6 +20,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
@@ -30,13 +33,15 @@ import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity   : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -50,6 +55,8 @@ class MainActivity : AppCompatActivity() {
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
+
+
 
 
     private val topLevelFragments = mutableListOf(
@@ -81,9 +88,15 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+
+        Picasso.setSingletonInstance(Picasso.Builder(this).build())
+
+
     }
 
-     fun setUpDrawer() {
+
+
+    fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
                 binding.drawerLayout.open()
@@ -189,47 +202,85 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragmentId(menuID: Int, childMenuId: Int)   {
-          when (menuID) {
+    private fun getFragmentId(menuID: Int, childMenuId: Int) {
+        when (menuID) {
             1 -> {
-                  when (childMenuId) {
+                when (childMenuId) {
 
-                    1 -> {  navController.navigate(  R.id.studentListFragment2 ).apply {
-                        Bundle().apply { putString(Constant.FROM,Constant.PROFILE_FRA_STU)  } } }
+                    1 -> {
+                        navController.navigate(R.id.studentListFragment2).apply {
+                            Bundle().apply { putString(Constant.FROM, Constant.PROFILE_FRA_STU) }
+                        }
+                    }
 
-                      3 -> {  navController.navigate(  R.id.leaveReportFragment )  }
+                    3 -> {
+                        navController.navigate(R.id.leaveReportFragment)
+                    }
 
-                  }
+                }
+            }
 
+            2 -> {
+                when (childMenuId) {
+
+                    4 -> {
+                        navController.navigate(R.id.staffListFragment).apply {
+                            Bundle().apply { putString(Constant.FROM, Constant.PROFILE_FRA_STAFF) }
+                        }
+                    }
+
+                    5 -> {
+                        navController.navigate(R.id.classTeacherFragment)
+                    }
+
+                    6 -> {
+                        navController.navigate(R.id.leaveReportFragment)
+                    }
+
+                }
+            }
+
+           /* 3 -> {
+                if ( systemViewModel .user .userType==Constant.STAFF_TYPE){
+                    if (systemViewModel .user.roleName== "Principal" || systemViewModel .user.roleName== "Management"){
+                        navController.navigate(R.id.staffListFragment).apply {
+                            Bundle().apply { putString(Constant.TO, Constant.FRA_ASSI) }
+                        }
+                    }
+
+                }
 
             }
+*/
             6 -> {
-                  when (childMenuId) {
+                when (childMenuId) {
                     7 -> R.id.composeFragment
                     8 -> R.id.messageFragment
                     9 -> R.id.messageFragment
-                 }
+                }
             }
+
             7 -> {
-                  when (childMenuId) {
+                when (childMenuId) {
                     10 -> R.id.circularFragment
                     11 -> R.id.noticeListFragment
-                    12-> R.id.noticeListFragment
-                 }
+                    12 -> R.id.noticeListFragment
+                }
             }
 
 
             11 -> {
-                  when (childMenuId) {
+                when (childMenuId) {
                     18 -> R.id.attendanceFragment
                     20 -> R.id.paySlipFragment
-                 }
+                }
             }
+
             18 -> {
-                  when (childMenuId) {
+                when (childMenuId) {
                     21 -> R.id.studentListFragment2
                     22 -> R.id.studentListFragment
-                 }
+                }
             }
 
 

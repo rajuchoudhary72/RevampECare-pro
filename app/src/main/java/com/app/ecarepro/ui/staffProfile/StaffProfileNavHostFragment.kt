@@ -2,19 +2,21 @@ package com.app.ecarepro.ui.staffProfile
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStaffProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,6 +43,7 @@ class StaffProfileNavHostFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         staffProfile(staffId)
 
     }
@@ -63,6 +66,13 @@ class StaffProfileNavHostFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
 
                         if (it.data!=null){
+
+                            binding.userData=it.data.details
+
+                            Picasso.get().
+                            load(it.data.details.photo)
+                                .placeholder(R.drawable.default_profile)
+                                .  into(binding.civStuPic)
 
                             var fragmentList : ArrayList<Fragment> = ArrayList();
 

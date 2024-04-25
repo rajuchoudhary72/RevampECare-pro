@@ -12,6 +12,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.staffProfile.StaffProfileNavHostFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -23,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="TimeTable"
+            app:title="Staff Profile"
 
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
@@ -83,8 +84,7 @@
                                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
                                 app:strokeColor="?attr/colorOutlineVariant"
                                 app:strokeWidth="1dp"
-                                imageUrl="@{userData.photo}"
-                                placeholder="@{@drawable/default_profile}" />
+                                 />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -124,6 +124,7 @@
                                         android:fontFamily="@font/ubuntu_medium"
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
+                                        android:layout_marginStart="@dimen/_8sdp"
                                         android:text="@{userData.designation}"
                                         />
                                 </LinearLayout>
@@ -149,6 +150,8 @@
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
                                         android:text="@{userData.gender}"
+                                        android:layout_marginStart="@dimen/_8sdp"
+
                                         />
                                 </LinearLayout>
 
@@ -173,6 +176,8 @@
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
                                         android:text="@{userData.doj}"
+                                        android:layout_marginStart="@dimen/_8sdp"
+
                                         />
                                 </LinearLayout>
                             </LinearLayout>
@@ -199,20 +204,15 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
-
-            </LinearLayout>
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -412,7 +412,7 @@
     <string name="date_of_anniversary">Date of Anniversary</string>
     <string name="spouse_name">Spouse Name</string>
     <string name="spouse_contact_number">Spouse Contact Number</string>
-    <string name="gender">Gender</string>
+    <string name="gender">Gender : </string>
     <string name="nationality">Nationality</string>
     <string name="religion">Religion</string>
     <string name="qualification">Qualification</string>
