@@ -2,15 +2,17 @@ package com.app.ecarepro.ui.dashbord.model
 
 import androidx.core.view.isVisible
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.databinding.ItemEstimateCollectionCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
+import com.app.ecarepro.utils.rupeeText
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 
-class EstimateCollectionModel :
+class EstimateCollectionModel(val feeCollection: FeeCollection) :
     ViewBindingKotlinModel<ItemEstimateCollectionCardBinding>(R.layout.item_estimate_collection_card) {
-        private var isExpanded = false
+    private var isExpanded = false
     override fun ItemEstimateCollectionCardBinding.bind() {
         isExpanded = this@EstimateCollectionModel.isExpanded
         title.setOnClickListener {
@@ -18,11 +20,17 @@ class EstimateCollectionModel :
             groupExpanded.isVisible = this@EstimateCollectionModel.isExpanded
             groupCollapsed.isVisible = this@EstimateCollectionModel.isExpanded.not()
         }
-        barChart.aa_drawChartWithChartModel(getBarChartModel())
-        lineChart.aa_drawChartWithChartModel(getLineChartModel())
+
+        textEstimatedAmount.rupeeText(feeCollection.estimate)
+        textReceivedAmount.rupeeText(feeCollection.received)
+        textConcessionAmount.rupeeText(feeCollection.concession)
+        textDueAmount.rupeeText(feeCollection.due)
+
+        barChart.aa_drawChartWithChartModel(getBarChartModel(feeCollection))
+        lineChart.aa_drawChartWithChartModel(getLineChartModel(feeCollection))
     }
 
-    private fun getBarChartModel() = AAChartModel()
+    private fun getBarChartModel(feeCollection: FeeCollection) = AAChartModel()
         .chartType(AAChartType.Bar)
         .dataLabelsEnabled(false)
         .margin(arrayOf(0, 0, 0, 0))
@@ -36,7 +44,7 @@ class EstimateCollectionModel :
                     .fillColor("#06BE7C")
                     .data(
                         arrayOf(
-                            4.0,
+                            feeCollection.estimate ?: 0.0,
                         )
                     ),
                 AASeriesElement()
@@ -45,7 +53,7 @@ class EstimateCollectionModel :
                     .fillColor("#1993D9")
                     .data(
                         arrayOf(
-                            6.0,
+                            feeCollection.received ?: 0.0,
                         )
                     ),
                 AASeriesElement()
@@ -54,7 +62,7 @@ class EstimateCollectionModel :
                     .fillColor("#F35E76")
                     .data(
                         arrayOf(
-                            8.0,
+                            feeCollection.concession ?: 0.0,
                         )
                     ),
                 AASeriesElement()
@@ -63,71 +71,34 @@ class EstimateCollectionModel :
                     .fillColor("#9999CC")
                     .data(
                         arrayOf(
-                            9.5,
+                            feeCollection.due ?: 0.0,
                         )
                     ),
             )
         )
         .xAxisVisible(false)
         .yAxisVisible(false)
-    private fun getLineChartModel() = AAChartModel()
+
+    private fun getLineChartModel(feeCollection: FeeCollection) = AAChartModel()
         .chartType(AAChartType.Column)
         .dataLabelsEnabled(false)
         .legendEnabled(false)
         .series(
-            arrayOf(
+            feeCollection.installmentCollections?.map { fee ->
                 AASeriesElement()
                     .borderRadiusTopLeft(10)
                     .borderRadiusTopRight(10)
-                    .name("Jan-Mar")
+                    .name(fee.installment)
                     .fillColor("#06BE7C")
                     .data(
                         arrayOf(
-                            4.0,
-                            5.0,
-                            6.0,
-                            3.0,
+                            fee.estimate ?: 0.0,
+                            fee.received ?: 0.0,
+                            fee.concession ?: 0.0,
+                            fee.due ?: 0.0,
                         )
-                    ),
-                AASeriesElement()
-                    .borderRadiusTopLeft(10)
-                    .borderRadiusTopRight(10)
-                    .fillColor("#1993D9")
-                    .name("Apr-Jun")
-                    .data(
-                        arrayOf(
-                            6.0,
-                            4.0,
-                            2.0,
-                            9.0,
-                        )
-                    ),
-                AASeriesElement()
-                    .borderRadiusTopLeft(10)
-                    .borderRadiusTopRight(10)
-                    .fillColor("#F35E76")
-                    .name("Jul-Sep")
-                    .data(
-                        arrayOf(
-                            8.0,
-                            1.0,
-                            4.0,
-                            6.0,
-                        )
-                    ),
-                AASeriesElement()
-                    .borderRadiusTopLeft(10)
-                    .borderRadiusTopRight(10)
-                    .fillColor("#9999CC")
-                    .name("Oct-Dec")
-                    .data(
-                        arrayOf(
-                            9.5,
-                            5.5,
-                            3.5,
-                            8.5,
-                        )
-                    ),
-            )
+                    )
+            }?.toTypedArray() ?: emptyArray()
         )
+
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_round_corner_green"
         android:paddingStart="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:paddingEnd="10dp"
         android:paddingVertical="12dp">
 
@@ -33,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu_medium"
-            android:text="₹3,90,000"
+            tools:text="₹3,90,000"
             android:textAppearance="?attr/textAppearanceBodyLarge"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -17,6 +17,7 @@ import coil.decode.SvgDecoder
 import coil.load
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.TransactionDetail
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
 import com.app.ecarepro.messageFilePreview
@@ -35,7 +36,8 @@ fun View.showOrHide(invisible: Boolean) {
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
     load(url) {
-        decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+        if (url?.contains("svg") == true)
+            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
         crossfade(true)
         if (placeholder != null) {
             placeholder(placeholder)
@@ -73,16 +75,19 @@ fun CardView.animateBetweenColorsOnExpand(
 }
 
 @BindingAdapter("collectionItems")
-fun LinearLayout.addCollectionItems(collections: Boolean) {
+fun LinearLayout.addCollectionItems(collections: List<TransactionDetail>?) {
+    collections ?: return
     removeAllViews()
-    (0..7).forEach {
+    collections.forEachIndexed { index, transactionDetail ->
         val binding = ItemCollectionBinding.inflate(LayoutInflater.from(context), null, false)
-        binding.showDivider = it != 7
+        binding.showDivider = collections.lastIndex != index
+        binding.transactionDetail = transactionDetail
         addView(binding.root)
 
     }
     val footer =
         ItemCollectionCollectFooterBinding.inflate(LayoutInflater.from(context), null, false)
+    footer.amount.rupeeText(collections.sumOf { it.amount ?: 0.0 })
     addView(footer.root)
 }
 
@@ -102,6 +107,7 @@ fun EpoxyRecyclerView.buildFilesModel(files: List<String>, clickListener: FileCl
     }
 
 }
+
 @BindingAdapter("autoLinkText")
 fun TextView.autoLink(textValue: String) {
     text = textValue
@@ -111,6 +117,12 @@ fun TextView.autoLink(textValue: String) {
         Linkify.addLinks(this, Linkify.EMAIL_ADDRESSES)
     }
 }
+
+@BindingAdapter("rupeeText")
+fun TextView.rupeeText(rupee: Double?) {
+    text = "₹$rupee"
+}
+
 interface FileClickListener {
     fun onClick(file: String)
 }

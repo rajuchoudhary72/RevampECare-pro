@@ -10,6 +10,10 @@
             type="java.lang.Boolean" />
 
         <variable
+            name="collectionModeWise"
+            type="com.app.ecarepro.data.network.model.CollectionModeWise" />
+
+        <variable
             name="toggleCardVisibility"
             type="android.view.View.OnClickListener" />
 
@@ -78,7 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
-                android:text="₹3,43,90,000"
+                rupeeText="@{collectionModeWise.total()}"
+                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +95,7 @@
                 isVisible="@{isExpanded}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                collectionItems="@{true}"
+                collectionItems="@{collectionModeWise.transactionDetails}"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
