@@ -2,13 +2,15 @@ package com.app.ecarepro.ui.dashbord.model
 
 import androidx.core.view.isVisible
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.FeeDefaulter
 import com.app.ecarepro.databinding.ItemFeeDefaulterCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
+import com.app.ecarepro.ui.views.subTitle
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 
-class FeeDefaulterModel :
+class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
     ViewBindingKotlinModel<ItemFeeDefaulterCardBinding>(R.layout.item_fee_defaulter_card) {
     private var isExpanded = false
     override fun ItemFeeDefaulterCardBinding.bind() {
@@ -19,10 +21,14 @@ class FeeDefaulterModel :
             groupCollapsed.isVisible = this@FeeDefaulterModel.isExpanded.not()
         }
 
-        chartView.aa_drawChartWithChartModel(getBarChartModel())
+        amount.subTitle("₹" + feeDefaulter.amount)
+        total.subTitle(feeDefaulter.totalStudent.toString())
+        defaulter.subTitle(feeDefaulter.dafaulterCount.toString())
+
+        chartView.aa_drawChartWithChartModel(getBarChartModel(feeDefaulter))
     }
 
-    private fun getBarChartModel() = AAChartModel()
+    private fun getBarChartModel(feeDefaulter: FeeDefaulter) = AAChartModel()
         .chartType(AAChartType.Pie)
         .colorsTheme(arrayOf("#0c9674", "#7dffc0"))
         .dataLabelsEnabled(true)

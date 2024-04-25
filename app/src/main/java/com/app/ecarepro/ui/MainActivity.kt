@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             this@withModels.requestModelBuild()
                         } else {
+                            systemViewModel.openDrawer(false)
                             getFragmentId(parentMenu.menuID)?.let { navController.navigate(it) }
                         }
                     }
@@ -165,6 +166,7 @@ class MainActivity : AppCompatActivity() {
                                     parentMenu.menuID,
                                     menu.chMenuID
                                 )?.let {
+                                    systemViewModel.openDrawer(false)
                                     navController.navigate(
                                         it
                                     )

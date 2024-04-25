@@ -43,10 +43,10 @@ class WidgetsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             mViewModel.card.collectLatest {
                 binding.recyclerView.withModels {
-                    it.forEach {
+                    it.forEachIndexed { index, card ->
                         dashboardCard {
-                            id(it.link)
-                            card(it)
+                            id(index)
+                            card(card)
                         }
                     }
                 }
