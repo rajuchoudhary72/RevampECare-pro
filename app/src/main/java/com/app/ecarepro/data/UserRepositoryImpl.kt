@@ -73,6 +73,7 @@ import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
@@ -510,6 +511,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getClassTeacher(): NetworkClassTeacher {
         return userService.getClassTeacher()
+    }
+
+    override suspend fun getTimetableViewer(): NetworkTimeTableViewer {
+        return userService.getTimetableViewer()
     }
 
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {

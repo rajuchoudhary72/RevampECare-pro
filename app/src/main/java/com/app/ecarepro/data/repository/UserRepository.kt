@@ -45,6 +45,7 @@ import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
@@ -409,5 +410,8 @@ interface UserRepository {
 
      suspend fun getClassTeacher(
     ): NetworkClassTeacher
+
+    suspend fun getTimetableViewer(
+    ): NetworkTimeTableViewer
 
 }

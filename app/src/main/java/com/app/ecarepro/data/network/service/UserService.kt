@@ -68,6 +68,7 @@ import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.ProfileAttendanceDTL
@@ -477,4 +478,8 @@ interface UserService {
     @GET("Report/Classteacher")
     suspend fun getClassTeacher(
     ): NetworkClassTeacher
+
+    @GET("Academic/TimetableViewer")
+    suspend fun getTimetableViewer(
+    ): NetworkTimeTableViewer
 }
