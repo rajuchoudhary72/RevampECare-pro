@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/ubuntu_medium"
-                android:text="₹3,43,90,000"
+                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/img_estimated"

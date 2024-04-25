@@ -8,6 +8,11 @@
         <variable
             name="showDivider"
             type="java.lang.Boolean" />
+
+        <variable
+            name="transactionDetail"
+            type="com.app.ecarepro.data.network.model.TransactionDetail" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,9 +22,10 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/img_cash"
+            imageUrl="@{transactionDetail.iconUrl}"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            tools:src="@drawable/img_cash"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,12 +33,14 @@
 
         <TextView
             android:id="@+id/label"
+            android:layout_marginStart="@dimen/_8sdp"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:fontFamily="@font/ubuntu_regular"
             app:layout_constraintStart_toEndOf="@+id/icon"
             app:layout_constraintTop_toTopOf="@+id/icon"
             app:layout_constraintBottom_toBottomOf="@+id/icon"
-            android:text="Cash"
+            android:text="@{transactionDetail.mode}"
+            tools:text="Cash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
@@ -42,7 +50,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/icon"
             app:layout_constraintBottom_toBottomOf="@+id/icon"
-            android:text="₹3,90,000"
+            rupeeText="@{transactionDetail.amount}"
+            tools:text="₹3,90,000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
