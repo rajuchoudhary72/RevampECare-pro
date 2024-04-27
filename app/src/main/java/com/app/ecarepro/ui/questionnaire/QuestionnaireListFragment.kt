@@ -43,6 +43,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
     ): View {
 
         binding = FragmentQuestionnaireListBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         noticeAdapter = QuestionnaireAdapter(
             ArrayList(),
@@ -102,10 +103,16 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
                             isLoading=true
                             if (it.data.questions != null) {
 
-                                binding.recyclerQuestionnaire.isVisible = true
-                                binding.tvNoData.isVisible = false
-                                noticeAdapter.setData(it.data.questions)
+                                if (it.data.questions.isNotEmpty()) {
 
+                                    binding.recyclerQuestionnaire.isVisible = true
+                                    binding.tvNoData.isVisible = false
+                                    noticeAdapter.setData(it.data.questions)
+
+                                } else {
+                                    binding.recyclerQuestionnaire.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
                             } else {
                                 binding.recyclerQuestionnaire.isVisible = false
                                 binding.tvNoData.isVisible = true

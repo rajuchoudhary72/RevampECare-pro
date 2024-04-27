@@ -48,6 +48,10 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.fbPostAssignement.setOnClickListener {
+            findNavController().navigate(R.id.postAssignmentFragment)
+        }
+
         lifecycleScope.launch {
             teacherAssignmentViewModel.teacAssignmentStateFlow.collectLatest {
 

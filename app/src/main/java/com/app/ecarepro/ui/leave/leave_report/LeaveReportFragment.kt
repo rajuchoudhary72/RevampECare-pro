@@ -31,9 +31,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LeaveReportFragment @Inject constructor(
-    private val userDataStore: UserDataStore,
-) : Fragment(), ItemListener<Dtl> {
+class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
     private lateinit var leaveReportAdapter: LeaveReportAdapter
     private lateinit var binding:  FragmentLeaveReportBinding
@@ -64,11 +62,13 @@ class LeaveReportFragment @Inject constructor(
         with(binding) {
             recyclerLeaveReport.adapter = leaveReportAdapter
         }
+
         lifecycleScope.launch {
-            user = userDataStore.getUser()
-            if (user.userType==Constant.STAFF_TYPE){
-                applType=3
-                order=1
+            leaveReportViewModel.user.collectLatest {
+                user = it
+                if (user.userType==Constant.STAFF_TYPE){
+                    //applType=3
+                 }
             }
         }
         return binding.root
@@ -97,7 +97,7 @@ class LeaveReportFragment @Inject constructor(
 
                 else -> {
                     leaveReportAdapter.clearData()
-                    status=3
+                    status=2
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
                 }
             }

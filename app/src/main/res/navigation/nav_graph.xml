@@ -470,9 +470,7 @@
         <action
             android:id="@+id/action_staffListFragment_to_staffProfileNavHostFragment"
             app:destination="@id/staffProfileNavHostFragment" />
-        <action
-            android:id="@+id/action_staffListFragment_to_staffAssignmentsListFragment"
-            app:destination="@id/staffAssignmentsListFragment" />
+          />
     </fragment>
     <fragment
         android:id="@+id/profileAtteFragment"
@@ -569,10 +567,7 @@
         android:id="@+id/studentProfileNavHostFragment"
         android:name="com.app.ecarepro.ui.studentProfile.StudentProfileNavHostFragment"
         android:label="StudentProfileNavHostFragment" />
-    <fragment
-        android:id="@+id/leaveReportFragment"
-        android:name="com.app.ecarepro.ui.leave.leave_report.LeaveReportFragment"
-        android:label="LeaveReportFragment" />
+
     <fragment
         android:id="@+id/attendanceFragment2"
         android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
@@ -581,4 +576,28 @@
         android:id="@+id/classTeacherFragment"
         android:name="com.app.ecarepro.ui.classteacher.ClassTeacherFragment"
         android:label="ClassTeacherFragment" />
+    <fragment
+        android:id="@+id/classAndTeacherListFragment"
+        android:name="com.app.ecarepro.ui.timetableviewer.ClassAndTeacherListFragment"
+        android:label="ClassAndTeacherListFragment" >
+        <action
+            android:id="@+id/action_classAndTeacherListFragment_to_timeTableNavHostFragment"
+            app:destination="@id/timeTableNavHostFragment" />
+        <action
+            android:id="@+id/action_classAndTeacherListFragment_to_staffAssignmentsListFragment"
+            app:destination="@id/staffAssignmentsListFragment" />
+        <action
+            android:id="@+id/action_classAndTeacherListFragment_to_lessonPlanListFragment5"
+            app:destination="@id/lessonPlanListFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/leaveReportFragment"
+        android:name="com.app.ecarepro.ui.leave.leave_report.LeaveReportFragment"
+        android:label="LeaveReportFragment" />
+    <fragment
+        android:id="@+id/reportCardDetailsNavHostFragment"
+        android:name="com.app.ecarepro.ui.reportCard.ReportCardDetailsNavHostFragment"
+        android:label="ReportCardDetailsNavHostFragment" />
 </navigation>

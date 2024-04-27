@@ -41,6 +41,7 @@ import java.util.Date
 @AndroidEntryPoint
 class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan> {
 
+    private   var teacherID: String = ""
     private var isNotFilterList: Boolean = true
     private lateinit var selectedSubject: MySubject
     private lateinit var subjectFilterer: List<MySubject>
@@ -72,6 +73,10 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
             }
 
         }
+        try {
+            teacherID = requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
+
+        }catch (_:Exception){}
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
@@ -356,7 +361,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                 }
             }
         }
-        lessonPlanListViewModel.getLessonPlanList(pageIndex)
+        lessonPlanListViewModel.getLessonPlanList(pageIndex,teacherID)
         isNotFilterList = true
 
 
@@ -365,7 +370,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
     override fun onItemClick(t: LessonPlan, pos: Int, boolean: Boolean) {
         if (pos == 3) {
             lessonPlanListViewModel.lessonPlanAction(t.lPlnID, 3, "").invokeOnCompletion {
-                lessonPlanListViewModel.getLessonPlanList(pageIndex)
+                lessonPlanListViewModel.getLessonPlanList(pageIndex,teacherID)
                 lessonPlanListAdapter.clearData()
             }
         } else if (pos == 1) {

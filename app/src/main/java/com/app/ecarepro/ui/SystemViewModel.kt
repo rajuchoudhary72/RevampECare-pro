@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
-import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
@@ -27,17 +26,17 @@ class SystemViewModel @Inject constructor(
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
+    val user = userDataStore.getUserAsFlow()
+
+    var userType : String = ""
 
     val refresh = MutableStateFlow(false)
 
-    /*init {
-        try {
-            viewModelScope.launch {
-                user = userDataStore.getUser()
-            }
-        }catch (e:Exception){}
-
-    }*/
+    init {
+        viewModelScope.launch {
+            userType = userDataStore.getRoleName().toString()
+        }
+    }
 
     val uiState =
         refresh.flatMapLatest {

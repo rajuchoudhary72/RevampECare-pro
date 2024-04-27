@@ -55,6 +55,7 @@ class AddInfractionFragment : Fragment() {
     ): View  {
         binding=FragmentAddInfractionBinding.inflate(inflater,container,false)
           studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
          return binding.root
     }
 
@@ -245,16 +246,20 @@ class AddInfractionFragment : Fragment() {
 
         }
 
-        val infractionCatPopUpListAdapter= SubInfractionPopUpListAdapter(subInfractionSubCateList, object : ItemListener<Type> {
-            override fun onItemClick(t: Type, pos: Int, boolean: Boolean) {
-                subInfractionCatData = t
-            }  })
+        try {
+            val infractionCatPopUpListAdapter= SubInfractionPopUpListAdapter(subInfractionSubCateList, object : ItemListener<Type> {
+                override fun onItemClick(t: Type, pos: Int, boolean: Boolean) {
+                    subInfractionCatData = t
+                }  })
+            rvYears.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(activity)
+                adapter = infractionCatPopUpListAdapter
+            }
+        }catch (e:Exception){}
 
-        rvYears.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            adapter = infractionCatPopUpListAdapter
-        }
+
+
 
         relCancel.setOnClickListener {
             builder.dismiss()
@@ -363,9 +368,7 @@ class AddInfractionFragment : Fragment() {
                      } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                   /* findNavController().navigate(R.id.action_addInfractionFragment_to_infractionListFragment,Bundle( ).apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, studentID)
-                    })*/
+                    findNavController().popBackStack()
                      }
                  }
             }

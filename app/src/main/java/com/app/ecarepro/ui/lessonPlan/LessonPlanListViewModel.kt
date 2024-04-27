@@ -43,10 +43,10 @@ class LessonPlanListViewModel  @Inject constructor(
 
 
 
-    fun getLessonPlanList(page:Int )=viewModelScope.launch {
+    fun getLessonPlanList(page:Int ,id: String)=viewModelScope.launch {
         runCatching {
             lessonPlanListMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.getLessonPlanList( page)
+            userRepository.getLessonPlanList( page,id)
         }.onSuccess {
             lessonPlanListMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {

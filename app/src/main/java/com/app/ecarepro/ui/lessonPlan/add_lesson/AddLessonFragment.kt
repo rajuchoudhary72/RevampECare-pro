@@ -56,8 +56,11 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     ): View {
         binding=FragmentAddLessonBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-         lPlanId= requireArguments().getString(Constant.LESSON_ID_ARGUMENT).toString()
-         return binding.root
+        try {
+            lPlanId= requireArguments().getString(Constant.LESSON_ID_ARGUMENT).toString()
+
+        }catch (_:Exception){}
+          return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

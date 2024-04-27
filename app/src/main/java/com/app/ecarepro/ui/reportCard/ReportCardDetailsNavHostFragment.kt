@@ -96,7 +96,7 @@ class ReportCardDetailsNavHostFragment : Fragment() {
             }
         }
 
-        reportCardDetailsViewModel.reportCardDTL(293)
+        reportCardDetailsViewModel.reportCardDTL(0)
 
 
     }

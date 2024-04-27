@@ -116,10 +116,6 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
             findNavController().navigate(R.id.action_staffListFragment_to_staffProfileNavHostFragment,Bundle( ).apply {
                 putInt(Constant.STAFF_ID_ARGUMENT, t.sid)
             })
-        }else{
-            findNavController().navigate(R.id.action_staffListFragment_to_staffAssignmentsListFragment,Bundle( ).apply {
-                putString(Constant.STAFF_ID_ARGUMENT, t.id)
-            })
         }
 
     }

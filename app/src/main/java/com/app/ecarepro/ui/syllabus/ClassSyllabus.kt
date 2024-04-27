@@ -37,6 +37,8 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
     ): View {
 
         binding = FragmentClassSyllabusBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         return binding.root
     }
 

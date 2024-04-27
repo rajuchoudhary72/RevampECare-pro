@@ -32,7 +32,7 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
 
     private   var studentList: List<Student>? = null
     private lateinit var studentListFilter: List<Student>
-    private var fromFragment: String= ""
+    private var toFragment: String= ""
     private lateinit var binding : FragmentStudentListBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
 
@@ -46,7 +46,7 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
         }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
            try {
-               fromFragment= requireArguments().getString(Constant.FROM).toString()
+               toFragment= requireArguments().getString(Constant.TO).toString()
            }catch (_:Exception){}
          return binding.root
     }
@@ -150,37 +150,33 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
 
     override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.action_studentListFragment2_to_studentProfileNavHostFragment,Bundle( ).apply {
-            putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
-        })
 
-        when (fromFragment) {
-           /* getString(R.string.add_appreciation) -> {
+        when (toFragment) {
+            Constant.FRA_ADD_APPRE -> {
                 findNavController().navigate(R.id.action_studentListFragment2_to_addAppreciationFragment,Bundle( ).apply {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
             }
-            getString(R.string.view_appreciation) -> {
+            Constant.FRA_VIEW_APPRE -> {
                 findNavController().navigate(R.id.action_studentListFragment2_to_appreciationListFragment,Bundle( ).apply {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
             }
-            getString(R.string.add_infraction) -> {
+            Constant.FRA_ADD_INFE -> {
                 findNavController().navigate(R.id.action_studentListFragment2_to_addInfractionFragment,Bundle( ).apply {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
             }
-            getString(R.string.view_infraction) -> {
+            Constant.FRA_VIEW_INFE -> {
                 findNavController().navigate(R.id.action_studentListFragment2_to_infractionListFragment,Bundle( ).apply {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
             }
-            */
-           /* Constant.PROFILE_FRA_STU -> {
+            Constant.PROFILE_FRA_STU -> {
                 findNavController().navigate(R.id.action_studentListFragment2_to_studentProfileNavHostFragment,Bundle( ).apply {
                     putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
                 })
-            }*/
+            }
         }
 
     }

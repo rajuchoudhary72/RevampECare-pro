@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.leave.leave_report
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
@@ -15,6 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LeaveReportViewModel @Inject constructor(
+    private val userDataStore: UserDataStore,
+
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -27,6 +30,7 @@ class LeaveReportViewModel @Inject constructor(
         NetworkResult.Loading())
     val leaveActionStateFlow: StateFlow<NetworkResult<CommonResponse>> = leaveActionMutableStateFlow
 
+    val user = userDataStore.getUserAsFlow()
 
     fun leaveReport(
         status: Int,

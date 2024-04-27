@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassAndTeacherListBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -22,12 +24,22 @@ class ClassAndTeacherListFragment : Fragment() {
 
     private lateinit var binding : FragmentClassAndTeacherListBinding
      private val timeTableViewerViewModel : TimeTableViewerViewModel by viewModels()
+    private var toFragment: String= ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding= FragmentClassAndTeacherListBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            toFragment= requireArguments().getString(Constant.TO).toString()
+            if (toFragment==Constant.FRA_ASSI){
+                binding.toolbar.title="Assignment"
+            }else if (toFragment==Constant.FRA_LESSON_PLAN){
+                binding.toolbar.title="Lesson Plan"
+            }
+        }catch (_:Exception){}
         return binding.root
     }
 
@@ -64,7 +76,11 @@ class ClassAndTeacherListFragment : Fragment() {
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
 
-                                fragmentList.add( ClassTimeTableFragment( it.data.classes))
+                                fragmentList.add( TeacherTimeTableFragment( it.data.teachers,toFragment))
+                                if (toFragment!=Constant.FRA_LESSON_PLAN){
+                                     fragmentList.add( ClassTimeTableFragment( it.data.classes,toFragment))
+
+                                }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,
@@ -80,10 +96,17 @@ class ClassAndTeacherListFragment : Fragment() {
                                 ) { tab, position ->
 
                                     if (position==0){
-                                        tab.text =  "Class"
-                                    }else if (position==1) {
+
                                         tab.text =  "Teacher"
+                                    }else   if (toFragment!=Constant.FRA_LESSON_PLAN){
+                                        if (position==1) {
+                                            tab.text =  "Class"
+                                        }
+
                                     }
+
+
+
 
 
 

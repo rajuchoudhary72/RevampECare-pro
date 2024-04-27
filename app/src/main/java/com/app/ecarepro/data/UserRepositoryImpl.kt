@@ -70,7 +70,9 @@ import com.app.ecarepro.data.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
+import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
@@ -128,6 +130,8 @@ class UserRepositoryImpl @Inject constructor(
             if (it.authenticated==true){
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated ?: false)
+                userDataStore.saveUserType(it.userType ?: 0)
+                userDataStore.saveRoleName(it.roleName ?: "")
             }
 
         }
@@ -297,6 +301,14 @@ class UserRepositoryImpl @Inject constructor(
         return userService.addInfraction(stID)
     }
 
+    override suspend fun getAppreciations(stID: Int): NetworkAppreciations {
+        return userService.getAppreciations(stID)
+    }
+
+    override suspend fun getInfractions(stID: Int): NetworkInfractions {
+        return userService.getInfractions(stID)
+    }
+
     override suspend fun saveInfraction(
         action: Int,
         stID: Int,
@@ -406,8 +418,8 @@ class UserRepositoryImpl @Inject constructor(
         return userService.postMarkAttendance(PostMarkAttedance(attDate,classID,mode,stuList,subID))
     }
 
-    override suspend fun getLessonPlanList(page : Int): NetworkLessonPlanList {
-        return  userService.getLessonPlanList(page)
+    override suspend fun getLessonPlanList(page : Int,id: String): NetworkLessonPlanList {
+        return  userService.getLessonPlanList(page,id)
     }
 
     override suspend fun getLessonPlanFilter(

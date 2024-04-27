@@ -54,6 +54,7 @@ class StaffApplyLeaveFragment : Fragment() {
     ): View {
 
         binding = FragmentStaffApplyLeaveBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         return binding.root
     }
@@ -73,7 +74,7 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.llStartDate.setOnClickListener {
             ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvStartDate.text = Constant.dateToShow(date.toString())
+                    binding.tvStartDate.text = date
                 } })  }
 
         binding.llEndDate.setOnClickListener {
@@ -83,7 +84,7 @@ class StaffApplyLeaveFragment : Fragment() {
                     true,
                     object : ECareDataPicker.PickerCallback {
                         override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                            binding.tvEndDate.text = Constant.dateToShow(date.toString())
+                            binding.tvEndDate.text = date
 
                             val diff =Constant.getLongTimeDate(  binding.tvEndDate.text.toString())-
                                 Constant.getLongTimeDate(binding.tvStartDate.text.toString())

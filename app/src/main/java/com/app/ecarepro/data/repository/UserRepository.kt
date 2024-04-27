@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
@@ -19,6 +20,7 @@ import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
+import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
@@ -187,6 +189,14 @@ interface UserRepository {
 
     suspend fun addInfraction( stID: Int  ): NetworkAddInfraction
 
+    suspend fun getAppreciations(
+          stID: Int
+    ): NetworkAppreciations
+
+    suspend fun getInfractions(
+          stID: Int
+    ): NetworkInfractions
+
 
     suspend fun saveInfraction(
         action:Int,
@@ -321,7 +331,7 @@ interface UserRepository {
          stuList:List<StudentAtt>
     ): CommonResponse
 
-    suspend fun getLessonPlanList(page :Int ): NetworkLessonPlanList
+    suspend fun getLessonPlanList(page :Int,id: String ): NetworkLessonPlanList
 
     suspend fun getLessonPlanFilter(
         filter: String,

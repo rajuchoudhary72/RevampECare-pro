@@ -20,8 +20,7 @@ data class NetworkUserDetailsDto(
     val status: String?,
     @SerializedName("userType")
     val userType: Int,
-    @SerializedName("roleName")
-    val roleName: String
+
 
 ) {
     fun getUserTypeName() = when (userType) {

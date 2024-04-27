@@ -29,12 +29,12 @@ import com.app.ecarepro.utils.Constant
 
          binding.tvAddAppreciation.setOnClickListener {
              findNavController().navigate(R.id.action_appreciationSelectionFragment_to_studentListFragment2,Bundle( ).apply {
-                 putString(Constant.TO,  getString(R.string.add_appreciation))
+                 putString(Constant.TO,  Constant.FRA_ADD_APPRE)
              })
          }
          binding.tvViewAppreciation.setOnClickListener {
              findNavController().navigate(R.id.action_appreciationSelectionFragment_to_studentListFragment2,Bundle( ).apply {
-                 putString(Constant.TO,  getString(R.string.view_appreciation))
+                 putString(Constant.TO, Constant.FRA_VIEW_APPRE )
              })
          }
 

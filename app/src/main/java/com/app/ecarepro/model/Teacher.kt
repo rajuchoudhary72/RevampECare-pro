@@ -4,7 +4,7 @@ data class Teacher(
     val `class`: String,
     val designation: String,
     val firstName: Any,
-    val id: Any,
+    val id: String,
     val name: String,
     val pending: Int,
     val photo: String,
