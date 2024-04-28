@@ -21,11 +21,13 @@ import com.app.ecarepro.data.network.model.StaffAttendance
 import com.app.ecarepro.data.network.model.StatusWiseStatistics
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.databinding.FragmentDashboardBinding
+import com.app.ecarepro.model.Feed
 import com.app.ecarepro.todayModeWiseCollectionCard
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
+import com.app.ecarepro.ui.dashbord.model.FeedsModel
 import com.app.ecarepro.ui.dashbord.model.LibraryBookStatusModel
 import com.app.ecarepro.ui.dashbord.model.OnlineVsOfflineAdmissionModel
 import com.app.ecarepro.ui.dashbord.model.StaffAttendanceModel
@@ -63,15 +65,15 @@ class DashboardFragment : Fragment() {
         initViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            dashboardViewModel.dashboard.collectLatest { data ->
+            dashboardViewModel.dashboard.collectLatest { (data, feeds) ->
                 if (data != null) {
-                    buildModels(data)
+                    buildModels(data, feeds)
                 }
             }
         }
     }
 
-    private fun buildModels(data: UserDashboardDto) {
+    private fun buildModels(data: UserDashboardDto, feeds: List<Feed>) {
         binding.recyclerView.withModels {
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
@@ -98,13 +100,15 @@ class DashboardFragment : Fragment() {
                 buildOnlineVsOfflineAdmissionCard(data.admissionModeComparison)
 
             if (data.showStuCategoryStatistics == true)
-                buildStudentStatisticModel(data.admissionModeComparison)
+                buildStudentStatisticModel(data.stuCategoryWiseStatistics)
 
             if (data.showLibraryDTL == true)
                 buildLibraryBookStatusModel(data.libraryDTL)
 
             if (data.showBDayCards == true)
                 buildTeachersBirthdayCarouselModel(data.birthDayCards)
+
+            buildFeedsModel(feeds)
 
 
         }
@@ -210,6 +214,15 @@ class DashboardFragment : Fragment() {
             .addTo(this)
     }
 
+    private fun EpoxyController.buildFeedsModel(data: List<Feed>) {
+        if (data.isEmpty()) {
+            return
+        }
+        FeedsModel(data)
+            .id("1e5e36erfr55")
+            .addTo(this)
+    }
+
     private fun initViews() {
         binding.recyclerView.apply {
 
@@ -254,9 +267,7 @@ class DashboardFragment : Fragment() {
                      .id("1ee36erfr55")
                      .addTo(this)
 
-                 FeedsModel()
-                     .id("1e5e36erfr55")
-                     .addTo(this)
+
 
                  StudentStatisticModel()
                      .id("1e5e36eerfr55")

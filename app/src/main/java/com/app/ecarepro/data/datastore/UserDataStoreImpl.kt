@@ -10,6 +10,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.model.Feed
+import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,6 +23,7 @@ import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_datastore")
 
+@Suppress("IMPLICIT_NOTHING_TYPE_ARGUMENT_AGAINST_NOT_NOTHING_EXPECTED_TYPE")
 class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val gson: Gson
@@ -58,6 +61,22 @@ class UserDataStoreImpl @Inject constructor(
             } else
                 gson.fromJson(json, NetworkSchool::class.java)
         }.first()
+    }
+
+    override suspend fun saveFeeds(feeds: FeedsDto) {
+        context.dataStore.edit { preferences ->
+            preferences[feedsKey] = gson.toJson(feeds)
+        }
+    }
+
+    override fun getFeeds(): Flow<List<Feed>> {
+        return context.dataStore.data.map { preferences ->
+            val json = preferences[feedsKey]
+            if (json == null) {
+                null
+            } else
+                gson.fromJson(json, FeedsDto::class.java)
+        }.map { it?.updates ?: emptyList() }
     }
 
     override suspend fun saveDashboardData(school: UserDashboardDto) {
@@ -121,6 +140,7 @@ class UserDataStoreImpl @Inject constructor(
 
     companion object {
         private val schoolDataKey = stringPreferencesKey("schoolData")
+        private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")
         private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
