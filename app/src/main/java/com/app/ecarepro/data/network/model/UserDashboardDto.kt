@@ -44,6 +44,16 @@ data class UserDashboardDto(
     val showFeeDafaulter: Boolean?,
     @SerializedName("showStfAttendanceSummary")
     val showStfAttendanceSummary: Boolean?,
+    @SerializedName("showAdmissionComparison")
+    val showAdmissionComparison: Boolean?,
+    @SerializedName("showStuStatusWiseStatistics")
+    val showStuStatusWiseStatistics: Boolean?,
+    @SerializedName("showAdmissionModeComparison")
+    val showAdmissionModeComparison: Boolean?,
+    @SerializedName("showStuCategoryStatistics")
+    val showStuCategoryStatistics: Boolean?,
+    @SerializedName("showLibraryDTL")
+    val showLibraryDTL: Boolean?,
     @SerializedName("status")
     val status: String?,
     @SerializedName("timetable")
@@ -58,8 +68,18 @@ data class UserDashboardDto(
     val feeDafaulter: FeeDefaulter?,
     @SerializedName("bankBalance")
     val bankBalance: List<BankBalance>?,
+    @SerializedName("stuStatusWiseStatistics")
+    val stuStatusWiseStatistics: List<StatusWiseStatistics>?,
+    @SerializedName("admissionModeComparison")
+    val admissionModeComparison: List<DataValue>?,
+    @SerializedName("stuCategoryWiseStatistics")
+    val stuCategoryWiseStatistics: List<DataValue>?,
+    @SerializedName("libraryDTL")
+    val libraryDTL: LibraryDetails?,
     @SerializedName("staffAttendanceSummary")
     val staffAttendanceSummary: StaffAttendance?,
+    @SerializedName("admissionComparison")
+    val admissionComparison: AdmissionComparison?,
 )
 
 data class AttendanceSummary(
@@ -94,7 +114,9 @@ data class BirthDayCard(
     val icon: String?,
     @SerializedName("link")
     val link: String?
-)
+) {
+    fun getIconUrl() = BASE_URL_COM + icon
+}
 
 data class Card(
     @SerializedName("color")
@@ -225,5 +247,55 @@ data class StaffAttendance(
     val present: Int?,
     @SerializedName("total")
     val total: Int?
+)
+
+data class AdmissionComparison(
+    @SerializedName("currentSession")
+    val currentSession: String?,
+    @SerializedName("previousSession")
+    val previousSession: String?,
+    @SerializedName("studentCountStandardWise")
+    val studentCountStandardWise: List<StudentCountStandardWise>?
+)
+
+data class StudentCountStandardWise(
+    @SerializedName("currentSession")
+    val currentSession: Int?,
+    @SerializedName("previousSession")
+    val previousSession: Int?,
+    @SerializedName("standard")
+    val standard: String?
+)
+
+
+data class StatusWiseStatistics(
+    @SerializedName("data")
+    val `data`: String?,
+    @SerializedName("value")
+    val value: Int?
+)
+
+data class DataValue(
+    @SerializedName("data")
+    val `data`: String?,
+    @SerializedName("value")
+    val value: Int?
+)
+
+data class LibraryDetails(
+    @SerializedName("circulatedBooks")
+    val circulatedBooks: Int?,
+    @SerializedName("discardedBooks")
+    val discardedBooks: Int?,
+    @SerializedName("dueFine")
+    val dueFine: Int?,
+    @SerializedName("fineCollected")
+    val fineCollected: Int?,
+    @SerializedName("magzineSubscribed")
+    val magzineSubscribed: Int?,
+    @SerializedName("newsSubscribed")
+    val newsSubscribed: Int?,
+    @SerializedName("totalBooks")
+    val totalBooks: Int?
 )
 

@@ -9,18 +9,29 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.AdmissionComparison
 import com.app.ecarepro.data.network.model.BankBalance
+import com.app.ecarepro.data.network.model.BirthDayCard
 import com.app.ecarepro.data.network.model.CollectionModeWise
+import com.app.ecarepro.data.network.model.DataValue
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.FeeDefaulter
+import com.app.ecarepro.data.network.model.LibraryDetails
 import com.app.ecarepro.data.network.model.StaffAttendance
+import com.app.ecarepro.data.network.model.StatusWiseStatistics
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.databinding.FragmentDashboardBinding
 import com.app.ecarepro.todayModeWiseCollectionCard
+import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
+import com.app.ecarepro.ui.dashbord.model.LibraryBookStatusModel
+import com.app.ecarepro.ui.dashbord.model.OnlineVsOfflineAdmissionModel
 import com.app.ecarepro.ui.dashbord.model.StaffAttendanceModel
+import com.app.ecarepro.ui.dashbord.model.StanderWiseStatisticModel
+import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
+import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,9 +40,13 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
+
     private var _binding: FragmentDashboardBinding? = null
+
     private val binding get() = _binding!!
+
     val dashboardViewModel: DashboardViewModel by viewModels()
+
     var isExpanded = false
 
     override fun onCreateView(
@@ -44,7 +59,9 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initViews()
+
         viewLifecycleOwner.lifecycleScope.launch {
             dashboardViewModel.dashboard.collectLatest { data ->
                 if (data != null) {
@@ -58,15 +75,41 @@ class DashboardFragment : Fragment() {
         binding.recyclerView.withModels {
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
+
             if (data.showFeeCollection == true)
                 buildEstimatedCollectionCard(data.feeCollection)
+
             if (data.showFeeDafaulter == true)
                 buildFeeDefaulterCard(data.feeDafaulter)
+
             if (data.showBankBalnce == true)
                 buildBankBalanceCard(data.bankBalance)
+
             if (data.showStfAttendanceSummary == true)
                 buildStaffAttendanceCard(data.staffAttendanceSummary)
+
+            if (data.showAdmissionComparison == true)
+                buildAdmissionComparisonCard(data.admissionComparison)
+
+            if (data.showStuStatusWiseStatistics == true)
+                buildStanderWiseStatistic(data.stuStatusWiseStatistics)
+
+            if (data.showAdmissionModeComparison == true)
+                buildOnlineVsOfflineAdmissionCard(data.admissionModeComparison)
+
+            if (data.showStuCategoryStatistics == true)
+                buildStudentStatisticModel(data.admissionModeComparison)
+
+            if (data.showLibraryDTL == true)
+                buildLibraryBookStatusModel(data.libraryDTL)
+
+            if (data.showBDayCards == true)
+                buildTeachersBirthdayCarouselModel(data.birthDayCards)
+
+
         }
+
+
     }
 
 
@@ -114,6 +157,59 @@ class DashboardFragment : Fragment() {
 
     }
 
+    private fun EpoxyController.buildAdmissionComparisonCard(admissionComparisonModel: AdmissionComparison?) {
+        admissionComparisonModel ?: return
+        AdmissionComparisonModel(admissionComparisonModel)
+            .id("1355")
+            .addTo(this)
+    }
+
+    private fun EpoxyController.buildStanderWiseStatistic(statusWiseStatistics: List<StatusWiseStatistics>?) {
+        if (statusWiseStatistics.isNullOrEmpty()) {
+            return
+        }
+        StanderWiseStatisticModel(statusWiseStatistics)
+            .id("1e355")
+            .addTo(this)
+    }
+
+    private fun EpoxyController.buildOnlineVsOfflineAdmissionCard(data: List<DataValue>?) {
+        if (data.isNullOrEmpty()) {
+            return
+        }
+        OnlineVsOfflineAdmissionModel(data)
+            .id("1e3e55")
+            .addTo(this)
+    }
+
+
+    private fun EpoxyController.buildStudentStatisticModel(data: List<DataValue>?) {
+        if (data.isNullOrEmpty()) {
+            return
+        }
+        StudentStatisticModel(data)
+            .id("1e5e36eerfr55")
+            .addTo(this)
+    }
+
+    private fun EpoxyController.buildLibraryBookStatusModel(data: LibraryDetails?) {
+        if (data == null) {
+            return
+        }
+        LibraryBookStatusModel(data)
+            .id("1ee36er55")
+            .addTo(this)
+    }
+
+    private fun EpoxyController.buildTeachersBirthdayCarouselModel(data: List<BirthDayCard>?) {
+        if (data == null) {
+            return
+        }
+        TeachersBirthdayCarouselModel(data)
+            .id("1e5e")
+            .addTo(this)
+    }
+
     private fun initViews() {
         binding.recyclerView.apply {
 
@@ -133,9 +229,6 @@ class DashboardFragment : Fragment() {
                      .id("135")
                      .addTo(this)
 
-                 AdmissionComparisonModel()
-                     .id("1355")
-                     .addTo(this)
 
                  StanderWiseStatisticModel()
                      .id("1e355")
