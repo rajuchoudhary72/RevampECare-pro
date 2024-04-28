@@ -182,7 +182,6 @@ class DashboardFragment : Fragment() {
             .addTo(this)
     }
 
-
     private fun EpoxyController.buildStudentStatisticModel(data: List<DataValue>?) {
         if (data.isNullOrEmpty()) {
             return
