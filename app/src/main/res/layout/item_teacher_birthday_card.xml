@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="data"
+            type="com.app.ecarepro.data.network.model.BirthDayCard" />
 
     </data>
 
@@ -23,7 +28,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_message_user"
+                imageUrl="@{data.iconUrl}"
+                tools:src="@drawable/img_message_user"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle" />
@@ -35,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/calibri_light"
-                android:text="Raju Choudhary"
+                android:text="@{data.heading}"
+                tools:text="Raju Choudhary"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
