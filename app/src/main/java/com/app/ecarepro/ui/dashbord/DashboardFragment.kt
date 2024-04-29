@@ -36,6 +36,8 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.model.Feed
+import com.app.ecarepro.ui.dashbord.model.FeedsModel
 
 
 @AndroidEntryPoint
@@ -63,15 +65,15 @@ class DashboardFragment : Fragment() {
         initViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            dashboardViewModel.dashboard.collectLatest { data ->
+            dashboardViewModel.dashboard.collectLatest { (data, feeds) ->
                 if (data != null) {
-                    buildModels(data)
+                    buildModels(data, feeds)
                 }
             }
         }
     }
 
-    private fun buildModels(data: UserDashboardDto) {
+    private fun buildModels(data: UserDashboardDto, feeds: List<Feed>) {
         binding.recyclerView.withModels {
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
@@ -98,14 +100,14 @@ class DashboardFragment : Fragment() {
                 buildOnlineVsOfflineAdmissionCard(data.admissionModeComparison)
 
             if (data.showStuCategoryStatistics == true)
-                buildStudentStatisticModel(data.admissionModeComparison)
+                buildStudentStatisticModel(data.stuCategoryWiseStatistics)
 
             if (data.showLibraryDTL == true)
                 buildLibraryBookStatusModel(data.libraryDTL)
 
             if (data.showBDayCards == true)
                 buildTeachersBirthdayCarouselModel(data.birthDayCards)
-
+            buildFeedsModel(feeds)
 
         }
 
@@ -209,7 +211,14 @@ class DashboardFragment : Fragment() {
             .id("1e5e")
             .addTo(this)
     }
-
+    private fun EpoxyController.buildFeedsModel(data: List<Feed>) {
+        if (data.isEmpty()) {
+            return
+        }
+        FeedsModel(data)
+            .id("1e5e36erfr55")
+            .addTo(this)
+    }
     private fun initViews() {
         binding.recyclerView.apply {
 
@@ -254,9 +263,6 @@ class DashboardFragment : Fragment() {
                      .id("1ee36erfr55")
                      .addTo(this)
 
-                 FeedsModel()
-                     .id("1e5e36erfr55")
-                     .addTo(this)
 
                  StudentStatisticModel()
                      .id("1e5e36eerfr55")
