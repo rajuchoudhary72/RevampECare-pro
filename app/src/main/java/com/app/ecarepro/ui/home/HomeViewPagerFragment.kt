@@ -49,7 +49,7 @@ class HomeViewPagerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewPager.apply {
             //isUserInputEnabled = false
-            setOnTouchListener(swipeControlTouchListener)
+          //  setOnTouchListener(swipeControlTouchListener)
             adapter = HomeViewPagerAdapter(this@HomeViewPagerFragment, fragments)
             setPageTransformer(FadeOutTransformation())
         }

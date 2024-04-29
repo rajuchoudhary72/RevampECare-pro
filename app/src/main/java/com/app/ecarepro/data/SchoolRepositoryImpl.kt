@@ -89,6 +89,9 @@ class SchoolRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response = schoolService.getSchoolFeeds(pg = pg)
+                if (pg == 1) {
+                    userDataStore.saveFeeds(response)
+                }
                 emit(Result.success(response))
             } catch (e: Exception) {
                 emit(Result.failure(e))
