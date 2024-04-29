@@ -38,6 +38,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.app.ecarepro.model.Feed
 import com.app.ecarepro.ui.dashbord.model.FeedsModel
+import com.app.ecarepro.ui.SystemViewModel
+import androidx.fragment.app.activityViewModels
 
 
 @AndroidEntryPoint
@@ -50,6 +52,7 @@ class DashboardFragment : Fragment() {
     val dashboardViewModel: DashboardViewModel by viewModels()
 
     var isExpanded = false
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -220,6 +223,9 @@ class DashboardFragment : Fragment() {
             .addTo(this)
     }
     private fun initViews() {
+        binding.toolbar.setNavigationOnClickListener {
+            systemViewModel.navigateBack(true)
+        }
         binding.recyclerView.apply {
 
             addItemDecoration(
