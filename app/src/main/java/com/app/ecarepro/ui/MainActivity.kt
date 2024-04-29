@@ -251,14 +251,19 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
 
                     1 -> {
-                        navController.navigate(R.id.studentListFragment2).apply {
-                            Bundle().apply { putString(Constant.FROM, Constant.PROFILE_FRA_STU) }
-                        }
-                    }
+                        navController.navigate(R.id.studentListFragment2,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.PROFILE_FRA_STU)
+                        })
 
-                    3 -> {
-                        navController.navigate(R.id.leaveReportFragment)
                     }
+                    2 -> {
+                        navController.navigate(R.id.studentAttendanceReportFragment)
+                    }
+                    3 -> {
+                        navController.navigate(R.id.leaveReportFragment,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.FRA_STU_LEAVE)
+                        })
+                     }
 
                 }
             }
@@ -267,9 +272,10 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
 
                     4 -> {
-                        navController.navigate(R.id.staffListFragment).apply {
-                            Bundle().apply { putString(Constant.FROM, Constant.PROFILE_FRA_STAFF) }
-                        }
+                        navController.navigate(R.id.staffListFragment,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.PROFILE_FRA_STAFF)
+                        })
+
                     }
 
                     5 -> {
@@ -277,8 +283,10 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     6 -> {
-                        navController.navigate(R.id.leaveReportFragment)
-                    }
+                        navController.navigate(R.id.leaveReportFragment,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.FRA_STAFF_LEAVE)
+                        })
+                     }
 
                 }
             }

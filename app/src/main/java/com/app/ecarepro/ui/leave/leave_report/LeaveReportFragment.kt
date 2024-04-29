@@ -46,7 +46,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
-    private lateinit var user: NetworkUserDetailsDto
+    private var toFragment: String= ""
 
 
 
@@ -62,15 +62,18 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
         with(binding) {
             recyclerLeaveReport.adapter = leaveReportAdapter
         }
+        try {
+            toFragment= requireArguments().getString(Constant.TO).toString()
 
-        lifecycleScope.launch {
-            leaveReportViewModel.user.collectLatest {
-                user = it
-                if (user.userType==Constant.STAFF_TYPE){
-                    //applType=3
-                 }
+            if (toFragment==Constant.FRA_STAFF_LEAVE){
+                order=1
+                applType=3
             }
-        }
+
+        }catch (_:Exception){}
+        return binding.root
+
+
         return binding.root
 
     }
@@ -135,6 +138,9 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
                             leaveReportAdapter.setData(it.data.dtl.toMutableList())
 
+                        }else{
+                            binding.recyclerLeaveReport.isVisible = false
+                            binding.tvNoData.isVisible = true
                         }
 
 

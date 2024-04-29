@@ -24,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="TimeTable"
+            app:title="Student Profile"
 
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"

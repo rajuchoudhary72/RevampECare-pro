@@ -45,6 +45,8 @@ class Constant {
         const val FRA_VIEW_INFE = "FragmentViewInfe"
         const val FRA_ADD_INFE = "FragmentAddInfe"
         const val FRA_LESSON_PLAN = "FragmentLessonPlan"
+        const val FRA_STAFF_LEAVE = "FragmentStaffLeave"
+        const val FRA_STU_LEAVE = "FragmentStudentLeave"
 
 
 

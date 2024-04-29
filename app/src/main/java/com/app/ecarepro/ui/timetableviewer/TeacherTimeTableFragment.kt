@@ -57,19 +57,25 @@ class TeacherTimeTableFragment(private val teachers: List<Teacher>, private val 
 
     override fun onItemClick(t: Teacher, pos: Int, boolean: Boolean) {
 
-        if (toFragment== Constant.FRA_TIMETABLE){
-            this@TeacherTimeTableFragment. findNavController().
-            navigate(R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment)
-        } else   if (toFragment== Constant.FRA_ASSI){
-            this@TeacherTimeTableFragment. findNavController().
-            navigate(R.id.action_classAndTeacherListFragment_to_staffAssignmentsListFragment,Bundle( ).apply {
-                putString(Constant.STAFF_ID_ARGUMENT, t.id)
-            })
-        }else   if (toFragment== Constant.FRA_LESSON_PLAN){
-            this@TeacherTimeTableFragment. findNavController().
-            navigate(R.id.action_classAndTeacherListFragment_to_lessonPlanListFragment5,Bundle( ).apply {
-                putString(Constant.STAFF_ID_ARGUMENT, t.id)
-            })
+        when (toFragment) {
+            Constant.FRA_TIMETABLE -> {
+                this@TeacherTimeTableFragment. findNavController().
+                navigate(R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment, Bundle().apply {
+                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                })
+            }
+            Constant.FRA_ASSI -> {
+                this@TeacherTimeTableFragment. findNavController().
+                navigate(R.id.action_classAndTeacherListFragment_to_staffAssignmentsListFragment,Bundle( ).apply {
+                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                })
+            }
+            Constant.FRA_LESSON_PLAN -> {
+                this@TeacherTimeTableFragment. findNavController().
+                navigate(R.id.action_classAndTeacherListFragment_to_lessonPlanListFragment5,Bundle( ).apply {
+                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                })
+            }
         }
 
 

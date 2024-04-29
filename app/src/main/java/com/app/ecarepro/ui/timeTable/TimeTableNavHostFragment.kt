@@ -14,6 +14,7 @@ import com.app.ecarepro.databinding.FragmentTimeTableNavHostBinding
 import com.app.ecarepro.model.TimeTableData
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,7 +29,7 @@ class TimeTableNavHostFragment : Fragment() {
 
     private lateinit var binding : FragmentTimeTableNavHostBinding
     private val timeTableNavHostViewModel : TimeTableNavHostViewModel by viewModels()
-
+    private   var staffId: String=""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +37,9 @@ class TimeTableNavHostFragment : Fragment() {
     ): View  {
         binding=FragmentTimeTableNavHostBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            staffId= requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
+        }catch (_:Exception){}
         return binding.root
     }
 
@@ -68,7 +72,7 @@ class TimeTableNavHostFragment : Fragment() {
 
 
 
-                                fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
+                               // fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
                                 fragmentList.add( TimeTableDayWiseNavHostFragment(it.data))
 
                                 val viewPagerAdapter = ViewPagerAdapter(
@@ -84,9 +88,9 @@ class TimeTableNavHostFragment : Fragment() {
                                     binding.viewPager
                                 ) { tab, position ->
 
-                                   if (position==0){
+                                  /* if (position==0){
                                        tab.text =  "Today"
-                                   }else if (position==1) {
+                                   }else*/ if (position==0) {
                                        tab.text =  "Day Wise"
                                    }
 
@@ -109,7 +113,7 @@ class TimeTableNavHostFragment : Fragment() {
             }
         }
 
-        timeTableNavHostViewModel.teachersTimetable("YzX1pWxLWm05u1qTF5cLFA==")
+        timeTableNavHostViewModel.teachersTimetable(staffId)
 
     }
 

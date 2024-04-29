@@ -139,14 +139,15 @@
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/iv_no_item"
                 android:fontFamily="@font/ubuntu_medium"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:visibility="gone"
-                android:text="@string/no_notice_available"
+
+                android:text="@string/no_data_found"
                 android:textSize="16sp"
 
                 />

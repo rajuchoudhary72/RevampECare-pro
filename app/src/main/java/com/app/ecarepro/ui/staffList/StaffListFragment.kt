@@ -112,7 +112,7 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
     }
 
     override fun onItemClick(t: Staff, pos: Int, boolean: Boolean) {
-        if (toFragment==Constant.FRA_ASSI){
+        if (toFragment==Constant.PROFILE_FRA_STAFF){
             findNavController().navigate(R.id.action_staffListFragment_to_staffProfileNavHostFragment,Bundle( ).apply {
                 putInt(Constant.STAFF_ID_ARGUMENT, t.sid)
             })
