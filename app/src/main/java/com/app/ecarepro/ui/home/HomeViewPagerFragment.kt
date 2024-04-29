@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.app.ecarepro.databinding.FragmentHomeViewPagerBinding
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.attendance.AttendanceFragment
 import com.app.ecarepro.ui.dashbord.DashboardFragment
 import com.app.ecarepro.ui.feed.FeedsFragment
@@ -14,6 +18,8 @@ import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
 import com.app.ecarepro.utils.SwipeDirection
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -21,6 +27,8 @@ class HomeViewPagerFragment : Fragment() {
 
     private var _binding: FragmentHomeViewPagerBinding? = null
     private val binding get() = _binding!!
+
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     private val fragments: List<Fragment> by lazy {
         mutableListOf(
@@ -47,6 +55,17 @@ class HomeViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            systemViewModel.navigateBack.collectLatest {
+                if (binding.viewPager.currentItem != 0) {
+                    binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() - 1, false);
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
         binding.viewPager.apply {
             //isUserInputEnabled = false
             // setOnTouchListener(swipeControlTouchListener)

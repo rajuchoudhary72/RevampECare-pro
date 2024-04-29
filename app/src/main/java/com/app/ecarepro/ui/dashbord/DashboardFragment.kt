@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.epoxy.EpoxyController
@@ -23,6 +24,7 @@ import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.databinding.FragmentDashboardBinding
 import com.app.ecarepro.model.Feed
 import com.app.ecarepro.todayModeWiseCollectionCard
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
@@ -48,6 +50,7 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     val dashboardViewModel: DashboardViewModel by viewModels()
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     var isExpanded = false
 
@@ -224,8 +227,10 @@ class DashboardFragment : Fragment() {
     }
 
     private fun initViews() {
+        binding.toolbar.setNavigationOnClickListener {
+            systemViewModel.navigateBack(true)
+        }
         binding.recyclerView.apply {
-
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin),
