@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/calibri_light"
-                android:text="@{data.heading}"
+                android:text='@{data.heading + " - "+data.data }'
                 tools:text="Raju Choudhary"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="@color/black"
