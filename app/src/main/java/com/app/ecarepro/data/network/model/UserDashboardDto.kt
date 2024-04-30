@@ -28,6 +28,8 @@ data class UserDashboardDto(
     val showAttendanceSummery: Boolean?,
     @SerializedName("showCollectionModeWise")
     val showCollectionModeWise: Boolean?,
+    @SerializedName("showQuestionnaire")
+    val showQuestionnaire: Boolean?,
     @SerializedName("showBDayCards")
     val showBDayCards: Boolean?,
     @SerializedName("showCards")
@@ -74,6 +76,8 @@ data class UserDashboardDto(
     val admissionModeComparison: List<DataValue>?,
     @SerializedName("stuCategoryWiseStatistics")
     val stuCategoryWiseStatistics: List<DataValue>?,
+    @SerializedName("questionnaire")
+    val questionnaire: List<Questionnaire>?,
     @SerializedName("libraryDTL")
     val libraryDTL: LibraryDetails?,
     @SerializedName("staffAttendanceSummary")
@@ -145,7 +149,9 @@ data class Timetable(
     @SerializedName("subject")
     val subject: String?,
     @SerializedName("time")
-    val time: String?
+    val time: String?,
+    @SerializedName("teachBy")
+    val teachBy: String?
 )
 
 data class ClassSummary(
@@ -299,3 +305,33 @@ data class LibraryDetails(
     val totalBooks: Int?
 )
 
+data class Questionnaire(
+    @SerializedName("isAnswered")
+    val isAnswered: Boolean?,
+    @SerializedName("isILike")
+    val isILike: Boolean?,
+    @SerializedName("isVerified")
+    val isVerified: Boolean?,
+    @SerializedName("likes")
+    val likes: Int?,
+    @SerializedName("photo")
+    val photo: String?,
+    @SerializedName("qType")
+    val qType: Int?,
+    @SerializedName("qid")
+    val qid: Int?,
+    @SerializedName("que")
+    val que: String?,
+    @SerializedName("queImg")
+    val queImg: Any?,
+    @SerializedName("totalAnswer")
+    val totalAnswer: Int?,
+    @SerializedName("updatedBy")
+    val updatedBy: String?,
+    @SerializedName("updatedOn")
+    val updatedOn: String?,
+    @SerializedName("userID")
+    val userID: Int?,
+    @SerializedName("userType")
+    val userType: Int?
+)
