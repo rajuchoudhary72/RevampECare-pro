@@ -40,8 +40,7 @@ import com.app.ecarepro.model.Feed
 import com.app.ecarepro.ui.dashbord.model.FeedsModel
 import com.app.ecarepro.ui.SystemViewModel
 import androidx.fragment.app.activityViewModels
-import com.app.ecarepro.model.Feed
-import com.app.ecarepro.ui.dashbord.model.FeedsModel
+
 
 
 @AndroidEntryPoint
