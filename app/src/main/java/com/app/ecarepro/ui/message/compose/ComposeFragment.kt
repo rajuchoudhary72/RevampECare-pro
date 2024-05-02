@@ -1,7 +1,6 @@
 package com.app.ecarepro.ui.message.compose
 
 import android.Manifest
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -15,6 +14,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,7 +76,7 @@ class ComposeFragment : Fragment() {
 
     private val receiveData =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
+            if (it.resultCode == RESULT_OK) {
                 val selectedMedia =
                     it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
                 composeViewModel.setAttachments(selectedMedia)
@@ -88,9 +88,8 @@ class ComposeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentComposeBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = composeViewModel
@@ -104,10 +103,10 @@ class ComposeFragment : Fragment() {
         setUpViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            composeViewModel
-                .uiState
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
-                .collectLatest { uiState: ComposeUiState ->
+            composeViewModel.uiState.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.CREATED
+            ).collectLatest { uiState: ComposeUiState ->
                     handleUiState(uiState)
                 }
         }
@@ -218,13 +217,11 @@ class ComposeFragment : Fragment() {
 
         binding.btnReplyMessage.setOnClickListener {
             (requireActivity() as MainActivity).showLoader(true)
-            composeViewModel.sendMessage { result ->
+            composeViewModel.sendMessage { isSuccess, message ->
                 (requireActivity() as MainActivity).showLoader(false)
-                result.onSuccess {
-                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                if (isSuccess) {
                     findNavController().popBackStack()
-                }.onFailure {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -288,8 +285,7 @@ class ComposeFragment : Fragment() {
             override fun onRecordFailed(errorMessage: String?) {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             }
-        })
-            .show(childFragmentManager, "VOICE")
+        }).show(childFragmentManager, "VOICE")
     }
 
     private fun hideAttachmentCard() {
@@ -363,68 +359,56 @@ class ComposeFragment : Fragment() {
     }
 
     private fun launchPhotoPicker() {
-        val intent = getLasiIntent()
-            .setMediaType(MediaType.IMAGE)
-            .setMaxCount(7)
-            .build()
+        val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
         receiveData.launch(intent)
     }
 
     private fun launchAudioPicker() {
-        val intent = getLasiIntent()
-            .setMediaType(MediaType.AUDIO)
-            .setMaxCount(1)
-            .build()
+        val intent = getLasiIntent().setMediaType(MediaType.AUDIO).setMaxCount(1).build()
         receiveData.launch(intent)
     }
 
     private fun launchPdfPicker() {
-        val intent = getLasiIntent()
-            .setMediaType(MediaType.DOC)
-            .setMaxCount(7)
-            .setSupportedFileTypes(
+        val intent =
+            getLasiIntent().setMediaType(MediaType.DOC).setMaxCount(7).setSupportedFileTypes(
                 "pdf"
-            )
-            .build()
+            ).build()
         receiveData.launch(intent)
     }
 
-    private fun getLasiIntent() = Lassi(requireContext())
-        .setStatusBarColor(R.color.md_theme_light_primary)
-        .setToolbarColor(R.color.md_theme_light_primary)
-        .setToolbarResourceColor(android.R.color.white)
-        .setAlertDialogNegativeButtonColor(R.color.black)
-        .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-        .setGalleryBackgroundColor(R.color.white)
-        .setProgressBarColor(R.color.md_theme_light_primary)
-        .setGridSize(3)
+    private fun getLasiIntent() =
+        Lassi(requireContext()).setStatusBarColor(R.color.md_theme_light_primary)
+            .setToolbarColor(R.color.md_theme_light_primary)
+            .setToolbarResourceColor(android.R.color.white)
+            .setAlertDialogNegativeButtonColor(R.color.black)
+            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
+            .setGalleryBackgroundColor(R.color.white)
+            .setProgressBarColor(R.color.md_theme_light_primary).setGridSize(3)
 
     private fun checkCameraPermissions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-            == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+        if (ContextCompat.checkSelfPermission(
                 requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            == PackageManager.PERMISSION_GRANTED
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             dispatchTakePictureIntent()
             return
         }
 
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-            != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.CAMERA),
-                REQUEST_CAMERA_PERMISSION
+                requireActivity(), arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA_PERMISSION
             )
         }
         if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            != PackageManager.PERMISSION_GRANTED
+                requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
@@ -436,8 +420,7 @@ class ComposeFragment : Fragment() {
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION || requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
@@ -468,9 +451,7 @@ class ComposeFragment : Fragment() {
             val bitmap = data?.extras?.get("data") as Bitmap
             val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
             file.writeBitmap(
-                bitmap,
-                Bitmap.CompressFormat.PNG,
-                100
+                bitmap, Bitmap.CompressFormat.PNG, 100
             )
             composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
         }
@@ -496,45 +477,42 @@ class ComposeFragment : Fragment() {
 
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
+                requireActivity(), arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                120
+                ), 120
             )
             return
         }
         if (isGPSEnabled().not()) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Turn On GPS")
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
                 .setCancelable(false)
                 .setMessage("GPS is disabled in your device. Would you like to enable it?")
                 .setPositiveButton("No") { d, _ ->
                     d.dismiss()
                     findNavController().popBackStack()
-                }
-                .setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
                     d.dismiss()
                     val callGPSSettingIntent = Intent(
                         Settings.ACTION_LOCATION_SOURCE_SETTINGS
                     )
                     startActivity(callGPSSettingIntent)
-                }
-                .show()
+                }.show()
         } else {
-            fusedLocationClient.lastLocation
+            fusedLocationClient
+                .lastLocation
                 .addOnSuccessListener { location: Location? ->
                     composeViewModel.currentLocation =
-                        Pair(location?.altitude ?: 0.0, location?.longitude ?: 0.0)
+                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+                }
+                .addOnFailureListener {
+                    Log.e("MSG", "startLocationFetch: " + it.message)
                 }
         }
     }
@@ -554,9 +532,5 @@ class ComposeFragment : Fragment() {
 }
 
 enum class AttachmentType {
-    CAMERA,
-    GALLERY,
-    RECORDING,
-    AUDIO,
-    PDF
+    CAMERA, GALLERY, RECORDING, AUDIO, PDF
 }

@@ -2,6 +2,7 @@ package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.BulkMessageResponseDto
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.ContactWithClassDto
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.GenerateTokenRequestDto
@@ -11,6 +12,7 @@ import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.model.SmsTemplatesDto
 import com.app.ecarepro.data.network.model.StaffContactsDto
@@ -93,4 +95,9 @@ interface MessageService {
         @Header("AuthenticationToken") token: String,
         @Body request: BulkMessageRequestDto
     ): BulkMessageResponseDto
+
+    @POST("Message/SendMessage")
+    suspend fun sendMessage(
+        @Body request: SendMessageRequest
+    ): CommonResponse
 }

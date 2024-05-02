@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
@@ -43,10 +44,15 @@ interface MessageRepository {
     fun getStaffTypes(): Flow<Result<List<StaffType>>>
 
     fun getStaffContacts(staffTypeIDs: List<Int>?): Flow<Result<StaffContactsDto>>
+
     fun getClassContacts(
         ofUserType: Int, scholarType: Int,
     ): Flow<Result<List<ClassContact>>>
+
     fun getSmsTemplates(): Flow<Result<List<SmsType>>>
+
     fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>>
+
+    fun sendMessage(request: SendMessageRequest): Flow<Result<String>>
 
 }

@@ -83,6 +83,7 @@
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/horizontal_margin"
                 android:autofillHints="true"
+                android:text="@={viewModel.subject}"
                 android:background="@drawable/bg_outline_round_corner_green_10"
                 android:fontFamily="@font/calibri_regular"
                 android:hint="@string/subject_line"

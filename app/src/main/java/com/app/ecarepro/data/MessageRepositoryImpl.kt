@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
@@ -207,6 +208,21 @@ class MessageRepositoryImpl @Inject constructor(
                     token.authenticationToken,
                     request
                 )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun sendMessage(request: SendMessageRequest): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = messageService.sendMessage(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: "Success"))
                 } else {
