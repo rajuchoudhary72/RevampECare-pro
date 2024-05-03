@@ -88,6 +88,11 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+        lifecycleScope.launch {
+            systemViewModel.user.collectLatest {
+                userData = it
+            }
+        }
     }
 
      fun setUpDrawer() {
