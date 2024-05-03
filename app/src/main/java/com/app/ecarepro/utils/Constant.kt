@@ -23,6 +23,12 @@ class Constant {
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val STUDENT_ID_ARGUMENT = "StudentID"
         const val STAFF_ID_ARGUMENT = "StaffID"
+        const val TIME_TABLE_TYPE = "TimeTableType"
+        const val ASSIGNMENT_TYPE = "AssignmentType"
+        const val CLASS_ASSIGNMENT = "ClassType"
+        const val TEACHER_ASSIGNMENT = "TeacherType"
+        const val TEACHER_TIME_TABLE = "TeacherTimeTable"
+        const val CLASS_TIME_TABLE = "ClassTimeTable"
         const val QUES_ID_ARGUMENT = "QuesID"
         const val LEAVE_ID_ARGUMENT = "LeaveID"
         const val CLASS_ID_ARGUMENT = "ClassID"
@@ -30,6 +36,10 @@ class Constant {
         const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
         const val TO = "to"
+
+        const val TODAY = 1
+        const val UP_COMING = 2
+        const val DATE_RANGE = 3
 
         const val FROM = "from"
     const val LEAVE_ACTION_APPROVE = 1

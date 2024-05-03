@@ -33,7 +33,7 @@ class ClassTimeTableAdapter    (
             val data= classeList[position]
             tvClassName.text = data.className
             cvMain.setOnClickListener {
-
+                classTimeTableFragment.onItemClick(data,0,false)
             }
 
 

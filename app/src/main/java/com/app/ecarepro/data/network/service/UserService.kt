@@ -65,7 +65,9 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
+import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
@@ -497,4 +499,30 @@ interface UserService {
     @GET("Academic/TimetableViewer")
     suspend fun getTimetableViewer(
     ): NetworkTimeTableViewer
+
+    @GET("Academic/ClassAssignment")
+    suspend fun getClassAssignment(
+        @Query("ID") id: String
+    ): NetworkAssignments
+
+    @GET("Academic/ClassTimetable")
+    suspend fun classTimetable(
+        @Query("ID") id: String
+    ): NetworkTeachersTimetable
+
+    @GET("Appointment/Overview")
+    suspend fun appointmentOverview(
+        @Query("AppDate") appDate: String,
+        @Query("TillDate") tillDate: String,
+        @Query("all") all: Boolean,
+    ): NetworkAppointments
+
+    @GET("Appointment/Action")
+    suspend fun appointmentOverview(
+        @Query("Act") act: Int,
+        @Query("AppId") appId: Int
+    ): CommonResponse
+
+
+
 }

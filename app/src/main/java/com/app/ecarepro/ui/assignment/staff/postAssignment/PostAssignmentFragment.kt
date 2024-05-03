@@ -171,8 +171,10 @@ class PostAssignmentFragment : Fragment() {
                postAssignmentViewModel.createAssignment(
                    binding.ctvAssignmentDt.text.toString(),
                    0,
-                   imageString,imageExt,"",
-                   it,
+                   imageString,
+                   imageExt,
+                   "",
+                     0,
                    it.toString(),
                    binding.etDescription.text.toString() ,
                    "",

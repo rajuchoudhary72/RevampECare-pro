@@ -196,6 +196,8 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(R.id.staffAssignmentsListFragment)
                     }
 
+                }else{
+                    navController.navigate(R.id.assignmentNavHostFragment)
                 }
 
             }
@@ -229,7 +231,7 @@ class MainActivity : AppCompatActivity() {
             19 ->  navController.navigate(R.id.leaveHistoryFragment)
             20 ->  navController.navigate(R.id.questionnaireListFragment)
             21 ->  navController.navigate(R.id.thoughtsListFragment)
-           // 22 ->  navController.navigate(R.id.webViewFragment)
+            22 ->  navController.navigate(R.id.appointmentReportFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
             25 ->  navController.navigate(R.id.excellenceAwardFragment)
 
@@ -301,11 +303,15 @@ class MainActivity : AppCompatActivity() {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
                     14 -> navController.navigate(R.id.birthdayFragment)
                     15 ->   if (userData.userType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
-                            putString(Constant.TO, Constant.FRA_LESSON_PLAN)
-                        })
-                    } else {
-                        navController.navigate(R.id.lessonPlanListFragment)
+                        if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
+                            navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_LESSON_PLAN)
+                            })
+                        }else{
+                            navController.navigate(R.id.lessonPlanListFragment)
+
+                        }
+
                     }
 
 

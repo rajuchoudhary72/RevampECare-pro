@@ -460,5 +460,12 @@
     <string name="reject">Reject</string>
     <string name="forward">Forward</string>
     <string name="post_assignment">Post Assignment</string>
+    <string name="only_me">Only Me</string>
+    <string name="today">Today</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="appointment_date">Appointment Date</string>
+    <string name="time">Time</string>
+    <string name="check_out">Check Out</string>
+    <string name="check_in">Check In</string>
 
 </resources>

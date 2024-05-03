@@ -73,7 +73,7 @@
             android:layout_margin="15dp"
             android:contentDescription="@string/post_assignment"
             android:src="@drawable/rounded_add_24"
-            android:text="@string/apply_for_leave"
+            android:text="@string/post_assignment"
             android:textColor="@android:color/black" />
 
 

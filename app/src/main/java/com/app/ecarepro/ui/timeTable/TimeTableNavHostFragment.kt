@@ -29,7 +29,8 @@ class TimeTableNavHostFragment : Fragment() {
 
     private lateinit var binding : FragmentTimeTableNavHostBinding
     private val timeTableNavHostViewModel : TimeTableNavHostViewModel by viewModels()
-    private   var staffId: String=""
+    private   var id: String=""
+    private   var toFragment: String=""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,7 +39,8 @@ class TimeTableNavHostFragment : Fragment() {
         binding=FragmentTimeTableNavHostBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         try {
-            staffId= requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
+            id= requireArguments().getString(Constant.ID).toString()
+            toFragment= requireArguments().getString(Constant.TIME_TABLE_TYPE).toString()
         }catch (_:Exception){}
         return binding.root
     }
@@ -73,7 +75,7 @@ class TimeTableNavHostFragment : Fragment() {
 
 
                                // fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
-                                fragmentList.add( TimeTableDayWiseNavHostFragment(it.data))
+                                fragmentList.add( TimeTableDayWiseNavHostFragment(it.data,toFragment))
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,
@@ -113,7 +115,15 @@ class TimeTableNavHostFragment : Fragment() {
             }
         }
 
-        timeTableNavHostViewModel.teachersTimetable(staffId)
+        if (toFragment==Constant.CLASS_TIME_TABLE){
+
+            timeTableNavHostViewModel.classTimetable(id)
+         }else{
+
+            timeTableNavHostViewModel.teachersTimetable(id)
+
+        }
+
 
     }
 

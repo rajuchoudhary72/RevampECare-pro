@@ -70,7 +70,9 @@ import com.app.ecarepro.data.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
+import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
@@ -529,6 +531,22 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getTimetableViewer()
     }
 
+    override suspend fun getClassAssignment(id: String): NetworkAssignments {
+        return userService.getClassAssignment(id)
+    }
+
+    override suspend fun appointmentOverview(
+        appDate: String,
+        tillDate: String,
+        all: Boolean
+    ): NetworkAppointments {
+        return userService.appointmentOverview(appDate, tillDate, all)
+    }
+
+    override suspend fun appointmentOverview(act: Int, appId: Int): CommonResponse {
+        return userService.appointmentOverview(act, appId)
+    }
+
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {
        return userService.viewAssignment(iD)
     }
@@ -554,6 +572,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun teachersTimetable(id: String): NetworkTeachersTimetable {
         return userService.teachersTimetable(id)
+    }
+
+    override suspend fun classTimetable(id: String): NetworkTeachersTimetable {
+        return userService.classTimetable(id)
     }
 
     override suspend fun birthday(userType: Int, rptType: Int, monthNo: Int, date:String): NetworkBirthday {

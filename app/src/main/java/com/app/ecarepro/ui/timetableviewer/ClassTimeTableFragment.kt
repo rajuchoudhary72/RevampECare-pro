@@ -6,13 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentClassTimeTableBinding
 import com.app.ecarepro.model.Classe
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 
 
-class ClassTimeTableFragment(private val classes: List<Classe>, toFragment: String) : Fragment(), ItemListener<Classe> {
+class ClassTimeTableFragment(private val classes: List<Classe>, private val toFragment: String) : Fragment(), ItemListener<Classe> {
 
     private lateinit var binding : FragmentClassTimeTableBinding
 
@@ -53,6 +56,29 @@ class ClassTimeTableFragment(private val classes: List<Classe>, toFragment: Stri
     }
 
     override fun onItemClick(t: Classe, pos: Int, boolean: Boolean) {
+        when (toFragment) {
+            Constant.FRA_TIMETABLE -> {
+                this@ClassTimeTableFragment. findNavController().
+                navigate(R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment, Bundle().apply {
+                    putString(Constant.ID, t.id)
+                    putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
 
+                })
+            }
+            Constant.FRA_ASSI -> {
+                this@ClassTimeTableFragment. findNavController().
+                navigate(R.id.action_classAndTeacherListFragment_to_assignmentNavHostFragment,Bundle( ).apply {
+                    putString(Constant.ID, t.id)
+                    putString(Constant.ASSIGNMENT_TYPE, Constant.CLASS_ASSIGNMENT)
+
+                })
+            }
+            Constant.FRA_LESSON_PLAN -> {
+                this@ClassTimeTableFragment. findNavController().
+                navigate(R.id.action_classAndTeacherListFragment_to_lessonPlanListFragment5,Bundle( ).apply {
+                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                })
+            }
+        }
     }
 }
