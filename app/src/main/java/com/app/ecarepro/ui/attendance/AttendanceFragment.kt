@@ -14,10 +14,13 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.fragment.app.activityViewModels
+import com.app.ecarepro.ui.SystemViewModel
 
 
 @AndroidEntryPoint
 class AttendanceFragment : Fragment() {
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     private var _binding: FragmentAttendancesBinding? = null
 
@@ -54,6 +57,9 @@ class AttendanceFragment : Fragment() {
     }
 
     private fun initView() {
+        binding.toolbar.setNavigationOnClickListener {
+            systemViewModel.navigateBack(true)
+        }
         binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(

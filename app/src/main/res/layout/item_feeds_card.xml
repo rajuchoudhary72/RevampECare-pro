@@ -87,7 +87,7 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/text_input_type"
-                tools:listitem="@layout/item_notification_card" />
+                tools:listitem="@layout/item_feed_card" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

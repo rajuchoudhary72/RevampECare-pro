@@ -22,12 +22,16 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.ui.SystemViewModel
+import androidx.fragment.app.activityViewModels
 
 
 @AndroidEntryPoint
 class FeedsFragment : Fragment() {
 
     private var _binding: FragmentFeedsBinding? = null
+
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     private val binding get() = _binding!!
 
@@ -57,6 +61,9 @@ class FeedsFragment : Fragment() {
     }
 
     private fun setUpViews() {
+        binding.toolbar.setNavigationOnClickListener {
+            systemViewModel.navigateBack(true)
+        }
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
             feedsViewModel.refresh()

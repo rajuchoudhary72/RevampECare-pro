@@ -19,9 +19,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import com.app.ecarepro.model.Feed
+import com.app.ecarepro.model.FeedsDto
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_datastore")
-
+@Suppress("IMPLICIT_NOTHING_TYPE_ARGUMENT_AGAINST_NOT_NOTHING_EXPECTED_TYPE")
 class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val gson: Gson
@@ -60,7 +62,21 @@ class UserDataStoreImpl @Inject constructor(
                 gson.fromJson(json, NetworkSchool::class.java)
         }.first()
     }
+    override suspend fun saveFeeds(feeds: FeedsDto) {
+        context.dataStore.edit { preferences ->
+            preferences[feedsKey] = gson.toJson(feeds)
+        }
+    }
 
+    override fun getFeeds(): Flow<List<Feed>> {
+        return context.dataStore.data.map { preferences ->
+            val json = preferences[feedsKey]
+            if (json == null) {
+                null
+            } else
+                gson.fromJson(json, FeedsDto::class.java)
+        }.map { it?.updates ?: emptyList() }
+    }
     override suspend fun saveDashboardData(school: UserDashboardDto) {
         context.dataStore.edit { preferences ->
             preferences[dashboardData] = gson.toJson(school)
@@ -146,6 +162,7 @@ class UserDataStoreImpl @Inject constructor(
 
     companion object {
         private val schoolDataKey = stringPreferencesKey("schoolData")
+        private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")
         private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")

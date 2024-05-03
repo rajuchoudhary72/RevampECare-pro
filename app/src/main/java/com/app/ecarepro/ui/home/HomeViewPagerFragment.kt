@@ -14,13 +14,19 @@ import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
 import com.app.ecarepro.utils.SwipeDirection
 import dagger.hilt.android.AndroidEntryPoint
-
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.ui.SystemViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeViewPagerFragment : Fragment() {
 
     private var _binding: FragmentHomeViewPagerBinding? = null
     private val binding get() = _binding!!
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     private val fragments: List<Fragment> by lazy {
         mutableListOf(
@@ -47,9 +53,18 @@ class HomeViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            systemViewModel.navigateBack.collectLatest {
+                if (binding.viewPager.currentItem != 0) {
+                    binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() - 1, false);
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        }
         binding.viewPager.apply {
             //isUserInputEnabled = false
-            setOnTouchListener(swipeControlTouchListener)
+          //  setOnTouchListener(swipeControlTouchListener)
             adapter = HomeViewPagerAdapter(this@HomeViewPagerFragment, fragments)
             setPageTransformer(FadeOutTransformation())
         }
