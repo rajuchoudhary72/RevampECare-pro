@@ -47,6 +47,8 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     ): View {
 
         fragmentCircularBinding= FragmentCirculerBinding.inflate(inflater,container,false)
+        fragmentCircularBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         fragmentCircularBinding.tvSelectSession.setOnClickListener {
             popUpSelectAcademicYears()
         }

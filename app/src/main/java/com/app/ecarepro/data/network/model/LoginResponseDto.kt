@@ -13,5 +13,10 @@ data class LoginResponseDto(
     @SerializedName("message")
     val message: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("userType")
+    val userType: Int,
+    @SerializedName("roleName")
+    val roleName: String,
+
 )

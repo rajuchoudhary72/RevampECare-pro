@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+     >
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_light"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="@color/white">
+
+
+            <RelativeLayout
+                android:id="@+id/date_rel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:id="@+id/tv_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="4dp"
+                    android:drawablePadding="3dp"
+                    android:textColor="@color/grey_60"
+                      app:fontFamily="@font/ubuntu_medium" />
+
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/plan_duration"
+                    android:textColor="@color/grey_60"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_plan_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:textColor="@color/grey_60"
+                    android:layout_marginStart="8dp"
+                     app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/planned_subject"
+                     android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_plan_subj"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginStart="8dp"
+                    android:textColor="@color/grey_60"
+                     app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/planned_for_class_s"
+                     android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_plan_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginStart="8dp"
+                    android:textColor="@color/grey_60"
+                     app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/date_rel3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status_extra"
+                     android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginStart="8dp"
+                    android:textColor="@color/grey_60"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llEditDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+             android:baselineAligned="false">
+
+            <LinearLayout
+                android:id="@+id/llSlipaeReson"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:visibility="gone"
+                android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/slipage_reason"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/ic_edit_pencil" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                 android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/view"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/view_white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llEdit"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                 android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/edit"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/ic_edit_pencil" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llDelete"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                 android:background="@color/brand_color"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/delete"
+                    android:textColor="@color/white"
+                    app:drawableLeftCompat="@drawable/delete_white" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="@color/grey_light" />
+
+
+    </LinearLayout>
+</layout>

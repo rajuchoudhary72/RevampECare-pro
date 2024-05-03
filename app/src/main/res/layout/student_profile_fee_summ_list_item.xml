@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_3sdp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvInstallment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:paddingBottom="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvActualFee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tvConcession"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tvReceived"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tvOutstanding"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/grey_60" />
+    </LinearLayout>
+</layout>

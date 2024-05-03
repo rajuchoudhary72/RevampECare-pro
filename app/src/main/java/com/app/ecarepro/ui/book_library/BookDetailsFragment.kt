@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBookDetailsBinding
@@ -32,6 +33,7 @@ class BookDetailsFragment : Fragment() {
     ): View  {
 
         binding= FragmentBookDetailsBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         val bookID=  requireArguments().getInt(Constant.BOOK_ID_ARGUMENT)
         bookDetailsViewModel.getBookDetails(bookID,Constant.DEFAULT_ID)

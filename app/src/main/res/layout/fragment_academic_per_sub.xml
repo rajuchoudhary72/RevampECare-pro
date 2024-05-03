@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.studentProfile.academic_performance.AcademicPerSubFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_exam_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/academic_perf_list_item" />
+
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+
+            />
+
+
+    </RelativeLayout>
+</layout>

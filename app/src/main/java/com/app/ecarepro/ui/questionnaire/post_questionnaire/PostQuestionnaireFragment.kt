@@ -34,6 +34,7 @@ class PostQuestionnaireFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostQustionnaireBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         return binding.root
     }

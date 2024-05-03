@@ -18,6 +18,13 @@ interface UserDataStore {
     suspend fun saveFeeds(feeds: FeedsDto)
     fun getFeeds(): Flow<List<Feed>>
     suspend fun saveAuthToken(token: String)
+    suspend fun saveUserType(userType: Int)
+    suspend fun saveRoleName(roleName: String)
+
+    suspend fun getUserType(): Int?
+
+    suspend fun getRoleName( ): String?
+
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
     suspend fun getAuthToken(): String?

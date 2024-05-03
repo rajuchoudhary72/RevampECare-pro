@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_by_date_range"
+        android:title="@string/search_by_date_range"
+        android:icon="@drawable/ic_menu_search_by_date"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_by_class"
+        android:icon="@drawable/ic_menu_search_by_class"
+        android:title="@string/search_by_classes"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_by_subject"
+        android:icon="@drawable/ic_menu_search_by_subject"
+        android:title="@string/search_by_subjects"
+        app:showAsAction="never" />
+    <item
+        android:icon="@drawable/ic_menu_search_by_status"
+        android:id="@+id/menu_by_status"
+        android:title="@string/search_by_status"
+        app:showAsAction="never" />
+</menu>

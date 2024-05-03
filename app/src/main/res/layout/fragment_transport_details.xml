@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="transDetails"
+            type="com.app.ecarepro.model.TransDetails" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_10sdp"
+        android:orientation="vertical"
+        tools:context=".ui.studentProfile.StudentProfileTransportDetailsFragment">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/transport_type"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:id="@+id/tvTransportType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.transportType}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/vehicle_number"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.vehicleNumber}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="Vehicle Type"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.vehicleType}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/driver_name"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.driverName}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/vehicle_name"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.vehicleNumber}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/contact_no"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.vehicleNumber}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/route_no"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.routeNumber}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/route_incharge_name"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@{transDetails.routeNumber}"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/route_incharge_mobile_no"
+            android:textColor="@color/grey_40"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_12sdp" />
+
+        <TextView
+             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+             android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp" />
+
+
+    </LinearLayout>
+</layout>

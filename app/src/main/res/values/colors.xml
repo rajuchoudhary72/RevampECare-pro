@@ -84,6 +84,9 @@
     <color name="grey_10">#1A1E1D0E</color>
     <color name="grey_light">#f3f3f3</color>
 
+    <color name="grey_light_compose_msg_headr_txt">#CCCCCC</color>
+
+
 
 
     <color name="black">#FF000000</color>
@@ -105,6 +108,15 @@
     <color name="category5">#9999CC</color>
     <color name="category6">#FFB99C</color>
     <color name="category7">#8E47B5</color>
+
+    <color name="att_leave_color">#FFD700</color>
+    <color name="att_late_color">#FFFEA11C</color>
+    <color name="att_na_color">#808080</color>
+
+    <color name="pending_color">#FFBB00</color>
+
+
+
 
 
 </resources>

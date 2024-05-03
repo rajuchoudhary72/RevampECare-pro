@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,10 +47,10 @@ class PostAssignmentViewModel @Inject constructor(
           }
       }
 
-    fun mySubjects( )=viewModelScope.launch {
+    fun mySubjects( classID :Int )=viewModelScope.launch {
         runCatching {
             subjectsMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.mySubjects( )
+            userRepository.mySubjects(classID )
         }.onSuccess {
             subjectsMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {
