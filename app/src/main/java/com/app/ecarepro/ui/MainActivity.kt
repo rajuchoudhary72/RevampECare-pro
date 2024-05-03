@@ -231,6 +231,7 @@ class MainActivity : AppCompatActivity() {
             21 ->  navController.navigate(R.id.thoughtsListFragment)
            // 22 ->  navController.navigate(R.id.webViewFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
+            25 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }
     }
@@ -279,10 +280,6 @@ class MainActivity : AppCompatActivity() {
                      }
                 }
             }
-
-
-
-
 
             6 -> {
                 when (childMenuId) {
