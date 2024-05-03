@@ -19,6 +19,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
+import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
@@ -153,7 +154,7 @@ class HomeFragment : Fragment() {
                             )
                         )
                     )
-                    uiState.cards.forEach { card ->
+                    uiState.cards.forEach { card: Card ->
                         dashboardCard {
                             id(card.link)
                             card(card)

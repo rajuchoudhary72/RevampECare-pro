@@ -38,7 +38,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rotation="@{isExpanded ? 90:0}"
-
                 android:src="@drawable/ic_arrow_right_black"
                 app:layout_constraintBottom_toBottomOf="@+id/title"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,61 +53,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
                 android:paddingVertical="5dp"
-                android:text="Fee Defaulter"
+                android:text="Timetable"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/defaulter"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:lv_image="@drawable/cash"
-                app:lv_text="Amount" />
 
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/defaulter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toStartOf="@+id/total"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/amount"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_text="Amount" />
-
-            <com.app.ecarepro.ui.views.LegendView
-                android:id="@+id/total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/defaulter"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_text="Total Student" />
-
-            <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                android:id="@+id/chartView"
+            <com.app.ecarepro.ui.views.CarouselNoSnap
+                android:id="@+id/carousel"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupCollapsed"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="amount, total, defaulter" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:listitem="@layout/item_teacher_birthday_card" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

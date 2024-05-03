@@ -3,16 +3,22 @@ package com.app.ecarepro.ui.message.compose
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.Data
+import com.app.ecarepro.data.network.model.Recipients
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.model.ComposeMessageType
 import com.app.ecarepro.ui.message.chat.getDeviceIpAddress
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import com.app.ecarepro.utils.FileAccess
 import com.lassi.data.media.MiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,7 +32,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.lifecycle.asLiveData
 
 @HiltViewModel
 class ComposeViewModel @Inject constructor(
@@ -51,6 +56,7 @@ class ComposeViewModel @Inject constructor(
     var currentLocation: Pair<Double, Double>? = null
 
     val message = MutableStateFlow("")
+    val subject = MutableStateFlow("")
 
     var smsType: SmsType? = null
     var template: Template? = null
@@ -112,7 +118,7 @@ class ComposeViewModel @Inject constructor(
         attachments.update { current -> current.filterNot { it == attachment } }
     }
 
-    fun sendMessage(result: (Result<String>) -> Unit) {
+    fun sendMessage(result: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             if (composeMessageType.value == ComposeMessageType.SMS_AND_APP_MESSAGE) {
                 messageRepository
@@ -129,8 +135,87 @@ class ComposeViewModel @Inject constructor(
                             uType = userDataStore.getUser().userType
                         )
                     )
-                    .collectLatest { result(it) }
+                    .collectLatest { response ->
+                        if (response.isSuccess) {
+                            result(true, response.getOrNull() ?: "")
+                        } else {
+                            result(
+                                false,
+                                response.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                            )
+                        }
+
+                    }
+            } else {
+                messageRepository.sendMessage(
+                    SendMessageRequest(
+                        device = 1,
+                        geoCoordinate = currentLocation.toString().replace("(", "")
+                            .replace(")", ""),
+                        ipAddress = context.getDeviceIpAddress(),
+                        subject = subject.value,
+                        body = message.value,
+                        classIDs = null,
+                        recipient = contacts.value.map {
+                            Recipients(
+                                receiverID = it.receiverID,
+                                receiverType = it.receiverType
+                            )
+                        },
+                        recipientType = 3,
+                        msgType = 2,
+                        attachment = getAttachment(),
+                        multipleAttachments = getMultipleAttachment()
+                    )
+                )
+                    .collectLatest { response ->
+                        if (response.isSuccess) {
+                            result(true, response.getOrNull() ?: "")
+                        } else {
+                            result(
+                                false,
+                                response.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                            )
+                        }
+                    }
             }
+        }
+
+    }
+
+    private fun getMultipleAttachment(): List<String>? {
+        val attachments = attachments.value
+        if (attachments.isEmpty() || attachments.size == 1)
+            return null
+
+        return attachments.map {
+            FileAccess.bitmapToByteArrayBase64String(
+                FileAccess.bitmapFromFile(
+                    context,
+                    attachments.first().path!!
+                )
+            )
+        }
+    }
+
+    private fun getAttachment(): Attachment? {
+        val attachments = attachments.value
+        return if (attachments.isEmpty()) {
+            null
+        } else if (attachments.size == 1) {
+            attachments.first()
+            val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
+
+            val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
+            val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+            Attachment(
+                attachment = imageString,
+                fileExt = imageExt,
+                fileURL = null
+            )
+        } else {
+            null
         }
     }
 

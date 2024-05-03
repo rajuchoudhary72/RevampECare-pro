@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
@@ -25,7 +27,8 @@ class SystemViewModel @Inject constructor(
 
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
-
+    private val _navigateBack = MutableSharedFlow<Boolean>()
+    val navigateBack = _navigateBack
     val user = userDataStore.getUserAsFlow()
     val refresh = MutableStateFlow(false)
 
@@ -58,7 +61,11 @@ class SystemViewModel @Inject constructor(
     fun openDrawer(open: Boolean) {
         _openNavigationDrawer.postValue(open)
     }
-
+    fun navigateBack(back: Boolean) {
+        viewModelScope.launch {
+            _navigateBack.emit(back)
+        }
+    }
     fun logout(onDataClear: () -> Unit) {
         viewModelScope.launch {
             userDataStore.clear()

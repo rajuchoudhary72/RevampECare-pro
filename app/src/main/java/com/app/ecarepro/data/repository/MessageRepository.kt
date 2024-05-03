@@ -13,6 +13,7 @@ import com.app.ecarepro.data.network.model.StaffContactsDto
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.ui.message.chat.MessageType
 import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.model.SendMessageRequest
 
 interface MessageRepository {
     fun getMessageSettings(): Flow<Result<MessageSettings>>
@@ -48,5 +49,6 @@ interface MessageRepository {
     ): Flow<Result<List<ClassContact>>>
     fun getSmsTemplates(): Flow<Result<List<SmsType>>>
     fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>>
+    fun sendMessage(request: SendMessageRequest): Flow<Result<String>>
 
 }
