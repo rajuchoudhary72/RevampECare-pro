@@ -237,7 +237,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
     private fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {
             1 -> {
