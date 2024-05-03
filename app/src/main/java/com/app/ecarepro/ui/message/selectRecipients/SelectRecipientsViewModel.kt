@@ -14,10 +14,16 @@ class SelectRecipientsViewModel @Inject constructor(
     fun getSelectedContacts() = selectedContacts
 
     fun addContact(contact: Contact) {
+        if (selectedContacts.all { it.receiverType == contact.receiverType }.not()) {
+            clearAllSelectedContact()
+        }
         selectedContacts.add(contact)
     }
 
     fun addContacts(contact: List<Contact>) {
+        if (selectedContacts.all { it.receiverType == contact.first().receiverType }.not()) {
+            clearAllSelectedContact()
+        }
         selectedContacts.addAll(contact)
     }
 

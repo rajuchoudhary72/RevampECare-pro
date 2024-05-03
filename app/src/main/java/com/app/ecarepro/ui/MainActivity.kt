@@ -190,6 +190,7 @@ class MainActivity : AppCompatActivity() {
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
             51 -> R.id.excellenceAwardFragment
+            25 -> R.id.excellenceAwardFragment
             else -> null
         }
     }

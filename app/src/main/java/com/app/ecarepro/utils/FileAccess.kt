@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Base64
@@ -73,8 +73,12 @@ class FileAccess {
             return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT)
         }
 
-        fun bitmapFromUri(context: Context , imgUri: Uri?): Bitmap {
-            return  MediaStore.Images.Media.getBitmap(context.contentResolver, imgUri)
+        fun bitmapFromFile(context: Context, filePath: String): Bitmap {
+            return BitmapFactory.decodeFile(filePath);
+        }
+
+        fun bitmapFromUri(context: Context, imgUri: Uri?): Bitmap {
+            return MediaStore.Images.Media.getBitmap(context.contentResolver, imgUri)
         }
 
           fun getImageExtFromUri(inContext: Context, inImage: Bitmap) : String? {

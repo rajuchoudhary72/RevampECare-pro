@@ -21,6 +21,8 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.Url
+import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.CommonResponse
 
 interface MessageService {
     @GET("Message/Setting")
@@ -93,4 +95,9 @@ interface MessageService {
         @Header("AuthenticationToken") token: String,
         @Body request: BulkMessageRequestDto
     ): BulkMessageResponseDto
+
+    @POST("Message/SendMessage")
+    suspend fun sendMessage(
+        @Body request: SendMessageRequest
+    ): CommonResponse
 }
