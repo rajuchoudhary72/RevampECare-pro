@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAssignmentNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -23,6 +25,9 @@ class AssignmentNavHostFragment : Fragment() {
 
     private lateinit var binding : FragmentAssignmentNavHostBinding
     private val assignmentNavHostViewModel : AssignmentNavHostViewModel by viewModels()
+    private   var  Id: String=""
+    private   var  assignmentType: String=""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +35,14 @@ class AssignmentNavHostFragment : Fragment() {
     ): View  {
 
         binding=FragmentAssignmentNavHostBinding.inflate(inflater,container,false)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            Id= requireArguments().getString(Constant.ID).toString()
+            assignmentType= requireArguments().getString(Constant.ASSIGNMENT_TYPE).toString()
+        }catch (_:Exception){}
          return binding.root
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,8 +107,13 @@ class AssignmentNavHostFragment : Fragment() {
 
             }
         }
+        if (assignmentType==Constant.CLASS_ASSIGNMENT){
+            assignmentNavHostViewModel.getClassAssignment(Id)
+        }else{
+            assignmentNavHostViewModel.getAssignment()
 
-        assignmentNavHostViewModel.getAssignment()
+        }
+
 
     }
 }

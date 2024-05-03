@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment> {
 
     private   var staffId: String=""
-    private   lateinit var binding : FragmentStaffAssignmentsListBinding
+     private   lateinit var binding : FragmentStaffAssignmentsListBinding
     private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
 
 
@@ -41,7 +41,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         try {
             staffId= requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
-        }catch (_:Exception){}
+         }catch (_:Exception){}
         return binding.root
     }
 

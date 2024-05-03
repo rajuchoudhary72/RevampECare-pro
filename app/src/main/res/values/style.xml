@@ -13,6 +13,11 @@
     <style name="ShapeAppearanceOverlay.ECarePro.ImageView.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+
+    </style>
+    <style name="ShapeAppearanceOverlay.ECarePro.ImageView.Round" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">15%</item>
     </style>
     <style name="ShapeAppearanceOverlay.ECarePro.BottomRoundedCorner" parent="">
         <item name="cornerFamily">rounded</item>

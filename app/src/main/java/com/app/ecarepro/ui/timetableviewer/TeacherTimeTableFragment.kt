@@ -61,7 +61,9 @@ class TeacherTimeTableFragment(private val teachers: List<Teacher>, private val 
             Constant.FRA_TIMETABLE -> {
                 this@TeacherTimeTableFragment. findNavController().
                 navigate(R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment, Bundle().apply {
-                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                    putString(Constant.ID, t.id)
+                    putString(Constant.TIME_TABLE_TYPE, Constant.TEACHER_TIME_TABLE)
+
                 })
             }
             Constant.FRA_ASSI -> {

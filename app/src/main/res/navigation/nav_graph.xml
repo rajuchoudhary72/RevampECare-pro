@@ -589,6 +589,9 @@
         <action
             android:id="@+id/action_classAndTeacherListFragment_to_lessonPlanListFragment5"
             app:destination="@id/lessonPlanListFragment" />
+        <action
+            android:id="@+id/action_classAndTeacherListFragment_to_assignmentNavHostFragment"
+            app:destination="@id/assignmentNavHostFragment" />
 
 
     </fragment>
@@ -600,4 +603,12 @@
         android:id="@+id/reportCardDetailsNavHostFragment"
         android:name="com.app.ecarepro.ui.reportCard.ReportCardDetailsNavHostFragment"
         android:label="ReportCardDetailsNavHostFragment" />
+    <fragment
+        android:id="@+id/assignmentListFragment"
+        android:name="com.app.ecarepro.ui.assignment.AssignmentListFragment"
+        android:label="AssignmentListFragment" />
+    <fragment
+        android:id="@+id/appointmentReportFragment"
+        android:name="com.app.ecarepro.ui.appointment.AppointmentReportFragment"
+        android:label="AppointmentReportFragment" />
 </navigation>

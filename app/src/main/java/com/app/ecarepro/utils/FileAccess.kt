@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Base64
 import androidx.core.app.ActivityCompat
@@ -74,7 +75,14 @@ class FileAccess {
         }
 
         fun bitmapFromUri(context: Context , imgUri: Uri?): Bitmap {
-            return  MediaStore.Images.Media.getBitmap(context.contentResolver, imgUri)
+            return if(Build.VERSION.SDK_INT < 28) {
+                MediaStore.Images.Media.getBitmap(context.contentResolver, imgUri)
+            }else{
+                val source: ImageDecoder.Source =
+                    ImageDecoder.createSource(context.contentResolver, imgUri!!)
+                ImageDecoder.decodeBitmap(source)
+            }
+
         }
 
           fun getImageExtFromUri(inContext: Context, inImage: Bitmap) : String? {

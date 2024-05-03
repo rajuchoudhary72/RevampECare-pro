@@ -8,12 +8,14 @@ import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
+import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
+import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
@@ -302,6 +304,10 @@ interface UserRepository {
          id: String
     ): NetworkTeachersTimetable
 
+    suspend fun classTimetable(
+        id: String
+    ): NetworkTeachersTimetable
+
     suspend fun birthday(
           userType: Int,
          rptType: Int,
@@ -423,5 +429,21 @@ interface UserRepository {
 
     suspend fun getTimetableViewer(
     ): NetworkTimeTableViewer
+
+    suspend fun getClassAssignment(
+        id: String
+    ): NetworkAssignments
+
+
+    suspend fun appointmentOverview(
+         appDate: String,
+          tillDate: String,
+          all: Boolean,
+    ): NetworkAppointments
+
+    suspend fun appointmentOverview(
+          act: Int,
+          appId: Int
+    ): CommonResponse
 
 }
