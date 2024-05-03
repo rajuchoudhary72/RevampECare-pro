@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.epoxy.EpoxyController
@@ -17,29 +18,32 @@ import com.app.ecarepro.data.network.model.DataValue
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.FeeDefaulter
 import com.app.ecarepro.data.network.model.LibraryDetails
+import com.app.ecarepro.data.network.model.Questionnaire
 import com.app.ecarepro.data.network.model.StaffAttendance
 import com.app.ecarepro.data.network.model.StatusWiseStatistics
+import com.app.ecarepro.data.network.model.Timetable
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.databinding.FragmentDashboardBinding
+import com.app.ecarepro.model.Feed
 import com.app.ecarepro.todayModeWiseCollectionCard
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
+import com.app.ecarepro.ui.dashbord.model.FeedsModel
 import com.app.ecarepro.ui.dashbord.model.LibraryBookStatusModel
 import com.app.ecarepro.ui.dashbord.model.OnlineVsOfflineAdmissionModel
+import com.app.ecarepro.ui.dashbord.model.QuestionnaireCarouselModel
 import com.app.ecarepro.ui.dashbord.model.StaffAttendanceModel
 import com.app.ecarepro.ui.dashbord.model.StanderWiseStatisticModel
 import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
+import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.model.Feed
-import com.app.ecarepro.ui.dashbord.model.FeedsModel
-import com.app.ecarepro.ui.SystemViewModel
-import androidx.fragment.app.activityViewModels
 
 
 
@@ -51,9 +55,9 @@ class DashboardFragment : Fragment() {
     private val binding get() = _binding!!
 
     val dashboardViewModel: DashboardViewModel by viewModels()
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     var isExpanded = false
-    private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,7 +115,15 @@ class DashboardFragment : Fragment() {
 
             if (data.showBDayCards == true)
                 buildTeachersBirthdayCarouselModel(data.birthDayCards)
+
             buildFeedsModel(feeds)
+
+            if (data.showTimetable == true)
+                timeTableCarouselModel(data.timetable)
+
+            if (data.showQuestionnaire == true)
+                questionnaireCarouselModel(data.questionnaire)
+
 
         }
 
@@ -215,6 +227,7 @@ class DashboardFragment : Fragment() {
             .id("1e5e")
             .addTo(this)
     }
+
     private fun EpoxyController.buildFeedsModel(data: List<Feed>) {
         if (data.isEmpty()) {
             return
@@ -223,12 +236,30 @@ class DashboardFragment : Fragment() {
             .id("1e5e36erfr55")
             .addTo(this)
     }
+
+    private fun EpoxyController.timeTableCarouselModel(data: List<Timetable>?) {
+        if (data.isNullOrEmpty()) {
+            return
+        }
+        TimeTableCarouselModel(data)
+            .id("1e5sfe36erfr55")
+            .addTo(this)
+    }
+
+    private fun EpoxyController.questionnaireCarouselModel(data: List<Questionnaire>?) {
+        if (data.isNullOrEmpty()) {
+            return
+        }
+        QuestionnaireCarouselModel(data)
+            .id("1e5sfe36er55fr55")
+            .addTo(this)
+    }
+
     private fun initViews() {
         binding.toolbar.setNavigationOnClickListener {
             systemViewModel.navigateBack(true)
         }
         binding.recyclerView.apply {
-
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin),
@@ -269,6 +300,7 @@ class DashboardFragment : Fragment() {
                  SubscriberModel()
                      .id("1ee36erfr55")
                      .addTo(this)
+
 
 
                  StudentStatisticModel()

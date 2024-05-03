@@ -88,19 +88,9 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
-
-        Picasso.setSingletonInstance(Picasso.Builder(this).build())
-
-        lifecycleScope.launch {
-            systemViewModel.user.collectLatest {
-                userData = it
-            }
-        }
-
     }
 
-
-    fun setUpDrawer() {
+     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
                 binding.drawerLayout.open()
@@ -287,9 +277,9 @@ class MainActivity : AppCompatActivity() {
                             putString(Constant.TO,  Constant.FRA_STAFF_LEAVE)
                         })
                      }
-
                 }
             }
+
 
 
 

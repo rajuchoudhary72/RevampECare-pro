@@ -19,6 +19,7 @@ import com.app.ecarepro.utils.Constant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.SendMessageRequest
 
 class MessageRepositoryImpl @Inject constructor(
     private val messageService: MessageService
@@ -207,6 +208,20 @@ class MessageRepositoryImpl @Inject constructor(
                     token.authenticationToken,
                     request
                 )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override fun sendMessage(request: SendMessageRequest): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = messageService.sendMessage(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: "Success"))
                 } else {
