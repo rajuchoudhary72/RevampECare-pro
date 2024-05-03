@@ -36,11 +36,12 @@ class AppointmentReportFragment : Fragment() {
     private val dateFrom: Calendar = Calendar.getInstance()
 
     private val dateTo: Calendar = Calendar.getInstance()
-    private val arrayList= ArrayList<Appointment>()
-
+    private val arrayList = ArrayList<Appointment>()
 
 
     override fun onCreateView(
+
+
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -85,8 +86,6 @@ class AppointmentReportFragment : Fragment() {
             setUpPager()
 
 
-
-
         }
     }
 
@@ -118,9 +117,11 @@ class AppointmentReportFragment : Fragment() {
                 0 -> {
                     tab.text = "Approved"
                 }
+
                 1 -> {
                     tab.text = "Pending"
                 }
+
                 2 -> {
                     tab.text = "Reject"
                 }
@@ -128,7 +129,6 @@ class AppointmentReportFragment : Fragment() {
 
 
         }.attach()
-
 
 
     }
@@ -159,7 +159,7 @@ class AppointmentReportFragment : Fragment() {
             dateFrom.text = from
             dateTo.text = to
         }
-         appointType = Constant.DATE_RANGE
+        appointType = Constant.DATE_RANGE
         getAppointments()
 
 
@@ -204,8 +204,6 @@ class AppointmentReportFragment : Fragment() {
                                 binding.viewPager.adapter = viewPagerAdapter
 
 
-
-
                             }
 
                         }
@@ -226,13 +224,15 @@ class AppointmentReportFragment : Fragment() {
                     all
                 )
             }
+
             Constant.UP_COMING -> {
                 appointmentViewModel.appointmentOverview(
                     Constant.currentDate(),
-                     "",
+                    "",
                     all
                 )
             }
+
             Constant.DATE_RANGE -> {
                 appointmentViewModel.appointmentOverview(
                     binding.dateFrom.text.toString(),
