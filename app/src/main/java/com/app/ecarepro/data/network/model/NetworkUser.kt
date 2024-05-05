@@ -1,6 +1,5 @@
 package com.app.ecarepro.data.network.model
 
-import com.app.ecarepro.data.database.model.UserEntity
 import com.google.gson.annotations.SerializedName
 
 
@@ -10,10 +9,3 @@ data class NetworkUser(
     @SerializedName("name")
     val name: String
 )
-
-fun NetworkUser.asEntity(): UserEntity {
-    return UserEntity(
-        userId = id,
-        name = name
-    )
-}

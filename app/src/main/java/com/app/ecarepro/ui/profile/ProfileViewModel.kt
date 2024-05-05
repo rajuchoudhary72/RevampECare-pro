@@ -2,14 +2,18 @@ package com.app.ecarepro.ui.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -18,33 +22,43 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    userDataStore: UserDataStore
+    userDataStore: UserDataStore,
+    private val userDatabase: UserDatabase
 ) : ViewModel() {
 
     var userType: Int = 0
 
-    val uiState = userRepository
-        .getUserProfile()
-        .map { result ->
-            if (result.isSuccess) {
-                ProfileUiState.Success(result.getOrNull()!!)
+    val uiState =
+
+        combine(
+            flow = userDataStore.getUsersFlow(),
+            flow2 = userRepository.getUserProfile()
+        ) { users, profile ->
+            Pair(users, profile)
+        }.map { (users, profile) ->
+            if (profile.isSuccess) {
+                ProfileUiState.Success(
+                    profile = profile.getOrNull()!!,
+                    users = users,
+                    currentUserId = userDataStore.getCurrentUserId()!!
+                )
             } else {
                 ProfileUiState.Error(
-                    result.exceptionOrNull() ?: IllegalArgumentException(
+                    profile.exceptionOrNull() ?: IllegalArgumentException(
                         UNKNOWN_ERROR_MESSAGE
                     )
                 )
             }
         }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = ProfileUiState.Loading,
-            started = SharingStarted.WhileSubscribed(300)
-        )
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = ProfileUiState.Loading,
+                started = SharingStarted.WhileSubscribed(300)
+            )
 
     init {
         viewModelScope.launch {
-            userType = userDataStore.getUser().userType
+            userType = userDataStore.getUser()?.userType!!
         }
     }
 
@@ -96,13 +110,21 @@ class ProfileViewModel @Inject constructor(
                 }
         }
     }
+
+    fun removeUser(user: NetworkUserDetailsDto) {
+        viewModelScope.launch {
+            userDatabase.deleteUser(user.asUserEntity())
+        }
+    }
 }
 
 sealed interface ProfileUiState {
     object Loading : ProfileUiState
 
     data class Success(
-        val profile: Profile
+        val profile: Profile,
+        val users: List<NetworkUserDetailsDto>,
+        val currentUserId: Int
     ) : ProfileUiState
 
     data class Error(

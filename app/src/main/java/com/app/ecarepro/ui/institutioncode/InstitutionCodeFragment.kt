@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentInstitutionCodeBinding
@@ -46,7 +47,11 @@ class InstitutionCodeFragment : Fragment() {
             institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
                 (requireActivity() as MainActivity).showLoader(false)
                 if (it?.errorCode == 0)
-                    findNavController().navigate(R.id.signInFragment)
+                    findNavController().navigate(
+                        R.id.signInFragment, arguments, navOptions = NavOptions.Builder()
+                            .setPopUpTo(R.id.schoolCodeFragment, true)
+                            .build()
+                    )
                 else
                     Toast.makeText(
                         requireContext(),

@@ -5,11 +5,16 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.database.model.asNetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
@@ -18,7 +23,9 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_datastore")
@@ -26,24 +33,52 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 @Suppress("IMPLICIT_NOTHING_TYPE_ARGUMENT_AGAINST_NOT_NOTHING_EXPECTED_TYPE")
 class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val userDatabase: UserDatabase,
     private val gson: Gson
 ) : UserDataStore {
 
     override suspend fun saveUser(user: NetworkUserDetailsDto) {
+        //userDatabase.insertUser(user.asUserEntity())
+    }
+
+    override suspend fun saveUserDetails(user: LoginResponseDto) {
+        userDatabase.insertUser(user.asUserEntity())
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0)
+            setCurrentUserId(userId = user.userID)
+
+    }
+
+    override suspend fun getUser(): NetworkUserDetailsDto? {
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0) return null
+        return userDatabase.getUser(userId).asNetworkUserDetailsDto()
+    }
+
+    override fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>> {
+        return userDatabase.getUsersFlow().map { it.map { it.asNetworkUserDetailsDto() } }
+    }
+
+    override suspend fun setCurrentUserId(userId: Int) {
         context.dataStore.edit { preferences ->
-            preferences[userPreferenceKey] = gson.toJson(user)
+            preferences[currentUserId] = userId
         }
     }
 
-    override suspend fun getUser(): NetworkUserDetailsDto {
+    override suspend fun getCurrentUserId(): Int? {
         return context.dataStore.data.map { preferences ->
-            gson.fromJson(preferences[userPreferenceKey], NetworkUserDetailsDto::class.java)
+            preferences[currentUserId]
         }.first()
     }
 
-    override fun getUserAsFlow(): Flow<NetworkUserDetailsDto> {
-        return context.dataStore.data.map { preferences ->
-            gson.fromJson(preferences[userPreferenceKey], NetworkUserDetailsDto::class.java)
+    override fun getUserAsFlow(): Flow<NetworkUserDetailsDto?> {
+        return runBlocking {
+            if (getCurrentUserId() == null || getCurrentUserId() == 0) flow {
+                emit(
+                    null
+                )
+            }
+            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it.asNetworkUserDetailsDto() }
         }
     }
 
@@ -58,8 +93,7 @@ class UserDataStoreImpl @Inject constructor(
             val json = preferences[schoolDataKey]
             if (json == null) {
                 null
-            } else
-                gson.fromJson(json, NetworkSchool::class.java)
+            } else gson.fromJson(json, NetworkSchool::class.java)
         }.first()
     }
 
@@ -74,8 +108,7 @@ class UserDataStoreImpl @Inject constructor(
             val json = preferences[feedsKey]
             if (json == null) {
                 null
-            } else
-                gson.fromJson(json, FeedsDto::class.java)
+            } else gson.fromJson(json, FeedsDto::class.java)
         }.map { it?.updates ?: emptyList() }
     }
 
@@ -90,8 +123,7 @@ class UserDataStoreImpl @Inject constructor(
             val json = preferences[dashboardData]
             if (json == null) {
                 null
-            } else
-                gson.fromJson(json, UserDashboardDto::class.java)
+            } else gson.fromJson(json, UserDashboardDto::class.java)
         }
     }
 
@@ -109,15 +141,16 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun isUserAuthenticated(): Boolean {
+
         return context.dataStore.data.map { preferences ->
             preferences[isAuthenticatedKey] ?: false
         }.first()
     }
 
     override suspend fun getAuthToken(): String? {
-        return context.dataStore.data.map { preferences ->
-            preferences[authTokenKey]
-        }.first()
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0) return null
+        return userDatabase.getUser(userId).authToken
     }
 
     override suspend fun saveSlides(sliders: List<Slide>) {
@@ -139,6 +172,7 @@ class UserDataStoreImpl @Inject constructor(
 
 
     companion object {
+        private val currentUserId = intPreferencesKey("currentUserId")
         private val schoolDataKey = stringPreferencesKey("schoolData")
         private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")

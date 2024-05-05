@@ -60,7 +60,12 @@ class SignInFragment  : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.update { true }
                         if (it.authenticated == true) {
-                            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                            if (arguments?.containsKey("add_account") == true) {
+                                findNavController().popBackStack()
+                            } else {
+                                findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                            }
+
                         }else{
                             Toast.makeText(requireContext(), "Authenticated "+it.authenticated, Toast.LENGTH_SHORT).show()
 

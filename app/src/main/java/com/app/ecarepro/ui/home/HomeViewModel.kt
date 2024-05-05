@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(
                 HomeUiState.Success(
                     cards = cards,
                     favourites = userDataStore.getSchoolData()?.slider ?: emptyList(),
-                    user = userDataStore.getUser()
+                    user = userDataStore.getUser()!!
                 )
             } else {
                 HomeUiState.Error(

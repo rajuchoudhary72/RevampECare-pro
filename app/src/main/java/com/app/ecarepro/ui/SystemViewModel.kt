@@ -30,7 +30,6 @@ class SystemViewModel @Inject constructor(
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack
 
-    val user = userDataStore.getUserAsFlow()
     val refresh = MutableStateFlow(false)
 
     val uiState =

@@ -1,6 +1,5 @@
 package com.app.ecarepro.data
 
-import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
@@ -33,7 +32,6 @@ import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
@@ -42,7 +40,6 @@ import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
-import com.app.ecarepro.data.network.model.asEntity
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
@@ -53,6 +50,7 @@ import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreci
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
+import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import kotlinx.coroutines.flow.Flow
@@ -60,16 +58,14 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val userDatabase: UserDatabase,
     private val userService: UserService,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    private val appRepository: AppRepository
 ) : UserRepository {
-    override suspend fun insertUser(user: NetworkUser) {
-        userDatabase.insertUser(user = user.asEntity())
-    }
+
 
     override suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto {
-        return userService.verifyUser(schoolCode, username).also { userDataStore.saveUser(it) }
+        return userService.verifyUser(schoolCode, username)
     }
 
     override suspend fun getCredentials(
@@ -102,13 +98,15 @@ class UserRepositoryImpl @Inject constructor(
                 password = password
             )
         ).also {
-            if (it.authenticated==true){
+            if (it.authenticated == true) {
+                userDataStore.saveUserDetails(it)
                 userDataStore.saveAuthToken(it.authToken ?: "")
-                userDataStore.setAsUserAuthenticated(it.authenticated ?: false)
+                userDataStore.setAsUserAuthenticated(it.authenticated)
             }
 
         }
     }
+
     override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
         return flow {
             try {
@@ -172,15 +170,15 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getLibrarySearch(query: String, pg: Int): NetworkBookDetails {
-        return   userService.getLibrarySearch(query, pg)
+        return userService.getLibrarySearch(query, pg)
     }
 
-    override suspend fun getQuestionnaireList(pg: Int, myque: Boolean ): NetworkQuestionnaire {
+    override suspend fun getQuestionnaireList(pg: Int, myque: Boolean): NetworkQuestionnaire {
         return userService.getQuestionnaireList(pg, myque)
     }
 
     override suspend fun questionnaireLike(qID: Int, like: Boolean): CommonResponse {
-        return  userService.questionnaireLike(qID, like)
+        return userService.questionnaireLike(qID, like)
     }
 
     override suspend fun answerList(qID: Int): NetworkAnswerDetails {
@@ -201,11 +199,16 @@ class UserRepositoryImpl @Inject constructor(
         fileURL: String,
         fileExt: String
     ): CommonResponse {
-        return userService.addQuestion(AddQuestionPostData(Attachment(attachment, fileExt, fileURL),question) )
+        return userService.addQuestion(
+            AddQuestionPostData(
+                Attachment(attachment, fileExt, fileURL),
+                question
+            )
+        )
     }
 
     override suspend fun leaveListStatus(): NetworkLeaveListStatus {
-       return userService.leaveListStatus()
+        return userService.leaveListStatus()
     }
 
     override suspend fun leaveApply(
@@ -218,14 +221,17 @@ class UserRepositoryImpl @Inject constructor(
         attachment: String,
         fileExt: String
     ): CommonResponse {
-         return userService.leaveApply(LeaveRequestData(duration,
-             FileAttachment(attachment,fileExt,""),
-             fromDate,
-             halfdayDTL,
-             leaveID,
-             reason,
-             tillDate
-         ))
+        return userService.leaveApply(
+            LeaveRequestData(
+                duration,
+                FileAttachment(attachment, fileExt, ""),
+                fromDate,
+                halfdayDTL,
+                leaveID,
+                reason,
+                tillDate
+            )
+        )
     }
 
     override suspend fun leaveSetting(): NetworkLeaveSetting {
@@ -233,7 +239,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun leaveDelete(lvID: Int): CommonResponse {
-       return userService.leaveDelete(lvID)
+        return userService.leaveDelete(lvID)
     }
 
     override suspend fun getInfractionTypes(): NetworkInfractionTypes {
@@ -265,13 +271,15 @@ class UserRepositoryImpl @Inject constructor(
         infractionOn: String,
         correctiveAction: String
     ): CommonResponse {
-      return  userService.saveInfraction(PostSaveInfraction(
-            action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID
-        ))
+        return userService.saveInfraction(
+            PostSaveInfraction(
+                action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID
+            )
+        )
     }
 
     override suspend fun getStudentList(scholarType: Int, showAll: Boolean): NetworkStudentList {
-       return userService.getStudentList(scholarType, showAll)
+        return userService.getStudentList(scholarType, showAll)
     }
 
     override suspend fun addAppreciation(stID: Int): NetworkAddAppreciation {
@@ -298,7 +306,17 @@ class UserRepositoryImpl @Inject constructor(
         appreciationOn: String,
         remark: String
     ): CommonResponse {
-        return userService.saveAppreciation(PostSaveAppreciation(action, appreciationOn, aprSubID, instance, remark, rwdID, stID))
+        return userService.saveAppreciation(
+            PostSaveAppreciation(
+                action,
+                appreciationOn,
+                aprSubID,
+                instance,
+                remark,
+                rwdID,
+                stID
+            )
+        )
     }
 
     override suspend fun assignment(): NetworkAssignments {
@@ -314,10 +332,17 @@ class UserRepositoryImpl @Inject constructor(
         fileURL: String,
         fileExt: String
     ): CommonResponse {
-        return userService.submitAssignment(PostSubmitAssignment(asgID,
-            com.app.ecarepro.data.network.model.submit_assignment.Attachment(attachment,fileExt, fileURL),
-            data, fileName, id
-        ))
+        return userService.submitAssignment(
+            PostSubmitAssignment(
+                asgID,
+                com.app.ecarepro.data.network.model.submit_assignment.Attachment(
+                    attachment,
+                    fileExt,
+                    fileURL
+                ),
+                data, fileName, id
+            )
+        )
     }
 
     override suspend fun teachersAssignment(): NetworkTeacherAssignment {
@@ -333,30 +358,47 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createAssignment(
-          asgDate: String,
-          asgID: Int,
-          attachment: String,
-          fileExt: String,
-          fileURL: String,
-          classID: Int,
-          classIDs: String,
-          `data`: String,
-          `file`: String,
-          id: String,
-          isActive: Boolean,
-          isFileRemoved: Boolean,
-          multipleSubmission: Boolean,
+        asgDate: String,
+        asgID: Int,
+        attachment: String,
+        fileExt: String,
+        fileURL: String,
+        classID: Int,
+        classIDs: String,
+        `data`: String,
+        `file`: String,
+        id: String,
+        isActive: Boolean,
+        isFileRemoved: Boolean,
+        multipleSubmission: Boolean,
 
-          subjectID: Int,
-          submitDate: String,
-          title: String
+        subjectID: Int,
+        submitDate: String,
+        title: String
     ): CommonResponse {
-        return userService.createAssignment(PostCreateAssignment( asgDate, asgID, Attachment(attachment, fileExt, fileURL), classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title))
+        return userService.createAssignment(
+            PostCreateAssignment(
+                asgDate,
+                asgID,
+                Attachment(attachment, fileExt, fileURL),
+                classID,
+                classIDs,
+                data,
+                file,
+                id,
+                isActive,
+                isFileRemoved,
+                multipleSubmission,
+                subjectID,
+                submitDate,
+                title
+            )
+        )
 
     }
 
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {
-       return userService.viewAssignment(iD)
+        return userService.viewAssignment(iD)
     }
 
     override suspend fun assignmnetSubmissionRPT(
@@ -382,8 +424,13 @@ class UserRepositoryImpl @Inject constructor(
         return userService.teachersTimetable(id)
     }
 
-    override suspend fun birthday(userType: Int, rptType: Int, monthNo: Int, date:String): NetworkBirthday {
-        return userService.birthday(userType, rptType, monthNo,date)
+    override suspend fun birthday(
+        userType: Int,
+        rptType: Int,
+        monthNo: Int,
+        date: String
+    ): NetworkBirthday {
+        return userService.birthday(userType, rptType, monthNo, date)
     }
 
     override fun getUserProfile(): Flow<Result<Profile>> {
@@ -400,6 +447,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+
     override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
         return flow {
             try {
@@ -414,8 +462,9 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+
     override suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass {
-        return  userService.staffMyClass()
+        return userService.staffMyClass()
     }
 
     override suspend fun getPayslip(): NetworkPaySlip {
@@ -423,7 +472,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getThoughts(pg: Int, dir: Int, mythoughts: Boolean): NetworkThoughts {
-        return  userService.getThoughts(pg, dir, mythoughts)
+        return userService.getThoughts(pg, dir, mythoughts)
     }
 
     override suspend fun thoughtsLike(thID: Int, like: Boolean): CommonResponse {
@@ -431,16 +480,17 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun thoughtsDelete(thID: Int): CommonResponse {
-        return userService.thoughtsDelete(thID )
+        return userService.thoughtsDelete(thID)
     }
 
     override suspend fun whoLiked(thID: Int): NetworkWhoLike {
-        return  userService.whoLiked(thID)
+        return userService.whoLiked(thID)
     }
 
     override suspend fun thoughtsCreate(quotation: String, author: String): CommonResponse {
         return userService.thoughtsCreate(AddThoughtsPostData(quotation, author))
     }
+
     override suspend fun excellenceAward(): ExcellenceAwardResponse {
         return userService.excellenceAward()
     }

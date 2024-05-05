@@ -29,7 +29,6 @@ import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
@@ -41,7 +40,6 @@ import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun insertUser(user: NetworkUser)
 
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
 

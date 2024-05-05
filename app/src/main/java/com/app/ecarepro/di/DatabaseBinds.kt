@@ -1,17 +1,15 @@
 package com.app.ecarepro.di
 
-import com.app.ecarepro.data.UserRepositoryImpl
 import com.app.ecarepro.data.database.UserDatabaseImpl
 import com.app.ecarepro.data.database.databases.UserDatabase
-import com.app.ecarepro.data.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class DatabaseBinds {
     @Binds
     abstract fun bindUserDatabase(
