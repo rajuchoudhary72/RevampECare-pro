@@ -99,7 +99,7 @@ class UserRepositoryImpl @Inject constructor(
             )
         ).also {
             if (it.authenticated == true) {
-                userDataStore.saveUserDetails(it)
+                userDataStore.saveUserDetails(it, schoolCode)
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
             }

@@ -8,12 +8,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.database.model.asNetworkSchool
 import com.app.ecarepro.data.database.model.asNetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.asNetworkSchool
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
@@ -34,6 +37,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDatabase: UserDatabase,
+    private val schoolDatabase: SchoolDatabase,
     private val gson: Gson
 ) : UserDataStore {
 
@@ -41,8 +45,8 @@ class UserDataStoreImpl @Inject constructor(
         //userDatabase.insertUser(user.asUserEntity())
     }
 
-    override suspend fun saveUserDetails(user: LoginResponseDto) {
-        userDatabase.insertUser(user.asUserEntity())
+    override suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String) {
+        userDatabase.insertUser(user.asUserEntity().copy(schoolCode = schoolCode))
         val userId = getCurrentUserId()
         if (userId == null || userId == 0)
             setCurrentUserId(userId = user.userID)
@@ -56,7 +60,15 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>> {
-        return userDatabase.getUsersFlow().map { it.map { it.asNetworkUserDetailsDto() } }
+        return userDatabase
+            .getUsersFlow()
+            .map {
+                it.map {
+                    it.asNetworkUserDetailsDto().copy(
+                        school = schoolDatabase.getSchool(it.schoolCode ?: "").asNetworkSchool()
+                    )
+                }
+            }
     }
 
     override suspend fun setCurrentUserId(userId: Int) {
@@ -83,18 +95,14 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
-        context.dataStore.edit { preferences ->
-            preferences[schoolDataKey] = gson.toJson(school)
-        }
+        schoolDatabase.insertSchool(school.asNetworkSchool())
     }
 
     override suspend fun getSchoolData(): NetworkSchool? {
-        return context.dataStore.data.map { preferences ->
-            val json = preferences[schoolDataKey]
-            if (json == null) {
-                null
-            } else gson.fromJson(json, NetworkSchool::class.java)
-        }.first()
+        val user = getUser()
+        if (user == null || user.schoolCode.isNullOrEmpty())
+            return null
+        return schoolDatabase.getSchool(user.schoolCode).asNetworkSchool()
     }
 
     override suspend fun saveFeeds(feeds: FeedsDto) {
@@ -141,7 +149,6 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun isUserAuthenticated(): Boolean {
-
         return context.dataStore.data.map { preferences ->
             preferences[isAuthenticatedKey] ?: false
         }.first()
@@ -154,6 +161,7 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveSlides(sliders: List<Slide>) {
+
         context.dataStore.edit { preferences ->
             preferences[slidesKey] = gson.toJson(sliders)
         }
@@ -162,7 +170,7 @@ class UserDataStoreImpl @Inject constructor(
     override fun getSlides(): Flow<List<Slide>> {
         return context.dataStore.data.map { preferences ->
             val itemType = object : TypeToken<List<Slide>>() {}.type
-            gson.fromJson<List<Slide>>(preferences[slidesKey], itemType)
+            gson.fromJson(preferences[slidesKey], itemType)
         }
     }
 

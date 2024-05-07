@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -46,19 +47,28 @@ class InstitutionCodeFragment : Fragment() {
             (requireActivity() as MainActivity).showLoader(true)
             institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
                 (requireActivity() as MainActivity).showLoader(false)
-                if (it?.errorCode == 0)
+                if (it?.errorCode == 0) {
                     findNavController().navigate(
-                        R.id.signInFragment, arguments, navOptions = NavOptions.Builder()
+                        resId = R.id.signInFragment,
+                        args = if (arguments == null) {
+                            bundleOf("schoolCode" to it.schoolCode)
+                        } else {
+                            arguments?.apply {
+                                putString("schoolCode", it.schoolCode)
+                            }
+                        },
+                        navOptions = NavOptions.Builder()
                             .setPopUpTo(R.id.schoolCodeFragment, true)
                             .build()
                     )
-                else
+                } else {
                     Toast.makeText(
                         requireContext(),
                         it?.message ?: "Something went wrong",
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                }
             }
         }
         binding.btnFindSchoolCollege.setOnClickListener {

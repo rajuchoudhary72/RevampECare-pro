@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
-    suspend fun saveUserDetails(user: LoginResponseDto)
+    suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String)
     suspend fun getUser(): NetworkUserDetailsDto?
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)

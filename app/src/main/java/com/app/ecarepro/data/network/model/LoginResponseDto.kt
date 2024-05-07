@@ -36,6 +36,7 @@ fun LoginResponseDto.asUserEntity(): UserEntity {
         authToken = authToken,
         isVerified = false,
         isUserAuthenticated = false,
-        roleName = roleName
+        roleName = roleName,
+        schoolCode = ""
     )
 }

@@ -172,6 +172,7 @@ class ProfileFragment : Fragment() {
                         id(it.userId)
                         name(it.name)
                         photo(it.photo)
+                        school(it.school)
                         isCurrentUser(it.userId == uiState.currentUserId)
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())

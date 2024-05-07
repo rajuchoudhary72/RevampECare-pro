@@ -14,6 +14,7 @@ data class UserEntity(
     @ColumnInfo(name = "userType") val userType: Int,
     @ColumnInfo(name = "auth_token") val authToken: String?,
     @ColumnInfo(name = "roleName") val roleName: String?,
+    @ColumnInfo(name = "schoolCode") val schoolCode: String?,
     @ColumnInfo(name = "is_user_authenticated") val isUserAuthenticated: Boolean?,
     @ColumnInfo(name = "is_verified") val isVerified: Boolean?,
 )
@@ -27,6 +28,7 @@ fun UserEntity.asNetworkUserDetailsDto(): NetworkUserDetailsDto {
         authToken = authToken,
         isUserAuthenticated = isUserAuthenticated,
         isVerified = isVerified,
-        roleName = roleName
+        roleName = roleName,
+        schoolCode = schoolCode
     )
 }

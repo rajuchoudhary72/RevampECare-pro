@@ -1,6 +1,7 @@
 package com.app.ecarepro.di
 
 import com.app.ecarepro.data.database.UserDatabaseImpl
+import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
 import dagger.Binds
 import dagger.Module
@@ -15,4 +16,9 @@ abstract class DatabaseBinds {
     abstract fun bindUserDatabase(
         impl: UserDatabaseImpl
     ): UserDatabase
+
+    @Binds
+    abstract fun bindSchoolDatabase(
+        impl: UserDatabaseImpl
+    ): SchoolDatabase
 }

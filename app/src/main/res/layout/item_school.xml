@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,36 +10,27 @@
             type="java.lang.String" />
 
         <variable
-            name="school"
-            type="com.app.ecarepro.data.network.model.NetworkSchool" />
-
-        <variable
-            name="isCurrentUser"
-            type="java.lang.Boolean" />
-
-        <variable
             name="name"
             type="java.lang.String" />
 
         <variable
-            name="removeAccountListener"
-            type="android.view.View.OnClickListener" />
+            name="address"
+            type="java.lang.String" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:paddingHorizontal="@dimen/horizontal_margin"
-        android:paddingVertical="@dimen/_5sdp">
+        android:background="@color/white">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image"
             imageUrl="@{photo}"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
@@ -51,38 +41,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_5sdp"
-            android:fontFamily="@font/calibri_bold"
+            android:fontFamily="@font/calibri_regular"
             android:text="@{name}"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_close"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintTop_toTopOf="@id/image"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Raju" />
 
-        <include
-            android:id="@+id/school"
-            layout="@layout/item_school"
+        <TextView
+            android:id="@+id/address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_5sdp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_close"
-            app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintTop_toBottomOf="@id/name"
-            bind:address="@{school.schAdd1}"
-            bind:name="@{school.schoolName}"
-            bind:photo="@{school.logo}" />
-
-        <ImageView
-            android:id="@+id/btn_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="@{!isCurrentUser}"
-            android:onClick="@{removeAccountListener}"
-            android:src="@{isCurrentUser ? @drawable/ic_check : @drawable/ic_close}"
+            android:fontFamily="@font/calibri_light"
+            android:text="@{address}"
+            android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_close" />
+            app:layout_constraintStart_toEndOf="@id/image"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="Raju" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
