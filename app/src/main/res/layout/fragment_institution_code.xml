@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent=".5" />
+                app:layout_constraintGuide_percent=".4" />
 
 
             <ImageView
@@ -128,18 +128,33 @@
                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
 
 
+            <com.app.ecarepro.ui.views.CarouselNoSnap
+                android:id="@+id/carousel_school"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_continue"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_school_code" />
+
+
             <TextView
                 android:id="@+id/textView"
                 bottomWindowInsetToMargin="@{true}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginTop="@dimen/_30sdp"
                 android:drawablePadding="8dp"
                 android:text="Powered by"
                 android:textAppearance="?attr/textAppearanceCaption"
                 android:textColor="@color/grey_40"
+                android:paddingBottom="10dp"
                 app:drawableEndCompat="@drawable/logo_franciscan_gray"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/carousel_school"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 

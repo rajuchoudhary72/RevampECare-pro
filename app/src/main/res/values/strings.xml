@@ -262,5 +262,6 @@
     <string name="are_you_sure_to_logout">Are you sure to logout?</string>
     <string name="no">No</string>
     <string name="print">Print</string>
+    <string name="change_school_college"><u>Change School/College</u>></string>
 
 </resources>

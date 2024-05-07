@@ -61,7 +61,8 @@ data class NetworkSchool(
     @SerializedName("themColor")
     val themColor: String?,
     @SerializedName("webSite")
-    val webSite: String?
+    val webSite: String?,
+    val isSelected: Boolean = false
 )
 
 data class Slider(

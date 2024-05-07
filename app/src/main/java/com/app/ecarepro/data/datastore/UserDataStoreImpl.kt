@@ -27,6 +27,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -83,6 +84,30 @@ class UserDataStoreImpl @Inject constructor(
         }.first()
     }
 
+    override fun getCurrentUserIdAsFlow(): Flow<Int?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[currentUserId]
+        }
+    }
+
+    override suspend fun setCurrentSchoolCode(schoolCode: String) {
+        context.dataStore.edit { preferences ->
+            preferences[currentSchoolCode] = schoolCode
+        }
+    }
+
+    override suspend fun getCurrentSchoolCode(): String? {
+        return context.dataStore.data.map { preferences ->
+            preferences[currentSchoolCode]
+        }.first()
+    }
+
+    override fun getCurrentSchoolCodeAsFlow(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[currentSchoolCode]
+        }
+    }
+
     override fun getUserAsFlow(): Flow<NetworkUserDetailsDto?> {
         return runBlocking {
             if (getCurrentUserId() == null || getCurrentUserId() == 0) flow {
@@ -96,6 +121,9 @@ class UserDataStoreImpl @Inject constructor(
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
         schoolDatabase.insertSchool(school.asNetworkSchool())
+        val schoolCode = getCurrentSchoolCode()
+        if (schoolCode.isNullOrEmpty())
+            setCurrentSchoolCode(school.schoolCode)
     }
 
     override suspend fun getSchoolData(): NetworkSchool? {
@@ -103,6 +131,13 @@ class UserDataStoreImpl @Inject constructor(
         if (user == null || user.schoolCode.isNullOrEmpty())
             return null
         return schoolDatabase.getSchool(user.schoolCode).asNetworkSchool()
+    }
+
+    override fun getSchoolAsFlow(): Flow<NetworkSchool?> {
+        val user = runBlocking { getUser() }
+        if (user == null || user.schoolCode.isNullOrEmpty())
+            return flowOf(null)
+        return schoolDatabase.getSchoolFlow(user.schoolCode).map { it.asNetworkSchool() }
     }
 
     override suspend fun saveFeeds(feeds: FeedsDto) {
@@ -181,6 +216,7 @@ class UserDataStoreImpl @Inject constructor(
 
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
+        private val currentSchoolCode = stringPreferencesKey("currentSchoolCode")
         private val schoolDataKey = stringPreferencesKey("schoolData")
         private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")

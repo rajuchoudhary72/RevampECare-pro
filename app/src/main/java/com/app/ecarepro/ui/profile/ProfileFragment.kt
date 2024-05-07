@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.account
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.databinding.FragmentProfileBinding
 import com.app.ecarepro.profileAddAccount
@@ -34,6 +35,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -45,6 +47,9 @@ class ProfileFragment : Fragment() {
     private val profileViewModel: ProfileViewModel by viewModels()
 
     private lateinit var photoType: PhotoType
+
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
     private val galleryLauncher =
         registerForActivityResult(
@@ -174,6 +179,11 @@ class ProfileFragment : Fragment() {
                         photo(it.photo)
                         school(it.school)
                         isCurrentUser(it.userId == uiState.currentUserId)
+                        changeUser { _ ->
+                            lifecycleScope.launch {
+                                userDataStore.setCurrentUserId(it.userId)
+                            }
+                        }
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Remove Account")

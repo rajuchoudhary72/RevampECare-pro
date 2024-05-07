@@ -16,9 +16,14 @@ interface UserDataStore {
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)
     suspend fun getCurrentUserId(): Int?
+    fun getCurrentUserIdAsFlow(): Flow<Int?>
+    suspend fun setCurrentSchoolCode(schoolCode: String)
+    suspend fun getCurrentSchoolCode(): String?
+    fun getCurrentSchoolCodeAsFlow(): Flow<String?>
     fun getUserAsFlow(): Flow<NetworkUserDetailsDto?>
     suspend fun saveSchoolData(school: NetworkSchool)
     suspend fun getSchoolData(): NetworkSchool?
+    fun getSchoolAsFlow(): Flow<NetworkSchool?>
     suspend fun saveFeeds(feeds: FeedsDto)
     fun getFeeds(): Flow<List<Feed>>
     suspend fun saveDashboardData(school: UserDashboardDto)

@@ -14,7 +14,7 @@ data class NetworkUserDetailsDto(
     @SerializedName("name")
     val name: String?,
     @SerializedName("userID")
-    val userId: Int?,
+    val userId: Int,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("roleName")

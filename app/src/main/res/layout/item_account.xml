@@ -26,10 +26,15 @@
             name="removeAccountListener"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="changeUser"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:onClick="@{changeUser}"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingHorizontal="@dimen/horizontal_margin"
