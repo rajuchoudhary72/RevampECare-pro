@@ -12,6 +12,7 @@ import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
+import com.app.ecarepro.model.TasksDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -70,4 +71,10 @@ interface SchoolService {
         @Query("IsDashboard") isDashboard: Boolean = true,
         @Query("pg") pg: Int,
     ): FeedsDto
+
+    @GET("TaskManager/Overview")
+    suspend fun getTaskList(
+        @Query("filter") filter: Int,
+        @Query("pg") pg: Int = 1,
+    ): TasksDto
 }

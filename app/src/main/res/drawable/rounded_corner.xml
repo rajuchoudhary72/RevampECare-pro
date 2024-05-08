@@ -3,12 +3,12 @@
     android:shape="rectangle">
 
     <!-- view background color -->
-    <solid android:color="@color/md_theme_light_primary"></solid>
+    <solid android:color="@color/md_theme_light_primary" />
 
     <!-- view border color and width -->
     <stroke
         android:width="1.5dp"
-        android:color="@color/md_theme_light_onPrimaryContainer"></stroke>
+        android:color="@color/md_theme_light_onPrimaryContainer" />
 
 
     <!-- If you want to add some padding -->
@@ -16,9 +16,9 @@
         android:left="5dp"
         android:bottom="5dp"
         android:right="5dp"
-        android:top="5dp"></padding>
+        android:top="5dp" />
 
     <!-- Here is the corner radius -->
-    <corners android:radius="6dp"></corners>
+    <corners android:radius="6dp" />
 
 </shape>

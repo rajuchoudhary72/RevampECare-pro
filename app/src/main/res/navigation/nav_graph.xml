@@ -452,4 +452,8 @@
         android:id="@+id/attendanceFragment2"
         android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
         android:label="AttendanceFragment" />
+    <fragment
+        android:id="@+id/taskManagerFragment"
+        android:name="com.app.ecarepro.ui.taskmanager.TaskManagerFragment"
+        android:label="TaskManagerFragment" />
 </navigation>

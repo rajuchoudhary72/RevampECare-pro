@@ -16,6 +16,7 @@ import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
+import com.app.ecarepro.model.TasksDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -95,6 +96,21 @@ class SchoolRepositoryImpl @Inject constructor(
                 emit(Result.success(response))
             } catch (e: Exception) {
                 emit(Result.failure(e))
+            }
+        }
+    }
+
+    override fun getTaskList(filter: Int): Flow<Result<TasksDto>> {
+        return flow {
+            try {
+                val response = schoolService.getTaskList(filter)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
             }
         }
     }

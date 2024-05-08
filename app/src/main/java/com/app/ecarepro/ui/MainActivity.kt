@@ -189,6 +189,7 @@ class MainActivity : AppCompatActivity() {
             12 -> R.id.bookLibraryFragment
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
+            23 -> R.id.taskManagerFragment
             51 -> R.id.excellenceAwardFragment
             else -> null
         }
