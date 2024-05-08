@@ -36,4 +36,18 @@ class TimeTableNavHostViewModel @Inject constructor(
 
     }
 
+    fun classTimetable(
+        id: String
+    )=viewModelScope.launch {
+        runCatching {
+            timeTableMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.classTimetable( id)
+        }.onSuccess {
+            timeTableMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            timeTableMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
 }

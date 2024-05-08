@@ -11,20 +11,32 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkClassAttendance
+import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
+import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
+import com.app.ecarepro.data.network.model.NetworkLessonPlanList
+import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
+import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
+import com.app.ecarepro.data.network.model.NetworkStaffList
+import com.app.ecarepro.data.network.model.NetworkStaffProfile
+import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
 import com.app.ecarepro.data.network.model.NetworkStudentList
+import com.app.ecarepro.data.network.model.NetworkStudentListToMarkAtt
+import com.app.ecarepro.data.network.model.NetworkStudentProfile
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
@@ -41,15 +53,30 @@ import com.app.ecarepro.data.network.model.UserLoginRequestDto
 import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
+import com.app.ecarepro.data.network.model.post_lesson.ActionOnLesson
+import com.app.ecarepro.data.network.model.post_lesson.PostLesson
+import com.app.ecarepro.data.network.model.post_mark_attedance.PostMarkAttedance
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
-import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAppointments
+import com.app.ecarepro.data.network.model.NetworkAppreciations
+import com.app.ecarepro.data.network.model.NetworkClassAssignments
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
+import com.app.ecarepro.data.network.model.NetworkInfractions
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
+import com.app.ecarepro.data.network.model.PostLeaveAction
+import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.ProfileAttendanceDTL
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserService {
     @GET("User/Verify")
@@ -69,44 +96,44 @@ interface UserService {
     ): LoginResponseDto
 
 
-     @GET("Academic/ClassSyllabus")
-    suspend fun getClassSyllabus(  ): NetworkClassSyllabus
+    @GET("Academic/ClassSyllabus")
+    suspend fun getClassSyllabus(): NetworkClassSyllabus
 
-     @GET("Academic/ActivityCaledar")
-    suspend fun getActivityCaledar(  ): NetworkActivityCalender
+    @GET("Academic/ActivityCaledar")
+    suspend fun getActivityCaledar(): NetworkActivityCalender
 
 
-     @GET("Library/DTL")
-    suspend fun getLibraryDetails(  ): NetworkLatestBook
+    @GET("Library/DTL")
+    suspend fun getLibraryDetails(): NetworkLatestBook
 
-     @GET("Library/BookDTL")
+    @GET("Library/BookDTL")
     suspend fun getBookDetails(
         @Query("BookID") bookID: Int,
         @Query("ID") id: Int,
     ): NetworkBookDetails
 
-     @GET("Library/Search")
+    @GET("Library/Search")
     suspend fun getLibrarySearch(
         @Query("query") query: String,
         @Query("pg") pg: Int,
     ): NetworkBookDetails
 
-     @GET("Questionnaire/List")
+    @GET("Questionnaire/List")
     suspend fun getQuestionnaireList(
         @Query("pg") pg: Int,
         @Query("myque") myque: Boolean,
     ): NetworkQuestionnaire
 
-     @GET("Staff/MyClass")
+    @GET("Staff/MyClass")
     suspend fun staffMyClass(
         /* @Query("SubID") subID: Int,
          @Query("ID") iD: Int*/
     ): NetworkMyClass
 
-     @GET("Staff/Payslip")
-    suspend fun getPayslip( ): NetworkPaySlip
+    @GET("Staff/Payslip")
+    suspend fun getPayslip(): NetworkPaySlip
 
-     @GET("Thoughts/List")
+    @GET("Thoughts/List")
     suspend fun getThoughts(
         @Query("pg") pg: Int,
         @Query("dir") dir: Int,
@@ -114,13 +141,13 @@ interface UserService {
     ): NetworkThoughts
 
 
-     @GET("Thoughts/Like")
+    @GET("Thoughts/Like")
     suspend fun thoughtsLike(
         @Query("ThID") thID: Int,
         @Query("Like") like: Boolean
     ): CommonResponse
 
-     @GET("Thoughts/WhoLiked")
+    @GET("Thoughts/WhoLiked")
     suspend fun whoLiked(
         @Query("ThID") thID: Int
     ): NetworkWhoLike
@@ -130,7 +157,7 @@ interface UserService {
         @Body request: AddThoughtsPostData,
     ): CommonResponse
 
-     @GET("Thoughts/Delete")
+    @GET("Thoughts/Delete")
     suspend fun thoughtsDelete(
         @Query("ThID") thID: Int
     ): CommonResponse
@@ -163,15 +190,28 @@ interface UserService {
     ): CommonResponse
 
     @GET("Leave/Status")
-    suspend fun leaveListStatus( ): NetworkLeaveListStatus
+    suspend fun leaveListStatus(): NetworkLeaveListStatus
 
     @POST("Leave/Apply")
     suspend fun leaveApply(
         @Body request: LeaveRequestData,
     ): CommonResponse
 
+    @GET("Leave/Report")
+    suspend fun leaveReport(
+        @Query("Status") status: Int,
+        @Query("ord") ord: Int,
+        @Query("ApplType") applType: Int,
+        @Query("pg") pg: Int
+    ): NetworkLeaveReport
+
+    @POST("Leave/Action")
+    suspend fun leaveAction(
+        @Body request: PostLeaveAction,
+    ): CommonResponse
+
     @GET("Leave/Setting")
-    suspend fun leaveSetting( ): NetworkLeaveSetting
+    suspend fun leaveSetting(): NetworkLeaveSetting
 
     @GET("Leave/Delete")
     suspend fun leaveDelete(
@@ -179,7 +219,7 @@ interface UserService {
     ): CommonResponse
 
     @GET("DisciplineLog/InfractionTypes")
-    suspend fun infractionTypes(  ): NetworkInfractionTypes
+    suspend fun infractionTypes(): NetworkInfractionTypes
 
     @GET("DisciplineLog/SubInfractionTypes")
     suspend fun subInfractionTypes(
@@ -199,6 +239,11 @@ interface UserService {
         @Query("StID") stID: Int
     ): NetworkAddInfraction
 
+    @GET("DisciplineLog/Infractions")
+    suspend fun getInfractions(
+        @Query("StID") stID: Int
+    ): NetworkInfractions
+
 
     @POST("DisciplineLog/SaveInfraction")
     suspend fun saveInfraction(
@@ -215,6 +260,11 @@ interface UserService {
     suspend fun addAppreciation(
         @Query("StID") stID: Int
     ): NetworkAddAppreciation
+
+    @GET("DisciplineLog/Appreciations")
+    suspend fun getAppreciations(
+        @Query("StID") stID: Int
+    ): NetworkAppreciations
 
     @GET("DisciplineLog/SubAppreciationTypes")
     suspend fun subAppreciationTypes(
@@ -234,7 +284,7 @@ interface UserService {
     ): CommonResponse
 
     @GET("Academic/Assignment")
-    suspend fun assignment( ): NetworkAssignments
+    suspend fun assignment(): NetworkAssignments
 
     @POST("Academic/SubmitAssignment")
     suspend fun submitAssignment(
@@ -243,7 +293,9 @@ interface UserService {
 
 
     @GET("Academic/TeachersAssignment")
-    suspend fun teachersAssignment( ): NetworkTeacherAssignment
+    suspend fun teachersAssignment(
+        @Query("ID") iD: String,
+    ): NetworkTeacherAssignment
 
     @GET("Academic/DeleteAssignment")
     suspend fun deleteAssignment(
@@ -251,7 +303,9 @@ interface UserService {
     ): CommonResponse
 
     @GET("Staff/MySubjects")
-    suspend fun mySubjects( ): NetworkMySubjects
+    suspend fun mySubjects(
+        @Query("ClassID") classID: Int
+    ): NetworkMySubjects
 
     @POST("Academic/CreateAssignment")
     suspend fun createAssignment(
@@ -295,6 +349,58 @@ interface UserService {
         @Query("Date") date: String,
     ): NetworkBirthday
 
+    @GET("ReportCard/DTL")
+    suspend fun reportCardDTL(
+        @Query("StID") stID: Int
+    ): NetworkReportCardDetails
+
+    @GET("Staff/MarkAttendance")
+    suspend fun markAttendance(): NetworkMarkAttendance
+
+    @GET("Staff/StudentListToMarkAtt")
+    suspend fun getStudentListToMarkAtt(
+        @Query("ClassID") classID: Int,
+        @Query("SubID") subID: Int,
+        @Query("AttDate") attDate: String
+    ): NetworkStudentListToMarkAtt
+
+    @POST("Staff/PostAttendance")
+    suspend fun postMarkAttendance(
+        @Body request: PostMarkAttedance,
+    ): CommonResponse
+
+    @GET("Staff/LessonPlanList")
+    suspend fun getLessonPlanList(
+        @Query("pg") pg: Int,
+        @Query("ID") id: String,
+    ): NetworkLessonPlanList
+
+    @GET("Staff/LessonPlanFilter")
+    suspend fun getLessonPlanFilter(
+        @Query("Filter") filter: String,
+        @Query("From") from: String,
+        @Query("Till") till: String,
+        @Query("ClassIds") classIds: String,
+        @Query("SubIds") subIds: String,
+        @Query("Status") status: Int,
+
+
+        ): NetworkLessonPlanList
+
+    @GET("Staff/LessonPlanDTL")
+    suspend fun getLessonPlanDTL(
+        @Query("ID") id: String,
+        @Query("TeacherID") teacherID: Int
+    ): NetworkLessonPlanDTL
+
+    @GET("Report/StaffList")
+    suspend fun getStaffList(): NetworkStaffList
+
+    @GET("Report/StaffProfile")
+    suspend fun getStaffProfile(
+        @Query("SID") sId: Int
+    ): NetworkStaffProfile
+
     @POST("User/ChangeUsername")
     suspend fun changeUsername(
         @Body request: ChangeUserNameRequestDto,
@@ -303,6 +409,63 @@ interface UserService {
     @POST("User/ChangePassword")
     suspend fun changePassword(
         @Body request: ChangeUserNameRequestDto,
+    ): CommonResponse
+
+    @POST("Staff/PostLessonPlan")
+    suspend fun postLessonPlan(
+        @Body request: PostLesson,
+    ): CommonResponse
+
+    @GET("Staff/CreateLessonPlan")
+    suspend fun createLessonPlan(): NetworkCreateLesson
+
+    @GET("Report/StudentProfile")
+    suspend fun getStudentProfile(
+        @Query("StID") sId: Int
+    ): NetworkStudentProfile
+
+    @GET("Report/AttendanceYrID")
+    suspend fun getSAttendanceYrID(
+        @Query("StID") sId: Int,
+        @Query("YrID") yrID: Int
+    ): NetworkProfileAttendanceDTL
+
+    @GET("Report/FeeSummaryYrID")
+    suspend fun getFeeSummaryYrID(
+        @Query("StID") sId: Int,
+        @Query("YrID") yrID: Int
+    ): FeeSummery
+
+    @GET("Student/AcademicPerformance")
+    suspend fun getAcademicPerformance(
+        @Query("StID") sId: Int,
+        @Query("YrID") yrID: Int
+    ): NetworkAcademicPerformance
+
+    @GET("Report/AttendanceSummary")
+    suspend fun getAttendanceSummary(
+        @Query("AttDate") attDate: String
+    ): NetworkAttedanceSummary
+
+    @GET("Report/ClassAttendance")
+    suspend fun getClassAttendance(
+        @Query("ID") id: String,
+        @Query("AttDate") attDate: String
+    ): NetworkClassAttendance
+
+
+    @GET("Student/Attendance")
+    suspend fun getStudentAttendance(
+        @Query("From") from: String,
+        @Query("Till") till: String,
+        @Query("YrID") yrID: String,
+        @Query("ID") iD: String,
+    ): NetworkStudentAttRepo
+
+
+    @POST("Staff/LessonPlanAction")
+    suspend fun lessonPlanAction(
+        @Body request: ActionOnLesson,
     ): CommonResponse
 
     @GET("User/UsernameAvailability")
@@ -327,4 +490,39 @@ interface UserService {
     @GET("User/Dashboard")
     suspend fun getUserDashboard(
     ): UserDashboardDto
+
+
+    @GET("Report/Classteacher")
+    suspend fun getClassTeacher(
+    ): NetworkClassTeacher
+
+    @GET("Academic/TimetableViewer")
+    suspend fun getTimetableViewer(
+    ): NetworkTimeTableViewer
+
+    @GET("Academic/ClassAssignment")
+    suspend fun getClassAssignment(
+        @Query("ID") id: String
+    ): NetworkAssignments
+
+    @GET("Academic/ClassTimetable")
+    suspend fun classTimetable(
+        @Query("ID") id: String
+    ): NetworkTeachersTimetable
+
+    @GET("Appointment/Overview")
+    suspend fun appointmentOverview(
+        @Query("AppDate") appDate: String,
+        @Query("TillDate") tillDate: String,
+        @Query("all") all: Boolean,
+    ): NetworkAppointments
+
+    @GET("Appointment/Action")
+    suspend fun appointmentOverview(
+        @Query("Act") act: Int,
+        @Query("AppId") appId: Int
+    ): CommonResponse
+
+
+
 }

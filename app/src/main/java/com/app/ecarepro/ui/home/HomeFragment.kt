@@ -51,7 +51,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -216,7 +216,7 @@ class HomeFragment : Fragment() {
         } else if (favouriteSlider.module.contains("Leave Request", true)) {
             findNavController().navigate(R.id.leaveHistoryFragment)
         } else if (favouriteSlider.module.contains("Appreciation", true)) {
-            findNavController().navigate(R.id.studentListFragment2)
+            findNavController().navigate(R.id.appreciationSelectionFragment)
         } else if (favouriteSlider.module.contains("Class Promotion", true)) {
             findNavController().navigate(R.id.classPromotionFragment)
         } else if (favouriteSlider.module.contains("Timetable", true)) {
@@ -227,6 +227,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.staffAssignmentsListFragment)
         } else if (favouriteSlider.module.contains("Attendance", true)) {
             findNavController().navigate(R.id.attendanceFragment)
+        }else if (favouriteSlider.module.contains("Infraction", true)) {
+            findNavController().navigate(R.id.infractionSelectFragment)
         } else if (favouriteSlider.module.contains("Excellence Award", true)) {
             findNavController().navigate(R.id.excellenceAwardFragment)
         }

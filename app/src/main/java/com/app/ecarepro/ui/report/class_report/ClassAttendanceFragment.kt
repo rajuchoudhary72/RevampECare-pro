@@ -1,0 +1,179 @@
+package com.app.ecarepro.ui.report.class_report
+
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.MyClasseItem
+import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.databinding.FragmentClassAttendanceBinding
+import com.app.ecarepro.model.AttReport
+import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
+import com.app.ecarepro.utils.listener.ItemListener
+import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
+
+@AndroidEntryPoint
+class ClassAttendanceFragment : Fragment()  {
+
+    private var classId: String  =  ""
+    private lateinit var binding :  FragmentClassAttendanceBinding
+    private val classAttViewModel : ClassAttViewModel by viewModels()
+    private lateinit var mMyClass: List<MyClasseItem>
+     private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding=FragmentClassAttendanceBinding.inflate(inflater,container,false)
+        classId= requireArguments().getString(Constant.CLASS_ID_ARGUMENT).toString()
+         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.tvDate.text= Constant.currentDate()
+
+        binding.tvDate.setOnClickListener {
+            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+                override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                    binding.tvDate.text = date
+                    classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
+                }
+
+            })
+        }
+
+        binding.autoCompleteClass.onItemClickListener=
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+
+                classId= mMyClass[pos].id!!
+                classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
+
+            }
+
+        lifecycleScope.launch {
+            classAttViewModel._myClassStateFlow.collectLatest {
+
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data!=null){
+                            if (it.data.myClasses!=null) {
+                                mMyClass=it.data.myClasses
+                                mMyClass.forEach { data ->
+                                    mMyClassDataString.add(data.className.toString())
+                                }
+                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,mMyClassDataString)
+                                binding.autoCompleteClass.setAdapter(arrayAdapter)
+                            }
+                        }
+                    }  } } }
+
+        classAttViewModel.getMyClass(0,1)
+
+        getClassAttendance()
+
+    }
+
+
+    private fun getClassAttendance(){
+        lifecycleScope.launch {
+            classAttViewModel.classAttStateFlow.collectLatest {
+
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error$it")
+                    }
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data!=null){
+
+                            if (it.data.attReport!=null) {
+                                val fragmentList = listOf(
+                                    ClassAttSubFragment( it.data.attReport ),
+                                    ClassAttSubFragment(getFilterList(it.data.attReport,1) ),
+                                    ClassAttSubFragment(getFilterList(it.data.attReport,2) ),
+                                    ClassAttSubFragment(getFilterList(it.data.attReport,3) )
+                                )
+
+                                val viewPagerAdapter = ViewPagerAdapter(
+                                    fragmentList,
+                                    activity?.supportFragmentManager!!,
+                                    lifecycle
+                                )
+                                binding.viewPager.adapter = viewPagerAdapter
+
+
+                                TabLayoutMediator(
+                                    binding.tabLayout,
+                                    binding.viewPager
+                                ) { tab, position ->
+                                    when (position) {
+                                        0 -> {
+                                            tab.text = "All"
+                                        }
+
+                                        1 -> {
+                                            tab.text = "Present"
+                                        }
+
+                                        2 -> {
+                                            tab.text = "Absent"
+                                        }
+
+                                        3 -> {
+                                            tab.text = "Late"
+                                        }
+                                    }
+                                }.attach()
+
+
+                            }
+
+                        }
+                    }  } } }
+
+        classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
+    }
+
+    private fun getFilterList(attReport: List<AttReport>, status: Int ): List<AttReport> {
+        val finalAttReport: ArrayList<AttReport> = ArrayList()
+        for ( data in attReport){
+           if (status==data.status){
+               finalAttReport.add(data)
+           }
+        }
+        return finalAttReport
+    }
+
+
+}
