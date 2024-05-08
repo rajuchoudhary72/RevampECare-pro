@@ -3,10 +3,10 @@ package com.app.ecarepro.ui.dashbord.model
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemFeedsCardBinding
-import com.app.ecarepro.notificationCard
-import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.app.ecarepro.feedCard
 import com.app.ecarepro.model.Feed
+import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
+
 class FeedsModel(val data: List<Feed>) :
     ViewBindingKotlinModel<ItemFeedsCardBinding>(R.layout.item_feeds_card) {
     override fun ItemFeedsCardBinding.bind() {

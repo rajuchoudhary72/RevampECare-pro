@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +19,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
+import com.app.ecarepro.account
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.databinding.FragmentProfileBinding
 import com.app.ecarepro.profileAddAccount
@@ -25,11 +28,14 @@ import com.app.ecarepro.profileHeader
 import com.app.ecarepro.profileItem
 import com.app.ecarepro.profileLogout
 import com.app.ecarepro.profileWardDetails
+import com.app.ecarepro.space
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.FileAccess
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -41,6 +47,9 @@ class ProfileFragment : Fragment() {
     private val profileViewModel: ProfileViewModel by viewModels()
 
     private lateinit var photoType: PhotoType
+
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
     private val galleryLauncher =
         registerForActivityResult(
@@ -159,8 +168,44 @@ class ProfileFragment : Fragment() {
                     buildStaffModels(uiState.profile)
                 }
 
+                space {
+                    id("space")
+                }
+
+                uiState.users.forEach {
+                    account {
+                        id(it.userId)
+                        name(it.name)
+                        photo(it.photo)
+                        school(it.school)
+                        isCurrentUser(it.userId == uiState.currentUserId)
+                        changeUser { _ ->
+                            lifecycleScope.launch {
+                                userDataStore.setCurrentUserId(it.userId)
+                            }
+                        }
+                        removeAccountListener { _ ->
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Remove Account")
+                                .setMessage("Are you sure to remove ${it.name}")
+                                .setPositiveButton("Yes") { _, _ ->
+                                    profileViewModel.removeUser(it)
+                                }.setNegativeButton("Yes") { _, _ ->
+
+                                }
+                                .show()
+                        }
+                    }
+                }
+
                 profileAddAccount {
                     id(23)
+                    clickListener { _ ->
+                        findNavController().navigate(
+                            R.id.schoolCodeFragment,
+                            bundleOf("add_account" to true)
+                        )
+                    }
                 }
 
                 profileLogout {

@@ -1,12 +1,12 @@
 package com.app.ecarepro.utils
 
+import android.graphics.Color
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.app.ecarepro.R
-import com.squareup.picasso.Picasso
 import com.google.android.material.card.MaterialCardView
-import androidx.core.content.ContextCompat
-import android.graphics.Color
+import com.squareup.picasso.Picasso
 
 @BindingAdapter("imageUrl")
 fun loadImage(imageView: ImageView, url: String) {

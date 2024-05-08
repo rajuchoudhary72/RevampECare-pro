@@ -51,7 +51,7 @@ class ComposeViewModel @Inject constructor(
         flow = composeMessageType,
         flow2 = userDataStore.getUserAsFlow()
     ) { messageType, user ->
-        messageType == ComposeMessageType.ONLY_APP_MESSAGE && user.userType == 3
+        messageType == ComposeMessageType.ONLY_APP_MESSAGE && user?.userType == 3
     }.asLiveData()
     var currentLocation: Pair<Double, Double>? = null
 
@@ -132,7 +132,7 @@ class ComposeViewModel @Inject constructor(
                             geoCoordinate = currentLocation.toString().replace("(", "")
                                 .replace(")", ""),
                             uID = /*userDataStore.getUser().userId*/ 32,
-                            uType = userDataStore.getUser().userType
+                            uType = userDataStore.getUser()?.userType
                         )
                     )
                     .collectLatest { response ->

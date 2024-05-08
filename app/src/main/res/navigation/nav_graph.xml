@@ -98,6 +98,11 @@
             app:popUpTo="@id/schoolCodeFragment"
             app:popUpToInclusive="true" />
 
+        <argument
+            android:name="schoolCode"
+            app:argType="string" />
+
+
     </fragment>
 
     <fragment

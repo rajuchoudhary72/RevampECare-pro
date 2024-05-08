@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.model
 
+import com.app.ecarepro.data.database.model.SchoolEntity
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 
@@ -19,13 +21,13 @@ data class NetworkSchool(
     @SerializedName("feePayemtURL")
     val feePayemtURL: String?,
     @SerializedName("feeReportURL")
-    val feeReportURL: Any?,
+    val feeReportURL: String?,
     @SerializedName("isBoardingSchool")
     val isBoardingSchool: Boolean?,
     @SerializedName("logo")
     val logo: String?,
     @SerializedName("logoNScName")
-    val logoNScName: Any?,
+    val logoNScName: String?,
     @SerializedName("logoScName")
     val logoScName: String?,
     @SerializedName("marksEntryURL")
@@ -39,27 +41,28 @@ data class NetworkSchool(
     @SerializedName("schUpdatedOn")
     val schUpdatedOn: String?,
     @SerializedName("schoolCode")
-    val schoolCode: String?,
+    val schoolCode: String,
     @SerializedName("schoolName")
     val schoolName: String?,
     @SerializedName("slider")
     val slider: List<Slider>?,
     @SerializedName("state")
-    val state: Any?,
+    val state: String?,
     @SerializedName("status")
     val status: String?,
     @SerializedName("supportDays")
-    val supportDays: Any?,
+    val supportDays: String?,
     @SerializedName("supportEmail")
     val supportEmail: String?,
     @SerializedName("supportHours")
-    val supportHours: Any?,
+    val supportHours: String?,
     @SerializedName("supportPhone")
     val supportPhone: String?,
     @SerializedName("themColor")
-    val themColor: Any?,
+    val themColor: String?,
     @SerializedName("webSite")
-    val webSite: String?
+    val webSite: String?,
+    val isSelected: Boolean = false
 )
 
 data class Slider(
@@ -69,5 +72,34 @@ data class Slider(
     val imgPath: String?,
     @SerializedName("module")
     val module: String
-
 )
+
+fun NetworkSchool.asNetworkSchool(): SchoolEntity {
+    return SchoolEntity(
+        schoolCode = schoolCode,
+        active = active,
+        assessmentMarksURL = assessmentMarksURL,
+        city = city,
+        contactEmail = contactEmail,
+        eCareProSch = eCareProSch,
+        feePaymentURL = feePayemtURL,
+        feeReportURL = feeReportURL,
+        isBoardingSchool = isBoardingSchool,
+        logo = logo,
+        logoNScName = logoNScName,
+        logoScName = logoScName,
+        marksEntryURL = marksEntryURL,
+        schAdd1 = schAdd1,
+        schAdd2 = schAdd2,
+        schUpdatedOn = schUpdatedOn,
+        schoolName = schoolCode,
+        state = state,
+        supportEmail = supportEmail,
+        supportHours = supportHours,
+        supportPhone = supportPhone,
+        supportDays = supportDays,
+        themColor = themColor,
+        webSite = webSite,
+        slides = Gson().toJson(slider)
+    )
+}

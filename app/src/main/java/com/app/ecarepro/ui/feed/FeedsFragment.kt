@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -17,13 +18,12 @@ import com.app.ecarepro.feedCard
 import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.ui.SystemViewModel
-import androidx.fragment.app.activityViewModels
 
 
 @AndroidEntryPoint
@@ -31,11 +31,12 @@ class FeedsFragment : Fragment() {
 
     private var _binding: FragmentFeedsBinding? = null
 
-    private val systemViewModel: SystemViewModel by activityViewModels()
-
     private val binding get() = _binding!!
 
     private val feedsViewModel: FeedsViewModel by viewModels()
+
+    private val systemViewModel: SystemViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +65,7 @@ class FeedsFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             systemViewModel.navigateBack(true)
         }
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
             feedsViewModel.refresh()

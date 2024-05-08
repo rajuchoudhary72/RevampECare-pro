@@ -18,7 +18,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.franciscan.ecare_proNew"
+        applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
