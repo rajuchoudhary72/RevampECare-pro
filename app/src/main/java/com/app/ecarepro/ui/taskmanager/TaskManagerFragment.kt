@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentTaskManagerBinding
 import com.app.ecarepro.task
 import com.app.ecarepro.taskSummary
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.taskmanager.add.AddTaskBottomSheet
 import com.google.android.material.tabs.TabLayout
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,10 +29,15 @@ class TaskManagerFragment : Fragment() {
 
     private val mViewModel: TaskManagerViewModel by viewModels()
 
+    private var extendedTaskId = R.id.overdue_tasks
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentTaskManagerBinding.inflate(inflater, container, false)
+        _binding = FragmentTaskManagerBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = mViewModel
+        }
         return binding.root
     }
 
@@ -57,62 +65,130 @@ class TaskManagerFragment : Fragment() {
 
                 if (uiState.tasksDto.overdue.isNullOrEmpty().not()) {
                     taskSummary {
-                        id("overdue")
+                        id(R.id.overdue_tasks)
                         title("Overdue")
                         count("${uiState.tasksDto.overdue?.size ?: 0} Tasks")
-                    }
-
-                    uiState.tasksDto.overdue?.forEach { task ->
-                        task {
-                            id(task.id)
-                            task(task)
+                        clickListener { _ ->
+                            if (extendedTaskId != R.id.overdue_tasks) {
+                                extendedTaskId = R.id.overdue_tasks
+                                this@withModels.requestModelBuild()
+                            }
                         }
                     }
+
+                    if (extendedTaskId == R.id.overdue_tasks)
+                        uiState
+                            .tasksDto
+                            .overdue
+                            ?.filter {
+                                it.taskTitle?.contains(uiState.searchQuery) ?: true || it.taskList?.contains(
+                                    uiState.searchQuery
+                                ) ?: true
+                            }
+                            ?.forEach { task ->
+                                task {
+                                    id(task.id)
+                                    task(task)
+                                    clickListener { _ ->
+                                        findNavController().navigate(
+                                            R.id.taskDetailsFragment,
+                                            bundleOf(
+                                                "taskId" to task.id,
+                                                "taskTitle" to task.taskTitle
+                                            )
+                                        )
+                                    }
+                                }
+                            }
 
                 }
                 if (uiState.tasksDto.todays.isNullOrEmpty().not()) {
                     taskSummary {
-                        id("todays")
+                        id(R.id.today_tasks)
                         title("Today's")
                         count("${uiState.tasksDto.todays?.size ?: 0} Tasks")
-                    }
-
-                    uiState.tasksDto.todays?.forEach { task ->
-                        task {
-                            id(task.id)
-                            task(task)
+                        clickListener { _ ->
+                            if (extendedTaskId != R.id.today_tasks) {
+                                extendedTaskId = R.id.today_tasks
+                                this@withModels.requestModelBuild()
+                            }
                         }
                     }
+
+                    if (extendedTaskId == R.id.today_tasks)
+                        uiState
+                            .tasksDto
+                            .todays
+                            ?.filter {
+                                it.taskTitle?.contains(uiState.searchQuery) ?: true || it.taskList?.contains(
+                                    uiState.searchQuery
+                                ) ?: true
+                            }
+                            ?.forEach { task ->
+                                task {
+                                    id(task.id)
+                                    task(task)
+                                }
+                            }
 
                 }
                 if (uiState.tasksDto.upcoming.isNullOrEmpty().not()) {
                     taskSummary {
-                        id("upcoming")
+                        id(R.id.upcoming_tasks)
                         title("Upcoming")
                         count("${uiState.tasksDto.upcoming?.size ?: 0} Tasks")
-                    }
-
-                    uiState.tasksDto.upcoming?.forEach { task ->
-                        task {
-                            id(task.id)
-                            task(task)
+                        clickListener { _ ->
+                            if (extendedTaskId != R.id.upcoming_tasks) {
+                                extendedTaskId = R.id.upcoming_tasks
+                                this@withModels.requestModelBuild()
+                            }
                         }
                     }
+                    if (extendedTaskId == R.id.upcoming_tasks)
+                        uiState
+                            .tasksDto
+                            .upcoming
+                            ?.filter {
+                                it.taskTitle?.contains(uiState.searchQuery) ?: true || it.taskList?.contains(
+                                    uiState.searchQuery
+                                ) ?: true
+                            }
+                            ?.forEach { task ->
+                                task {
+                                    id(task.id)
+                                    task(task)
+                                }
+                            }
 
                 }
                 if (uiState.tasksDto.closed.isNullOrEmpty().not()) {
                     taskSummary {
-                        id("closed")
+                        id(R.id.closed_tasks)
                         title("Closed")
                         count("${uiState.tasksDto.closed?.size ?: 0} Tasks")
-                    }
-
-                    uiState.tasksDto.closed?.forEach { task ->
-                        task {
-                            id(task.id)
-                            task(task)
+                        clickListener { _ ->
+                            if (extendedTaskId != R.id.closed_tasks) {
+                                extendedTaskId = R.id.closed_tasks
+                                this@withModels.requestModelBuild()
+                            }
                         }
                     }
+
+                    if (extendedTaskId == R.id.closed_tasks)
+                        uiState
+                            .tasksDto
+                            .closed
+                            ?.filter {
+                                it.taskTitle?.contains(uiState.searchQuery) ?: true || it.taskList?.contains(
+                                    uiState.searchQuery
+                                ) ?: true
+                            }
+                            ?.forEach { task ->
+                                task {
+                                    id(task.id)
+                                    task(task)
+                                }
+                            }
 
                 }
 
@@ -122,6 +198,12 @@ class TaskManagerFragment : Fragment() {
     }
 
     private fun initViews() {
+
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
+        binding.btnAddTask.setOnClickListener {
+            AddTaskBottomSheet().show(childFragmentManager, "")
+        }
 
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(

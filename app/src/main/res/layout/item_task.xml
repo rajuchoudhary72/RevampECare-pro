@@ -9,10 +9,15 @@
             name="task"
             type="com.app.ecarepro.model.Task" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:onClick="@{clickListener}"
         android:layout_height="wrap_content"
         app:cardCornerRadius="4dp"
         app:contentPadding="8dp">

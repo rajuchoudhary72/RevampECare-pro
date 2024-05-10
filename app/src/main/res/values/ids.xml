@@ -6,5 +6,9 @@
     <item name="epoxy_viewbinding" type="id"/>
     <item name="empty_view" type="id" />
     <item name="load_more_view" type="id" />
+    <item name="overdue_tasks" type="id" />
+    <item name="today_tasks" type="id" />
+    <item name="upcoming_tasks" type="id" />
+    <item name="closed_tasks" type="id" />
 
 </resources>

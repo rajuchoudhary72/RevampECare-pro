@@ -12,6 +12,7 @@ import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
+import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import kotlinx.coroutines.flow.Flow
 
@@ -30,4 +31,5 @@ interface SchoolRepository {
     suspend fun submitClassPromotions( request: RequestClassPromotion): AppResponse
     fun getFeeds(pg: Int): Flow<Result<FeedsDto>>
     fun getTaskList(filter: Int): Flow<Result<TasksDto>>
+    fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>
 }

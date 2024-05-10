@@ -456,4 +456,8 @@
         android:id="@+id/taskManagerFragment"
         android:name="com.app.ecarepro.ui.taskmanager.TaskManagerFragment"
         android:label="TaskManagerFragment" />
+    <fragment
+        android:id="@+id/taskDetailsFragment"
+        android:name="com.app.ecarepro.ui.taskmanager.details.TaskDetailsFragment"
+        android:label="TaskDetailsFragment" />
 </navigation>

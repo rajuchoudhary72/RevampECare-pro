@@ -16,6 +16,7 @@ import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
+import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -104,6 +105,21 @@ class SchoolRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response = schoolService.getTaskList(filter)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>> {
+        return flow {
+            try {
+                val response = schoolService.getTaskDetails(taskId)
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
