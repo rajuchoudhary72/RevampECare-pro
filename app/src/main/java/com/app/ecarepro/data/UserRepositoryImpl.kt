@@ -53,6 +53,7 @@ import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -209,6 +210,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun leaveListStatus(): NetworkLeaveListStatus {
         return userService.leaveListStatus()
+    }
+ override suspend fun medicineIsuueModel(): MedicineIsuueModel {
+        return userService.medicineIssued()
     }
 
     override suspend fun leaveApply(

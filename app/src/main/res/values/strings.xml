@@ -263,5 +263,6 @@
     <string name="no">No</string>
     <string name="print">Print</string>
     <string name="change_school_college"><u>Change School/College</u>></string>
+    <string name="medicine_issue">Medicine Issue</string>
 
 </resources>

@@ -287,6 +287,12 @@
             android:id="@+id/action_leaveHistoryFragment_to_openImageFragment"
             app:destination="@id/openImageFragment" />
     </fragment>
+<fragment
+        android:id="@+id/medicineIssuedFragment"
+        android:name="com.app.ecarepro.ui.medicine_issue.MedicineIssuedFragment"
+        android:label="MedicineIssuedFragment"   >
+
+    </fragment>
 
     <fragment
         android:id="@+id/leaveSettingFragment"
