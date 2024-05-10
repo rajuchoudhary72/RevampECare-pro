@@ -3,6 +3,7 @@ package com.app.ecarepro.data
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.Notification
+import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.service.AppService
 import com.app.ecarepro.data.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +45,21 @@ class AppRepositoryImpl @Inject constructor(
                 val response = appService.getNotifications()
                 if (response.errorCode == 0) {
                     emit(Result.success(response.recentNotifications ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun registerDevice(registerDevice: RegisterDevice): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = appService.registerFirebaseToken(registerDevice)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: ""))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

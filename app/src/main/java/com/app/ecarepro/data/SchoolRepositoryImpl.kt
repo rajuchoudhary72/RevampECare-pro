@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.repository.SchoolRepository
+import com.app.ecarepro.model.AddTaskDto
 import com.app.ecarepro.model.AppResponse
 import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
@@ -18,6 +19,7 @@ import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.model.Title
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -122,6 +124,36 @@ class SchoolRepositoryImpl @Inject constructor(
                 val response = schoolService.getTaskDetails(taskId)
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getTasks(): Flow<Result<List<Title>>> {
+        return flow {
+            try {
+                val response = schoolService.getTasks()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.titles ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun addTask(request: AddTaskDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = schoolService.saveTask(request)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Task Saved"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

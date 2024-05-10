@@ -5,6 +5,7 @@ import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
+import com.app.ecarepro.model.AddTaskDto
 import com.app.ecarepro.model.AppResponse
 import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
@@ -14,6 +15,7 @@ import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.model.Title
 import kotlinx.coroutines.flow.Flow
 
 interface SchoolRepository {
@@ -32,4 +34,6 @@ interface SchoolRepository {
     fun getFeeds(pg: Int): Flow<Result<FeedsDto>>
     fun getTaskList(filter: Int): Flow<Result<TasksDto>>
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>
+    fun getTasks(): Flow<Result<List<Title>>>
+    fun addTask(request: AddTaskDto): Flow<Result<String>>
 }

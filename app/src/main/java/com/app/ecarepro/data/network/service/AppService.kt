@@ -1,8 +1,12 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.AppLayoutDto
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NotificationsDto
+import com.app.ecarepro.data.network.model.RegisterDevice
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AppService {
@@ -10,6 +14,13 @@ interface AppService {
     suspend fun getAppLayout(
         @Query("Device") device: Int = 1,
     ): AppLayoutDto
+
+
     @GET("App/Notifications")
     suspend fun getNotifications(): NotificationsDto
+
+    @POST("App/RegisterDevice")
+    suspend fun registerFirebaseToken(
+        @Body registerDevice: RegisterDevice
+    ): CommonResponse
 }

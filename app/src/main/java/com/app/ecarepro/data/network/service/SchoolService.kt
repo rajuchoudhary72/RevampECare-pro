@@ -7,12 +7,14 @@ import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
 import com.app.ecarepro.data.network.model.NetworkWalkThrough
+import com.app.ecarepro.model.AddTaskDto
 import com.app.ecarepro.model.AppResponse
 import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
+import com.app.ecarepro.model.TaskDto
 import com.app.ecarepro.model.TasksDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -83,4 +85,12 @@ interface SchoolService {
     suspend fun getTaskDetails(
         @Query("ID") taskId: String
     ): TaskDetails
+
+    @GET("TaskManager/TaskList")
+    suspend fun getTasks(): TaskDto
+
+    @POST("TaskManager/SaveTask")
+    suspend fun saveTask(
+        @Body request: AddTaskDto
+    ): TaskDto
 }
