@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentMedicineIssueBinding
@@ -33,11 +34,17 @@ class MedicineIssuedFragment : Fragment() , ItemListener<Dtl> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Picasso.setSingletonInstance(
-            Picasso.Builder(requireActivity()) // additional settings
-                .build()
-        )
+        try {
+            Picasso.setSingletonInstance(
+                Picasso.Builder(requireActivity()) // additional settings
+                    .build()
+            )
+        }catch (_:IllegalStateException){
+
+        }
+
         binding = FragmentMedicineIssueBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
