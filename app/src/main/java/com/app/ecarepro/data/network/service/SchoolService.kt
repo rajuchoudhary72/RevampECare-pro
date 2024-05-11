@@ -17,7 +17,9 @@ import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
+import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -87,6 +89,12 @@ interface SchoolService {
     suspend fun getTaskDetails(
         @Query("ID") taskId: String
     ): TaskDetails
+
+    @GET("Student/MedicalCard")
+    suspend fun medicalCard(): MedicalCardResponse
+
+    @POST("Student/UpdateMedicalCard")
+    suspend fun updateMedicalCard( @Body request: UpdateMedicalCardRequest): CommonResponse
 
     @GET("Admin/StudentListToAssignHouse")
     suspend fun getStudentListToAssignHouse(

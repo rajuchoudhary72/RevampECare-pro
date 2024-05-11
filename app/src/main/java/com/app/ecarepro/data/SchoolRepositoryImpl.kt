@@ -20,7 +20,9 @@ import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
+import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -143,5 +145,13 @@ class SchoolRepositoryImpl @Inject constructor(
 
     override suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse {
         return schoolService.assignHouse(request)
+    }
+
+    override suspend fun getMedicalCard(): MedicalCardResponse {
+        return schoolService.medicalCard()
+    }
+
+    override suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse {
+        return schoolService.updateMedicalCard(request)
     }
 }
