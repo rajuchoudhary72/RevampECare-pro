@@ -37,6 +37,7 @@ import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -116,6 +117,7 @@ interface UserRepository {
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
+    suspend fun medicineIsuueModel(): MedicineIsuueModel
 
     suspend fun leaveApply(
         leaveID: Int,

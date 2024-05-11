@@ -249,6 +249,8 @@ class HomeFragment : Fragment() {
                     webViewCall(url, getString(R.string.assessment_headling))
                 }
             }
+        }else if (favouriteSlider.module.contains("Medicine Issue", true)) {
+            findNavController().navigate(R.id.medicineIssuedFragment)
         }
         /*end Web view module call  from here */
         else {
