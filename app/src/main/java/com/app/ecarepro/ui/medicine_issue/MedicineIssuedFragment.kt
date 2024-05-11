@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.medicine_issue
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import com.app.ecarepro.databinding.FragmentMedicineIssueBinding
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.listener.ItemListener
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +33,10 @@ class MedicineIssuedFragment : Fragment() , ItemListener<Dtl> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Picasso.setSingletonInstance(
+            Picasso.Builder(requireActivity()) // additional settings
+                .build()
+        )
         binding = FragmentMedicineIssueBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,7 +63,7 @@ class MedicineIssuedFragment : Fragment() , ItemListener<Dtl> {
                         binding.rvMedicineIssue.isVisible = true
 
                         if (it.data != null) {
-
+                            setHeaderData(it.data)
                             binding.rvMedicineIssue.isVisible = true
                             binding.tvNoData.isVisible = false
 
@@ -83,6 +89,32 @@ class MedicineIssuedFragment : Fragment() , ItemListener<Dtl> {
 
         mViewModel.medicineIssue()
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setHeaderData(data: MedicineIsuueModel)= with(binding){
+        tvStudentName.text = data.name
+        data.designation?.let {
+            tvAdmissionNo.text = "Designation: $it"
+            tvClassName.text = ""
+            linPro.visibility = View.VISIBLE
+        }?:run {
+            data.admissionNo?.let {
+                tvAdmissionNo.text = "Admission No: $it"
+            }
+            data.className?.let {
+                tvClassName.text = "Class: $it"
+            }
+            linPro.visibility = View.VISIBLE
+        }
+
+
+        Picasso.get().load(
+            data.photo
+        ) //.placeholder(getIcNoProfileBig(context))
+            //.error(getIcNoProfileBig(context))
+            //.memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE)
+            .into(circleImageViewProfile)
     }
 
     override fun onItemClick(t: Dtl, pos: Int, boolean: Boolean) {

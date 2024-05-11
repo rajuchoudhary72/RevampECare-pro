@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
@@ -7,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
 import com.app.ecarepro.data.network.model.NetworkWalkThrough
+import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.model.AppResponse
 import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
@@ -14,6 +17,7 @@ import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.ui.assign_home.StudentList
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -83,4 +87,15 @@ interface SchoolService {
     suspend fun getTaskDetails(
         @Query("ID") taskId: String
     ): TaskDetails
+
+    @GET("Admin/StudentListToAssignHouse")
+    suspend fun getStudentListToAssignHouse(
+        @Query("ID") id:String,
+        @Query("Orderby") orderBy:String
+    ): StudentList
+
+    @POST("Admin/AssignHouse")
+    suspend fun assignHouse(
+        @Body request: List<AssignHouseRequest>
+    ): CommonResponse
 }

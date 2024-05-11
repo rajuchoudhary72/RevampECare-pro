@@ -46,7 +46,115 @@
                 android:visibility="gone"
 
                 />
+            <LinearLayout
+                android:id="@+id/lin_pro"
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/_10sdp"
+                android:paddingTop="@dimen/_10sdp"
+                android:layout_height="wrap_content">
 
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp"
+                        android:background="@drawable/profile_image_circuler_bg">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/circleImageViewProfile"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="@dimen/_70sdp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_no_profile_big"
+                            app:civ_border_color="@color/white"
+                            app:civ_border_width="@dimen/_2sdp"
+                            app:srcCompat="@drawable/ic_no_profile_big" />
+
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/rel_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/tv_student_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_light"
+                                android:textColor="@color/module"
+                                android:textSize="@dimen/_15sdp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/tv_admission_no"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_light"
+                                android:textColor="@color/module"
+                                android:textSize="@dimen/_10sdp" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/tv_class_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_light"
+                                android:textColor="@color/module"
+                                android:textSize="@dimen/_10sdp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_medicine_issue"
                 android:layout_width="match_parent"

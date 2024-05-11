@@ -1,6 +1,8 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
@@ -18,6 +20,7 @@ import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.ui.assign_home.StudentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -129,5 +132,16 @@ class SchoolRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun getStudentListToAssignHouse(
+        id: String,
+        orderBy: String
+    ): StudentList {
+        return schoolService.getStudentListToAssignHouse(id,orderBy)
+    }
+
+    override suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse {
+        return schoolService.assignHouse(request)
     }
 }

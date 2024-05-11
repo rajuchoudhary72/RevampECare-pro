@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
@@ -14,6 +16,7 @@ import com.app.ecarepro.model.School
 import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.ui.assign_home.StudentList
 import kotlinx.coroutines.flow.Flow
 
 interface SchoolRepository {
@@ -32,4 +35,6 @@ interface SchoolRepository {
     fun getFeeds(pg: Int): Flow<Result<FeedsDto>>
     fun getTaskList(filter: Int): Flow<Result<TasksDto>>
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>
+    suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
+    suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse
 }
