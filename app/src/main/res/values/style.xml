@@ -57,6 +57,9 @@
         <item name="android:windowBackground">@android:color/white</item>
         <item name="actionMenuTextColor">@color/colorAccent</item>
     </style>
-
+    <style name="SpinnerThemeAtt" parent="Base.Theme.ECarePro">
+        <item name="overlapAnchor">true</item>
+        <item name="android:background">@drawable/spinner_background_att</item>
+    </style>
 
 </resources>

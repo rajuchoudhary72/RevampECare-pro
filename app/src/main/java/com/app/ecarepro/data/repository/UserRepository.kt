@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
@@ -258,4 +259,6 @@ interface UserRepository {
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
     fun getUserDashboard(): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
 }

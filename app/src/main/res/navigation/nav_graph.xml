@@ -293,7 +293,18 @@
         android:label="MedicineIssuedFragment"   >
 
     </fragment>
+    <fragment
+        android:id="@+id/assignHomeFragment"
+        android:name="com.app.ecarepro.ui.assign_home.AssignHomeFragment"
+        android:label="AssignHomeFragment"   >
 
+    </fragment>
+    <fragment
+        android:id="@+id/medicalCardFragment"
+        android:name="com.app.ecarepro.ui.medicalcard.MedicalCardFragment"
+        android:label="MedicalCardFragment"   >
+
+    </fragment>
     <fragment
         android:id="@+id/leaveSettingFragment"
         android:name="com.app.ecarepro.ui.leave.leave_setting.LeaveSettingFragment"

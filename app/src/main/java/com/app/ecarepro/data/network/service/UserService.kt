@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -325,6 +326,8 @@ interface UserService {
         @Body request: UploadPhotoRequest
     ): CommonResponse
 
+
+
     @GET("Academic/ExcellenceAward")
     suspend fun excellenceAward(
     ): ExcellenceAwardResponse
@@ -332,4 +335,15 @@ interface UserService {
     @GET("User/Dashboard")
     suspend fun getUserDashboard(
     ): UserDashboardDto
+
+    @GET("Admin/StudentListToAssignHouse")
+    suspend fun getStudentListToAssignHouse(
+        @Query("ID") id:String,
+        @Query("Orderby") orderBy:String
+    ): UserDashboardDto
+
+    @POST("Admin/AssignHouse")
+    suspend fun assignHouse(
+        @Body request: AssignHouseRequest
+    ): CommonResponse
 }

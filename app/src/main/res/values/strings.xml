@@ -264,5 +264,6 @@
     <string name="print">Print</string>
     <string name="change_school_college"><u>Change School/College</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
+    <string name="assign_house">Assign House</string>
 
 </resources>
