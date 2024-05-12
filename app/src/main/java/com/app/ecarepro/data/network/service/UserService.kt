@@ -47,6 +47,7 @@ import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreci
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIssued
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import retrofit2.http.Body
@@ -216,6 +217,12 @@ interface UserService {
         @Query("ScholarType") scholarType: Int,
         @Query("ShowAll") showAll: Boolean
     ): NetworkStudentList
+
+
+    @GET("Report/StudentMedicalCard")
+    suspend fun getStudentMedicalCard(
+        @Query("StId") StId: String
+    ): StudentMedicalCardResponse
 
     @GET("DisciplineLog/AddAppreciation")
     suspend fun addAppreciation(

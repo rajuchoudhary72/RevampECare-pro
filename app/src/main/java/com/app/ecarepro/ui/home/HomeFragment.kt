@@ -253,8 +253,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.medicineIssuedFragment)
         }else if (favouriteSlider.module.contains("Assign House", true)) {
             findNavController().navigate(R.id.assignHomeFragment)
-        }else if (favouriteSlider.module.contains("Id Card", true)) {
+        }else if (favouriteSlider.module.contains("Medical History", true)) {
             findNavController().navigate(R.id.medicalCardFragment)
+        }else if (favouriteSlider.module.contains("Id Card", true)) {
+            findNavController().navigate(R.id.medicalClassFragment)
         }
         /*end Web view module call  from here */
         else {
