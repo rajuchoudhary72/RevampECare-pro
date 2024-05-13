@@ -16,6 +16,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.model.Title
+import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 
 interface SchoolRepository {
@@ -36,4 +37,5 @@ interface SchoolRepository {
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>
     fun getTasks(): Flow<Result<List<Title>>>
     fun addTask(request: AddTaskDto): Flow<Result<String>>
+    fun getWatchers(): Flow<Result<List<Watcher>>>
 }

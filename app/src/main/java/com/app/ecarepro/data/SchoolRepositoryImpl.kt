@@ -20,6 +20,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.model.Title
+import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -154,6 +155,21 @@ class SchoolRepositoryImpl @Inject constructor(
                 val response = schoolService.saveTask(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: "Task Saved"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getWatchers(): Flow<Result<List<Watcher>>> {
+        return flow {
+            try {
+                val response = schoolService.getWatcher()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.watchers?: emptyList()))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

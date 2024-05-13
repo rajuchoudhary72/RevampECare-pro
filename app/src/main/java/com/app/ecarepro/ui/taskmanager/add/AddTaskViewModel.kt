@@ -6,11 +6,13 @@ import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.model.AddTaskDto
 import com.app.ecarepro.model.Attachment
 import com.app.ecarepro.model.Title
+import com.app.ecarepro.model.Watcher
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -33,15 +35,27 @@ class AddTaskViewModel @Inject constructor(
     var attachment: Pair<String, String>? = null
     var selectedTitle = MutableStateFlow<Title?>(null)
 
-    val uiState =
-        schoolRepository.getTasks().map { result ->
-            if (result.isSuccess) {
-                AddTaskUiState.Success(
-                    result.getOrNull() ?: emptyList(),
-                )
+    val watchers = mutableListOf<Watcher>()
 
+    val uiState =
+        combine(
+            flow = schoolRepository.getTasks(),
+            flow2 = schoolRepository.getWatchers()
+        ) { tasks, watchers ->
+            Pair(tasks, watchers)
+        }.map { (tasks, watchers) ->
+            if (tasks.isSuccess && watchers.isSuccess) {
+                watchers.getOrNull()?.let {
+                    this.watchers.clear()
+                    this.watchers.addAll(it)
+                }
+                AddTaskUiState.Success(
+                    title = tasks.getOrNull() ?: emptyList(),
+                    watchers = watchers.getOrNull() ?: emptyList()
+                )
             } else {
-                val error = result.exceptionOrNull() ?: IllegalArgumentException(
+                val error = tasks.exceptionOrNull() ?: watchers.exceptionOrNull()
+                ?: IllegalArgumentException(
                     UNKNOWN_ERROR_MESSAGE
                 )
                 AddTaskUiState.Error(
@@ -72,7 +86,8 @@ class AddTaskViewModel @Inject constructor(
                         tskID = 1,
                         startDate = startDate,
                         repeatedBy = 0,
-                        watchersIDs = null
+                        watchersIDs = if(makePublic.value) watchers.filter { it.isSelected }.map { it.userID }
+                            .joinToString() else null
                     )
                 )
                 .collectLatest { result ->
@@ -96,7 +111,7 @@ sealed interface AddTaskUiState {
 
     data class Success(
         val title: List<Title>,
-        val selectedTitle: Title? = null,
+        val watchers: List<Watcher>,
     ) : AddTaskUiState
 
     data class Error(

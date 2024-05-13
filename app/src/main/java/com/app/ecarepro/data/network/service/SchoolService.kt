@@ -16,6 +16,7 @@ import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TaskDto
 import com.app.ecarepro.model.TasksDto
+import com.app.ecarepro.model.WatchersDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -93,4 +94,7 @@ interface SchoolService {
     suspend fun saveTask(
         @Body request: AddTaskDto
     ): TaskDto
+
+    @GET("TaskManager/CreateTask")
+    suspend fun getWatcher(): WatchersDto
 }
