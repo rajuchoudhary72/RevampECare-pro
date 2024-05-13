@@ -265,5 +265,10 @@
     <string name="change_school_college"><u>Change School/College</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
-
+    <string name="student_not_found">Student not found</string>
+    <string name="recipients">Recipients</string>
+    <string name="lbl_add">Add</string>
+    <string name="lbl_date_of_birth">Date of Birth</string>
+    <string name="lbl_contact_nos">Contact Nos.</string>
+    <string name="lbl_residential_address">Residential Address</string>
 </resources>

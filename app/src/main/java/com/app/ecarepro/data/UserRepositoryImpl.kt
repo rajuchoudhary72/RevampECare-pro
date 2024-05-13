@@ -54,6 +54,7 @@ import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -286,6 +287,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getStudentList(scholarType: Int, showAll: Boolean): NetworkStudentList {
         return userService.getStudentList(scholarType, showAll)
+    }
+
+    override suspend fun getStudentMedicalCard(stID: String): StudentMedicalCardResponse {
+        return userService.getStudentMedicalCard(stID)
     }
 
     override suspend fun addAppreciation(stID: Int): NetworkAddAppreciation {
