@@ -21,6 +21,7 @@ import com.app.ecarepro.model.Title
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
+import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 
 interface SchoolRepository {
@@ -41,6 +42,7 @@ interface SchoolRepository {
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>
     fun getTasks(): Flow<Result<List<Title>>>
     fun addTask(request: AddTaskDto): Flow<Result<String>>
+    fun getWatchers(): Flow<Result<List<Watcher>>>
     suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
     suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse
 

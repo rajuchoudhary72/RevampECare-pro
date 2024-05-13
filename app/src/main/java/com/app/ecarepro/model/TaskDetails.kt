@@ -99,5 +99,6 @@ data class Watcher(
     @SerializedName("title")
     val title: String?,
     @SerializedName("userID")
-    val userID: Int?
+    val userID: Int?,
+    var isSelected:Boolean = false
 )

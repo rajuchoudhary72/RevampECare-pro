@@ -19,6 +19,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.DialogAddTaskBinding
 import com.app.ecarepro.model.Assignee
 import com.app.ecarepro.model.Title
+import com.app.ecarepro.model.Watcher
 import com.app.ecarepro.taskAssigneeCarouselItem
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.FileAccess
@@ -139,6 +140,10 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                 }
                 selectAssignee(mViewModel.selectedTitle.value?.assignees)
             }
+
+            selectWatcher.setOnClickListener {
+                selectWatchers(mViewModel.watchers)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -198,7 +203,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun convertMillisToDateString(millis: Long): String {
-        val formatter = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+        val formatter = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = millis
         return formatter.format(calendar.time)
@@ -209,7 +214,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         val checkedItems = assignees?.map { it.isSelected }?.toBooleanArray()
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(resources.getString(R.string.title))
+            .setTitle("Select Assignee")
             .setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
                 println(which)
             }
@@ -224,6 +229,45 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                 buildAssigneeModels(assignees?.filter { it.isSelected })
             }
             .show()
+    }
+
+    private fun selectWatchers(assignees: List<Watcher>) {
+        val multiItems = assignees.map { it.name }.toTypedArray()
+        val checkedItems = assignees.map { it.isSelected }.toBooleanArray()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Select Watchers")
+            .setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
+                println(which)
+            }
+            .setMultiChoiceItems(multiItems, checkedItems) { dialog, which, checked ->
+                checkedItems[which] = checked
+                assignees.forEachIndexed { index, assignee ->
+                    if (index == which) {
+                        assignee.isSelected = checked
+                    }
+                }
+
+                buildWatcherModels(assignees.filter { it.isSelected })
+            }
+            .show()
+    }
+
+    private fun buildWatcherModels(assignees: List<Watcher>) {
+        binding.watcherCarousel.apply {
+            isVisible = assignees.isEmpty().not()
+            numViewsToShowOnScreen = 1.8f
+            withModels {
+                assignees.forEach {
+                    taskAssigneeCarouselItem {
+                        id(it.userID)
+                        photo(it.photo)
+                        name(it.name)
+                        designation(it.designation)
+                    }
+                }
+            }
+        }
     }
 
     private fun buildAssigneeModels(assignees: List<Assignee>?) {
