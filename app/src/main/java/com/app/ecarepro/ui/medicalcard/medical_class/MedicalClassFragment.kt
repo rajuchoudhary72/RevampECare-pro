@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -53,6 +54,7 @@ class MedicalClassFragment : Fragment() {
             toolbarAdd2.toprightIcon.setOnClickListener {
                 searchClick()
             }
+            toolbarAdd2.mainToolbarTitle.text = "Student List"
         }
         return binding.root
     }
@@ -91,7 +93,8 @@ class MedicalClassFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvStudentList.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
+            layoutManager = GridLayoutManager(activity,2)
+          //  layoutManager = LinearLayoutManager(activity)
             adapter = mAdapter
         }
         lifecycleScope.launch {

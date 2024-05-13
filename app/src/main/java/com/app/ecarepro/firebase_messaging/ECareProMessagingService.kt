@@ -54,7 +54,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
                         fcmToken = token,
                         osVersion = "OS " + Build.VERSION.SDK_INT,
                         deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
-                        deviceType = 0,
+                        deviceType = 1,
                         imeI1 = (application
                             .getSystemService(TELEPHONY_SERVICE) as TelephonyManager).primaryImei,
                         imeI2 = (application

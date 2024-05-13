@@ -40,6 +40,7 @@ class MedicalCardFragment : Fragment(), ItemListener<Dtl> {
             binding.edit.visibility = View.GONE
             binding.btnSubmit.visibility = View.VISIBLE
         }
+        binding.toolbar.title = "Medical History"
         binding.btnSubmit.setOnClickListener {
             var isYesNo = false
             if (binding.rb1.isChecked)

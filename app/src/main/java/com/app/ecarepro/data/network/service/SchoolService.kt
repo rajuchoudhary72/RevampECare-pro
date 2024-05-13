@@ -69,11 +69,11 @@ interface SchoolService {
     @GET("Staff/ClassTeacherOf")
     suspend fun getClassTeacherOf(): ClassPromotionModel
 
-    @GET("Student/ClassPromotion")
+    @GET("Admin/ClassPromotion")
     suspend fun getClassPromotion(@Query("ClassId") classId: String): PromotionModel
 
 
-    @POST("Student/SaveClassPromotion")
+    @POST("Admin/SaveClassPromotion")
     suspend fun saveClassPromotion(@Body body: RequestClassPromotion): AppResponse
 
     @GET("School/Feed")
