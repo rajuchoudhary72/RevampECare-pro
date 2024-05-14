@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.app.ecarepro.data.database.ECareProDatabase
 import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asNetworkSchool
@@ -39,6 +40,7 @@ class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDatabase: UserDatabase,
     private val schoolDatabase: SchoolDatabase,
+    private val eCareProDatabase: ECareProDatabase,
     private val gson: Gson
 ) : UserDataStore {
 
@@ -211,6 +213,7 @@ class UserDataStoreImpl @Inject constructor(
 
     override suspend fun clear() {
         context.dataStore.edit { it.clear() }
+        eCareProDatabase.clearAllTables()
     }
 
 

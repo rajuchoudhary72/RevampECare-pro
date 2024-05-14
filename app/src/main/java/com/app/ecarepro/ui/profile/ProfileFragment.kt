@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.profile
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -182,6 +183,7 @@ class ProfileFragment : Fragment() {
                         changeUser { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentUserId(it.userId)
+                                restartApp()
                             }
                         }
                         removeAccountListener { _ ->
@@ -216,6 +218,13 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun restartApp() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
     }
 
     private fun selectImageOptionDialog() {

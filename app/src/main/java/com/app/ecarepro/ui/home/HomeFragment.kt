@@ -25,6 +25,7 @@ import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.imageUrl
@@ -100,16 +101,35 @@ class HomeFragment : Fragment() {
 
     private fun setUpObservers() {
         lifecycleScope.launch {
-            mViewModel
-                .uiState
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
-                .collectLatest { uiState ->
-                    handleUiState(uiState)
+            launch {
+                mViewModel
+                    .uiState
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
+                    .collectLatest { uiState ->
+                        handleUiState(uiState)
+                    }
+            }
+
+            launch {
+
+                systemViewModel.uiState.collectLatest { uiState ->
+                    if (uiState is MainActivityUiState.Success) {
+                        uiState.userInfo.let { user ->
+                            binding.apply {
+                                imgUserAvatar.imageUrl(user.photo)
+                                txtUserName.text = user.name
+                            }
+                        }
+                    }
                 }
+
+            }
+
         }
         mViewModel.schoolData.observe(viewLifecycleOwner) {
             schoolData = it
         }
+
     }
 
     private fun handleUiState(uiState: HomeUiState) {
@@ -128,13 +148,6 @@ class HomeFragment : Fragment() {
         }
 
         if (uiState is HomeUiState.Success) {
-            uiState.user.let { user ->
-                binding.apply {
-                    imgUserAvatar.imageUrl(user.photo)
-                    txtUserName.text = user.name
-                }
-            }
-
             binding.recyclerView.withModels {
                 carouselNoSnapBuilder {
                     id("carousel")

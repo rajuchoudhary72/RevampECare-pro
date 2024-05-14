@@ -72,6 +72,9 @@ class TaskManagerFragment : Fragment() {
                             if (extendedTaskId != R.id.overdue_tasks) {
                                 extendedTaskId = R.id.overdue_tasks
                                 this@withModels.requestModelBuild()
+                            } else {
+                                extendedTaskId = -1
+                                this@withModels.requestModelBuild()
                             }
                         }
                     }
@@ -111,6 +114,9 @@ class TaskManagerFragment : Fragment() {
                             if (extendedTaskId != R.id.today_tasks) {
                                 extendedTaskId = R.id.today_tasks
                                 this@withModels.requestModelBuild()
+                            } else {
+                                extendedTaskId = -1
+                                this@withModels.requestModelBuild()
                             }
                         }
                     }
@@ -141,6 +147,9 @@ class TaskManagerFragment : Fragment() {
                             if (extendedTaskId != R.id.upcoming_tasks) {
                                 extendedTaskId = R.id.upcoming_tasks
                                 this@withModels.requestModelBuild()
+                            } else {
+                                extendedTaskId = -1
+                                this@withModels.requestModelBuild()
                             }
                         }
                     }
@@ -169,6 +178,9 @@ class TaskManagerFragment : Fragment() {
                         clickListener { _ ->
                             if (extendedTaskId != R.id.closed_tasks) {
                                 extendedTaskId = R.id.closed_tasks
+                                this@withModels.requestModelBuild()
+                            } else {
+                                extendedTaskId = -1
                                 this@withModels.requestModelBuild()
                             }
                         }

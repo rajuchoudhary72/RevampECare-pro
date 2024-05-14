@@ -1,6 +1,7 @@
 package com.app.ecarepro.utils
 
 import android.graphics.Color
+import android.view.View
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -47,4 +48,30 @@ fun ImageView.taskPriorityColor(priority: Int) {
     }
     imageTintList = ContextCompat.getColorStateList(context, colorId)
 
+}
+
+@BindingAdapter("taskStatusColor")
+fun ImageView.taskStatusColor(priority: Int) {
+    val colorId = when (priority) {
+        -1 -> {
+            R.color.grey_80
+        }
+
+        0 -> {
+            R.color.grey_60
+        }
+
+        1 -> {
+            R.color.red
+        }
+
+        2 -> {
+            com.lassi.R.color.colorAccent
+        }
+
+        else -> {
+            R.color.green
+        }
+    }
+    imageTintList = ContextCompat.getColorStateList(context, colorId)
 }
