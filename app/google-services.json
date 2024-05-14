@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:71010075382:android:408b98ae59a26f15",
         "android_client_info": {
-          "package_name": "com.franciscan.ecare_pro"
+          "package_name": "com.franciscan.ecare_proNew"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "71010075382-n251rn3idemb42ieseeap39u2amg1f2q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.franciscan.ecare_pro",
+            "package_name": "com.franciscan.ecare_proNew",
             "certificate_hash": "d4371d1b26a4cafc1909a164082bdba76d586f56"
           }
         },
