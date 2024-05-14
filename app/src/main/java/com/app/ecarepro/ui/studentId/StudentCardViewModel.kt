@@ -39,4 +39,20 @@ class StudentCardViewModel @Inject constructor(
         }
 
     }
+
+
+    private val uploadPhotoResponse: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val _uploadPhotoResponse: StateFlow<NetworkResult<CommonResponse>> = uploadPhotoResponse
+    fun  getPhotoUpload(request:StudentIDRequest)=viewModelScope.launch {
+        runCatching {
+            uploadPhotoResponse.value = NetworkResult.Loading()
+            userRepository.uploadPhoto(request)
+        }.onSuccess {
+            uploadPhotoResponse.value = NetworkResult.Success(it)
+        }.onFailure {
+            uploadPhotoResponse.value = NetworkResult.Error(it.message)
+        }
+
+    }
 }

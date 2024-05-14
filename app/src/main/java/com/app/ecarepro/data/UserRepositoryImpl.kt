@@ -57,6 +57,7 @@ import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.http.Query
@@ -292,6 +293,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getStudentMedicalCard(stID: String): StudentMedicalCardResponse {
         return userService.getStudentMedicalCard(stID)
+    }
+
+    override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
+        return userService.uploadPhoto(request)
     }
 
     override suspend fun getStudentIDCard(): StudentCardResponse {

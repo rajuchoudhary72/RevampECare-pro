@@ -51,6 +51,7 @@ import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIssued
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -225,7 +226,10 @@ interface UserService {
         @Query("StId") StId: String
     ): StudentMedicalCardResponse
 
-
+    @POST("Student/UploadIDCardImg")
+    suspend fun uploadPhoto(
+        @Body request: StudentIDRequest
+    ): CommonResponse
     @GET("Student/IDCard")
     suspend fun getStudentIDCard(
     ): StudentCardResponse
