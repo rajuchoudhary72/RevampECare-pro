@@ -40,6 +40,7 @@ import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.studentId.StudentCardResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -169,6 +170,9 @@ interface UserRepository {
     suspend fun getStudentMedicalCard(
        stID: String
     ): StudentMedicalCardResponse
+
+
+    suspend fun getStudentIDCard(): StudentCardResponse
 
     suspend fun addAppreciation( stID: Int  ): NetworkAddAppreciation
 

@@ -54,7 +54,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
+        <activity
+            android:name="com.lassi.presentation.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.app.ecarepro.fileprovider"

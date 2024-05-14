@@ -50,6 +50,7 @@ import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIssued
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.studentId.StudentCardResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -223,6 +224,11 @@ interface UserService {
     suspend fun getStudentMedicalCard(
         @Query("StId") StId: String
     ): StudentMedicalCardResponse
+
+
+    @GET("Student/IDCard")
+    suspend fun getStudentIDCard(
+    ): StudentCardResponse
 
     @GET("DisciplineLog/AddAppreciation")
     suspend fun addAppreciation(
