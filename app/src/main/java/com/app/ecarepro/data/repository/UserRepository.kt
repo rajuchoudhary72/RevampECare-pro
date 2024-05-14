@@ -41,6 +41,7 @@ import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -170,6 +171,10 @@ interface UserRepository {
     suspend fun getStudentMedicalCard(
        stID: String
     ): StudentMedicalCardResponse
+
+ suspend fun uploadPhoto(
+       request: StudentIDRequest
+    ): CommonResponse
 
 
     suspend fun getStudentIDCard(): StudentCardResponse

@@ -115,4 +115,6 @@
     <color name="profile_color">#959595</color>
     <color name="grey_light1">#F9F9F9</color>
     <color name="name_2">#131313</color>
+    <color name="pending_color">#FFBB00</color>
+    <color name="att_na_color">#808080</color>
 </resources>

@@ -3,26 +3,23 @@ package com.app.ecarepro.ui.studentId
 
 import android.Manifest
 import android.app.Activity
-import android.app.Dialog
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -30,21 +27,20 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentIdBinding
-import com.app.ecarepro.databinding.StudentMedicalCardBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.FileAccess
 import com.github.dhaval2404.imagepicker.ImagePicker
-
+import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
-
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.util.*
+
 @AndroidEntryPoint
 class StudentIDFragment : Fragment() {
 
@@ -53,6 +49,7 @@ class StudentIDFragment : Fragment() {
     private lateinit var finalMotherFile: File
     private lateinit var finalEscortFile: File
     private lateinit var type: String
+    private var uploadImage = 0
 
     private val mViewModel: StudentCardViewModel by viewModels()
     override fun onCreateView(
@@ -64,35 +61,49 @@ class StudentIDFragment : Fragment() {
                 Picasso.Builder(requireActivity()) // additional settings
                     .build()
             )
-        }catch (e:IllegalStateException){
+        } catch (e: IllegalStateException) {
 
         }
         binding = FragmentStudentIdBinding.inflate(inflater, container, false)
 
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationOnClickListener {findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        binding.ivFatherPicEdit.setOnClickListener { pickImage("1") }
-        binding.ivMotherPicEdit.setOnClickListener { pickImage("2") }
-        binding.ivEscortPicEdit.setOnClickListener { pickImage("3") }
+        binding.ivFatherPicEdit.setOnClickListener {
+            uploadImage = 1
+            selectImageOptionDialog()
+        }
+        binding.ivMotherPicEdit.setOnClickListener {
+            uploadImage = 2
+            selectImageOptionDialog()
+        }
+        binding.ivEscortPicEdit.setOnClickListener {
+            uploadImage = 3
+            selectImageOptionDialog()
+        }
 
         binding.tvPhone.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + binding.tvPhone.text.toString()))
+            val intent =
+                Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + binding.tvPhone.text.toString()))
             startActivity(intent)
         }
 
 
-       getObserverData()
+        getObserverData()
     }
 
 
-    private  val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1001
+    private val READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 1001
     private fun pickImage(type: String) {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
             != PackageManager.PERMISSION_GRANTED
         ) {
             // Permission is not granted, request it
@@ -108,13 +119,112 @@ class StudentIDFragment : Fragment() {
 
     }
 
+    private fun selectImageOptionDialog() {
+        val items = arrayOf<CharSequence>(
+            "Take Photo", "Choose from Library",
+            "Cancel"
+        )
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Photo!")
+        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+            FileAccess.checkPermission(this)
+            if (items[item] == "Take Photo") {
+                cameraLauncher.launch(FileAccess.cameraIntent())
+            } else if (items[item] == "Choose from Library") {
+                galleryLauncher.launch(FileAccess.galleryIntent())
+            } else if (items[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        })
+        builder.show()
+    }
+
+    private val galleryLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                // binding.ivAddedImage.setImageURI(imgUri)
+               /* when (uploadImage) {
+                    1 -> {//f
+                        binding.circleImageViewFather.setImageURI(imgUri)
+                    }
+                    2 -> {//m
+                        binding.circleImageViewMother.setImageURI(imgUri)
+                    }
+                    3 -> {//e
+                        binding.circleImageViewEscort.setImageURI(imgUri)
+                    }
+                }*/
+                val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
+
+                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
+                val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+
+                uploadPhoto(imageString, imageExt)
+
+            }
+        }
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                if (result?.data != null) {
+                    val bitmap = result.data?.extras?.get("data") as Bitmap
+                    /*when (uploadImage) {
+                        1 -> {//f
+                            binding.circleImageViewFather.setImageBitmap(bitmap)
+                        }
+                        2 -> {//m
+                            binding.circleImageViewMother.setImageBitmap(bitmap)
+                        }
+                        3 -> {//e
+                            binding.circleImageViewEscort.setImageBitmap(bitmap)
+                        }
+                    }*/
+
+                    // binding.ivAddedImage.setImageBitmap(bitmap)
+
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
+                    val imageExt =
+                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+
+                    uploadPhoto(imageString, imageExt)
+
+                }
+            }
+        }
+
+    private fun uploadPhoto(imageString: String, imageExt: String) {
+        val requestImage = StudentIDRequest()
+        when (uploadImage) {
+            1 -> {//f
+                val reqFather = FatherPhoto(imageString, imageExt)
+                requestImage.fatherPhoto = reqFather
+            }
+            2 -> {//m
+                val reqMother = MotherPhoto(imageString, imageExt)
+                requestImage.motherPhoto = reqMother
+            }
+            3 -> {//e
+                val reqEscort = EscortPhoto(imageString, imageExt)
+                requestImage.escortPhoto = reqEscort
+            }
+        }
+        mViewModel.getPhotoUpload(requestImage)
+    }
+
     private fun startImagePicker() {
-        ImagePicker.with(requireActivity())
+        ImagePicker.with(this)
             .crop(216F, 253F)
             .compress(4096)
             .maxResultSize(216, 253)
             .start()
     }
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -136,13 +246,15 @@ class StudentIDFragment : Fragment() {
             }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             val uri: Uri? = data?.data
             uri?.let { uri ->
                 try {
-                    val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+                    val bitmap: Bitmap =
+                        MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
                     val h = bitmap.height
                     val w = bitmap.width
 
@@ -165,19 +277,25 @@ class StudentIDFragment : Fragment() {
                                 binding.circleImageViewFather.setImageURI(uri)
                                 finalFatherFile = File(uri.path!!)
                             }
+
                             "2" -> {
                                 binding.circleImageViewMother.setImageURI(uri)
                                 finalMotherFile = File(uri.path!!)
                             }
+
                             "3" -> {
                                 binding.circleImageViewEscort.setImageURI(uri)
                                 finalEscortFile = File(uri.path!!)
                             }
                         }
 
-                        hitUploadProfileApi()
+
                     } else {
-                        Toast.makeText(context, "Oops...!!! could not proceed, the image height must be greater than 252 pixels.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "Oops...!!! could not proceed, the image height must be greater than 252 pixels.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -186,63 +304,10 @@ class StudentIDFragment : Fragment() {
         }
     }
 
-    private fun hitUploadProfileApi() {
-       /* showLoadingDialog()
-        val finalFile: File?
-        var imageName = ""
-        val url = "api/Upload/IDCardImg?SchCode=$SCHOOL_CODE_APP_USER&UserID=$USER_ID_APP_USER&key=$Constant.key"
-        when (type) {
-            "1" -> {
-                finalFile = finalFatherFile
-                imageName = "Father"
-            }
-            "2" -> {
-                finalFile = finalMotherFile
-                imageName = "Mother"
-            }
-            "3" -> {
-                imageName = "Escort"
-                finalFile = finalEscortFile
-            }
-        }
 
-        val body = MultipartBody.Part.createFormData("picture", "$imageName.jpeg", RequestBody.create(MediaType.parse("image/JPEG"), finalFile))
-        val interfaceRetrofit = RetrofitAdapter.createService(ApiInterface::class.java)
-        val responseCall = interfaceRetrofit.UploadProfilePic(url, body)
-        responseCall.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                hideLoadingDialog()
-                if (response.code() == 201) {
-                    when (type) {
-                        "1" -> {
-                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                            binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
-                            Snackbar.make(binding.scParentLayout, "It will be uploaded after verification", Snackbar.LENGTH_LONG).show()
-                        }
-                        "2" -> {
-                            binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                            binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
-                            Snackbar.make(binding.scParentLayout, "It will be uploaded after verification", Snackbar.LENGTH_LONG).show()
-                        }
-                        "3" -> {
-                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
-                            Snackbar.make(binding.scParentLayout, "It will be uploaded after verification", Snackbar.LENGTH_LONG).show()
-                        }
-                    }
-                } else {
-                    Snackbar.make(binding.scParentLayout, Constant.server_error, Snackbar.LENGTH_LONG).show()
-                }
-            }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                hideLoadingDialog()
-                Toast.makeText(requireContext(), t.toString(), Toast.LENGTH_SHORT).show()
-            }
-        })*/
-    }
 
     private fun getObserverData() {
+
         lifecycleScope.launch {
             mViewModel._studentCardResponse.collectLatest {
                 when (it) {
@@ -260,8 +325,8 @@ class StudentIDFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        it.data?.let {studentDTL->
-                            studentDTL.studentDTL?.let {ss->
+                        it.data?.let { studentDTL ->
+                            studentDTL.studentDTL?.let { ss ->
                                 Picasso.get()
                                     .load(ss.photo)
                                     .error(R.drawable.shape_rect_trans)
@@ -269,16 +334,20 @@ class StudentIDFragment : Fragment() {
                                     .into(binding.circleImageViewProfile)
                                 val blankValue = "N/A"
                                 binding.tvName.text = ss.name?.ifEmpty { blankValue } ?: ""
-                                binding.tvFatherName.text = ss.fatherName?.ifEmpty { blankValue } ?: ""
+                                binding.tvFatherName.text =
+                                    ss.fatherName?.ifEmpty { blankValue } ?: ""
                                 binding.tvFatherNumber.text =
                                     ss.fatherMobile?.ifEmpty { blankValue } ?: ""
                                 binding.tvMotherName.text = ss.motherName?.ifEmpty { blankValue }
                                 binding.tvMotherNumber.text =
                                     ss.motherMobile?.ifEmpty { blankValue } ?: ""
                                 binding.tvDob.text = ss.dob?.ifEmpty { blankValue } ?: ""
-                                binding.tvAddhar.text = ss.aadhaarNumber?.ifEmpty { blankValue } ?: ""
-                                binding.tvClass.text = if (ss.className?.isEmpty() == true) "Class: $blankValue" else "Class: ${ss.className}"
-                                binding.tvRollNo.text = if (ss.rollNo?.isEmpty() == true) "Roll No: $blankValue" else "Roll No: ${ss.rollNo}"
+                                binding.tvAddhar.text =
+                                    ss.aadhaarNumber?.ifEmpty { blankValue } ?: ""
+                                binding.tvClass.text =
+                                    if (ss.className?.isEmpty() == true) "Class: $blankValue" else "Class: ${ss.className}"
+                                binding.tvRollNo.text =
+                                    if (ss.rollNo?.isEmpty() == true) "Roll No: $blankValue" else "Roll No: ${ss.rollNo}"
                                 binding.tvBg.text = ss.bloodGroup?.ifEmpty { blankValue } ?: ""
                                 binding.tvHouse.text = ss.house?.ifEmpty { blankValue } ?: ""
                                 binding.tvAddress.text = ss.address?.ifEmpty { blankValue } ?: ""
@@ -290,19 +359,186 @@ class StudentIDFragment : Fragment() {
                                     binding.ivEscortPicEdit.visibility = View.GONE
                                 }
 
-                                binding.ivFatherPicEdit.isEnabled = studentDTL.canChangeApprovedImg == true && studentDTL.browseImgEnable
-                                binding.ivMotherPicEdit.isEnabled = studentDTL.canChangeApprovedImg == true && studentDTL.browseImgEnable
-                                binding.ivEscortPicEdit.isEnabled = studentDTL.canChangeApprovedImg == true && studentDTL.browseImgEnable
 
-                                binding.llParentStudentId.visibility = View.VISIBLE
+                                Picasso.get()
+                                    .load(studentDTL.fatherImgURL)
+                                    .error(R.drawable.shape_rect_trans)
+                                    .placeholder(R.drawable.shape_rect_trans)
+                                    .into(binding.circleImageViewFather)
+
+
+                                Picasso.get()
+                                    .load(studentDTL.motherImgURL)
+                                    .error(R.drawable.shape_rect_trans)
+                                    .placeholder(R.drawable.shape_rect_trans)
+                                    .into(binding.circleImageViewMother)
+                                Picasso.get()
+                                    .load(studentDTL.escortImgURL)
+                                    .error(R.drawable.shape_rect_trans)
+                                    .placeholder(R.drawable.shape_rect_trans)
+                                    .into(binding.circleImageViewEscort)
+
+
+                                studentDTL.apply {
+                                    when (fatherReq) {
+                                        "Approved" -> {
+                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg)
+                                            binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_approve_icon))
+                                            binding.ivFatherPicEdit.isEnabled = false
+                                        }
+                                        "Approval pending" -> {
+                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                             binding.ivFatherPicEdit.isEnabled = true
+                                        }
+                                        "Rejected" -> {
+                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                             binding.ivFatherPicEdit.isEnabled = true
+                                        }
+                                        "Not uploded" -> {
+                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                             binding.ivFatherPicEdit.isEnabled = true
+                                        }
+                                    }
+
+                                    when (motherReq) {
+                                        "Approved" -> {
+                                            binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg)
+                                            binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_approve_icon))
+                                            binding.ivMotherPicEdit.isEnabled = false
+                                        }
+                                        "Approval pending" -> {
+                                            binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                             binding.ivMotherPicEdit.isEnabled = true
+                                        }
+                                        "Rejected" -> {
+                                            binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                             binding.ivMotherPicEdit.isEnabled = true
+                                        }
+                                        "Not uploded" -> {
+                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                            binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                             binding.ivMotherPicEdit.isEnabled = true
+                                        }
+                                    }
+
+                                    when (escortReq) {
+                                        "Approved" -> {
+                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg)
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_approve_icon))
+                                            binding.ivEscortPicEdit.isEnabled = false
+                                        }
+                                        "Approval pending" -> {
+                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                            binding.ivEscortPicEdit.isEnabled = true
+                                        }
+                                        "Rejected" -> {
+                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                            binding.ivEscortPicEdit.isEnabled = true
+                                        }
+                                        "Not uploded" -> {
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                            binding.ivEscortPicEdit.isEnabled = true
+                                        }
+                                    }
+
+                                    if (canChangeApprovedImg && browseImgEnable) {
+                                         binding.ivFatherPicEdit.apply {
+                                            visibility = View.VISIBLE
+                                            isEnabled = true
+                                            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                        }
+                                         binding.ivMotherPicEdit.apply {
+                                            visibility = View.VISIBLE
+                                            isEnabled = true
+                                            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                        }
+                                        binding.ivEscortPicEdit.apply {
+                                            visibility = View.VISIBLE
+                                            isEnabled = true
+                                            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                        }
+                                    }
+                                    binding.llParentStudentId.visibility = View.VISIBLE
+                                }
+
+
                             }
-
-
 
 
                         }
 
 
+                    }
+                }
+            }
+
+        }
+        lifecycleScope.launch {
+            mViewModel._uploadPhotoResponse.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        // binding.rvMedicineIssue.isVisible = false
+                        Log.d("main", "Error$it")
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (uploadImage == 1) {
+                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                            binding.ivFatherPicEdit.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.studnet_pending_icon
+                                )
+                            )
+                            Snackbar.make(
+                                binding.scParentLayout,
+                                "It will be uploaded after verification",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        } else if (uploadImage == 2) {
+                            binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                            binding.ivMotherPicEdit.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.studnet_pending_icon
+                                )
+                            )
+                            Snackbar.make(
+                                binding.scParentLayout,
+                                "It will be uploaded after verification",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        } else if (uploadImage == 3) {
+                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                            binding.ivEscortPicEdit.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.studnet_pending_icon
+                                )
+                            )
+                            Snackbar.make(
+                                binding.scParentLayout,
+                                "It will be uploaded after verification",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        }
+                        Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
 
 
                     }
@@ -312,7 +548,6 @@ class StudentIDFragment : Fragment() {
         }
         mViewModel.getMedicalCard()
     }
-
 
 
     private fun showLoadingDialog() {
