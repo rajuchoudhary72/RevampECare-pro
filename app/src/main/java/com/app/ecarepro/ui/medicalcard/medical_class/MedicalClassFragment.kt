@@ -54,7 +54,9 @@ class MedicalClassFragment : Fragment() {
             toolbarAdd2.toprightIcon.setOnClickListener {
                 searchClick()
             }
-            toolbarAdd2.mainToolbarTitle.text = "Student List"
+            toolbarAdd2.mainToolbarTitle2.text = "Student List"
+            toolbarAdd2.mainToolbarTitle2.setTextColor(resources.getColor(R.color.md_theme_light_primary) )
+            toolbarAdd2.mainToolbarTitle2.setTextSize(resources.getDimension(R.dimen.size_teenty) )
         }
         return binding.root
     }
@@ -73,14 +75,10 @@ class MedicalClassFragment : Fragment() {
                     after: Int
                 ) {
                 }
-
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(editable: Editable) {
                     mAdapter.filter(editable.toString())
-
                 }
-
-
             })
         } else {
             binding.toolbarAdd2.etSearchCtb.setText("")
