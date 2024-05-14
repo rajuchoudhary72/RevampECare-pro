@@ -318,6 +318,12 @@
 
     </fragment>
     <fragment
+        android:id="@+id/studentIDFragment"
+        android:name="com.app.ecarepro.ui.studentId.StudentIDFragment"
+        android:label="StudentIDFragment"   >
+
+    </fragment>
+    <fragment
         android:id="@+id/studentMedicalReportFragment"
         android:name="com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalReportFragment"
         android:label="StudentMedicalReportFragment"   >
