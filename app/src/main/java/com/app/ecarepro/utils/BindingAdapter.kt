@@ -63,11 +63,11 @@ fun ImageView.taskStatusColor(priority: Int) {
         }
 
         1 -> {
-            R.color.red
+            R.color.pending_color
         }
 
         2 -> {
-            com.lassi.R.color.colorAccent
+            R.color.red
         }
 
         else -> {
