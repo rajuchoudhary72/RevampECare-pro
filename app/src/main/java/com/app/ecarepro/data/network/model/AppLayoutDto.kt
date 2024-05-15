@@ -16,6 +16,8 @@ data class AppLayoutDto(
     val logoURL: String?,
     @SerializedName("menus")
     val menus: List<Menu>?,
+    @SerializedName("favoriteMenus")
+    val favoriteMenus: List<Menu>?,
     @SerializedName("message")
     val message: String?,
     @SerializedName("smlLogoURL")
@@ -33,6 +35,8 @@ data class Menu(
     val icon: String?,
     @SerializedName("menuID")
     val menuID: Int,
+    @SerializedName("slNo")
+    val slNo: Int,
     @SerializedName("title")
     val title: String?,
     @SerializedName("url")

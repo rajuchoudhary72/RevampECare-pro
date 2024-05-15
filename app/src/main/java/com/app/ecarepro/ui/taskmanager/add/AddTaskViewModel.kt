@@ -83,7 +83,7 @@ class AddTaskViewModel @Inject constructor(
                         remindBefore = remindBefore.value.toInt(),
                         title = title.value,
                         tlId = selectedTitle.value?.tlId,
-                        tskID = 1,
+                        tskID = 0,
                         startDate = startDate,
                         repeatedBy = 0,
                         watchersIDs = if(makePublic.value) watchers.filter { it.isSelected }.map { it.userID }

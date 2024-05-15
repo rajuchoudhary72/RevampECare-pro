@@ -17,8 +17,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:onClick="@{clickListener}"
         android:layout_height="wrap_content"
+        android:onClick="@{clickListener}"
         app:cardCornerRadius="4dp"
         app:contentPadding="8dp">
 
@@ -27,15 +27,16 @@
             android:layout_height="wrap_content">
 
 
-            <View
+            <ImageView
                 android:id="@+id/indicator"
+                taskStatusColor="@{task.status}"
                 android:layout_width="@dimen/_10sdp"
                 android:layout_height="@dimen/_10sdp"
-                android:background="@drawable/tv_bg_rounded"
-                android:backgroundTint="@color/red"
+                android:src="@{task.status == -1 ?  @drawable/outline_remove_red_eye_24: @drawable/tv_bg_rounded}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/outline_remove_red_eye_24" />
 
             <TextView
                 android:id="@+id/title"

@@ -30,7 +30,7 @@ class SystemViewModel @Inject constructor(
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack
 
-    val refresh = MutableStateFlow(false)
+    val refresh = MutableSharedFlow<Boolean>()
 
     val uiState =
         refresh.flatMapLatest {
@@ -41,7 +41,8 @@ class SystemViewModel @Inject constructor(
                     val response = result.getOrNull()!!
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
-                        menus = response.menus ?: emptyList()
+                        menus = response.menus ?: emptyList(),
+                        favroiteMenus = response.favoriteMenus?: emptyList()
                     )
                 } else {
                     val error = result.exceptionOrNull() ?: IllegalArgumentException(
@@ -74,6 +75,12 @@ class SystemViewModel @Inject constructor(
             onDataClear()
         }
     }
+
+    fun refreshAppLayout() {
+        viewModelScope.launch {
+            refresh.emit(true)
+        }
+    }
 }
 
 sealed interface MainActivityUiState {
@@ -81,7 +88,8 @@ sealed interface MainActivityUiState {
 
     data class Success(
         val userInfo: UserInfo,
-        val menus: List<Menu>
+        val menus: List<Menu>,
+        val favroiteMenus: List<Menu>,
     ) : MainActivityUiState
 
     data class Error(

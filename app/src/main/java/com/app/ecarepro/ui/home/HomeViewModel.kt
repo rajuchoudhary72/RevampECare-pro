@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
-    private val userRepository: UserRepository
+    userRepository: UserRepository
 ) : ViewModel() {
     val schoolData = MutableLiveData<NetworkSchool>()
 

@@ -20,6 +20,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
+import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         setUpMoreOptions()
     }
 
-     fun setUpDrawer() {
+    fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
                 binding.drawerLayout.open()
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                 .collectLatest { uiState ->
                     uiState.getValueOrNull()?.let { data ->
                         buildDrawerModels(data.menus)
+                        buildFavoriteMenusModels(data.favroiteMenus)
                         binding.itemDrawerHeader.user = data.userInfo
                     }
                 }
@@ -129,6 +131,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.drawerLayout.open()
+    }
+
+    private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
+        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
+            favoriteMenus.forEach { menu ->
+                cardOption {
+                    id(menu.menuID)
+                    data(
+                        Slider(
+                            imgPath = menu.icon,
+                            module = menu.title ?: ""
+                        )
+                    )
+                    clickListener { _ ->
+                        getFragmentId(menu.menuID)?.let { navController.navigate(it) }
+                    }
+                }
+            }
+        }
     }
 
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -205,11 +226,12 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+
             7 -> {
                 return when (childMenuId) {
                     10 -> R.id.circularFragment
                     11 -> R.id.noticeListFragment
-                    12-> R.id.noticeListFragment
+                    12 -> R.id.noticeListFragment
                     else -> null
                 }
             }
@@ -222,6 +244,7 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+
             18 -> {
                 return when (childMenuId) {
                     21 -> R.id.studentListFragment2
@@ -243,6 +266,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage(getString(R.string.are_you_sure_to_logout))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 systemViewModel.logout {
+
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
@@ -267,12 +291,6 @@ class MainActivity : AppCompatActivity() {
 
                 }
             ))
-
-        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
-            (0..16).forEach {
-                cardOption { id(it) }
-            }
-        }
     }
 
     private fun setUpBottomNavigationView() {

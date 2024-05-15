@@ -67,7 +67,7 @@ data class NetworkSchool(
 
 data class Slider(
     @SerializedName("description")
-    val description: String?,
+    val description: String? = null,
     @SerializedName("imgPath")
     val imgPath: String?,
     @SerializedName("module")

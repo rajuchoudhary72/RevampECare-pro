@@ -203,7 +203,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun convertMillisToDateString(millis: Long): String {
-        val formatter = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = millis
         return formatter.format(calendar.time)
