@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
@@ -37,6 +38,10 @@ import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -116,6 +121,7 @@ interface UserRepository {
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
+    suspend fun medicineIsuueModel(): MedicineIsuueModel
 
     suspend fun leaveApply(
         leaveID: Int,
@@ -161,6 +167,17 @@ interface UserRepository {
        scholarType: Int,
          showAll: Boolean
     ): NetworkStudentList
+
+    suspend fun getStudentMedicalCard(
+       stID: String
+    ): StudentMedicalCardResponse
+
+ suspend fun uploadPhoto(
+       request: StudentIDRequest
+    ): CommonResponse
+
+
+    suspend fun getStudentIDCard(): StudentCardResponse
 
     suspend fun addAppreciation( stID: Int  ): NetworkAddAppreciation
 
@@ -256,4 +273,6 @@ interface UserRepository {
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
     fun getUserDashboard(): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
 }

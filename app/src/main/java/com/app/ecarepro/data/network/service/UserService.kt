@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -46,6 +47,11 @@ import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreci
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIssued
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -165,6 +171,9 @@ interface UserService {
     @GET("Leave/Status")
     suspend fun leaveListStatus( ): NetworkLeaveListStatus
 
+    @GET("User/MedicineIssued")
+    suspend fun medicineIssued( ): MedicineIsuueModel
+
     @POST("Leave/Apply")
     suspend fun leaveApply(
         @Body request: LeaveRequestData,
@@ -210,6 +219,20 @@ interface UserService {
         @Query("ScholarType") scholarType: Int,
         @Query("ShowAll") showAll: Boolean
     ): NetworkStudentList
+
+
+    @GET("Report/StudentMedicalCard")
+    suspend fun getStudentMedicalCard(
+        @Query("StId") StId: String
+    ): StudentMedicalCardResponse
+
+    @POST("Student/UploadIDCardImg")
+    suspend fun uploadPhoto(
+        @Body request: StudentIDRequest
+    ): CommonResponse
+    @GET("Student/IDCard")
+    suspend fun getStudentIDCard(
+    ): StudentCardResponse
 
     @GET("DisciplineLog/AddAppreciation")
     suspend fun addAppreciation(
@@ -320,6 +343,8 @@ interface UserService {
         @Body request: UploadPhotoRequest
     ): CommonResponse
 
+
+
     @GET("Academic/ExcellenceAward")
     suspend fun excellenceAward(
     ): ExcellenceAwardResponse
@@ -327,4 +352,15 @@ interface UserService {
     @GET("User/Dashboard")
     suspend fun getUserDashboard(
     ): UserDashboardDto
+
+    @GET("Admin/StudentListToAssignHouse")
+    suspend fun getStudentListToAssignHouse(
+        @Query("ID") id:String,
+        @Query("Orderby") orderBy:String
+    ): UserDashboardDto
+
+    @POST("Admin/AssignHouse")
+    suspend fun assignHouse(
+        @Body request: AssignHouseRequest
+    ): CommonResponse
 }

@@ -3,14 +3,13 @@
     <dimen name="horizontal_margin">16dp</dimen>
     <dimen name="vertical_margin">10dp</dimen>
     <dimen name="divider_size">1dp</dimen>
-
     <dimen name="cbn_fab_size">56dp</dimen>
     <dimen name="cbn_height">56dp</dimen>
     <dimen name="cbn_layout_height">84dp</dimen>
     <dimen name="cbn_bottom_curve_offset">12dp</dimen>
     <dimen name="cbn_fab_top_offset">8dp</dimen>
-
     <dimen name="ed_around">8dp</dimen>
     <dimen name="ed_around_5">5dp</dimen>
     <dimen name="ed_radioud">8dp</dimen>
+    <dimen name="size_teenty">12dp</dimen>
 </resources>

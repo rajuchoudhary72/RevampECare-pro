@@ -242,6 +242,17 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.attendanceFragment)
         } else if (favouriteSlider.module.contains("Excellence Award", true)) {
             findNavController().navigate(R.id.excellenceAwardFragment)
+        }else if (favouriteSlider.module.contains("Medicine Issue", true)) {
+            findNavController().navigate(R.id.medicineIssuedFragment)
+        }else if (favouriteSlider.module.contains("Assign House", true)) {
+            findNavController().navigate(R.id.assignHomeFragment)
+        }else if (favouriteSlider.module.contains("Medical History", true)) {
+            findNavController().navigate(R.id.medicalCardFragment)
+        }else if (favouriteSlider.module.contains("Id Card", true)) {
+           // findNavController().navigate(R.id.medicalClassFragment)
+            findNavController().navigate(R.id.studentIDFragment)
+        }else if (favouriteSlider.module.contains("Classmates", true)) {
+             findNavController().navigate(R.id.medicalClassFragment)
         }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {

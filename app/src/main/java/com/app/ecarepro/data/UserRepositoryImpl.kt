@@ -1,5 +1,6 @@
 package com.app.ecarepro.data
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
@@ -53,8 +54,13 @@ import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.http.Query
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -210,6 +216,9 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun leaveListStatus(): NetworkLeaveListStatus {
         return userService.leaveListStatus()
     }
+ override suspend fun medicineIsuueModel(): MedicineIsuueModel {
+        return userService.medicineIssued()
+    }
 
     override suspend fun leaveApply(
         leaveID: Int,
@@ -280,6 +289,18 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getStudentList(scholarType: Int, showAll: Boolean): NetworkStudentList {
         return userService.getStudentList(scholarType, showAll)
+    }
+
+    override suspend fun getStudentMedicalCard(stID: String): StudentMedicalCardResponse {
+        return userService.getStudentMedicalCard(stID)
+    }
+
+    override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
+        return userService.uploadPhoto(request)
+    }
+
+    override suspend fun getStudentIDCard(): StudentCardResponse {
+        return userService.getStudentIDCard()
     }
 
     override suspend fun addAppreciation(stID: Int): NetworkAddAppreciation {
@@ -501,6 +522,36 @@ class UserRepositoryImpl @Inject constructor(
                 val response = userService.getUserDashboard()
                 if (response.errorCode == 0) {
                     userDataStore.saveDashboardData(response)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>> {
+        return flow {
+            try {
+                val response= userService.getStudentListToAssignHouse(id,orderBy)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>> {
+        return flow {
+            try {
+                val response = userService.assignHouse(request)
+                if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
