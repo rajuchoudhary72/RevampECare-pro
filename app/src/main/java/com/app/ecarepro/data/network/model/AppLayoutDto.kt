@@ -35,6 +35,8 @@ data class Menu(
     val icon: String?,
     @SerializedName("menuID")
     val menuID: Int,
+    @SerializedName("chMenuID")
+    val chMenuID: Int?,
     @SerializedName("slNo")
     val slNo: Int,
     @SerializedName("title")

@@ -1,6 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
     <dimen name="vertical_margin">10dp</dimen>
     <dimen name="divider_size">1dp</dimen>
     <dimen name="cbn_fab_size">56dp</dimen>

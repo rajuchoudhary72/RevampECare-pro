@@ -145,7 +145,8 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     clickListener { _ ->
-                        getFragmentId(menu.menuID)?.let { navController.navigate(it) }
+                        getFragmentId(menu.menuID, menu.chMenuID?:0)?.let { navController.navigate(it) }
+                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                     }
                 }
             }

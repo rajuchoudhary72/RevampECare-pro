@@ -1,6 +1,8 @@
 package com.app.ecarepro.ui.home
 
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,7 @@ import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
+import com.app.ecarepro.databinding.LayoutUndertakingBinding
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
@@ -30,6 +33,7 @@ import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.DecorationLookup
 import com.rubensousa.decorator.GridMarginDecoration
@@ -37,6 +41,10 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -107,6 +115,7 @@ class HomeFragment : Fragment() {
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
                     .collectLatest { uiState ->
                         handleUiState(uiState)
+
                     }
             }
 
@@ -135,8 +144,63 @@ class HomeFragment : Fragment() {
     private fun handleUiState(uiState: HomeUiState) {
         (requireActivity() as MainActivity).showLoader(uiState is HomeUiState.Loading)
         if (uiState is HomeUiState.Success) {
+            handleUndertaking(uiState.underTaking)
             buildUiModels(uiState)
         }
+    }
+
+    private fun handleUndertaking(underTaking: String) {
+        val jsonObject = JSONObject(underTaking)
+        if (jsonObject.getBoolean("showUserUndertaking")) {
+            val string = removeUTFCharacters(jsonObject.getString("htmlDecription"))
+            val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(string.toString(), Html.FROM_HTML_MODE_LEGACY)
+            } else {
+                Html.fromHtml(string.toString())
+            }
+            val binding =
+                LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+            binding.text.text = spannedString
+
+            val builder = MaterialAlertDialogBuilder(requireContext())
+                .setView(binding.root)
+                .setCancelable(false)
+                .show()
+
+            binding.btnSubmit.setOnClickListener {
+                if (binding.checkbox.isChecked) {
+                    (requireActivity() as MainActivity).showLoader(true)
+                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        if (isSuccess) {
+                            builder.dismiss()
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please go throw user undertaking and accept it",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+
+        }
+
+    }
+
+    private fun removeUTFCharacters(data: String): StringBuffer {
+        val p: Pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})")
+        val m: Matcher = p.matcher(data)
+        val buf = StringBuffer(data.length)
+        while (m.find()) {
+            val ch = m.group(1).toInt(16).toChar().toString()
+            m.appendReplacement(buf, Matcher.quoteReplacement(ch))
+        }
+        m.appendTail(buf)
+        return buf
     }
 
     private fun buildUiModels(uiState: HomeUiState) {
@@ -242,17 +306,17 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.attendanceFragment)
         } else if (favouriteSlider.module.contains("Excellence Award", true)) {
             findNavController().navigate(R.id.excellenceAwardFragment)
-        }else if (favouriteSlider.module.contains("Medicine Issue", true)) {
+        } else if (favouriteSlider.module.contains("Medicine Issue", true)) {
             findNavController().navigate(R.id.medicineIssuedFragment)
-        }else if (favouriteSlider.module.contains("Assign House", true)) {
+        } else if (favouriteSlider.module.contains("Assign House", true)) {
             findNavController().navigate(R.id.assignHomeFragment)
-        }else if (favouriteSlider.module.contains("Medical History", true)) {
+        } else if (favouriteSlider.module.contains("Medical History", true)) {
             findNavController().navigate(R.id.medicalCardFragment)
-        }else if (favouriteSlider.module.contains("Id Card", true)) {
-           // findNavController().navigate(R.id.medicalClassFragment)
+        } else if (favouriteSlider.module.contains("Id Card", true)) {
+            // findNavController().navigate(R.id.medicalClassFragment)
             findNavController().navigate(R.id.studentIDFragment)
-        }else if (favouriteSlider.module.contains("Classmates", true)) {
-             findNavController().navigate(R.id.medicalClassFragment)
+        } else if (favouriteSlider.module.contains("Classmates", true)) {
+            findNavController().navigate(R.id.medicalClassFragment)
         }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {

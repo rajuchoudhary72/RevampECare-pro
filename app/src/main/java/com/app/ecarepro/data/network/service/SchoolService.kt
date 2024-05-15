@@ -9,7 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
 import com.app.ecarepro.data.network.model.NetworkWalkThrough
-import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UpdateTaskDto
 import com.app.ecarepro.model.AddTaskDto
 import com.app.ecarepro.model.AppResponse
 import com.app.ecarepro.model.ClassPromotionModel
@@ -19,8 +19,9 @@ import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TaskDto
 import com.app.ecarepro.model.TasksDto
-import com.app.ecarepro.model.WatchersDto
 import com.app.ecarepro.model.UpdateMedicalCardRequest
+import com.app.ecarepro.model.UpdateTaskAttachmentDto
+import com.app.ecarepro.model.WatchersDto
 import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import retrofit2.http.Body
@@ -101,6 +102,11 @@ interface SchoolService {
         @Body request: AddTaskDto
     ): TaskDto
 
+    @POST("TaskManager/ManageTaskAttachment")
+    suspend fun updateTaskAttachment(
+        @Body request: UpdateTaskAttachmentDto
+    ): CommonResponse
+
     @GET("TaskManager/CreateTask")
     suspend fun getWatcher(): WatchersDto
 
@@ -108,16 +114,21 @@ interface SchoolService {
     suspend fun medicalCard(): MedicalCardResponse
 
     @POST("Student/UpdateMedicalCard")
-    suspend fun updateMedicalCard( @Body request: UpdateMedicalCardRequest): CommonResponse
+    suspend fun updateMedicalCard(@Body request: UpdateMedicalCardRequest): CommonResponse
 
     @GET("Admin/StudentListToAssignHouse")
     suspend fun getStudentListToAssignHouse(
-        @Query("ID") id:String,
-        @Query("Orderby") orderBy:String
+        @Query("ID") id: String,
+        @Query("Orderby") orderBy: String
     ): StudentList
 
     @POST("Admin/AssignHouse")
     suspend fun assignHouse(
         @Body request: List<AssignHouseRequest>
+    ): CommonResponse
+
+    @POST("TaskManager/UpdateTask")
+    suspend fun updateTask(
+        @Body request: UpdateTaskDto
     ): CommonResponse
 }

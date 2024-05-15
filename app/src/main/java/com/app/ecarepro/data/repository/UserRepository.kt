@@ -275,4 +275,6 @@ interface UserRepository {
     fun getUserDashboard(): Flow<Result<UserDashboardDto>>
     fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
+    fun getUserUndertaking(): Flow<Result<String>>
+    fun saveUserUndertaking(id:String): Flow<Result<String>>
 }

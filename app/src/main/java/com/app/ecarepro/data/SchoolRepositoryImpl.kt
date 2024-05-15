@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.NetworkCircularDetails
 import com.app.ecarepro.data.network.model.NetworkNoticDetails
 import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
+import com.app.ecarepro.data.network.model.UpdateTaskDto
 import com.app.ecarepro.data.network.model.asExternalModel
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.repository.SchoolRepository
@@ -25,6 +26,7 @@ import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import com.app.ecarepro.model.Title
+import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -160,6 +162,36 @@ class SchoolRepositoryImpl @Inject constructor(
                 val response = schoolService.saveTask(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: "Task Saved"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun updateTaskImage(request: UpdateTaskAttachmentDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = schoolService.updateTaskAttachment(request)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Task Saved"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun updateTask(request: UpdateTaskDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = schoolService.updateTask(request)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message?:""))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

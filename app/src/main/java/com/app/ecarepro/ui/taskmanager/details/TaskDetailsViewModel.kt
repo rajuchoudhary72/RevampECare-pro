@@ -2,15 +2,22 @@ package com.app.ecarepro.ui.taskmanager.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.TaskFiledName
+import com.app.ecarepro.data.network.model.UpdateTaskDto
 import com.app.ecarepro.data.repository.SchoolRepository
+import com.app.ecarepro.model.Attachment
 import com.app.ecarepro.model.TaskDetails
+import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,11 +25,13 @@ class TaskDetailsViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val taskId = savedStateHandle.getStateFlow("taskId", "")
+
+
+    private val taskId = savedStateHandle.getLiveData<String>("taskId", "")
     val taskTitle = savedStateHandle.getStateFlow("taskTitle", "")
 
     val uiState =
-        taskId.flatMapLatest { taskId ->
+        taskId.asFlow().flatMapLatest { taskId ->
             schoolRepository.getTaskDetails(taskId)
         }.map { result ->
             if (result.isSuccess) {
@@ -44,6 +53,49 @@ class TaskDetailsViewModel @Inject constructor(
             scope = viewModelScope
         )
 
+
+    fun updateTask(
+        taskTitle: TaskFiledName,
+        old: String?,
+        newValue: String,
+        function: (Boolean, String?) -> Unit
+    ) {
+        viewModelScope.launch {
+            schoolRepository.updateTask(
+                UpdateTaskDto(
+                    fieldName = taskTitle.value,
+                    id = taskId.value,
+                    newValue = newValue,
+                    oldValue = old
+                )
+            ).collectLatest { result ->
+                function(result.isSuccess, result.getOrNull() ?: result.exceptionOrNull()?.message)
+                if (result.isSuccess) {
+                    taskId.value = taskId.value
+                }
+            }
+        }
+    }
+
+    fun updateAttachment(imageString: String, imageExt: String, function: (String) -> Unit) {
+        viewModelScope.launch {
+            schoolRepository.updateTaskImage(
+                UpdateTaskAttachmentDto(
+                    id = taskId.value,
+                    action = 1,
+                    attachment = Attachment(
+                        imageString,
+                        imageExt
+                    )
+                )
+            ).collectLatest {
+                function(it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE)
+                if (it.isSuccess) {
+                    taskId.value = taskId.value
+                }
+            }
+        }
+    }
 
 }
 
