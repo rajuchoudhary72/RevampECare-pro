@@ -60,7 +60,6 @@ import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -216,7 +215,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun leaveListStatus(): NetworkLeaveListStatus {
         return userService.leaveListStatus()
     }
- override suspend fun medicineIsuueModel(): MedicineIsuueModel {
+
+    override suspend fun medicineIsuueModel(): MedicineIsuueModel {
         return userService.medicineIssued()
     }
 
@@ -532,10 +532,13 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>> {
+    override fun getStudentListToAssignHouse(
+        id: String,
+        orderBy: String
+    ): Flow<Result<UserDashboardDto>> {
         return flow {
             try {
-                val response= userService.getStudentListToAssignHouse(id,orderBy)
+                val response = userService.getStudentListToAssignHouse(id, orderBy)
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
@@ -553,6 +556,32 @@ class UserRepositoryImpl @Inject constructor(
                 val response = userService.assignHouse(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getUserUndertaking(): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = userService.getUserUndertaking()
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun saveUserUndertaking(id: String): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = userService.saveUserUndertaking(id)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message?:"Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

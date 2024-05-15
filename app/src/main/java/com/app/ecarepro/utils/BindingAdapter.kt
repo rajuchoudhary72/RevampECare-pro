@@ -1,8 +1,9 @@
 package com.app.ecarepro.utils
 
 import android.graphics.Color
-import android.view.View
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.app.ecarepro.R
@@ -74,4 +75,15 @@ fun ImageView.taskStatusColor(priority: Int) {
         }
     }
     imageTintList = ContextCompat.getColorStateList(context, colorId)
+}
+
+
+@BindingAdapter("showEditButton")
+fun TextView.showEditButton(show: Boolean) {
+    if(show){
+        val drawable = ContextCompat.getDrawable(context, R.drawable.ic_edit)
+        setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+    }else{
+        setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+    }
 }

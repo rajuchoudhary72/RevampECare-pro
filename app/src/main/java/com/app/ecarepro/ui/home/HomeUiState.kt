@@ -14,6 +14,7 @@ sealed interface HomeUiState {
         val favourites: List<Slider>,
         val cards: List<Card>,
         val user: NetworkUserDetailsDto,
+        val underTaking:String
     ) : HomeUiState
 
     fun isLoading() = this == Loading

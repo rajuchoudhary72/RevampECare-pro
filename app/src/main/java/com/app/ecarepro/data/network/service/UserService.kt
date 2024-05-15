@@ -363,4 +363,12 @@ interface UserService {
     suspend fun assignHouse(
         @Body request: AssignHouseRequest
     ): CommonResponse
+
+    @GET("User/UserUndertaking")
+    suspend fun getUserUndertaking(): String
+
+    @POST("User/SaveUndertakingAckowledgement")
+    suspend fun saveUserUndertaking(
+        @Query("UtID") id:String,
+    ): CommonResponse
 }

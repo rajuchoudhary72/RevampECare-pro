@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentTaskManagerBinding
+import com.app.ecarepro.model.Task
 import com.app.ecarepro.task
 import com.app.ecarepro.taskSummary
 import com.app.ecarepro.ui.MainActivity
@@ -93,13 +94,7 @@ class TaskManagerFragment : Fragment() {
                                     id(task.id)
                                     task(task)
                                     clickListener { _ ->
-                                        findNavController().navigate(
-                                            R.id.taskDetailsFragment,
-                                            bundleOf(
-                                                "taskId" to task.id,
-                                                "taskTitle" to task.taskTitle
-                                            )
-                                        )
+                                        navigateToDetails(task)
                                     }
                                 }
                             }
@@ -134,6 +129,9 @@ class TaskManagerFragment : Fragment() {
                                 task {
                                     id(task.id)
                                     task(task)
+                                    clickListener { _ ->
+                                        navigateToDetails(task)
+                                    }
                                 }
                             }
 
@@ -166,6 +164,9 @@ class TaskManagerFragment : Fragment() {
                                 task {
                                     id(task.id)
                                     task(task)
+                                    clickListener { _ ->
+                                        navigateToDetails(task)
+                                    }
                                 }
                             }
 
@@ -199,6 +200,9 @@ class TaskManagerFragment : Fragment() {
                                 task {
                                     id(task.id)
                                     task(task)
+                                    clickListener { _ ->
+                                        navigateToDetails(task)
+                                    }
                                 }
                             }
 
@@ -207,6 +211,16 @@ class TaskManagerFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun navigateToDetails(task: Task) {
+        findNavController().navigate(
+            R.id.taskDetailsFragment,
+            bundleOf(
+                "taskId" to task.id,
+                "taskTitle" to task.taskList
+            )
+        )
     }
 
     private fun initViews() {

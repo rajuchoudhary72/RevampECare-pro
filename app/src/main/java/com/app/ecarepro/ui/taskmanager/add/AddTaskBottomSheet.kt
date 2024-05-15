@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -183,31 +184,6 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         _binding = null
     }
 
-    private fun selectDate(title: String, onDateSelection: (String) -> Unit) {
-
-        val constraintsBuilder =
-            CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.now())
-
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText(title)
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .setCalendarConstraints(constraintsBuilder.build())
-                .build()
-
-        datePicker.addOnPositiveButtonClickListener { selectedTime: Long ->
-            onDateSelection(convertMillisToDateString(selectedTime))
-        }
-        datePicker.show(childFragmentManager, "tag");
-    }
-
-    private fun convertMillisToDateString(millis: Long): String {
-        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = millis
-        return formatter.format(calendar.time)
-    }
 
     private fun selectAssignee(assignees: List<Assignee>?) {
         val multiItems = assignees?.map { it.name }?.toTypedArray()
@@ -304,4 +280,31 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         })
         builder.show()
     }
+}
+
+
+fun Fragment.selectDate(title: String, onDateSelection: (String) -> Unit) {
+
+    val constraintsBuilder =
+        CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointForward.now())
+
+    val datePicker =
+        MaterialDatePicker.Builder.datePicker()
+            .setTitleText(title)
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+
+    datePicker.addOnPositiveButtonClickListener { selectedTime: Long ->
+        onDateSelection(convertMillisToDateString(selectedTime))
+    }
+    datePicker.show(childFragmentManager, "tag");
+}
+
+private fun convertMillisToDateString(millis: Long): String {
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val calendar = Calendar.getInstance()
+    calendar.timeInMillis = millis
+    return formatter.format(calendar.time)
 }
