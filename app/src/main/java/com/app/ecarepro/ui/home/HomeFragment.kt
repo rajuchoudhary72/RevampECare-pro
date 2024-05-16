@@ -315,8 +315,12 @@ class HomeFragment : Fragment() {
         } else if (favouriteSlider.module.contains("Id Card", true)) {
             // findNavController().navigate(R.id.medicalClassFragment)
             findNavController().navigate(R.id.studentIDFragment)
-        } else if (favouriteSlider.module.contains("Classmates", true)) {
+        } else if (favouriteSlider.module.contains("SMS Addon", true)) {
             findNavController().navigate(R.id.medicalClassFragment)
+        }else if (favouriteSlider.module.contains("Teachers", true)) {
+            findNavController().navigate(R.id.subjectTeacherFragment)
+        }else if (favouriteSlider.module.contains("Classmates", true)) {
+            findNavController().navigate(R.id.classMateFragment)
         }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {
@@ -330,7 +334,7 @@ class HomeFragment : Fragment() {
                 it.marksEntryURL?.let { url ->
                     webViewCall(url, getString(R.string.marks_entry_heading))
                 }
-            }medicalClassFragment
+            }
         } else if (favouriteSlider.module.contains("Assessment", true)) {
             schoolData?.let {
                 it.assessmentMarksURL?.let { url ->
