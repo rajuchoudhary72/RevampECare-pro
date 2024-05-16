@@ -4,11 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,12 +18,13 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val userDataStore: UserDataStore,
+    private val schoolDatabase: SchoolDatabase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val schoolCode = savedStateHandle.get<String>("schoolCode")
         ?: throw IllegalArgumentException("School code required")
 
-    val school = userDataStore.getSchoolAsFlow().asLiveData()
+    val school = schoolDatabase.getSchoolsFlow().map { it.lastOrNull() }.asLiveData()
 
 
     fun verifyUser(username: String, onResponse: (NetworkUserDetailsDto) -> Unit) {
