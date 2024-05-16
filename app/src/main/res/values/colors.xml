@@ -117,4 +117,5 @@
     <color name="name_2">#131313</color>
     <color name="pending_color">#FFBB00</color>
     <color name="att_na_color">#808080</color>
+    <color name="noti_count_red_color">#ffE74C3C</color>
 </resources>

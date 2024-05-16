@@ -256,8 +256,11 @@ class HomeFragment : Fragment() {
         }else if (favouriteSlider.module.contains("Medical History", true)) {
             findNavController().navigate(R.id.medicalCardFragment)
         }else if (favouriteSlider.module.contains("Id Card", true)) {
-            //findNavController().navigate(R.id.medicalClassFragment)
-            findNavController().navigate(R.id.studentIDFragment)
+            findNavController().navigate(R.id.medicalClassFragment)
+        }else if (favouriteSlider.module.contains("Teachers", true)) {
+            findNavController().navigate(R.id.subjectTeacherFragment)
+        }else if (favouriteSlider.module.contains("Classmates", true)) {
+            findNavController().navigate(R.id.classMateFragment)
         }
         /*end Web view module call  from here */
         else {
