@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
-import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,14 +18,14 @@ class AppreciationListViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val addAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppreciations>> = MutableStateFlow(
+    private val addAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddAppreciation>> = MutableStateFlow(
         NetworkResult.Loading())
-    val addAppreciationStateFlow: StateFlow<NetworkResult<NetworkAppreciations>> = addAppreciationMutableStateFlow
+    val addAppreciationStateFlow: StateFlow<NetworkResult<NetworkAddAppreciation>> = addAppreciationMutableStateFlow
 
-    fun  getAppreciations( stID: Int  )=viewModelScope.launch {
+    fun  addAppreciation( stID: Int  )=viewModelScope.launch {
         runCatching {
             addAppreciationMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getAppreciations(stID)
+            userRepository.addAppreciation(stID)
         }.onSuccess {
             addAppreciationMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

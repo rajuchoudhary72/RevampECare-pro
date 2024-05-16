@@ -18,7 +18,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.franciscan.ecare_pro"
+        applicationId = "com.franciscan.ecare_proNew"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
@@ -132,5 +132,6 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:2.2.0")
     implementation("com.github.Mindinventory:Lassi:1.3.0")
     implementation("com.github.AsynctaskCoffee:VoiceRecorder:beta-0.5")
+    implementation("com.github.dhaval2404:imagepicker:2.1")
 
 }

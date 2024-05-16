@@ -51,7 +51,6 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
             mnoticeViewModel = noticeViewModel
 
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         return binding.root
     }

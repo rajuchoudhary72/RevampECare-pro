@@ -73,7 +73,7 @@ class SignInFragment : Fragment() {
                 ) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        systemViewModel.refresh.update { true }
+                        systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
                             if (arguments?.containsKey("add_account") == true) {
                                 findNavController().popBackStack()

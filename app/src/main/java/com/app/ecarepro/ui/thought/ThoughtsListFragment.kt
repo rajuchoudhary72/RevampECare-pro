@@ -47,7 +47,7 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
 
             }
         initRecycleView()
-        fragmentThoughtsListBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         return fragmentThoughtsListBinding.root
     }
 

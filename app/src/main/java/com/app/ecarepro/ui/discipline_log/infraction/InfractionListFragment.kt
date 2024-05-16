@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 
@@ -36,12 +35,8 @@ class InfractionListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentInfractionListBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        try {
-            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
-
-        }catch (_:Exception){}
-         if(activity is AppCompatActivity){
+        studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        if(activity is AppCompatActivity){
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
             (activity as AppCompatActivity).supportActionBar?.apply {
                 title = " Infractions"
@@ -96,12 +91,12 @@ class InfractionListFragment : Fragment() {
                                 append(it.data.studentDTL.contactMob)
                             }
 
-                            if (it.data.records!=null){
+                            if (it.data.recentInfractions.isNotEmpty()){
                                 binding.recyclerInfractionList.isVisible=true
                                 binding.tvNoData.isVisible=false
 
                                 val circularAdapter = InfractionListAdapter(
-                                    it.data.records,
+                                    it.data.recentInfractions,
                                     this@InfractionListFragment
                                 )
 
@@ -126,7 +121,7 @@ class InfractionListFragment : Fragment() {
             }
 
         }
-        infractionListViewModel.getInfractions(studentID)
+        infractionListViewModel.addInfraction(studentID)
 
 
     }

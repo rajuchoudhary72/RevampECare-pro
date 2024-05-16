@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 
@@ -36,11 +35,16 @@ class AppreciationListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentAppreciationListBinding.inflate(inflater,container,false)
-        try {
-            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        if(activity is AppCompatActivity){
+            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+            (activity as AppCompatActivity).supportActionBar?.apply {
+                title = "Appreciations"
 
-        }catch (e: Exception){}
-         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
+            }
+        }
         return binding.root
     }
 
@@ -87,12 +91,12 @@ class AppreciationListFragment : Fragment() {
                                 append(it.data.studentDTL.contactMob)
                             }
 
-                            if (it.data.records!=null){
+                            if (it.data.recentAppreciations.isNotEmpty()){
                                 binding.recyclerInfractionList.isVisible=true
                                 binding.tvNoData.isVisible=false
 
                                 val appreciationListAdapter = AppreciationListAdapter(
-                                    it.data.records,
+                                    it.data.recentAppreciations,
                                     this@AppreciationListFragment
                                 )
 
@@ -117,7 +121,7 @@ class AppreciationListFragment : Fragment() {
             }
 
         }
-        appreciationListViewModel.getAppreciations(studentID)
+        appreciationListViewModel.addAppreciation(studentID)
 
 
     }

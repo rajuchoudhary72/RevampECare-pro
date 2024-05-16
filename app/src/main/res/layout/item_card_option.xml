@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}"
-        app:cardBackgroundColor="@color/white"
+        app:cardBackgroundColor="@color/md_theme_dark_onBackground"
         app:contentPadding="10dp"
         app:strokeColor="@color/green_10"
         app:strokeWidth="1dp">

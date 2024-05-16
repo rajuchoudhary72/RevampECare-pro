@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.app.ecarepro.data.database.ECareProDatabase
 import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asNetworkSchool
@@ -39,6 +40,7 @@ class UserDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDatabase: UserDatabase,
     private val schoolDatabase: SchoolDatabase,
+    private val eCareProDatabase: ECareProDatabase,
     private val gson: Gson
 ) : UserDataStore {
 
@@ -177,30 +179,6 @@ class UserDataStoreImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveUserType(userType: Int) {
-        context.dataStore.edit { preferences ->
-            preferences[userTypeKey] = userType
-        }
-    }
-
-    override suspend fun saveRoleName(roleName: String) {
-        context.dataStore.edit { preferences ->
-            preferences[roleNameKey] = roleName
-        }
-    }
-
-    override suspend fun getUserType(): Int? {
-        return context.dataStore.data.map { preferences ->
-            preferences[userTypeKey]
-        }.first()
-    }
-
-    override suspend fun getRoleName(): String? {
-        return context.dataStore.data.map { preferences ->
-            preferences[roleNameKey]
-        }.first()
-    }
-
     override suspend fun setAsUserAuthenticated(isAuthenticated: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[isAuthenticatedKey] = isAuthenticated
@@ -235,6 +213,7 @@ class UserDataStoreImpl @Inject constructor(
 
     override suspend fun clear() {
         context.dataStore.edit { it.clear() }
+        eCareProDatabase.clearAllTables()
     }
 
 
@@ -247,8 +226,6 @@ class UserDataStoreImpl @Inject constructor(
         private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
-        private val roleNameKey = stringPreferencesKey("roleName")
-        private val userTypeKey = intPreferencesKey("userType")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }

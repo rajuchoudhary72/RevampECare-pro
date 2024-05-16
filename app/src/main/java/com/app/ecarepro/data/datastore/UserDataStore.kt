@@ -29,13 +29,6 @@ interface UserDataStore {
     suspend fun saveDashboardData(school: UserDashboardDto)
     fun getDashboardData(): Flow<UserDashboardDto?>
     suspend fun saveAuthToken(token: String)
-    suspend fun saveUserType(userType: Int)
-    suspend fun saveRoleName(roleName: String)
-
-    suspend fun getUserType(): Int?
-
-    suspend fun getRoleName( ): String?
-
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
     suspend fun getAuthToken(): String?

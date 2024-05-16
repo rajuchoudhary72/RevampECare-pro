@@ -88,7 +88,7 @@ class PostAssignmentFragment : Fragment() {
 
                 }  }
             } }
-        postAssignmentViewModel.mySubjects(Constant.DEFAULT_ID)
+        postAssignmentViewModel.mySubjects()
 
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
         binding.tvSelectClass.setOnClickListener { popUpSelectClass() }
@@ -171,10 +171,8 @@ class PostAssignmentFragment : Fragment() {
                postAssignmentViewModel.createAssignment(
                    binding.ctvAssignmentDt.text.toString(),
                    0,
-                   imageString,
-                   imageExt,
-                   "",
-                     0,
+                   imageString,imageExt,"",
+                   it,
                    it.toString(),
                    binding.etDescription.text.toString() ,
                    "",

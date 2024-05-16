@@ -16,6 +16,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ECarePro"
+rootProject.name = "ECareProNew"
 include(":app")
  

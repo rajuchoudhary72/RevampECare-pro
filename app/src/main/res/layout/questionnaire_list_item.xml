@@ -156,7 +156,7 @@
                             android:paddingRight="15dp"
                             android:text="@string/answer"
                             android:visibility="visible"
-                            app:drawableLeftCompat="@drawable/round_chat_24" />
+                            app:drawableLeftCompat="@drawable/like_hover" />
 
                         <TextView
                             android:id="@+id/tv_answer"
@@ -169,8 +169,7 @@
                             android:text="@string/answer"
                             android:visibility="gone"
                             android:textColor="@color/md_theme_light_primary"
-                            app:drawableLeftCompat="@drawable/round_chat_24"
-                            app:drawableTint="@color/md_theme_light_primary" />
+                            app:drawableLeftCompat="@drawable/like" />
 
                         <TextView
                             android:id="@+id/tv_total_answer"

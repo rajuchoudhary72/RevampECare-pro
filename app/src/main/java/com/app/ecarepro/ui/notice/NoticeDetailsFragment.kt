@@ -1,12 +1,13 @@
 package com.app.ecarepro.ui.notice
 
 import android.app.DownloadManager
-
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class NoticeDetailsFragment : Fragment() {
 
-     private lateinit var fileSource: String
+    private var manager: DownloadManager? = null
+    private lateinit var fileSource: String
     private lateinit var noticeDetailsBinding: FragmentNoticeDetailsBinding
 
     private val _noticeDetailsViewModel : NoticeDetailsViewModel by viewModels()
@@ -40,8 +42,6 @@ class NoticeDetailsFragment : Fragment() {
             lifecycleOwner= viewLifecycleOwner
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
-        noticeDetailsBinding.toolbarNoticDetail.setNavigationOnClickListener { findNavController().popBackStack() }
-
 
         val noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
         _noticeDetailsViewModel.getNoticeDTL(noticeID,1)

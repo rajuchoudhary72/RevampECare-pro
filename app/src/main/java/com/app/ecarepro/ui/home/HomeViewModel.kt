@@ -10,6 +10,8 @@ import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -20,40 +22,59 @@ class HomeViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val userRepository: UserRepository
 ) : ViewModel() {
+
     val schoolData = MutableLiveData<NetworkSchool>()
 
-    val uiState = userRepository.getUserDashboard()
-        .map { result ->
-            if (result.isSuccess) {
-                val response = result.getOrNull()
-                val cards = mutableListOf<Card>()
+    val uiState =
 
-                if (response?.showProCards == true) {
-                    cards.addAll(response.proCards ?: emptyList())
-                }
+        combine(
+            flow = userRepository.getUserDashboard(),
+            flow2 = userRepository.getUserUndertaking()
+        ) { dashboard, undertaking ->
+            Pair(dashboard, undertaking)
+        }
 
-                if (response?.showCards == true) {
-                    cards.addAll(response.cards ?: emptyList())
-                }
+            .map { (dashboard, undertaking) ->
+                if (dashboard.isSuccess && undertaking.isSuccess) {
+                    val response = dashboard.getOrNull()
+                    val cards = mutableListOf<Card>()
 
-                HomeUiState.Success(
-                    cards = cards,
-                    favourites = userDataStore.getSchoolData()?.slider ?: emptyList(),
-                    user = userDataStore.getUser()!!
-                )
-            } else {
-                HomeUiState.Error(
-                    result.exceptionOrNull() ?: IllegalStateException(
-                        UNKNOWN_ERROR_MESSAGE
+                    if (response?.showProCards == true) {
+                        cards.addAll(response.proCards ?: emptyList())
+                    }
+
+                    if (response?.showCards == true) {
+                        cards.addAll(response.cards ?: emptyList())
+                    }
+
+                    HomeUiState.Success(
+                        cards = cards,
+                        favourites = userDataStore.getSchoolData()?.slider ?: emptyList(),
+                        user = userDataStore.getUser()!!,
+                        underTaking = undertaking.getOrNull() ?: ""
                     )
-                )
+                } else {
+                    HomeUiState.Error(
+                        dashboard.exceptionOrNull() ?: IllegalStateException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
+                    )
+                }
+            }
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = HomeUiState.Loading,
+                started = SharingStarted.WhileSubscribed(500)
+            )
+
+    fun submitUserUndertaking(id: String, function: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            userRepository.saveUserUndertaking(id).collectLatest {
+                function(it.isSuccess, it.getOrNull()?:it.exceptionOrNull()?.message?: UNKNOWN_ERROR_MESSAGE)
             }
         }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = HomeUiState.Loading,
-            started = SharingStarted.WhileSubscribed(500)
-        )
+    }
+
 
     init {
         viewModelScope.launch {

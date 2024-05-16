@@ -96,11 +96,11 @@ class ECareDataPicker : OnDateSetListener {
             year.toString() + "-" + (month + 1) + "-" + dayOfMonth,
             isCurrentDate
         )
-        pickerCallback.onSelect(
+        /*pickerCallback.onSelect(
             dayOfMonth.toString() + " " + SimpleDateFormat("MMM").format(  Date( year,
                 month - 1, dayOfMonth ) ) + ", " + year,
             isCurrentDate
-        )
+        )*/
         // pickerCallback.onSelect(dayOfMonth + "-" + (month + 1) + "-" + year, isCurrentDate);
     }
 

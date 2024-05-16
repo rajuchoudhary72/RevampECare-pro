@@ -356,7 +356,9 @@ class AddAppreciationFragment : Fragment() {
                 } is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
 
-                     findNavController().popBackStack()
+                    findNavController().navigate(R.id.action_addAppreciationFragment_to_appreciationListFragment ,Bundle( ).apply {
+                        putInt(Constant.STUDENT_ID_ARGUMENT, studentID)
+                    })
                 }
                 }
             }

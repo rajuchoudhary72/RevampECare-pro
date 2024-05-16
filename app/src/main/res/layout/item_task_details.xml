@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="java.lang.String" />
+
+        <variable
+            name="assignBy"
+            type="java.lang.String" />
+
+        <variable
+            name="description"
+            type="java.lang.String" />
+
+        <variable
+            name="canEdit"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="onClickEdit"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            showEditButton="@{canEdit}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="@{canEdit}"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/calibri_bold"
+            android:includeFontPadding="false"
+            android:onClick="@{onClickEdit}"
+            android:text="@{title}"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Need to verify the question paper of Physics" />
+
+        <TextView
+            android:id="@+id/assignBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_light"
+            android:includeFontPadding="false"
+            android:text='@{"Assign By: " + assignBy}'
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="Assign By: RAJEEV KUMAR SAXENA" />
+
+        <TextView
+            android:id="@+id/description"
+            showEditButton="@{canEdit}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:clickable="@{canEdit}"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/calibri_regular"
+            android:includeFontPadding="false"
+            android:onClick="@{onClickEdit}"
+            android:text="@{description}"
+            app:layout_constraintTop_toBottomOf="@+id/assignBy"
+            tools:text="Dear Team,  We've to review the task tomorrow" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -3,7 +3,6 @@ package com.app.ecarepro.ui.assignment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.databinding.StuAssignmentItemBinding
@@ -22,18 +21,15 @@ class AssignmentListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListAdapter {
         bindingm =
             StuAssignmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AssignmentListAdapter(bindingm)
+        return AssignmentListAdapter(bindingm.root)
     }
 
     override fun getItemCount(): Int = activityLST.size
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
+        bindingm.assignmentData = activityLST[position]
 
-        val binding= DataBindingUtil.getBinding<StuAssignmentItemBinding>(holder.itemView)
-
-        binding!!.assignmentData = activityLST[position]
-
-        binding.llView.setOnClickListener {
+        bindingm.llView.setOnClickListener {
             activityCalenderFragment.onItemClick(activityLST[position],1,false)
         }
 
@@ -42,7 +38,7 @@ class AssignmentListAdapter(
      }
 
 
-    class AssignmentListAdapter(itemView: StuAssignmentItemBinding) : RecyclerView.ViewHolder(itemView.root) {
+    class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
 

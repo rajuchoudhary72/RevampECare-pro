@@ -38,29 +38,12 @@ class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
     ): View  {
 
         fragmentLibrarySearchBinding=FragmentLibrarySearchBinding.inflate(inflater,container,false)
-        fragmentLibrarySearchBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
-        return fragmentLibrarySearchBinding.root
+         return fragmentLibrarySearchBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-
-
-        fragmentLibrarySearchBinding.edSearch.doAfterTextChanged {
-            setUpUI()
-        }
-
-
-
-
-    }
-
-
-    private fun setUpUI(){
         lifecycleScope.launch {
             bookSearchViewModel._bookSearchStateFlow.collectLatest {
                 when (it) {
@@ -107,12 +90,25 @@ class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
                 }
             }
         }
-        if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
-            bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
-        }else{
-            bookSearchViewModel.getLibrarySearch( "",Constant.PAGE_INDEX)
 
+       /* fragmentLibrarySearchBinding.ivSearch.setOnClickListener {
+            if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
+                bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
+            }
+        }*/
+
+        fragmentLibrarySearchBinding.edSearch.doAfterTextChanged {
+            if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
+                bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
+            }else{
+                bookSearchViewModel.getLibrarySearch( "",Constant.PAGE_INDEX)
+
+            }
         }
+
+
+
+
     }
 
     override fun onItemClick(t: BookDTL, pos: Int, boolean: Boolean) {

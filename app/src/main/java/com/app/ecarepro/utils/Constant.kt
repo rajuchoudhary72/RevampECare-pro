@@ -22,44 +22,9 @@ class Constant {
         const val URL_ARGUMENT = "url"
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val STUDENT_ID_ARGUMENT = "StudentID"
-        const val STAFF_ID_ARGUMENT = "StaffID"
-        const val TIME_TABLE_TYPE = "TimeTableType"
-        const val ASSIGNMENT_TYPE = "AssignmentType"
-        const val CLASS_ASSIGNMENT = "ClassType"
-        const val TEACHER_ASSIGNMENT = "TeacherType"
-        const val TEACHER_TIME_TABLE = "TeacherTimeTable"
-        const val CLASS_TIME_TABLE = "ClassTimeTable"
         const val QUES_ID_ARGUMENT = "QuesID"
         const val LEAVE_ID_ARGUMENT = "LeaveID"
-        const val CLASS_ID_ARGUMENT = "ClassID"
-        const val  ID  = "ID"
-        const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
-        const val TO = "to"
-
-        const val TODAY = 1
-        const val UP_COMING = 2
-        const val DATE_RANGE = 3
-
-        const val FROM = "from"
-    const val LEAVE_ACTION_APPROVE = 1
-    const val LEAVE_ACTION_REJECT = 2
-
-        const val PROFILE_FRA_STU = "ProfileFragmentStudent"
-        const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
-        const val FRA_LEAVE = "FragmentLeave"
-        const val FRA_ASSI = "FragmentAssignment"
-        const val FRA_TIMETABLE = "FragmentTimeTable"
-        const val FRA_ADD_APPRE = "FragmentAddApprecation"
-        const val FRA_VIEW_APPRE = "FragmentViewApprecation"
-        const val FRA_VIEW_INFE = "FragmentViewInfe"
-        const val FRA_ADD_INFE = "FragmentAddInfe"
-        const val FRA_LESSON_PLAN = "FragmentLessonPlan"
-        const val FRA_STAFF_LEAVE = "FragmentStaffLeave"
-        const val FRA_STU_LEAVE = "FragmentStudentLeave"
-
-
-
         const val CIRCULAR_ID = "CircularID"
         const val ASSIGNMENT_ID = "AssiID"
         const val DEFAULT_ID = 0
@@ -68,10 +33,8 @@ class Constant {
         const val DEFAULT_ID_CIRCULAR = 1
         const val PAGE_INDEX = 1
         const val THOUGHTS_DIR = 1
-
         const val TRUE_VALUE = 1
         const val FALSE_VALUE = 0
-
         const val STUDENT_TYPE = 1
         const val PARENT_TYPE = 2
         const val STAFF_TYPE = 3

@@ -40,8 +40,6 @@ class BookLibraryFragment : Fragment() {
     ): View {
 
         bookLibraryBinding=FragmentBookLibraryBinding.inflate(inflater,container,false)
-        bookLibraryBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
         return bookLibraryBinding.root
     }
 
