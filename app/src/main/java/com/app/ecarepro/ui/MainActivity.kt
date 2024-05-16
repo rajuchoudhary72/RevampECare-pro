@@ -207,11 +207,18 @@ class MainActivity : AppCompatActivity() {
             3 -> R.id.staffAssignmentsListFragment
             4 -> R.id.timeTableNavHostFragment
             5 -> R.id.classSyllabus
-            10 -> R.id.calenderActivityNavHost
+            6 -> R.id.messageFragment    // student  app
+            10 -> R.id.calenderActivityNavHost //
             12 -> R.id.bookLibraryFragment
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
+            16 -> R.id.calenderActivityNavHost    // student  app
+            17 -> R.id.attendanceFragment    // student  app
+            20 -> R.id.questionnaireListFragment    // student  app
+            21 -> R.id.thoughtsListFragment    // student  app
             23 -> R.id.taskManagerFragment
+            25 -> R.id.excellenceAwardFragment    // student  app
+            32 -> R.id.studentIDFragment    // student  app
             51 -> R.id.excellenceAwardFragment
             else -> null
         }
@@ -237,6 +244,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            10 -> {
+                return when (childMenuId) {
+                    18 -> R.id.attendanceFragment
+                    19 -> R.id.leaveHistoryFragment
+                    20 -> R.id.paySlipFragment
+                    else -> null
+                }
+            }
 
             11 -> {
                 return when (childMenuId) {

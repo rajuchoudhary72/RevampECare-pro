@@ -107,7 +107,7 @@ class SubjectTeacherFragment : Fragment() {
                             it.data.let {respose->
                                 list.addAll(respose.allTeacher)
                                 listAll.addAll(respose.allTeacher)
-                                listSubject.addAll(respose.subjectTeacher)
+                                respose.subjectTeacher?.let { it1 -> listSubject.addAll(it1) }
                             }
 
 

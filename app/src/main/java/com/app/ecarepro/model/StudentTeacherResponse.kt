@@ -6,6 +6,6 @@ data class StudentTeacherResponse(
     val errorCode: Int?,
     val message: String?,
     val status: String?,
-    val subjectTeacher: List<AllTeacher>,
+    val subjectTeacher: List<AllTeacher>?,
     val teachers: Any?
 )

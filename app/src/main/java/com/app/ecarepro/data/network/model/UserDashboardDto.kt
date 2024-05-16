@@ -138,7 +138,7 @@ data class Card(
     @SerializedName("data_2")
     val data2: String?
 ) : Serializable {
-    fun getIconUrl() = BASE_URL_COM + icon
+    fun getIconUrl() =  icon
 }
 
 data class Timetable(
