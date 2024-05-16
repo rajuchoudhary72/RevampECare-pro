@@ -105,6 +105,17 @@
     <color name="category5">#9999CC</color>
     <color name="category6">#FFB99C</color>
     <color name="category7">#8E47B5</color>
-
-
+    <color name="module">#545454</color>
+    <color name="sub_text_color">#5B5B5B</color>
+    <color name="reports_tiles_bg_grey_light">#F6F6F6</color>
+    <color name="grey_light_compose_msg_headr_txt">#CCCCCC</color>
+    <color name="light_grey">#d3d3d3</color>
+    <color name="light">#878787</color>
+    <color name="profile_color2">#ABABAB</color>
+    <color name="profile_color">#959595</color>
+    <color name="grey_light1">#F9F9F9</color>
+    <color name="name_2">#131313</color>
+    <color name="pending_color">#FFBB00</color>
+    <color name="att_na_color">#808080</color>
+    <color name="noti_count_red_color">#ffE74C3C</color>
 </resources>

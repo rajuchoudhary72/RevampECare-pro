@@ -3,6 +3,7 @@ package com.app.ecarepro.di
 import android.content.Context
 import androidx.room.Room
 import com.app.ecarepro.data.database.ECareProDatabase
+import com.app.ecarepro.data.database.dao.SchoolDao
 import com.app.ecarepro.data.database.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -29,6 +30,13 @@ object DatabaseModule {
         database: ECareProDatabase
     ): UserDao {
         return database.userDao()
+    }
+
+    @Provides
+    fun provideSchoolDao(
+        database: ECareProDatabase
+    ): SchoolDao {
+        return database.schoolDao()
     }
 
 

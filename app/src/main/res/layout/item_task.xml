@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="task"
+            type="com.app.ecarepro.model.Task" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener}"
+        app:cardCornerRadius="4dp"
+        app:contentPadding="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/indicator"
+                taskStatusColor="@{task.status}"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:src="@{task.status == -1 ?  @drawable/outline_remove_red_eye_24: @drawable/tv_bg_rounded}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:background="@drawable/outline_remove_red_eye_24" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:fontFamily="@font/calibri_regular"
+                android:includeFontPadding="false"
+                android:text="@{task.taskTitle}"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/sub_title"
+                app:layout_constraintEnd_toStartOf="@+id/threads"
+                app:layout_constraintStart_toEndOf="@+id/indicator"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="HR Department" />
+
+            <TextView
+                android:id="@+id/sub_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/calibri_light"
+                android:includeFontPadding="false"
+                android:text="@{task.taskList}"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/threads"
+                app:layout_constraintStart_toEndOf="@+id/indicator"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="Make a system to greeting employee" />
+
+
+            <TextView
+                android:id="@+id/threads"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:background="@drawable/bg_outline_round_corner_grey"
+                android:drawablePadding="3dp"
+                android:fontFamily="@font/calibri_light"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text='@{task.assignTo.size() + " | +"}'
+                android:textSize="12sp"
+                app:drawableStartCompat="@drawable/ic_chain"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/flag"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="4 | +" />
+
+
+            <ImageView
+                android:id="@+id/flag"
+                taskPriorityColor="@{task.priority}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_flag"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/golden_yellow" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

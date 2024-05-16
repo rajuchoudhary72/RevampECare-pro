@@ -1,22 +1,33 @@
 package com.app.ecarepro.data.datastore
 
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.UserDashboardDto
-import com.app.ecarepro.model.Slide
-import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
+import com.app.ecarepro.model.Slide
+import kotlinx.coroutines.flow.Flow
+
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
-    suspend fun getUser(): NetworkUserDetailsDto
-    fun getUserAsFlow(): Flow<NetworkUserDetailsDto>
+    suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String)
+    suspend fun getUser(): NetworkUserDetailsDto?
+    fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
+    suspend fun setCurrentUserId(userId: Int)
+    suspend fun getCurrentUserId(): Int?
+    fun getCurrentUserIdAsFlow(): Flow<Int?>
+    suspend fun setCurrentSchoolCode(schoolCode: String)
+    suspend fun getCurrentSchoolCode(): String?
+    fun getCurrentSchoolCodeAsFlow(): Flow<String?>
+    fun getUserAsFlow(): Flow<NetworkUserDetailsDto?>
     suspend fun saveSchoolData(school: NetworkSchool)
     suspend fun getSchoolData(): NetworkSchool?
-    suspend fun saveDashboardData(school: UserDashboardDto)
-    fun getDashboardData(): Flow<UserDashboardDto?>
+    fun getSchoolAsFlow(): Flow<NetworkSchool?>
     suspend fun saveFeeds(feeds: FeedsDto)
     fun getFeeds(): Flow<List<Feed>>
+    suspend fun saveDashboardData(school: UserDashboardDto)
+    fun getDashboardData(): Flow<UserDashboardDto?>
     suspend fun saveAuthToken(token: String)
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean

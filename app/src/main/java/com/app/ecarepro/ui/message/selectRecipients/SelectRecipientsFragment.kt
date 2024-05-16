@@ -53,7 +53,7 @@ class SelectRecipientsFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             userDataStore.getUserAsFlow().collectLatest {
-                setUpViewPager(it.userType)
+                setUpViewPager(it?.userType ?: 1)
             }
         }
 

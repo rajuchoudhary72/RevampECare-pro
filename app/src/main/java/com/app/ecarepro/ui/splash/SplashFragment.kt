@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSplashBinding
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -24,6 +26,7 @@ class SplashFragment : Fragment() {
     private val binding get() = _binding!!
 
     val splashViewModel: SplashViewModel by viewModels()
+    val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +56,7 @@ class SplashFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             if (splashViewModel.isUserAuthenticated()) {
+                systemViewModel.refreshAppLayout()
                 delay(2000)
                 findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
             } else {

@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
@@ -19,7 +20,6 @@ import com.app.ecarepro.utils.Constant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import com.app.ecarepro.data.network.model.SendMessageRequest
 
 class MessageRepositoryImpl @Inject constructor(
     private val messageService: MessageService
@@ -218,6 +218,7 @@ class MessageRepositoryImpl @Inject constructor(
             }
         }
     }
+
     override fun sendMessage(request: SendMessageRequest): Flow<Result<String>> {
         return flow {
             try {

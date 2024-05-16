@@ -58,6 +58,15 @@
         android:id="@+id/homeFragment"
         android:name="com.app.ecarepro.ui.home.HomeViewPagerFragment"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/subjectTeacherFragment"
+        android:name="com.app.ecarepro.ui.subjectTeacher.SubjectTeacherFragment"
+        tools:layout="@layout/fragment_subject_teacher" />
+
+    <fragment
+        android:id="@+id/classMateFragment"
+        android:name="com.app.ecarepro.ui.classmate.ClassMateFragment"
+        tools:layout="@layout/fragment_classmate" />
 
     <fragment
         android:id="@+id/schoolCodeFragment"
@@ -97,6 +106,11 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/schoolCodeFragment"
             app:popUpToInclusive="true" />
+
+        <argument
+            android:name="schoolCode"
+            app:argType="string" />
+
 
     </fragment>
 
@@ -282,7 +296,48 @@
             android:id="@+id/action_leaveHistoryFragment_to_openImageFragment"
             app:destination="@id/openImageFragment" />
     </fragment>
+<fragment
+        android:id="@+id/medicineIssuedFragment"
+        android:name="com.app.ecarepro.ui.medicine_issue.MedicineIssuedFragment"
+        android:label="MedicineIssuedFragment"   >
 
+    </fragment>
+    <fragment
+        android:id="@+id/assignHomeFragment"
+        android:name="com.app.ecarepro.ui.assign_home.AssignHomeFragment"
+        android:label="AssignHomeFragment"   >
+
+    </fragment>
+    <fragment
+        android:id="@+id/medicalCardFragment"
+        android:name="com.app.ecarepro.ui.medicalcard.MedicalCardFragment"
+        android:label="MedicalCardFragment"   >
+
+    </fragment>
+    <fragment
+        android:id="@+id/medicalClassFragment"
+        android:name="com.app.ecarepro.ui.medicalcard.medical_class.MedicalClassFragment"
+        android:label="MedicalClassFragment"   >
+
+    </fragment>
+    <fragment
+        android:id="@+id/studentMedicalCardFragment"
+        android:name="com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardFragment"
+        android:label="StudentMedicalCardFragment"   >
+
+    </fragment>
+    <fragment
+        android:id="@+id/studentIDFragment"
+        android:name="com.app.ecarepro.ui.studentId.StudentIDFragment"
+        android:label="StudentIDFragment"   >
+
+    </fragment>
+    <fragment
+        android:id="@+id/studentMedicalReportFragment"
+        android:name="com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalReportFragment"
+        android:label="StudentMedicalReportFragment"   >
+
+    </fragment>
     <fragment
         android:id="@+id/leaveSettingFragment"
         android:name="com.app.ecarepro.ui.leave.leave_setting.LeaveSettingFragment"
@@ -447,4 +502,12 @@
         android:id="@+id/attendanceFragment2"
         android:name="com.app.ecarepro.ui.attendance.AttendanceFragment"
         android:label="AttendanceFragment" />
+    <fragment
+        android:id="@+id/taskManagerFragment"
+        android:name="com.app.ecarepro.ui.taskmanager.TaskManagerFragment"
+        android:label="TaskManagerFragment" />
+    <fragment
+        android:id="@+id/taskDetailsFragment"
+        android:name="com.app.ecarepro.ui.taskmanager.details.TaskDetailsFragment"
+        android:label="TaskDetailsFragment" />
 </navigation>

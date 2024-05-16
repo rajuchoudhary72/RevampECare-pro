@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.repository
 
+import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
@@ -29,7 +30,6 @@ import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
@@ -37,11 +37,16 @@ import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
+import com.app.ecarepro.model.ClassMateResponse
+import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
+import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.studentId.StudentCardResponse
+import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun insertUser(user: NetworkUser)
 
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
 
@@ -118,6 +123,7 @@ interface UserRepository {
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
+    suspend fun medicineIsuueModel(): MedicineIsuueModel
 
     suspend fun leaveApply(
         leaveID: Int,
@@ -163,6 +169,22 @@ interface UserRepository {
        scholarType: Int,
          showAll: Boolean
     ): NetworkStudentList
+
+    suspend fun getStudentMedicalCard(
+       stID: String
+    ): StudentMedicalCardResponse
+
+    suspend fun getStudentTeachers(
+    ): StudentTeacherResponse
+
+    suspend fun getClassmates(
+    ): ClassMateResponse
+ suspend fun uploadPhoto(
+       request: StudentIDRequest
+    ): CommonResponse
+
+
+    suspend fun getStudentIDCard(): StudentCardResponse
 
     suspend fun addAppreciation( stID: Int  ): NetworkAddAppreciation
 
@@ -258,4 +280,8 @@ interface UserRepository {
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
     fun getUserDashboard(): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
+    fun getUserUndertaking(): Flow<Result<String>>
+    fun saveUserUndertaking(id:String): Flow<Result<String>>
 }

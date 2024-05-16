@@ -107,8 +107,8 @@ class ComposeFragment : Fragment() {
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.CREATED
             ).collectLatest { uiState: ComposeUiState ->
-                handleUiState(uiState)
-            }
+                    handleUiState(uiState)
+                }
         }
     }
 

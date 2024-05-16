@@ -20,6 +20,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
+import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         setUpMoreOptions()
     }
 
-     fun setUpDrawer() {
+    fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
                 binding.drawerLayout.open()
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                 .collectLatest { uiState ->
                     uiState.getValueOrNull()?.let { data ->
                         buildDrawerModels(data.menus)
+                        buildFavoriteMenusModels(data.favroiteMenus)
                         binding.itemDrawerHeader.user = data.userInfo
                     }
                 }
@@ -129,6 +131,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.drawerLayout.open()
+    }
+
+    private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
+        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
+            favoriteMenus.forEach { menu ->
+                cardOption {
+                    id(menu.menuID)
+                    data(
+                        Slider(
+                            imgPath = menu.icon,
+                            module = menu.title ?: ""
+                        )
+                    )
+                    clickListener { _ ->
+                        getFragmentId(menu.menuID, menu.chMenuID?:0)?.let { navController.navigate(it) }
+                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                    }
+                }
+            }
+        }
     }
 
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -185,12 +207,19 @@ class MainActivity : AppCompatActivity() {
             3 -> R.id.staffAssignmentsListFragment
             4 -> R.id.timeTableNavHostFragment
             5 -> R.id.classSyllabus
-            10 -> R.id.calenderActivityNavHost
+            6 -> R.id.messageFragment    // student  app
+            10 -> R.id.calenderActivityNavHost //
             12 -> R.id.bookLibraryFragment
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
+            16 -> R.id.calenderActivityNavHost    // student  app
+            17 -> R.id.attendanceFragment    // student  app
+            20 -> R.id.questionnaireListFragment    // student  app
+            21 -> R.id.thoughtsListFragment    // student  app
+            23 -> R.id.taskManagerFragment
+            25 -> R.id.excellenceAwardFragment    // student  app
+            32 -> R.id.studentIDFragment    // student  app
             51 -> R.id.excellenceAwardFragment
-            25 -> R.id.excellenceAwardFragment
             else -> null
         }
     }
@@ -205,15 +234,23 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+
             7 -> {
                 return when (childMenuId) {
                     10 -> R.id.circularFragment
                     11 -> R.id.noticeListFragment
-                    12-> R.id.noticeListFragment
+                    12 -> R.id.noticeListFragment
                     else -> null
                 }
             }
-
+            10 -> {
+                return when (childMenuId) {
+                    18 -> R.id.attendanceFragment
+                    19 -> R.id.leaveHistoryFragment
+                    20 -> R.id.paySlipFragment
+                    else -> null
+                }
+            }
 
             11 -> {
                 return when (childMenuId) {
@@ -222,6 +259,7 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+
             18 -> {
                 return when (childMenuId) {
                     21 -> R.id.studentListFragment2
@@ -243,6 +281,7 @@ class MainActivity : AppCompatActivity() {
             .setMessage(getString(R.string.are_you_sure_to_logout))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 systemViewModel.logout {
+
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
@@ -267,12 +306,6 @@ class MainActivity : AppCompatActivity() {
 
                 }
             ))
-
-        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
-            (0..16).forEach {
-                cardOption { id(it) }
-            }
-        }
     }
 
     private fun setUpBottomNavigationView() {

@@ -82,7 +82,7 @@ class ChatViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            user = userDataStore.getUser()
+            user = userDataStore.getUser()!!
         }
     }
 
