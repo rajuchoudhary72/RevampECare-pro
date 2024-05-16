@@ -243,7 +243,6 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
-
             10 -> {
                 return when (childMenuId) {
                     18 -> R.id.attendanceFragment
