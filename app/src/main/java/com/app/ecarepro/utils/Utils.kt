@@ -7,6 +7,7 @@ import android.util.DisplayMetrics
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.SimpleDateFormat
@@ -42,4 +43,8 @@ fun formatDate(dateString: String, fromDateFormat: String, toDateFormat: String)
     } catch (e: Exception) {
         return ""
     }
+}
+
+fun getIcNoProfileBig(context: Context): VectorDrawableCompat? {
+    return VectorDrawableCompat.create(context.resources, R.drawable.ic_no_profile_big, null)
 }

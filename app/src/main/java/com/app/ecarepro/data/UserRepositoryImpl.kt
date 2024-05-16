@@ -53,6 +53,8 @@ import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignmen
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.ClassMateResponse
+import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
@@ -295,6 +297,13 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getStudentMedicalCard(stID)
     }
 
+    override suspend fun getStudentTeachers(): StudentTeacherResponse {
+        return userService.getStudentTeachers()
+    }
+
+    override suspend fun getClassmates(): ClassMateResponse {
+        return userService.getClassmates()
+    }
     override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
         return userService.uploadPhoto(request)
     }

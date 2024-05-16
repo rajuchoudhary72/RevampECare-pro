@@ -330,7 +330,7 @@ class HomeFragment : Fragment() {
                 it.marksEntryURL?.let { url ->
                     webViewCall(url, getString(R.string.marks_entry_heading))
                 }
-            }
+            }medicalClassFragment
         } else if (favouriteSlider.module.contains("Assessment", true)) {
             schoolData?.let {
                 it.assessmentMarksURL?.let { url ->

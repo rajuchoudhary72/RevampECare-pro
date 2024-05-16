@@ -37,6 +37,8 @@ import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
+import com.app.ecarepro.model.ClassMateResponse
+import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
@@ -172,6 +174,11 @@ interface UserRepository {
        stID: String
     ): StudentMedicalCardResponse
 
+    suspend fun getStudentTeachers(
+    ): StudentTeacherResponse
+
+    suspend fun getClassmates(
+    ): ClassMateResponse
  suspend fun uploadPhoto(
        request: StudentIDRequest
     ): CommonResponse

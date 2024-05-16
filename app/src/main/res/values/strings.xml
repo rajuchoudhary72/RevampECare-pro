@@ -271,4 +271,8 @@
     <string name="lbl_date_of_birth">Date of Birth</string>
     <string name="lbl_contact_nos">Contact Nos.</string>
     <string name="lbl_residential_address">Residential Address</string>
+    <string name="subject_teacher_s">Subject Teacher(s)</string>
+    <string name="all_teachers">All Teachers</string>
+    <string name="pending_col">"Pending Approval: "</string>
+    <string name="discuss2">Message</string>
 </resources>

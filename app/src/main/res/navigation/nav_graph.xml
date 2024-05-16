@@ -58,6 +58,15 @@
         android:id="@+id/homeFragment"
         android:name="com.app.ecarepro.ui.home.HomeViewPagerFragment"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/subjectTeacherFragment"
+        android:name="com.app.ecarepro.ui.subjectTeacher.SubjectTeacherFragment"
+        tools:layout="@layout/fragment_subject_teacher" />
+
+    <fragment
+        android:id="@+id/classMateFragment"
+        android:name="com.app.ecarepro.ui.classmate.ClassMateFragment"
+        tools:layout="@layout/fragment_classmate" />
 
     <fragment
         android:id="@+id/schoolCodeFragment"
