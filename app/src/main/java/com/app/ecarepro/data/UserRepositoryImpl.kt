@@ -55,6 +55,7 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
+import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
@@ -448,6 +449,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun staffAttendance(month: Int, year: Int): NetworkStaffAttendence {
         return userService.staffAttendance(month, year)
+    }
+
+    override suspend fun getAttendance(
+        from: String,
+        till: String,
+        yrID: String
+    ): AttendanceResponse {
+        return userService.getAttendance(from, till, yrID)
     }
 
     override suspend fun teachersTimetable(id: String): NetworkTeachersTimetable {

@@ -455,6 +455,10 @@
         android:name="com.app.ecarepro.ui.staffAttendence.AttendanceFragment"
         android:label="AttendanceFragment" />
     <fragment
+        android:id="@+id/showAttendanceFragment"
+        android:name="com.app.ecarepro.ui.attendance_section.ShowAttendanceFragment"
+        android:label="ShowAttendanceFragment" />
+    <fragment
         android:id="@+id/timeTableNavHostFragment"
         android:name="com.app.ecarepro.ui.timeTable.TimeTableNavHostFragment"
         android:label="TimeTableNavHostFragment" />
