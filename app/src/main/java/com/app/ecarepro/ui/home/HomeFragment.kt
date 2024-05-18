@@ -260,7 +260,8 @@ class HomeFragment : Fragment() {
         }else if (favouriteSlider.module.contains("Teachers", true)) {
             findNavController().navigate(R.id.subjectTeacherFragment)
         }else if (favouriteSlider.module.contains("Classmates", true)) {
-            findNavController().navigate(R.id.classMateFragment)
+           // findNavController().navigate(R.id.classMateFragment)
+            findNavController().navigate(R.id.showAttendanceFragment)
         }
         /*end Web view module call  from here */
         else {

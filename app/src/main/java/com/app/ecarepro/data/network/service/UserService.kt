@@ -48,6 +48,7 @@ import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfracti
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
+import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIssued
@@ -307,6 +308,13 @@ interface UserService {
         @Query("Month") month: Int,
         @Query("Year") year: Int,
     ): NetworkStaffAttendence
+
+    @GET("Student/Attendance")
+    suspend fun getAttendance(
+        @Query("From") from: String,
+        @Query("Till") till: String,
+        @Query("YrID") yrID: String,
+    ): AttendanceResponse
 
     @GET("Academic/TeachersTimetable")
     suspend fun teachersTimetable(
