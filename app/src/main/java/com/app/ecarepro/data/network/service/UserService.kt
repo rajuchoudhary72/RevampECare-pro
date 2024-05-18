@@ -349,7 +349,7 @@ interface UserService {
     suspend fun excellenceAward(
     ): ExcellenceAwardResponse
 
-    @GET("User/Dashboard")
+    @GET("User/AppDashboard")
     suspend fun getUserDashboard(
     ): UserDashboardDto
 

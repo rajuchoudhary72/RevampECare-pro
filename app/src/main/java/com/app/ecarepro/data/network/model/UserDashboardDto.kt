@@ -131,14 +131,20 @@ data class Card(
     val heading: String?,
     @SerializedName("icon")
     val icon: String?,
+    @SerializedName("tinyIcon")
+    val tinyIcon: String?,
     @SerializedName("link")
     val link: String?,
     @SerializedName("data_1")
     val data1: String?,
     @SerializedName("data_2")
-    val data2: String?
+    val data2: String?,
+    @SerializedName("menuID")
+    val menuID: Int,
+    @SerializedName("chmenuID")
+    val chmenuID: Int
 ) : Serializable {
-    fun getIconUrl() = BASE_URL_COM + icon
+    fun getIconUrl() = icon
 }
 
 data class Timetable(
