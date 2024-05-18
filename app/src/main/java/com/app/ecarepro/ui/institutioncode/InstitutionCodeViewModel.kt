@@ -22,6 +22,7 @@ class InstitutionCodeViewModel @Inject constructor(
     private val schoolDatabase: SchoolDatabase
 ) : ViewModel() {
 
+
     val schools = userDataStore.getCurrentSchoolCodeAsFlow().flatMapLatest { schoolCode ->
         schoolDatabase.getSchoolsFlow().map {
             it.map {
@@ -42,5 +43,7 @@ class InstitutionCodeViewModel @Inject constructor(
             }
         }
     }
+
+    suspend fun isUserAuthenticated() = userDataStore.isUserAuthenticated()
 
 }
