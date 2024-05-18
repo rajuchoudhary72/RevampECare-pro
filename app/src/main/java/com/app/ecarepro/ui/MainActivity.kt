@@ -213,7 +213,7 @@ class MainActivity : AppCompatActivity() {
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
             16 -> R.id.calenderActivityNavHost    // student  app
-            17 -> R.id.attendanceFragment    // student  app
+            17 -> R.id.showAttendanceFragment    // student  app
             20 -> R.id.questionnaireListFragment    // student  app
             21 -> R.id.thoughtsListFragment    // student  app
             23 -> R.id.taskManagerFragment
@@ -243,6 +243,7 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+
             10 -> {
                 return when (childMenuId) {
                     18 -> R.id.attendanceFragment

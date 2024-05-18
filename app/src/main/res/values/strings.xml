@@ -275,4 +275,11 @@
     <string name="all_teachers">All Teachers</string>
     <string name="pending_col">"Pending Approval: "</string>
     <string name="discuss2">Message</string>
+    <string name="school_days">School Days: </string>
+    <string name="present_days">Present Days:</string>
+    <string name="late_days">Late days:</string>
+    <string name="absent_days">Absent days:</string>
+    <string name="leave">Leave:</string>
+    <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
+    <string name="attendance_between_01_aug_2021_to_09_oct_2021">Attendance between: %s</string>
 </resources>
