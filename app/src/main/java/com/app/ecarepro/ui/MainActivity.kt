@@ -145,7 +145,10 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     clickListener { _ ->
-                        getFragmentId(menu.menuID, menu.chMenuID?:0)?.let { navController.navigate(it) }
+                        getFragmentId(
+                            menu.menuID,
+                            menu.chMenuID ?: 0
+                        )?.let { navController.navigate(it) }
                         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                     }
                 }
@@ -224,7 +227,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
+    fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
         return when (menuID) {
             6 -> {
                 return when (childMenuId) {

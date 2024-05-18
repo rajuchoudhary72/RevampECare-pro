@@ -235,6 +235,10 @@ class HomeFragment : Fragment() {
                         dashboardCard {
                             id(card.link)
                             card(card)
+                            clickListener { _ ->
+                                (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
+                                    ?.let { findNavController().navigate(it) }
+                            }
                         }
                     }
                 }
@@ -358,5 +362,10 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        systemViewModel.refreshAppLayout()
     }
 }
