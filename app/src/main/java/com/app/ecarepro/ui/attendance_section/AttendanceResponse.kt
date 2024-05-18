@@ -3,7 +3,7 @@ package com.app.ecarepro.ui.attendance_section
 data class AttendanceResponse(
     val absentDays: Int?,
     val academicYears: List<AcademicYear>,
-    val attendance: List<Attendance>,
+    val attendance: List<Attendance>?,
     val errorCode: Int?,
     val isLateEnable: Boolean?,
     val lateDays: Int?,

@@ -5,6 +5,10 @@
 
     <data>
 
+
+        <variable
+            name="data"
+            type="com.app.ecarepro.ui.attendance_section.AttendanceResponse" />
     </data>
 
     <LinearLayout
@@ -65,7 +69,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
@@ -74,12 +77,14 @@
 
                 >
 
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteMonth"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dateRange"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="DateRange" />
+                    android:textSize="10sp"
+                    android:focusable="false"
+                    android:text="Select Date" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -87,17 +92,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/bg_outline_round_corner_grey"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/_5sdp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center"
+                android:id="@+id/tvSession"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/attendance_in_session_2021_2022"
                 android:textColor="@color/black" />
@@ -119,9 +125,11 @@
                         android:text="@string/school_days" />
 
                     <TextView
+                        android:id="@+id/tvSessionSchoolDays"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        android:text='@{""+data.schoolDays}'
+                        tools:text="24" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -136,9 +144,11 @@
                         android:text="@string/present_days" />
 
                     <TextView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.totalPresent}'/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -161,7 +171,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.totalLates}'/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -178,7 +189,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.totalAbsent}' />
                 </LinearLayout>
             </LinearLayout>
 
@@ -201,28 +213,31 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.totalLeave}' />
                 </LinearLayout>
 
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/bg_outline_round_corner_grey"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/_5sdp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center"
+                android:id="@+id/tvHeadingDateRange"
                 android:padding="@dimen/_5sdp"
-                android:text="Attendance between: 01 Aug 2021 to 09 Oct 2021"
+                android:text="@string/attendance_between_01_aug_2021_to_09_oct_2021"
                 android:textColor="@color/black" />
 
             <LinearLayout
@@ -244,7 +259,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.workingDays}' />
                 </LinearLayout>
 
                 <LinearLayout
@@ -261,7 +277,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.presentDays}' />
                 </LinearLayout>
             </LinearLayout>
 
@@ -284,7 +301,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.lateDays}' />
                 </LinearLayout>
 
                 <LinearLayout
@@ -301,7 +319,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.absentDays}' />
                 </LinearLayout>
             </LinearLayout>
 
@@ -324,12 +343,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="24" />
+                        tools:text="24"
+                        android:text='@{""+data.leaveDays}' />
                 </LinearLayout>
 
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/llHeading"
             android:layout_width="match_parent"
