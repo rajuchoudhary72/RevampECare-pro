@@ -52,6 +52,7 @@ class SchoolRepositoryImpl @Inject constructor(
                 userDataStore.saveSchoolData(response)
                 emit(response)
             } catch (e: Exception) {
+                e.printStackTrace()
                 emit(null)
             }
         }
@@ -233,5 +234,20 @@ class SchoolRepositoryImpl @Inject constructor(
 
     override suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse {
         return schoolService.updateMedicalCard(request)
+    }
+
+    override fun updateTaskStatus(id: String?, statusId: Int): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = schoolService.updateTaskStatus(id!!, statusId)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message?:""))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
     }
 }

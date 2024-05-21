@@ -17,6 +17,7 @@ import com.app.ecarepro.task
 import com.app.ecarepro.taskSummary
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.taskmanager.add.AddTaskBottomSheet
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,6 +79,7 @@ class TaskManagerFragment : Fragment() {
                                 this@withModels.requestModelBuild()
                             }
                         }
+
                     }
 
                     if (extendedTaskId == R.id.overdue_tasks)
@@ -95,6 +97,9 @@ class TaskManagerFragment : Fragment() {
                                     task(task)
                                     clickListener { _ ->
                                         navigateToDetails(task)
+                                    }
+                                    updateStatusListener { _ ->
+                                        updateTask(task)
                                     }
                                 }
                             }
@@ -132,6 +137,9 @@ class TaskManagerFragment : Fragment() {
                                     clickListener { _ ->
                                         navigateToDetails(task)
                                     }
+                                    updateStatusListener { _ ->
+                                        updateTask(task)
+                                    }
                                 }
                             }
 
@@ -166,6 +174,9 @@ class TaskManagerFragment : Fragment() {
                                     task(task)
                                     clickListener { _ ->
                                         navigateToDetails(task)
+                                    }
+                                    updateStatusListener { _ ->
+                                        updateTask(task)
                                     }
                                 }
                             }
@@ -203,6 +214,9 @@ class TaskManagerFragment : Fragment() {
                                     clickListener { _ ->
                                         navigateToDetails(task)
                                     }
+                                    updateStatusListener { _ ->
+                                        updateTask(task)
+                                    }
                                 }
                             }
 
@@ -211,6 +225,21 @@ class TaskManagerFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun updateTask(task: Task) {
+        val items = TaskStatus.getTaskApartFromThis(task.status)
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Update Status")
+            .setItems(items.map { it.value }.toTypedArray()) { dialog, which ->
+                (requireActivity() as MainActivity).showLoader(true)
+                mViewModel.updateTask(task, items[which].id) { _, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun navigateToDetails(task: Task) {
@@ -263,5 +292,18 @@ class TaskManagerFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+}
+
+enum class TaskStatus(val value: String, val id: Int) {
+    OPEN("Open", 0),
+    IN_PROGRESS("In Progress", 1),
+    HOLD("Hold", 2),
+    CLOSED("Closed", 3);
+
+    companion object {
+        fun getTaskApartFromThis(id: Int): List<TaskStatus> {
+            return values().filterNot { it.id == id }
+        }
     }
 }
