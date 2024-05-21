@@ -261,7 +261,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.subjectTeacherFragment)
         }else if (favouriteSlider.module.contains("Classmates", true)) {
            // findNavController().navigate(R.id.classMateFragment)
-            findNavController().navigate(R.id.showAttendanceFragment)
+            //findNavController().navigate(R.id.showAttendanceFragment)
+            findNavController().navigate(R.id.staticalReport)
         }
         /*end Web view module call  from here */
         else {

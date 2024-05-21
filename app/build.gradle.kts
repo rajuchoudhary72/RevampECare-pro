@@ -133,5 +133,5 @@ dependencies {
     implementation("com.github.Mindinventory:Lassi:1.3.0")
     implementation("com.github.AsynctaskCoffee:VoiceRecorder:beta-0.5")
     implementation("com.github.dhaval2404:imagepicker:2.1")
-
+    implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
 }

@@ -53,6 +53,7 @@ import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIssued
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
 import retrofit2.http.Body
@@ -308,6 +309,9 @@ interface UserService {
         @Query("Month") month: Int,
         @Query("Year") year: Int,
     ): NetworkStaffAttendence
+
+    @GET("Report/Statistical")
+    suspend fun statistical(): StaticGraphResponse
 
     @GET("Student/Attendance")
     suspend fun getAttendance(
