@@ -229,6 +229,18 @@ class MainActivity : AppCompatActivity() {
 
     fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
         return when (menuID) {
+            1-> {
+                return when (childMenuId) {
+                    3 -> R.id.leaveHistoryFragment
+                    else -> null
+                }
+            }
+            2-> {
+                return when (childMenuId) {
+                    6 -> R.id.leaveHistoryFragment
+                    else -> null
+                }
+            }
             6 -> {
                 return when (childMenuId) {
                     7 -> R.id.composeFragment
@@ -243,6 +255,12 @@ class MainActivity : AppCompatActivity() {
                     10 -> R.id.circularFragment
                     11 -> R.id.noticeListFragment
                     12 -> R.id.noticeListFragment
+                    else -> null
+                }
+            }
+            8-> {
+                return when (childMenuId) {
+                    45-> R.id.staticalReport
                     else -> null
                 }
             }
