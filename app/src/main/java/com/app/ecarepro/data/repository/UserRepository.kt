@@ -39,6 +39,8 @@ import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
+import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
+import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
@@ -272,6 +274,14 @@ interface UserRepository {
 
     suspend fun statistical(
     ): StaticGraphResponse
+
+    suspend fun appUserReportResponse(
+    ): AppUserReportResponse
+
+    suspend fun appUserReportWevResponse(
+        userType:String
+    ): AppUserWebResponse
+
     suspend fun getAttendance(
         from: String,
         till: String,

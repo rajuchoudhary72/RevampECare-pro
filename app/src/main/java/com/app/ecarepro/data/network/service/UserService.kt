@@ -48,6 +48,8 @@ import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfracti
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
+import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
+import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
@@ -312,7 +314,11 @@ interface UserService {
 
     @GET("Report/Statistical")
     suspend fun statistical(): StaticGraphResponse
+    @GET("Report/AppUsersCount")
+    suspend fun appUsersCount(): AppUserReportResponse
 
+    @GET("Report/AppUsersDTL")
+    suspend fun appUsersWeb(@Query("UserType") userType:String): AppUserWebResponse
     @GET("Student/Attendance")
     suspend fun getAttendance(
         @Query("From") from: String,

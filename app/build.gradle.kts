@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.googleServices)
     alias(libs.plugins.safeArgs)
     kotlin("kapt")
+    alias(libs.plugins.kotlinParcelize)
 }
 
 kapt {
