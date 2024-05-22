@@ -499,14 +499,7 @@
         android:name="com.app.ecarepro.ui.class_promo.ClassPromotionFragment"
         android:label="ClassPromotionFragment"
         />
-    <fragment
-        android:id="@+id/infractionSelectFragment"
-        android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionSelectFragment"
-        android:label="InfractionSelectFragment" >
-        <action
-            android:id="@+id/action_infractionSelectFragment_to_studentListFragment2"
-            app:destination="@id/studentListFragment2" />
-    </fragment>
+
     <fragment
         android:id="@+id/stuMarkAttendanceFragment"
         android:name="com.app.ecarepro.ui.markAttendence.StuMarkAttendanceFragment"
@@ -736,4 +729,13 @@
         android:id="@+id/questionPaperFragment"
         android:name="com.app.ecarepro.ui.question_paper.QuestionPaperFragment"
         android:label="QuestionPaperFragment" />
+
+    <fragment
+        android:id="@+id/infractionSelectFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.InfractionSelectFragment"
+        android:label="InfractionSelectFragment" >
+        <action
+            android:id="@+id/action_infractionSelectFragment_to_studentListFragment2"
+            app:destination="@id/studentListFragment2" />
+    </fragment>
 </navigation>
