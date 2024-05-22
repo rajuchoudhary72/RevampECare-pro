@@ -59,6 +59,8 @@ import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -317,6 +319,18 @@ interface UserService {
         @Query("pg") pg: Int=1,
         @Query("isReport") isReport: Boolean=false,
     ): SurveyListResponse
+
+
+    @GET("Survey/Questions")
+    suspend fun surveyQuestions(
+        @Query("ID") id: String
+    ): SurveyQuestionsResponse
+
+    @POST("Survey/PostAnswer")
+    suspend fun submitSurveyQuestions(
+        @Body model: SurveyQuestionsSubmitRequest
+    ): CommonResponse
+
     @GET("Report/Statistical")
     suspend fun statistical(): StaticGraphResponse
     @GET("Report/AppUsersCount")

@@ -49,6 +49,8 @@ import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Query
 
@@ -276,6 +278,15 @@ interface UserRepository {
     suspend fun surveyList(
         pg: Int, isReport: Boolean
     ): SurveyListResponse
+
+
+    suspend fun surveyQuestions(
+        id: String
+    ): SurveyQuestionsResponse
+
+    suspend fun submitSurveyQuestions(
+        request: SurveyQuestionsSubmitRequest
+    ): CommonResponse
 
     suspend fun statistical(
     ): StaticGraphResponse
