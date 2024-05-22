@@ -69,8 +69,7 @@ import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
- import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
-import com.app.ecarepro.ui.medicine_issue.MedicineIssued
+ import com.app.ecarepro.ui.medicine_issue.MedicineIssued
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
@@ -108,7 +107,6 @@ import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.ProfileAttendanceDTL
-import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 
 interface UserService {
     @GET("User/Verify")

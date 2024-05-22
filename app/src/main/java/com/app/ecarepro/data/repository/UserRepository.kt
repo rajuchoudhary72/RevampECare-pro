@@ -81,8 +81,7 @@ import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.StudentTeacherResponse
- import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
-import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
+ import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse

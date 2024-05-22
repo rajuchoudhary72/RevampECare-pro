@@ -24,8 +24,10 @@ data class NetworkUserDetailsDto(
     val authToken: String?,
     val schoolCode: String?,
     val isUserAuthenticated: Boolean?,
+
     @SerializedName("userType")
     val userType: Int,
+
     val school: NetworkSchool? = null
 ) {
     fun getUserTypeName() = when (userType) {

@@ -75,8 +75,7 @@ import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
-import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
-import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
@@ -114,8 +113,7 @@ import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.model.FeeSummery
-import com.app.ecarepro.ui.award.ExcellenceAwardResponse
-import javax.inject.Inject
+ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userService: UserService,
@@ -162,6 +160,8 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.saveUserDetails(it, schoolCode)
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
+                userDataStore.saveUserType(it.userType ?: 0)
+                userDataStore.saveRoleName(it.roleName ?: "")
             }
 
         }
