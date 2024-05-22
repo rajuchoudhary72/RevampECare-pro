@@ -25,11 +25,13 @@ import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -122,7 +124,8 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
-        schoolDatabase.insertSchool(school.asNetworkSchool())
+        if (schoolDatabase.getSchoolData(school.schoolCode) == null)
+            schoolDatabase.insertSchool(school.asNetworkSchool())
         val schoolCode = getCurrentSchoolCode()
         if (schoolCode.isNullOrEmpty())
             setCurrentSchoolCode(school.schoolCode)
@@ -212,8 +215,10 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun clear() {
-        context.dataStore.edit { it.clear() }
-        eCareProDatabase.clearAllTables()
+        GlobalScope.launch {
+            context.dataStore.edit { it.clear() }
+            eCareProDatabase.clearAllTables()
+        }
     }
 
 

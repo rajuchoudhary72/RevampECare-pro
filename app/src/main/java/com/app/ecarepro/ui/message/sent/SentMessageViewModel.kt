@@ -57,7 +57,9 @@ class SentMessageViewModel @Inject constructor(
                             }
                             messages.addAll(response.sentMessages ?: emptyList())
 
-                            if (isRefresh && messages.isEmpty()) {
+                            if (page == DEFAULT_PAGE && messages.isNullOrEmpty()) {
+                                SentMessageUiState.EmptyInbox
+                            } else if (isRefresh && messages.isEmpty()) {
                                 SentMessageUiState.EmptyInbox
                             } else {
                                 SentMessageUiState.Success(messages)

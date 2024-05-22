@@ -58,7 +58,9 @@ class InstitutionCodeFragment : Fragment() {
         }
 
         institutionCodeViewModel.schools.observe(viewLifecycleOwner) { schools ->
-            binding.carouselSchool.isVisible = schools.isNullOrEmpty().not()
+            lifecycleScope.launch {
+                binding.carouselSchool.isVisible = schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()
+            }
             schools.forEach { school ->
                 binding.carouselSchool.withModels {
                     schoolCode {
