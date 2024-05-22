@@ -78,6 +78,8 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import com.app.ecarepro.ui.survey.SurveyListResponse
+
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAppointments
@@ -718,5 +720,9 @@ interface UserService {
         @Query("ClassID") classID: Int,
         @Query("YrID") yrID: Int
     ): NetworkQuestionPaper
-
+    @GET("Survey/List")
+    suspend fun surveyList(
+        @Query("pg") pg: Int=1,
+        @Query("isReport") isReport: Boolean=false,
+    ): SurveyListResponse
 }

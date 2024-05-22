@@ -755,4 +755,8 @@
             android:id="@+id/action_infractionSelectFragment_to_studentListFragment2"
             app:destination="@id/studentListFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/surveyListFragment"
+        android:name="com.app.ecarepro.ui.survey.SurveyListFragment"
+        tools:layout="@layout/survey_layout" />
 </navigation>

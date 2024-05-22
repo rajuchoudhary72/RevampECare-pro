@@ -11,6 +11,8 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppointments
+import com.app.ecarepro.ui.survey.SurveyListResponse
+
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
@@ -591,7 +593,9 @@ interface UserRepository {
     ): NetworkGenerateTokenFeePay
 
 
-
+    suspend fun surveyList(
+        pg: Int, isReport: Boolean
+    ): SurveyListResponse
 
     suspend fun getQuestionPaper(
          classID: Int,

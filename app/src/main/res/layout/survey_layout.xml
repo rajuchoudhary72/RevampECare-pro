@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/md_theme_light_primary"
+        android:elevation="8dp"
+        app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/ic_arrow_back_24px"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/survey"
+        app:titleCentered="true"
+        app:titleTextAppearance="?attr/titleTextAppearance"
+        app:titleTextColor="@color/white" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_survey_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_no_survey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawablePadding="@dimen/_10sdp"
+            android:gravity="center"
+            android:text="No Survey Available"
+            android:textSize="@dimen/_20sdp"
+            android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_no_servey" />
+    </RelativeLayout>
+
+
+</RelativeLayout>
+</layout>

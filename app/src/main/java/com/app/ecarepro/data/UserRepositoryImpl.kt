@@ -113,6 +113,8 @@ import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.ui.survey.SurveyListResponse
+import javax.inject.Inject
  import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -943,6 +945,8 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getQuestionPaper(classID, yrID)
     }
 
-
+    override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
+        return userService.surveyList(pg, isReport)
+    }
 
 }
