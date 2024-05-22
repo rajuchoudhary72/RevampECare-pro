@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragmentId(menuID: Int) {
+      fun getFragmentId(menuID: Int) {
         when (menuID) {
             3 -> {
                 if (userData.userType == Constant.STAFF_TYPE) {
@@ -267,7 +267,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragmentId(menuID: Int, childMenuId: Int) {
+      fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {
             1 -> {
                 when (childMenuId) {

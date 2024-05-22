@@ -237,7 +237,9 @@ class HomeFragment : Fragment() {
                             card(card)
                             clickListener { _ ->
                                 (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
-                                    ?.let { findNavController().navigate(it) }
+                                    ?.let {
+                                       /* findNavController().navigate(it)*/
+                                    }
                             }
                         }
                     }
