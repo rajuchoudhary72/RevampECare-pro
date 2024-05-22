@@ -222,6 +222,7 @@ class MainActivity : AppCompatActivity() {
             23 -> R.id.taskManagerFragment
             25 -> R.id.excellenceAwardFragment    // student  app
             32 -> R.id.studentIDFragment    // student  app
+            33 -> R.id.surveyListFragment
             51 -> R.id.excellenceAwardFragment
             else -> null
         }
@@ -262,6 +263,7 @@ class MainActivity : AppCompatActivity() {
                 return when (childMenuId) {
                     45-> R.id.staticalReport
                     46-> R.id.appUserReportFragment
+                    47-> R.id.surveyListFragment
                     else -> null
                 }
             }
