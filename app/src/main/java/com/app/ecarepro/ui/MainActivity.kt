@@ -262,6 +262,7 @@ class MainActivity : AppCompatActivity() {
             20 ->  navController.navigate(R.id.questionnaireListFragment)
             21 ->  navController.navigate(R.id.thoughtsListFragment)
             22 ->  navController.navigate(R.id.appointmentReportFragment)
+            31 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -347,6 +348,9 @@ class MainActivity : AppCompatActivity() {
 
                     }
                     42 -> navController.navigate(R.id.smsMsgReportFragment)
+                    45 -> navController.navigate(R.id.staticalReport)
+                    46 -> navController.navigate(R.id.appUserReportFragment)
+                     47 -> navController.navigate(R.id.surveyListFragment)
 
 
                 }
