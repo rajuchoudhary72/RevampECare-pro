@@ -325,6 +325,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.subjectTeacherFragment)
         }else if (favouriteSlider.module.contains("Classmates", true)) {
             findNavController().navigate(R.id.classMateFragment)
+        }else if (favouriteSlider.module.contains("Survey", true)) {
+            findNavController().navigate(R.id.surveyListFragment)
         }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {
@@ -333,34 +335,20 @@ class HomeFragment : Fragment() {
                     webViewCall(url, getString(R.string.website_txt))
                 }
             }
-        } else if (favouriteSlider.module.contains("Marks Entry", true)) {
+        }
+        else if (favouriteSlider.module.contains("Marks Entry", true)) {
             schoolData?.let {
                 it.marksEntryURL?.let { url ->
                     webViewCall(url, getString(R.string.marks_entry_heading))
                 }
             }
-        } else if (favouriteSlider.module.contains("Assessment", true)) {
+        }
+        else if (favouriteSlider.module.contains("Assessment", true)) {
             schoolData?.let {
                 it.assessmentMarksURL?.let { url ->
                     webViewCall(url, getString(R.string.assessment_headling))
                 }
             }
-        }else if (favouriteSlider.module.contains("Medicine Issue", true)) {
-            findNavController().navigate(R.id.medicineIssuedFragment)
-        }else if (favouriteSlider.module.contains("Assign House", true)) {
-            findNavController().navigate(R.id.assignHomeFragment)
-        }else if (favouriteSlider.module.contains("Medical History", true)) {
-            findNavController().navigate(R.id.medicalCardFragment)
-        }else if (favouriteSlider.module.contains("Id Card", true)) {
-            findNavController().navigate(R.id.medicalClassFragment)
-        }else if (favouriteSlider.module.contains("Teachers", true)) {
-            findNavController().navigate(R.id.subjectTeacherFragment)
-        }else if (favouriteSlider.module.contains("Classmates", true)) {
-           // findNavController().navigate(R.id.classMateFragment)
-            //findNavController().navigate(R.id.showAttendanceFragment)
-            //findNavController().navigate(R.id.staticalReport)
-           // findNavController().navigate(R.id.appUserReportFragment)
-            findNavController().navigate(R.id.surveyListFragment)
         }
         /*end Web view module call  from here */
         else {

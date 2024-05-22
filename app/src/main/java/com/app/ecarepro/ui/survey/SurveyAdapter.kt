@@ -68,12 +68,14 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Ada
                     "Closed on: " + surveyModel.openEndDate
                 )
                 if (surveyModel.isResponded) {
-                    binding.tvRespondedOn.setText(
-                        "RESPONDED ON: " + getDateTimeFormatted(
-                            surveyModel.respondedOn
-                        )
-                    )
-                    binding.tvRespondedOn.setVisibility(View.VISIBLE)
+                     if (surveyModel.respondedOn!=null){
+                         binding.tvRespondedOn.setVisibility(View.VISIBLE)
+                         binding.tvRespondedOn.setText(
+                             "RESPONDED ON: " + (
+                                 surveyModel.respondedOn
+                             )
+                         )
+                     }
                 }
             })
 

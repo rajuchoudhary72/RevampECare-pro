@@ -312,7 +312,7 @@ interface UserService {
         @Query("Month") month: Int,
         @Query("Year") year: Int,
     ): NetworkStaffAttendence
-    @GET("Survey/List?pg=1&isReport=false")
+    @GET("Survey/List")
     suspend fun surveyList(
         @Query("pg") pg: Int=1,
         @Query("isReport") isReport: Boolean=false,
