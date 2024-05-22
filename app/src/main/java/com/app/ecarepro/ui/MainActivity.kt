@@ -22,8 +22,10 @@ import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.ActivityMainBinding
+import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
+import com.app.ecarepro.menuCard
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
@@ -98,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 .collectLatest { uiState ->
                     uiState.getValueOrNull()?.let { data ->
                         buildDrawerModels(data.menus)
-                        buildFavoriteMenusModels(data.favroiteMenus)
+                        buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
                     }
                 }
@@ -136,20 +138,43 @@ class MainActivity : AppCompatActivity() {
     private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
             favoriteMenus.forEach { menu ->
-                cardOption {
-                    id(menu.menuID)
-                    data(
-                        Slider(
-                            imgPath = menu.icon,
-                            module = menu.title ?: ""
-                        )
-                    )
-                    clickListener { _ ->
-                        getFragmentId(
-                            menu.menuID,
-                            menu.chMenuID ?: 0
-                        )?.let { navController.navigate(it) }
-                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                if(menu.childMenus.isNullOrEmpty()){
+                    menuCard {
+                        id(menu.menuID)
+                        title(menu.title)
+                        icon(menu.icon)
+                        clickListener { _ ->
+                            getFragmentId(menu.menuID)?.let { navController.navigate(it) }
+                            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                        }
+                    }
+                }else{
+                    menu.childMenus.forEach { childMenu ->
+                        if(childMenu.childMenus.isNullOrEmpty()){
+                            menuCard {
+                                id(childMenu.menuID)
+                                title(childMenu.title)
+                                icon(childMenu.icon)
+                                parentMenuIcon(menu.icon)
+                                clickListener { _ ->
+                                    getFragmentId(menu.menuID, childMenu.chMenuID)?.let { navController.navigate(it) }
+                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                }
+                            }
+                        }else{
+                            childMenu.childMenus.forEach { childChildMenu ->
+                                menuCard {
+                                    id(childChildMenu.menuID)
+                                    title(childChildMenu.title)
+                                    icon(childChildMenu.icon)
+                                    parentMenuIcon(childMenu.icon)
+                                    clickListener { _ ->
+                                        getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)?.let { navController.navigate(it) }
+                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -185,7 +210,6 @@ class MainActivity : AppCompatActivity() {
                             id(parentMenu.menuID, menu.menuID)
                             title(menu.title)
                             icon(menu.icon)
-                            hasChildMenu(menu.childMenus.isNullOrEmpty().not())
                             clickListener { _ ->
                                 getFragmentId(
                                     parentMenu.menuID,
@@ -198,8 +222,26 @@ class MainActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                    }
 
+                        menu.childMenus?.forEach { childChildMenu ->
+                            drawerChildChildItem {
+                                id(parentMenu.menuID, childChildMenu.menuID)
+                                title(childChildMenu.title)
+                                icon(childChildMenu.icon)
+                                clickListener { _ ->
+                                    getFragmentId(
+                                        childChildMenu.menuID,
+                                        childChildMenu.chMenuID
+                                    )?.let {
+                                        systemViewModel.openDrawer(false)
+                                        navController.navigate(
+                                            it
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

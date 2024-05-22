@@ -123,6 +123,7 @@ class HomeFragment : Fragment() {
 
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
+                        mViewModel.setFavourite(uiState.favroiteMenus)
                         uiState.userInfo.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
@@ -131,9 +132,7 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-
             }
-
         }
         mViewModel.schoolData.observe(viewLifecycleOwner) {
             schoolData = it
@@ -259,7 +258,7 @@ class HomeFragment : Fragment() {
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
 
-                uiState.favourites.forEach { favouriteSlider ->
+                uiState.favourites.forEach { favouriteSlider: Slider ->
                     cardOption {
                         id(favouriteSlider.module)
                         data(favouriteSlider)
