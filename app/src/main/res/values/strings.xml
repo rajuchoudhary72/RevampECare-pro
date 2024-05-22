@@ -532,6 +532,7 @@
     <string name="present_days">Present Days:</string>
     <string name="late_days">Late days:</string>
     <string name="absent_days">Absent days:</string>
+    <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
      <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
     <string name="attendance_between_01_aug_2021_to_09_oct_2021">Attendance between: %s</string>
     <string name="statistical">Statistical</string>
@@ -541,4 +542,6 @@
     <string name="self_bus">Self Conveyance</string>
     <string name="students">Students</string>
      <string name="app_user_report">App User Report</string>
+    <string name="transport">Transport</string>
+    <string name="app_user_report">App User Report</string>
 </resources>
