@@ -58,6 +58,7 @@ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
+import com.app.ecarepro.ui.survey.SurveyListResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -311,7 +312,11 @@ interface UserService {
         @Query("Month") month: Int,
         @Query("Year") year: Int,
     ): NetworkStaffAttendence
-
+    @GET("Survey/List?pg=1&isReport=false")
+    suspend fun surveyList(
+        @Query("pg") pg: Int=1,
+        @Query("isReport") isReport: Boolean=false,
+    ): SurveyListResponse
     @GET("Report/Statistical")
     suspend fun statistical(): StaticGraphResponse
     @GET("Report/AppUsersCount")

@@ -10,8 +10,11 @@ import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 fun Int.toPx(context: Context) =
     (this * context.resources.displayMetrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT
@@ -44,7 +47,21 @@ fun formatDate(dateString: String, fromDateFormat: String, toDateFormat: String)
         return ""
     }
 }
-
+fun getDateTimeFormatted(DateTime: String): String {
+    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+    simpleDateFormat.timeZone = TimeZone.getDefault()
+    var dateTime: Date? = null
+    try {
+        dateTime = simpleDateFormat.parse(DateTime)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    val finalDate = SimpleDateFormat("dd MMM, yyyy")
+    val finalTime = SimpleDateFormat("hh:mm aa")
+    val formattedDate = finalDate.format(dateTime).toString()
+    val formattedTime = finalTime.format(dateTime).toString().uppercase(Locale.getDefault())
+    return "$formattedDate at $formattedTime"
+}
 fun getIcNoProfileBig(context: Context): VectorDrawableCompat? {
     return VectorDrawableCompat.create(context.resources, R.drawable.ic_no_profile_big, null)
 }

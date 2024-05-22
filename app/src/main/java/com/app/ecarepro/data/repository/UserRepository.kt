@@ -48,6 +48,7 @@ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
+import com.app.ecarepro.ui.survey.SurveyListResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Query
 
@@ -271,6 +272,10 @@ interface UserRepository {
           month: Int,
           year: Int,
     ): NetworkStaffAttendence
+
+    suspend fun surveyList(
+        pg: Int, isReport: Boolean
+    ): SurveyListResponse
 
     suspend fun statistical(
     ): StaticGraphResponse
