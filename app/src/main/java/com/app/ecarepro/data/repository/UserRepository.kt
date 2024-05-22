@@ -81,13 +81,18 @@ import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.StudentTeacherResponse
+import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
+import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
+import com.app.ecarepro.ui.attendance_section.AttendanceResponse
+import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
  import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
  import retrofit2.http.Query
 import kotlinx.coroutines.flow.Flow
-import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import retrofit2.http.GET
 
 interface UserRepository {
@@ -335,6 +340,21 @@ interface UserRepository {
           year: Int,
     ): NetworkStaffAttendence
 
+    suspend fun statistical(
+    ): StaticGraphResponse
+
+    suspend fun appUserReportResponse(
+    ): AppUserReportResponse
+
+    suspend fun appUserReportWevResponse(
+        userType:String
+    ): AppUserWebResponse
+
+    suspend fun getAttendance(
+        from: String,
+        till: String,
+         yrID: String,
+    ): AttendanceResponse
     suspend fun teachersTimetable(
          id: String
     ): NetworkTeachersTimetable

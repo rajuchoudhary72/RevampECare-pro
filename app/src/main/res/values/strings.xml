@@ -281,7 +281,6 @@
     <string name="pan_number">PAN Number</string>
     <string name="admissio_n_no">Admissio n No.</string>
     <string name="house">House</string>
-    <string name="transport">Transport</string>
     <string name="bloodgroup">BloodGroup</string>
     <string name="caste">Caste</string>
     <string name="diseno">DiseNo</string>
@@ -528,4 +527,18 @@
     <string name="exam_name">Exam Name:</string>
     <string name="file_size">File Size:</string>
     <string name="updated_on">Updated On:</string>
+    <string name="school_days">School Days: </string>
+    <string name="present_days">Present Days:</string>
+    <string name="late_days">Late days:</string>
+    <string name="absent_days">Absent days:</string>
+    <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
+    <string name="attendance_between_01_aug_2021_to_09_oct_2021">Attendance between: %s</string>
+    <string name="statistical">Statistical</string>
+    <string name="boys">Boy(s)</string>
+    <string name="girls">Girl(s)</string>
+    <string name="school_bus">School/College Bus</string>
+    <string name="self_bus">Self Conveyance</string>
+    <string name="students">Students</string>
+    <string name="transport">Transport</string>
+    <string name="app_user_report">App User Report</string>
 </resources>

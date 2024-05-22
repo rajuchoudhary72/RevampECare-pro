@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.databinding.FragmentWidgetsBinding
+import com.app.ecarepro.ui.MainActivity
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +49,14 @@ class WidgetsFragment : Fragment() {
                         dashboardCard {
                             id(index)
                             card(card)
+                            clickListener { _ ->
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    card.menuID,
+                                    card.chmenuID
+                                )
+                                    ?.let { findNavController().navigate(it) }
+                            }
+
                         }
                     }
                 }

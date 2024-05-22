@@ -3,16 +3,19 @@ package com.app.ecarepro.ui.taskmanager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.repository.SchoolRepository
+import com.app.ecarepro.model.Task
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,6 +66,19 @@ class TaskManagerViewModel @Inject constructor(
             searchQuery.update {
                 ""
             }
+    }
+
+    fun updateTask(task: Task, statusId: Int, func: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            schoolRepository
+                .updateTaskStatus(task.id, statusId)
+                .collectLatest { result ->
+                    func(result.isSuccess, result.getOrNull()?:result.exceptionOrNull()?.message?: UNKNOWN_ERROR_MESSAGE)
+                    if(result.isSuccess){
+                        searchQuery.update { it }
+                    }
+                }
+        }
     }
 }
 
