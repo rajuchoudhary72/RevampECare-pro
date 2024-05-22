@@ -261,6 +261,7 @@ class MainActivity : AppCompatActivity() {
             8-> {
                 return when (childMenuId) {
                     45-> R.id.staticalReport
+                    46-> R.id.appUserReportFragment
                     else -> null
                 }
             }
