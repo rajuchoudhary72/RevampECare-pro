@@ -55,6 +55,8 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
+import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
+import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
@@ -454,6 +456,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun statistical(): StaticGraphResponse {
         return userService.statistical()
+    }
+
+    override suspend fun appUserReportResponse(): AppUserReportResponse {
+        return userService.appUsersCount()
+    }
+
+    override suspend fun appUserReportWevResponse(userType:String): AppUserWebResponse {
+        return userService.appUsersWeb(userType)
     }
     override suspend fun getAttendance(
         from: String,

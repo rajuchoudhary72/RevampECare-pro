@@ -289,4 +289,5 @@
     <string name="self_bus">Self Conveyance</string>
     <string name="students">Students</string>
     <string name="transport">Transport</string>
+    <string name="app_user_report">App User Report</string>
 </resources>

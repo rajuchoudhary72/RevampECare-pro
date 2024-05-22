@@ -122,6 +122,7 @@
     <color name="light_hai">#e5e5e5</color>
     <color name="android">#00E3FF</color>
     <color name="ios">#363636</color>
+    <color name="button_browse_green">#ff56B54C</color>
     <color name="windows">#0099FF</color>
     <color name="violet">#7F00FF</color>
     <color name="magenta">#FF00FF</color>
