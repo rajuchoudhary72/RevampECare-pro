@@ -101,6 +101,7 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                isVisible="@{viewModel.isUserAuthenticated()"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/change_school_college"
                 android:textAppearance="?attr/textAppearanceLabelLarge"

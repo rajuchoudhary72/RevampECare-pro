@@ -46,7 +46,7 @@ data class Task(
     @SerializedName("startDate")
     val startDate: String?,
     @SerializedName("status")
-    val status: Int?,
+    val status: Int,
     @SerializedName("taskList")
     val taskList: String?,
     @SerializedName("taskTitle")

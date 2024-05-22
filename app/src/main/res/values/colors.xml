@@ -97,7 +97,8 @@
     <color name="nav_bar">@color/immersive_sys_ui</color>
     <color name="transparent">#00000000</color>
 
-
+    <color name="female_color">#FF70B7</color>
+    <color name="male_color">#3E98F9</color>
     <color name="category1">#129A69</color>
     <color name="category2">#00759B</color>
     <color name="category3">#009FFB</color>
@@ -118,4 +119,39 @@
     <color name="pending_color">#FFBB00</color>
     <color name="att_na_color">#808080</color>
     <color name="noti_count_red_color">#ffE74C3C</color>
+    <color name="light_hai">#e5e5e5</color>
+    <color name="android">#00E3FF</color>
+    <color name="ios">#363636</color>
+    <color name="button_browse_green">#ff56B54C</color>
+    <color name="windows">#0099FF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+    <color name="lime">#bfef45</color>
+    <color name="teal">#A3E6DC</color>
+    <color name="att_late_color">#FFFEA11C</color>
+    <color name="att_leave_color">#FFD700</color>
+    <color name="opt4_color">#954000</color>
+    <color name="survey_grid_color">#929292</color>
+    <color name="cyan">#EBA088</color>
+    <color name="blue_headline">#0b3388</color>
+    <color name="azure">#007FFF</color>
+    <color name="opt1_color">#9A75CA</color>
+    <color name="approved">#4BD964</color>
+    <color name="Self_transprt_color">#D1D1D1</color>
+    <array name="multi_color_array">
+        <item>@color/android</item>
+        <item>@color/red</item>
+        <item>@color/violet</item>
+        <item>@color/pending_color</item>
+        <item>@color/opt4_color</item>
+        <item>@color/brand_color</item>
+        <item>@color/survey_grid_color</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/magenta</item>
+        <item>@color/opt1_color</item>
+        <item>@color/lime</item>
+        <item>@color/teal</item>
+        <item>@color/ios</item>
+    </array>
 </resources>

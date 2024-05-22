@@ -29,7 +29,7 @@ scrollingpagerindicator = "1.2.4"
 picasso="2.8"
 swiperefreshlayout = "1.2.0-alpha01"
 play-services-location = "21.2.0"
-
+kotlinPlugin = "1.8.10"
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity-ktx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
@@ -77,6 +77,6 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
 firebaseCrashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "google-services" }
 safeArgs = { id = "androidx.navigation.safeargs", version.ref = "navigation-ui-ktx" }
-
+kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlinPlugin"  }
 [bundles]
 

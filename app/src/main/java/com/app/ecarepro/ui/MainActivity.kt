@@ -145,7 +145,10 @@ class MainActivity : AppCompatActivity() {
                         )
                     )
                     clickListener { _ ->
-                        getFragmentId(menu.menuID, menu.chMenuID?:0)?.let { navController.navigate(it) }
+                        getFragmentId(
+                            menu.menuID,
+                            menu.chMenuID ?: 0
+                        )?.let { navController.navigate(it) }
                         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                     }
                 }
@@ -213,7 +216,7 @@ class MainActivity : AppCompatActivity() {
             14 -> R.id.questionnaireListFragment
             15 -> R.id.thoughtsListFragment
             16 -> R.id.calenderActivityNavHost    // student  app
-            17 -> R.id.attendanceFragment    // student  app
+            17 -> R.id.showAttendanceFragment    // student  app
             20 -> R.id.questionnaireListFragment    // student  app
             21 -> R.id.thoughtsListFragment    // student  app
             23 -> R.id.taskManagerFragment
@@ -224,8 +227,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
+    fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
         return when (menuID) {
+            1-> {
+                return when (childMenuId) {
+                    3 -> R.id.leaveHistoryFragment
+                    else -> null
+                }
+            }
+            2-> {
+                return when (childMenuId) {
+                    6 -> R.id.leaveHistoryFragment
+                    else -> null
+                }
+            }
             6 -> {
                 return when (childMenuId) {
                     7 -> R.id.composeFragment
@@ -243,6 +258,14 @@ class MainActivity : AppCompatActivity() {
                     else -> null
                 }
             }
+            8-> {
+                return when (childMenuId) {
+                    45-> R.id.staticalReport
+                    46-> R.id.appUserReportFragment
+                    else -> null
+                }
+            }
+
             10 -> {
                 return when (childMenuId) {
                     18 -> R.id.attendanceFragment

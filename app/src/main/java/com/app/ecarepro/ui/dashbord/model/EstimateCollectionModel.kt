@@ -26,6 +26,11 @@ class EstimateCollectionModel(val feeCollection: FeeCollection) :
         textConcessionAmount.rupeeText(feeCollection.concession)
         textDueAmount.rupeeText(feeCollection.due)
 
+        textExpReceivedAmount.rupeeText(feeCollection.received)
+        textExpEstimatedAmount.rupeeText(feeCollection.estimate)
+        textExpConcessionDue.rupeeText(feeCollection.due)
+        textExpConcessionAmount.rupeeText(feeCollection.concession)
+
         barChart.aa_drawChartWithChartModel(getBarChartModel(feeCollection))
         lineChart.aa_drawChartWithChartModel(getLineChartModel(feeCollection))
     }

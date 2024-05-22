@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.signin
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -24,7 +25,15 @@ class SignInViewModel @Inject constructor(
     val schoolCode = savedStateHandle.get<String>("schoolCode")
         ?: throw IllegalArgumentException("School code required")
 
+    val isUserAuthenticated = MutableLiveData(false)
+
     val school = schoolDatabase.getSchoolsFlow().map { it.lastOrNull() }.asLiveData()
+
+    init {
+        viewModelScope.launch {
+            isUserAuthenticated.value = userDataStore.isUserAuthenticated()
+        }
+    }
 
 
     fun verifyUser(username: String, onResponse: (NetworkUserDetailsDto) -> Unit) {
