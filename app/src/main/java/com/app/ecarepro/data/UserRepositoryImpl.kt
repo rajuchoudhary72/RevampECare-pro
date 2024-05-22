@@ -64,6 +64,7 @@ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
+import com.app.ecarepro.ui.survey.SurveyListResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -452,6 +453,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun staffAttendance(month: Int, year: Int): NetworkStaffAttendence {
         return userService.staffAttendance(month, year)
+    }
+override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
+        return userService.surveyList(pg, isReport)
     }
 
     override suspend fun statistical(): StaticGraphResponse {
