@@ -1,0 +1,1152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="requiredData"
+            type="com.app.ecarepro.model.RequiredField" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:fitsSystemWindows="true"
+        tools:context=".ui.lessonPlan.add_lesson.AddLessonFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/md_theme_light_primary"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="Add Lesson"
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_45sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/ctvFromDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_line"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:text="@string/from_date"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="visible" />
+
+
+                    <TextView
+                        android:id="@+id/ctvToDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_line"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:text="@string/to_date"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/ctvSelectSubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_line"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:text="@string/select_subject"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="visible"
+                        app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
+
+                    <TextView
+                        android:id="@+id/ctvSelectClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_weight="1"
+                        android:background="@drawable/shape_line"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:gravity="center_vertical"
+                        android:paddingStart="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingEnd="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:text="@string/lbl_select_class"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_14sdp"
+                        android:visibility="visible"
+                        app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/topic"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/grey_60" />
+
+                        <TextView
+                            android:id="@+id/tvTopicReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/symbol_special"
+                            android:visibility="gone"
+                            isVisible="@{requiredData.topicRequired}"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/red" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etTopic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_50sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:padding="@dimen/_2sdp"
+                        android:maxLength="500"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:hint="@string/please_enter_the_topic_s_for_this_lesson_plan_in_not_more_than_500_characters" />
+
+                    <TextView
+                        android:id="@+id/tvTopicCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_0_500"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/objective"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/grey_60" />
+
+                        <TextView
+                            android:id="@+id/tvObjectiveReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/symbol_special"
+                            android:visibility="gone"
+                            isVisible="@{requiredData.objectiveRequired}"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/red" />
+                    </LinearLayout>
+
+
+                    <EditText
+                        android:id="@+id/etObjective"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_50sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:padding="@dimen/_2sdp"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:hint="@string/please_enter_the_objectives_of_this_lesson_plan" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/resources"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/grey_60" />
+
+                        <TextView
+                            android:id="@+id/tvResourcesReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/symbol_special"
+                            android:visibility="gone"
+                            isVisible="@{requiredData.resourcesRequired}"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/red" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etResources"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_50sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:padding="@dimen/_2sdp"
+                        android:maxLength="500"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:hint="@string/please_mention_all_the_resources_used_to_be_used_in_the_lesson_plan_in_not_more_than_500_characters" />
+
+                    <TextView
+                        android:id="@+id/tvResourcesCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_0_500"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/auditory"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60" />
+
+                    <TextView
+                        android:id="@+id/tvAuditorReq"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/symbol_special"
+                        android:visibility="gone"
+                        isVisible="@{requiredData.auditoryRequired}"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/red" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvAuditor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/visual_youtube_links"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/grey_60" />
+
+                        <TextView
+                            android:id="@+id/tvLinkReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/symbol_special"
+                            android:visibility="gone"
+                            isVisible="@{requiredData.youtubeLinksRequired}"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/red" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etLink"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_50sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:padding="@dimen/_2sdp"
+                        android:maxLength="500"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:autoLink="web"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:hint="@string/please_provide_the_youtube_links_if_any_used_in_this_lesson_plan" />
+
+                    <TextView
+                        android:id="@+id/tvLinkCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_0_500"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kinesthetic_activity"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/grey_60" />
+
+                        <TextView
+                            android:id="@+id/tvActivityReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/symbol_special"
+                            android:visibility="gone"
+                            isVisible="@{requiredData.kinestheticActivityRequired}"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/red" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_50sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:padding="@dimen/_2sdp"
+                        android:maxLength="500"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:hint="@string/please_mention_the_kinesthetic_activities_if_any_used_in_this_lesson_plan" />
+
+                    <TextView
+                        android:id="@+id/tvLActivityCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_0_500"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/other_resources_verbal"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/grey_60" />
+
+                        <TextView
+                            android:id="@+id/tvOtherResourcesReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/symbol_special"
+                            android:visibility="gone"
+                            isVisible="@{requiredData.otherResourcesRequired}"
+                            android:textSize="@dimen/_14sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:textColor="@color/red" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etOtherResources"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/_50sdp"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:padding="@dimen/_2sdp"
+                        android:maxLength="1000"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:hint="@string/please_mention_about_all_the_other_resources_used_to_be_used_in_this_lesson_plan_other_than_the_above_resources_in_not_more_than_1000_characters" />
+
+                    <TextView
+                        android:id="@+id/tvOtherResourceCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_0_1000"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:text="@string/anticipatory_set"
+                            android:textColor="@color/grey_60"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <TextView
+                            android:id="@+id/tvAnticipatorySetReq"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:text="@string/symbol_special"
+                            android:textColor="@color/red"
+                            android:textSize="@dimen/_14sdp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etAnticipatorySet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:hint="@string/please_mention_about_all_the_anticipatory_set_used_to_be_used_in_this_lesson_plan_other_than_the_above_anticipatory_set_in_not_more_than_1000_characters"
+                        android:inputType="textMultiLine"
+                        android:maxLength="1000"
+                        android:minHeight="@dimen/_50sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/tvAnticipatorySetCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:text="@string/_0_1000"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_10sdp" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/procedure"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:textColor="@color/grey_60" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_5sdp"
+                        android:background="@drawable/rectangle_border_gray"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/introductions"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/grey_60" />
+
+                                <TextView
+                                    android:id="@+id/tvIntroductionReq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/symbol_special"
+                                    android:visibility="gone"
+                                    isVisible="@{requiredData.introductionRequired}"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/red" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etIntroduction"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="@dimen/_50sdp"
+                                android:textSize="@dimen/_12sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:padding="@dimen/_2sdp"
+                                android:inputType="textMultiLine"
+                                android:background="@drawable/rectangle_border_gray"
+                                android:hint="@string/please_provide_the_introduction_of_the_topics_covered_in_this_lesson_plan" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:text="@string/direct_instruction"
+                                    android:textColor="@color/grey_60"
+                                    android:textSize="@dimen/_14sdp" />
+
+                                <TextView
+                                    android:id="@+id/tvDirectInstructionReq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:text="@string/symbol_special"
+                                    android:textColor="@color/red"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:visibility="gone"
+
+                                    />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etDirectInstruction"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/rectangle_border_gray"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:hint="Please provide the Direct Instruction of the Topics covered in this Lesson Plan"
+                                android:inputType="textMultiLine"
+                                android:minHeight="@dimen/_50sdp"
+                                android:padding="@dimen/_2sdp"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:text="Guided Practice: "
+                                    android:textColor="@color/grey_60"
+                                    android:textSize="@dimen/_14sdp" />
+
+                                <TextView
+                                    android:id="@+id/tvGuidedPracticeReq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:text="*"
+                                    android:textColor="@color/red"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etGuidedPractice"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/rectangle_border_gray"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:hint="Please provide the Guided Practice of the Topics covered in this Lesson Plan"
+                                android:inputType="textMultiLine"
+                                android:minHeight="@dimen/_50sdp"
+                                android:padding="@dimen/_2sdp"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Extension of the topic: "
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/grey_60" />
+
+                                <TextView
+                                    android:id="@+id/tvExtensionReq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="*"
+                                    android:visibility="gone"
+                                    isVisible="@{requiredData.extensionTopicRequired}"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/red" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etExtension"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="@dimen/_50sdp"
+                                android:textSize="@dimen/_12sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:padding="@dimen/_2sdp"
+                                android:inputType="textMultiLine"
+                                android:maxLength="500"
+                                android:background="@drawable/rectangle_border_gray"
+                                android:hint="Please provide the introduction of the Topics covered in this Lesson Plan" />
+
+                            <TextView
+                                android:id="@+id/tvExtensionCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0/500"
+                                android:textSize="@dimen/_10sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:layout_gravity="end" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Closure: "
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/grey_60" />
+
+                                <TextView
+                                    android:id="@+id/tvClosureReq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="*"
+                                    isVisible="@{requiredData.closureRequired}"
+                                    android:visibility="gone"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/red" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etClosure"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="@dimen/_50sdp"
+                                android:textSize="@dimen/_12sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:padding="@dimen/_2sdp"
+                                android:inputType="textMultiLine"
+                                android:maxLength="500"
+                                android:background="@drawable/rectangle_border_gray"
+                                android:hint="Please provide the introduction of the Topics covered in this Lesson Plan" />
+
+                            <TextView
+                                android:id="@+id/tvClosureCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0/500"
+                                android:textSize="@dimen/_10sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:layout_gravity="end" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Learning Outcomes/Others: "
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/grey_60" />
+
+                                <TextView
+                                    android:id="@+id/tvLearningOutcomesReq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="*"
+                                    android:visibility="gone"
+                                    isVisible="@{requiredData.learningOutcomesRequired}"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:fontFamily="@font/ubuntu_medium"
+                                    android:textColor="@color/red" />
+                            </LinearLayout>
+
+                            <EditText
+                                android:id="@+id/etLearningOutcomes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="@dimen/_50sdp"
+                                android:textSize="@dimen/_12sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:padding="@dimen/_2sdp"
+                                android:inputType="textMultiLine"
+                                android:background="@drawable/rectangle_border_gray"
+                                android:hint="Please provide the introduction of the Topics covered in this Lesson Plan" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="Independent Practice: "
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <TextView
+                                android:id="@+id/tvIndependentPracticeReq"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="*"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/_14sdp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/etIndependentPractice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rectangle_border_gray"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:hint="Please provide the Independent Practice of the Topics covered in this Lesson Plan"
+                            android:inputType="textMultiLine"
+                            android:minHeight="@dimen/_50sdp"
+                            android:padding="@dimen/_2sdp"
+                            android:textColor="@color/grey_60"
+                            android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="Assessment: "
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <TextView
+                                android:id="@+id/tvAssessmentReq"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="*"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/_14sdp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/etAssessment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rectangle_border_gray"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:hint="Please provide the Assessment of the Topics covered in this Lesson Plan"
+                            android:inputType="textMultiLine"
+                            android:minHeight="@dimen/_50sdp"
+                            android:padding="@dimen/_2sdp"
+                            android:textColor="@color/grey_60"
+                            android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ctvExamDate1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="Exam Date: "
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/ctvExamDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:layout_weight="1"
+                            android:background="@drawable/rectangle_border_gray"
+                            android:fontFamily="@font/ubuntu_light"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/_50sdp"
+                            android:paddingStart="@dimen/_10sdp"
+                            android:paddingLeft="@dimen/_10sdp"
+                            android:paddingEnd="@dimen/_10sdp"
+                            android:paddingRight="@dimen/_10sdp"
+                            android:text="dd/mm/yyyy"
+                            android:textColor="@color/grey_60"
+                            android:textSize="@dimen/_14sdp"
+                            android:visibility="visible" />
+
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp">
+
+                        <LinearLayout
+                            android:id="@+id/llFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:background="@drawable/rectangle_border_gray_corner_radius"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/_5sdp"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:lines="1"
+                                android:paddingStart="@dimen/_5sdp"
+                                android:paddingEnd="@dimen/_5sdp"
+                                android:text="attachment"
+                                android:textColor="#545454"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <ImageView
+                                android:id="@+id/ivFileRemove"
+                                android:layout_width="@dimen/_25sdp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:visibility="visible"
+                                app:srcCompat="@drawable/ic_white_cross"
+                                app:tint="@color/brand_color" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvAddFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:gravity="center_vertical"
+                            android:paddingTop="@dimen/_10sdp"
+                            android:paddingBottom="@dimen/_10sdp"
+                            android:text="Browse file"
+                            android:textSize="@dimen/_14sdp"
+                            android:visibility="visible"
+                            app:drawableRightCompat="@drawable/ic_add_green_fil" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_check"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_below="@+id/et_leave_reason"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_open_student"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:fontFamily="@font/ubuntu_medium" />
+
+                        <TextView
+                            android:id="@+id/tv_tc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="@dimen/_4sdp"
+                            android:paddingLeft="@dimen/_4sdp"
+                            android:paddingRight="@dimen/_4sdp"
+                            android:paddingStart="@dimen/_4sdp"
+                            android:text="Enable for the students after approval"
+                            app:fontFamily="@font/ubuntu_medium" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/btnSubmit"
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/shape_button_green_radius"
+                            android:fontFamily="@font/ubuntu_light"
+                            android:text="@string/lbl_submit"
+                            android:layout_marginRight="@dimen/_7sdp"
+                            android:layout_marginEnd="@dimen/_7sdp"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnReset"
+                            android:layout_width="@dimen/_100sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_7sdp"
+                            android:layout_marginStart="@dimen/_7sdp"
+                            android:background="@drawable/shape_button_green_radius"
+                            android:fontFamily="@font/ubuntu_light"
+                            android:text="Reset"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30sdp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+    </LinearLayout>
+</layout>

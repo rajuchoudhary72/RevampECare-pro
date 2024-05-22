@@ -88,7 +88,7 @@ class PostAssignmentFragment : Fragment() {
 
                 }  }
             } }
-        postAssignmentViewModel.mySubjects()
+        postAssignmentViewModel.mySubjects(Constant.DEFAULT_ID)
 
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
         binding.tvSelectClass.setOnClickListener { popUpSelectClass() }

@@ -64,7 +64,6 @@ class CircularDetailsFragment : Fragment() {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
-
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){

@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity() {
             16 -> R.id.calenderActivityNavHost    // student  app
             17 -> R.id.attendanceFragment    // student  app
             20 -> R.id.questionnaireListFragment    // student  app
-            21 -> R.id.thoughtsListFragment    // student  app
+            21 -> R.id.questionPaperFragment    // student  app
             23 -> R.id.taskManagerFragment
             25 -> R.id.excellenceAwardFragment    // student  app
             32 -> R.id.studentIDFragment    // student  app

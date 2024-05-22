@@ -33,11 +33,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
-    private lateinit var mMyClass: List<MyClasseItem>
-    private lateinit var binding: FragmentNoticeListBinding
-    private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
+
+
 
     private val noticeViewModel: NoticeViewModel by viewModels()
+    private lateinit var binding :  FragmentNoticeListBinding
+    private lateinit var mMyClass: List<MyClasseItem>
+    private var mMyClassDataString: ArrayList<String> = ArrayList()
+
 
 
 
@@ -51,6 +54,8 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
             mnoticeViewModel = noticeViewModel
 
         }
+
+
 
         return binding.root
     }
