@@ -60,22 +60,16 @@
     <color name="md_theme_dark_surfaceTint">#92D880</color>
     <color name="md_theme_dark_outlineVariant">#43483F</color>
     <color name="md_theme_dark_scrim">#000000</color>
-
-
-
     <color name="brand_color">#4DAC3C</color>
     <color name="brand_color2">#5FA150</color>
     <color name="component_color">#FFD786</color>
     <color name="accent_color">#5570F1</color>
-
-
     <color name="green">#4DAC3C</color>
     <color name="green_80">#CC5FA150</color>
     <color name="green_60">#995FA150</color>
     <color name="green_40">#665FA150</color>
     <color name="green_20">#335FA150</color>
     <color name="green_10">#1A5FA150</color>
-
     <color name="grey">#1E1D0E</color>
     <color name="grey_80">#CC1E1D0E</color>
     <color name="grey_60">#991E1D0E</color>
@@ -83,20 +77,14 @@
     <color name="grey_20">#331E1D0E</color>
     <color name="grey_10">#1A1E1D0E</color>
     <color name="grey_light">#f3f3f3</color>
-
-
-
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_green">#F5FBF2</color>
     <color name="red">#FF352F</color>
     <color name="light_background_color">#F4F4FC</color>
-
-
     <color name="immersive_sys_ui">#33000000</color>
     <color name="nav_bar">@color/immersive_sys_ui</color>
     <color name="transparent">#00000000</color>
-
     <color name="female_color">#FF70B7</color>
     <color name="male_color">#3E98F9</color>
     <color name="category1">#129A69</color>
@@ -106,20 +94,10 @@
     <color name="category5">#9999CC</color>
     <color name="category6">#FFB99C</color>
     <color name="category7">#8E47B5</color>
-
-    <color name="att_leave_color">#FFD700</color>
-    <color name="att_late_color">#FFFEA11C</color>
     <color name="att_na_color">#808080</color>
     <color name="absent_red">#FB4E4E</color>
-
-
     <color name="disabled">#78CC41</color>
-
     <color name="pending_color">#FFBB00</color>
-
-
-
-
     <color name="module">#545454</color>
     <color name="sub_text_color">#5B5B5B</color>
     <color name="reports_tiles_bg_grey_light">#F6F6F6</color>
@@ -130,7 +108,6 @@
     <color name="profile_color">#959595</color>
     <color name="grey_light1">#F9F9F9</color>
     <color name="name_2">#131313</color>
-
     <color name="noti_count_red_color">#ffE74C3C</color>
     <color name="light_hai">#e5e5e5</color>
     <color name="android">#00E3FF</color>
