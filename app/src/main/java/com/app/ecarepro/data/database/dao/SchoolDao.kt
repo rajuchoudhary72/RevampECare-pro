@@ -16,6 +16,9 @@ interface SchoolDao {
     suspend fun getSchool(schoolCode: String): SchoolEntity
 
     @Query("SELECT * FROM schools WHERE schoolCode = :schoolCode LIMIT 1")
+    suspend fun getSchoolData(schoolCode: String): SchoolEntity?
+
+    @Query("SELECT * FROM schools WHERE schoolCode = :schoolCode LIMIT 1")
     fun getSchoolFlow(schoolCode: String): Flow<SchoolEntity>
 
     @Query("SELECT * FROM schools")

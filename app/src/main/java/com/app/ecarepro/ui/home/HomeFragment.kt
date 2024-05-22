@@ -235,6 +235,10 @@ class HomeFragment : Fragment() {
                         dashboardCard {
                             id(card.link)
                             card(card)
+                            clickListener { _ ->
+                                (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
+                                    ?.let { findNavController().navigate(it) }
+                            }
                         }
                     }
                 }
@@ -341,6 +345,20 @@ class HomeFragment : Fragment() {
                     webViewCall(url, getString(R.string.assessment_headling))
                 }
             }
+        }else if (favouriteSlider.module.contains("Medicine Issue", true)) {
+            findNavController().navigate(R.id.medicineIssuedFragment)
+        }else if (favouriteSlider.module.contains("Assign House", true)) {
+            findNavController().navigate(R.id.assignHomeFragment)
+        }else if (favouriteSlider.module.contains("Medical History", true)) {
+            findNavController().navigate(R.id.medicalCardFragment)
+        }else if (favouriteSlider.module.contains("Id Card", true)) {
+            findNavController().navigate(R.id.medicalClassFragment)
+        }else if (favouriteSlider.module.contains("Teachers", true)) {
+            findNavController().navigate(R.id.subjectTeacherFragment)
+        }else if (favouriteSlider.module.contains("Classmates", true)) {
+           // findNavController().navigate(R.id.classMateFragment)
+            //findNavController().navigate(R.id.showAttendanceFragment)
+            findNavController().navigate(R.id.staticalReport)
         }
         /*end Web view module call  from here */
         else {
@@ -358,5 +376,10 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        systemViewModel.refreshAppLayout()
     }
 }

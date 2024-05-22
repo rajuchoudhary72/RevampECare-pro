@@ -58,6 +58,19 @@
         android:id="@+id/homeFragment"
         android:name="com.app.ecarepro.ui.home.HomeViewPagerFragment"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/staticalReport"
+        android:name="com.app.ecarepro.ui.statical.StaticalReport"
+        tools:layout="@layout/fragment_statical_report" />
+    <fragment
+        android:id="@+id/appUserReportFragment"
+        android:name="com.app.ecarepro.ui.appuserreport.AppUserReportFragment"
+        tools:layout="@layout/fragment_statical_report" />
+    <fragment
+        android:id="@+id/appUserReportWebFragment"
+        android:name="com.app.ecarepro.ui.appuserreport.AppUserReportWebFragment"
+        tools:layout="@layout/fragment_statical_report" />
     <fragment
         android:id="@+id/subjectTeacherFragment"
         android:name="com.app.ecarepro.ui.subjectTeacher.SubjectTeacherFragment"

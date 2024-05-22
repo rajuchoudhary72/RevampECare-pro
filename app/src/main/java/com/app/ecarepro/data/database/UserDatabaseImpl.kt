@@ -41,6 +41,10 @@ class UserDatabaseImpl @Inject constructor(
         return schoolDao.getSchool(schoolCode)
     }
 
+    override suspend fun getSchoolData(schoolCode: String): SchoolEntity? {
+        return schoolDao.getSchoolData(schoolCode)
+    }
+
     override fun getSchoolFlow(schoolCode: String): Flow<SchoolEntity> {
         return schoolDao.getSchoolFlow(schoolCode)
     }
