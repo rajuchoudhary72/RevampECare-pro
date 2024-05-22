@@ -13,6 +13,10 @@
             name="clickListener"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="updateStatusListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -28,6 +32,7 @@
 
 
             <ImageView
+                android:onClick="@{updateStatusListener}"
                 android:id="@+id/indicator"
                 taskStatusColor="@{task.status}"
                 android:layout_width="@dimen/_10sdp"

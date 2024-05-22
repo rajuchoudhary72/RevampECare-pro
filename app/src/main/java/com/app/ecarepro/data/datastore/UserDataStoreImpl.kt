@@ -124,7 +124,8 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
-        schoolDatabase.insertSchool(school.asNetworkSchool())
+        if (schoolDatabase.getSchoolData(school.schoolCode) == null)
+            schoolDatabase.insertSchool(school.asNetworkSchool())
         val schoolCode = getCurrentSchoolCode()
         if (schoolCode.isNullOrEmpty())
             setCurrentSchoolCode(school.schoolCode)

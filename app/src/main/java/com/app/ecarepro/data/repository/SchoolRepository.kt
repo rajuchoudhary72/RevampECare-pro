@@ -51,4 +51,5 @@ interface SchoolRepository {
     suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse
     suspend fun getMedicalCard(): MedicalCardResponse
     suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse
+    fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>
 }

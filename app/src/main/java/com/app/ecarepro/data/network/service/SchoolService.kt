@@ -131,4 +131,10 @@ interface SchoolService {
     suspend fun updateTask(
         @Body request: UpdateTaskDto
     ): CommonResponse
+
+    @GET("TaskManager/UpdateTaskStatus")
+    suspend fun updateTaskStatus(
+        @Query("ID") id: String,
+        @Query("Status") status: Int
+    ): CommonResponse
 }
