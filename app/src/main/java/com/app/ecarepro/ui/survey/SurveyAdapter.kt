@@ -63,19 +63,23 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Ada
                 }
                 binding.tvDescription.setText(surveyModel.description)
                 binding.tvTitle.setText(surveyModel.title)
-                binding.tvPublishedOn.setText("Published on: " + getDateTimeFormatted(surveyModel.publishedOn))
+                binding.tvPublishedOn.setText("Published on: " + surveyModel.publishedOn?.let {
+                    getDateTimeFormatted(
+                        it
+                    )
+                })
                 if (surveyModel.isOpen) binding.tvOpenClose.setText("Open till: " + surveyModel.openEndDate) else binding.tvOpenClose.setText(
                     "Closed on: " + surveyModel.openEndDate
                 )
                 if (surveyModel.isResponded) {
-                     if (surveyModel.respondedOn!=null){
-                         binding.tvRespondedOn.setVisibility(View.VISIBLE)
-                         binding.tvRespondedOn.setText(
-                             "RESPONDED ON: " + (
-                                 surveyModel.respondedOn
-                             )
-                         )
-                     }
+                    binding.tvRespondedOn.setText(
+                        "RESPONDED ON: " + surveyModel.respondedOn?.let {
+                            getDateTimeFormatted(
+                                it
+                            )
+                        }
+                    )
+                    binding.tvRespondedOn.setVisibility(View.VISIBLE)
                 }
             })
 
