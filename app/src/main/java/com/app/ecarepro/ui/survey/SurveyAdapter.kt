@@ -1,16 +1,19 @@
 package com.app.ecarepro.ui.survey
 
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.SurveyItemBinding
 import com.app.ecarepro.databinding.TeacherItemBinding
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.utils.getDateTimeFormatted
 
-class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
+class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss:Int, data: AllSurvey) -> Unit) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
        val binding =
             SurveyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -27,25 +30,7 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Ada
         if (binding!=null){
             binding.tvTest.text = surveyModel.description
             holder.itemView.setOnClickListener {
-                /* if (surveyModel.isOpen && !surveyModel.isResponded
-                 )
-                     mContext.startActivity(
-                     Intent(
-                         mContext,
-                         ActivitySurveyQuestions::class.java
-                     ).putExtra("SurveyObj", mData.get(holder.adapterPosition))
-                 ) else if (mData.get(holder.adapterPosition)
-                         .getResultDeclared()
-                 ) mContext.startActivity(
-                     Intent(
-                         mContext,
-                         ActivitySurveyResult::class.java
-                     ).putExtra("surId", surveyModel.getSurID())
-                 ) else if (mData.get(holder.adapterPosition).getResponded()) Toast.makeText(
-                     mContext,
-                     "Thanks for your response. Your response has already been recorded.",
-                     Toast.LENGTH_SHORT
-                 ).show() else Toast.makeText(mContext, "Survey Closed", Toast.LENGTH_SHORT).show()*/
+               callback.invoke(position,surveyModel)
             }
 
 

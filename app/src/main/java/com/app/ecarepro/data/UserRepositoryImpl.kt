@@ -65,6 +65,8 @@ import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -309,6 +311,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getClassmates(): ClassMateResponse {
         return userService.getClassmates()
     }
+
     override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
         return userService.uploadPhoto(request)
     }
@@ -454,8 +457,17 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun staffAttendance(month: Int, year: Int): NetworkStaffAttendence {
         return userService.staffAttendance(month, year)
     }
-override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
+
+    override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
         return userService.surveyList(pg, isReport)
+    }
+
+    override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
+        return userService.surveyQuestions(id)
+    }
+
+    override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
+        return userService.submitSurveyQuestions(model)
     }
 
     override suspend fun statistical(): StaticGraphResponse {
@@ -466,9 +478,10 @@ override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse 
         return userService.appUsersCount()
     }
 
-    override suspend fun appUserReportWevResponse(userType:String): AppUserWebResponse {
+    override suspend fun appUserReportWevResponse(userType: String): AppUserWebResponse {
         return userService.appUsersWeb(userType)
     }
+
     override suspend fun getAttendance(
         from: String,
         till: String,
