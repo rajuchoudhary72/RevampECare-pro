@@ -32,6 +32,7 @@ import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -85,6 +86,8 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+
+        Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -200,7 +203,9 @@ class MainActivity : AppCompatActivity() {
                             title(menu.title)
                             icon(menu.icon)
                             hasChildMenu(menu.childMenus.isNullOrEmpty().not())
+
                             clickListener { _ ->
+                                systemViewModel.openDrawer(false)
                                 getFragmentId(
                                     parentMenu.menuID,
                                     menu.chMenuID
@@ -251,10 +256,10 @@ class MainActivity : AppCompatActivity() {
             5 -> navController.navigate(R.id.classSyllabus)
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
-            12 ->  navController.navigate(R.id.selectTransportTypeFragment)
-            13 ->  navController.navigate(R.id.smsMsgReportFragment)
+            12 ->  navController.navigate(R.id.conversationReportFragment)
+            13 ->  navController.navigate(R.id.bookLibraryFragment)
             //  14 ->  navController.navigate(R.id.webViewFragment)
-            15 ->  navController.navigate(R.id.thoughtsListFragment)
+
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
             17 ->  navController.navigate(R.id.attendanceFragment)
             18 ->  navController.navigate(R.id.reportCardDetailsNavHostFragment)
@@ -262,7 +267,10 @@ class MainActivity : AppCompatActivity() {
             20 ->  navController.navigate(R.id.questionnaireListFragment)
             21 ->  navController.navigate(R.id.thoughtsListFragment)
             22 ->  navController.navigate(R.id.appointmentReportFragment)
-            31 ->  navController.navigate(R.id.surveyListFragment)
+            26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
+            28 ->  navController.navigate(R.id.lessonPlanListFragment)
+             23 ->  navController.navigate(R.id.taskManagerFragment)
+            33 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -347,6 +355,8 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     }
+
+                    16 -> navController.navigate(R.id.questionPaperFragment)
                     42 -> navController.navigate(R.id.smsMsgReportFragment)
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)

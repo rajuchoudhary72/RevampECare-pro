@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class Constant {
     companion object {
@@ -119,6 +120,16 @@ class Constant {
              val date: Date? = inputFormat.parse(inputDateStr)
             return  outputFormat.format(date!!)
         }
+
+        fun dateToShowCon(inputDateStr:String):String {
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.getDefault() )
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return  outputFormat.format(date!!)
+        }
+
+
+
         fun currentDate():String{
             val c: Date = Calendar.getInstance().time
             val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())

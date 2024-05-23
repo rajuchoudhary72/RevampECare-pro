@@ -7,12 +7,26 @@
 
     </data>
 
-    <RelativeLayout
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cvMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/_8sdp"
         android:paddingRight="@dimen/_8sdp"
-        android:paddingTop="@dimen/_8sdp">
+        android:paddingTop="@dimen/_8sdp"
+        app:cardCornerRadius="16dp"
+        app:contentPadding="12dp"
+        app:strokeColor="@color/grey_60"
+        android:layout_margin="@dimen/_5sdp"
+        app:strokeWidth="1dp">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_user_pic"
@@ -87,7 +101,7 @@
                 android:fontFamily="@font/ubuntu_italic"
                 android:textColor="@color/brand_color"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="visible" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_sub_abbre2"
@@ -119,11 +133,8 @@
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/rl_msg_item"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:background="@color/light_grey" />
+
     </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </layout>
