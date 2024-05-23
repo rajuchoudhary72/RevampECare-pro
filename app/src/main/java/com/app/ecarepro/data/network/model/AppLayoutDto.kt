@@ -66,7 +66,7 @@ data class ChildMenu(
     @SerializedName("icon")
     val icon: String?,
     @SerializedName("menuID")
-    val menuID: Int?,
+    val menuID: Int,
     @SerializedName("slNo")
     val slNo: Int?,
     @SerializedName("title")

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="java.lang.String" />
+
+        <variable
+            name="parentMenuIcon"
+            type="java.lang.String" />
+
+        <variable
+            name="icon"
+            type="java.lang.String" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{clickListener}"
+        app:cardBackgroundColor="@color/white"
+        app:contentPadding="10dp"
+        app:strokeColor="@color/green_10"
+        app:strokeWidth="1dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image"
+                app:tint="@color/grey_80"
+                android:layout_margin="@dimen/_15sdp"
+                imageUrl="@{icon}"
+                placeholder="@{@drawable/img_school_placeholder}"
+                android:layout_width="0dp"
+                tools:src="@drawable/img_school_placeholder"
+                app:layout_constraintDimensionRatio="h,1:1"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/calibri_bold"
+                android:text="@{title}"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="@+id/image"
+                app:layout_constraintStart_toStartOf="@+id/image"
+                app:layout_constraintTop_toBottomOf="@+id/image"
+                tools:text="Assignment" />
+
+            <ImageView
+                app:tint="@color/green"
+                imageUrl="@{parentMenuIcon}"
+                android:padding="3dp"
+                isVisible="@{parentMenuIcon!=null}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_edit"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
