@@ -95,7 +95,8 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
  import retrofit2.http.Query
 import kotlinx.coroutines.flow.Flow
  import retrofit2.http.GET
-
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 interface UserRepository {
 
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
@@ -596,7 +597,13 @@ interface UserRepository {
     suspend fun surveyList(
         pg: Int, isReport: Boolean
     ): SurveyListResponse
+    suspend fun surveyQuestions(
+        id: String
+    ): SurveyQuestionsResponse
 
+    suspend fun submitSurveyQuestions(
+        request: SurveyQuestionsSubmitRequest
+    ): CommonResponse
     suspend fun getQuestionPaper(
          classID: Int,
           yrID: Int

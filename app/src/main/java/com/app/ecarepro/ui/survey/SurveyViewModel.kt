@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.survey
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,28 +35,45 @@ class SurveyViewModel @Inject constructor(
 
     }
 
-   /* private val attendanceMutableStateFlow: MutableStateFlow<NetworkResult<AttendanceResponse>> =
+    private val surveyQuestionsResponseStateFlow: MutableStateFlow<NetworkResult<SurveyQuestionsResponse>> =
         MutableStateFlow(
             NetworkResult.Loading()
         )
-    val attendanceStateFlow: StateFlow<NetworkResult<AttendanceResponse>> =
-        attendanceMutableStateFlow
+    val surveyQuestionsStateFlow: StateFlow<NetworkResult<SurveyQuestionsResponse>> =
+        surveyQuestionsResponseStateFlow
 
-    fun getAttendance(
-        from: String,
-        till: String,
-        yrID: String,
+    fun surveyQuestions(
+        id: String
     ) = viewModelScope.launch {
         runCatching {
-            attendanceMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getAttendance(from, till, yrID)
+            surveyQuestionsResponseStateFlow.value = NetworkResult.Loading()
+            userRepository.surveyQuestions(id)
         }.onSuccess {
-            attendanceMutableStateFlow.value = NetworkResult.Success(it)
+            surveyQuestionsResponseStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            attendanceMutableStateFlow.value = NetworkResult.Error(it.message)
+            surveyQuestionsResponseStateFlow.value = NetworkResult.Error(it.message)
         }
 
-    }*/
+    }
+
+    private val commonResponseStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(NetworkResult.Loading()
+    )
+    val commonStateFlow: StateFlow<NetworkResult<CommonResponse>> =
+        commonResponseStateFlow
+
+    fun surveyQuestionsSubmit(
+        model: SurveyQuestionsSubmitRequest
+    ) = viewModelScope.launch {
+        runCatching {
+            commonResponseStateFlow.value = NetworkResult.Loading()
+            userRepository.submitSurveyQuestions(model)
+        }.onSuccess {
+            commonResponseStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            commonResponseStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
 
 
 }

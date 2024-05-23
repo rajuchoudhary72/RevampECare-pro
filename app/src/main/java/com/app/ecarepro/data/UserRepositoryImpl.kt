@@ -115,7 +115,8 @@ import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import javax.inject.Inject
-
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 class UserRepositoryImpl @Inject constructor(
     private val userService: UserService,
     private val userDataStore: UserDataStore,
@@ -948,4 +949,11 @@ class UserRepositoryImpl @Inject constructor(
         return userService.surveyList(pg, isReport)
     }
 
+    override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
+        return userService.surveyQuestions(id)
+    }
+
+    override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
+        return userService.submitSurveyQuestions(model)
+    }
 }
