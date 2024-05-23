@@ -150,6 +150,7 @@
     <color name="opt1_color">#9A75CA</color>
     <color name="approved">#4BD964</color>
     <color name="Self_transprt_color">#D1D1D1</color>
+    <color name="light_gray_gallerytext">#757575</color>
     <array name="multi_color_array">
         <item>@color/android</item>
         <item>@color/red</item>

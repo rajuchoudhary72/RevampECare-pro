@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -40,6 +41,7 @@ class QuestionPaperFragment : Fragment() {
     ): View? {
 
         binding = FragmentQuestionPaperBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
 
     }

@@ -542,4 +542,17 @@
      <string name="transport">Transport</string>
     <string name="app_user_report">App User Report</string>
     <string name="survey">Survey</string>
+    <string name="filter_by">Filter by</string>
+    <string name="date_range">DATE RANGE</string>
+    <string name="_02_may_2018">02 may 2018</string>
+    <string name="sender">SENDER</string>
+    <string name="parent">Parent</string>
+    <string name="enter_the_sender_name_if_any">Enter the sender name if any</string>
+    <string name="recipient">RECIPIENT</string>
+    <string name="enter_the_recipient_name_if_any">Enter the recipient name if any</string>
+    <string name="has_the_word_in_the_message">HAS THE WORD IN THE MESSAGE</string>
+    <string name="any">Any</string>
+    <string name="specific">Specific</string>
+    <string name="clear_all">Clear All</string>
+    <string name="apply">Apply</string>
 </resources>

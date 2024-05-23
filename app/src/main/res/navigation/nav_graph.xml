@@ -759,4 +759,8 @@
         android:id="@+id/surveyListFragment"
         android:name="com.app.ecarepro.ui.survey.SurveyListFragment"
         tools:layout="@layout/survey_layout" />
+    <fragment
+        android:id="@+id/conversationReportFragment"
+        android:name="com.app.ecarepro.ui.con_report.ConversationReportFragment"
+        android:label="ConversationReportFragment" />
 </navigation>

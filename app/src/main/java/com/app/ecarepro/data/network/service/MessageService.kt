@@ -105,7 +105,12 @@ interface MessageService {
     @GET("Message/Conversation")
     suspend fun getConversationReport(
         @Query("pg") pg: Int,
-        @Query("fromDate") fromDate: String? = null,
-        @Query("TillDate") tillDate: String? = null,
+        @Query("FromDate") fromDate: String? = null,
+        @Query("ToDate") tillDate: String? = null,
     ): NetworkConversationReport
+
+    @GET("Message/ConversationMsgDTL")
+    suspend fun getConversationMsgDTL(
+        @Query("MsgID") id: String
+    ): ConversationDetailsDto
 }

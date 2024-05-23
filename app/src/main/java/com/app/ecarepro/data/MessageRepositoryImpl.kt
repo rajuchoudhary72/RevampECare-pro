@@ -97,6 +97,8 @@ class MessageRepositoryImpl @Inject constructor(
         }
     }
 
+
+
     override fun getConversationDetails(
         id: String,
         messageType: MessageType
@@ -104,9 +106,16 @@ class MessageRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response =
-                    if (messageType == MessageType.INBOX) messageService.getConversationDetails(id) else messageService.getSentConversationDetails(
-                        id
-                    )
+                    when (messageType) {
+                        MessageType.INBOX -> {
+                            messageService.getConversationDetails(id)
+                        }
+                        MessageType.CONV -> {
+                            messageService.getConversationMsgDTL(id)
+                        }
+                        else -> messageService.getSentConversationDetails( id )
+                    }
+
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
@@ -117,6 +126,8 @@ class MessageRepositoryImpl @Inject constructor(
             }
         }
     }
+
+
 
     override fun replyMessage(request: ReplyMessageRequestDto): Flow<Result<String>> {
         return flow {
