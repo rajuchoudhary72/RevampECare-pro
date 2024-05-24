@@ -70,6 +70,7 @@ interface UserRepository {
         password: String,
         confirmPassword: String
     ): Flow<Result<CommonResponse>>
+
     suspend fun getClassSyllabus(): NetworkClassSyllabus
     suspend fun getActivityCalender(): NetworkActivityCalender
 
@@ -148,60 +149,60 @@ interface UserRepository {
         StID: Int
     ): NetworkInfractionInstance
 
-    suspend fun addInfraction( stID: Int  ): NetworkAddInfraction
+    suspend fun addInfraction(stID: Int): NetworkAddInfraction
 
 
     suspend fun saveInfraction(
-        action:Int,
-        stID:Int,
-        infrSubTypeID:Int,
-        consID:Int,
-        instance:Int,
-        infractionOn:String,
-        correctiveAction:String,
+        action: Int,
+        stID: Int,
+        infrSubTypeID: Int,
+        consID: Int,
+        instance: Int,
+        infractionOn: String,
+        correctiveAction: String,
 
-    ): CommonResponse
+        ): CommonResponse
 
 
     suspend fun getStudentList(
-       scholarType: Int,
-         showAll: Boolean
+        scholarType: Int,
+        showAll: Boolean
     ): NetworkStudentList
 
     suspend fun getStudentMedicalCard(
-       stID: String
+        stID: String
     ): StudentMedicalCardResponse
 
- suspend fun uploadPhoto(
-       request: StudentIDRequest
+    suspend fun uploadPhoto(
+        request: StudentIDRequest
     ): CommonResponse
 
 
     suspend fun getStudentIDCard(): StudentCardResponse
 
-    suspend fun addAppreciation( stID: Int  ): NetworkAddAppreciation
+    suspend fun addAppreciation(stID: Int): NetworkAddAppreciation
 
     suspend fun subAppreciationTypes(
-          aprID: Int
+        aprID: Int
     ): NetworkSubAppreciationTypes
 
     suspend fun appreciationInstance(
-         aprSubID: Int,
+        aprSubID: Int,
         stID: Int,
     ): NetworkAppreciationInstance
 
     suspend fun saveAppreciation(
-        action:Int,
-        stID:Int,
-        aprSubID:Int,
-        rwdID:Int,
-        instance:Int,
-        appreciationOn:String,
-        remark:String,
+        action: Int,
+        stID: Int,
+        aprSubID: Int,
+        rwdID: Int,
+        instance: Int,
+        appreciationOn: String,
+        remark: String,
 
         ): CommonResponse
 
-    suspend fun assignment( ): NetworkAssignments
+    suspend fun assignment(): NetworkAssignments
 
     suspend fun submitAssignment(
         id: String,
@@ -213,68 +214,69 @@ interface UserRepository {
         fileExt: String
     ): CommonResponse
 
-    suspend fun teachersAssignment( ): NetworkTeacherAssignment
+    suspend fun teachersAssignment(): NetworkTeacherAssignment
 
-    suspend fun deleteAssignment(  iD: String  ): CommonResponse
+    suspend fun deleteAssignment(iD: String): CommonResponse
 
-    suspend fun mySubjects( ): NetworkMySubjects
+    suspend fun mySubjects(): NetworkMySubjects
 
     suspend fun createAssignment(
-          asgDate: String,
-          asgID: Int,
-          attachment: String,
-          fileExt: String,
-          fileURL: String,
-          classID: Int,
-          classIDs: String,
-          `data`: String,
-          `file`: String,
-          id: String,
-          isActive: Boolean,
-          isFileRemoved: Boolean,
-          multipleSubmission: Boolean,
+        asgDate: String,
+        asgID: Int,
+        attachment: String,
+        fileExt: String,
+        fileURL: String,
+        classID: Int,
+        classIDs: String,
+        `data`: String,
+        `file`: String,
+        id: String,
+        isActive: Boolean,
+        isFileRemoved: Boolean,
+        multipleSubmission: Boolean,
 
-          subjectID: Int,
-          submitDate: String,
-          title: String
+        subjectID: Int,
+        submitDate: String,
+        title: String
 
-        ): CommonResponse
+    ): CommonResponse
 
     suspend fun viewAssignment(
-          iD: String,
+        iD: String,
     ): NetworkViewAssignment
 
     suspend fun assignmnetSubmissionRPT(
-          iD: String,
-          notSubmitted: Boolean,
+        iD: String,
+        notSubmitted: Boolean,
     ): NetworkSubmitAssignReport
 
     suspend fun offlineSubmited(
-         iD: String,
-          stID: Int,
-         submissitedOn: String,
+        iD: String,
+        stID: Int,
+        submissitedOn: String,
     ): CommonResponse
 
     suspend fun staffAttendance(
-          month: Int,
-          year: Int,
+        month: Int,
+        year: Int,
     ): NetworkStaffAttendence
 
     suspend fun teachersTimetable(
-         id: String
+        id: String
     ): NetworkTeachersTimetable
 
     suspend fun birthday(
-          userType: Int,
-         rptType: Int,
-         monthNo: Int,
-          date: String,
+        userType: Int,
+        rptType: Int,
+        monthNo: Int,
+        date: String,
     ): NetworkBirthday
-    suspend fun excellenceAward (): ExcellenceAwardResponse
+
+    suspend fun excellenceAward(): ExcellenceAwardResponse
 
     fun getUserDashboard(): Flow<Result<UserDashboardDto>>
-    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id: String, orderBy: String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(): Flow<Result<String>>
-    fun saveUserUndertaking(id:String): Flow<Result<String>>
+    fun saveUserUndertaking(id: String): Flow<Result<String>>
 }

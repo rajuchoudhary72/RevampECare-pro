@@ -1,12 +1,11 @@
 package com.app.ecarepro.data.network.model
 
 import com.app.ecarepro.model.Notice
-import com.app.ecarepro.model.School
 
 data class NetworkNotice(
     val errorCode: Int?,
     val message: String?,
-    val noticeList: List<Notice> ,
+    val noticeList: List<Notice>,
     val status: String?,
     val totalNotice: Int?,
     val unreadNotice: Int?

@@ -32,18 +32,18 @@ class BankBalanceModel(val bankBalance: List<BankBalance>) :
         .dataLabelsEnabled(true) //是否直接显示扇形图数据
         .series(
             arrayOf(
-            AASeriesElement()
-                .name("Bank Balance")
-                .size("80%") //尺寸大小
-                .innerSize("70%") //内部圆环半径大小占比
-                .borderWidth(0) //描边的宽度
-                .allowPointSelect(false) //是否允许在点击数据点标记(扇形图点击选中的块发生位移)
-                .data(
-                    bankBalance.map {
-                        arrayOf(it.accountName, it.balnce?.toDouble() ?: 0.0)
-                    }.toTypedArray()
+                AASeriesElement()
+                    .name("Bank Balance")
+                    .size("80%") //尺寸大小
+                    .innerSize("70%") //内部圆环半径大小占比
+                    .borderWidth(0) //描边的宽度
+                    .allowPointSelect(false) //是否允许在点击数据点标记(扇形图点击选中的块发生位移)
+                    .data(
+                        bankBalance.map {
+                            arrayOf(it.accountName, it.balnce?.toDouble() ?: 0.0)
+                        }.toTypedArray()
 
-                )
+                    )
             )
         )
 

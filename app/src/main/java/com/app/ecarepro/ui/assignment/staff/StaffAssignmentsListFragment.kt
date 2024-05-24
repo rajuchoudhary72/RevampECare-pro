@@ -2,23 +2,21 @@ package com.app.ecarepro.ui.assignment.staff
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
-
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStaffAssignmentsListBinding
- import com.app.ecarepro.model.TeacherAssignment
+import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
-
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,15 +26,15 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment> {
 
-    private   lateinit var binding : FragmentStaffAssignmentsListBinding
-    private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
+    private lateinit var binding: FragmentStaffAssignmentsListBinding
+    private val teacherAssignmentViewModel: TeacherAssignmentViewModel by viewModels()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStaffAssignmentsListBinding.inflate(inflater,container,false)
+        binding = FragmentStaffAssignmentsListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -62,31 +60,32 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
 
                         if (it.data != null) {
 
-                            if (it.data.assignments!=null ) {
+                            if (it.data.assignments != null) {
 
                                 val assignmentListAdapter =
-                                    StaffAssignmentListAdapter(it.data.assignments,
-                                        this@StaffAssignmentsListFragment)
+                                    StaffAssignmentListAdapter(
+                                        it.data.assignments,
+                                        this@StaffAssignmentsListFragment
+                                    )
 
                                 binding.rvAssignment.apply {
                                     setHasFixedSize(true)
                                     layoutManager = LinearLayoutManager(activity)
                                     adapter = assignmentListAdapter
                                 }
-                                binding.rvAssignment.isVisible=true
-                                binding.tvNoData.isVisible=false
+                                binding.rvAssignment.isVisible = true
+                                binding.tvNoData.isVisible = false
 
 
-                            }else{
-                                binding.rvAssignment.isVisible=false
-                                binding.tvNoData.isVisible=true
-
-                            }
+                            } else {
+                                binding.rvAssignment.isVisible = false
+                                binding.tvNoData.isVisible = true
 
                             }
 
                         }
 
+                    }
 
 
                     else -> {}
@@ -102,37 +101,40 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     }
 
     override fun onItemClick(t: TeacherAssignment, pos: Int, boolean: Boolean) {
-        if (pos==1){
-             findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
-                putString(Constant.ASSIGNMENT_ID, t.id)
-            })
-        } else if (pos==2){
-            findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_editAssignmentFragment,Bundle( ).apply {
-                putString(Constant.ASSIGNMENT_ID, t.id)
-            })
-        }
+        if (pos == 1) {
+            findNavController().navigate(
+                R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,
+                Bundle().apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })
+        } else if (pos == 2) {
+            findNavController().navigate(
+                R.id.action_staffAssignmentsListFragment_to_editAssignmentFragment,
+                Bundle().apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })
+        } else
+            if (pos == 3) {
+                teacherAssignmentViewModel.deleteAssignment(t.id)
+                lifecycleScope.launch {
+                    teacherAssignmentViewModel.deleteAssignmentStateFlow.collectLatest {
+                        when (it) {
+                            is NetworkResult.Loading -> {
+                                (requireActivity() as MainActivity).showLoader(true)
+                            }
 
-        else
-        if (pos==3){
-            teacherAssignmentViewModel.deleteAssignment(t.id)
-            lifecycleScope.launch {
-                teacherAssignmentViewModel.deleteAssignmentStateFlow.collectLatest {
-                    when (it) {  is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }  is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    } is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        teacherAssignmentViewModel.teachersAssignment()
-                    }  }
-                } }
-        }
+                            is NetworkResult.Error -> {
+                                (requireActivity() as MainActivity).showLoader(false)
+                            }
 
-
-
-
-
-
+                            is NetworkResult.Success -> {
+                                (requireActivity() as MainActivity).showLoader(false)
+                                teacherAssignmentViewModel.teachersAssignment()
+                            }
+                        }
+                    }
+                }
+            }
 
 
     }

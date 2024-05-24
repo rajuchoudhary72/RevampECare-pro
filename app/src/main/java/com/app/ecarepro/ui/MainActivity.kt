@@ -19,8 +19,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.cardOption
-import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
@@ -138,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
             favoriteMenus.forEach { menu ->
-                if(menu.childMenus.isNullOrEmpty()){
+                if (menu.childMenus.isNullOrEmpty()) {
                     menuCard {
                         id(menu.menuID)
                         title(menu.title)
@@ -148,20 +146,25 @@ class MainActivity : AppCompatActivity() {
                             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                         }
                     }
-                }else{
+                } else {
                     menu.childMenus.forEach { childMenu ->
-                        if(childMenu.childMenus.isNullOrEmpty()){
+                        if (childMenu.childMenus.isNullOrEmpty()) {
                             menuCard {
                                 id(childMenu.menuID)
                                 title(childMenu.title)
                                 icon(childMenu.icon)
                                 parentMenuIcon(menu.icon)
                                 clickListener { _ ->
-                                    getFragmentId(menu.menuID, childMenu.chMenuID)?.let { navController.navigate(it) }
-                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                    getFragmentId(
+                                        menu.menuID,
+                                        childMenu.chMenuID
+                                    )?.let { navController.navigate(it) }
+                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(
+                                        false
+                                    )
                                 }
                             }
-                        }else{
+                        } else {
                             childMenu.childMenus.forEach { childChildMenu ->
                                 menuCard {
                                     id(childChildMenu.menuID)
@@ -169,8 +172,13 @@ class MainActivity : AppCompatActivity() {
                                     icon(childChildMenu.icon)
                                     parentMenuIcon(childMenu.icon)
                                     clickListener { _ ->
-                                        getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)?.let { navController.navigate(it) }
-                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                        getFragmentId(
+                                            childChildMenu.menuID,
+                                            childChildMenu.chMenuID
+                                        )?.let { navController.navigate(it) }
+                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(
+                                            false
+                                        )
                                     }
                                 }
                             }

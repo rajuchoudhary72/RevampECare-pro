@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
-import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

@@ -11,7 +11,7 @@ import com.app.ecarepro.databinding.MedicineIssueItemBinding
 class MedicineIssueAdapter(private var leaveList: List<MedicineIssued>) :
     RecyclerView.Adapter<MedicineIssueAdapter.MedicineIssueViewHolder>() {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineIssueViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineIssueViewHolder {
         val binding =
             MedicineIssueItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MedicineIssueViewHolder(binding)
@@ -21,9 +21,9 @@ class MedicineIssueAdapter(private var leaveList: List<MedicineIssued>) :
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MedicineIssueViewHolder, position: Int) {
-        val medicineIssued=leaveList[position]
-        val mainBinding=DataBindingUtil.getBinding<MedicineIssueItemBinding>(holder.itemView)
-        with(mainBinding!!){
+        val medicineIssued = leaveList[position]
+        val mainBinding = DataBindingUtil.getBinding<MedicineIssueItemBinding>(holder.itemView)
+        with(mainBinding!!) {
 
             tvMedicineName.text = "Medicine: ${medicineIssued.medicine}"
             tvQuantity.text = "Dose: ${medicineIssued.qty}"
@@ -39,7 +39,7 @@ class MedicineIssueAdapter(private var leaveList: List<MedicineIssued>) :
             if (medicineIssued.informedParent.equals("")) {
                 tvInfParent.text = "N/A"
             } else {
-                tvInfParent.text=medicineIssued.informedParent
+                tvInfParent.text = medicineIssued.informedParent
             }
 
             if (medicineIssued.remark.equals("")) {

@@ -32,21 +32,21 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_bold"
             android:checked="@{isSelected}"
             android:clickable="false"
+            android:fontFamily="@font/calibri_bold"
             android:text="@{className}"
-            tools:text="Class 9"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Class 9" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View All"
             android:onClick="@{onClickViewAll}"
+            android:text="View All"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

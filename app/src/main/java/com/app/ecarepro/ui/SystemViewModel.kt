@@ -10,7 +10,6 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -42,7 +41,7 @@ class SystemViewModel @Inject constructor(
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
-                        favroiteMenus = response.favoriteMenus?: emptyList()
+                        favroiteMenus = response.favoriteMenus ?: emptyList()
                     )
                 } else {
                     val error = result.exceptionOrNull() ?: IllegalArgumentException(

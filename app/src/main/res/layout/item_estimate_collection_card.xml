@@ -92,12 +92,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/img_estimated"
                 app:layout_constraintStart_toEndOf="@+id/img_estimated"
-                app:layout_constraintTop_toBottomOf="@+id/text_estimated" />
+                app:layout_constraintTop_toBottomOf="@+id/text_estimated"
+                tools:text="₹3,43,90,000" />
 
 
             <ImageView
@@ -218,11 +218,11 @@
                 app:layout_constraintTop_toBottomOf="@id/title">
 
                 <AutoCompleteTextView
-                    android:padding="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:hint="All Fee Type"
                     android:inputType="none"
+                    android:padding="0dp"
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -237,11 +237,11 @@
                 app:layout_constraintTop_toTopOf="@id/text_input_fee_type">
 
                 <AutoCompleteTextView
-                    android:padding="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:hint="This Year"
                     android:inputType="none"
+                    android:padding="0dp"
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -284,12 +284,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/img_exp_estimated"
                 app:layout_constraintStart_toEndOf="@+id/img_exp_estimated"
-                app:layout_constraintTop_toBottomOf="@+id/text_exp_estimated" />
+                app:layout_constraintTop_toBottomOf="@+id/text_exp_estimated"
+                tools:text="₹3,43,90,000" />
 
             <ImageView
                 android:id="@+id/img_exp_received"
@@ -321,12 +321,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/img_exp_received"
                 app:layout_constraintStart_toEndOf="@+id/img_exp_received"
-                app:layout_constraintTop_toBottomOf="@+id/text_exp_received" />
+                app:layout_constraintTop_toBottomOf="@+id/text_exp_received"
+                tools:text="₹3,43,90,000" />
 
 
             <ImageView
@@ -358,20 +358,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/img_exp_concession"
                 app:layout_constraintStart_toEndOf="@+id/img_exp_concession"
-                app:layout_constraintTop_toBottomOf="@+id/text_exp_concession" />
+                app:layout_constraintTop_toBottomOf="@+id/text_exp_concession"
+                tools:text="₹3,43,90,000" />
 
 
             <ImageView
                 android:id="@+id/img_exp_due"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
                 android:src="@drawable/ic_circle"
                 app:layout_constraintStart_toEndOf="@+id/text_exp_concession_amount"
                 app:layout_constraintTop_toBottomOf="@+id/text_exp_estimated_amount"
@@ -396,29 +396,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@id/img_exp_due"
                 app:layout_constraintStart_toEndOf="@+id/img_exp_due"
-                app:layout_constraintTop_toBottomOf="@+id/text_exp_due" />
+                app:layout_constraintTop_toBottomOf="@+id/text_exp_due"
+                tools:text="₹3,43,90,000" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/groupCollapsed"
-                android:layout_width="wrap_content"
-                android:visibility="visible"
                 isVisible="@{!isExpanded}"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 app:constraint_referenced_ids="barChart,guidelineCenter,img_estimated,text_estimated,text_estimated_amount,img_received,text_received,text_received_amount,img_concession,text_concession,text_concession_amount,img_due,text_due,text_due_amount," />
 
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/groupExpanded"
-                android:layout_width="wrap_content"
-                tools:visibility="gone"
                 isVisible="@{isExpanded}"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="text_input_fee_type,text_input_Year,lineChart,img_exp_estimated,text_exp_estimated,text_exp_estimated_amount,img_exp_received,text_exp_received,text_exp_received_amount,img_exp_concession,text_exp_concession,text_exp_concession_amount,img_exp_due,text_exp_concession_due,text_exp_due" />
+                app:constraint_referenced_ids="text_input_fee_type,text_input_Year,lineChart,img_exp_estimated,text_exp_estimated,text_exp_estimated_amount,img_exp_received,text_exp_received,text_exp_received_amount,img_exp_concession,text_exp_concession,text_exp_concession_amount,img_exp_due,text_exp_concession_due,text_exp_due"
+                tools:visibility="gone" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

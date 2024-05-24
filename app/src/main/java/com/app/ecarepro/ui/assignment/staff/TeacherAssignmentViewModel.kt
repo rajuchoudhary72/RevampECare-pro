@@ -17,19 +17,25 @@ class TeacherAssignmentViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val teacAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkTeacherAssignment>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val teacAssignmentStateFlow: StateFlow<NetworkResult<NetworkTeacherAssignment>> = teacAssignmentMutableStateFlow
+    private val teacAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkTeacherAssignment>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val teacAssignmentStateFlow: StateFlow<NetworkResult<NetworkTeacherAssignment>> =
+        teacAssignmentMutableStateFlow
 
-    private val deleteAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val deleteAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAssignmentMutableStateFlow
+    private val deleteAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val deleteAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> =
+        deleteAssignmentMutableStateFlow
 
 
-    fun teachersAssignment( )=viewModelScope.launch {
+    fun teachersAssignment() = viewModelScope.launch {
         runCatching {
             teacAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.teachersAssignment( )
+            userRepository.teachersAssignment()
         }.onSuccess {
             teacAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -38,10 +44,10 @@ class TeacherAssignmentViewModel @Inject constructor(
 
     }
 
-    fun deleteAssignment(  iD: String  )=viewModelScope.launch {
+    fun deleteAssignment(iD: String) = viewModelScope.launch {
         runCatching {
             deleteAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.deleteAssignment(iD )
+            userRepository.deleteAssignment(iD)
         }.onSuccess {
             deleteAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

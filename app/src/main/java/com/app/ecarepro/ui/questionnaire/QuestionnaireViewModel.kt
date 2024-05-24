@@ -13,32 +13,34 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionnaireViewModel @Inject constructor(
-    private val  userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val questionnaireStateFlow: MutableStateFlow<NetworkResult<NetworkQuestionnaire>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val _questionnaireStateFlow: StateFlow<NetworkResult<NetworkQuestionnaire>> = questionnaireStateFlow
+    private val questionnaireStateFlow: MutableStateFlow<NetworkResult<NetworkQuestionnaire>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val _questionnaireStateFlow: StateFlow<NetworkResult<NetworkQuestionnaire>> =
+        questionnaireStateFlow
 
-    fun getQuestionnaireList( pg: Int, myque: Boolean )=viewModelScope.launch {
+    fun getQuestionnaireList(pg: Int, myque: Boolean) = viewModelScope.launch {
         runCatching {
-            questionnaireStateFlow.value = NetworkResult.Loading( )
-            userRepository.getQuestionnaireList( pg, myque)
+            questionnaireStateFlow.value = NetworkResult.Loading()
+            userRepository.getQuestionnaireList(pg, myque)
         }.onSuccess {
             questionnaireStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            questionnaireStateFlow .value = NetworkResult.Error(it.message)
+            questionnaireStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 
-    fun questionnaireLike(qID: Int, like: Boolean)=viewModelScope.launch {
+    fun questionnaireLike(qID: Int, like: Boolean) = viewModelScope.launch {
         runCatching {
-             userRepository.questionnaireLike( qID, like)
+            userRepository.questionnaireLike(qID, like)
         }.onSuccess {
-         }.onFailure {
-         }
+        }.onFailure {
+        }
     }
-
 
 
 }

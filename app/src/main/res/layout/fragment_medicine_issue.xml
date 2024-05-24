@@ -46,16 +46,16 @@
                 android:visibility="gone"
 
                 />
+
             <LinearLayout
                 android:id="@+id/lin_pro"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:background="@color/white"
-                android:paddingBottom="@dimen/_10sdp"
+                android:gravity="center"
                 android:paddingTop="@dimen/_10sdp"
-                android:layout_height="wrap_content">
-
+                android:paddingBottom="@dimen/_10sdp">
 
 
                 <LinearLayout
@@ -155,6 +155,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_medicine_issue"
                 android:layout_width="match_parent"
@@ -164,7 +165,6 @@
 
 
         </LinearLayout>
-
 
 
     </RelativeLayout>

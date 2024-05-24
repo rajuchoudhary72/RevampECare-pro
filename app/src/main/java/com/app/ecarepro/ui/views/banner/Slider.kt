@@ -10,10 +10,19 @@ import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.epoxy.*
+import com.airbnb.epoxy.AfterPropsSet
+import com.airbnb.epoxy.CallbackProp
+import com.airbnb.epoxy.Carousel
+import com.airbnb.epoxy.DiffResult
+import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.ModelProp
+import com.airbnb.epoxy.ModelView
+import com.airbnb.epoxy.OnModelBuildFinishedListener
+import com.airbnb.epoxy.OnViewRecycled
 import com.app.ecarepro.R
 import ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import java.util.concurrent.atomic.AtomicInteger
 
 typealias ModelCopier = (yours: EpoxyModel<*>) -> EpoxyModel<*>

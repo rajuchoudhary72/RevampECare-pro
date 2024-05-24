@@ -15,7 +15,8 @@ class StanderWiseStatisticModel(val statusWiseStatistics: List<StatusWiseStatist
     override fun ItemStanderWiseStatisticCardBinding.bind() {
         isExpanded = this@StanderWiseStatisticModel.isExpanded
         title.setOnClickListener {
-            this@StanderWiseStatisticModel.isExpanded = this@StanderWiseStatisticModel.isExpanded.not()
+            this@StanderWiseStatisticModel.isExpanded =
+                this@StanderWiseStatisticModel.isExpanded.not()
             chartView.isVisible = this@StanderWiseStatisticModel.isExpanded
             groupCollapsed.isVisible = this@StanderWiseStatisticModel.isExpanded.not()
         }

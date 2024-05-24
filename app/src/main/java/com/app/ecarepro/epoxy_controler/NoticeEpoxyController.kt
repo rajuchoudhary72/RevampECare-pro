@@ -6,11 +6,11 @@ import com.app.ecarepro.model.Notice
 
 class NoticeEpoxyController : TypedEpoxyController<List<Notice>>() {
     override fun buildModels(data: List<Notice>?) {
-        if (data.isNullOrEmpty()){
+        if (data.isNullOrEmpty()) {
             return
         }
         data.forEach {
-            NoticeEpoxyModel(it ).id(it.id).addTo(this)
+            NoticeEpoxyModel(it).id(it.id).addTo(this)
         }
     }
 }

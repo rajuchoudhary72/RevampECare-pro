@@ -15,41 +15,47 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ThoughtsViewModel @Inject constructor(
-    private val  userRepository: UserRepository
+    private val userRepository: UserRepository
 
 ) : ViewModel() {
 
-    private val postStateFlow:MutableStateFlow<ResponseState> = MutableStateFlow(ResponseState.Empty)
-     val _postStateFlow: StateFlow<ResponseState> = postStateFlow
+    private val postStateFlow: MutableStateFlow<ResponseState> =
+        MutableStateFlow(ResponseState.Empty)
+    val _postStateFlow: StateFlow<ResponseState> = postStateFlow
 
-    private val createToutStateFlow:MutableStateFlow<ResponseStateCreateTou> = MutableStateFlow(ResponseStateCreateTou.Empty)
-     val _createTouStateFlow: StateFlow<ResponseStateCreateTou> = createToutStateFlow
+    private val createToutStateFlow: MutableStateFlow<ResponseStateCreateTou> =
+        MutableStateFlow(ResponseStateCreateTou.Empty)
+    val _createTouStateFlow: StateFlow<ResponseStateCreateTou> = createToutStateFlow
 
-    private val likeStateFlow:MutableStateFlow<ResponseStateCreateTou> = MutableStateFlow(ResponseStateCreateTou.Empty)
+    private val likeStateFlow: MutableStateFlow<ResponseStateCreateTou> =
+        MutableStateFlow(ResponseStateCreateTou.Empty)
     val _likeStateFlow: StateFlow<ResponseStateCreateTou> = likeStateFlow
 
-    private val whoLikeStateFlow:MutableStateFlow<NetworkResult<NetworkWhoLike>> = MutableStateFlow(NetworkResult.Loading())
+    private val whoLikeStateFlow: MutableStateFlow<NetworkResult<NetworkWhoLike>> =
+        MutableStateFlow(NetworkResult.Loading())
     val _whoLikeStateFlow: StateFlow<NetworkResult<NetworkWhoLike>> = whoLikeStateFlow
 
-    private val thoughtsDeleteStateFlow:MutableStateFlow<ResponseStateCreateTou> = MutableStateFlow(ResponseStateCreateTou.Empty)
+    private val thoughtsDeleteStateFlow: MutableStateFlow<ResponseStateCreateTou> =
+        MutableStateFlow(ResponseStateCreateTou.Empty)
     val _thoughtsDeleteStateFlow: StateFlow<ResponseStateCreateTou> = thoughtsDeleteStateFlow
-    fun getThoughts(pg: Int,
-                    dir: Int,
-                    mythoughts: Boolean)=viewModelScope.launch {
+    fun getThoughts(
+        pg: Int,
+        dir: Int,
+        mythoughts: Boolean
+    ) = viewModelScope.launch {
         postStateFlow.value = ResponseState.Loading
         runCatching {
             userRepository.getThoughts(pg, dir, mythoughts)
-              }.onSuccess {
-                  postStateFlow.value=ResponseState.Success(it)
+        }.onSuccess {
+            postStateFlow.value = ResponseState.Success(it)
         }.onFailure {
             postStateFlow.value = ResponseState.Failure(it)
         }
     }
 
 
-
-      fun like(thID: Int, like: Boolean)=viewModelScope.launch {
-          likeStateFlow.value = ResponseStateCreateTou.Loading
+    fun like(thID: Int, like: Boolean) = viewModelScope.launch {
+        likeStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
             userRepository.thoughtsLike(thID, like)
         }.onSuccess {
@@ -59,10 +65,10 @@ class ThoughtsViewModel @Inject constructor(
         }
     }
 
-    fun thoughtsDelete(thID: Int)=viewModelScope.launch {
+    fun thoughtsDelete(thID: Int) = viewModelScope.launch {
         thoughtsDeleteStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
-            userRepository.thoughtsDelete(thID )
+            userRepository.thoughtsDelete(thID)
         }.onSuccess {
             thoughtsDeleteStateFlow.value = ResponseStateCreateTou.Success(it)
         }.onFailure {
@@ -70,25 +76,25 @@ class ThoughtsViewModel @Inject constructor(
         }
     }
 
-    fun whoLiked(thID: Int)=viewModelScope.launch {
+    fun whoLiked(thID: Int) = viewModelScope.launch {
         whoLikeStateFlow.value = NetworkResult.Loading()
         runCatching {
-            userRepository.whoLiked(thID )
+            userRepository.whoLiked(thID)
         }.onSuccess {
-            whoLikeStateFlow.value =NetworkResult.Success(it)
+            whoLikeStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             whoLikeStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 
-    fun thoughtsCreate(quotation:String,author:String)=viewModelScope.launch {
+    fun thoughtsCreate(quotation: String, author: String) = viewModelScope.launch {
         createToutStateFlow.value = ResponseStateCreateTou.Loading
         runCatching {
             userRepository.thoughtsCreate(quotation, author)
         }.onSuccess {
-            createToutStateFlow.value=ResponseStateCreateTou.Success(it)
+            createToutStateFlow.value = ResponseStateCreateTou.Success(it)
         }.onFailure {
-            createToutStateFlow.value=ResponseStateCreateTou.Failure(it)
+            createToutStateFlow.value = ResponseStateCreateTou.Failure(it)
         }
 
 

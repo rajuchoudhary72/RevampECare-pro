@@ -15,7 +15,8 @@ class OnlineVsOfflineAdmissionModel(val data: List<DataValue>) :
     override fun ItemOnlineVsOfflineAdmissionCardBinding.bind() {
         isExpanded = this@OnlineVsOfflineAdmissionModel.isExpanded
         title.setOnClickListener {
-            this@OnlineVsOfflineAdmissionModel.isExpanded = this@OnlineVsOfflineAdmissionModel.isExpanded.not()
+            this@OnlineVsOfflineAdmissionModel.isExpanded =
+                this@OnlineVsOfflineAdmissionModel.isExpanded.not()
             chartView.isVisible = this@OnlineVsOfflineAdmissionModel.isExpanded
             groupCollapsed.isVisible = this@OnlineVsOfflineAdmissionModel.isExpanded.not()
         }

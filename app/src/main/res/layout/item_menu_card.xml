@@ -39,18 +39,18 @@
 
             <ImageView
                 android:id="@+id/image"
-                app:tint="@color/grey_80"
-                android:layout_margin="@dimen/_15sdp"
                 imageUrl="@{icon}"
                 placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="0dp"
-                tools:src="@drawable/img_school_placeholder"
-                app:layout_constraintDimensionRatio="h,1:1"
                 android:layout_height="0dp"
+                android:layout_margin="@dimen/_15sdp"
+                app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
+                app:tint="@color/grey_80"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/img_school_placeholder" />
 
             <TextView
                 android:id="@+id/text_title"
@@ -58,23 +58,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:fontFamily="@font/calibri_bold"
-                android:text="@{title}"
                 android:gravity="center"
+                android:text="@{title}"
                 app:layout_constraintEnd_toEndOf="@+id/image"
                 app:layout_constraintStart_toStartOf="@+id/image"
                 app:layout_constraintTop_toBottomOf="@+id/image"
                 tools:text="Assignment" />
 
             <ImageView
-                app:tint="@color/green"
                 imageUrl="@{parentMenuIcon}"
-                android:padding="3dp"
                 isVisible="@{parentMenuIcon!=null}"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="3dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ic_edit"
-                android:layout_width="24dp"
-                android:layout_height="24dp"/>
+                app:tint="@color/green"
+                tools:src="@drawable/ic_edit" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

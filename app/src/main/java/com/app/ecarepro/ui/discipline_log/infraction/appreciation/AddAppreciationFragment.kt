@@ -3,13 +3,13 @@ package com.app.ecarepro.ui.discipline_log.infraction.appreciation
 import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,8 +20,6 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAddAppreciationBinding
 import com.app.ecarepro.model.AppreciationReward
 import com.app.ecarepro.model.AppreciationType
-import com.app.ecarepro.model.InfractionConsequence
-import com.app.ecarepro.model.Type
 import com.app.ecarepro.model.TypeAppreciation
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.AppreciationCatPopUpListAdapter
@@ -47,23 +45,23 @@ class AddAppreciationFragment : Fragment() {
     private lateinit var appreciationCatData: AppreciationType
     private lateinit var appreciationRewardList: List<AppreciationReward>
     private lateinit var appreciationTypeList: List<AppreciationType>
-     private val addAppreciationViewModel : AddAppreciationViewModel by viewModels()
-    private lateinit var binding : FragmentAddAppreciationBinding
+    private val addAppreciationViewModel: AddAppreciationViewModel by viewModels()
+    private lateinit var binding: FragmentAddAppreciationBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentAddAppreciationBinding.inflate(inflater,container,false)
-        studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
-         return binding.root
+    ): View {
+        binding = FragmentAddAppreciationBinding.inflate(inflater, container, false)
+        studentID = requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(activity is AppCompatActivity){
+        if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
             (activity as AppCompatActivity).supportActionBar?.apply {
                 title = "Add Appreciation"
@@ -114,8 +112,7 @@ class AddAppreciationFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
 
-                            subAppreciationSubCateList=it.data.types
-
+                            subAppreciationSubCateList = it.data.types
 
 
                         }
@@ -149,27 +146,29 @@ class AddAppreciationFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            binding.studentData=it.data.studentDTL
+                            binding.studentData = it.data.studentDTL
 
-                            binding.tvAdmissionNo.text= buildString {
+                            binding.tvAdmissionNo.text = buildString {
                                 append(getString(R.string.admission_no))
                                 append(it.data.studentDTL.admissionNo)
                             }
-                            binding.tvClassName.text= buildString {
+                            binding.tvClassName.text = buildString {
                                 append(getString(R.string.classes))
                                 append(it.data.studentDTL.`class`)
                             }
-                            binding.tvFatherName.text= buildString {
+                            binding.tvFatherName.text = buildString {
                                 append(getString(R.string.contact_person))
                                 append(it.data.studentDTL.contactPerson)
                             }
-                            binding.tvContact.text= buildString {
+                            binding.tvContact.text = buildString {
                                 append(getString(R.string.contact_no))
                                 append(it.data.studentDTL.contactMob)
                             }
 
-                            appreciationTypeList=it.data.appreciationTypes
-                            appreciationRewardList=it.data.appreciationRewards  }  }
+                            appreciationTypeList = it.data.appreciationTypes
+                            appreciationRewardList = it.data.appreciationRewards
+                        }
+                    }
                 }
             }
         }
@@ -178,20 +177,20 @@ class AddAppreciationFragment : Fragment() {
 
     }
 
-    private fun popUpSelectAppreciationCat(){
+    private fun popUpSelectAppreciationCat() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
-        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text=getString(R.string.select_apprec_category)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
+        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text = getString(R.string.select_apprec_category)
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectApprecCate.text= appreciationCatData .appreciation
-            apprecTypeSelected=true
+            binding.tvSelectApprecCate.text = appreciationCatData.appreciation
+            apprecTypeSelected = true
 
             getSubAppreciation(appreciationCatData.aprID)
 
@@ -199,10 +198,13 @@ class AddAppreciationFragment : Fragment() {
 
         }
 
-        val infractionCatPopUpListAdapter= AppreciationCatPopUpListAdapter(appreciationTypeList, object : ItemListener<AppreciationType> {
-            override fun onItemClick(t: AppreciationType, pos: Int, boolean: Boolean) {
-                appreciationCatData = t
-            }  })
+        val infractionCatPopUpListAdapter = AppreciationCatPopUpListAdapter(
+            appreciationTypeList,
+            object : ItemListener<AppreciationType> {
+                override fun onItemClick(t: AppreciationType, pos: Int, boolean: Boolean) {
+                    appreciationCatData = t
+                }
+            })
 
         rvYears.apply {
             setHasFixedSize(true)
@@ -218,30 +220,36 @@ class AddAppreciationFragment : Fragment() {
         builder.show()
     }
 
-    private fun popUpSelectSubAppreciationCat(){
+    private fun popUpSelectSubAppreciationCat() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
-        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text=getString(R.string.select_apprec_subcategory)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
+        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text = getString(R.string.select_apprec_subcategory)
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectSubApprec.text= subAppreciationCatData.appreciation
-            SubApprecTypeSelected=true
-            addAppreciationViewModel.appreciationInstance( subAppreciationCatData.aprSubID,studentID)
+            binding.tvSelectSubApprec.text = subAppreciationCatData.appreciation
+            SubApprecTypeSelected = true
+            addAppreciationViewModel.appreciationInstance(
+                subAppreciationCatData.aprSubID,
+                studentID
+            )
             setInfrenceInstance()
             builder.dismiss()
 
         }
 
-        val infractionCatPopUpListAdapter= SubAppreciationPopUpListAdapter(subAppreciationSubCateList, object : ItemListener<TypeAppreciation> {
-            override fun onItemClick(t: TypeAppreciation, pos: Int, boolean: Boolean) {
-                subAppreciationCatData = t
-            }  })
+        val infractionCatPopUpListAdapter = SubAppreciationPopUpListAdapter(
+            subAppreciationSubCateList,
+            object : ItemListener<TypeAppreciation> {
+                override fun onItemClick(t: TypeAppreciation, pos: Int, boolean: Boolean) {
+                    subAppreciationCatData = t
+                }
+            })
 
         rvYears.apply {
             setHasFixedSize(true)
@@ -274,7 +282,7 @@ class AddAppreciationFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        binding.tvInstance.text= it.data?.instance.toString()
+                        binding.tvInstance.text = it.data?.instance.toString()
                     }
 
 
@@ -284,28 +292,31 @@ class AddAppreciationFragment : Fragment() {
 
     }
 
-    private fun popUpSelectAppreciationReward(){
+    private fun popUpSelectAppreciationReward() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
-        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text=getString(R.string.select_consequences)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
+        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text = getString(R.string.select_consequences)
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectReward.text= appreciationReward .reward
-            apprecRewardSelected=true
+            binding.tvSelectReward.text = appreciationReward.reward
+            apprecRewardSelected = true
             builder.dismiss()
 
         }
 
-        val infractionCatPopUpListAdapter= AppreciationConsPopUpListAdapter(appreciationRewardList, object : ItemListener<AppreciationReward> {
-            override fun onItemClick(t: AppreciationReward, pos: Int, boolean: Boolean) {
-                appreciationReward = t
-            }  })
+        val infractionCatPopUpListAdapter = AppreciationConsPopUpListAdapter(
+            appreciationRewardList,
+            object : ItemListener<AppreciationReward> {
+                override fun onItemClick(t: AppreciationReward, pos: Int, boolean: Boolean) {
+                    appreciationReward = t
+                }
+            })
 
         rvYears.apply {
             setHasFixedSize(true)
@@ -321,22 +332,22 @@ class AddAppreciationFragment : Fragment() {
         builder.show()
     }
 
-    private fun saveAppreciation(action:Int) {
-        var isValidate= true
-        if (!apprecTypeSelected){
-            isValidate=false
+    private fun saveAppreciation(action: Int) {
+        var isValidate = true
+        if (!apprecTypeSelected) {
+            isValidate = false
         }
-        if (!SubApprecTypeSelected){
-            isValidate=false
+        if (!SubApprecTypeSelected) {
+            isValidate = false
         }
-        if (!apprecRewardSelected){
-            isValidate=false
+        if (!apprecRewardSelected) {
+            isValidate = false
         }
-        if (binding.etRemark .text.toString().isEmpty()){
-            isValidate=false
+        if (binding.etRemark.text.toString().isEmpty()) {
+            isValidate = false
         }
 
-        if (isValidate){
+        if (isValidate) {
             addAppreciationViewModel.saveAppreciation(
                 action,
                 studentID,
@@ -344,28 +355,33 @@ class AddAppreciationFragment : Fragment() {
                 appreciationReward.rwdID,
                 binding.tvInstance.text.toString().toInt(),
                 Constant.currentDate(),
-                binding.etRemark.text.toString())  }
+                binding.etRemark.text.toString()
+            )
+        }
 
         lifecycleScope.launch {
             addAppreciationViewModel.saveAppreciationStateFlow.collectLatest {
                 when (it) {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                    } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
+                    }
 
-                    findNavController().navigate(R.id.action_addAppreciationFragment_to_appreciationListFragment ,Bundle( ).apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, studentID)
-                    })
-                }
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+
+                        findNavController().navigate(
+                            R.id.action_addAppreciationFragment_to_appreciationListFragment,
+                            Bundle().apply {
+                                putInt(Constant.STUDENT_ID_ARGUMENT, studentID)
+                            })
+                    }
                 }
             }
         }
-
-
-
 
 
     }

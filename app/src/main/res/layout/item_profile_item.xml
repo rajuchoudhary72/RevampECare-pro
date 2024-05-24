@@ -50,10 +50,11 @@
 
         <TextView
             android:id="@+id/subTitle"
+            autoLinkText='@{subTitle!=null &amp;&amp; subTitle.length()>0 ? subTitle : "N/A"}'
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/calibri_regular"
-            autoLinkText='@{subTitle!=null &amp;&amp; subTitle.length()>0 ? subTitle : "N/A"}'            android:textColor="@color/black"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/title"

@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.award
 
+
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -23,7 +24,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,8 +31,6 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentExcellenceAwardBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.PdfDocumentAdapter
-
-
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -64,7 +62,7 @@ class ExcellenceAwardFragment : Fragment() {
         observers()
         mViewModel.getAwardData()
         binding.tvPrint.setOnClickListener {
-                createPDF()
+            createPDF()
 
         }
     }
@@ -128,11 +126,21 @@ class ExcellenceAwardFragment : Fragment() {
     private fun createPDF() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Above Android O, use PixelCopy
-            val bitmap = Bitmap.createBitmap(binding.nestScroll.width, binding.nestScroll.height, Bitmap.Config.ARGB_8888)
+            val bitmap = Bitmap.createBitmap(
+                binding.nestScroll.width,
+                binding.nestScroll.height,
+                Bitmap.Config.ARGB_8888
+            )
             val location = IntArray(2)
             binding.nestScroll.getLocationInWindow(location)
-            PixelCopy.request(requireActivity().window,
-                Rect(location[0], location[1], location[0] + binding.nestScroll.width, location[1] + binding.nestScroll.height),
+            PixelCopy.request(
+                requireActivity().window,
+                Rect(
+                    location[0],
+                    location[1],
+                    location[0] + binding.nestScroll.width,
+                    location[1] + binding.nestScroll.height
+                ),
                 bitmap,
                 {
                     if (it == PixelCopy.SUCCESS) {
@@ -143,11 +151,16 @@ class ExcellenceAwardFragment : Fragment() {
                                 requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
                             val printAdapter: PrintDocumentAdapter =
                                 PdfDocumentAdapter(requireActivity(), pdfFile.absolutePath)
-                            printManager.print("Document", printAdapter, PrintAttributes.Builder().build())
+                            printManager.print(
+                                "Document",
+                                printAdapter,
+                                PrintAttributes.Builder().build()
+                            )
                         }
                     }
                 },
-                Handler(Looper.getMainLooper()) )
+                Handler(Looper.getMainLooper())
+            )
         } else {
             val tBitmap = Bitmap.createBitmap(
                 binding.nestScroll.width, binding.nestScroll.height, Bitmap.Config.RGB_565

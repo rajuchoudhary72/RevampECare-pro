@@ -4,11 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.widget.DatePicker
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
 
 
 class ECareDataPicker : OnDateSetListener {
@@ -36,7 +32,6 @@ class ECareDataPicker : OnDateSetListener {
         }
         dpd.show()
     }
-
 
 
     /**
@@ -107,9 +102,6 @@ class ECareDataPicker : OnDateSetListener {
     interface PickerCallback {
         fun onSelect(date: String?, isCurrentDate: Boolean)
     }
-
-
-
 
 
 }

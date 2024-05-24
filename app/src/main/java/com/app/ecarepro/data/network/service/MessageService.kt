@@ -79,6 +79,7 @@ interface MessageService {
         @Query("OfUserType") ofUserType: Int,
         @Query("ScholarType") scholarType: Int,
     ): ContactWithClassDto
+
     @GET("Message/SMSTemplates")
     suspend fun getSmsTemplates(
     ): SmsTemplatesDto

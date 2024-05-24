@@ -58,9 +58,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/calibri_bold"
                     android:padding="@dimen/horizontal_margin"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toStartOf="@+id/btn_recipient"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="18sp"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Sub: TEsting meesage" />
 
@@ -91,12 +91,12 @@
                     tools:listitem="@layout/item_sender_chat_message" />
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/send_message_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:padding="16dp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <EditText

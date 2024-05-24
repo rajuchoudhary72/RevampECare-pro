@@ -17,34 +17,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddInfractionViewModel @Inject constructor(
-    private   val userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val infractionTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkInfractionTypes>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val infractionTypesStateFlow: StateFlow<NetworkResult<NetworkInfractionTypes>> = infractionTypesMutableStateFlow
+    private val infractionTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkInfractionTypes>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val infractionTypesStateFlow: StateFlow<NetworkResult<NetworkInfractionTypes>> =
+        infractionTypesMutableStateFlow
 
 
-    private val infractionInstanceMutableStateFlow: MutableStateFlow<NetworkResult<NetworkInfractionInstance>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val infractionInstanceStateFlow: StateFlow<NetworkResult<NetworkInfractionInstance>> = infractionInstanceMutableStateFlow
+    private val infractionInstanceMutableStateFlow: MutableStateFlow<NetworkResult<NetworkInfractionInstance>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val infractionInstanceStateFlow: StateFlow<NetworkResult<NetworkInfractionInstance>> =
+        infractionInstanceMutableStateFlow
 
 
-    private val addInfractionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddInfraction>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val addInfractionStateFlow: StateFlow<NetworkResult<NetworkAddInfraction>> = addInfractionMutableStateFlow
+    private val addInfractionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddInfraction>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val addInfractionStateFlow: StateFlow<NetworkResult<NetworkAddInfraction>> =
+        addInfractionMutableStateFlow
 
- private val subInfractionTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkSubInfractionTypes>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val subInfractionTypesStateFlow: StateFlow<NetworkResult<NetworkSubInfractionTypes>> = subInfractionTypesMutableStateFlow
+    private val subInfractionTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkSubInfractionTypes>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val subInfractionTypesStateFlow: StateFlow<NetworkResult<NetworkSubInfractionTypes>> =
+        subInfractionTypesMutableStateFlow
 
-    private val saveInfractionMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val saveInfractionStateFlow: StateFlow<NetworkResult<CommonResponse>> = saveInfractionMutableStateFlow
+    private val saveInfractionMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val saveInfractionStateFlow: StateFlow<NetworkResult<CommonResponse>> =
+        saveInfractionMutableStateFlow
 
 
-    fun getInfractionTypes( )=viewModelScope.launch {
+    fun getInfractionTypes() = viewModelScope.launch {
         runCatching {
             infractionTypesMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getInfractionTypes()
@@ -56,7 +71,7 @@ class AddInfractionViewModel @Inject constructor(
 
     }
 
-    fun  addInfraction( stID: Int  )=viewModelScope.launch {
+    fun addInfraction(stID: Int) = viewModelScope.launch {
         runCatching {
             addInfractionMutableStateFlow.value = NetworkResult.Loading()
             userRepository.addInfraction(stID)
@@ -68,7 +83,7 @@ class AddInfractionViewModel @Inject constructor(
 
     }
 
-    fun  getSubInfractionTypes(infrTypeID: Int)=viewModelScope.launch {
+    fun getSubInfractionTypes(infrTypeID: Int) = viewModelScope.launch {
         runCatching {
             subInfractionTypesMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getSubInfractionTypes(infrTypeID)
@@ -80,11 +95,11 @@ class AddInfractionViewModel @Inject constructor(
 
     }
 
-    fun  getinfractionInstance(
+    fun getinfractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
         StID: Int
-    )=viewModelScope.launch {
+    ) = viewModelScope.launch {
         runCatching {
             infractionInstanceMutableStateFlow.value = NetworkResult.Loading()
             userRepository.infractionInstance(infrTypeID, InfrSubTypeID, StID)
@@ -96,19 +111,27 @@ class AddInfractionViewModel @Inject constructor(
 
     }
 
-    fun   saveInfraction(
-        action:Int,
-        stID:Int,
-        infrSubTypeID:Int,
-        consID:Int,
-        instance:Int,
-        infractionOn:String,
-        correctiveAction:String,
+    fun saveInfraction(
+        action: Int,
+        stID: Int,
+        infrSubTypeID: Int,
+        consID: Int,
+        instance: Int,
+        infractionOn: String,
+        correctiveAction: String,
 
-        )=viewModelScope.launch {
+        ) = viewModelScope.launch {
         runCatching {
             saveInfractionMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.saveInfraction(action, stID, infrSubTypeID, consID, instance, infractionOn, correctiveAction)
+            userRepository.saveInfraction(
+                action,
+                stID,
+                infrSubTypeID,
+                consID,
+                instance,
+                infractionOn,
+                correctiveAction
+            )
         }.onSuccess {
             saveInfractionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

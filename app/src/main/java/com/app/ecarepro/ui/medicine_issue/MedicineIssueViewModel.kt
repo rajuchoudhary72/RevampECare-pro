@@ -2,8 +2,6 @@ package com.app.ecarepro.ui.medicine_issue
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.network.model.CommonResponse
-import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,20 +16,22 @@ class MedicineIssueViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val medicineIssueModelMutableStateFlow: MutableStateFlow<NetworkResult<MedicineIsuueModel>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val leaveHistoryStateFlow: StateFlow<NetworkResult<MedicineIsuueModel>> = medicineIssueModelMutableStateFlow
+    private val medicineIssueModelMutableStateFlow: MutableStateFlow<NetworkResult<MedicineIsuueModel>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val leaveHistoryStateFlow: StateFlow<NetworkResult<MedicineIsuueModel>> =
+        medicineIssueModelMutableStateFlow
 
 
-
-    fun medicineIssue(  )=viewModelScope.launch {
+    fun medicineIssue() = viewModelScope.launch {
         runCatching {
-            medicineIssueModelMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.medicineIsuueModel( )
+            medicineIssueModelMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.medicineIsuueModel()
         }.onSuccess {
             medicineIssueModelMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            medicineIssueModelMutableStateFlow .value = NetworkResult.Error(it.message)
+            medicineIssueModelMutableStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 

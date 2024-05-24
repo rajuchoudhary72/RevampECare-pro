@@ -34,9 +34,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:onClick="@{changeUser}"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:onClick="@{changeUser}"
         android:paddingHorizontal="@dimen/horizontal_margin"
         android:paddingVertical="@dimen/_5sdp">
 

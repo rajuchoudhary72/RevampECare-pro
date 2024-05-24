@@ -581,7 +581,7 @@ class UserRepositoryImpl @Inject constructor(
             try {
                 val response = userService.saveUserUndertaking(id)
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.message?:"Success"))
+                    emit(Result.success(response.message ?: "Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

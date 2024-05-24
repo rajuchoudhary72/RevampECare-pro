@@ -17,25 +17,25 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="?selectableItemBackground"
-        android:onClick="@{clickListener}"
-        android:layout_height="wrap_content">
+        android:onClick="@{clickListener}">
 
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_institute"
+            imageUrl="@{school.logo}"
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:padding="1dp"
-            imageUrl="@{school.logo}"
-            tools:src="@drawable/img_school_placeholder"
             app:contentPadding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round.Small"
             app:strokeColor="?attr/colorOutlineVariant"
             app:strokeWidth="1dp"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/img_school_placeholder" />
 
         <TextView
             android:id="@+id/text_institute_name"
@@ -44,14 +44,14 @@
             android:layout_marginStart="10dp"
             android:fontFamily="@font/ubuntu_regular"
             android:text="@{school.name}"
-            tools:text="Jain Girls Secondary School"
             android:textAppearance="?attr/textAppearanceBodyLarge"
             app:layout_constraintBottom_toTopOf="@+id/text_institute_address"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/img_institute"
             app:layout_constraintTop_toTopOf="@+id/img_institute"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Jain Girls Secondary School" />
 
         <TextView
             android:id="@+id/text_institute_address"
@@ -63,13 +63,13 @@
             android:fontFamily="@font/ubuntu_light"
             android:maxLines="2"
             android:text="@{school.address}"
-            tools:text="H663+MRX, Green Park Ext, Block N, Green Park Extension, Green Park, New Delhi, Delhi 110029"
             android:textAppearance="?attr/textAppearanceLabelMedium"
             app:layout_constraintBottom_toTopOf="@+id/text_institute_code"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/img_institute"
-            app:layout_constraintTop_toBottomOf="@+id/text_institute_name" />
+            app:layout_constraintTop_toBottomOf="@+id/text_institute_name"
+            tools:text="H663+MRX, Green Park Ext, Block N, Green Park Extension, Green Park, New Delhi, Delhi 110029" />
 
         <TextView
             android:id="@+id/text_institute_code"
@@ -83,13 +83,13 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:text="@{school.schoolCode}"
-            tools:text="A B C D F R"
             android:textAllCaps="true"
             android:textAppearance="?attr/textAppearanceTitleSmall"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/img_institute"
             app:layout_constraintStart_toEndOf="@+id/img_institute"
-            app:layout_constraintTop_toBottomOf="@+id/text_institute_address" />
+            app:layout_constraintTop_toBottomOf="@+id/text_institute_address"
+            tools:text="A B C D F R" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

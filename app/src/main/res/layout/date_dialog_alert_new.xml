@@ -28,34 +28,32 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/grey_light" />
-        
-        
+
+
         <LinearLayout
             android:id="@+id/ll_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="10dp"
-            android:orientation="horizontal"
-            android:background="@drawable/black_line"
             android:layout_margin="15dp"
-            >
+            android:background="@drawable/black_line"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/activity_calender"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="15dp"
-                app:tint="@color/grey_40"
-                />
+                android:src="@drawable/activity_calender"
+                app:tint="@color/grey_40" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-
                 android:layout_gravity="center"
+
+                android:gravity="center_horizontal"
                 android:text="Submitted Date : "
                 app:fontFamily="@font/ubuntu_medium" />
 
@@ -64,12 +62,10 @@
                 android:id="@+id/tv_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-
                 android:layout_gravity="center"
+
+                android:gravity="center_horizontal"
                 app:fontFamily="@font/ubuntu_bold" />
-
-
 
 
         </LinearLayout>
@@ -83,25 +79,25 @@
 
         <Button
             android:id="@+id/btn_canel"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/shape_dialog_bottom_main"
             android:minHeight="40dp"
             android:text="@string/cancel"
-            app:fontFamily="@font/ubuntu_medium"
-            style="?android:attr/buttonBarButtonStyle" />
+            app:fontFamily="@font/ubuntu_medium" />
 
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@color/brand_color"
             android:minHeight="40dp"
             android:text="@string/submit"
             android:textColor="@color/white"
-             app:fontFamily="@font/ubuntu_medium" />
+            app:fontFamily="@font/ubuntu_medium" />
 
     </LinearLayout>
 

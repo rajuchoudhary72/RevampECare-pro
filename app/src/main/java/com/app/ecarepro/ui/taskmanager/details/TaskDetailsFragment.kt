@@ -15,7 +15,6 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -63,7 +62,7 @@ class TaskDetailsFragment : Fragment() {
 
     private fun uploadPhoto(imageString: String, imageExt: String) {
         (requireActivity() as MainActivity).showLoader(true)
-        mViewModel.updateAttachment(imageString, imageExt){ message:String ->
+        mViewModel.updateAttachment(imageString, imageExt) { message: String ->
             (requireActivity() as MainActivity).showLoader(false)
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
@@ -123,7 +122,10 @@ class TaskDetailsFragment : Fragment() {
                     canEdit(uiState.taskDetails.task?.imOwner)
                     onClickEdit { v: View ->
                         if (v.id == R.id.title) {
-                            openTextInputDialog("Title", uiState.taskDetails.task?.taskTitle ?: "") {
+                            openTextInputDialog(
+                                "Title",
+                                uiState.taskDetails.task?.taskTitle ?: ""
+                            ) {
                                 (requireActivity() as MainActivity).showLoader(true)
                                 mViewModel.updateTask(
                                     TaskFiledName.TASK_TITLE,
@@ -214,7 +216,7 @@ class TaskDetailsFragment : Fragment() {
                         id("attachment")
                         attachment(uiState.taskDetails.task.attachment)
                         canUploadAttachment(uiState.taskDetails.task.imOwner)
-                        clickListener { _ -> selectImageOptionDialog()}
+                        clickListener { _ -> selectImageOptionDialog() }
                     }
                 }
 

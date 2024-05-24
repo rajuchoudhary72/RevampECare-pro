@@ -45,12 +45,12 @@ class LegendView @JvmOverloads constructor(
     }
 
     fun setImageTint(color: Int) {
-        if (color != -1 )
+        if (color != -1)
             binding.image.imageTintList = ColorStateList.valueOf(color)
     }
 
     fun setImage(drawable: Drawable?) {
-        binding.image.isVisible = drawable!=null
+        binding.image.isVisible = drawable != null
         binding.image.setImageDrawable(drawable)
     }
 

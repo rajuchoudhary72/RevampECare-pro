@@ -8,13 +8,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.AppreciationType
-import com.app.ecarepro.model.InfractionType
 import com.app.ecarepro.utils.listener.ItemListener
 
-class AppreciationCatPopUpListAdapter(private var infractionTypeList: List<AppreciationType>,
-                                      private var itemListener: ItemListener<AppreciationType>
+class AppreciationCatPopUpListAdapter(
+    private var infractionTypeList: List<AppreciationType>,
+    private var itemListener: ItemListener<AppreciationType>
 ) :
     RecyclerView.Adapter<AppreciationCatPopUpListAdapter.PopUpListViewHolder>() {
 
@@ -31,15 +30,15 @@ class AppreciationCatPopUpListAdapter(private var infractionTypeList: List<Appre
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text=infractionTypeList[holder.bindingAdapterPosition].appreciation
+        holder.itemName.text = infractionTypeList[holder.bindingAdapterPosition].appreciation
         holder.llMain.setOnClickListener {
-            lastIndex=holder.bindingAdapterPosition
-             itemListener.onItemClick(infractionTypeList[holder.bindingAdapterPosition],1,true)
+            lastIndex = holder.bindingAdapterPosition
+            itemListener.onItemClick(infractionTypeList[holder.bindingAdapterPosition], 1, true)
             notifyDataSetChanged()
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
+            holder.itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
@@ -47,7 +46,7 @@ class AppreciationCatPopUpListAdapter(private var infractionTypeList: List<Appre
 
     }
 
-    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val itemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val llMain: LinearLayout = itemView.findViewById(R.id.ll_main)

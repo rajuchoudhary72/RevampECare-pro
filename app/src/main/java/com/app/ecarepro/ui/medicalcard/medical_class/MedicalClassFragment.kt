@@ -13,7 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.MedicalClassBinding
@@ -32,11 +31,11 @@ class MedicalClassFragment : Fragment() {
     private val studentList = mutableListOf<Student>()
     private val mAdapter by lazy {
         MedicalClassAdapter(studentList) { poss, student ->
-            val bundle=Bundle()
-            bundle.putString("Name",student.name)
-            bundle.putString("ID","${student.stID}")
+            val bundle = Bundle()
+            bundle.putString("Name", student.name)
+            bundle.putString("ID", "${student.stID}")
             binding.toolbarAdd2.etSearchCtb.text.clear()
-            findNavController().navigate(R.id.studentMedicalCardFragment,bundle)
+            findNavController().navigate(R.id.studentMedicalCardFragment, bundle)
         }
     }
 
@@ -55,8 +54,8 @@ class MedicalClassFragment : Fragment() {
                 searchClick()
             }
             toolbarAdd2.mainToolbarTitle2.text = "Student List"
-            toolbarAdd2.mainToolbarTitle2.setTextColor(resources.getColor(R.color.md_theme_light_primary) )
-            toolbarAdd2.mainToolbarTitle2.setTextSize(resources.getDimension(R.dimen.size_teenty) )
+            toolbarAdd2.mainToolbarTitle2.setTextColor(resources.getColor(R.color.md_theme_light_primary))
+            toolbarAdd2.mainToolbarTitle2.setTextSize(resources.getDimension(R.dimen.size_teenty))
         }
         return binding.root
     }
@@ -75,6 +74,7 @@ class MedicalClassFragment : Fragment() {
                     after: Int
                 ) {
                 }
+
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(editable: Editable) {
                     mAdapter.filter(editable.toString())
@@ -91,8 +91,8 @@ class MedicalClassFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvStudentList.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(activity,2)
-          //  layoutManager = LinearLayoutManager(activity)
+            layoutManager = GridLayoutManager(activity, 2)
+            //  layoutManager = LinearLayoutManager(activity)
             adapter = mAdapter
         }
         lifecycleScope.launch {

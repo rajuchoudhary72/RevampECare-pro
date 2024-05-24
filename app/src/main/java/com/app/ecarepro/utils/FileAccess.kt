@@ -19,23 +19,31 @@ import java.io.ByteArrayOutputStream
 class FileAccess {
 
 
-    companion object{
+    companion object {
 
 
         private val REQUEST_CAMERA_PERMISSION = 1001
         private val REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 1002
 
-        fun checkPermission(fragment: Fragment ) {
-            if (ContextCompat.checkSelfPermission(fragment.requireContext(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        fun checkPermission(fragment: Fragment) {
+            if (ContextCompat.checkSelfPermission(
+                    fragment.requireContext(),
+                    Manifest.permission.CAMERA
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
                 ActivityCompat.requestPermissions(
                     fragment.requireActivity(),
                     arrayOf(Manifest.permission.CAMERA),
                     REQUEST_CAMERA_PERMISSION
                 )
             }
-            if (ContextCompat.checkSelfPermission(fragment.requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    fragment.requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
                 ActivityCompat.requestPermissions(
                     fragment.requireActivity(),
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -45,29 +53,29 @@ class FileAccess {
         }
 
 
-        fun galleryIntent( ): Intent {
+        fun galleryIntent(): Intent {
 
-          //  val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-          //  fragment. startActivityForResult(intent, REQUEST_CAMERA_PERMISSION)
-
-
-            return Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI )
-
-        }
-
-          fun cameraIntent( ) : Intent {
-
-              //  val intent = Intent()
-              //intent.setType("image/*")
-              // intent.setAction(Intent.ACTION_GET_CONTENT)
-              //fragment.startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION)
+            //  val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            //  fragment. startActivityForResult(intent, REQUEST_CAMERA_PERMISSION)
 
 
-              return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            return Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
 
         }
 
-          fun bitmapToByteArrayBase64String(bitmap: Bitmap): String {
+        fun cameraIntent(): Intent {
+
+            //  val intent = Intent()
+            //intent.setType("image/*")
+            // intent.setAction(Intent.ACTION_GET_CONTENT)
+            //fragment.startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION)
+
+
+            return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        }
+
+        fun bitmapToByteArrayBase64String(bitmap: Bitmap): String {
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             return Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT)
@@ -81,19 +89,23 @@ class FileAccess {
             return MediaStore.Images.Media.getBitmap(context.contentResolver, imgUri)
         }
 
-          fun getImageExtFromUri(inContext: Context, inImage: Bitmap) : String? {
+        fun getImageExtFromUri(inContext: Context, inImage: Bitmap): String? {
             val bytes = ByteArrayOutputStream()
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
             val path =
-                MediaStore.Images.Media.insertImage(inContext.contentResolver, inImage, "Title", null)
+                MediaStore.Images.Media.insertImage(
+                    inContext.contentResolver,
+                    inImage,
+                    "Title",
+                    null
+                )
 
-           return   getRealPathFromURI(Uri.parse(path),inContext)
+            return getRealPathFromURI(Uri.parse(path), inContext)
 
         }
 
 
-
-          private fun getRealPathFromURI(uri: Uri?, inContext: Context): String? {
+        private fun getRealPathFromURI(uri: Uri?, inContext: Context): String? {
             val cursor: Cursor? = inContext.contentResolver.query(uri!!, null, null, null, null)
             cursor?.moveToFirst()
             val idx = cursor?.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
@@ -103,10 +115,6 @@ class FileAccess {
         }
 
     }
-
-
-
-
 
 
 }

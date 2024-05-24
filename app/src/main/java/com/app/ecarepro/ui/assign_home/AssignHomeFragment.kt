@@ -75,7 +75,7 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
                 Picasso.Builder(requireActivity()) // additional settings
                     .build()
             )
-        }catch (e:IllegalStateException){
+        } catch (e: IllegalStateException) {
 
         }
 

@@ -1,7 +1,5 @@
 package com.app.ecarepro.model
 
-import com.app.ecarepro.model.Assignment
-
 data class SubjectAssignment(
     val assignments: List<Assignment>,
     val showAlert: Boolean,

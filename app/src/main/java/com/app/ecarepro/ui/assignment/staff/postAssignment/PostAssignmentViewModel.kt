@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
-import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
@@ -14,49 +13,55 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 @HiltViewModel
 class PostAssignmentViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
-    private val  userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val myClassMutableStateFlow: MutableStateFlow<NetworkResult<NetworkMyClass>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val myClassMutableStateFlow: MutableStateFlow<NetworkResult<NetworkMyClass>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val myClassStateFlow: StateFlow<NetworkResult<NetworkMyClass>> = myClassMutableStateFlow
 
-    private val subjectsMutableStateFlow: MutableStateFlow<NetworkResult<NetworkMySubjects>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val subjectsMutableStateFlow: MutableStateFlow<NetworkResult<NetworkMySubjects>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val subjectsStateFlow: StateFlow<NetworkResult<NetworkMySubjects>> = subjectsMutableStateFlow
 
-    private val createAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val createAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = createAssignmentMutableStateFlow
+    private val createAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val createAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> =
+        createAssignmentMutableStateFlow
 
 
-
-    fun getMyClass(subID: Int, iD: Int  )=viewModelScope.launch {
-          runCatching {
-              myClassMutableStateFlow.value =NetworkResult.Loading( )
-              userRepository.staffMyClass(subID, iD)
-          }.onSuccess {
-              myClassMutableStateFlow.value =NetworkResult.Success(it)
-          }.onFailure {
-              myClassMutableStateFlow.value = NetworkResult.Error(it.message)
-          }
-      }
-
-    fun mySubjects( )=viewModelScope.launch {
+    fun getMyClass(subID: Int, iD: Int) = viewModelScope.launch {
         runCatching {
-            subjectsMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.mySubjects( )
+            myClassMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.staffMyClass(subID, iD)
         }.onSuccess {
-            subjectsMutableStateFlow.value =NetworkResult.Success(it)
+            myClassMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            myClassMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+    }
+
+    fun mySubjects() = viewModelScope.launch {
+        runCatching {
+            subjectsMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.mySubjects()
+        }.onSuccess {
+            subjectsMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             subjectsMutableStateFlow.value = NetworkResult.Error(it.message)
         }
     }
-
 
 
     fun createAssignment(
@@ -78,12 +83,29 @@ class PostAssignmentViewModel @Inject constructor(
         submitDate: String,
         title: String
 
-    )=viewModelScope.launch {
+    ) = viewModelScope.launch {
         runCatching {
-            createAssignmentMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.createAssignment( asgDate, asgID, attachment, fileExt, fileURL, classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title)
+            createAssignmentMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.createAssignment(
+                asgDate,
+                asgID,
+                attachment,
+                fileExt,
+                fileURL,
+                classID,
+                classIDs,
+                data,
+                file,
+                id,
+                isActive,
+                isFileRemoved,
+                multipleSubmission,
+                subjectID,
+                submitDate,
+                title
+            )
         }.onSuccess {
-            createAssignmentMutableStateFlow.value =NetworkResult.Success(it)
+            createAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             createAssignmentMutableStateFlow.value = NetworkResult.Error(it.message)
         }

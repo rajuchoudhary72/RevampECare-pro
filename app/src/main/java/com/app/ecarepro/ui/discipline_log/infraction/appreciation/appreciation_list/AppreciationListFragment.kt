@@ -28,15 +28,15 @@ class AppreciationListFragment : Fragment() {
 
     private var studentID: Int = 0
     private lateinit var binding: FragmentAppreciationListBinding
-    private  val appreciationListViewModel: AppreciationListViewModel by viewModels()
+    private val appreciationListViewModel: AppreciationListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentAppreciationListBinding.inflate(inflater,container,false)
-        studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
-        if(activity is AppCompatActivity){
+    ): View {
+        binding = FragmentAppreciationListBinding.inflate(inflater, container, false)
+        studentID = requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
             (activity as AppCompatActivity).supportActionBar?.apply {
                 title = "Appreciations"
@@ -70,30 +70,30 @@ class AppreciationListFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerInfractionList.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            binding.studentData=it.data.studentDTL
+                            binding.studentData = it.data.studentDTL
 
-                            binding.tvAdmissionNo.text= buildString {
+                            binding.tvAdmissionNo.text = buildString {
                                 append(getString(R.string.admission_no))
                                 append(it.data.studentDTL.admissionNo)
                             }
-                            binding.tvClassName.text= buildString {
+                            binding.tvClassName.text = buildString {
                                 append(getString(R.string.classes))
                                 append(it.data.studentDTL.`class`)
                             }
-                            binding.tvFatherName.text= buildString {
+                            binding.tvFatherName.text = buildString {
                                 append(getString(R.string.contact_person))
                                 append(it.data.studentDTL.contactPerson)
                             }
-                            binding.tvContact.text= buildString {
+                            binding.tvContact.text = buildString {
                                 append(getString(R.string.contact_no))
                                 append(it.data.studentDTL.contactMob)
                             }
 
-                            if (it.data.recentAppreciations.isNotEmpty()){
-                                binding.recyclerInfractionList.isVisible=true
-                                binding.tvNoData.isVisible=false
+                            if (it.data.recentAppreciations.isNotEmpty()) {
+                                binding.recyclerInfractionList.isVisible = true
+                                binding.tvNoData.isVisible = false
 
                                 val appreciationListAdapter = AppreciationListAdapter(
                                     it.data.recentAppreciations,
@@ -105,9 +105,9 @@ class AppreciationListFragment : Fragment() {
                                     layoutManager = LinearLayoutManager(activity)
                                     adapter = appreciationListAdapter
                                 }
-                            }else{
-                                binding.recyclerInfractionList.isVisible=false
-                                 binding.tvNoData.isVisible=true
+                            } else {
+                                binding.recyclerInfractionList.isVisible = false
+                                binding.tvNoData.isVisible = true
                             }
 
                         }

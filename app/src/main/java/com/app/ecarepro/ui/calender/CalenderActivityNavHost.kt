@@ -2,10 +2,10 @@ package com.app.ecarepro.ui.calender
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -90,7 +90,7 @@ class CalenderActivityNavHost : Fragment() {
                                     ActivityCalenderFragment(
                                         it.data.activityMonth[7],
                                         it.data.session
-                                    ), 
+                                    ),
                                     ActivityCalenderFragment(
                                         it.data.activityMonth[8],
                                         it.data.session
@@ -142,24 +142,31 @@ class CalenderActivityNavHost : Fragment() {
                                         4 -> {
                                             tab.text = it.data.activityMonth[4].monthName
                                         }
+
                                         5 -> {
                                             tab.text = it.data.activityMonth[5].monthName
                                         }
+
                                         6 -> {
                                             tab.text = it.data.activityMonth[6].monthName
                                         }
+
                                         7 -> {
                                             tab.text = it.data.activityMonth[7].monthName
                                         }
+
                                         8 -> {
                                             tab.text = it.data.activityMonth[8].monthName
                                         }
+
                                         9 -> {
                                             tab.text = it.data.activityMonth[9].monthName
                                         }
+
                                         10 -> {
                                             tab.text = it.data.activityMonth[10].monthName
                                         }
+
                                         11 -> {
                                             tab.text = it.data.activityMonth[11].monthName
                                         }

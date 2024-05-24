@@ -57,7 +57,7 @@ class StudentMedicalReportFragment : Fragment() {
                 Picasso.Builder(requireActivity()) // additional settings
                     .build()
             )
-        }catch (e:IllegalStateException){
+        } catch (e: IllegalStateException) {
 
         }
         binding = MedicalReportBinding.inflate(inflater, container, false)
@@ -84,12 +84,15 @@ class StudentMedicalReportFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        it.data?.let {student->
-                            student.profile?.let { it1 -> student.immunizationRecords?.let { it2 ->
-                                showData(it1,
-                                    it2
-                                )
-                            } }
+                        it.data?.let { student ->
+                            student.profile?.let { it1 ->
+                                student.immunizationRecords?.let { it2 ->
+                                    showData(
+                                        it1,
+                                        it2
+                                    )
+                                }
+                            }
                         }
 
                     }
@@ -112,7 +115,7 @@ class StudentMedicalReportFragment : Fragment() {
         getIcNoProfileBig(requireContext())?.let {
             getIcNoProfileBig(requireContext())?.let { it1 ->
                 Picasso.get()
-                    .load( details.photo)
+                    .load(details.photo)
                     .placeholder(it)
                     .error(it1)
                     .into(binding.logo)
@@ -148,9 +151,14 @@ class StudentMedicalReportFragment : Fragment() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             Log.d("size", " ${binding.scrollView.width}  ${binding.scrollView.width}")
-            val bitmap = getBitmapFromView(binding.scrollView, binding.scrollView.getChildAt(0).height, binding.scrollView.getChildAt(0).width)
+            val bitmap = getBitmapFromView(
+                binding.scrollView,
+                binding.scrollView.getChildAt(0).height,
+                binding.scrollView.getChildAt(0).width
+            )
             val pdfFile = createPdf(bitmap)
-            val printManager = requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
+            val printManager =
+                requireActivity().getSystemService(Context.PRINT_SERVICE) as PrintManager
             val printAdapter = PdfDocumentAdapter(requireActivity(), pdfFile?.absolutePath ?: "")
             printManager.print("Document", printAdapter, PrintAttributes.Builder().build())
         }, 500)
@@ -212,6 +220,7 @@ class StudentMedicalReportFragment : Fragment() {
         view.draw(canvas)
         return bitmap
     }
+
     fun getIcNoProfileBig(context: Context): VectorDrawableCompat? {
         return VectorDrawableCompat.create(context.resources, R.drawable.ic_no_profile_big, null)
     }

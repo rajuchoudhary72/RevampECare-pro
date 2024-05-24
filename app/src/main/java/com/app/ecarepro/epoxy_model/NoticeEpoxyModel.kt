@@ -1,23 +1,19 @@
 package com.app.ecarepro.epoxy_model
 
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.findNavController
- import com.app.ecarepro.R
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.NoticeListItemBinding
 import com.app.ecarepro.model.Notice
-import com.app.ecarepro.ui.searchinstitution.SearchInstitutionFragment
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 
-class NoticeEpoxyModel (
+class NoticeEpoxyModel(
     private val notices: Notice
- ):ViewBindingKotlinModel<NoticeListItemBinding>(R.layout.notice_list_item){
+) : ViewBindingKotlinModel<NoticeListItemBinding>(R.layout.notice_list_item) {
     override fun NoticeListItemBinding.bind() {
 
-        tvTitleNotice.text=notices.heading
-        noticeData=notices
+        tvTitleNotice.text = notices.heading
+        noticeData = notices
 
-        if ( notices.isRead == false){
+        if (notices.isRead == false) {
             cvNotItem.maxCardElevation = 8F;
         }
 
@@ -26,7 +22,6 @@ class NoticeEpoxyModel (
         cvNotItem.setOnClickListener {
 
         }
-
 
 
     }

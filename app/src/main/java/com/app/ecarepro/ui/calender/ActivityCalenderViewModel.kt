@@ -13,17 +13,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActivityCalenderViewModel @Inject constructor(
-    private val  userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val calenderStateFlow: MutableStateFlow<NetworkResult<NetworkActivityCalender>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val calenderStateFlow: MutableStateFlow<NetworkResult<NetworkActivityCalender>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val _calenderStateFlow: StateFlow<NetworkResult<NetworkActivityCalender>> = calenderStateFlow
 
-    fun getActivityCaledar( )=viewModelScope.launch {
+    fun getActivityCaledar() = viewModelScope.launch {
         runCatching {
             calenderStateFlow.value = NetworkResult.Loading()
-            userRepository.getActivityCalender( )
+            userRepository.getActivityCalender()
         }.onSuccess {
             calenderStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

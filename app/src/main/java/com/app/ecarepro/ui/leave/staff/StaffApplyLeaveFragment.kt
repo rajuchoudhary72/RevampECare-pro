@@ -2,15 +2,12 @@ package com.app.ecarepro.ui.leave.staff
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -18,15 +15,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
-import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.databinding.FragmentStaffApplyLeaveBinding
-import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.leave.LeaveHistoryAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
@@ -43,9 +36,9 @@ class StaffApplyLeaveFragment : Fragment() {
     private var days: Long = 0
     private lateinit var binding: FragmentStaffApplyLeaveBinding
     private val leaveApplyLeaveViewModel: StaffApplyLeaveViewModel by viewModels()
-    private   var imageExt: String =""
-    private   var imageString: String =""
-    private   var halfdayDTL: List<HalfdayDTL> =ArrayList()
+    private var imageExt: String = ""
+    private var imageString: String = ""
+    private var halfdayDTL: List<HalfdayDTL> = ArrayList()
 
 
     override fun onCreateView(
@@ -61,12 +54,12 @@ class StaffApplyLeaveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val leaveID=  requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
-        val leaveType=  requireArguments().getString(Constant.NAME)
+        val leaveID = requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
+        val leaveType = requireArguments().getString(Constant.NAME)
 
-        binding.tvLeaveType.text=leaveType
-        binding.tvStartDate.text=Constant.currentDate()
-        binding.tvEndDate.text=Constant.currentDate()
+        binding.tvLeaveType.text = leaveType
+        binding.tvStartDate.text = Constant.currentDate()
+        binding.tvEndDate.text = Constant.currentDate()
 
 
 
@@ -74,7 +67,9 @@ class StaffApplyLeaveFragment : Fragment() {
             ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
-                } })  }
+                }
+            })
+        }
 
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
@@ -85,22 +80,21 @@ class StaffApplyLeaveFragment : Fragment() {
                         override fun onSelect(date: String?, isCurrentDate: Boolean) {
                             binding.tvEndDate.text = Constant.dateToShow(date.toString())
 
-                            val diff =Constant.getLongTimeDate(  binding.tvEndDate.text.toString())-
-                                Constant.getLongTimeDate(binding.tvStartDate.text.toString())
+                            val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
+                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
 
 
 
 
-                             days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
 
                             binding.tvDuration.text = buildString {
-                                append(days+1)
+                                append(days + 1)
                                 append(" ")
                                 append(getString(R.string.day_s))
                             }
                         }
                     }).setMinDate(Constant.getLongTimeDate(binding.tvStartDate.text.toString()))
-
 
 
             } else Toast.makeText(requireContext(), "Select To Date", Toast.LENGTH_LONG).show()
@@ -131,7 +125,7 @@ class StaffApplyLeaveFragment : Fragment() {
                     leaveID,
                     binding.tvStartDate.text.toString(),
                     binding.tvEndDate.text.toString(),
-                    (days+1).toInt() ,
+                    (days + 1).toInt(),
                     halfdayDTL,
                     binding.textFiledReason.text.toString(),
                     imageString,
@@ -163,8 +157,6 @@ class StaffApplyLeaveFragment : Fragment() {
             }
 
         }
-
-
 
 
     }

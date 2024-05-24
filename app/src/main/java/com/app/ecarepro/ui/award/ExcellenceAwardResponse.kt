@@ -15,10 +15,12 @@ data class ExcellenceAwardResponse(
     val totalMarksInSport: String?,
     val year: String?
 )
+
 data class AcademicActivity(
     val activity: String,
     val marks: String
 )
+
 data class SportActivity(
     val activity: String,
     val marks: String

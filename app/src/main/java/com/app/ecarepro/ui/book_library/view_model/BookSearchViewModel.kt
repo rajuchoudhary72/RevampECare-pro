@@ -13,17 +13,19 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class BookSearchViewModel  @Inject constructor(
-    private val  userRepository: UserRepository
+class BookSearchViewModel @Inject constructor(
+    private val userRepository: UserRepository
 
 ) : ViewModel() {
 
 
-    private val bookSearchStateFlow: MutableStateFlow<NetworkResult<NetworkBookDetails>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val bookSearchStateFlow: MutableStateFlow<NetworkResult<NetworkBookDetails>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val _bookSearchStateFlow: StateFlow<NetworkResult<NetworkBookDetails>> = bookSearchStateFlow
 
-    fun getLibrarySearch( query: String,pg: Int  )=viewModelScope.launch {
+    fun getLibrarySearch(query: String, pg: Int) = viewModelScope.launch {
         runCatching {
             bookSearchStateFlow.value = NetworkResult.Loading()
             userRepository.getLibrarySearch(query, pg)
