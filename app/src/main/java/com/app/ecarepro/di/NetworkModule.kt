@@ -3,6 +3,7 @@ package com.app.ecarepro.di
 import android.content.Context
 import com.app.ecarepro.data.network.AuthInterceptor
 import com.app.ecarepro.data.network.service.AppService
+import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.UserService
@@ -90,5 +91,11 @@ object NetworkModule {
         return retrofit.create(AppService::class.java)
     }
 
+    @Provides
+    fun provideFomApiService(
+        retrofit: Retrofit
+    ): FomApiService {
+        return retrofit.create(FomApiService::class.java)
+    }
 
 }

@@ -106,6 +106,18 @@
     <color name="category5">#9999CC</color>
     <color name="category6">#FFB99C</color>
     <color name="category7">#8E47B5</color>
+
+
+    <color name="att_na_color">#808080</color>
+
+
+    <color name="disabled">#78CC41</color>
+
+    <color name="pending_color">#FFBB00</color>
+
+
+
+
     <color name="module">#545454</color>
     <color name="sub_text_color">#5B5B5B</color>
     <color name="reports_tiles_bg_grey_light">#F6F6F6</color>
@@ -116,8 +128,7 @@
     <color name="profile_color">#959595</color>
     <color name="grey_light1">#F9F9F9</color>
     <color name="name_2">#131313</color>
-    <color name="pending_color">#FFBB00</color>
-    <color name="att_na_color">#808080</color>
+
     <color name="noti_count_red_color">#ffE74C3C</color>
     <color name="light_hai">#e5e5e5</color>
     <color name="android">#00E3FF</color>
@@ -138,6 +149,7 @@
     <color name="opt1_color">#9A75CA</color>
     <color name="approved">#4BD964</color>
     <color name="Self_transprt_color">#D1D1D1</color>
+    <color name="light_gray_gallerytext">#757575</color>
     <color name="absent_red">#FB4E4E</color>
     <color name="shimmer_color">#a2878787</color>
     <array name="multi_color_array">

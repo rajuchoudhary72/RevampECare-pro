@@ -6,6 +6,7 @@ import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.data.network.model.NetworkConversationReport
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
@@ -37,6 +38,8 @@ interface MessageRepository {
         messageType: MessageType
     ): Flow<Result<ConversationDetailsDto>>
 
+
+
     fun replyMessage(
         request: ReplyMessageRequestDto
     ): Flow<Result<String>>
@@ -54,5 +57,11 @@ interface MessageRepository {
     fun sendBulkMessage(request: BulkMessageRequestDto): Flow<Result<String>>
 
     fun sendMessage(request: SendMessageRequest): Flow<Result<String>>
+
+    suspend fun getConversationReport(
+        pg: Int,
+        fromDate: String? = null,
+        tillDate: String? = null,
+    ): NetworkConversationReport
 
 }

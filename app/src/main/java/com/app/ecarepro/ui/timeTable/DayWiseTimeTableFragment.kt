@@ -7,8 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
-import com.app.ecarepro.R
+ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentDayWiseTimeTableBinding
 import com.app.ecarepro.model.TimeTableData
 import com.app.ecarepro.ui.assignment.AssignmentListAdapter

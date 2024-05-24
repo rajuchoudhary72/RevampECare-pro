@@ -10,6 +10,7 @@ import com.app.ecarepro.data.network.model.GenerateTokenResponseDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.data.network.model.NetworkConversationReport
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
@@ -100,4 +101,16 @@ interface MessageService {
     suspend fun sendMessage(
         @Body request: SendMessageRequest
     ): CommonResponse
+
+    @GET("Message/Conversation")
+    suspend fun getConversationReport(
+        @Query("pg") pg: Int,
+        @Query("FromDate") fromDate: String? = null,
+        @Query("ToDate") tillDate: String? = null,
+    ): NetworkConversationReport
+
+    @GET("Message/ConversationMsgDTL")
+    suspend fun getConversationMsgDTL(
+        @Query("MsgID") id: String
+    ): ConversationDetailsDto
 }

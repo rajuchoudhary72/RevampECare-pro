@@ -14,7 +14,7 @@ data class NetworkMyClass(
 data class MyClasseItem(
     val classID: Int?,
     val className: String?,
-    val id: Any?,
+    val id: String?,
     val isSelect: Boolean?
 )
 

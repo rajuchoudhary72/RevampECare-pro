@@ -3,8 +3,7 @@ package com.app.ecarepro.data
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
-import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
-import com.app.ecarepro.data.network.model.CommonResponse
+ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
@@ -13,38 +12,54 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAssignments
+import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
+import com.app.ecarepro.data.network.model.NetworkClassAttendance
+import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
+import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
+import com.app.ecarepro.data.network.model.NetworkLessonPlanList
+import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkQuestionPaper
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
+import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
+import com.app.ecarepro.data.network.model.NetworkStaffList
+import com.app.ecarepro.data.network.model.NetworkStaffProfile
+import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
 import com.app.ecarepro.data.network.model.NetworkStudentList
+import com.app.ecarepro.data.network.model.NetworkStudentListToMarkAtt
+import com.app.ecarepro.data.network.model.NetworkStudentProfile
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
+import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
-import com.app.ecarepro.data.network.model.Profile
-import com.app.ecarepro.data.network.model.UploadPhotoRequest
-import com.app.ecarepro.data.network.model.UserDashboardDto
+ import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
-import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
+ import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
+import com.app.ecarepro.data.network.model.post_lesson.ActionOnLesson
+import com.app.ecarepro.data.network.model.post_lesson.PostLesson
+import com.app.ecarepro.data.network.model.post_mark_attedance.PostMarkAttedance
+import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
@@ -55,22 +70,53 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.StudentTeacherResponse
+ import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
-import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
-import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
-import com.app.ecarepro.ui.statical.StaticGraphResponse
+ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+ import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
+import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAllTeacher
+import com.app.ecarepro.data.network.model.NetworkAppointments
+import com.app.ecarepro.data.network.model.NetworkAppreciations
+import com.app.ecarepro.data.network.model.NetworkAssignRollNo
+import com.app.ecarepro.data.network.model.NetworkClassAssignments
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
+import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
+import com.app.ecarepro.data.network.model.NetworkClassmateLST
+import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
+import com.app.ecarepro.data.network.model.NetworkInfractions
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkOutPassReport
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkRechargeLog
+import com.app.ecarepro.data.network.model.NetworkRouteList
+import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
+import com.app.ecarepro.data.network.model.NetworkSMSConsumption
+import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
+import com.app.ecarepro.data.network.model.NetworkStoppage
+import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
+import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.PostLeaveAction
+import kotlinx.coroutines.flow.flow
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
+import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
+import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
+import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
+import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import javax.inject.Inject
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
-
 class UserRepositoryImpl @Inject constructor(
     private val userService: UserService,
     private val userDataStore: UserDataStore,
@@ -116,6 +162,8 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.saveUserDetails(it, schoolCode)
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
+                userDataStore.saveUserType(it.userType ?: 0)
+                userDataStore.saveRoleName(it.roleName ?: "")
             }
 
         }
@@ -225,6 +273,24 @@ class UserRepositoryImpl @Inject constructor(
         return userService.leaveListStatus()
     }
 
+    override suspend fun leaveReport(
+        status: Int,
+        ord: Int,
+        applType: Int,
+        pg: Int
+    ): NetworkLeaveReport {
+        return userService.leaveReport(status, ord, applType, pg)
+    }
+
+    override suspend fun leaveAction(
+        applType: Int,
+        lvID: Int,
+        action: Int,
+        forwardedTo: Int
+    ): CommonResponse {
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID))
+    }
+
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {
         return userService.medicineIssued()
     }
@@ -280,6 +346,14 @@ class UserRepositoryImpl @Inject constructor(
         return userService.addInfraction(stID)
     }
 
+    override suspend fun getAppreciations(stID: Int): NetworkAppreciations {
+        return userService.getAppreciations(stID)
+    }
+
+    override suspend fun getInfractions(stID: Int): NetworkInfractions {
+        return userService.getInfractions(stID)
+    }
+
     override suspend fun saveInfraction(
         action: Int,
         stID: Int,
@@ -311,7 +385,6 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getClassmates(): ClassMateResponse {
         return userService.getClassmates()
     }
-
     override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
         return userService.uploadPhoto(request)
     }
@@ -383,57 +456,282 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun teachersAssignment(): NetworkTeacherAssignment {
-        return userService.teachersAssignment()
+    override suspend fun teachersAssignment(iD: String,): NetworkTeacherAssignment {
+        return userService.teachersAssignment(iD)
     }
 
     override suspend fun deleteAssignment(iD: String): CommonResponse {
         return userService.deleteAssignment(iD)
     }
 
-    override suspend fun mySubjects(): NetworkMySubjects {
-        return userService.mySubjects()
+    override suspend fun mySubjects(classID :Int): NetworkMySubjects {
+        return userService.mySubjects(classID)
     }
 
     override suspend fun createAssignment(
-        asgDate: String,
-        asgID: Int,
+          asgDate: String,
+          asgID: Int,
+          attachment: String,
+          fileExt: String,
+          fileURL: String,
+          classID: Int,
+          classIDs: String,
+          `data`: String,
+          `file`: String,
+          id: String,
+          isActive: Boolean,
+          isFileRemoved: Boolean,
+          multipleSubmission: Boolean,
+
+          subjectID: Int,
+          submitDate: String,
+          title: String
+    ): CommonResponse {
+        return userService.createAssignment(PostCreateAssignment( asgDate, asgID, Attachment(attachment, fileExt, fileURL), classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title))
+
+    }
+
+    override suspend fun postMarkAttedance(
+        classID: Int,
+        subID: Int,
+        mode: Int,
+        attDate: String,
+        stuList: List<StudentAtt>
+    ): CommonResponse {
+        return userService.postMarkAttendance(PostMarkAttedance(attDate,classID,mode,stuList,subID))
+    }
+
+    override suspend fun getLessonPlanList(page : Int,id: String): NetworkLessonPlanList {
+        return  userService.getLessonPlanList(page,id)
+    }
+
+    override suspend fun getLessonPlanFilter(
+        filter: String,
+        from: String,
+        till: String,
+        classIds: String,
+        subIds: String,
+        status: Int,
+
+    ): NetworkLessonPlanList {
+        return userService.getLessonPlanFilter(filter, from, till, classIds, subIds, status )
+    }
+
+    override suspend fun getLessonPlanDTL(id: String, teacherID: Int): NetworkLessonPlanDTL {
+        return userService.getLessonPlanDTL(id, teacherID)
+    }
+
+    override suspend fun getStaffList(): NetworkStaffList {
+        return  userService.getStaffList()
+    }
+
+    override suspend fun getStaffProfile(sId: Int): NetworkStaffProfile {
+        return userService.getStaffProfile(sId)
+    }
+
+    override suspend fun postLessonPlan(
         attachment: String,
         fileExt: String,
         fileURL: String,
-        classID: Int,
-        classIDs: String,
-        `data`: String,
-        `file`: String,
-        id: String,
-        isActive: Boolean,
-        isFileRemoved: Boolean,
-        multipleSubmission: Boolean,
-
-        subjectID: Int,
-        submitDate: String,
-        title: String
+        auditory: String,
+        classIds: String,
+        closure: String,
+        extensionTopic: String,
+        fileName: String,
+        fromDate: String,
+        introduction: String,
+        kinestheticActivity: String,
+        lPlnID: Int,
+        learningOutcomes: String,
+        objective: String,
+        otherResources: String,
+        resources: String,
+        showToStudent: Boolean,
+        subID: Int,
+        tillDate: String,
+        topic: String,
+        youtubeLinks: String
     ): CommonResponse {
-        return userService.createAssignment(
-            PostCreateAssignment(
-                asgDate,
-                asgID,
-                Attachment(attachment, fileExt, fileURL),
-                classID,
-                classIDs,
-                data,
-                file,
-                id,
-                isActive,
-                isFileRemoved,
-                multipleSubmission,
-                subjectID,
-                submitDate,
-                title
-            )
-        )
 
+        return userService.postLessonPlan(PostLesson(
+            com.app.ecarepro.data.network.model.post_lesson.Attachment(attachment, fileExt, fileURL),
+            auditory, classIds, closure, extensionTopic, fileName, fromDate, introduction, kinestheticActivity, lPlnID, learningOutcomes, objective, otherResources, resources, showToStudent, subID, tillDate, topic, youtubeLinks
+        ))
     }
+
+    override suspend fun createLessonPlan(): NetworkCreateLesson {
+        return userService.createLessonPlan()
+    }
+
+    override suspend fun getStudentProfile(sId: Int): NetworkStudentProfile {
+        return userService.getStudentProfile(sId)
+    }
+
+    override suspend fun getSAttendanceYrID(sId: Int, yrID: Int): NetworkProfileAttendanceDTL {
+        return userService.getSAttendanceYrID(sId, yrID)
+    }
+
+    override suspend fun getFeeSummaryYrID(sId: Int, yrID: Int): FeeSummery {
+        return userService.getFeeSummaryYrID(sId, yrID)
+    }
+
+    override suspend fun getAcademicPerformance(sId: Int, yrID: Int): NetworkAcademicPerformance {
+        return userService.getAcademicPerformance(sId, yrID)
+    }
+
+    override suspend fun getAttendanceSummary(attDate: String): NetworkAttedanceSummary {
+        return userService.getAttendanceSummary(attDate)
+    }
+
+    override suspend fun getClassAttendance(id: String, attDate: String): NetworkClassAttendance {
+        return userService.getClassAttendance(id, attDate)
+    }
+
+    override suspend fun getStudentAttendance(
+        from: String,
+        till: String,
+        yrID: String,
+        iD: String
+    ): NetworkStudentAttRepo {
+        return userService.getStudentAttendance(from, till, yrID, iD)
+    }
+
+    override suspend fun lessonPlanAction(
+        lPlnID: Int,
+        action: Int,
+        rejectionComments: String
+    ): CommonResponse {
+        return userService.lessonPlanAction(ActionOnLesson(action, lPlnID, rejectionComments))
+    }
+
+    override suspend fun getClassTeacher(): NetworkClassTeacher {
+        return userService.getClassTeacher()
+    }
+
+    override suspend fun getTimetableViewer(): NetworkTimeTableViewer {
+        return userService.getTimetableViewer()
+    }
+
+    override suspend fun getClassAssignment(id: String): NetworkAssignments {
+        return userService.getClassAssignment(id)
+    }
+
+    override suspend fun appointmentOverview(
+        appDate: String,
+        tillDate: String,
+        all: Boolean
+    ): NetworkAppointments {
+        return userService.appointmentOverview(appDate, tillDate, all)
+    }
+
+    override suspend fun appointmentAction(act: Int, appId: Int): CommonResponse {
+        return userService.appointmentAction(act, appId)
+    }
+
+    override suspend fun routesList(): NetworkRouteList {
+        return userService.routesList()
+    }
+
+    override suspend fun stoppageList(routeIDs: String, trip: Int): NetworkStoppage {
+        return userService.stoppageList(routeIDs, trip)
+    }
+
+    override suspend fun studentToMarkTransAttendane(
+        routeIDs: String,
+        stopID: Int,
+        trip: Int,
+        attDate: String,
+        stopIDs: String
+    ): NetworkStudentToMarkTransAttendane {
+        return userService.studentToMarkTransAttendane(routeIDs, stopID, trip, attDate, stopIDs)
+    }
+
+    override suspend fun postTransAttendance(
+        attDate: String,
+        routeID: Int,
+        stopID: Int,
+        stuAtt: List<StuAtt>,
+        trip: Int
+    ): CommonResponse {
+        return userService.postTransAttendance(PostStudentToMarkAtt(attDate, routeID, stopID, stuAtt, trip))
+    }
+
+    override suspend fun studentToDrop(
+        routeID : Int,
+        stopID: Int,
+        attDate: String
+    ): NetworkStudentToMarkTransAttendane {
+        return userService.studentToDrop(routeID , stopID, attDate)
+    }
+
+    override suspend fun transAttendanceReport(
+        routeID: Int,
+        StopIds: String,
+        attDate: String
+    ): NetworkTransAttendanceReport {
+        return userService.transAttendanceReport(routeID, StopIds, attDate)
+    }
+
+    override suspend fun getOutPassReport(attDate: String): NetworkOutPassReport {
+        return userService.getOutPassReport(attDate)
+    }
+
+    override suspend fun getStudentListToAssignRollNo(
+        iD: String,
+        orderby: Int
+    ): NetworkAssignRollNo {
+        return userService.getStudentListToAssignRollNo(iD, orderby)
+    }
+
+    override suspend fun getClassTeacherOf(): NetworkClassTeacherOf {
+        return userService.getClassTeacherOf()
+    }
+
+    override suspend fun assignRollNumber(request: List<AssignRollNoBodyItem>): CommonResponse {
+        return userService.assignRollNumber(request)
+    }
+
+    override suspend fun dropToStudent(
+        stID: Int,
+        attDate: String,
+        hasDropped: Boolean
+    ): NetworkStudentToMarkTransAttendane {
+        return userService.dropToStudent(stID, attDate, hasDropped)
+    }
+
+    override suspend fun getAppMsgUses(
+        fromDate: String,
+        toDate: String,
+        iD: String
+    ): NetworkSmsMsgReport {
+        return userService.getAppMsgUses(fromDate, toDate, iD)
+    }
+
+    override suspend fun getSMSUses(
+        fromDate: String,
+        toDate: String,
+        iD: String
+    ): NetworkSmsMsgReport {
+        return userService.getSMSUses(fromDate, toDate, iD)
+    }
+
+    override suspend fun getSMSConsumption(fromDate: String, toDate: String): NetworkSMSConsumption {
+        return userService.getSMSConsumption(fromDate, toDate)
+    }
+
+    override suspend fun getSMSBalnceInfo(): NetworkSMSBalnceInfo {
+        return userService.getSMSBalnceInfo()
+    }
+
+    override suspend fun getRechargeLog(fromDate: String, toDate: String): NetworkRechargeLog {
+        return userService.getRechargeLog(fromDate, toDate)
+    }
+
+    override suspend fun getGenerateToken(device: Int): NetworkGenerateTokenFeePay {
+        return userService.getGenerateToken(device)
+    }
+
+
 
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {
         return userService.viewAssignment(iD)
@@ -458,18 +756,6 @@ class UserRepositoryImpl @Inject constructor(
         return userService.staffAttendance(month, year)
     }
 
-    override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
-        return userService.surveyList(pg, isReport)
-    }
-
-    override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
-        return userService.surveyQuestions(id)
-    }
-
-    override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
-        return userService.submitSurveyQuestions(model)
-    }
-
     override suspend fun statistical(): StaticGraphResponse {
         return userService.statistical()
     }
@@ -478,10 +764,9 @@ class UserRepositoryImpl @Inject constructor(
         return userService.appUsersCount()
     }
 
-    override suspend fun appUserReportWevResponse(userType: String): AppUserWebResponse {
+    override suspend fun appUserReportWevResponse(userType:String): AppUserWebResponse {
         return userService.appUsersWeb(userType)
     }
-
     override suspend fun getAttendance(
         from: String,
         till: String,
@@ -494,14 +779,30 @@ class UserRepositoryImpl @Inject constructor(
         return userService.teachersTimetable(id)
     }
 
-    override suspend fun birthday(
-        userType: Int,
-        rptType: Int,
-        monthNo: Int,
-        date: String
-    ): NetworkBirthday {
-        return userService.birthday(userType, rptType, monthNo, date)
+    override suspend fun classTimetable(id: String): NetworkTeachersTimetable {
+        return userService.classTimetable(id)
     }
+
+    override suspend fun birthday(userType: Int, rptType: Int, monthNo: Int, date:String): NetworkBirthday {
+        return userService.birthday(userType, rptType, monthNo,date)
+    }
+
+    override suspend fun reportCardDTL(stID: Int): NetworkReportCardDetails {
+        return userService.reportCardDTL(stID)
+    }
+
+    override suspend fun markAttendance(): NetworkMarkAttendance {
+        return userService.markAttendance()
+    }
+
+    override suspend fun getStudentListToMarkAtt(
+        classID: Int,
+        subID: Int,
+        attDate: String
+    ): NetworkStudentListToMarkAtt {
+        return userService.getStudentListToMarkAtt(classID, subID, attDate)
+    }
+
 
     override fun getUserProfile(): Flow<Result<Profile>> {
         return flow {
@@ -638,5 +939,21 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun getQuestionPaper(classID: Int, yrID: Int): NetworkQuestionPaper {
+        return userService.getQuestionPaper(classID, yrID)
+    }
+
+    override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
+        return userService.surveyList(pg, isReport)
+    }
+
+    override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
+        return userService.surveyQuestions(id)
+    }
+
+    override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
+        return userService.submitSurveyQuestions(model)
     }
 }

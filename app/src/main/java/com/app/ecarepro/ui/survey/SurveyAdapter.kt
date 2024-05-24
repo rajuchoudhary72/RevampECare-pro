@@ -15,7 +15,7 @@ import com.app.ecarepro.utils.getDateTimeFormatted
 
 class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss:Int, data: AllSurvey) -> Unit) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
-       val binding =
+        val binding =
             SurveyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoticeViewHolder(binding.root)
     }
@@ -26,11 +26,11 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss
 
         val binding = DataBindingUtil.getBinding<SurveyItemBinding>(holder.itemView)
         val surveyModel=syllabusLST[position]
-       // bindingm.attData = syllabusLST[position]
+        // bindingm.attData = syllabusLST[position]
         if (binding!=null){
             binding.tvTest.text = surveyModel.description
             holder.itemView.setOnClickListener {
-               callback.invoke(position,surveyModel)
+                callback.invoke(position,surveyModel)
             }
 
 
@@ -59,7 +59,7 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss
                 if (surveyModel.isResponded) {
                     binding.tvRespondedOn.setText(
                         "RESPONDED ON: " + surveyModel.respondedOn?.let {
-                            getDateTimeFormatted(
+                            (
                                 it
                             )
                         }

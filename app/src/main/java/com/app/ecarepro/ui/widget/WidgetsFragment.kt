@@ -54,7 +54,7 @@ class WidgetsFragment : Fragment() {
                                     card.menuID,
                                     card.chmenuID
                                 )
-                                    ?.let { findNavController().navigate(it) }
+                                   /* ?.let { findNavController().navigate(it) }*/
                             }
 
                         }

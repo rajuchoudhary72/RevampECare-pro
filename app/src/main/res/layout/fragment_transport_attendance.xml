@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.transport_attendance.TransportAttendanceFragment">
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/md_theme_light_primary"
+        android:elevation="8dp"
+        app:layout_collapseMode="pin"
+        app:navigationIcon="@drawable/ic_arrow_back_24px"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="Attendance"
+        app:titleCentered="true"
+        app:titleTextAppearance="?attr/titleTextAppearance"
+        app:titleTextColor="@color/white" />
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cl_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+
+
+            >
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentScrim="@android:color/transparent"
+                app:expandedTitleTextAppearance="@android:color/transparent"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:statusBarScrim="@android:color/transparent">
+
+
+                <LinearLayout
+                    android:id="@+id/ll_toole"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="?actionBarSize"
+                    android:background="@color/md_theme_light_primary"
+                    android:fitsSystemWindows="true"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_collapseMode="parallax"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="10dp" >
+
+                        <TextView
+                            android:id="@+id/tv_select_route"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:background="@drawable/edit_text_box_des_log"
+                            android:fontFamily="@font/ubuntu_light"
+                            android:gravity="center_vertical"
+                            android:padding="13dp"
+                            android:text="@string/select_route"
+                            android:visibility="visible"
+                            app:drawableRightCompat="@drawable/ic_dropdown_spinner"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/edit_text_box_des_log"
+
+                            >
+
+                            <Spinner
+                                android:id="@+id/spinner_select_trip"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                 android:dropDownVerticalOffset="50dp"
+                                android:overlapAnchor="true"
+                                android:spinnerMode="dropdown"
+                                android:background="@drawable/spinner_drop_background_white"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:gravity="center_vertical"
+                                  android:visibility="visible"
+                                android:layout_marginVertical="@dimen/_4sdp"
+
+                                />
+
+
+                        </LinearLayout>
+                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_select_Stoppage"
+                        android:layout_width="match_parent"
+                         android:layout_height="52dp"
+                        android:background="@drawable/edit_text_box_des_log"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:gravity="center_vertical"
+                        android:padding="13dp"
+                        android:text="@string/select_stoppage"
+                        android:layout_marginHorizontal="10dp"
+                         android:layout_marginBottom="10dp"
+                         android:visibility="visible"
+                        app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
+
+
+
+                </LinearLayout>
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_student_att_mark"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:listitem="@layout/transport_att_student_list_item"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_no_item"
+            android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu_medium"
+            android:gravity="center"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+            android:visibility="gone"
+
+            />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

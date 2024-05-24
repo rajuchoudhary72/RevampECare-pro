@@ -132,7 +132,9 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
+
             }
+
         }
         mViewModel.schoolData.observe(viewLifecycleOwner) {
             schoolData = it
@@ -236,7 +238,9 @@ class HomeFragment : Fragment() {
                             card(card)
                             clickListener { _ ->
                                 (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
-                                    ?.let { findNavController().navigate(it) }
+                                    ?.let {
+                                       /* findNavController().navigate(it)*/
+                                    }
                             }
                         }
                     }
@@ -326,7 +330,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.classMateFragment)
         }else if (favouriteSlider.module.contains("Survey", true)) {
             findNavController().navigate(R.id.surveyListFragment)
-        }
+             }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {
             schoolData?.let {
@@ -334,15 +338,13 @@ class HomeFragment : Fragment() {
                     webViewCall(url, getString(R.string.website_txt))
                 }
             }
-        }
-        else if (favouriteSlider.module.contains("Marks Entry", true)) {
+        } else if (favouriteSlider.module.contains("Marks Entry", true)) {
             schoolData?.let {
                 it.marksEntryURL?.let { url ->
                     webViewCall(url, getString(R.string.marks_entry_heading))
                 }
             }
-        }
-        else if (favouriteSlider.module.contains("Assessment", true)) {
+        } else if (favouriteSlider.module.contains("Assessment", true)) {
             schoolData?.let {
                 it.assessmentMarksURL?.let { url ->
                     webViewCall(url, getString(R.string.assessment_headling))
