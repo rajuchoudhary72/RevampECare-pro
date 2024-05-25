@@ -79,32 +79,31 @@
                             android:id="@+id/rl_search"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                             android:weightSum="6"
-                            android:padding="10dp"
                             android:orientation="horizontal"
-                            android:visibility="visible">
+                            android:padding="10dp"
+                            android:visibility="visible"
+                            android:weightSum="6">
 
                             <EditText
                                 android:id="@+id/ed_search"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
-                                 android:paddingHorizontal="10dp"
                                 android:background="@drawable/background_box_rectangle_white"
                                 android:fontFamily="@font/ubuntu_light"
                                 android:gravity="center_vertical"
-                                android:maxLines="1"
-                                android:inputType="text"
                                 android:hint="Enter Title"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:paddingHorizontal="10dp"
 
-                                android:visibility="visible"/>
+                                android:visibility="visible" />
 
 
                             <RelativeLayout
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:visibility="gone"
                                 android:layout_height="match_parent"
-                                >
+                                android:layout_weight="1"
+                                android:visibility="gone">
 
                                 <ImageView
                                     android:id="@+id/iv_search"
@@ -123,9 +122,6 @@
                         </LinearLayout>
 
 
-
-
-
                     </LinearLayout>
 
 
@@ -139,12 +135,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
                 />
-
-
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -155,12 +149,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_no_item"
-            android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:visibility="gone"
             android:text="@string/no_circuler_available"
             android:textSize="16sp"
+            android:visibility="gone"
 
             />
 

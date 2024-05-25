@@ -11,8 +11,9 @@ import com.app.ecarepro.R
 import com.app.ecarepro.model.InfractionType
 import com.app.ecarepro.utils.listener.ItemListener
 
-class InfractionCatPopUpListAdapter(private var infractionTypeList: List<InfractionType>,
-                                    private var itemListener: ItemListener<InfractionType>
+class InfractionCatPopUpListAdapter(
+    private var infractionTypeList: List<InfractionType>,
+    private var itemListener: ItemListener<InfractionType>
 ) :
     RecyclerView.Adapter<InfractionCatPopUpListAdapter.PopUpListViewHolder>() {
 
@@ -29,15 +30,15 @@ class InfractionCatPopUpListAdapter(private var infractionTypeList: List<Infract
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text=infractionTypeList[holder.bindingAdapterPosition].infraction
+        holder.itemName.text = infractionTypeList[holder.bindingAdapterPosition].infraction
         holder.llMain.setOnClickListener {
-            lastIndex=holder.bindingAdapterPosition
-             itemListener.onItemClick(infractionTypeList[holder.bindingAdapterPosition],1,true)
+            lastIndex = holder.bindingAdapterPosition
+            itemListener.onItemClick(infractionTypeList[holder.bindingAdapterPosition], 1, true)
             notifyDataSetChanged()
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
+            holder.itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
@@ -45,7 +46,7 @@ class InfractionCatPopUpListAdapter(private var infractionTypeList: List<Infract
 
     }
 
-    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val itemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val llMain: LinearLayout = itemView.findViewById(R.id.ll_main)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="dataActivity"
             type="com.app.ecarepro.model.Activity" />
@@ -26,15 +26,13 @@
                 android:layout_marginStart="5dp">
 
 
-
                 <TextView
                     android:id="@+id/day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                     android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}"
-                     android:text="@{dataActivity.fromDate}"
                     android:layout_marginHorizontal="25dp"
-                    />
+                    android:text="@{dataActivity.fromDate}"
+                    android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}" />
 
 
             </RelativeLayout>
@@ -61,7 +59,7 @@
                 android:layout_height="25dp"
                 android:layout_below="@+id/rel_day2"
                 android:layout_toEndOf="@+id/rel_day"
-                 android:background="@{dataActivity.working ? @drawable/circle_calender2 : @drawable/circle_calender2_blue}"
+                android:background="@{dataActivity.working ? @drawable/circle_calender2 : @drawable/circle_calender2_blue}"
 
                 >
 
@@ -126,18 +124,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:textColor="@color/white"
                     android:text="@{dataActivity.title}"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/day2"
+                    isVisible="@{!dataActivity.working}"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/view_fest"
                     android:text="@string/_holiday_"
                     android:textColor="@color/white"
-                    isVisible="@{!dataActivity.working}"
                     tools:ignore="RtlCompat" />
 
 

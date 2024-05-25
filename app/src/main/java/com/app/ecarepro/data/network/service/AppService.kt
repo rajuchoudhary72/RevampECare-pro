@@ -2,6 +2,8 @@ package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.FavouritesDto
+import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
 import retrofit2.http.Body
@@ -22,5 +24,15 @@ interface AppService {
     @POST("App/RegisterDevice")
     suspend fun registerFirebaseToken(
         @Body registerDevice: RegisterDevice
+    ): CommonResponse
+
+    @GET("App/FavoriteMenus")
+    suspend fun getFavourites(
+        @Query("Device") device: Int = 1,
+    ): FavouritesDto
+
+    @POST("App/UpdateFavoriteMenus")
+    suspend fun updateFavourites(
+       @Body request: List<FavouritesUpdateDto>
     ): CommonResponse
 }

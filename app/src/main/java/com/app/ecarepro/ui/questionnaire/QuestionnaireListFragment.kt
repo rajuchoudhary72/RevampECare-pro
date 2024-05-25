@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,7 +28,7 @@ import kotlinx.coroutines.launch
 class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
     private lateinit var noticeAdapter: QuestionnaireAdapter
-    private var isLoading:Boolean = true
+    private var isLoading: Boolean = true
     private var myQues: Boolean = false
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
@@ -54,7 +53,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
             layoutManager = LinearLayoutManager(activity)
             adapter = noticeAdapter
         }
-          return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,15 +62,16 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
         binding.toggleButtonTypeQuestion.addOnButtonCheckedListener { _, checkedId, isChecked ->
             myQues = when (binding.toggleButtonTypeQuestion.checkedButtonId) {
                 R.id.btn_all_ques -> {
-                    noticeAdapter.clearData( )
+                    noticeAdapter.clearData()
 
-                    pageIndex=1
+                    pageIndex = 1
                     questionnaireViewModel.getQuestionnaireList(pageIndex, false)
                     false
                 }
+
                 else -> {
-                    pageIndex=1
-                    noticeAdapter.clearData( )
+                    pageIndex = 1
+                    noticeAdapter.clearData()
                     questionnaireViewModel.getQuestionnaireList(pageIndex, true)
                     true
                 }
@@ -83,23 +83,23 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
                 when (it) {
 
                     is NetworkResult.Loading -> {
-                         (requireActivity() as MainActivity).showLoader(true)
+                        (requireActivity() as MainActivity).showLoader(true)
                     }
 
                     is NetworkResult.Error -> {
-                        isLoading=true
-                         (requireActivity() as MainActivity).showLoader(false)
+                        isLoading = true
+                        (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = false
                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
-                         (requireActivity() as MainActivity).showLoader(false)
+                        (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = true
 
                         if (it.data != null) {
 
-                            isLoading=true
+                            isLoading = true
                             if (it.data.questions != null) {
 
                                 binding.recyclerQuestionnaire.isVisible = true
@@ -139,13 +139,13 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
                         totalItemCount = linearLayoutManager.itemCount;
                         pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
 
-                         if ( isLoading){
-                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                 isLoading=false
-                                 pageIndex += 1
-                                 questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
-                              }
-                         }
+                        if (isLoading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                isLoading = false
+                                pageIndex += 1
+                                questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
+                            }
+                        }
 
                     }
                 }
@@ -161,7 +161,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
             }
 
             4 -> {
-                if (t.isVerified){
+                if (t.isVerified) {
                     findNavController().navigate(
                         R.id.action_questionnaireListFragment_to_answerDetailsFragment,
                         Bundle().apply {

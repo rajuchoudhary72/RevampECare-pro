@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +54,7 @@ class PostQuestionnaireFragment : Fragment() {
                 imageString, "", imageExt
             )
 
-            Toast.makeText(activity, getString(R.string .successfully), Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, getString(R.string.successfully), Toast.LENGTH_LONG).show()
             findNavController().popBackStack()
         }
 

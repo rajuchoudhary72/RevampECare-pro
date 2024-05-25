@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="assignmentData"
             type="com.app.ecarepro.model.TeacherAssignment" />
@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey_light"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ll_"
@@ -119,17 +118,16 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:drawablePadding="4dp"
-                            android:text="Status: "
-                             />
+                            android:text="Status: " />
 
                         <TextView
                             android:id="@+id/tvStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="2dp"
                             android:paddingTop="3dp"
                             android:textColor="@color/grey_40"
-                            android:layout_marginStart="5dp"
                             app:fontFamily="@font/ubuntu_medium   " />
 
 
@@ -157,13 +155,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="2dp"
                             android:layout_toEndOf="@+id/clock"
                             android:paddingTop="3dp"
-                            android:layout_marginStart="5dp"
-                            android:textColor="@color/grey_40"
                             android:text="@{assignmentData.uploadedOn}"
-                             app:fontFamily="@font/ubuntu_light" />
+                            android:textColor="@color/grey_40"
+                            app:fontFamily="@font/ubuntu_light" />
 
 
                     </RelativeLayout>
@@ -182,17 +180,16 @@
                             android:layout_alignParentStart="true"
                             android:layout_marginTop="3dp"
                             android:drawablePadding="3dp"
-                            android:text="@string/assigned_on"
-                             />
+                            android:text="@string/assigned_on" />
 
                         <TextView
                             android:id="@+id/date2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="2dp"
                             android:layout_toEndOf="@+id/clock2"
                             android:paddingTop="3dp"
-                            android:layout_marginStart="5dp"
                             android:text="@{assignmentData.uploadedOn}"
                             android:textColor="@color/grey_40"
 
@@ -215,20 +212,19 @@
                             android:layout_marginTop="3dp"
                             android:drawablePadding="3dp"
 
-                            android:text="@string/submitted_on"
-                             />
+                            android:text="@string/submitted_on" />
 
                         <TextView
                             android:id="@+id/date3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
+                            android:layout_marginStart="5dp"
                             android:layout_marginTop="3dp"
                             android:layout_toEndOf="@+id/clock3"
                             android:paddingTop="3dp"
-                            android:textColor="@color/grey_40"
-                            android:layout_marginStart="5dp"
                             android:text="@{assignmentData.submitDate}"
+                            android:textColor="@color/grey_40"
                             app:fontFamily="@font/ubuntu_medium" />
 
 
@@ -259,8 +255,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@+id/word_space"
-                            android:textColor="@color/brand_color"
                             android:text="@{assignmentData.subject}"
+                            android:textColor="@color/brand_color"
                             android:textSize="14sp" />
 
                     </RelativeLayout>
@@ -281,8 +277,7 @@
                             android:layout_toEndOf="@+id/user_img"
                             android:text="@string/updated_by"
                             android:textSize="8dp"
-                            app:fontFamily="@font/ubuntu_light"
-                            />
+                            app:fontFamily="@font/ubuntu_light" />
 
                         <TextView
                             android:id="@+id/updated_by_person"
@@ -290,17 +285,17 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/updated_by"
                             android:layout_marginStart="3dp"
+                            android:layout_toEndOf="@+id/user_img"
                             android:text="You"
-                             android:layout_toEndOf="@+id/user_img"
                             app:fontFamily="@font/ubuntu_medium" />
 
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/user_img"
-                              android:layout_width="45dp"
+                            android:layout_width="45dp"
                             android:layout_height="45dp"
-                            android:visibility="gone"
                             android:layout_centerVertical="true"
+                            android:visibility="gone"
                             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle" />
 
 

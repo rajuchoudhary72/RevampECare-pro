@@ -2,7 +2,7 @@ package com.app.ecarepro.ui.leave.apply_leave
 
 import android.app.Activity
 import android.app.AlertDialog
- import android.graphics.Bitmap
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,7 +24,7 @@ import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
- import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
-class  ApplyLeaveFragment : Fragment() {
+class ApplyLeaveFragment : Fragment() {
 
     private var selectedLeaveTypeID: Int = 0
     private var leaveTypesDataString: ArrayList<String> = ArrayList()
@@ -49,11 +49,11 @@ class  ApplyLeaveFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
+    ): View {
 
-        binding= FragmentApplyLeaveBinding.inflate(inflater,container,false)
+        binding = FragmentApplyLeaveBinding.inflate(inflater, container, false)
 
-         return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,41 +61,48 @@ class  ApplyLeaveFragment : Fragment() {
 
 
         binding.llStartDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback  {
+            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                     binding.tvStartDate.text=date
+                    binding.tvStartDate.text = date
                 }
 
             })
 
             binding.llEndDate.setOnClickListener {
-                if (binding.tvStartDate.text.toString().isNotEmpty()){
-                    ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback  {
-                        override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                            binding.tvEndDate.text=date
-                        }
-                    }).setMinDate(Constant.getLongTimeDate(binding.tvEndDate.text.toString()))
+                if (binding.tvStartDate.text.toString().isNotEmpty()) {
+                    ECareDataPicker(
+                        requireActivity(),
+                        true,
+                        object : ECareDataPicker.PickerCallback {
+                            override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                                binding.tvEndDate.text = date
+                            }
+                        }).setMinDate(Constant.getLongTimeDate(binding.tvEndDate.text.toString()))
 
 
-                    val diff=Constant.getLongTimeDate(binding.tvStartDate.text.toString())-Constant.getLongTimeDate(binding.tvEndDate.text.toString())
+                    val diff =
+                        Constant.getLongTimeDate(binding.tvStartDate.text.toString()) - Constant.getLongTimeDate(
+                            binding.tvEndDate.text.toString()
+                        )
 
-                      val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+                    val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
 
-                    binding.tvNumberDays.text=days.toString()
+                    binding.tvNumberDays.text = days.toString()
 
 
-                }  else Toast.makeText(requireContext(),"Select To Date", Toast.LENGTH_LONG).show()
-            }   }
+                } else Toast.makeText(requireContext(), "Select To Date", Toast.LENGTH_LONG).show()
+            }
+        }
 
 
         binding.btnAttachment.setOnClickListener {
             selectImageOptionDialog()
         }
         binding.imageViewCancel.setOnClickListener {
-            imageExt=""
-            imageString=""
-            binding.imageViewCancel.isVisible=false
-            binding.attachmentImage.isVisible=false
+            imageExt = ""
+            imageString = ""
+            binding.imageViewCancel.isVisible = false
+            binding.attachmentImage.isVisible = false
         }
 
         lifecycleScope.launch {
@@ -108,22 +115,29 @@ class  ApplyLeaveFragment : Fragment() {
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                         Log.d("main", "Error$it")
+                        Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data !=null) {
-                            leaveTypeList=it.data.leaveTypes
+                        if (it.data != null) {
+                            leaveTypeList = it.data.leaveTypes
                             it.data.leaveTypes.forEach { data ->
-                                leaveTypesDataString.add(data.suggestion )
+                                leaveTypesDataString.add(data.suggestion)
                             }
-                            val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,leaveTypesDataString)
+                            val arrayAdapter = ArrayAdapter(
+                                requireContext(),
+                                R.layout.view_drop_down_menu,
+                                leaveTypesDataString
+                            )
                             binding.autoCompleteReason.setAdapter(arrayAdapter)
                         }
 
-                    }  }  }  }
+                    }
+                }
+            }
+        }
 
         lifecycleScope.launch {
             leaveApplyLeaveViewModel.leaveApplyStateFlow.collectLatest {
@@ -142,18 +156,21 @@ class  ApplyLeaveFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         findNavController().popBackStack()
 
-                    }  }  }  }
+                    }
+                }
+            }
+        }
 
         leaveApplyLeaveViewModel.leaveSetting()
 
         binding.autoCompleteReason.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
-                selectedLeaveTypeID=leaveTypeList[position].lvSgID
-               }
+                selectedLeaveTypeID = leaveTypeList[position].lvSgID
+            }
 
         binding.btnSubmit.setOnClickListener {
 
-            if (validateData()){
+            if (validateData()) {
                 leaveApplyLeaveViewModel.leaveApply(
                     selectedLeaveTypeID,
                     binding.tvStartDate.text.toString(),
@@ -172,11 +189,13 @@ class  ApplyLeaveFragment : Fragment() {
         binding.toggleButtonTypeLeave.addOnButtonCheckedListener { _, _, _ ->
             when (binding.toggleButtonTypeLeave.checkedButtonId) {
                 R.id.btn_leave_req -> {
-                    binding.llLeaveHistory.isVisible=false
-                    binding.llMainLeaveRequest.isVisible=true
-                } else -> {
-                    binding.llLeaveHistory.isVisible=true
-                    binding.llMainLeaveRequest.isVisible=false
+                    binding.llLeaveHistory.isVisible = false
+                    binding.llMainLeaveRequest.isVisible = true
+                }
+
+                else -> {
+                    binding.llLeaveHistory.isVisible = true
+                    binding.llMainLeaveRequest.isVisible = false
                 }
             }
         }
@@ -227,10 +246,7 @@ class  ApplyLeaveFragment : Fragment() {
 
         leaveApplyLeaveViewModel.leaveHistory()
 
-}
-
-
-
+    }
 
 
     private fun selectImageOptionDialog() {
@@ -270,8 +286,8 @@ class  ApplyLeaveFragment : Fragment() {
 
                 imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
-                binding.imageViewCancel.isVisible=true
-                binding.attachmentImage.isVisible=true
+                binding.imageViewCancel.isVisible = true
+                binding.attachmentImage.isVisible = true
 
             }
         }
@@ -286,37 +302,38 @@ class  ApplyLeaveFragment : Fragment() {
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
                     imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-                    binding.imageViewCancel.isVisible=true
-                    binding.attachmentImage.isVisible=true
+                    binding.imageViewCancel.isVisible = true
+                    binding.attachmentImage.isVisible = true
 
                 }
             }
         }
 
-    private fun validateData():Boolean{
-        var validate=true
-        if (binding.tvStartDate.text.toString().isEmpty()){
-            validate=false
-            Toast.makeText(requireContext(),"Select From Date",Toast.LENGTH_LONG).show()
+    private fun validateData(): Boolean {
+        var validate = true
+        if (binding.tvStartDate.text.toString().isEmpty()) {
+            validate = false
+            Toast.makeText(requireContext(), "Select From Date", Toast.LENGTH_LONG).show()
         }
-        if (binding.tvEndDate.text.toString().isEmpty()){
-            validate=false
-            Toast.makeText(requireContext(),"Select To Date",Toast.LENGTH_LONG).show()
+        if (binding.tvEndDate.text.toString().isEmpty()) {
+            validate = false
+            Toast.makeText(requireContext(), "Select To Date", Toast.LENGTH_LONG).show()
 
         }
-        if (selectedLeaveTypeID == 0){
-            validate=false
-            Toast.makeText(requireContext(),"Select Leave Type",Toast.LENGTH_LONG).show()
+        if (selectedLeaveTypeID == 0) {
+            validate = false
+            Toast.makeText(requireContext(), "Select Leave Type", Toast.LENGTH_LONG).show()
 
         }
-        if (binding.textFiledReason.text.toString().isEmpty()){
-            validate=false
-            Toast.makeText(requireContext(),"Enter Reason",Toast.LENGTH_LONG).show()
+        if (binding.textFiledReason.text.toString().isEmpty()) {
+            validate = false
+            Toast.makeText(requireContext(), "Enter Reason", Toast.LENGTH_LONG).show()
 
         }
-        if (!binding.cbLeaveTc.isChecked){
-            validate=false
-            Toast.makeText(requireContext(),"Please Check Term and Condition",Toast.LENGTH_LONG).show()
+        if (!binding.cbLeaveTc.isChecked) {
+            validate = false
+            Toast.makeText(requireContext(), "Please Check Term and Condition", Toast.LENGTH_LONG)
+                .show()
 
         }
 

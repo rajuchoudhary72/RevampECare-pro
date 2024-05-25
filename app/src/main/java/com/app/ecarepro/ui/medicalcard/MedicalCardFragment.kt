@@ -124,7 +124,8 @@ class MedicalCardFragment : Fragment(), ItemListener<Dtl> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        Toast.makeText(requireContext(), "Updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Updated successfully", Toast.LENGTH_SHORT)
+                            .show()
 
 
                     }

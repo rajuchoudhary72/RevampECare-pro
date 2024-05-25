@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="attData"
             type="com.app.ecarepro.model.Attendance" />
@@ -16,9 +17,9 @@
             android:id="@+id/llHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
             android:layout_marginTop="5dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <View
                 android:layout_width="match_parent"
@@ -39,11 +40,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:text="@{attData.attDate}"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:text="@{attData.attDate}" />
 
                 <View
                     android:layout_width="0.5dp"
@@ -54,11 +55,11 @@
                     android:id="@+id/tvIn"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_weight="0.6"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
                     android:paddingVertical="10dp"
                     android:text="@{attData.inTime}"
-                    android:fontFamily="@font/ubuntu_medium"
 
                     />
 
@@ -71,12 +72,12 @@
                     android:id="@+id/tvOut"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-
                     android:layout_weight="0.6"
+
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="@{attData.outTime}"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:text="@{attData.outTime}" />
 
                 <View
                     android:layout_width="0.5dp"
@@ -87,11 +88,11 @@
                     android:id="@+id/tvLate"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_weight="0.6"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="@{attData.lateBy}"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:text="@{attData.lateBy}" />
 
 
                 <View
@@ -103,11 +104,11 @@
                     android:id="@+id/tvTotal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:gravity="center"
                     android:layout_weight="0.6"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="@{attData.totalWorking}"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:text="@{attData.totalWorking}" />
 
                 <View
                     android:layout_width="0.5dp"
@@ -118,11 +119,11 @@
                     android:id="@+id/tvStatus"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:paddingVertical="10dp"
-                    android:text="@{attData.status}"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:layout_weight="0.9" />
+                    android:text="@{attData.status}" />
 
                 <View
                     android:layout_width="0.5dp"

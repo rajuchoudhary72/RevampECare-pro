@@ -12,7 +12,7 @@ class TeachersBirthdayCarouselModel(val data: List<BirthDayCard>) :
         carousel.numViewsToShowOnScreen = 1.8f
         carousel.withModels {
             data.forEach {
-                teacherBirthdayCard{
+                teacherBirthdayCard {
                     id(it.heading)
                     data(it)
                 }

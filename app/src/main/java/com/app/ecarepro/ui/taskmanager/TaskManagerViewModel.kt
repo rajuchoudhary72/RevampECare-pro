@@ -73,8 +73,11 @@ class TaskManagerViewModel @Inject constructor(
             schoolRepository
                 .updateTaskStatus(task.id, statusId)
                 .collectLatest { result ->
-                    func(result.isSuccess, result.getOrNull()?:result.exceptionOrNull()?.message?: UNKNOWN_ERROR_MESSAGE)
-                    if(result.isSuccess){
+                    func(result.isSuccess,
+                        result.getOrNull() ?: result.exceptionOrNull()?.message
+                        ?: UNKNOWN_ERROR_MESSAGE
+                    )
+                    if (result.isSuccess) {
                         searchQuery.update { it }
                     }
                 }

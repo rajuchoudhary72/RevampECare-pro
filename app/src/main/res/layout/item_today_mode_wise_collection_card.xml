@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -20,14 +20,14 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
+        animateBetweenColorsOnExpand="@{isExpanded}"
+        colorFrom="@{@color/green_80}"
+        colorTo="@{@color/light_green}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/brand_color"
-        app:contentPadding="8dp"
-        animateBetweenColorsOnExpand="@{isExpanded}"
-        colorFrom="@{@color/green_80}"
         app:cardElevation="@{isExpanded ? 3f:0f}"
-        colorTo="@{@color/light_green}"
+        app:contentPadding="8dp"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.BottomRoundedCorner"
         app:strokeWidth="0dp">
 
@@ -39,15 +39,15 @@
 
             <ImageView
                 android:id="@+id/image_arrow"
-                app:layout_constraintTop_toTopOf="@+id/title"
-                app:layout_constraintBottom_toBottomOf="@+id/title"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:rotation="@{isExpanded ? 90:0}"
                 android:src="@{isExpanded ? @drawable/ic_arrow_right_black:@drawable/ic_arrow_right_white}"
-                tools:src="@drawable/ic_arrow_right_white"
-                android:layout_height="wrap_content"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintBottom_toBottomOf="@+id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_arrow_right_white" />
 
             <TextView
                 android:id="@+id/title"
@@ -57,12 +57,12 @@
                 android:drawablePadding="6dp"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
-                android:paddingVertical="5dp"
                 android:onClick="@{toggleCardVisibility}"
+                android:paddingVertical="5dp"
                 android:text="Today's Mode Wise Collection"
                 android:textColor="@{isExpanded ? @color/black:@color/white}"
-                app:layout_constraintStart_toEndOf="@+id/image_arrow"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_arrow"
                 app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -79,23 +79,23 @@
 
             <TextView
                 android:id="@+id/text_total_collection"
+                rupeeText="@{collectionModeWise.total()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
-                rupeeText="@{collectionModeWise.total()}"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_total" />
+                app:layout_constraintTop_toBottomOf="@+id/text_total"
+                tools:text="₹3,43,90,000" />
 
 
             <LinearLayout
                 android:id="@+id/layoutCollections"
+                collectionItems="@{collectionModeWise.transactionDetails}"
                 isVisible="@{isExpanded}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                collectionItems="@{collectionModeWise.transactionDetails}"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@+id/title" />

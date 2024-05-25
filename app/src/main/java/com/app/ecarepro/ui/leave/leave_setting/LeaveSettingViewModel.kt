@@ -16,19 +16,22 @@ class LeaveSettingViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val leaveSettingMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLeaveSetting>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val leaveSettingStateFlow: StateFlow<NetworkResult<NetworkLeaveSetting>> = leaveSettingMutableStateFlow
+    private val leaveSettingMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLeaveSetting>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val leaveSettingStateFlow: StateFlow<NetworkResult<NetworkLeaveSetting>> =
+        leaveSettingMutableStateFlow
 
 
-    fun leaveSetting(  )=viewModelScope.launch {
+    fun leaveSetting() = viewModelScope.launch {
         runCatching {
-            leaveSettingMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveSetting(  )
+            leaveSettingMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.leaveSetting()
         }.onSuccess {
             leaveSettingMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            leaveSettingMutableStateFlow .value = NetworkResult.Error(it.message)
+            leaveSettingMutableStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 

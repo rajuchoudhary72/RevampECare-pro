@@ -26,15 +26,15 @@ import java.util.Locale
 @AndroidEntryPoint
 class TimeTableNavHostFragment : Fragment() {
 
-    private lateinit var binding : FragmentTimeTableNavHostBinding
-    private val timeTableNavHostViewModel : TimeTableNavHostViewModel by viewModels()
+    private lateinit var binding: FragmentTimeTableNavHostBinding
+    private val timeTableNavHostViewModel: TimeTableNavHostViewModel by viewModels()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentTimeTableNavHostBinding.inflate(inflater,container,false)
+    ): View {
+        binding = FragmentTimeTableNavHostBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
@@ -62,13 +62,13 @@ class TimeTableNavHostFragment : Fragment() {
 
                         if (it.data != null) {
 
-                            if (it.data.data!=null ) {
+                            if (it.data.data != null) {
 
-                                val fragmentList : ArrayList<Fragment> = ArrayList()
+                                val fragmentList: ArrayList<Fragment> = ArrayList()
 
 
-                                fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
-                                fragmentList.add( TimeTableDayWiseNavHostFragment(it.data))
+                                fragmentList.add(DayWiseTimeTableFragment(todayData(it.data.data)))
+                                fragmentList.add(TimeTableDayWiseNavHostFragment(it.data))
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,
@@ -83,13 +83,11 @@ class TimeTableNavHostFragment : Fragment() {
                                     binding.viewPager
                                 ) { tab, position ->
 
-                                   if (position==0){
-                                       tab.text =  "Today"
-                                   }else if (position==1) {
-                                       tab.text =  "Day Wise"
-                                   }
-
-
+                                    if (position == 0) {
+                                        tab.text = "Today"
+                                    } else if (position == 1) {
+                                        tab.text = "Day Wise"
+                                    }
 
 
                                 }.attach()
@@ -112,16 +110,17 @@ class TimeTableNavHostFragment : Fragment() {
 
     }
 
-    private fun todayData(data: List<TimeTableData>) : TimeTableData {
+    private fun todayData(data: List<TimeTableData>): TimeTableData {
         val sdf = SimpleDateFormat("EEEE", Locale.getDefault())
         val d = Date()
         val dayOfTheWeek: String = sdf.format(d)
-        lateinit var  timeTableData : TimeTableData
+        lateinit var timeTableData: TimeTableData
 
-        data.forEach {itemData ->
-            if (dayOfTheWeek==itemData.day){
-                timeTableData=itemData
-            } }
+        data.forEach { itemData ->
+            if (dayOfTheWeek == itemData.day) {
+                timeTableData = itemData
+            }
+        }
         return timeTableData
     }
 }

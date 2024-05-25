@@ -14,17 +14,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ClassSyllabusViewModel @Inject constructor(
-    private val  userRepository: UserRepository
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val classSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<NetworkClassSyllabus>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val classSyllabusStateFlow: StateFlow<NetworkResult<NetworkClassSyllabus>> = classSyllabusMutableStateFlow
+    private val classSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<NetworkClassSyllabus>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val classSyllabusStateFlow: StateFlow<NetworkResult<NetworkClassSyllabus>> =
+        classSyllabusMutableStateFlow
 
-    fun getClassSyllabus( )=viewModelScope.launch {
+    fun getClassSyllabus() = viewModelScope.launch {
         runCatching {
             classSyllabusMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getClassSyllabus( )
+            userRepository.getClassSyllabus()
         }.onSuccess {
             classSyllabusMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

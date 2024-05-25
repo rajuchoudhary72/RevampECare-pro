@@ -1,6 +1,6 @@
 package com.app.ecarepro.model
 
-data class Thoughts (
+data class Thoughts(
     val author: String,
     val isILike: Int,
     val isVerified: Boolean,

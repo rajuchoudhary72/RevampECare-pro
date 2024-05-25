@@ -23,6 +23,7 @@ class SplashViewModel @Inject constructor(
             school.postValue(userDataStore.getSchoolData())
         }
     }
+
     suspend fun getSliders() {
         schoolRepository.fetchWalkThroughData()
     }

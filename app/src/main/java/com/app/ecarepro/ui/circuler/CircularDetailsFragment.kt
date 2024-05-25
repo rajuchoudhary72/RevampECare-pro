@@ -1,10 +1,10 @@
 package com.app.ecarepro.ui.circuler
 
- import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,31 +22,33 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CircularDetailsFragment : Fragment() {
 
-    private lateinit var binding : FragmentCirculerDetailsBinding
-     private lateinit var fileSource: String
+    private lateinit var binding: FragmentCirculerDetailsBinding
+    private lateinit var fileSource: String
 
-    private val circularDetailsViewModel:CircularDetailsViewModel by    viewModels()
+    private val circularDetailsViewModel: CircularDetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
+    ): View {
 
-        binding= FragmentCirculerDetailsBinding.inflate(inflater,container,false)
+        binding = FragmentCirculerDetailsBinding.inflate(inflater, container, false)
 
-        val circularID=  requireArguments().getInt(Constant.CIRCULAR_ID)
-        circularDetailsViewModel.getCircularDTL(circularID,Constant.DEFAULT_ID_CIRCULAR)
+        val circularID = requireArguments().getInt(Constant.CIRCULAR_ID)
+        circularDetailsViewModel.getCircularDTL(circularID, Constant.DEFAULT_ID_CIRCULAR)
 
-         return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.relView.setOnClickListener {
-            findNavController().navigate(R.id.action_circularDetailsFragment_to_openPdfFragment,Bundle( ).apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
+            findNavController().navigate(
+                R.id.action_circularDetailsFragment_to_openPdfFragment,
+                Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
         }
 
         binding.relDownload.setOnClickListener {
@@ -61,14 +63,15 @@ class CircularDetailsFragment : Fragment() {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data!=null){
-                            binding.circularDetails=it.data.circuler
-                            fileSource=it.data.circuler.filePath
+                        if (it.data != null) {
+                            binding.circularDetails = it.data.circuler
+                            fileSource = it.data.circuler.filePath
 
                         }
                     }

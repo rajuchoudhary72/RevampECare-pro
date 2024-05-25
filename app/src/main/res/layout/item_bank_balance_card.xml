@@ -75,11 +75,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹ 1,26,37,980"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/img_pnb"
-                app:layout_constraintTop_toBottomOf="@+id/img_pnb" />
+                app:layout_constraintTop_toBottomOf="@+id/img_pnb"
+                tools:text="₹ 1,26,37,980" />
 
 
             <ImageView
@@ -98,11 +98,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@+id/img_axis"
-                app:layout_constraintTop_toBottomOf="@+id/img_axis" />
+                app:layout_constraintTop_toBottomOf="@+id/img_axis"
+                tools:text="₹3,43,90,000" />
 
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView

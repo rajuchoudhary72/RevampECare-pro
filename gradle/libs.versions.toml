@@ -26,7 +26,7 @@ firebase-crashlytics = "2.9.4"
 google-services = "4.4.0"
 firebase-bom = "32.1.0"
 scrollingpagerindicator = "1.2.4"
-picasso="2.8"
+picasso = "2.8"
 swiperefreshlayout = "1.2.0-alpha01"
 play-services-location = "21.2.0"
 kotlinPlugin = "1.8.10"
@@ -67,7 +67,7 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-cloud-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 scrollingpagerindicator = { module = "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator", version.ref = "scrollingpagerindicator" }
-picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso"}
+picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
 [plugins]

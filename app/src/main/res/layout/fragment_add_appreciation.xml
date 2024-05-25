@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="studentData"
             type="com.app.ecarepro.model.StudentDTL" />
@@ -12,20 +13,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:fitsSystemWindows="true"
+        android:orientation="vertical"
         tools:context=".ui.discipline_log.infraction.appreciation.AddAppreciationFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
+            android:elevation="8dp"
+            android:theme="@style/MyThemeOverlay_Toolbar"
             app:layout_collapseMode="pin"
             app:titleCentered="true"
-            android:elevation="8dp"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:theme="@style/MyThemeOverlay_Toolbar"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />
 
@@ -43,12 +44,12 @@
                 <LinearLayout
                     android:id="@+id/lin_pro"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:visibility="visible"
                     android:background="@color/white"
+                    android:gravity="center"
                     android:paddingVertical="13dp"
-                    android:layout_height="wrap_content">
+                    android:visibility="visible">
 
 
                     <LinearLayout
@@ -69,8 +70,8 @@
                                 placeholder="@{@drawable/default_profile}"
                                 android:layout_width="90dp"
                                 android:layout_height="90dp"
-                                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
-                                android:layout_centerInParent="true" />
+                                android:layout_centerInParent="true"
+                                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle" />
 
 
                         </RelativeLayout>
@@ -176,8 +177,8 @@
                     android:id="@+id/LL_add_infraction"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="visible"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
 
                     <TextView
@@ -185,11 +186,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
+                        android:layout_marginVertical="5dp"
                         android:background="@drawable/edit_text_box_des_log"
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:padding="13dp"
-                        android:layout_marginVertical="5dp"
                         android:text="@string/select_apprec_category"
                         android:visibility="visible"
                         app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
@@ -211,20 +212,20 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tv_instance"
                             android:layout_width="0dp"
                             android:layout_height="52dp"
-                            android:layout_weight="1"
                             android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_weight="1"
                             android:background="@drawable/edit_text_box_des_log"
                             android:fontFamily="@font/ubuntu_light"
                             android:gravity="center_vertical"
                             android:padding="13dp"
-                            android:layout_marginVertical="5dp"
                             android:text="@string/instance"
                             android:visibility="visible" />
 
@@ -232,13 +233,13 @@
                             android:id="@+id/tv_select_reward"
                             android:layout_width="0dp"
                             android:layout_height="52dp"
-                            android:layout_weight="1"
                             android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="5dp"
+                            android:layout_weight="1"
                             android:background="@drawable/edit_text_box_des_log"
                             android:fontFamily="@font/ubuntu_light"
                             android:gravity="center_vertical"
                             android:padding="13dp"
-                            android:layout_marginVertical="5dp"
                             android:text="@string/select_reward"
                             android:visibility="visible"
                             app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
@@ -253,10 +254,10 @@
                         android:layout_height="52dp"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginVertical="5dp"
-                        android:paddingHorizontal="10dp"
                         android:background="@drawable/edit_text_box_des_log"
                         android:fontFamily="@font/ubuntu_light"
                         android:hint="@string/enter_remark"
+                        android:paddingHorizontal="10dp"
                         android:visibility="visible" />
 
 
@@ -264,17 +265,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:gravity="center"
                         android:layout_marginTop="45dp"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/tv_continue_noti"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
+                            android:layout_gravity="center"
                             android:layout_marginVertical="10dp"
                             android:paddingHorizontal="10dp"
-                            android:layout_gravity="center"
                             app:cardBackgroundColor="@color/brand_color"
                             app:cardCornerRadius="8dp">
 
@@ -333,14 +334,14 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="35dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="70dp"
                         android:fontFamily="@font/ubuntu_italic"
                         android:gravity="center"
                         android:text="@string/lbl_message_create_new_apprec"
                         android:textColor="#545454"
-                        android:textSize="12sp"
-                        android:layout_marginBottom="70dp"
-                        android:layout_marginHorizontal="35dp" />
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 

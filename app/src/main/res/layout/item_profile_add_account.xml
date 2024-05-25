@@ -15,9 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/horizontal_margin"
+        android:background="@color/white"
         android:foreground="?selectableItemBackground"
         android:onClick="@{clickListener}"
-        android:background="@color/white"
         android:paddingHorizontal="@dimen/horizontal_margin"
         android:paddingVertical="8dp">
 

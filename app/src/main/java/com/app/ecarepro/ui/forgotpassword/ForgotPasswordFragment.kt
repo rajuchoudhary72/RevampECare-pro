@@ -45,9 +45,11 @@ class ForgotPasswordFragment : Fragment() {
                 R.id.btn_parent -> {
                     2
                 }
+
                 R.id.btn_staff -> {
                     3
                 }
+
                 else -> {
                     1
                 }
@@ -61,6 +63,7 @@ class ForgotPasswordFragment : Fragment() {
                     binding.textFiled.inputType = InputType.TYPE_CLASS_PHONE
                     "mob"
                 }
+
                 else -> {
                     binding.tilTextFiled.hint = "Email Address"
                     binding.textFiled.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS

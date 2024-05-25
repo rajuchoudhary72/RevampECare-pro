@@ -15,9 +15,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        bottomWindowInsetToPadding="@{true}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        bottomWindowInsetToPadding="@{true}"
         android:paddingVertical="20dp">
 
 
@@ -26,9 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:onClick="@{clickListener}"
             android:text="Logout"
             app:icon="@drawable/ic_logout"
-            android:onClick="@{clickListener}"
             app:iconGravity="textStart"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />

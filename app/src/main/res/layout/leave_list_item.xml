@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="data"
             type="com.app.ecarepro.model.Dtl" />
@@ -19,26 +20,25 @@
             android:id="@+id/rel_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             android:padding="10dp"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:padding="10dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_img"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
+                app:imageUrl="@{data.applicantPhoto}"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
                 app:strokeColor="?attr/colorOutlineVariant"
                 app:strokeWidth="1dp"
-                tools:src="@drawable/default_profile"
-                app:imageUrl="@{data.applicantPhoto}"
-                />
+                tools:src="@drawable/default_profile" />
 
             <TextView
                 android:id="@+id/textUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:layout_marginStart="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/user_img"
                 android:text="@{data.applicantName}"
                 android:textSize="12sp" />
@@ -47,21 +47,20 @@
                 android:id="@+id/tv_applied_on"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:layout_marginStart="10dp"
+                android:layout_below="@+id/textUserName"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/user_img"
                 android:text="@{data.submittedOn}"
-                android:layout_below="@+id/textUserName"
                 android:textSize="12sp" />
 
 
             <ImageView
                 android:id="@+id/dot"
+                isInvisible="@{data.status.equals(`Approved`)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                isInvisible="@{data.status.equals(`Approved`)}"
                 app:srcCompat="@drawable/delete" />
-
 
 
         </RelativeLayout>
@@ -69,34 +68,34 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/grey_10"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/grey_10">
 
             <LinearLayout
                 android:id="@+id/ll_start"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/cbn_height"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:layout_gravity="center">
+                android:orientation="vertical">
 
                 <TextView
-                    android:gravity="center"
                     android:id="@+id/tv_from"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="@string/from_" />
 
 
                 <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center"
                     android:id="@+id/tv_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:ellipsize="end"
+                    android:gravity="center"
                     android:text="@{data.fromDate}"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -116,22 +115,22 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:gravity="center"
                     android:id="@+id/tv_to"
-                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="@string/to_" />
 
 
                 <TextView
-                    android:gravity="center"
                     android:id="@+id/tv_end_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:text="@{data.tillDate}"
                     android:layout_gravity="center"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:text="@{data.tillDate}"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -151,8 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/horizontal_margin"
-            android:text="@{data.reason}"
-            />
+            android:text="@{data.reason}" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -163,28 +161,28 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/tv_bg_rounded_status_blue"
-                android:paddingVertical="2dp"
                 android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
                 android:text="@{data.status}"
-                android:textColor="@color/white"
-                android:layout_marginStart="10dp" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/tv_action_on"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingVertical="2dp"
+                android:layout_marginEnd="10dp"
                 android:paddingHorizontal="8dp"
-                android:text="@{data.actionOn}"
-                android:layout_marginEnd="10dp" />
+                android:paddingVertical="2dp"
+                android:text="@{data.actionOn}" />
 
             <RelativeLayout
                 android:id="@+id/rel_view_attac"
-                android:layout_width="wrap_content"
                 isVisible="@{data.attachment != null  ? true : false}"
-                android:layout_marginStart="10dp"
-                android:layout_height="fill_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="10dp">
 
                 <ImageView
                     android:id="@+id/view1234"
@@ -211,21 +209,21 @@
 
         <RelativeLayout
             android:id="@+id/rel_approve_by"
+            isVisible="@{data.status.equals(`Approved`)}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            isVisible="@{data.status.equals(`Approved`)}"
-             android:background="@color/white">
+            android:background="@color/white"
+            android:padding="10dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/im_approve_by"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
+                app:imageUrl="@{data.photo}"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
                 app:strokeColor="?attr/colorOutlineVariant"
                 app:strokeWidth="1dp"
-                app:imageUrl="@{data.photo}"
                 tools:src="@drawable/default_profile" />
 
             <TextView

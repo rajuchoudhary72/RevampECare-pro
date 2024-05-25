@@ -22,7 +22,8 @@
             app:title="Medical Card"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white" >
+            app:titleTextColor="@color/white">
+
             <TextView
                 android:id="@+id/printView"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
@@ -37,6 +38,7 @@
                 app:fontFamily="@font/ubuntu_medium"
                 tools:ignore="RtlSymmetry" />
         </com.google.android.material.appbar.MaterialToolbar>
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

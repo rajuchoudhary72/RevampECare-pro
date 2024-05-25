@@ -2,10 +2,10 @@ package com.app.ecarepro.ui.assignment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -21,17 +21,17 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AssignmentNavHostFragment : Fragment() {
 
-    private lateinit var binding : FragmentAssignmentNavHostBinding
-    private val assignmentNavHostViewModel : AssignmentNavHostViewModel by viewModels()
+    private lateinit var binding: FragmentAssignmentNavHostBinding
+    private val assignmentNavHostViewModel: AssignmentNavHostViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
+    ): View {
 
-        binding=FragmentAssignmentNavHostBinding.inflate(inflater,container,false)
+        binding = FragmentAssignmentNavHostBinding.inflate(inflater, container, false)
 
-         return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,13 +57,13 @@ class AssignmentNavHostFragment : Fragment() {
 
                         if (it.data != null) {
 
-                            if (it.data.subjectAssignments!=null ) {
+                            if (it.data.subjectAssignments != null) {
 
-                                val fragmentList : ArrayList<Fragment> = ArrayList()
+                                val fragmentList: ArrayList<Fragment> = ArrayList()
 
-                                 it.data.subjectAssignments.forEach { assignmentsData ->
+                                it.data.subjectAssignments.forEach { assignmentsData ->
                                     fragmentList.add(AssignmentListFragment(assignmentsData.assignments))
-                                 }
+                                }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,
@@ -78,7 +78,7 @@ class AssignmentNavHostFragment : Fragment() {
                                     binding.viewPager
                                 ) { tab, position ->
 
-                                        tab.text = it.data.subjectAssignments[position].subject
+                                    tab.text = it.data.subjectAssignments[position].subject
 
 
                                 }.attach()

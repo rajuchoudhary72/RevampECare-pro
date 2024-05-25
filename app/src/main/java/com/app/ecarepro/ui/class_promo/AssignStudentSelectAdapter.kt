@@ -10,7 +10,7 @@ import com.app.ecarepro.model.Section
 
 import com.app.ecarepro.ui.common.IItemListener
 
-class AssignStudentSelectAdapter  (
+class AssignStudentSelectAdapter(
     private var studentMutableList: MutableList<Section>,
     var callBack: IItemListener<Section>
 ) :
@@ -29,7 +29,7 @@ class AssignStudentSelectAdapter  (
         val mBinding = DataBindingUtil.getBinding<ItemBinding>(holder.itemView)
         val nextSessionClass = studentMutableList[position]
         with(mBinding!!) {
-            tvClassName.text=nextSessionClass.secName
+            tvClassName.text = nextSessionClass.secName
             tvClassName.setOnClickListener {
                 callBack.onItemClick(nextSessionClass, position)
                 lastIndex = holder.adapterPosition

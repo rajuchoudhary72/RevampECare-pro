@@ -14,22 +14,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PaySlipViewModel @Inject constructor(
-    private val  userRepository: UserRepository
-)  : ViewModel() {
+    private val userRepository: UserRepository
+) : ViewModel() {
 
 
-    private val payslipStateFlow: MutableStateFlow<NetworkResult<NetworkPaySlip>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val payslipStateFlow: MutableStateFlow<NetworkResult<NetworkPaySlip>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val _payslipStateFlow: StateFlow<NetworkResult<NetworkPaySlip>> = payslipStateFlow
 
-    fun getPayslip(  )=viewModelScope.launch {
+    fun getPayslip() = viewModelScope.launch {
         runCatching {
-            payslipStateFlow.value = NetworkResult.Loading( )
-            userRepository.getPayslip( )
+            payslipStateFlow.value = NetworkResult.Loading()
+            userRepository.getPayslip()
         }.onSuccess {
             payslipStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            payslipStateFlow .value = NetworkResult.Error(it.message)
+            payslipStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 

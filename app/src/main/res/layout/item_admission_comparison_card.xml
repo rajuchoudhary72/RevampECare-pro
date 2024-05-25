@@ -75,7 +75,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

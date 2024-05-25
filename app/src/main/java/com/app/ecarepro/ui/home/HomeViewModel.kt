@@ -55,7 +55,12 @@ class HomeViewModel @Inject constructor(
 
                     HomeUiState.Success(
                         cards = cards,
-                        favourites = favourite?.map { Slider(imgPath = it.icon, module = it.title?:"") }?: emptyList(),
+                        favourites = favourite?.map {
+                            Slider(
+                                imgPath = it.icon,
+                                module = it.title ?: ""
+                            )
+                        } ?: emptyList(),
                         user = userDataStore.getUser()!!,
                         underTaking = undertaking.getOrNull() ?: ""
                     )

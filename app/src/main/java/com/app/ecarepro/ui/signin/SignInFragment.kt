@@ -19,7 +19,6 @@ import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {

@@ -9,7 +9,6 @@
             type="com.app.ecarepro.model.Circular" />
 
 
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="0dp"
-             app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,8 +122,6 @@
 
 
         </com.google.android.material.card.MaterialCardView>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

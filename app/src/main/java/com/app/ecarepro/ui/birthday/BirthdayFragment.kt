@@ -13,12 +13,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
- import com.app.ecarepro.R
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBirthdayBinding
 import com.app.ecarepro.model.MonthModel
 import com.app.ecarepro.ui.MainActivity
- import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,22 +28,22 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class BirthdayFragment : Fragment() {
 
-     private var rptType: Int=1
+    private var rptType: Int = 1
     private var userType: Int = Constant.STUDENT_TYPE
     private var monthSelected: Int = 0
-    private lateinit var binding : FragmentBirthdayBinding
+    private lateinit var binding: FragmentBirthdayBinding
     private var monthModelArrayList = ArrayList<MonthModel>()
 
-    private val birthdayViewModel : BirthdayViewModel by viewModels()
+    private val birthdayViewModel: BirthdayViewModel by viewModels()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentBirthdayBinding.inflate(inflater,container,false)
+    ): View {
+        binding = FragmentBirthdayBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.tvDate.text=Constant.currentDate()
+        binding.tvDate.text = Constant.currentDate()
         return binding.root
     }
 
@@ -51,17 +51,27 @@ class BirthdayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toggleButtonTypeUser.addOnButtonCheckedListener { _, _, _ ->
-              when (binding.toggleButtonTypeUser.checkedButtonId) {
+            when (binding.toggleButtonTypeUser.checkedButtonId) {
                 R.id.btn_student -> {
                     userType = Constant.STUDENT_TYPE
-                    birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
+                    birthdayViewModel.birthday(
+                        userType,
+                        rptType,
+                        monthSelected,
+                        binding.tvDate.text.toString()
+                    )
 
 
                 }
 
                 else -> {
                     userType = Constant.STAFF_TYPE
-                    birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
+                    birthdayViewModel.birthday(
+                        userType,
+                        rptType,
+                        monthSelected,
+                        binding.tvDate.text.toString()
+                    )
 
                 }
             }
@@ -83,68 +93,73 @@ class BirthdayFragment : Fragment() {
             })
         }
 
-            bindMonthArray()
+        bindMonthArray()
 
-            binding.autoCompleteMonth.onItemClickListener=
-                AdapterView.OnItemClickListener { parent, view, pos, id ->
-                    monthSelected=monthModelArrayList[pos].monthID
-                    rptType=2
-                    birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
+        binding.autoCompleteMonth.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+                monthSelected = monthModelArrayList[pos].monthID
+                rptType = 2
+                birthdayViewModel.birthday(
+                    userType,
+                    rptType,
+                    monthSelected,
+                    binding.tvDate.text.toString()
+                )
 
-                }
+            }
 
 
 
 
-            lifecycleScope.launch {
-                birthdayViewModel.birthdayStateFlow.collectLatest {
-                    when (it) {
+        lifecycleScope.launch {
+            birthdayViewModel.birthdayStateFlow.collectLatest {
+                when (it) {
 
-                        is NetworkResult.Loading -> {
-                            (requireActivity() as MainActivity).showLoader(true)
-                            binding.recyclerNotice.isVisible = false
-                        }
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                        binding.recyclerNotice.isVisible = false
+                    }
 
-                        is NetworkResult.Error -> {
-                            (requireActivity() as MainActivity).showLoader(false)
-                            binding.recyclerNotice.isVisible = false
-                            Log.d("main", "Error$it")
-                        }
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.recyclerNotice.isVisible = false
+                        Log.d("main", "Error$it")
+                    }
 
-                        is NetworkResult.Success -> {
-                            (requireActivity() as MainActivity).showLoader(false)
-                            binding.recyclerNotice.isVisible = true
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.recyclerNotice.isVisible = true
 
-                            if (it.data != null) {
+                        if (it.data != null) {
 
-                                if (it.data.usersBirthday != null) {
+                            if (it.data.usersBirthday != null) {
 
-                                    binding.recyclerNotice.isVisible = true
-                                    binding.tvNoData.isVisible = false
+                                binding.recyclerNotice.isVisible = true
+                                binding.tvNoData.isVisible = false
 
-                                    val noticeAdapter = BirthListAdapter(
-                                        it.data.usersBirthday,
-                                        this@BirthdayFragment
-                                    )
+                                val noticeAdapter = BirthListAdapter(
+                                    it.data.usersBirthday,
+                                    this@BirthdayFragment
+                                )
 
-                                    binding.recyclerNotice.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = noticeAdapter
-                                    }
-                                } else {
-                                    binding.recyclerNotice.isVisible = false
-                                    binding.tvNoData.isVisible = true
+                                binding.recyclerNotice.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = noticeAdapter
                                 }
-
+                            } else {
+                                binding.recyclerNotice.isVisible = false
+                                binding.tvNoData.isVisible = true
                             }
 
                         }
 
-
                     }
+
+
                 }
             }
+        }
 
         birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
 
@@ -200,7 +215,7 @@ class BirthdayFragment : Fragment() {
 
         monthDataString.clear()
         monthModelArrayList.forEach { data ->
-            monthDataString.add(data.month.toString() )
+            monthDataString.add(data.month.toString())
         }
 
         val arrayAdapter = ArrayAdapter(

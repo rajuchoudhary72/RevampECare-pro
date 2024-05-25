@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -108,19 +109,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             launch {
                 mViewModel
                     .uiState
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
                     .collectLatest { uiState ->
                         handleUiState(uiState)
-
                     }
             }
 
             launch {
-
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
                         mViewModel.setFavourite(uiState.favroiteMenus)
@@ -237,10 +236,11 @@ class HomeFragment : Fragment() {
                             id(card.link)
                             card(card)
                             clickListener { _ ->
-                                (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
-                                    ?.let {
-                                       /* findNavController().navigate(it)*/
-                                    }
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    card.menuID,
+                                    card.chmenuID
+                                )
+                                    ?.let { findNavController().navigate(it) }
                             }
                         }
                     }
@@ -273,6 +273,11 @@ class HomeFragment : Fragment() {
                 addMoreFavourites {
                     id("add more")
                     clickListener { _ ->
+                        setFragmentResultListener("favourites") { _, bundle ->
+                            if (bundle.containsKey("isUpdate")) {
+                                systemViewModel.refreshAppLayout()
+                            }
+                        }
                         findNavController().navigate(R.id.favouritesFragment)
                     }
                 }

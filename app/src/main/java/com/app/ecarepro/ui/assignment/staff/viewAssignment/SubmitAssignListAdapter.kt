@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 
 import com.app.ecarepro.databinding.SubmittedStuListBinding
- import com.app.ecarepro.model.AssignSubmitStudent
+import com.app.ecarepro.model.AssignSubmitStudent
 
 
 class SubmitAssignListAdapter(
     private var activityLST: List<AssignSubmitStudent>,
-    private var viewAssignmentFragment:  ViewAssignmentFragment
+    private var viewAssignmentFragment: ViewAssignmentFragment
 ) :
     RecyclerView.Adapter<SubmitAssignListAdapter.AssignmentListAdapter>() {
 
@@ -30,30 +30,26 @@ class SubmitAssignListAdapter(
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
         bindingm.stuData = activityLST[position]
-         val data = activityLST[position]
+        val data = activityLST[position]
 
-        if (data.isOfflineSubmitted){
-            bindingm.tvSubmittedBy.text=  viewAssignmentFragment.getString(R.string.offline)
+        if (data.isOfflineSubmitted) {
+            bindingm.tvSubmittedBy.text = viewAssignmentFragment.getString(R.string.offline)
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#000000"))
-        }else{
-            bindingm.tvSubmittedBy.text= viewAssignmentFragment.getString(R.string.online)
+        } else {
+            bindingm.tvSubmittedBy.text = viewAssignmentFragment.getString(R.string.online)
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#4DAC3C"))
 
         }
 
         bindingm.llView.setOnClickListener {
-            viewAssignmentFragment.onItemClick(data,1,false)
+            viewAssignmentFragment.onItemClick(data, 1, false)
         }
         bindingm.llDownload.setOnClickListener {
-            viewAssignmentFragment.onItemClick(data,2,false)
+            viewAssignmentFragment.onItemClick(data, 2, false)
         }
 
 
-
-
-
-
-     }
+    }
 
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -8,8 +8,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/light_background_color"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/light_background_color">
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
@@ -32,11 +32,11 @@
 
         <com.airbnb.epoxy.EpoxyRecyclerView
             android:id="@+id/recycler_view"
-            android:nestedScrollingEnabled="false"
-            android:touchscreenBlocksFocus="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
             android:orientation="vertical"
+            android:touchscreenBlocksFocus="true"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 

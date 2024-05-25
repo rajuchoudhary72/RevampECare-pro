@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-<variable
-    name="data"
-    type="com.app.ecarepro.model.UsersBirthday" />
+
+        <variable
+            name="data"
+            type="com.app.ecarepro.model.UsersBirthday" />
     </data>
 
     <LinearLayout
@@ -21,10 +20,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="10dp"
-            >
+            android:layout_marginVertical="5dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,25 +35,21 @@
                 android:id="@+id/tv_bir_on"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                android:textColor="@color/brand_color"
-                android:text="@{data.birthdayOn}"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                />
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{data.birthdayOn}"
+                android:textColor="@color/brand_color"
+                android:textSize="16sp" />
 
         </LinearLayout>
-
-
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="10dp"
-            >
+            android:layout_marginVertical="5dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,20 +62,19 @@
                 android:id="@+id/tvname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                android:textColor="@color/grey_40"
-                android:text="@{data.name}"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                />
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{data.name}"
+                android:textColor="@color/grey_40"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -95,12 +88,11 @@
                 android:id="@+id/tv_class"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                android:textColor="@color/grey_40"
-                android:text="@{data.className}"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                />
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{data.className}"
+                android:textColor="@color/grey_40"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -108,8 +100,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -123,20 +115,19 @@
                 android:id="@+id/tv_f_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                android:textColor="@color/grey_40"
-                android:text="@{data.fatherName}"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                />
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{data.fatherName}"
+                android:textColor="@color/grey_40"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -150,23 +141,19 @@
                 android:id="@+id/tv_m_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                android:textColor="@color/grey_40"
-                android:text="@{data.motherName}"
                 android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                />
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{data.motherName}"
+                android:textColor="@color/grey_40"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
 
-
-
-<com.google.android.material.divider.MaterialDivider
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginTop="5dp"
-    />
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp" />
 
 
     </LinearLayout>

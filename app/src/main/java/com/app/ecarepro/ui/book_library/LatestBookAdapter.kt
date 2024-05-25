@@ -9,18 +9,20 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LatestBookListItemBinding
 
 import com.app.ecarepro.model.LatestBook
- import com.squareup.picasso.Picasso
+import com.squareup.picasso.Picasso
 
-class LatestBookAdapter(private var latestBookList: List<LatestBook>,
-                        private var latestBookFragment: LatestBookFragment ) :
+class LatestBookAdapter(
+    private var latestBookList: List<LatestBook>,
+    private var latestBookFragment: LatestBookFragment
+) :
     RecyclerView.Adapter<LatestBookAdapter.ThoughtsViewHolder>() {
 
-        private lateinit var bindingm:   LatestBookListItemBinding
-
+    private lateinit var bindingm: LatestBookListItemBinding
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThoughtsViewHolder {
-        bindingm=LatestBookListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        bindingm =
+            LatestBookListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ThoughtsViewHolder(bindingm.root)
     }
 
@@ -28,22 +30,22 @@ class LatestBookAdapter(private var latestBookList: List<LatestBook>,
 
     override fun onBindViewHolder(holder: ThoughtsViewHolder, position: Int) {
 
-        bindingm.latestBookData=latestBookList[position]
+        bindingm.latestBookData = latestBookList[position]
 
 
         bindingm.ivI.setOnClickListener {
-            latestBookFragment.onItemClick(latestBookList[position],1,true)
+            latestBookFragment.onItemClick(latestBookList[position], 1, true)
         }
 
-        Picasso.get().load(latestBookList[position].coverImg).
-        placeholder(R.drawable.ic_library_big_image)
+        Picasso.get().load(latestBookList[position].coverImg)
+            .placeholder(R.drawable.ic_library_big_image)
             .into(bindingm.userImg)
 
 
     }
 
-    class ThoughtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-  }
+    class ThoughtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    }
 
 
 }

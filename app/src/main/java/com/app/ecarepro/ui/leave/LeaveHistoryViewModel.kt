@@ -17,33 +17,38 @@ class LeaveHistoryViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val leaveHistoryMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLeaveListStatus>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val leaveHistoryStateFlow: StateFlow<NetworkResult<NetworkLeaveListStatus>> = leaveHistoryMutableStateFlow
+    private val leaveHistoryMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLeaveListStatus>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val leaveHistoryStateFlow: StateFlow<NetworkResult<NetworkLeaveListStatus>> =
+        leaveHistoryMutableStateFlow
 
-    private val leaveDeleteMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val leaveDeleteMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val leaveDeleteStateFlow: StateFlow<NetworkResult<CommonResponse>> = leaveDeleteMutableStateFlow
 
-    fun leaveHistory(  )=viewModelScope.launch {
+    fun leaveHistory() = viewModelScope.launch {
         runCatching {
-            leaveHistoryMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveListStatus( )
+            leaveHistoryMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.leaveListStatus()
         }.onSuccess {
             leaveHistoryMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            leaveHistoryMutableStateFlow .value = NetworkResult.Error(it.message)
+            leaveHistoryMutableStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 
-    fun leaveDelete(lvID: Int )=viewModelScope.launch {
+    fun leaveDelete(lvID: Int) = viewModelScope.launch {
         runCatching {
-            leaveDeleteMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveDelete( lvID)
+            leaveDeleteMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.leaveDelete(lvID)
         }.onSuccess {
             leaveDeleteMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            leaveDeleteMutableStateFlow .value = NetworkResult.Error(it.message)
+            leaveDeleteMutableStateFlow.value = NetworkResult.Error(it.message)
         }
     }
 
