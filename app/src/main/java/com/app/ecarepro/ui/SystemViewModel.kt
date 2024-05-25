@@ -31,6 +31,15 @@ class SystemViewModel @Inject constructor(
     val navigateBack = _navigateBack
 
     val refresh = MutableSharedFlow<Boolean>()
+    val user = userDataStore.getUserAsFlow()
+    var userType : String = ""
+
+    init {
+        viewModelScope.launch {
+            userType = userDataStore.getRoleName().toString()
+        }
+    }
+
 
     val uiState =
         refresh.flatMapLatest {

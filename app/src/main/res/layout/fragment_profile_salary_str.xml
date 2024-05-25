@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+<variable
+    name="salaryData"
+    type="com.app.ecarepro.model.SalaryStructure" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/_10sdp"
+        tools:context=".ui.staffProfile.ProfileSalaryStrFragment">
+
+
+
+        <TextView
+            android:id="@+id/tvFromDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:textColor="@color/grey_60"
+            android:textSize="@dimen/_12sdp"
+            android:text="@{salaryData.salryOf}"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/basic"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp"
+                android:text="@string/sp" />
+
+            <TextView
+                android:id="@+id/tvBasic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp"
+                android:text="@{String.valueOf(salaryData.basic)}"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/allowance"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp"
+                android:text="@string/sp" />
+
+            <TextView
+                android:id="@+id/tvAllowance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp"
+                android:text="@{String.valueOf(salaryData.allowances)}"
+
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/deduction"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_40"
+                android:textSize="@dimen/_12sdp"
+                android:text="@string/sp" />
+
+            <TextView
+                android:id="@+id/tvDeduction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp"
+                android:text="@{String.valueOf(salaryData.deduction)}"
+
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_margin="15dp"
+            android:layout_height="wrap_content">
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+
+                 />
+
+
+            <TextView
+                android:id="@+id/tv_teacher_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:fontFamily="@font/ubuntu_regular"
+                 android:textColor="@color/grey_60"
+                android:textSize="@dimen/_11sdp"
+                android:layout_toEndOf="@+id/iv_profile"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_8sdp"
+                />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

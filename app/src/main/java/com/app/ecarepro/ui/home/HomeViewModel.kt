@@ -16,6 +16,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.Slider
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -24,17 +28,19 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val schoolData = MutableLiveData<NetworkSchool>()
+    private val favouriteData = MutableStateFlow<List<Menu>?>(null)
 
     val uiState =
 
         combine(
             flow = userRepository.getUserDashboard(),
-            flow2 = userRepository.getUserUndertaking()
-        ) { dashboard, undertaking ->
-            Pair(dashboard, undertaking)
+            flow2 = userRepository.getUserUndertaking(),
+            flow3 = favouriteData
+        ) { dashboard, undertaking, favourite ->
+            Triple(dashboard, undertaking, favourite)
         }
 
-            .map { (dashboard, undertaking) ->
+            .map { (dashboard, undertaking, favourite) ->
                 if (dashboard.isSuccess && undertaking.isSuccess) {
                     val response = dashboard.getOrNull()
                     val cards = mutableListOf<Card>()
@@ -49,7 +55,7 @@ class HomeViewModel @Inject constructor(
 
                     HomeUiState.Success(
                         cards = cards,
-                        favourites = userDataStore.getSchoolData()?.slider ?: emptyList(),
+                        favourites = favourite?.map { Slider(imgPath = it.icon, module = it.title?:"") }?: emptyList(),
                         user = userDataStore.getUser()!!,
                         underTaking = undertaking.getOrNull() ?: ""
                     )
@@ -70,9 +76,15 @@ class HomeViewModel @Inject constructor(
     fun submitUserUndertaking(id: String, function: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository.saveUserUndertaking(id).collectLatest {
-                function(it.isSuccess, it.getOrNull()?:it.exceptionOrNull()?.message?: UNKNOWN_ERROR_MESSAGE)
+                function(
+                    it.isSuccess,
+                    it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                )
             }
         }
+    }
+    fun setFavourite(menu: List<Menu>) {
+        favouriteData.update { menu }
     }
 
 

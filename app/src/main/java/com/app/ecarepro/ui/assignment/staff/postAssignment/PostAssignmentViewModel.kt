@@ -46,10 +46,10 @@ class PostAssignmentViewModel @Inject constructor(
           }
       }
 
-    fun mySubjects( )=viewModelScope.launch {
+    fun mySubjects(classID :Int )=viewModelScope.launch {
         runCatching {
             subjectsMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.mySubjects( )
+            userRepository.mySubjects(classID )
         }.onSuccess {
             subjectsMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {

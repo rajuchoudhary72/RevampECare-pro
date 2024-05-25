@@ -161,7 +161,9 @@ sealed interface ChatUiState {
 
 enum class MessageType(val value: String) {
     INBOX("inbox"),
-    SENT("sent");
+    SENT("sent"),
+    CONV("conv")
+    ;
 
     companion object {
         fun getMessageType(value: String): MessageType {

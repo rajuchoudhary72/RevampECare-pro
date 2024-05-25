@@ -26,10 +26,10 @@ class TeacherAssignmentViewModel @Inject constructor(
     val deleteAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAssignmentMutableStateFlow
 
 
-    fun teachersAssignment( )=viewModelScope.launch {
+    fun teachersAssignment(iD: String )=viewModelScope.launch {
         runCatching {
             teacAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.teachersAssignment( )
+            userRepository.teachersAssignment(iD )
         }.onSuccess {
             teacAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

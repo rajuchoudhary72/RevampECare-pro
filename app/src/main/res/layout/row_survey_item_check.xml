@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatCheckBox xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cb"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:checked="true"
+    android:fontFamily="@font/ubuntu_regular"
+    android:padding="@dimen/_5sdp"
+    android:text="Cricket"
+    android:textColor="@color/module"
+    android:textSize="@dimen/_14sdp">
+
+</androidx.appcompat.widget.AppCompatCheckBox>

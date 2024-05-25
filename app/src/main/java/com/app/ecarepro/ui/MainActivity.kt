@@ -20,19 +20,24 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.cardOption
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.drawerChildChildItem
+import com.app.ecarepro.menuCard
 
 
 @AndroidEntryPoint
@@ -40,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var userData: NetworkUserDetailsDto
+
 
     private val systemViewModel: SystemViewModel by viewModels()
 
@@ -81,7 +88,19 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+
+        Picasso.setSingletonInstance(Picasso.Builder(this).build())
+
+        lifecycleScope.launch {
+            systemViewModel.user.collectLatest {
+                if (it != null) {
+                    userData = it
+                }
+            }
+        }
     }
+
+
 
     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
@@ -98,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 .collectLatest { uiState ->
                     uiState.getValueOrNull()?.let { data ->
                         buildDrawerModels(data.menus)
-                        buildFavoriteMenusModels(data.favroiteMenus)
+                        buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
                     }
                 }
@@ -133,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.open()
     }
 
-    private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
+    /*private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
             favoriteMenus.forEach { menu ->
                 cardOption {
@@ -148,14 +167,59 @@ class MainActivity : AppCompatActivity() {
                         getFragmentId(
                             menu.menuID,
                             menu.chMenuID ?: 0
-                        )?.let { navController.navigate(it) }
+                        )
                         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                     }
                 }
             }
         }
-    }
+    }*/
 
+    private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
+        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
+            favoriteMenus.forEach { menu ->
+                if(menu.childMenus.isNullOrEmpty()){
+                    menuCard {
+                        id(menu.menuID)
+                        title(menu.title)
+                        icon(menu.icon)
+                        clickListener { _ ->
+                            getFragmentId(menu.menuID)
+                            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                        }
+                    }
+                }else{
+                    menu.childMenus.forEach { childMenu ->
+                        if(childMenu.childMenus.isNullOrEmpty()){
+                            menuCard {
+                                id(childMenu.menuID)
+                                title(childMenu.title)
+                                icon(childMenu.icon)
+                                parentMenuIcon(menu.icon)
+                                clickListener { _ ->
+                                    getFragmentId(menu.menuID, childMenu.chMenuID)
+                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                }
+                            }
+                        }else{
+                            childMenu.childMenus.forEach { childChildMenu ->
+                                menuCard {
+                                    id(childChildMenu.menuID)
+                                    title(childChildMenu.title)
+                                    icon(childChildMenu.icon)
+                                    parentMenuIcon(childMenu.icon)
+                                    clickListener { _ ->
+                                        getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)
+                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
             menu.forEach { parentMenu ->
@@ -174,7 +238,7 @@ class MainActivity : AppCompatActivity() {
                             this@withModels.requestModelBuild()
                         } else {
                             systemViewModel.openDrawer(false)
-                            getFragmentId(parentMenu.menuID)?.let { navController.navigate(it) }
+                            getFragmentId(parentMenu.menuID)
                         }
                     }
                 }
@@ -185,115 +249,225 @@ class MainActivity : AppCompatActivity() {
                             id(parentMenu.menuID, menu.menuID)
                             title(menu.title)
                             icon(menu.icon)
-                            hasChildMenu(menu.childMenus.isNullOrEmpty().not())
                             clickListener { _ ->
+                                systemViewModel.openDrawer(false)
                                 getFragmentId(
                                     parentMenu.menuID,
                                     menu.chMenuID
-                                )?.let {
+                                )
+                            }
+                        }
+
+                        menu.childMenus?.forEach { childChildMenu ->
+                            drawerChildChildItem {
+                                id(parentMenu.menuID, childChildMenu.menuID)
+                                title(childChildMenu.title)
+                                icon(childChildMenu.icon)
+                                clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    navController.navigate(
-                                        it
+                                    getFragmentId(
+                                        childChildMenu.menuID,
+                                        childChildMenu.chMenuID
                                     )
                                 }
                             }
                         }
                     }
-
                 }
             }
         }
     }
 
-    private fun getFragmentId(menuID: Int): Int? {
-        return when (menuID) {
-            3 -> R.id.staffAssignmentsListFragment
-            4 -> R.id.timeTableNavHostFragment
-            5 -> R.id.classSyllabus
-            6 -> R.id.messageFragment    // student  app
-            10 -> R.id.calenderActivityNavHost //
-            12 -> R.id.bookLibraryFragment
-            14 -> R.id.questionnaireListFragment
-            15 -> R.id.thoughtsListFragment
-            16 -> R.id.calenderActivityNavHost    // student  app
-            17 -> R.id.showAttendanceFragment    // student  app
-            20 -> R.id.questionnaireListFragment    // student  app
-            21 -> R.id.thoughtsListFragment    // student  app
-            23 -> R.id.taskManagerFragment
-            25 -> R.id.excellenceAwardFragment    // student  app
-            32 -> R.id.studentIDFragment    // student  app
-            51 -> R.id.excellenceAwardFragment
-            else -> null
+      fun getFragmentId(menuID: Int) {
+        when (menuID) {
+            3 -> {
+                if (userData.userType == Constant.STAFF_TYPE) {
+                    if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
+                        navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                            putString(Constant.TO, Constant.FRA_ASSI)
+                        })
+                    } else {
+                        navController.navigate(R.id.staffAssignmentsListFragment)
+                    }
+
+                }else{
+                    navController.navigate(R.id.assignmentNavHostFragment)
+                }
+
+            }
+
+            4 -> {
+                if (userData.userType == Constant.STAFF_TYPE) {
+                    if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
+                        navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                            putString(Constant.TO, Constant.FRA_TIMETABLE)
+                        })
+                    } else {
+                        navController.navigate(R.id.timeTableNavHostFragment)
+                    }
+
+                } /*else {
+                    navController.navigate(R.id.timeTableNavHostFragment)
+                }*/
+
+            }
+
+            5 -> navController.navigate(R.id.classSyllabus)
+            10 ->  navController.navigate(R.id.calenderActivityNavHost)
+            //11 ->  navController.navigate(R.id.feeModule)
+            12 ->  navController.navigate(R.id.conversationReportFragment)
+            13 ->  navController.navigate(R.id.bookLibraryFragment)
+            //  14 ->  navController.navigate(R.id.webViewFragment)
+
+            16 ->  navController.navigate(R.id.calenderActivityNavHost)
+            17 ->  navController.navigate(R.id.attendanceFragment)
+            18 ->  navController.navigate(R.id.reportCardDetailsNavHostFragment)
+            19 ->  navController.navigate(R.id.leaveHistoryFragment)
+            20 ->  navController.navigate(R.id.questionnaireListFragment)
+            21 ->  navController.navigate(R.id.thoughtsListFragment)
+            22 ->  navController.navigate(R.id.appointmentReportFragment)
+            26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
+            28 ->  navController.navigate(R.id.lessonPlanListFragment)
+             23 ->  navController.navigate(R.id.taskManagerFragment)
+            32 ->  navController.navigate(R.id.studentIDFragment)
+            33 ->  navController.navigate(R.id.surveyListFragment)
+            51 ->  navController.navigate(R.id.excellenceAwardFragment)
+
         }
     }
 
-    fun getFragmentId(menuID: Int, childMenuId: Int): Int? {
-        return when (menuID) {
-            1-> {
-                return when (childMenuId) {
-                    3 -> R.id.leaveHistoryFragment
-                    else -> null
+      fun getFragmentId(menuID: Int, childMenuId: Int) {
+        when (menuID) {
+            1 -> {
+                when (childMenuId) {
+
+                    1 -> {
+                        navController.navigate(R.id.studentListFragment2,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.PROFILE_FRA_STU)
+                        })
+
+                    }
+                    2 -> {
+                        navController.navigate(R.id.studentAttendanceReportFragment)
+                    }
+                    3 -> {
+                        navController.navigate(R.id.leaveReportFragment,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.FRA_STU_LEAVE)
+                        })
+                    }
+
                 }
             }
-            2-> {
-                return when (childMenuId) {
-                    6 -> R.id.leaveHistoryFragment
-                    else -> null
+
+            2 -> {
+                when (childMenuId) {
+
+                    4 -> {
+                        navController.navigate(R.id.staffListFragment,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.PROFILE_FRA_STAFF)
+                        })
+
+                    }
+
+                    5 -> {
+                        navController.navigate(R.id.classTeacherFragment)
+                    }
+
+                    6 -> {
+                        navController.navigate(R.id.leaveReportFragment,Bundle( ).apply {
+                            putString(Constant.TO,  Constant.FRA_STAFF_LEAVE)
+                        })
+                    }
+
                 }
             }
+
+
+
+
             6 -> {
-                return when (childMenuId) {
-                    7 -> R.id.composeFragment
-                    8 -> R.id.messageFragment
-                    9 -> R.id.messageFragment
-                    else -> null
+                when (childMenuId) {
+                    7 -> navController.navigate(R.id.composeFragment)
+                    8 -> navController.navigate(R.id.messageFragment)
+                    9 -> navController.navigate(R.id.messageFragment)
                 }
             }
 
             7 -> {
-                return when (childMenuId) {
-                    10 -> R.id.circularFragment
-                    11 -> R.id.noticeListFragment
-                    12 -> R.id.noticeListFragment
-                    else -> null
+                when (childMenuId) {
+                    10 -> navController.navigate(R.id.circularFragment)
+                    11 -> navController.navigate(R.id.noticeListFragment)
+                    12 -> navController.navigate(R.id.noticeListFragment)
                 }
             }
-            8-> {
-                return when (childMenuId) {
-                    45-> R.id.staticalReport
-                    46-> R.id.appUserReportFragment
-                    else -> null
-                }
-            }
+            8 -> {
+                when (childMenuId) {
+                    13 -> navController.navigate(R.id.studentAttendanceReportFragment)
+                    14 -> navController.navigate(R.id.birthdayFragment)
+                    15 ->   if (userData.userType == Constant.STAFF_TYPE) {
+                        if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
+                            navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_LESSON_PLAN)
+                            })
+                        }else{
+                            navController.navigate(R.id.lessonPlanListFragment)
 
+                        }
+
+                    }
+
+                    16 -> navController.navigate(R.id.questionPaperFragment)
+                    42 -> navController.navigate(R.id.smsMsgReportFragment)
+                    45 -> navController.navigate(R.id.staticalReport)
+                    46 -> navController.navigate(R.id.appUserReportFragment)
+                     47 -> navController.navigate(R.id.surveyListFragment)
+
+
+                }
+            }
             10 -> {
-                return when (childMenuId) {
-                    18 -> R.id.attendanceFragment
-                    19 -> R.id.leaveHistoryFragment
-                    20 -> R.id.paySlipFragment
-                    else -> null
+                when (childMenuId) {
+                    18 ->  navController.navigate(R.id.attendanceFragment)
+                    19 ->  navController.navigate(R.id.leaveHistoryFragment)
+                    20 ->  navController.navigate(R.id.paySlipFragment)
                 }
             }
 
             11 -> {
-                return when (childMenuId) {
-                    18 -> R.id.attendanceFragment
-                    20 -> R.id.paySlipFragment
-                    else -> null
+                when (childMenuId) {
+                    18 ->  navController.navigate(R.id.attendanceFragment)
+                    20 ->  navController.navigate(R.id.paySlipFragment)
                 }
             }
 
             18 -> {
-                return when (childMenuId) {
-                    21 -> R.id.studentListFragment2
-                    22 -> R.id.studentListFragment
-                    else -> null
+                when (childMenuId) {
+                    21 ->  navController.navigate(R.id.studentListFragment2)
+                    22 ->  navController.navigate(R.id.studentListFragment)
                 }
             }
 
-            else -> {
-                null
+            24 -> {
+                when (childMenuId) {
+                    21 ->  if (userData.userType == Constant.STAFF_TYPE) {
+                        navController.navigate(R.id.appreciationSelectionFragment)
+
+                    } else {
+                        navController.navigate(R.id.appreciationListFragment)
+
+                    }
+                    22 -> if (userData.userType == Constant.STAFF_TYPE) {
+                        navController.navigate(R.id.infractionSelectFragment)
+
+                    } else {
+                        navController.navigate(R.id.infractionListFragment)
+
+                    }
+
+                }
             }
+
+
         }
     }
 

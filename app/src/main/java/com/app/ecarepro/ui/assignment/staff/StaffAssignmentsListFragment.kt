@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment> {
 
+    private   var staffId: String=""
     private   lateinit var binding : FragmentStaffAssignmentsListBinding
     private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
 
@@ -37,6 +38,10 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStaffAssignmentsListBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            staffId= requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
+        }catch (_:Exception){}
         return binding.root
     }
 
@@ -96,7 +101,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
             }
         }
 
-        teacherAssignmentViewModel.teachersAssignment()
+        teacherAssignmentViewModel.teachersAssignment(staffId )
 
 
     }
@@ -123,17 +128,10 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
                         (requireActivity() as MainActivity).showLoader(false)
                     } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        teacherAssignmentViewModel.teachersAssignment()
+                        teacherAssignmentViewModel.teachersAssignment(staffId)
                     }  }
                 } }
         }
-
-
-
-
-
-
-
 
     }
 }
