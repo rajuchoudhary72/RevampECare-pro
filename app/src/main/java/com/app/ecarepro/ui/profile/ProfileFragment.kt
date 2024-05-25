@@ -176,7 +176,14 @@ class ProfileFragment : Fragment() {
                 uiState.users.forEach {
                     account {
                         id(it.userId)
-                        name(it.name)
+                        name(
+                            if(it.name.isNullOrEmpty()){
+                                "N/A (${it.roleName})"
+                            }else {
+                                it.name + "(${it.roleName})"
+                            }
+
+                        )
                         photo(it.photo)
                         school(it.school)
                         isCurrentUser(it.userId == uiState.currentUserId)

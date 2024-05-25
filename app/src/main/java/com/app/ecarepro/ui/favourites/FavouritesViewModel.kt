@@ -3,7 +3,6 @@ package com.app.ecarepro.ui.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Favourites
-import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,15 +64,7 @@ class FavouritesViewModel @Inject constructor(
         viewModelScope.launch {
             appRepository
                 .updateFavourites(updatedItems.map {
-                    FavouritesUpdateDto(
-                        isSelected = it.isSelected,
-                        slNo = it.slNo,
-                        isModified = true,
-                        sbChMenuID = it.sbChMenuID,
-                        fvtID = it.fvtID,
-                        menuID = it.menuID,
-                        chMenuID = it.chMenuID
-                    )
+                    it.copy(isModified = true)
                 })
                 .collectLatest { result ->
                     if (result.isSuccess) {

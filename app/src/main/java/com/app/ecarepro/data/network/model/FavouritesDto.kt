@@ -23,7 +23,7 @@ data class Favourites(
     @SerializedName("icon")
     val icon: String?,
     @SerializedName("isModified")
-    val isModified: Any?,
+    val isModified: Boolean?,
     @SerializedName("isSelected")
     val isSelected: Boolean?,
     @SerializedName("menuID")

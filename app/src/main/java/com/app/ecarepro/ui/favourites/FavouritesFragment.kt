@@ -59,7 +59,7 @@ class FavouritesFragment : Fragment() {
                 uiState.favourites.forEach {
                     favourite {
                         id(it.menuID)
-                        icon(it.getImageUrl())
+                        icon(it.icon)
                         title(it.title)
                         isChecked(it.isSelected)
                         clickListener { _ ->

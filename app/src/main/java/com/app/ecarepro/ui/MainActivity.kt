@@ -2,6 +2,7 @@ package com.app.ecarepro.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
+
+    private var listenMenuItemClickEvent = true
 
 
     private val topLevelFragments = mutableListOf(
@@ -142,8 +145,12 @@ class MainActivity : AppCompatActivity() {
                         title(menu.title)
                         icon(menu.icon)
                         clickListener { _ ->
-                            getFragmentId(menu.menuID)?.let { navController.navigate(it) }
-                            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+
+                            getFragmentId(menu.menuID)?.let {
+                                hideMoreItemMenu()
+                                navController.navigate(it)
+                            }
+
                         }
                     }
                 } else {
@@ -158,10 +165,11 @@ class MainActivity : AppCompatActivity() {
                                     getFragmentId(
                                         menu.menuID,
                                         childMenu.chMenuID
-                                    )?.let { navController.navigate(it) }
-                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(
-                                        false
-                                    )
+                                    )?.let {
+                                        hideMoreItemMenu()
+                                        navController.navigate(it)
+                                    }
+
                                 }
                             }
                         } else {
@@ -175,10 +183,11 @@ class MainActivity : AppCompatActivity() {
                                         getFragmentId(
                                             childChildMenu.menuID,
                                             childChildMenu.chMenuID
-                                        )?.let { navController.navigate(it) }
-                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(
-                                            false
-                                        )
+                                        )?.let {
+                                            hideMoreItemMenu()
+                                            navController.navigate(it)
+                                        }
+
                                     }
                                 }
                             }
@@ -187,6 +196,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun hideMoreItemMenu() {
+        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+        binding.appBarMain.contentMain.bottomNavigationView.onMenuItemClick(0)
+        listenMenuItemClickEvent = false
     }
 
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -379,6 +394,10 @@ class MainActivity : AppCompatActivity() {
         //binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
+            if (listenMenuItemClickEvent.not()) {
+                listenMenuItemClickEvent = true
+                return@setOnMenuItemClickListener
+            }
             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
 
             when (position) {
