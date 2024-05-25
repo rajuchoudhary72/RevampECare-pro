@@ -5,12 +5,29 @@
 
     <data>
 
+        <variable
+            name="icon"
+            type="java.lang.String" />
+
+        <variable
+            name="title"
+            type="java.lang.String" />
+
+        <variable
+            name="isChecked"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:contentPadding="10dp"
+        android:onClick="@{clickListener}"
         app:strokeColor="@color/grey_60"
         app:strokeWidth="1dp">
 
@@ -24,39 +41,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_drag"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/grey_40" />
+                app:tint="@color/grey_40"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/image"
+                imageUrl="@{icon}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/ic_assignment"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/img_drag"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_assignment" />
 
             <TextView
                 android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="Assignment"
+                android:text="@{title}"
                 android:textAppearance="?attr/textAppearanceTitleSmall"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Assignment" />
 
             <ToggleButton
                 android:layout_width="80dp"
-                android:textOn=""
-                android:textOff=""
                 android:layout_height="40dp"
                 android:background="@drawable/bg_toggle_button"
+                android:checked="@{isChecked}"
+                android:clickable="false"
+                android:textOff=""
+                android:textOn=""
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

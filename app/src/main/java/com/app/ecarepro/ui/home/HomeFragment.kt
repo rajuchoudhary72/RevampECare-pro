@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
@@ -108,7 +109,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             launch {
                 mViewModel
                     .uiState
@@ -273,6 +274,11 @@ class HomeFragment : Fragment() {
                 addMoreFavourites {
                     id("add more")
                     clickListener { _ ->
+                        setFragmentResultListener("favourites") { _, bundle ->
+                            if (bundle.containsKey("isUpdate")) {
+                                systemViewModel.refreshAppLayout()
+                            }
+                        }
                         findNavController().navigate(R.id.favouritesFragment)
                     }
                 }

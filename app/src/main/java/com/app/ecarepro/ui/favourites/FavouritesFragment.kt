@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyTouchHelper
-import com.airbnb.epoxy.EpoxyTouchHelper.DragCallbacks
-import com.app.ecarepro.FavouriteBindingModel_
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentFavouritesBinding
 import com.app.ecarepro.favourite
+import com.app.ecarepro.ui.MainActivity
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -38,44 +40,59 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
+        viewLifecycleOwner.lifecycleScope.launch {
+            mViewModel.uiState.collect { uiState ->
+                buildModels(uiState)
+            }
+        }
+    }
 
-        var controller:EpoxyController? = null
+    private fun buildModels(uiState: FavouritesUiState) {
+        (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
+        uiState.getErrorOrNull()?.let { error ->
+            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+        }
+        if (uiState is FavouritesUiState.Success) {
+            binding.recyclerView.withModels {
+                uiState.favourites.forEach {
+                    favourite {
+                        id(it.menuID)
+                        icon(it.getImageUrl())
+                        title(it.title)
+                        isChecked(it.isSelected)
+                        clickListener { _ ->
+                            mViewModel.onFavouriteClicked(it)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initViews() {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        binding.recyclerView.apply {
+        binding.btnSave.setOnClickListener {
+            (requireActivity() as MainActivity).showLoader(true)
+            mViewModel.saveFavourites() { isSuccess, message ->
+                (requireActivity() as MainActivity).showLoader(false)
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                if (isSuccess) {
+                    setFragmentResult("favourites", bundleOf("isUpdate" to true))
+                    findNavController().popBackStack()
+                }
+            }
+        }
 
+        binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
             )
-
-            withModels {controller = this
-                (0..25).forEach {
-                    favourite { id(it) }
-                }
-            }
         }
-
-        EpoxyTouchHelper
-            .initDragging(controller)
-            .withRecyclerView(binding.recyclerView)
-            .forVerticalList()
-            .withTarget(FavouriteBindingModel_::class.java)
-            .andCallbacks(object : DragCallbacks<FavouriteBindingModel_>() {
-                override fun onModelMoved(
-                    fromPosition: Int,
-                    toPosition: Int,
-                    modelBeingMoved: FavouriteBindingModel_?,
-                    itemView: View?
-                ) {
-
-                }
-
-
-            })
-
     }
 
 

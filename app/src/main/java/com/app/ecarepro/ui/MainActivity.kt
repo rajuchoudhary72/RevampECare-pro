@@ -329,6 +329,7 @@ class MainActivity : AppCompatActivity() {
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
+            32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
