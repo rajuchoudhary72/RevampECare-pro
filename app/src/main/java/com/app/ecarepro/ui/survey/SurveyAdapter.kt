@@ -1,18 +1,21 @@
 package com.app.ecarepro.ui.survey
 
+import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.SurveyItemBinding
 import com.app.ecarepro.databinding.TeacherItemBinding
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.utils.getDateTimeFormatted
 
-class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
+class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss:Int, data: AllSurvey) -> Unit) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
-       val binding =
+        val binding =
             SurveyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoticeViewHolder(binding.root)
     }
@@ -23,29 +26,11 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Ada
 
         val binding = DataBindingUtil.getBinding<SurveyItemBinding>(holder.itemView)
         val surveyModel=syllabusLST[position]
-       // bindingm.attData = syllabusLST[position]
+        // bindingm.attData = syllabusLST[position]
         if (binding!=null){
             binding.tvTest.text = surveyModel.description
             holder.itemView.setOnClickListener {
-                /* if (surveyModel.isOpen && !surveyModel.isResponded
-                 )
-                     mContext.startActivity(
-                     Intent(
-                         mContext,
-                         ActivitySurveyQuestions::class.java
-                     ).putExtra("SurveyObj", mData.get(holder.adapterPosition))
-                 ) else if (mData.get(holder.adapterPosition)
-                         .getResultDeclared()
-                 ) mContext.startActivity(
-                     Intent(
-                         mContext,
-                         ActivitySurveyResult::class.java
-                     ).putExtra("surId", surveyModel.getSurID())
-                 ) else if (mData.get(holder.adapterPosition).getResponded()) Toast.makeText(
-                     mContext,
-                     "Thanks for your response. Your response has already been recorded.",
-                     Toast.LENGTH_SHORT
-                 ).show() else Toast.makeText(mContext, "Survey Closed", Toast.LENGTH_SHORT).show()*/
+                callback.invoke(position,surveyModel)
             }
 
 
@@ -63,19 +48,23 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>) : RecyclerView.Ada
                 }
                 binding.tvDescription.setText(surveyModel.description)
                 binding.tvTitle.setText(surveyModel.title)
-                binding.tvPublishedOn.setText("Published on: " + getDateTimeFormatted(surveyModel.publishedOn))
+                binding.tvPublishedOn.setText("Published on: " + surveyModel.publishedOn?.let {
+                    getDateTimeFormatted(
+                        it
+                    )
+                })
                 if (surveyModel.isOpen) binding.tvOpenClose.setText("Open till: " + surveyModel.openEndDate) else binding.tvOpenClose.setText(
                     "Closed on: " + surveyModel.openEndDate
                 )
                 if (surveyModel.isResponded) {
-                     if (surveyModel.respondedOn!=null){
-                         binding.tvRespondedOn.setVisibility(View.VISIBLE)
-                         binding.tvRespondedOn.setText(
-                             "RESPONDED ON: " + (
-                                 surveyModel.respondedOn
-                             )
-                         )
-                     }
+                    binding.tvRespondedOn.setText(
+                        "RESPONDED ON: " + surveyModel.respondedOn?.let {
+                            (
+                                it
+                            )
+                        }
+                    )
+                    binding.tvRespondedOn.setVisibility(View.VISIBLE)
                 }
             })
 

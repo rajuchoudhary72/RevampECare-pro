@@ -9,7 +9,8 @@ import com.app.ecarepro.data.repository.AppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-
+import com.app.ecarepro.data.network.model.Favourites
+import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
     private val userDataStore: UserDataStore
@@ -60,6 +61,35 @@ class AppRepositoryImpl @Inject constructor(
                 val response = appService.registerFirebaseToken(registerDevice)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: ""))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override fun getFavourites(): Flow<Result<List<Favourites>>> {
+        return flow {
+            try {
+                val response = appService.getFavourites()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.allMenus?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun updateFavourites(items: List<FavouritesUpdateDto>): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = appService.updateFavourites(items)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message?:""))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

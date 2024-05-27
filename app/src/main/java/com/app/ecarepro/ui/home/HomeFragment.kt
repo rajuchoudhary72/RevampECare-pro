@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
@@ -108,7 +109,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             launch {
                 mViewModel
                     .uiState
@@ -123,6 +124,7 @@ class HomeFragment : Fragment() {
 
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
+                        mViewModel.setFavourite(uiState.favroiteMenus)
                         uiState.userInfo.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
@@ -261,7 +263,7 @@ class HomeFragment : Fragment() {
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
 
-                uiState.favourites.forEach { favouriteSlider ->
+                uiState.favourites.forEach { favouriteSlider: Slider ->
                     cardOption {
                         id(favouriteSlider.module)
                         data(favouriteSlider)
@@ -272,6 +274,11 @@ class HomeFragment : Fragment() {
                 addMoreFavourites {
                     id("add more")
                     clickListener { _ ->
+                        setFragmentResultListener("favourites") { _, bundle ->
+                            if (bundle.containsKey("isUpdate")) {
+                                systemViewModel.refreshAppLayout()
+                            }
+                        }
                         findNavController().navigate(R.id.favouritesFragment)
                     }
                 }
@@ -349,20 +356,6 @@ class HomeFragment : Fragment() {
                     webViewCall(url, getString(R.string.assessment_headling))
                 }
             }
-        }else if (favouriteSlider.module.contains("Medicine Issue", true)) {
-            findNavController().navigate(R.id.medicineIssuedFragment)
-        }else if (favouriteSlider.module.contains("Assign House", true)) {
-            findNavController().navigate(R.id.assignHomeFragment)
-        }else if (favouriteSlider.module.contains("Medical History", true)) {
-            findNavController().navigate(R.id.medicalCardFragment)
-        }else if (favouriteSlider.module.contains("Id Card", true)) {
-            findNavController().navigate(R.id.medicalClassFragment)
-        }else if (favouriteSlider.module.contains("Teachers", true)) {
-            findNavController().navigate(R.id.subjectTeacherFragment)
-        }else if (favouriteSlider.module.contains("Classmates", true)) {
-           // findNavController().navigate(R.id.classMateFragment)
-            //findNavController().navigate(R.id.showAttendanceFragment)
-            findNavController().navigate(R.id.staticalReport)
         }
         /*end Web view module call  from here */
         else {

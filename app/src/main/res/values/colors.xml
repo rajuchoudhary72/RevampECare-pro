@@ -109,7 +109,6 @@
 
 
     <color name="att_na_color">#808080</color>
-    <color name="absent_red">#FB4E4E</color>
 
 
     <color name="disabled">#78CC41</color>
@@ -151,6 +150,8 @@
     <color name="approved">#4BD964</color>
     <color name="Self_transprt_color">#D1D1D1</color>
     <color name="light_gray_gallerytext">#757575</color>
+    <color name="absent_red">#FB4E4E</color>
+    <color name="shimmer_color">#a2878787</color>
     <array name="multi_color_array">
         <item>@color/android</item>
         <item>@color/red</item>

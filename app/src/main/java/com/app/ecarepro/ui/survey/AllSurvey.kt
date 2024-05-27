@@ -6,8 +6,8 @@ data class AllSurvey(
     val isOpen: Boolean,
     val isResponded: Boolean,
     val openEndDate: String,
-    val publishedOn: String,
-    val respondedOn: String,
+    val publishedOn: String?,
+    val respondedOn: String?,
     val resultDeclared: Boolean,
     val title: String
 )

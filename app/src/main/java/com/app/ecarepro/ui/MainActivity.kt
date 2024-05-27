@@ -36,6 +36,8 @@ import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.drawerChildChildItem
+import com.app.ecarepro.menuCard
 
 
 @AndroidEntryPoint
@@ -115,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 .collectLatest { uiState ->
                     uiState.getValueOrNull()?.let { data ->
                         buildDrawerModels(data.menus)
-                        buildFavoriteMenusModels(data.favroiteMenus)
+                        buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
                     }
                 }
@@ -150,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.open()
     }
 
-    private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
+    /*private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
             favoriteMenus.forEach { menu ->
                 cardOption {
@@ -171,8 +173,53 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+    }*/
 
+    private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
+        binding.appBarMain.contentMain.recyclerViewMoreOptions.withModels {
+            favoriteMenus.forEach { menu ->
+                if(menu.childMenus.isNullOrEmpty()){
+                    menuCard {
+                        id(menu.menuID)
+                        title(menu.title)
+                        icon(menu.icon)
+                        clickListener { _ ->
+                            getFragmentId(menu.menuID)
+                            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                        }
+                    }
+                }else{
+                    menu.childMenus.forEach { childMenu ->
+                        if(childMenu.childMenus.isNullOrEmpty()){
+                            menuCard {
+                                id(childMenu.menuID)
+                                title(childMenu.title)
+                                icon(childMenu.icon)
+                                parentMenuIcon(menu.icon)
+                                clickListener { _ ->
+                                    getFragmentId(menu.menuID, childMenu.chMenuID)
+                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                }
+                            }
+                        }else{
+                            childMenu.childMenus.forEach { childChildMenu ->
+                                menuCard {
+                                    id(childChildMenu.menuID)
+                                    title(childChildMenu.title)
+                                    icon(childChildMenu.icon)
+                                    parentMenuIcon(childMenu.icon)
+                                    clickListener { _ ->
+                                        getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)
+                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
             menu.forEach { parentMenu ->
@@ -202,8 +249,6 @@ class MainActivity : AppCompatActivity() {
                             id(parentMenu.menuID, menu.menuID)
                             title(menu.title)
                             icon(menu.icon)
-                            hasChildMenu(menu.childMenus.isNullOrEmpty().not())
-
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
                                 getFragmentId(
@@ -212,8 +257,22 @@ class MainActivity : AppCompatActivity() {
                                 )
                             }
                         }
-                    }
 
+                        menu.childMenus?.forEach { childChildMenu ->
+                            drawerChildChildItem {
+                                id(parentMenu.menuID, childChildMenu.menuID)
+                                title(childChildMenu.title)
+                                icon(childChildMenu.icon)
+                                clickListener { _ ->
+                                    systemViewModel.openDrawer(false)
+                                    getFragmentId(
+                                        childChildMenu.menuID,
+                                        childChildMenu.chMenuID
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -270,6 +329,7 @@ class MainActivity : AppCompatActivity() {
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
+            32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 

@@ -52,6 +52,7 @@ fun getIcNoProfileBig(context: Context): VectorDrawableCompat? {
     return VectorDrawableCompat.create(context.resources, R.drawable.ic_no_profile_big, null)
 }
 fun getDateTimeFormatted(DateTime: String): String {
+    try {
     val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     simpleDateFormat.timeZone = TimeZone.getDefault()
     var dateTime: Date? = null
@@ -65,4 +66,8 @@ fun getDateTimeFormatted(DateTime: String): String {
     val formattedDate = finalDate.format(dateTime).toString()
     val formattedTime = finalTime.format(dateTime).toString().uppercase(Locale.getDefault())
     return "$formattedDate at $formattedTime"
+    }catch (e:Exception){
+        return ""
+    }
+
 }

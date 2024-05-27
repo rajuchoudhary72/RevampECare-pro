@@ -109,7 +109,8 @@ import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.ProfileAttendanceDTL
-
+import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
+import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 interface UserService {
     @GET("User/Verify")
     suspend fun verifyUser(
@@ -725,4 +726,14 @@ interface UserService {
         @Query("pg") pg: Int=1,
         @Query("isReport") isReport: Boolean=false,
     ): SurveyListResponse
+
+    @GET("Survey/Questions")
+    suspend fun surveyQuestions(
+        @Query("ID") id: String
+    ): SurveyQuestionsResponse
+
+    @POST("Survey/PostAnswer")
+    suspend fun submitSurveyQuestions(
+        @Body model: SurveyQuestionsSubmitRequest
+    ): CommonResponse
 }

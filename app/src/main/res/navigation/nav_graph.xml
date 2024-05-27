@@ -760,6 +760,10 @@
         android:name="com.app.ecarepro.ui.survey.SurveyListFragment"
         tools:layout="@layout/survey_layout" />
     <fragment
+        android:id="@+id/surveyQuestionFragment"
+        android:name="com.app.ecarepro.ui.survey.SurveyQuestionFragment"
+        tools:layout="@layout/survey_question" />
+    <fragment
         android:id="@+id/conversationReportFragment"
         android:name="com.app.ecarepro.ui.con_report.ConversationReportFragment"
         android:label="ConversationReportFragment" />
