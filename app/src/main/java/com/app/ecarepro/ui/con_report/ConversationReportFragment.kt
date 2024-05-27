@@ -91,6 +91,10 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
 
             tvDateFrom.setOnClickListener { pickDateRange() }
             tvDateTo.setOnClickListener { pickDateRange() }
+
+            btnFilter.setOnClickListener {
+                showFilterPopUp()
+            }
         }
 
     }
