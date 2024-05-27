@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">ECarePro</string>
     <string name="action_settings">Settings</string>
     <!--School/College Code-->
     <string name="help">Help</string>
