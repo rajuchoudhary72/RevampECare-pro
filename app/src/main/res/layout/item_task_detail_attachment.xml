@@ -35,13 +35,13 @@
 
         <TextView
             android:id="@+id/btn_upload"
+            android:onClick="@{clickListener}"
             isVisible="@{canUploadAttachment}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/_5sdp"
             android:fontFamily="@font/calibri_bold"
             android:gravity="center"
-            android:onClick="@{clickListener}"
             android:text="Upload"
             android:textColor="@color/green"
             app:drawableStartCompat="@drawable/ic_upload"

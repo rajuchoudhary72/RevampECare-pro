@@ -24,7 +24,6 @@
         <variable
             name="editStartDate"
             type="android.view.View.OnClickListener" />
-
         <variable
             name="editEndDate"
             type="android.view.View.OnClickListener" />
@@ -49,14 +48,14 @@
             tools:lv_sub_text="13 March 2021" />
 
         <ImageView
+            app:layout_constraintTop_toTopOf="@id/startDate"
+            app:layout_constraintStart_toEndOf="@+id/startDate"
+            android:src="@drawable/ic_edit"
             isVisible="@{canEdit}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:onClick="@{editStartDate}"
             android:padding="4dp"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintStart_toEndOf="@+id/startDate"
-            app:layout_constraintTop_toTopOf="@id/startDate" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <com.app.ecarepro.ui.views.LegendView
             android:id="@+id/endDate"
@@ -71,14 +70,14 @@
             tools:lv_sub_text="13 March 2021" />
 
         <ImageView
-            isVisible="@{canEdit}"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{editEndDate}"
             android:padding="4dp"
-            android:src="@drawable/ic_edit"
+            app:layout_constraintTop_toTopOf="@id/startDate"
             app:layout_constraintStart_toEndOf="@+id/endDate"
-            app:layout_constraintTop_toTopOf="@id/startDate" />
+            android:src="@drawable/ic_edit"
+            android:layout_width="wrap_content"
+            isVisible="@{canEdit}"
+            android:onClick="@{editEndDate}"
+            android:layout_height="wrap_content"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"

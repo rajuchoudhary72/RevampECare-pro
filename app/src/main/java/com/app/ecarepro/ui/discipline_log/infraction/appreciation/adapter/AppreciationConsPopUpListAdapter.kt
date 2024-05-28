@@ -9,11 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.model.AppreciationReward
+import com.app.ecarepro.model.InfractionConsequence
 import com.app.ecarepro.utils.listener.ItemListener
 
-class AppreciationConsPopUpListAdapter(
-    private var infractionConsList: List<AppreciationReward>,
-    private var itemListener: ItemListener<AppreciationReward>
+class AppreciationConsPopUpListAdapter(private var infractionConsList: List<AppreciationReward>,
+                                       private var itemListener: ItemListener<AppreciationReward>
 ) :
     RecyclerView.Adapter<AppreciationConsPopUpListAdapter.PopUpListViewHolder>() {
 
@@ -30,15 +30,15 @@ class AppreciationConsPopUpListAdapter(
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text = infractionConsList[holder.bindingAdapterPosition].reward
+        holder.itemName.text=infractionConsList[holder.bindingAdapterPosition].reward
         holder.llMain.setOnClickListener {
-            lastIndex = holder.bindingAdapterPosition
-            itemListener.onItemClick(infractionConsList[holder.bindingAdapterPosition], 1, true)
+            lastIndex=holder.bindingAdapterPosition
+             itemListener.onItemClick(infractionConsList[holder.bindingAdapterPosition],1,true)
             notifyDataSetChanged()
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-            holder.itemName.setTextColor(Color.parseColor("#4DAC3C"))
+           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
@@ -46,7 +46,7 @@ class AppreciationConsPopUpListAdapter(
 
     }
 
-    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         val itemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val llMain: LinearLayout = itemView.findViewById(R.id.ll_main)

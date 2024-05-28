@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="stuData"
             type="com.app.ecarepro.model.AssignSubmitStudent" />
@@ -11,8 +10,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/llMain"
@@ -41,8 +40,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
+                    android:textSize="14sp"
                     android:text="@{stuData.studentName}"
-                    android:textSize="14sp" />
+                    />
 
             </LinearLayout>
 
@@ -65,8 +65,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
+                    android:textSize="14sp"
                     android:text="@{stuData.submittedOn}"
-                    android:textSize="14sp" />
+                    />
 
             </LinearLayout>
 
@@ -100,9 +101,9 @@
             android:id="@+id/llEditDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
+            android:visibility="visible"
 
-            android:visibility="visible">
+            android:baselineAligned="false">
 
             <LinearLayout
                 android:id="@+id/llView"
@@ -152,9 +153,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:background="@color/brand_color"
-                android:gravity="center"
-                android:visibility="gone">
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"

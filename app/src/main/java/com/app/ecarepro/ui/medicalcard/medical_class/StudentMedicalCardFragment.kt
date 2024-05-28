@@ -15,6 +15,7 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.StudentMedicalCardBinding
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.medicalcard.MedicineCardViewModel
 import com.squareup.picasso.Picasso
@@ -33,6 +34,7 @@ class StudentMedicalCardFragment : Fragment() {
     private val mViewModel: MedicineCardViewModel by viewModels()
 
 
+
     val bundle by lazy {
         arguments
     }
@@ -46,14 +48,14 @@ class StudentMedicalCardFragment : Fragment() {
                 Picasso.Builder(requireActivity()) // additional settings
                     .build()
             )
-        } catch (e: IllegalStateException) {
+        }catch (e:IllegalStateException){
 
         }
         binding = StudentMedicalCardBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.printView.setOnClickListener {
 
-            findNavController().navigate(R.id.studentMedicalReportFragment, bundle)
+            findNavController().navigate(R.id.studentMedicalReportFragment,bundle)
 
 
         }
@@ -80,15 +82,12 @@ class StudentMedicalCardFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        it.data?.let { student ->
-                            student.profile?.let { it1 ->
-                                student.immunizationRecords?.let { it2 ->
-                                    bindElement(
-                                        it1,
-                                        it2
-                                    )
-                                }
-                            }
+                        it.data?.let {student->
+                            student.profile?.let { it1 -> student.immunizationRecords?.let { it2 ->
+                                bindElement(it1,
+                                    it2
+                                )
+                            } }
                         }
 
                     }
@@ -109,18 +108,18 @@ class StudentMedicalCardFragment : Fragment() {
     private val DEFAULT_TEXT = ""
     private fun bindElement(details: Profile, immunizationRecords: ImmunizationRecords) {
 
-        Picasso.get()
-            .load(details.coverImg)
-            .error(R.drawable.shape_rect_trans)
-            .placeholder(R.drawable.shape_rect_trans)
-            .into(binding.ivBannerImage)
-        getIcNoProfileBig(requireContext())?.let {
             Picasso.get()
-                .load(details.photo)
-                .placeholder(it)
-                .error(it)
-                .into(binding.ivUserImage)
-        }
+                .load(details.coverImg)
+                .error(R.drawable.shape_rect_trans)
+                .placeholder(R.drawable.shape_rect_trans)
+                .into(binding.ivBannerImage)
+            getIcNoProfileBig(requireContext())?.let {
+                Picasso.get()
+                    .load(details.photo)
+                    .placeholder(it)
+                    .error(it)
+                    .into(binding.ivUserImage)
+            }
 
 
 

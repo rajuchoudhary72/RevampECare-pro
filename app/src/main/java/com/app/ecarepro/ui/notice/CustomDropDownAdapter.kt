@@ -10,8 +10,7 @@ import android.widget.TextView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 
-class CustomDropDownAdapter(val context: Context, private var listItemsTxt: List<MyClasseItem>) :
-    BaseAdapter() {
+class CustomDropDownAdapter(val context: Context, private var listItemsTxt: List<MyClasseItem>) : BaseAdapter() {
 
 
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
@@ -45,7 +44,7 @@ class CustomDropDownAdapter(val context: Context, private var listItemsTxt: List
         } else {
             view = mInflater.inflate(R.layout.view_drop_down_menu, parent, false)
             getItem(position)?.let { country ->
-                // setItemForCountry(view, country)
+               // setItemForCountry(view, country)
             }
         }
         return view

@@ -37,5 +37,5 @@ data class Favourites(
     @SerializedName("url")
     val url: Any?
 ) {
-    fun getImageUrl() = BASE_URL_COM + icon
+    fun getImageUrl() =  icon
 }

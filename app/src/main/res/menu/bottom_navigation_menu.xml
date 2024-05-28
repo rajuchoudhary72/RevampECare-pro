@@ -8,23 +8,23 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
+        android:id="@+id/settings"
         android:title="Settings" />
 
     <item
-        android:id="@+id/more"
         android:icon="@drawable/ic_home"
+        android:id="@+id/more"
         android:title="More" />
 
     <item
-        android:id="@+id/notification"
         android:icon="@drawable/ic_notifications"
+        android:id="@+id/notification"
         android:title="Notification" />
 
     <item
-        android:id="@+id/message"
         android:icon="@drawable/ic_chat_bubble"
+        android:id="@+id/message"
         android:title="Message" />
 
 </menu>

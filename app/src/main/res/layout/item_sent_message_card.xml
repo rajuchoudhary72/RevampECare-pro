@@ -35,8 +35,8 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{clickListener}"
         app:cardCornerRadius="16dp"
+        android:onClick="@{clickListener}"
         app:contentPadding="12dp"
         app:strokeColor="@color/grey_60"
         app:strokeWidth="1dp">

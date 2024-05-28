@@ -15,15 +15,14 @@ class SubmitAssignmentViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val submitAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val submitAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> =
-        submitAssignmentMutableStateFlow
+    private val submitAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val submitAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = submitAssignmentMutableStateFlow
 
 
-    suspend fun submitAssignment(
+
+
+      suspend fun submitAssignment(
         id: String,
         asgID: Int,
         data: String,
@@ -31,15 +30,15 @@ class SubmitAssignmentViewModel @Inject constructor(
         attachment: String,
         fileURL: String,
         fileExt: String
-    ) = viewModelScope.launch {
+    )=viewModelScope.launch {
         runCatching {
-            submitAssignmentMutableStateFlow.value = NetworkResult.Loading()
+            submitAssignmentMutableStateFlow.value= NetworkResult.Loading( )
 
             userRepository.submitAssignment(id, asgID, data, fileName, attachment, fileURL, fileExt)
         }.onSuccess {
-            submitAssignmentMutableStateFlow.value = NetworkResult.Success(it)
+            submitAssignmentMutableStateFlow.value= NetworkResult.Success(it)
         }.onFailure {
-            submitAssignmentMutableStateFlow.value = NetworkResult.Error(it.message)
+            submitAssignmentMutableStateFlow.value= NetworkResult.Error(it.message)
         }
     }
 

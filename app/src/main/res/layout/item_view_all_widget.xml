@@ -14,8 +14,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_view_all_widget"
-        android:onClick="@{clickListener}">
+        android:onClick="@{clickListener}"
+        android:background="@drawable/bg_view_all_widget">
 
 
         <ImageView

@@ -1,5 +1,8 @@
 package com.app.ecarepro.model
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 
 data class PromotionModel(
     val errorCode: Int?,
@@ -22,16 +25,14 @@ data class StudentPro(
     val photo: String?,
     val rollNumber: String?,
     val stID: Int?,
-    var selected: Section?
+    var selected:Section?
 )
-
 data class NextSessionClasse(
     var classID: Int?,
     val className: String?,
-    var isSelected: Boolean = false,
+    var isSelected: Boolean=false,
     val sections: MutableList<Section>?
 )
-
 data class Section(
     var classID: Int?,
     val secID: Int?,

@@ -9,23 +9,21 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.ThoughtsListItemBinding
 import com.app.ecarepro.model.Thoughts
+import com.app.ecarepro.databinding.ThoughtsListItemBinding
 import com.google.android.material.imageview.ShapeableImageView
 import com.squareup.picasso.Picasso
 
-class ThoughtsAdapter(
-    private var thoughtsList: List<Thoughts>,
-    private var thoughtsListFragment: ThoughtsListFragment
-) :
+class ThoughtsAdapter(private var thoughtsList: List<Thoughts>,
+                     private var thoughtsListFragment: ThoughtsListFragment) :
     RecyclerView.Adapter<ThoughtsAdapter.ThoughtsViewHolder>() {
 
-    private lateinit var bindingm: ThoughtsListItemBinding
+        private lateinit var bindingm:   ThoughtsListItemBinding
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThoughtsViewHolder {
-        bindingm =
-            ThoughtsListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm=ThoughtsListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ThoughtsViewHolder(bindingm.root)
     }
 
@@ -34,86 +32,92 @@ class ThoughtsAdapter(
     override fun onBindViewHolder(holder: ThoughtsViewHolder, position: Int) {
 
 
-        val data = thoughtsList[position]
+
+        val data= thoughtsList[position]
 
         var like = data.isILike == 0
 
         setLikeDisLikeUi(like, holder)
 
-        holder.word.text = data.quotation
-        holder.tv_aut.text = data.author
-        holder.updated_by_person.text = data.updatedBy
-        holder.total_like.text = data.likes.toString() + " Likes"
+        holder.word.text=data.quotation
+        holder.tv_aut.text=data.author
+        holder.updated_by_person.text=data.updatedBy
+        holder.total_like.text= data.likes.toString()+" Likes"
 
-        Picasso.get().load(thoughtsList[position].photo).placeholder(R.drawable.default_profile)
+        Picasso.get().load(thoughtsList[position].photo).
+        placeholder(R.drawable.default_profile)
             .into(holder.user_img)
 
-        if (!data.isVerified) {
-            holder.rl_likes.isVisible = false
-            holder.tv_thoughtStatus.isVisible = true
-            holder.tv_thoughtStatus.text = "Pending"
+        if (!data.isVerified){
+            holder.rl_likes.isVisible=false
+            holder.tv_thoughtStatus.isVisible=true
+            holder.tv_thoughtStatus.text="Pending"
         }
 
-        var likeCount = data.likes
+        var likeCount=data.likes
 
 
         holder.unlike.setOnClickListener {
-            if (like) {
+            if (like){
                 likeCount += 1
-                thoughtsListFragment.onItemClick(data, 1, like)
-                like = false
+                thoughtsListFragment.onItemClick(data,1,like)
+                like=false
 
-            } else {
-                likeCount -= 1
-                thoughtsListFragment.onItemClick(data, 1, like)
-                like = true
-            }
-            setLikeDisLikeUi(like, holder)
+             }else{
+                  likeCount-= 1
+                thoughtsListFragment.onItemClick(data,1,like)
+                like=true
+           }
+            setLikeDisLikeUi(like,holder)
             holder.total_like.text = "$likeCount Likes"
-        }
+         }
 
         holder.like.setOnClickListener {
-            if (like) {
-                likeCount += 1
-                thoughtsListFragment.onItemClick(data, 1, like)
-                like = false
+            if (like){
+                 likeCount+= 1
+                thoughtsListFragment.onItemClick(data,1,like)
+                like=false
 
-            } else {
-                likeCount -= 1
-                thoughtsListFragment.onItemClick(data, 1, like)
-                like = true
+            }else{
+                 likeCount-= 1
+                thoughtsListFragment.onItemClick(data,1,like)
+                like=true
 
             }
             setLikeDisLikeUi(like, holder)
-            holder.total_like.text = "$likeCount Likes"
+            holder.total_like.text="$likeCount Likes"
         }
 
         holder.total_like.setOnClickListener {
-            if (data.likes > 0) {
-                thoughtsListFragment.onItemClick(data, 2, true)
-            }
-        }
+            if (data.likes>0){
+                thoughtsListFragment.onItemClick(data,2,true)
+            }  }
 
         holder.rel_dot.setOnClickListener {
-            thoughtsListFragment.onItemClick(data, 3, true)
-        }
+                thoughtsListFragment.onItemClick(data,3,true)
+            }
+
+
+
+
 
 
     }
 
 
-    private fun setLikeDisLikeUi(boolean: Boolean, holder: ThoughtsViewHolder) {
-        if (boolean) {
-            holder.unlike.isVisible = true
-            holder.like.isVisible = false
-        } else {
-            holder.unlike.isVisible = false
-            holder.like.isVisible = true
+
+    private fun setLikeDisLikeUi(boolean: Boolean, holder: ThoughtsViewHolder){
+        if (boolean){
+            holder.unlike.isVisible=true
+            holder.like.isVisible=false
+        }else{
+            holder.unlike.isVisible=false
+            holder.like .isVisible=true
         }
     }
 
 
-    class ThoughtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ThoughtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
 
         val unlike: TextView = itemView.findViewById(R.id.unkike)
@@ -129,8 +133,8 @@ class ThoughtsAdapter(
 
     }
 
-    fun setData(thoughtsList: List<Thoughts>) {
-        this.thoughtsList = thoughtsList as ArrayList<Thoughts>
+    fun setData(thoughtsList : List<Thoughts>){
+         this.thoughtsList= thoughtsList as ArrayList<Thoughts>
         notifyDataSetChanged()
     }
 }

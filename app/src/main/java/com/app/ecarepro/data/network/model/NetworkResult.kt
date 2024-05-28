@@ -1,11 +1,11 @@
 package com.app.ecarepro.data.network.model
 
-sealed class NetworkResult<T>(val data: T? = null, val message: String? = null) {
+ sealed  class NetworkResult<T>(val data: T? =null,val message:String?=null) {
 
 
-    class Success<T>(data: T) : NetworkResult<T>(data)
+     class Success<T> (data: T ): NetworkResult<T>(data)
 
-    class Error<T>(message: String?, data: T? = null) : NetworkResult<T>(data, message)
+     class Error<T>( message: String?, data: T? = null): NetworkResult<T>(data, message)
 
-    class Loading<T> : NetworkResult<T>()
+     class Loading<T> : NetworkResult<T>()
 }

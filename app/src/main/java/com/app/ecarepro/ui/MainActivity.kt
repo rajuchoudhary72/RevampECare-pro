@@ -2,7 +2,6 @@ package com.app.ecarepro.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,6 +15,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
-
     private var listenMenuItemClickEvent = true
 
 
@@ -91,6 +90,16 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+
+        Picasso.setSingletonInstance(Picasso.Builder(this).build())
+
+        lifecycleScope.launch {
+            systemViewModel.user.collectLatest {
+                if (it != null) {
+                    userData = it
+                }
+            }
+        }
     }
 
 
@@ -177,15 +186,12 @@ class MainActivity : AppCompatActivity() {
                         title(menu.title)
                         icon(menu.icon)
                         clickListener { _ ->
-
                             getFragmentId(menu.menuID)?.let {
                                 hideMoreItemMenu()
-                                navController.navigate(it)
                             }
-
                         }
                     }
-                } else {
+                }else{
                     menu.childMenus.forEach { childMenu ->
                         if(childMenu.childMenus.isNullOrEmpty()){
                             menuCard {
@@ -199,12 +205,10 @@ class MainActivity : AppCompatActivity() {
                                         childMenu.chMenuID
                                     )?.let {
                                         hideMoreItemMenu()
-                                        navController.navigate(it)
                                     }
-
                                 }
                             }
-                        } else {
+                        }else{
                             childMenu.childMenus.forEach { childChildMenu ->
                                 menuCard {
                                     id(childChildMenu.menuID)
@@ -217,9 +221,7 @@ class MainActivity : AppCompatActivity() {
                                             childChildMenu.chMenuID
                                         )?.let {
                                             hideMoreItemMenu()
-                                            navController.navigate(it)
                                         }
-
                                     }
                                 }
                             }
@@ -229,13 +231,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun hideMoreItemMenu() {
         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
         binding.appBarMain.contentMain.bottomNavigationView.onMenuItemClick(0)
         listenMenuItemClickEvent = false
     }
-
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
             menu.forEach { parentMenu ->
@@ -333,8 +333,6 @@ class MainActivity : AppCompatActivity() {
             //11 ->  navController.navigate(R.id.feeModule)
             12 ->  navController.navigate(R.id.conversationReportFragment)
             13 ->  navController.navigate(R.id.bookLibraryFragment)
-            //  14 ->  navController.navigate(R.id.webViewFragment)
-
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
             17 ->  navController.navigate(R.id.attendanceFragment)
             18 ->  navController.navigate(R.id.reportCardDetailsNavHostFragment)
@@ -343,24 +341,23 @@ class MainActivity : AppCompatActivity() {
             21 ->  navController.navigate(R.id.thoughtsListFragment)
             22 ->  navController.navigate(R.id.appointmentReportFragment)
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
+            27 ->  navController.navigate(R.id.lessonPlanListFragment)
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
+            32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }
     }
-
       fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {
             1 -> {
                 when (childMenuId) {
-
                     1 -> {
                         navController.navigate(R.id.studentListFragment2,Bundle( ).apply {
                             putString(Constant.TO,  Constant.PROFILE_FRA_STU)
                         })
-
                     }
                     2 -> {
                         navController.navigate(R.id.studentAttendanceReportFragment)
@@ -370,10 +367,8 @@ class MainActivity : AppCompatActivity() {
                             putString(Constant.TO,  Constant.FRA_STU_LEAVE)
                         })
                     }
-
                 }
             }
-
             2 -> {
                 when (childMenuId) {
 

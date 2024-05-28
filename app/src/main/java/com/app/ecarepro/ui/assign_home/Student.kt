@@ -1,7 +1,7 @@
 package com.app.ecarepro.ui.assign_home
 
 data class Student(
-    val contactMob: Any?,
+    val  contactMob: Any?,
     val admissionNumber: String?,
 
     val contactPerson: Any?,

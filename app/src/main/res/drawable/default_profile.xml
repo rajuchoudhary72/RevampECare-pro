@@ -2,8 +2,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="141dp"
     android:height="141dp"
-    android:viewportWidth="141"
-    android:viewportHeight="141">
+    android:viewportHeight="141"
+    android:viewportWidth="141">
 
     <path
         android:name="Ellipse_244"

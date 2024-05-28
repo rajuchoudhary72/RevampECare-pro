@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassPromotionModel
@@ -22,12 +23,9 @@ class AssignHomeViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val medicineIssueModelMutableStateFlow: MutableStateFlow<NetworkResult<MedicineIsuueModel>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val leaveHistoryStateFlow: StateFlow<NetworkResult<MedicineIsuueModel>> =
-        medicineIssueModelMutableStateFlow
+    private val medicineIssueModelMutableStateFlow: MutableStateFlow<NetworkResult<MedicineIsuueModel>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val leaveHistoryStateFlow: StateFlow<NetworkResult<MedicineIsuueModel>> = medicineIssueModelMutableStateFlow
 
     private val classList: MutableStateFlow<NetworkResult<ClassPromotionModel>> =
         MutableStateFlow(NetworkResult.Loading())
@@ -37,21 +35,20 @@ class AssignHomeViewModel @Inject constructor(
         MutableStateFlow(NetworkResult.Loading())
     val _studentList: StateFlow<NetworkResult<StudentList>> = studentList
 
-    private val assignHouse: MutableStateFlow<NetworkResult<CommonResponse>> =
+private val assignHouse: MutableStateFlow<NetworkResult<CommonResponse>> =
         MutableStateFlow(NetworkResult.Loading())
     val _assignHouse: StateFlow<NetworkResult<CommonResponse>> = assignHouse
 
-    fun medicineIssue() = viewModelScope.launch {
+    fun medicineIssue(  )=viewModelScope.launch {
         runCatching {
-            medicineIssueModelMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.medicineIsuueModel()
+            medicineIssueModelMutableStateFlow.value = NetworkResult.Loading( )
+            userRepository.medicineIsuueModel( )
         }.onSuccess {
             medicineIssueModelMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            medicineIssueModelMutableStateFlow.value = NetworkResult.Error(it.message)
+            medicineIssueModelMutableStateFlow .value = NetworkResult.Error(it.message)
         }
     }
-
     fun getClassList() = viewModelScope.launch {
         runCatching {
             classList.value = NetworkResult.Loading()
@@ -63,11 +60,10 @@ class AssignHomeViewModel @Inject constructor(
         }
 
     }
-
-    fun getStudentList(id: String, orderBy: String) = viewModelScope.launch {
+    fun getStudentList(id:String, orderBy:String) = viewModelScope.launch {
         runCatching {
             studentList.value = NetworkResult.Loading()
-            schoolRepository.getStudentListToAssignHouse(id, orderBy)
+            schoolRepository.getStudentListToAssignHouse(id,orderBy)
         }.onSuccess {
             studentList.value = NetworkResult.Success(it)
         }.onFailure {
@@ -75,8 +71,7 @@ class AssignHomeViewModel @Inject constructor(
         }
 
     }
-
-    fun assignHouse(request: List<AssignHouseRequest>) = viewModelScope.launch {
+    fun assignHouse(request:List<AssignHouseRequest>) = viewModelScope.launch {
         runCatching {
             assignHouse.value = NetworkResult.Loading()
             schoolRepository.assignHouse(request)

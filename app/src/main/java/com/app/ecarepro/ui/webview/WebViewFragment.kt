@@ -46,7 +46,7 @@ class WebViewFragment : Fragment() {
         binding.toolbar.title = title
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        // loadUrl("https://www.franciscansolutions.com/faq-v2.aspx")
+       // loadUrl("https://www.franciscansolutions.com/faq-v2.aspx")
         loadUrl(url)
     }
 
@@ -56,8 +56,8 @@ class WebViewFragment : Fragment() {
             builtInZoomControls = false
             displayZoomControls = false
             javaScriptEnabled = true
-            loadWithOverviewMode = true
-            useWideViewPort = true
+            loadWithOverviewMode=true
+            useWideViewPort=true
             cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
         }
         /*wv_url.getSettings().setDisplayZoomControls(true);
@@ -75,7 +75,7 @@ class WebViewFragment : Fragment() {
                     Environment.DIRECTORY_DOWNLOADS,
                     "download"
                 )
-                val dm = requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+                val dm =   requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
                 Toast.makeText(requireActivity(), "Downloading...", Toast.LENGTH_SHORT)
                     .show()
@@ -100,7 +100,6 @@ class WebViewFragment : Fragment() {
             }
         }
     }
-
     private fun isStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             true
@@ -112,7 +111,6 @@ class WebViewFragment : Fragment() {
             storagePermission(permission)
         }
     }
-
     private fun storagePermission(permission: Array<String>): Boolean {
         for (s in permission) {
             if (PackageManager.PERMISSION_GRANTED != requireActivity().checkSelfPermission(s)) {
@@ -123,8 +121,8 @@ class WebViewFragment : Fragment() {
         return true
     }
 
-    /* override fun onDestroyView() {
-         super.onDestroyView()
-         _binding = null
-     }*/
+   /* override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }*/
 }

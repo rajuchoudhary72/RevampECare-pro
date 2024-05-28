@@ -1,12 +1,11 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.data.network.model.AppLayoutDto
-import com.app.ecarepro.data.network.model.Favourites
-import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.RegisterDevice
 import kotlinx.coroutines.flow.Flow
-
+import com.app.ecarepro.data.network.model.Favourites
+import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 interface AppRepository {
     fun getAppLayout(): Flow<Result<AppLayoutDto>>
     fun getNotifications(): Flow<Result<List<Notification>>>

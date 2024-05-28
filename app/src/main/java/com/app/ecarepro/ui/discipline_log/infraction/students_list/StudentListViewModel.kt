@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.discipline_log.infraction.students_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.repository.UserRepository
@@ -16,17 +17,14 @@ class StudentListViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val studentListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStudentList>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val studentListStateFlow: StateFlow<NetworkResult<NetworkStudentList>> =
-        studentListMutableStateFlow
+    private val studentListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStudentList>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val studentListStateFlow: StateFlow<NetworkResult<NetworkStudentList>> = studentListMutableStateFlow
 
-    fun getStudentList(
+    fun  getStudentList(
         scholarType: Int,
         showAll: Boolean
-    ) = viewModelScope.launch {
+    )=viewModelScope.launch {
         runCatching {
             studentListMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStudentList(scholarType, showAll)

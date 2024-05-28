@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -34,16 +35,16 @@ class PaySlipFragment : Fragment() {
     private lateinit var monthSelectedData: MonthlyPaySlip
     private lateinit var monthData: List<MonthlyPaySlip>
     private lateinit var yearData: List<Year>
-    private var yearDataString: ArrayList<String> = ArrayList()
-    private var monthDataString: ArrayList<String> = ArrayList()
-    private val paySlipViewModel: PaySlipViewModel by viewModels()
-    private lateinit var binding: FragmentPaySlipBinding
+    private   var yearDataString:   ArrayList<String> =  ArrayList( )
+    private   var monthDataString:   ArrayList<String> =  ArrayList( )
+    private val paySlipViewModel : PaySlipViewModel by viewModels()
+    private lateinit var binding : FragmentPaySlipBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentPaySlipBinding.inflate(inflater, container, false)
+        binding=FragmentPaySlipBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -52,34 +53,29 @@ class PaySlipFragment : Fragment() {
 
 
 
-        binding.autoCompleteMonth.onItemClickListener =
-            OnItemClickListener { parent, view, pos, id ->
+        binding.autoCompleteMonth.onItemClickListener= OnItemClickListener{parent,view,pos,id ->
 
-                monthSelectedData = monthData[pos]
-                downloadFileUrl = monthSelectedData.protectedFilePath
+            monthSelectedData =monthData[pos]
+            downloadFileUrl=monthSelectedData.protectedFilePath
 
-                if (monthSelectedData.filePath.isNotEmpty()) {
-                    binding.wvPdf.loadUrl(Constant.WEBVIEW_PDF_BASE_URL + monthSelectedData.filePath)
-                }
-
+            if (monthSelectedData.filePath.isNotEmpty()){
+                binding.wvPdf.loadUrl(Constant.WEBVIEW_PDF_BASE_URL+monthSelectedData.filePath)
             }
+
+        }
 
         binding.autoCompleteYear.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
 
-                monthData = yearData[position].monthlyPaySlip
+                monthData= yearData[position].monthlyPaySlip
 
-                if (monthData != null) {
+                if (monthData!=null) {
                     monthDataString.clear()
                     monthData.forEach { data ->
                         monthDataString.add(data.month.toString())
                     }
 
-                    val arrayAdapter = ArrayAdapter(
-                        requireContext(),
-                        R.layout.view_drop_down_menu,
-                        monthDataString
-                    )
+                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,monthDataString)
                     binding.autoCompleteMonth.setAdapter(arrayAdapter)
                 }
 
@@ -93,17 +89,16 @@ class PaySlipFragment : Fragment() {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
-
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
+                        if (it.data!=null){
 
-                            if (it.data.years != null) {
-                                yearData = it.data.years
+                            if (it.data.years!=null) {
+                                yearData=it.data.years
 
 
 
@@ -111,12 +106,10 @@ class PaySlipFragment : Fragment() {
                                     yearDataString.add(data.year.toString())
                                 }
 
-                                val arrayAdapter = ArrayAdapter(
-                                    requireContext(),
-                                    R.layout.view_drop_down_menu,
-                                    yearDataString
-                                )
+                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,yearDataString)
                                 binding.autoCompleteYear.setAdapter(arrayAdapter)
+
+
 
 
                             }
@@ -135,11 +128,12 @@ class PaySlipFragment : Fragment() {
         paySlipViewModel.getPayslip()
 
         binding.wvPdf.zoomIn()
-        binding.wvPdf.settings.loadWithOverviewMode = true
+         binding.wvPdf.settings .loadWithOverviewMode = true
         binding.wvPdf.settings.javaScriptEnabled = true
         binding.wvPdf.settings.supportZoom()
-        binding.wvPdf.settings.builtInZoomControls = true
-        binding.wvPdf.webViewClient = object : WebViewClient() {
+        binding.wvPdf.settings.builtInZoomControls=true
+         binding.wvPdf.webViewClient= object  : WebViewClient(){
+
 
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

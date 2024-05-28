@@ -21,9 +21,9 @@ import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.model.Title
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.model.UpdateTaskAttachmentDto
-import com.app.ecarepro.model.Watcher
 import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
+import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 
 interface SchoolRepository {
@@ -32,13 +32,13 @@ interface SchoolRepository {
     fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?>
     suspend fun getSchools(): List<School>
     fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool>
-    suspend fun getNotice(pg: Int, classID: Int): NetworkNotice
-    suspend fun getCirculars(pg: Int, yrID: Int, title: String): NetworkCircular
-    suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails
-    suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails
+    suspend fun getNotice(pg: Int,classID: Int): NetworkNotice
+    suspend fun getCirculars(pg: Int,yrID: Int,title :String): NetworkCircular
+    suspend fun getNoticeDTL( ntID: Int, iD: Int ): NetworkNoticDetails
+    suspend fun getCircularDTL( cirID: Int, iD: Int ): NetworkCircularDetails
     suspend fun getClass(): ClassPromotionModel
-    suspend fun getClassPromotions(classId: String): PromotionModel
-    suspend fun submitClassPromotions(request: RequestClassPromotion): AppResponse
+    suspend fun getClassPromotions( classId: String): PromotionModel
+    suspend fun submitClassPromotions( request: RequestClassPromotion): AppResponse
     fun getFeeds(pg: Int): Flow<Result<FeedsDto>>
     fun getTaskList(filter: Int): Flow<Result<TasksDto>>
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>
@@ -47,9 +47,9 @@ interface SchoolRepository {
     fun updateTaskImage(request: UpdateTaskAttachmentDto): Flow<Result<String>>
     fun updateTask(request: UpdateTaskDto): Flow<Result<String>>
     fun getWatchers(): Flow<Result<List<Watcher>>>
-    suspend fun getStudentListToAssignHouse(id: String, orderBy: String): StudentList
+    suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
     suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse
     suspend fun getMedicalCard(): MedicalCardResponse
     suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse
-    fun updateTaskStatus(id: String?, statusId: Int): Flow<Result<String>>
+    fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>
 }

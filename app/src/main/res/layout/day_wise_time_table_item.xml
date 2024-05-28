@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="timeData"
-            type="com.app.ecarepro.model.TimeTable" />
+<variable
+    name="timeData"
+    type="com.app.ecarepro.model.TimeTable" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,13 +24,13 @@
                 android:id="@+id/tv_no_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
                 android:text="@{String.valueOf(timeData.period)}"
-                android:textColor="@color/brand_color"
                 android:textSize="21sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/brand_color"
+                android:fontFamily="@font/ubuntu_medium"
 
                 />
 
@@ -39,12 +38,12 @@
                 android:id="@+id/tv_st"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/ubuntu_light"
+                 app:layout_constraintStart_toEndOf="@+id/tv_no_day"
+                app:layout_constraintTop_toTopOf="parent"
                 android:textColor="@color/brand_color"
-                app:layout_constraintStart_toEndOf="@+id/tv_no_day"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:fontFamily="@font/ubuntu_light"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:id="@+id/tv_older_peroid"
@@ -52,28 +51,28 @@
                 android:layout_height="wrap_content"
                 android:text="@string/peroid"
                 android:textColor="@color/grey_60"
-                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_no_day" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_no_day"
+                android:textSize="12sp" />
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toEndOf="@+id/tv_older_peroid"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="15dp">
 
                 <TextView
                     android:id="@+id/tv_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu_medium"
                     android:text="@{timeData.className}"
                     android:textSize="16sp"
+                    android:fontFamily="@font/ubuntu_medium"
 
                     />
 
@@ -83,8 +82,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
                     android:text="@{timeData.subject}"
-                    android:textAllCaps="true"
                     android:textColor="@color/grey_40"
+                    android:textAllCaps="true"
 
                     />
 
@@ -99,13 +98,13 @@
                         app:tint="@color/grey_40" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="2dp"
                         android:fontFamily="@font/ubuntu_medium"
                         android:text="@{timeData.time}"
-                        android:textAllCaps="true"
+                        android:layout_marginStart="2dp"
                         android:textColor="@color/grey_40"
+                        android:textAllCaps="true"
 
                         />
 

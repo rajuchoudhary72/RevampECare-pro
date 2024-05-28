@@ -41,20 +41,20 @@
                 app:layout_constraintTop_toTopOf="@+id/text_input_type" />
 
             <TextView
-                android:id="@+id/badge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:background="@drawable/bg_round_corner_green"
-                android:backgroundTint="@color/red"
-                android:fontFamily="@font/calibri_light"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="2dp"
-                android:text="50 new"
-                android:textAppearance="?attr/textAppearanceBodySmall"
-                android:textColor="@color/white"
+                app:layout_constraintStart_toEndOf="@+id/title"
                 app:layout_constraintBaseline_toBaselineOf="@+id/title"
-                app:layout_constraintStart_toEndOf="@+id/title" />
+                android:id="@+id/badge"
+                android:background="@drawable/bg_round_corner_green"
+                android:text="50 new"
+                android:textColor="@color/white"
+                android:paddingHorizontal="5dp"
+                android:backgroundTint="@color/red"
+                android:paddingVertical="2dp"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:fontFamily="@font/calibri_light"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -69,11 +69,11 @@
                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
 
                 <AutoCompleteTextView
+                    android:padding="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:hint="All"
                     android:inputType="none"
-                    android:padding="0dp"
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

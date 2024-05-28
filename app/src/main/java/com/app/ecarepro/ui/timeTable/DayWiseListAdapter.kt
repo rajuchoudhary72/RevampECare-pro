@@ -4,7 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.databinding.DayWiseTimeTableItemBinding
+import com.app.ecarepro.databinding.StuAssignmentItemBinding
+import com.app.ecarepro.model.Activity
+import com.app.ecarepro.model.Assignment
 import com.app.ecarepro.model.TimeTable
 
 class DayWiseListAdapter(
@@ -26,20 +30,22 @@ class DayWiseListAdapter(
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
         bindingm.timeData = activityLST[position]
-        val data = activityLST[position]
+        val data= activityLST[position]
 
-        if (data.period == 1) {
-            bindingm.tvSt.text = "st"
-        } else if (data.period == 2) {
-            bindingm.tvSt.text = "nd"
-        } else if (data.period == 3) {
-            bindingm.tvSt.text = "rd"
-        } else {
-            bindingm.tvSt.text = "th"
+        if (data.period==1){
+            bindingm.tvSt.text="st"
+        }else if (data.period==2){
+            bindingm.tvSt.text="nd"
+        }else if (data.period==3){
+            bindingm.tvSt.text="rd"
+        }else{
+            bindingm.tvSt.text="th"
         }
 
 
-    }
+
+
+     }
 
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {

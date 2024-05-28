@@ -4,8 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.databinding.NotSubmittedStuListBinding
+import com.app.ecarepro.databinding.StaffAssignmentItemBinding
+import com.app.ecarepro.databinding.StuAssignmentItemBinding
+import com.app.ecarepro.model.Activity
 import com.app.ecarepro.model.AssignSubmitStudent
+import com.app.ecarepro.model.Assignment
+import com.app.ecarepro.model.TeacherAssignment
+import com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListFragment
 
 class NotSubmitAssignListAdapter(
     private var activityLST: List<AssignSubmitStudent>,
@@ -17,8 +24,7 @@ class NotSubmitAssignListAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListAdapter {
-        bindingm =
-            NotSubmittedStuListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm = NotSubmittedStuListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AssignmentListAdapter(bindingm.root)
     }
 
@@ -28,11 +34,14 @@ class NotSubmitAssignListAdapter(
         bindingm.stuData = activityLST[position]
 
         bindingm.llEdit.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position], 3, false)
+            activityCalenderFragment.onItemClick(activityLST[position],3,false)
         }
 
 
-    }
+
+
+
+     }
 
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {

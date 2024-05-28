@@ -66,6 +66,7 @@ class WidgetsFragment : Fragment() {
 
     private fun initView() {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         binding.recyclerView.apply {
 
             addItemDecoration(
@@ -74,6 +75,24 @@ class WidgetsFragment : Fragment() {
                 )
             )
         }
+        /*
+                EpoxyTouchHelper
+                    .initDragging(controller)
+                    .withRecyclerView(binding.recyclerView)
+                    .forVerticalList()
+                    .withTarget(DashboardCardBindingModel_::class.java)
+                    .andCallbacks(object : DragCallbacks<DashboardCardBindingModel_>() {
+                        override fun onModelMoved(
+                            fromPosition: Int,
+                            toPosition: Int,
+                            modelBeingMoved: DashboardCardBindingModel_?,
+                            itemView: View?
+                        ) {
+
+                        }
+
+
+                    })*/
     }
 
 

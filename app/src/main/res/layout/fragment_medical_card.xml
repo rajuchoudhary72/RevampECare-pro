@@ -22,8 +22,7 @@
             app:title="@string/assign_house"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white">
-
+            app:titleTextColor="@color/white" >
             <TextView
                 android:id="@+id/edit"
                 style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"

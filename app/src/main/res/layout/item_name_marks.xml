@@ -6,7 +6,6 @@
         <variable
             name="name"
             type="String" />
-
         <variable
             name="value"
             type="String" />
@@ -43,8 +42,8 @@
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/_5sdp"
                 android:text="@{value}"
+                android:padding="@dimen/_5sdp"
                 tools:text="1" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

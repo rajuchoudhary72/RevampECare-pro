@@ -20,12 +20,12 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
+                app:topWindowInsetToPadding="@{true}"
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_arrow_back_24px"
                 app:title="Notifications"
                 app:titleTextAppearance="?attr/titleTextAppearance"
-                app:titleTextColor="@color/white"
-                app:topWindowInsetToPadding="@{true}" />
+                app:titleTextColor="@color/white" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -2,11 +2,11 @@ package com.app.ecarepro.ui.leave
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,10 +24,11 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class LeaveHistoryFragment : Fragment(), ItemListener<Dtl> {
+class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
     private lateinit var binding: FragmentLeaveListBinding
     private val leaveHistoryViewModel: LeaveHistoryViewModel by viewModels()
+
 
 
     override fun onCreateView(
@@ -97,35 +98,31 @@ class LeaveHistoryFragment : Fragment(), ItemListener<Dtl> {
 
     override fun onItemClick(t: Dtl, pos: Int, boolean: Boolean) {
 
-        if (pos == 1) {
+        if (pos==1){
             lifecycleScope.launch {
                 leaveHistoryViewModel.leaveDeleteStateFlow.collectLatest {
                     when (it) {
                         is NetworkResult.Loading -> {
                             (requireActivity() as MainActivity).showLoader(true)
                         }
-
                         is NetworkResult.Error -> {
                             (requireActivity() as MainActivity).showLoader(false)
-                            Log.d("main", "Error$it")
+                             Log.d("main", "Error$it")
                         }
-
                         is NetworkResult.Success -> {
                             (requireActivity() as MainActivity).showLoader(false)
                             leaveHistoryViewModel.leaveHistory()
-                        }
-                    }
-                }
+                              }  }  }
             }
 
             leaveHistoryViewModel.leaveDelete(t.lvID)
 
         }
-        if (pos == 2) {
+        if (pos==2 ){
             findNavController().navigate(
                 R.id.action_leaveHistoryFragment_to_openImageFragment,
                 Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, t.attachment)
+                     putString(Constant.URL_ARGUMENT, t.attachment)
                 })
         }
     }

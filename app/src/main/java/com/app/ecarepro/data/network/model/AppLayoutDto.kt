@@ -36,7 +36,7 @@ data class Menu(
     @SerializedName("menuID")
     val menuID: Int,
     @SerializedName("chMenuID")
-    val chMenuID: Int?,
+    val chMenuID: Int,
     @SerializedName("slNo")
     val slNo: Int,
     @SerializedName("title")

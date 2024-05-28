@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -18,15 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
-            android:elevation="8dp"
             app:layout_collapseMode="pin"
-            app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Syllabus"
             app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="Syllabus"
+            app:layout_constraintTop_toTopOf="parent"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            tools:listitem="@layout/syllabus_list_item"
+             tools:listitem="@layout/syllabus_list_item"
 
             />
 
@@ -43,16 +43,16 @@
             android:id="@+id/tv_no_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:fontFamily="@font/ubuntu_medium"
+            android:layout_gravity="center"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/no_Syllabus_available"
             android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
 
             />
 

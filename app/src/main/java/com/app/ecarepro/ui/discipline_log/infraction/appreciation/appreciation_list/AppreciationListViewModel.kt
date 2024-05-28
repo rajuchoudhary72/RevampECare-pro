@@ -14,18 +14,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppreciationListViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private   val userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val addAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddAppreciation>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val addAppreciationStateFlow: StateFlow<NetworkResult<NetworkAddAppreciation>> =
-        addAppreciationMutableStateFlow
+    private val addAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddAppreciation>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val addAppreciationStateFlow: StateFlow<NetworkResult<NetworkAddAppreciation>> = addAppreciationMutableStateFlow
 
-    fun addAppreciation(stID: Int) = viewModelScope.launch {
+    fun  addAppreciation( stID: Int  )=viewModelScope.launch {
         runCatching {
             addAppreciationMutableStateFlow.value = NetworkResult.Loading()
             userRepository.addAppreciation(stID)

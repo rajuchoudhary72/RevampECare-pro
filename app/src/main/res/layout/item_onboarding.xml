@@ -39,10 +39,10 @@
         <TextView
             android:id="@+id/sub_title"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/ubuntu_light"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
             android:text="Don't wait for tomorrow, start saving today and give yourself the gift of a stylish and fulfilling retirement."
             android:textAppearance="?attr/textAppearanceBodySmall"
             app:layout_constraintEnd_toEndOf="parent"

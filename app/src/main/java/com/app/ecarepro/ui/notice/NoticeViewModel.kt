@@ -12,46 +12,42 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
 class NoticeViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
-    private val userRepository: UserRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
     private val noticeStateFlow: MutableStateFlow<NetworkResult<NetworkNotice>> = MutableStateFlow(
-        NetworkResult.Loading()
-    )
+        NetworkResult.Loading())
     val _noticeStateFlow: StateFlow<NetworkResult<NetworkNotice>> = noticeStateFlow
 
-    private val myClassStateFlow: MutableStateFlow<NetworkResult<NetworkMyClass>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+    private val myClassStateFlow: MutableStateFlow<NetworkResult<NetworkMyClass>> = MutableStateFlow(
+        NetworkResult.Loading())
     val _myClassStateFlow: StateFlow<NetworkResult<NetworkMyClass>> = myClassStateFlow
 
-    fun getNotice(pg: Int, classID: Int) = viewModelScope.launch {
-        runCatching {
-            noticeStateFlow.value = NetworkResult.Loading()
-            schoolRepository.getNotice(pg, classID)
-        }.onSuccess {
-            noticeStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            noticeStateFlow.value = NetworkResult.Error(it.message)
+        fun getNotice(pg: Int,classID: Int )=viewModelScope.launch {
+            runCatching {
+                noticeStateFlow.value =NetworkResult.Loading()
+                schoolRepository.getNotice(pg, classID)
+            }.onSuccess {
+                noticeStateFlow.value =NetworkResult.Success(it)
+            }.onFailure {
+                noticeStateFlow.value = NetworkResult.Error(it.message)
+            }
+
         }
 
-    }
-
-    fun getMyClass(subID: Int, iD: Int) = viewModelScope.launch {
-        runCatching {
-            myClassStateFlow.value = NetworkResult.Loading()
-            userRepository.staffMyClass(subID, iD)
-        }.onSuccess {
-            myClassStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            myClassStateFlow.value = NetworkResult.Error(it.message)
-        }
-    }
+      fun getMyClass(subID: Int, iD: Int  )=viewModelScope.launch {
+          runCatching {
+              myClassStateFlow.value =NetworkResult.Loading( )
+              userRepository.staffMyClass(subID, iD)
+          }.onSuccess {
+              myClassStateFlow.value =NetworkResult.Success(it)
+          }.onFailure {
+              myClassStateFlow.value = NetworkResult.Error(it.message)
+          }
+      }
 
 
 }

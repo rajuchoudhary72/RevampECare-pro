@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="assignmentData"
             type="com.app.ecarepro.model.Assignment" />
@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey_light"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:id="@+id/ll_"
@@ -128,7 +129,7 @@
                             android:layout_marginTop="2dp"
                             android:paddingTop="3dp"
                             android:textColor="#848484"
-                            app:fontFamily="@font/ubuntu_medium   " />
+                             app:fontFamily="@font/ubuntu_medium   " />
 
 
                     </LinearLayout>
@@ -158,9 +159,9 @@
                             android:layout_marginTop="2dp"
                             android:layout_toEndOf="@+id/clock"
                             android:paddingTop="3dp"
-                            android:text="@{assignmentData.uploadedOn}"
                             android:textColor="#C7C7C7"
-                            app:fontFamily="@font/ubuntu_light" />
+                            android:text="@{assignmentData.uploadedOn}"
+                             app:fontFamily="@font/ubuntu_light" />
 
 
                     </RelativeLayout>
@@ -221,8 +222,8 @@
                             android:layout_marginTop="3dp"
                             android:layout_toEndOf="@+id/clock3"
                             android:paddingTop="3dp"
-                            android:text="@{assignmentData.submitDate}"
                             android:textColor="#848484"
+                            android:text="@{assignmentData.submitDate}"
                             app:fontFamily="@font/ubuntu_medium" />
 
 
@@ -280,8 +281,8 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/updated_by"
                             android:layout_marginStart="3dp"
-                            android:layout_toEndOf="@+id/user_img"
                             android:text="@{assignmentData.updateBy}"
+                            android:layout_toEndOf="@+id/user_img"
                             app:fontFamily="@font/ubuntu_medium" />
 
 

@@ -53,7 +53,7 @@ class StudentIDFragment : Fragment() {
     private val mViewModel: StudentCardViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         try {
             Picasso.setSingletonInstance(
@@ -145,18 +145,20 @@ class StudentIDFragment : Fragment() {
             if (it.resultCode == Activity.RESULT_OK) {
                 val data = it.data
                 val imgUri = data?.data
+
+
                 // binding.ivAddedImage.setImageURI(imgUri)
-                /* when (uploadImage) {
-                     1 -> {//f
-                         binding.circleImageViewFather.setImageURI(imgUri)
-                     }
-                     2 -> {//m
-                         binding.circleImageViewMother.setImageURI(imgUri)
-                     }
-                     3 -> {//e
-                         binding.circleImageViewEscort.setImageURI(imgUri)
-                     }
-                 }*/
+               /* when (uploadImage) {
+                    1 -> {//f
+                        binding.circleImageViewFather.setImageURI(imgUri)
+                    }
+                    2 -> {//m
+                        binding.circleImageViewMother.setImageURI(imgUri)
+                    }
+                    3 -> {//e
+                        binding.circleImageViewEscort.setImageURI(imgUri)
+                    }
+                }*/
                 val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
 
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
@@ -204,12 +206,10 @@ class StudentIDFragment : Fragment() {
                 val reqFather = FatherPhoto(imageString, imageExt)
                 requestImage.fatherPhoto = reqFather
             }
-
             2 -> {//m
                 val reqMother = MotherPhoto(imageString, imageExt)
                 requestImage.motherPhoto = reqMother
             }
-
             3 -> {//e
                 val reqEscort = EscortPhoto(imageString, imageExt)
                 requestImage.escortPhoto = reqEscort
@@ -230,7 +230,7 @@ class StudentIDFragment : Fragment() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE) {
@@ -304,6 +304,7 @@ class StudentIDFragment : Fragment() {
             }
         }
     }
+
 
 
     private fun getObserverData() {
@@ -383,171 +384,87 @@ class StudentIDFragment : Fragment() {
                                     when (fatherReq) {
                                         "Approved" -> {
                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg)
-                                            binding.ivFatherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.student_approve_icon
-                                                )
-                                            )
+                                            binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_approve_icon))
                                             binding.ivFatherPicEdit.isEnabled = false
                                         }
-
                                         "Approval pending" -> {
-                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                                            binding.ivFatherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.studnet_pending_icon
-                                                )
-                                            )
-                                            binding.ivFatherPicEdit.isEnabled = true
+                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                             binding.ivFatherPicEdit.isEnabled = true
                                         }
-
                                         "Rejected" -> {
-                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
-                                            binding.ivFatherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.student_reject_icon
-                                                )
-                                            )
-                                            binding.ivFatherPicEdit.isEnabled = true
+                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                             binding.ivFatherPicEdit.isEnabled = true
                                         }
-
                                         "Not uploded" -> {
-                                            binding.ivFatherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.edit_icon_color
-                                                )
-                                            )
-                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
-                                            binding.ivFatherPicEdit.isEnabled = true
+                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                             binding.ivFatherPicEdit.isEnabled = true
                                         }
                                     }
 
                                     when (motherReq) {
                                         "Approved" -> {
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg)
-                                            binding.ivMotherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.student_approve_icon
-                                                )
-                                            )
+                                            binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_approve_icon))
                                             binding.ivMotherPicEdit.isEnabled = false
                                         }
-
                                         "Approval pending" -> {
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                                            binding.ivMotherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.studnet_pending_icon
-                                                )
-                                            )
-                                            binding.ivMotherPicEdit.isEnabled = true
+                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                             binding.ivMotherPicEdit.isEnabled = true
                                         }
-
                                         "Rejected" -> {
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
-                                            binding.ivMotherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.student_reject_icon
-                                                )
-                                            )
-                                            binding.ivMotherPicEdit.isEnabled = true
+                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                             binding.ivMotherPicEdit.isEnabled = true
                                         }
-
                                         "Not uploded" -> {
-                                            binding.ivMotherPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.edit_icon_color
-                                                )
-                                            )
+                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
-                                            binding.ivMotherPicEdit.isEnabled = true
+                                             binding.ivMotherPicEdit.isEnabled = true
                                         }
                                     }
 
                                     when (escortReq) {
                                         "Approved" -> {
                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg)
-                                            binding.ivEscortPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.student_approve_icon
-                                                )
-                                            )
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_approve_icon))
                                             binding.ivEscortPicEdit.isEnabled = false
                                         }
-
                                         "Approval pending" -> {
-                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                                            binding.ivEscortPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.studnet_pending_icon
-                                                )
-                                            )
+                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
                                             binding.ivEscortPicEdit.isEnabled = true
                                         }
-
                                         "Rejected" -> {
-                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
-                                            binding.ivEscortPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.student_reject_icon
-                                                )
-                                            )
+                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
                                             binding.ivEscortPicEdit.isEnabled = true
                                         }
-
                                         "Not uploded" -> {
-                                            binding.ivEscortPicEdit.setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.edit_icon_color
-                                                )
-                                            )
-                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                            binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
                                             binding.ivEscortPicEdit.isEnabled = true
                                         }
                                     }
 
                                     if (canChangeApprovedImg && browseImgEnable) {
-                                        binding.ivFatherPicEdit.apply {
+                                         binding.ivFatherPicEdit.apply {
                                             visibility = View.VISIBLE
                                             isEnabled = true
-                                            setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.edit_icon_color
-                                                )
-                                            )
+                                            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
                                         }
-                                        binding.ivMotherPicEdit.apply {
+                                         binding.ivMotherPicEdit.apply {
                                             visibility = View.VISIBLE
                                             isEnabled = true
-                                            setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.edit_icon_color
-                                                )
-                                            )
+                                            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
                                         }
                                         binding.ivEscortPicEdit.apply {
                                             visibility = View.VISIBLE
                                             isEnabled = true
-                                            setImageDrawable(
-                                                ContextCompat.getDrawable(
-                                                    requireContext(),
-                                                    R.drawable.edit_icon_color
-                                                )
-                                            )
+                                            setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
                                         }
                                     }
                                     binding.llParentStudentId.visibility = View.VISIBLE

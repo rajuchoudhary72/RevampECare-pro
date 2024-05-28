@@ -13,25 +13,23 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class CircularViewModel @Inject constructor(
+class CircularViewModel  @Inject constructor(
     private val schoolRepository: SchoolRepository,
-) : ViewModel() {
+ ) : ViewModel() {
 
-    private val circularsStateFlow: MutableStateFlow<NetworkResult<NetworkCircular>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+    private val circularsStateFlow: MutableStateFlow<NetworkResult<NetworkCircular>> = MutableStateFlow(
+        NetworkResult.Loading())
     val _circularsStateFlowStateFlow: StateFlow<NetworkResult<NetworkCircular>> = circularsStateFlow
 
-    fun getCirculars(pg: Int, yrID: Int, title: String) = viewModelScope.launch {
-        runCatching {
-            circularsStateFlow.value = NetworkResult.Loading()
-            schoolRepository.getCirculars(pg, yrID, title)
-        }.onSuccess {
-            circularsStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            circularsStateFlow.value = NetworkResult.Error(it.message)
-        }
+    fun getCirculars(pg: Int,yrID: Int,title :String)=viewModelScope.launch {
+       runCatching {
+           circularsStateFlow.value =NetworkResult.Loading()
+           schoolRepository.getCirculars(pg, yrID,title)
+       }.onSuccess {
+           circularsStateFlow.value =NetworkResult.Success(it)
+       }.onFailure {
+           circularsStateFlow.value = NetworkResult.Error(it.message)
+       }
 
     }
 

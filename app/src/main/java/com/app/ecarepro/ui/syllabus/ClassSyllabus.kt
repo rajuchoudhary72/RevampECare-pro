@@ -2,11 +2,11 @@ package com.app.ecarepro.ui.syllabus
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -104,7 +104,7 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
                 })
         } else if (pos == 2) {
             val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus))
+            androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
 
         }
     }

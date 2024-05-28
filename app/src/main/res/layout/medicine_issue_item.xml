@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
-    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="18sp"
-        android:layout_marginVertical="@dimen/_9sdp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         app:cardBackgroundColor="#FAFAFA"
-        app:cardCornerRadius="@dimen/_15sdp">
+        app:cardCornerRadius="@dimen/_15sdp"
+        android:layout_marginHorizontal="18sp"
+        android:layout_marginVertical="@dimen/_9sdp"
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_13sdp"
-                android:orientation="vertical">
+                android:layout_marginRight="@dimen/_10sdp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -46,9 +46,9 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/ubuntu_light"
+                        android:textStyle="bold"
                         android:textColor="@color/module"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                 </RelativeLayout>
 
@@ -56,191 +56,200 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:weightSum="3">
+                    android:weightSum="3"
+                    >
 
                     <TextView
                         android:id="@+id/tv_date"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/ubuntu_light"
-                        android:gravity="center"
-                        android:textColor="@color/module"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="2dp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:layout_marginHorizontal="@dimen/_5sdp"
-                        android:background="#E0E0E0" />
-
-                    <TextView
-                        android:id="@+id/tv_in_time"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/ubuntu_light"
                         android:gravity="center"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/module"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/_12sdp" />
 
                     <View
                         android:layout_width="2dp"
                         android:layout_height="@dimen/_15sdp"
                         android:layout_marginHorizontal="@dimen/_5sdp"
                         android:background="#E0E0E0"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_in_time"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/module"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:background="#E0E0E0"
+                        android:layout_marginHorizontal="@dimen/_5sdp"
 
                         />
 
                     <TextView
                         android:id="@+id/tv_out_time"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_light"
+                        android:layout_weight="1"
                         android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
                         android:textColor="@color/module"
-                        android:textSize="@dimen/_12sdp"
-                        android:textStyle="bold" />
+                        android:textSize="@dimen/_12sdp" />
+
 
 
                 </LinearLayout>
-
                 <LinearLayout
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:text="Reason To Visit Infirmary: "
-                        android:textColor="@color/module"
                         android:textSize="18sp"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:textColor="@color/module"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_reason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/ubuntu_light"
-                        android:maxLines="1"
                         android:textColor="@color/module"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textSize="18sp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:textStyle="italic" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:text="Diagnosis: "
-                        android:textColor="@color/module"
                         android:textSize="18sp"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:textColor="@color/module"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_diagnosis"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/ubuntu_light"
-                        android:maxLines="1"
                         android:textColor="@color/module"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textSize="18sp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:textStyle="italic" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/_10sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:text="Treatment: "
+                        android:textStyle="bold"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/module"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tv_remark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/module"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:textStyle="italic"
                         android:layout_marginRight="@dimen/_10sdp"
                         android:ellipsize="end"
-                        android:fontFamily="@font/ubuntu_light"
                         android:maxLines="1"
-                        android:textColor="@color/module"
-                        android:textSize="18sp"
-                        android:textStyle="italic" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
 
                 <LinearLayout
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:text="Attended By: "
+                        android:textStyle="bold"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/module"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        />
 
                     <TextView
                         android:id="@+id/tv_attdent_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/module"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:text="Informed To Parent: "
+                        android:textStyle="bold"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/module"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/tv_inf_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/module"
+                        android:fontFamily="@font/ubuntu_light"
                         android:textSize="18sp" />
 
                 </LinearLayout>
 
 
+
+
+
+
+
             </LinearLayout>
+
 
 
         </LinearLayout>

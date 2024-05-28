@@ -5,7 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.databinding.StaffAssignmentItemBinding
+import com.app.ecarepro.databinding.StuAssignmentItemBinding
+import com.app.ecarepro.model.Activity
+import com.app.ecarepro.model.Assignment
 import com.app.ecarepro.model.TeacherAssignment
 
 class StaffAssignmentListAdapter(
@@ -29,26 +33,28 @@ class StaffAssignmentListAdapter(
         bindingm.assignmentData = activityLST[position]
 
         bindingm.llView.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position], 1, false)
+            activityCalenderFragment.onItemClick(activityLST[position],1,false)
         }
         bindingm.llDelete.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position], 3, false)
+            activityCalenderFragment.onItemClick(activityLST[position],3,false)
         }
         bindingm.llEdit.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position], 2, false)
+            activityCalenderFragment.onItemClick(activityLST[position],2,false)
         }
-        val data = activityLST[position]
-        if (data.isActive) {
-            bindingm.tvStatus.text = "  Active"
+        val data=activityLST[position]
+        if (data.isActive){
+            bindingm.tvStatus.text="  Active"
             bindingm.tvStatus.setTextColor(Color.parseColor("#4DAC3C"))
 
-        } else {
-            bindingm.tvStatus.text = "  InActive"
+        }else{
+            bindingm.tvStatus.text="  InActive"
             bindingm.tvStatus.setTextColor(Color.parseColor("#848484"))
         }
 
 
-    }
+
+
+     }
 
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {

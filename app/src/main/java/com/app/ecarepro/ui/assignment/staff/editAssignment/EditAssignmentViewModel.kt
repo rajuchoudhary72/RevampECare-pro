@@ -3,6 +3,8 @@ package com.app.ecarepro.ui.assignment.staff.editAssignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.NetworkMyClass
+import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.repository.SchoolRepository
@@ -16,29 +18,25 @@ import javax.inject.Inject
 @HiltViewModel
 class EditAssignmentViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
-    private val userRepository: UserRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val createAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val createAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> =
-        createAssignmentMutableStateFlow
 
-    private val viewAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkViewAssignment>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val viewAssignmentStateFlow: StateFlow<NetworkResult<NetworkViewAssignment>> =
-        viewAssignmentMutableStateFlow
+    private val createAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val createAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = createAssignmentMutableStateFlow
+
+    private val viewAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkViewAssignment>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val viewAssignmentStateFlow: StateFlow<NetworkResult<NetworkViewAssignment>> = viewAssignmentMutableStateFlow
 
 
-    fun viewAssignment(iD: String) = viewModelScope.launch {
+
+    fun viewAssignment(  iD: String )=viewModelScope.launch {
         runCatching {
             viewAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.viewAssignment(iD)
+            userRepository.viewAssignment(iD )
         }.onSuccess {
             viewAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -46,6 +44,7 @@ class EditAssignmentViewModel @Inject constructor(
         }
 
     }
+
 
 
     fun createAssignment(
@@ -67,27 +66,10 @@ class EditAssignmentViewModel @Inject constructor(
         submitDate: String,
         title: String
 
-    ) = viewModelScope.launch {
+    )=viewModelScope.launch {
         runCatching {
-            createAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.createAssignment(
-                asgDate,
-                asgID,
-                attachment,
-                fileExt,
-                fileURL,
-                classID,
-                classIDs,
-                data,
-                file,
-                id,
-                isActive,
-                isFileRemoved,
-                multipleSubmission,
-                subjectID,
-                submitDate,
-                title
-            )
+            createAssignmentMutableStateFlow.value = NetworkResult.Loading( )
+            userRepository.createAssignment( asgDate, asgID, attachment, fileExt, fileURL, classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title )
         }.onSuccess {
             createAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

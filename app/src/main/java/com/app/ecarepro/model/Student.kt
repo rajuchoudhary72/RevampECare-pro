@@ -1,5 +1,7 @@
 package com.app.ecarepro.model
 
+import java.util.jar.Attributes.Name
+
 data class Student(
     val admissionNumber: String,
     val `class`: String,
@@ -12,7 +14,7 @@ data class Student(
     val photo: String,
     val rollNumber: String,
     val stID: Int
-) {
+){
     override fun toString(): String {
         return "$name $rollNumber $admissionNumber"
     }

@@ -13,20 +13,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookDetailsViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val bookDetailsStateFlow: MutableStateFlow<NetworkResult<NetworkBookDetails>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+    private val bookDetailsStateFlow: MutableStateFlow<NetworkResult<NetworkBookDetails>> = MutableStateFlow(
+        NetworkResult.Loading())
     val _bookDetailsStateFlow: StateFlow<NetworkResult<NetworkBookDetails>> = bookDetailsStateFlow
 
-    fun getBookDetails(bookID: Int, id: Int) = viewModelScope.launch {
+    fun getBookDetails(bookID: Int, id: Int  )=viewModelScope.launch {
         runCatching {
             bookDetailsStateFlow.value = NetworkResult.Loading()
-            userRepository.getBookDetails(bookID, id)
+            userRepository.getBookDetails(bookID, id )
         }.onSuccess {
             bookDetailsStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

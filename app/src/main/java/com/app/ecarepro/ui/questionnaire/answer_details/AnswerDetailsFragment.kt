@@ -2,12 +2,12 @@ package com.app.ecarepro.ui.questionnaire.answer_details
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,17 +25,17 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
+class AnswerDetailsFragment : Fragment() , ItemListener<Answer> {
 
     private lateinit var binding: FragmentQuestionnaireDetailsBinding
-    private val answerDetailsViewModel: AnswerDetailsViewModel by viewModels()
+    private val answerDetailsViewModel : AnswerDetailsViewModel  by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View  {
 
-        binding = FragmentQuestionnaireDetailsBinding.inflate(inflater, container, false)
+        binding=FragmentQuestionnaireDetailsBinding.inflate(inflater,container,false)
 
 
         return binding.root
@@ -44,18 +44,19 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val quesID = requireArguments().getInt(Constant.QUES_ID_ARGUMENT)
+        val quesID=  requireArguments().getInt(Constant.QUES_ID_ARGUMENT)
 
 
 
         binding.etAnswer.doAfterTextChanged {
             if (it != null) {
-                if (it.isNotEmpty()) {
+                if (it.isNotEmpty()){
                     binding.postAnswer.isEnabled = true
                     binding.postAnswer.setImageResource(R.drawable.send_icon_enable)
 
 
-                } else {
+
+                }else{
                     binding.postAnswer.isEnabled = false
                     binding.postAnswer.setImageResource(R.drawable.send_icon_light)
                 }
@@ -64,7 +65,7 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
         }
 
         binding.postAnswer.setOnClickListener {
-            answerDetailsViewModel.postAnswer(quesID.toString(), binding.etAnswer.text.toString())
+            answerDetailsViewModel.postAnswer(quesID.toString(),binding.etAnswer.text.toString())
             answerDetailsViewModel.getAnswerList(quesID)
         }
 
@@ -74,7 +75,7 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                    }
+                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
@@ -83,7 +84,7 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        binding.relSend.isVisible = false
+                        binding.relSend.isVisible=false
 
                         answerDetailsViewModel.getAnswerList(quesID)
 
@@ -110,7 +111,7 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        answerDetailsViewModel.getAnswerList(quesID)
+                         answerDetailsViewModel.getAnswerList(quesID)
 
                     }
 
@@ -139,27 +140,25 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.rvAnswer.isVisible = true
 
-                        if (it.data != null) {
+                        if (it.data!=null){
 
-                            binding.questionData = it.data.question
+                            binding.questionData=it.data.question
 
-                            if (it.data.list != null) {
+                            if (it.data.list!=null){
 
-                                binding.rvAnswer.isVisible = true
+                                binding.rvAnswer.isVisible=true
 
-                                val answerAdapter = AnswerAdapter(
-                                    it.data.list,
-                                    this@AnswerDetailsFragment
-                                )
+                                val answerAdapter = AnswerAdapter(it.data.list ,
+                                    this@AnswerDetailsFragment)
 
                                 binding.rvAnswer.apply {
                                     setHasFixedSize(true)
                                     layoutManager = LinearLayoutManager(activity)
                                     adapter = answerAdapter
                                 }
-                            } else {
-                                binding.rvAnswer.isVisible = false
-                            }
+                            }else{
+                                binding.rvAnswer.isVisible=false
+                             }
 
                         }
 
@@ -169,13 +168,13 @@ class AnswerDetailsFragment : Fragment(), ItemListener<Answer> {
                 }
             }
 
-        }
-
-        answerDetailsViewModel.getAnswerList(quesID)
     }
 
+        answerDetailsViewModel.getAnswerList(quesID)
+}
+
     override fun onItemClick(t: Answer, pos: Int, boolean: Boolean) {
-        answerDetailsViewModel.deleteAnswer(t.anID)
+         answerDetailsViewModel.deleteAnswer(t.anID)
 
     }
 }

@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.assign_home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +10,9 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.CustomPopupSelectClassItemBinding
 
 
-class HomeSelectAdapter(private var houseList: List<House>, val callback: (poss: Int) -> Unit) :
+class HomeSelectAdapter(private var houseList: List<House>,val callback: (poss:Int) -> Unit) :
     RecyclerView.Adapter<HomeSelectAdapter.HomeSelectViewHolder>() {
-    var lastIndex = -1
+     var lastIndex = -1
         get() = field
         set(value) {
             field = value
@@ -19,11 +20,7 @@ class HomeSelectAdapter(private var houseList: List<House>, val callback: (poss:
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeSelectViewHolder {
         val binding =
-            CustomPopupSelectClassItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+            CustomPopupSelectClassItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HomeSelectViewHolder(binding)
     }
 
@@ -31,10 +28,9 @@ class HomeSelectAdapter(private var houseList: List<House>, val callback: (poss:
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: HomeSelectViewHolder, position: Int) {
-        val house = houseList[position]
-        val mainBinding =
-            DataBindingUtil.getBinding<CustomPopupSelectClassItemBinding>(holder.itemView)
-        with(mainBinding!!) {
+        val house=houseList[position]
+        val mainBinding= DataBindingUtil.getBinding<CustomPopupSelectClassItemBinding>(holder.itemView)
+        with(mainBinding!!){
             tvClassName.text = house.houseName
             tvClassName.setOnClickListener({
                 lastIndex = position

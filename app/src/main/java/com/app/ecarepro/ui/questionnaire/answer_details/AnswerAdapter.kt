@@ -10,17 +10,16 @@ import com.app.ecarepro.databinding.AnswerListItemBinding
 import com.app.ecarepro.model.Answer
 import com.app.ecarepro.ui.questionnaire.answer_details.AnswerDetailsFragment
 
-class AnswerAdapter(
-    private var answerList: List<Answer>,
-    private var answerDetailsFragment: AnswerDetailsFragment
-) :
+class AnswerAdapter(private var answerList: List<Answer>,
+                    private var answerDetailsFragment: AnswerDetailsFragment) :
     RecyclerView.Adapter<AnswerAdapter.AnswerAdapterViewHolder>() {
 
-    private lateinit var bindingm: AnswerListItemBinding
+        private lateinit var bindingm:   AnswerListItemBinding
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnswerAdapterViewHolder {
-        bindingm = AnswerListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm=AnswerListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return AnswerAdapterViewHolder(bindingm.root)
     }
 
@@ -28,7 +27,7 @@ class AnswerAdapter(
 
     override fun onBindViewHolder(holder: AnswerAdapterViewHolder, position: Int) {
 
-        bindingm.answerData = answerList[position]
+        bindingm.answerData=answerList[position]
         bindingm.dot.setOnClickListener {
 
 
@@ -36,19 +35,19 @@ class AnswerAdapter(
         }
 
 
-    }
+   }
 
     private fun deleteAlert(position: Int) {
         val builder = AlertDialog.Builder(answerDetailsFragment.context)
         builder.setTitle(answerDetailsFragment.getString(R.string.delete_alert))
         builder.setMessage(answerDetailsFragment.getString(R.string.delete_alert_are_you_sure))
 
-        builder.setPositiveButton(R.string.yes) { _, _ ->
-            answerDetailsFragment.onItemClick(answerList[position], 1, false)
+        builder.setPositiveButton( R.string.yes) { _, _ ->
+            answerDetailsFragment.onItemClick(answerList[position],1,false)
 
         }
 
-        builder.setNegativeButton(R.string.cancel) { _, _ ->
+        builder.setNegativeButton( R.string.cancel) { _, _ ->
 
         }
 
@@ -57,13 +56,17 @@ class AnswerAdapter(
     }
 
 
-    class AnswerAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+
+
+    class AnswerAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
 
 
     }
 
-    fun setData(thoughtsList: List<Answer>) {
-        this.answerList = thoughtsList as ArrayList<Answer>
+    fun setData(thoughtsList : List<Answer>){
+         this.answerList= thoughtsList as ArrayList<Answer>
         notifyDataSetChanged()
     }
 }

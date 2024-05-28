@@ -8,10 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.StudentListItemBinding
 import com.app.ecarepro.model.Student
 
-class MedicalClassAdapter(
-    private var studentList: List<Student>,
-    val callback: (poss: Int, student: Student) -> Unit
-) :
+class MedicalClassAdapter(private var studentList: List<Student>,  val callback: (poss:Int, student:Student) -> Unit) :
     RecyclerView.Adapter<MedicalClassAdapter.MedicalClassViewHolder>() {
     private var filteredList: List<Student> = studentList
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicalClassViewHolder {
@@ -24,34 +21,33 @@ class MedicalClassAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MedicalClassViewHolder, position: Int) {
-        val studentList = filteredList[position]
-        val mainBinding = DataBindingUtil.getBinding<StudentListItemBinding>(holder.itemView)
-        with(mainBinding!!) {
+        val studentList=filteredList[position]
+        val mainBinding= DataBindingUtil.getBinding<StudentListItemBinding>(holder.itemView)
+        with(mainBinding!!){
 
-            studentData = studentList
-            rollno.text = buildString {
+            studentData=studentList
+            rollno.text= buildString {
                 append("Roll No : ")
                 append(studentList.rollNumber)
             }
 
-            admission.text = buildString {
+            admission.text= buildString {
                 append("Admission No : ")
                 append(studentList.admissionNumber)
             }
             llMain.setOnClickListener {
-                callback.invoke(position, studentList)
+                callback.invoke(position,studentList)
             }
         }
     }
 
     class MedicalClassViewHolder(itemView: StudentListItemBinding) :
         RecyclerView.ViewHolder(itemView.root)
-
     fun filter(text: String) {
         filteredList = if (text.isEmpty()) {
             studentList
         } else {
-            studentList.filter { item -> item.toString().contains(text, ignoreCase = true) }
+            studentList.filter {item-> item.toString().contains(text, ignoreCase = true) }
         }
         notifyDataSetChanged()
     }

@@ -11,9 +11,8 @@ import com.app.ecarepro.R
 import com.app.ecarepro.model.InfractionConsequence
 import com.app.ecarepro.utils.listener.ItemListener
 
-class InfractionConsPopUpListAdapter(
-    private var infractionConsList: List<InfractionConsequence>,
-    private var itemListener: ItemListener<InfractionConsequence>
+class InfractionConsPopUpListAdapter(private var infractionConsList: List<InfractionConsequence>,
+                                     private var itemListener: ItemListener<InfractionConsequence>
 ) :
     RecyclerView.Adapter<InfractionConsPopUpListAdapter.PopUpListViewHolder>() {
 
@@ -30,15 +29,15 @@ class InfractionConsPopUpListAdapter(
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text = infractionConsList[holder.bindingAdapterPosition].consequences
+        holder.itemName.text=infractionConsList[holder.bindingAdapterPosition].consequences
         holder.llMain.setOnClickListener {
-            lastIndex = holder.bindingAdapterPosition
-            itemListener.onItemClick(infractionConsList[holder.bindingAdapterPosition], 1, true)
+            lastIndex=holder.bindingAdapterPosition
+             itemListener.onItemClick(infractionConsList[holder.bindingAdapterPosition],1,true)
             notifyDataSetChanged()
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-            holder.itemName.setTextColor(Color.parseColor("#4DAC3C"))
+           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
@@ -46,7 +45,7 @@ class InfractionConsPopUpListAdapter(
 
     }
 
-    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         val itemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val llMain: LinearLayout = itemView.findViewById(R.id.ll_main)

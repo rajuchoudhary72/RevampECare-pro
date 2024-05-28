@@ -51,12 +51,12 @@
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text='@{"Welcome to " +viewModel.school.schoolName}'
+                tools:text="Welcome to Franciscan"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Welcome to Franciscan" />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -90,18 +90,18 @@
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
                 android:layout_marginTop="20dp"
+                tools:src="@drawable/sc_logo"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtWelcome"
-                tools:ignore="ContentDescription"
-                tools:src="@drawable/sc_logo" />
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_find_school_college"
                 style="@style/Widget.Material3.Button.TextButton"
-                isVisible="@{viewModel.isUserAuthenticated()"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                isVisible="@{viewModel.isUserAuthenticated()"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/change_school_college"
                 android:textAppearance="?attr/textAppearanceLabelLarge"

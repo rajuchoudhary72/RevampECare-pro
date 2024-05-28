@@ -71,11 +71,11 @@
                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
 
                 <AutoCompleteTextView
+                    android:padding="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:hint="Class"
                     android:inputType="none"
-                    android:padding="0dp"
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -91,11 +91,11 @@
                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
 
                 <AutoCompleteTextView
+                    android:padding="0dp"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:hint="Section"
                     android:inputType="none"
-                    android:padding="0dp"
                     android:textSize="12sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

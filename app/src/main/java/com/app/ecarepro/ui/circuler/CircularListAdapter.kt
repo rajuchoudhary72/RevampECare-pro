@@ -5,42 +5,42 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.CircularListItemBinding
+import com.app.ecarepro.databinding.NoticeListItemBinding
 import com.app.ecarepro.model.Circular
+import com.app.ecarepro.model.Notice
 
-class CircularListAdapter(
-    private var circularList: List<Circular>,
-    private var circularFragment: CircularFragment
-) :
+class CircularListAdapter(private var circularList: List<Circular>,
+                          private var circularFragment: CircularFragment ) :
     RecyclerView.Adapter<CircularListAdapter.CircularViewHolder>() {
 
-    private lateinit var bindingm: CircularListItemBinding
+        private lateinit var bindingm:   CircularListItemBinding
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CircularViewHolder {
-        bindingm =
-            CircularListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm=CircularListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return CircularViewHolder(bindingm.root)
     }
 
     override fun getItemCount(): Int = circularList.size
 
     override fun onBindViewHolder(holder: CircularViewHolder, position: Int) {
-        bindingm.circularData = circularList[position]
+        bindingm.circularData=circularList[position]
         bindingm.clMain.setOnClickListener {
-            circularFragment.onItemClick(circularList[position], 1, true)
+            circularFragment.onItemClick(circularList[position],1,true)
         }
 
-        if (circularList[position].isRead) {
-            bindingm.cvNotItem.elevation = 0f
-        } else {
-            bindingm.cvNotItem.elevation = 8f
+        if (circularList[position].isRead){
+            bindingm.cvNotItem.elevation=0f
+        }else{
+            bindingm.cvNotItem.elevation=8f
         }
 
 
     }
 
-    class CircularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    }
+    class CircularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+  }
 
 
 }

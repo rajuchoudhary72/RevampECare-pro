@@ -133,12 +133,5 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
                 } }
         }
 
-
-
-
-
-
-
-
     }
 }

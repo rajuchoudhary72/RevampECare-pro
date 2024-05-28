@@ -23,10 +23,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MedicineIssuedFragment : Fragment(), ItemListener<Dtl> {
+class MedicineIssuedFragment : Fragment() , ItemListener<Dtl> {
 
     private lateinit var binding: FragmentMedicineIssueBinding
     private val mViewModel: MedicineIssueViewModel by viewModels()
+
 
 
     override fun onCreateView(
@@ -38,7 +39,7 @@ class MedicineIssuedFragment : Fragment(), ItemListener<Dtl> {
                 Picasso.Builder(requireActivity()) // additional settings
                     .build()
             )
-        } catch (_: IllegalStateException) {
+        }catch (_:IllegalStateException){
 
         }
 
@@ -98,13 +99,13 @@ class MedicineIssuedFragment : Fragment(), ItemListener<Dtl> {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setHeaderData(data: MedicineIsuueModel) = with(binding) {
+    private fun setHeaderData(data: MedicineIsuueModel)= with(binding){
         tvStudentName.text = data.name
         data.designation?.let {
             tvAdmissionNo.text = "Designation: $it"
             tvClassName.text = ""
             linPro.visibility = View.VISIBLE
-        } ?: run {
+        }?:run {
             data.admissionNo?.let {
                 tvAdmissionNo.text = "Admission No: $it"
             }

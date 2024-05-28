@@ -18,6 +18,6 @@ data class MyClasseItem(
     val isSelect: Boolean?
 )
 
-fun MyClasseItem.asExternalModel() = MyClasse(
-    classID, className, id, isSelect
+fun MyClasseItem.asExternalModel()=MyClasse(
+    classID,className,id,isSelect
 )

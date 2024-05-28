@@ -2,10 +2,10 @@ package com.app.ecarepro.ui.book_library
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.R
@@ -24,17 +24,17 @@ import kotlinx.coroutines.launch
 class BookDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentBookDetailsBinding
-    private val bookDetailsViewModel: BookDetailsViewModel by viewModels()
+    private val bookDetailsViewModel : BookDetailsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View  {
 
-        binding = FragmentBookDetailsBinding.inflate(inflater, container, false)
+        binding= FragmentBookDetailsBinding.inflate(inflater,container,false)
 
-        val bookID = requireArguments().getInt(Constant.BOOK_ID_ARGUMENT)
-        bookDetailsViewModel.getBookDetails(bookID, Constant.DEFAULT_ID)
+        val bookID=  requireArguments().getInt(Constant.BOOK_ID_ARGUMENT)
+        bookDetailsViewModel.getBookDetails(bookID,Constant.DEFAULT_ID)
 
         return binding.root
 
@@ -49,31 +49,31 @@ class BookDetailsFragment : Fragment() {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                    }
+                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error$it")
+                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data != null) {
+                        if (it.data!=null){
 
-                            val data = it.data.bookDTL[0]
+                            val data=it.data.bookDTL[0]
 
-                            binding.bookDetails = data
+                            binding.bookDetails=data
 
-                            Picasso.get().load(data.coverImg)
-                                .placeholder(R.drawable.ic_library_big_image)
+                            Picasso.get().load(data.coverImg).
+                            placeholder(R.drawable.ic_library_big_image)
                                 .into(binding.ivCoverPic)
 
 
-                            if (data.isIssuable == Constant.TRUE_VALUE) {
-                                binding.tvIssuable.text = R.string.true_value.toString()
-                            } else {
-                                binding.tvIssuable.text = R.string.false_value.toString()
+                            if (data.isIssuable==Constant.TRUE_VALUE){
+                                binding.tvIssuable.text=  R.string.true_value.toString()
+                            }else{
+                                binding.tvIssuable.text=  R.string.false_value.toString()
                             }
                         }
 
@@ -84,7 +84,7 @@ class BookDetailsFragment : Fragment() {
             }
         }
 
-        bookDetailsViewModel.getBookDetails(1, 0)
+        bookDetailsViewModel.getBookDetails(1,0)
 
 
     }

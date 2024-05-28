@@ -4,8 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.UpdateMedicalCardRequest
+import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
+import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,12 +24,11 @@ class StudentCardViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val studentCardResponse: MutableStateFlow<NetworkResult<StudentCardResponse>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+
+    private val studentCardResponse: MutableStateFlow<NetworkResult<StudentCardResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
     val _studentCardResponse: StateFlow<NetworkResult<StudentCardResponse>> = studentCardResponse
-    fun getMedicalCard() = viewModelScope.launch {
+    fun  getMedicalCard()=viewModelScope.launch {
         runCatching {
             studentCardResponse.value = NetworkResult.Loading()
             userRepository.getStudentIDCard()
@@ -38,12 +41,10 @@ class StudentCardViewModel @Inject constructor(
     }
 
 
-    private val uploadPhotoResponse: MutableStateFlow<NetworkResult<CommonResponse>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+    private val uploadPhotoResponse: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
     val _uploadPhotoResponse: StateFlow<NetworkResult<CommonResponse>> = uploadPhotoResponse
-    fun getPhotoUpload(request: StudentIDRequest) = viewModelScope.launch {
+    fun  getPhotoUpload(request:StudentIDRequest)=viewModelScope.launch {
         runCatching {
             uploadPhotoResponse.value = NetworkResult.Loading()
             userRepository.uploadPhoto(request)

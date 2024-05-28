@@ -3,6 +3,9 @@ package com.app.ecarepro.ui.dashbord.model
 import androidx.core.view.isVisible
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemLibraryFeeStatusCardBinding
+import com.app.ecarepro.databinding.ItemOnlineVsOfflineAdmissionCardBinding
+import com.app.ecarepro.databinding.ItemStaffAttendanceCardBinding
+import com.app.ecarepro.databinding.ItemStanderWiseStatisticCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -35,8 +38,8 @@ class LibraryFeeStatusModel :
                     .allowPointSelect(false) //是否允许在点击数据点标记(扇形图点击选中的块发生位移)
                     .data(
                         arrayOf(
-                            arrayOf("Pending", 20),
-                            arrayOf("Collected", 80),
+                           arrayOf("Pending",20),
+                           arrayOf("Collected",80),
                         )
                     )
             )

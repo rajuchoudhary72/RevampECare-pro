@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.staffAttendence
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.repository.UserRepository

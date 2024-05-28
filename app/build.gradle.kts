@@ -19,7 +19,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.franciscan.ecare_proNew"
+        applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
         versionCode = 1
@@ -53,16 +53,16 @@ android {
     productFlavors {
         create("dev") {
             dimension = "build"
-            resValue("string", "app_name", "ECarePro - Dev")
+            resValue("string", "app_name", "e-Care-Dev")
         }
         create("prod") {
             dimension = "build"
-            resValue("string", "app_name", "ECarePro")
+            resValue("string", "app_name", "e-Care")
         }
         create("beta") {
             dimension = "build"
             applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "ECarePro - Beta")
+            resValue("string", "app_name", "e-Care Beta")
         }
     }
 

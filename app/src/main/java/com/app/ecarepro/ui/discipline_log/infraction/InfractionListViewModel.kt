@@ -13,18 +13,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InfractionListViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private   val userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val addInfractionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddInfraction>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val addInfractionStateFlow: StateFlow<NetworkResult<NetworkAddInfraction>> =
-        addInfractionMutableStateFlow
+    private val addInfractionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddInfraction>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val addInfractionStateFlow: StateFlow<NetworkResult<NetworkAddInfraction>> = addInfractionMutableStateFlow
 
-    fun addInfraction(stID: Int) = viewModelScope.launch {
+    fun  addInfraction( stID: Int  )=viewModelScope.launch {
         runCatching {
             addInfractionMutableStateFlow.value = NetworkResult.Loading()
             userRepository.addInfraction(stID)

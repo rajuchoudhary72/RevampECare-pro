@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/too ls">
+    xmlns:tools="http://schemas.android.com/too ls"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="bookDetails"
-            type="com.app.ecarepro.model.BookDTL" />
+    <variable
+    name="bookDetails"
+    type="com.app.ecarepro.model.BookDTL" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,26 +16,26 @@
         tools:context=".ui.book_library.BookDetailsFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
-            android:elevation="8dp"
             app:layout_collapseMode="pin"
-            app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/book_details"
             app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="@string/book_details"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
         <ScrollView
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,15 +56,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="start">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
-                        android:text="@string/accession_no__"
                         android:textSize="12sp"
+                        android:text="@string/accession_no__"
 
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -75,8 +74,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.accessionNumber}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.accessionNumber}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -88,8 +87,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/book_title"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -99,8 +98,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.title}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.title}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -112,8 +111,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/author"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -123,8 +122,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.author}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.author}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -136,8 +135,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/lbl_subject"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -147,8 +146,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.subject}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.subject}"
                         app:fontFamily="@font/ubuntu_bold" />
                 </LinearLayout>
 
@@ -160,8 +159,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/hint"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -171,8 +170,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.storageHint}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.storageHint}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -184,8 +183,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/year_of_publication"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -195,8 +194,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.publicationYear}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.publicationYear}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -208,8 +207,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/lbl_book_no"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -219,8 +218,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.bookNo}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.bookNo}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -232,8 +231,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/lbl_class_no"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -243,8 +242,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="10dp"
-                        android:text="@{bookDetails.classNo}"
                         android:textSize="12sp"
+                        android:text="@{bookDetails.classNo}"
                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
@@ -256,8 +255,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
                         android:text="@string/issuable"
+                        android:padding="10dp"
                         android:textSize="12sp"
                         app:fontFamily="@font/ubuntu_medium" />
 
@@ -268,7 +267,7 @@
                         android:gravity="start"
                         android:padding="10dp"
                         android:textSize="12sp"
-                        app:fontFamily="@font/ubuntu_light" />
+                         app:fontFamily="@font/ubuntu_light" />
                 </LinearLayout>
 
             </LinearLayout>

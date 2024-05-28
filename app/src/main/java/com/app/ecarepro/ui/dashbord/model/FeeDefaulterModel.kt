@@ -40,7 +40,7 @@ class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
                     .name("Language market shares")
                     .data(
                         arrayOf(
-                            arrayOf(80),
+                            arrayOf( 80),
                             arrayOf("Defaulter 885Amount ₹1,62,01,020", 29),
                         )
                     )

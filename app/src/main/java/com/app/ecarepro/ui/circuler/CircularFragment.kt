@@ -33,11 +33,12 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CircularFragment : Fragment(), ItemListener<Circular> {
 
-    private var selectedYearID: Int = 0
+    private var selectedYearID: Int=0
     private var yearList: List<AcademicYear> = ArrayList<AcademicYear>()
-    private val circularViewModel: CircularViewModel by viewModels()
+    private val circularViewModel :CircularViewModel   by viewModels()
     private lateinit var fragmentCircularBinding: FragmentCirculerBinding
-    var selectedYearData: AcademicYear? = null
+    var selectedYearData: AcademicYear? =null
+
 
 
     override fun onCreateView(
@@ -45,20 +46,16 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         savedInstanceState: Bundle?
     ): View {
 
-        fragmentCircularBinding = FragmentCirculerBinding.inflate(inflater, container, false)
+        fragmentCircularBinding= FragmentCirculerBinding.inflate(inflater,container,false)
         fragmentCircularBinding.tvSelectSession.setOnClickListener {
             popUpSelectAcademicYears()
         }
 
         fragmentCircularBinding.ivSearch.setOnClickListener {
-            if (fragmentCircularBinding.edSearch.text.isNotEmpty()) {
-                circularViewModel.getCirculars(
-                    Constant.PAGE_INDEX,
-                    selectedYearID,
-                    fragmentCircularBinding.edSearch.text.toString()
-                )
-            } else {
-                Toast.makeText(requireContext(), "Please enter title!!!", Toast.LENGTH_LONG).show()
+            if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+            }else {
+                 Toast.makeText(requireContext(),"Please enter title!!!",Toast.LENGTH_LONG ).show()
             }
         }
 
@@ -75,14 +72,10 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         super.onViewCreated(view, savedInstanceState)
 
         fragmentCircularBinding.edSearch.doAfterTextChanged {
-            if (fragmentCircularBinding.edSearch.text.isNotEmpty()) {
-                circularViewModel.getCirculars(
-                    Constant.PAGE_INDEX,
-                    selectedYearID,
-                    fragmentCircularBinding.edSearch.text.toString()
-                )
-            } else {
-                circularViewModel.getCirculars(Constant.PAGE_INDEX, selectedYearID, "")
+            if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+            }else {
+                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"" )
 
             }
         }
@@ -99,43 +92,40 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         fragmentCircularBinding.recyclerCircular.isVisible = false
-                        Log.d("main", "Error" + it)
+                        Log.d("main", "Error" + it )
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         fragmentCircularBinding.recyclerCircular.isVisible = true
 
-                        if (it.data != null) {
-                            if (it.data.academicYears != null) {
-                                yearList = it.data.academicYears
+                        if (it.data!=null){
+                            if (it.data.academicYears!=null){
+                                yearList=it.data.academicYears
                             }
 
-                            if (it.data.circularList != null) {
+                            if (it.data.circularList!=null  ){
 
-                                if (it.data.circularList.isNotEmpty()) {
-                                    fragmentCircularBinding.recyclerCircular.isVisible = true
-                                    fragmentCircularBinding.tvNoData.isVisible = false
+                                if (it.data.circularList.isNotEmpty()){
+                                    fragmentCircularBinding.recyclerCircular.isVisible=true
+                                    fragmentCircularBinding.tvNoData.isVisible=false
 
-                                    val circularAdapter = CircularListAdapter(
-                                        it.data.circularList,
-                                        this@CircularFragment
-                                    )
+                                    val circularAdapter = CircularListAdapter(it.data.circularList , this@CircularFragment)
 
                                     fragmentCircularBinding.recyclerCircular.apply {
                                         setHasFixedSize(true)
                                         layoutManager = LinearLayoutManager(activity)
                                         adapter = circularAdapter
                                     }
-                                } else {
-                                    fragmentCircularBinding.recyclerCircular.isVisible = false
-                                    fragmentCircularBinding.tvNoData.isVisible = true
+                                }else{
+                                    fragmentCircularBinding.recyclerCircular.isVisible=false
+                                    fragmentCircularBinding.tvNoData.isVisible=true
                                 }
 
 
-                            } else {
-                                fragmentCircularBinding.recyclerCircular.isVisible = false
-                                fragmentCircularBinding.tvNoData.isVisible = true
+                            }else{
+                                fragmentCircularBinding.recyclerCircular.isVisible=false
+                                fragmentCircularBinding.tvNoData.isVisible=true
                             }
 
                         }
@@ -147,40 +137,38 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
             }
         }
 
-        circularViewModel.getCirculars(Constant.PAGE_INDEX, selectedYearID, "")
+        circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"")
 
     }
 
     override fun onItemClick(t: Circular, pos: Int, boolean: Boolean) {
-        findNavController().navigate(
-            R.id.action_circularFragment_to_circularDetailsFragment,
-            Bundle().apply {
-                putInt(Constant.CIRCULAR_ID, t.cirID)
-            })
-    }
+        findNavController().navigate(R.id.action_circularFragment_to_circularDetailsFragment,Bundle( ).apply {
+            putInt(Constant.CIRCULAR_ID, t.cirID)
+        })
+     }
 
-    private fun popUpSelectAcademicYears() {
+    private fun popUpSelectAcademicYears(){
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
-        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text = "Select Academic Year"
+        val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
+        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text="Select Academic Year"
         builder.setView(view)
 
         relOk.setOnClickListener {
-            fragmentCircularBinding.tvSelectSession.text = selectedYearData!!.session
-            circularViewModel.getCirculars(1, selectedYearID, "")
+            fragmentCircularBinding.tvSelectSession.text= selectedYearData!!.session
+            circularViewModel.getCirculars(1, selectedYearID,"")
             builder.dismiss()
 
         }
 
-        val yearAdapter = PopUpListAdapter(yearList, object : ItemListener<AcademicYear> {
+        val yearAdapter= PopUpListAdapter(yearList, object : ItemListener<AcademicYear>{
             override fun onItemClick(t: AcademicYear, pos: Int, boolean: Boolean) {
                 selectedYearData = t
-                selectedYearID = t.yrID
+                selectedYearID=t.yrID
             }
 
         })

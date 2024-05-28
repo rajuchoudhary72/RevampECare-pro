@@ -6,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
+import com.app.ecarepro.model.AcademicYear
+import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.utils.listener.ItemListener
 
-class ClassListAdapter(
-    private var academicYearList: List<MyClasseItem>,
-    private var itemListener: ItemListener<MyClasseItem>
+class ClassListAdapter(private var academicYearList: List<MyClasseItem>,
+                       private var itemListener: ItemListener<MyClasseItem>
 ) :
     RecyclerView.Adapter<ClassListAdapter.PopUpListViewHolder>() {
 
@@ -30,15 +32,15 @@ class ClassListAdapter(
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text = academicYearList[holder.bindingAdapterPosition].className
+        holder.itemName.text=academicYearList[holder.bindingAdapterPosition].className
         holder.llMain.setOnClickListener {
-            lastIndex = holder.bindingAdapterPosition
-            itemListener.onItemClick(academicYearList[holder.bindingAdapterPosition], 1, true)
+            lastIndex=holder.bindingAdapterPosition
+             itemListener.onItemClick(academicYearList[holder.bindingAdapterPosition],1,true)
             notifyDataSetChanged()
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-            holder.itemName.setTextColor(Color.parseColor("#4DAC3C"))
+           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
@@ -46,7 +48,7 @@ class ClassListAdapter(
 
     }
 
-    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class PopUpListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         val itemName: TextView = itemView.findViewById(R.id.tv_item_name)
         val llMain: LinearLayout = itemView.findViewById(R.id.ll_main)

@@ -1,12 +1,15 @@
 package com.app.ecarepro.ui.timeTable
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.databinding.FragmentTiemTableDayWiseNavHostBinding
+import com.app.ecarepro.databinding.FragmentTimeTableNavHostBinding
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -14,27 +17,27 @@ import com.google.android.material.tabs.TabLayoutMediator
 class TimeTableDayWiseNavHostFragment(val data: NetworkTeachersTimetable) : Fragment() {
 
 
-    private lateinit var binding: FragmentTiemTableDayWiseNavHostBinding
+    private lateinit var binding : FragmentTiemTableDayWiseNavHostBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentTiemTableDayWiseNavHostBinding.inflate(inflater, container, false)
+    ): View  {
+        binding= FragmentTiemTableDayWiseNavHostBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (data != null) {
+        if (data!=null){
 
-            if (data.data.isNotEmpty()) {
+            if (data.data.isNotEmpty()){
 
-                val fragmentList: ArrayList<Fragment> = ArrayList()
+                val fragmentList : ArrayList<Fragment> = ArrayList()
 
                 data.data.forEach { itemDat ->
-                    fragmentList.add(DayWiseTimeTableFragment(itemDat))
+                    fragmentList.add( DayWiseTimeTableFragment(itemDat  ))
                 }
 
                 val viewPagerAdapter = ViewPagerAdapter(
@@ -50,11 +53,22 @@ class TimeTableDayWiseNavHostFragment(val data: NetworkTeachersTimetable) : Frag
                 ) { tab, position ->
                     tab.text = data.data[position].day
                 }.attach()
+                
+
 
 
             }
 
         }
+
+
+
+
+
+
+
+
+
 
 
     }

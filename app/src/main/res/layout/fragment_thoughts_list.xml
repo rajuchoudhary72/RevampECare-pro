@@ -14,22 +14,25 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:context=".ui.thought.ThoughtsListFragment"
         android:fitsSystemWindows="true"
-        tools:context=".ui.thought.ThoughtsListFragment">
+        >
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
-            android:elevation="8dp"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Thoughts"
             app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="Thoughts"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            />
+
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -39,12 +42,13 @@
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
-                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
+                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
 
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                >
 
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -62,8 +66,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="?actionBarSize"
                         android:background="@color/md_theme_light_primary"
-                        android:fitsSystemWindows="true"
                         android:gravity="center"
+                        android:fitsSystemWindows="true"
                         android:orientation="vertical"
                         app:layout_collapseMode="parallax"
                         app:layout_scrollFlags="scroll|enterAlways"
@@ -93,8 +97,8 @@
                                 android:text="All"
 
                                 app:rippleColor="@color/white"
-                                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
-                                app:strokeColor="@color/white" />
+                                  app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
+                                 app:strokeColor="@color/white" />
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btn_my"
@@ -104,7 +108,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/ubuntu_bold"
                                 android:text="My"
-                                app:rippleColor="@color/white"
+                                 app:rippleColor="@color/white"
                                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
                                 app:strokeColor="@color/white" />
 
@@ -133,14 +137,15 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fb_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="15dp"
+             android:textColor="@android:color/white"
             android:src="@drawable/rounded_add_24"
-            android:textColor="@android:color/white"
 
             />
 

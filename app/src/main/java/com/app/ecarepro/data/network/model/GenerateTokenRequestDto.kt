@@ -1,8 +1,8 @@
 package com.app.ecarepro.data.network.model
 
+import com.google.gson.annotations.SerializedName
 import com.app.ecarepro.utils.Constant.Companion.SMS_USER_PASSWORD
 import com.app.ecarepro.utils.Constant.Companion.SMS_USER_USER_NAME
-import com.google.gson.annotations.SerializedName
 
 data class GenerateTokenRequestDto(
     @SerializedName("ErrorCode")

@@ -75,10 +75,7 @@ class AddTaskViewModel @Inject constructor(
                     AddTaskDto(
                         assigneesIDs = selectedTitle.value?.assignees?.filter { it.isSelected }
                             ?.map { it.userID }?.joinToString(),
-                        attachment = if (attachment?.first != null) Attachment(
-                            attachment?.first,
-                            attachment?.second
-                        ) else null,
+                        attachment = if(attachment?.first !=null) Attachment(attachment?.first, attachment?.second) else null,
                         description = description.value,
                         dueDate = endDate,
                         isPublic = makePublic.value,
@@ -89,8 +86,7 @@ class AddTaskViewModel @Inject constructor(
                         tskID = 0,
                         startDate = startDate,
                         repeatedBy = 0,
-                        watchersIDs = if (makePublic.value.not()) watchers.filter { it.isSelected }
-                            .map { it.userID }
+                        watchersIDs = if(makePublic.value.not()) watchers.filter { it.isSelected }.map { it.userID }
                             .joinToString() else null
                     )
                 )

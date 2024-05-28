@@ -2,50 +2,52 @@
 <layout xmlns:tools="http://schemas.android.com/tools">
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/parent_co"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_co"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar_add2"
+        layout="@layout/custom_toolbar3" />
+
+
+    <RelativeLayout
+        android:id="@+id/rel_recycler2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/toolbar_add2"
-            layout="@layout/custom_toolbar3" />
+        android:layout_below="@+id/toolbar_add2"
+        android:visibility="visible">
 
 
-        <RelativeLayout
-            android:id="@+id/rel_recycler2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_student_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_add2"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/student_list_item" />
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_student_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/student_list_item" />
-
-
-            <TextView
-                android:id="@+id/tv_student_not_found"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:text="@string/student_not_found"
-                android:textAlignment="center"
-                android:textSize="@dimen/_18sdp"
-                android:visibility="gone" />
-
-        </RelativeLayout>
-
+        <TextView
+            android:id="@+id/tv_student_not_found"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="@string/student_not_found"
+            android:textAlignment="center"
+            android:textSize="@dimen/_18sdp"
+            android:visibility="gone" />
 
     </RelativeLayout>
+
+
+
+</RelativeLayout>
 
 
 </layout>

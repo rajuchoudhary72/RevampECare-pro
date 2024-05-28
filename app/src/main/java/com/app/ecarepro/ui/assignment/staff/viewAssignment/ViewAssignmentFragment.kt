@@ -27,6 +27,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
+import com.app.ecarepro.utils.formatDate
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -34,23 +35,23 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
+class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
     private var viewAssignmentData: NetworkViewAssignment? = null
-    private var submitList: Boolean = true
-    private var assignmentId: String = ""
-    private lateinit var binding: FragmentViewAssignmentBinding
-    private val viewAssignmentViewModel: ViewAssignmentViewModel by viewModels()
+    private var submitList: Boolean=true
+    private var assignmentId: String  = ""
+    private lateinit var binding : FragmentViewAssignmentBinding
+    private val viewAssignmentViewModel : ViewAssignmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View  {
 
-        binding = FragmentViewAssignmentBinding.inflate(inflater, container, false)
+        binding=FragmentViewAssignmentBinding.inflate(inflater,container,false)
         assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        return binding.root
+         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,14 +62,14 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_submit -> {
 
-                    submitList = true
-                    viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId, false)
+                    submitList=true
+                    viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
                 }
 
                 else -> {
-                    submitList = false
-                    viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId, true)
+                    submitList=false
+                    viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,true)
                 }
             }
         }
@@ -76,129 +77,114 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
 
         lifecycleScope.launch {
             viewAssignmentViewModel.viewAssignmentStateFlow.collectLatest {
-                when (it) {
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
+                when (it) {  is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                }  is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                    val  data= it.data
+                    viewAssignmentData= it.data
+
+                    if (data!=null){
+                        binding.tvSubject.text= ""
+                        binding.tvTitle.text= data.title
+                        binding.tvData.text= data.data
+                        binding.tvAssignmentDate.text= data.asgDate
+                        binding.tvSubmittedDate.text= data.submitDate
                     }
 
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-
-                        val data = it.data
-                        viewAssignmentData = it.data
-
-                        if (data != null) {
-                            binding.tvSubject.text = ""
-                            binding.tvTitle.text = data.title
-                            binding.tvData.text = data.data
-                            binding.tvAssignmentDate.text = data.asgDate
-                            binding.tvSubmittedDate.text = data.submitDate
-                        }
 
 
-                    }
-                }
-            }
-        }
+                }  }
+            } }
 
         lifecycleScope.launch {
             viewAssignmentViewModel.assigSubRPTStateFlow.collectLatest {
-                when (it) {
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
-
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
+                when (it) {  is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                }  is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
 
 
 
-                        if (submitList) {
-                            if (it.data != null) {
-                                if (it.data.studentList != null) {
+                    if (submitList){
+                        if (it.data!=null){
+                            if (it.data.studentList!=null){
 
-                                    binding.rvSubmitList.isVisible = true
+                                binding.rvSubmitList.isVisible=true
 
-                                    val noticeAdapter = SubmitAssignListAdapter(
-                                        it.data.studentList,
-                                        this@ViewAssignmentFragment
-                                    )
+                                val noticeAdapter = SubmitAssignListAdapter(it.data.studentList ,
+                                    this@ViewAssignmentFragment)
 
-                                    binding.rvSubmitList.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = noticeAdapter
-                                    }
-
-
-                                } else {
-                                    binding.rvSubmitList.isVisible = false
+                                binding.rvSubmitList.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = noticeAdapter
                                 }
+
+
+
+                            }else{
+                                binding.rvSubmitList.isVisible=false
                             }
+                        }
 
-                            binding.tvDetailsAssi.text = buildString {
-                                append("Submitted (")
-                                append(it.data!!.submittedBy)
-                                append("/")
-                                append(it.data.totalStudent)
-                                append("): Offline (")
-                                append(it.data.offlineSubmitted)
-                                append("): Online (")
-                                append(it.data.submittedBy - it.data.offlineSubmitted)
-                                append(")")
-
-                            }
-
-                        } else {
-
-                            if (it.data != null) {
-                                if (it.data.studentList != null) {
-
-                                    binding.rvSubmitList.isVisible = true
-
-                                    val noticeAdapter = NotSubmitAssignListAdapter(
-                                        it.data.studentList,
-                                        this@ViewAssignmentFragment
-                                    )
-
-                                    binding.rvSubmitList.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = noticeAdapter
-                                    }
-                                } else {
-                                    binding.rvSubmitList.isVisible = false
-                                }
-                            }
-
-                            binding.tvDetailsAssi.text = buildString {
-                                append("Not Submitted (")
-                                append(it.data!!.totalStudent - it.data.submittedBy)
-                                append("/")
-                                append(it.data.totalStudent)
-                                append(") ")
-
-
-                            }
+                        binding.tvDetailsAssi.text= buildString {
+                            append("Submitted (")
+                            append(it.data!!.submittedBy)
+                            append("/")
+                            append(it.data.totalStudent)
+                            append("): Offline (")
+                            append(it.data.offlineSubmitted)
+                            append("): Online (")
+                            append(it.data.submittedBy-it.data.offlineSubmitted )
+                            append(")")
 
                         }
 
+                    }else{
+
+                        if (it.data!=null){
+                            if (it.data.studentList!=null){
+
+                                binding.rvSubmitList.isVisible=true
+
+                                val noticeAdapter = NotSubmitAssignListAdapter(it.data.studentList ,
+                                    this@ViewAssignmentFragment)
+
+                                binding.rvSubmitList.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = noticeAdapter
+                                }
+                            }else{
+                                binding.rvSubmitList.isVisible=false
+                            }
+                        }
+
+                        binding.tvDetailsAssi.text= buildString {
+                            append("Not Submitted (")
+                            append(it.data!!.totalStudent-it.data.submittedBy)
+                            append("/")
+                            append(it.data.totalStudent)
+                            append(") ")
+
+
+                        }
 
                     }
-                }
-            }
-        }
+
+
+
+                }  }
+            } }
 
         viewAssignmentViewModel.viewAssignment(assignmentId)
-        viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId, false)
+        viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
         binding.llView.setOnClickListener {
             openFile(viewAssignmentData!!.file)
@@ -213,27 +199,25 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
 
     }
 
-    private fun openFile(fileSource: String) {
-        findNavController().navigate(
-            R.id.action_viewAssignmentFragment_to_openPdfFragment,
-            Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
+    private fun openFile(fileSource:String){
+        findNavController().navigate(R.id.action_viewAssignmentFragment_to_openPdfFragment,Bundle( ).apply {
+            putString(Constant.URL_ARGUMENT, fileSource)
+        })
     }
 
-    private fun downloadFile(fileSource: String) {
+    private fun downloadFile(fileSource:String){
         val androidDownloader = AndroidDownloader(requireContext())
         androidDownloader.downloadFile(fileSource, getString(R.string.circular))
     }
 
     override fun onItemClick(t: AssignSubmitStudent, pos: Int, boolean: Boolean) {
-        if (pos == 1) {
-            openFile(t.asgFile)
-        } else if (pos == 2) {
-            downloadFile(t.asgFile)
-        } else if (pos == 3) {
-            dateSelctedPoPUp(t)
-        }
+         if (pos==1){
+             openFile(t.asgFile)
+         }else if (pos==2){
+             downloadFile(t.asgFile)
+         }else if (pos==3){
+             dateSelctedPoPUp(t)
+         }
     }
 
 
@@ -247,7 +231,7 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
         if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
             ColorDrawable(Color.TRANSPARENT)
         )
-        dialog.setContentView(R.layout.date_dialog_alert_new)
+         dialog.setContentView(R.layout.date_dialog_alert_new)
         tv_date = dialog.findViewById(R.id.tv_date)
         btn_canel = dialog.findViewById<Button>(R.id.btn_canel)
         btn_submit = dialog.findViewById(R.id.btn_submit)
@@ -267,7 +251,7 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
             if (tv_date.text.toString() == "") {
                 Toast.makeText(context, "Please Select Date", Toast.LENGTH_SHORT).show()
             } else {
-                offlineSubmited(t, tv_date.text.toString())
+                 offlineSubmited(t, tv_date.text.toString())
                 dialog.dismiss()
             }
         }
@@ -277,7 +261,7 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
 
     private fun offlineSubmited(t: AssignSubmitStudent, fromDt: String) {
 
-        viewAssignmentViewModel.offlineSubmited(assignmentId, t.stID, fromDt)
+        viewAssignmentViewModel.offlineSubmited(assignmentId,t.stID, fromDt)
 
         lifecycleScope.launch {
             viewAssignmentViewModel.offlineSubmitedStateFlow.collectLatest {
@@ -292,7 +276,7 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId, false)
+                        viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
                     }
 
@@ -301,8 +285,8 @@ class ViewAssignmentFragment : Fragment(), ItemListener<AssignSubmitStudent> {
 
             }
 
-        }
-    }
+        }}
+
 
 
 }

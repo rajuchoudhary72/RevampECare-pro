@@ -8,8 +8,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="match_parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round.Small"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
-        android:src="@drawable/frame_192"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round.Small" />
+        android:src="@drawable/frame_192" />
 </layout>

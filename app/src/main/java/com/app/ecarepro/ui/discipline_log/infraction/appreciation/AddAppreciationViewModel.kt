@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
+import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.NetworkInfractionInstance
+import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
+import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,41 +20,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddAppreciationViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private   val userRepository: UserRepository
 ) : ViewModel() {
 
 
-    private val appreciationInstanceMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppreciationInstance>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val appreciationInstanceStateFlow: StateFlow<NetworkResult<NetworkAppreciationInstance>> =
-        appreciationInstanceMutableStateFlow
+
+    private val appreciationInstanceMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppreciationInstance>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val appreciationInstanceStateFlow: StateFlow<NetworkResult<NetworkAppreciationInstance>> = appreciationInstanceMutableStateFlow
 
 
-    private val addAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddAppreciation>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val addAppreciationStateFlow: StateFlow<NetworkResult<NetworkAddAppreciation>> =
-        addAppreciationMutableStateFlow
+    private val addAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddAppreciation>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val addAppreciationStateFlow: StateFlow<NetworkResult<NetworkAddAppreciation>> = addAppreciationMutableStateFlow
 
-    private val subAppreciationTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkSubAppreciationTypes>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val subAppreciationTypesStateFlow: StateFlow<NetworkResult<NetworkSubAppreciationTypes>> =
-        subAppreciationTypesMutableStateFlow
+ private val subAppreciationTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkSubAppreciationTypes>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val subAppreciationTypesStateFlow: StateFlow<NetworkResult<NetworkSubAppreciationTypes>> = subAppreciationTypesMutableStateFlow
 
-    private val saveAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val saveAppreciationStateFlow: StateFlow<NetworkResult<CommonResponse>> =
-        saveAppreciationMutableStateFlow
+    private val saveAppreciationMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val saveAppreciationStateFlow: StateFlow<NetworkResult<CommonResponse>> = saveAppreciationMutableStateFlow
 
 
-    fun addAppreciation(stID: Int) = viewModelScope.launch {
+
+
+    fun  addAppreciation( stID: Int  )=viewModelScope.launch {
         runCatching {
             addAppreciationMutableStateFlow.value = NetworkResult.Loading()
             userRepository.addAppreciation(stID)
@@ -62,7 +57,7 @@ class AddAppreciationViewModel @Inject constructor(
 
     }
 
-    fun subAppreciationTypes(aprID: Int) = viewModelScope.launch {
+    fun  subAppreciationTypes(aprID: Int)=viewModelScope.launch {
         runCatching {
             subAppreciationTypesMutableStateFlow.value = NetworkResult.Loading()
             userRepository.subAppreciationTypes(aprID)
@@ -74,10 +69,10 @@ class AddAppreciationViewModel @Inject constructor(
 
     }
 
-    fun appreciationInstance(
+    fun  appreciationInstance(
         aprSubID: Int,
         stID: Int,
-    ) = viewModelScope.launch {
+    )=viewModelScope.launch {
         runCatching {
             appreciationInstanceMutableStateFlow.value = NetworkResult.Loading()
             userRepository.appreciationInstance(aprSubID, stID)
@@ -89,27 +84,19 @@ class AddAppreciationViewModel @Inject constructor(
 
     }
 
-    fun saveAppreciation(
-        action: Int,
-        stID: Int,
-        aprSubID: Int,
-        rwdID: Int,
-        instance: Int,
-        appreciationOn: String,
-        remark: String,
+    fun   saveAppreciation(
+        action:Int,
+        stID:Int,
+        aprSubID:Int,
+        rwdID:Int,
+        instance:Int,
+        appreciationOn:String,
+        remark:String,
 
-        ) = viewModelScope.launch {
+        )=viewModelScope.launch {
         runCatching {
             saveAppreciationMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.saveAppreciation(
-                action,
-                stID,
-                aprSubID,
-                rwdID,
-                instance,
-                appreciationOn,
-                remark
-            )
+            userRepository. saveAppreciation(action, stID, aprSubID, rwdID, instance, appreciationOn, remark )
         }.onSuccess {
             saveAppreciationMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

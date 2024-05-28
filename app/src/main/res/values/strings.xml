@@ -554,4 +554,7 @@
     <string name="specific">Specific</string>
     <string name="clear_all">Clear All</string>
     <string name="apply">Apply</string>
+    <string name="marks_manager">Marks Manager</string>
+    <string name="assessment">Assessment</string>
+    <string name="website">Website</string>
 </resources>

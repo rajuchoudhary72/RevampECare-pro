@@ -3,8 +3,8 @@ package com.app.ecarepro.ui.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Favourites
+import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.repository.AppRepository
-import com.app.ecarepro.ui.home.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest

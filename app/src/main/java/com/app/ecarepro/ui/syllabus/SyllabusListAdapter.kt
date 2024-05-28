@@ -1,11 +1,25 @@
 package com.app.ecarepro.ui.syllabus
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
+import com.app.ecarepro.databinding.NoticeListItemBinding
 import com.app.ecarepro.databinding.SyllabusListItemBinding
+import com.app.ecarepro.model.Thoughts
+import com.app.ecarepro.databinding.ThoughtsListItemBinding
+import com.app.ecarepro.model.Notice
 import com.app.ecarepro.model.SyllabusLST
+import com.app.ecarepro.utils.AndroidDownloader
+
+import com.google.android.material.imageview.ShapeableImageView
+import com.squareup.picasso.Picasso
 
 class SyllabusListAdapter(
     private var syllabusLST: List<SyllabusLST>,

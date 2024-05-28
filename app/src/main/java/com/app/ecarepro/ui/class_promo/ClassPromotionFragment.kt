@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassPromotionBinding
 import com.app.ecarepro.model.MyClasseX
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentPromotedClass
 import com.app.ecarepro.ui.MainActivity

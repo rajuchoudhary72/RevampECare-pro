@@ -15,7 +15,10 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.CustomPopupSelectClassBinding
 import com.app.ecarepro.databinding.ItemClassPromotionBinding
 import com.app.ecarepro.model.NextSessionClasse
+
 import com.app.ecarepro.model.Section
+
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
 import com.squareup.picasso.Picasso
 
@@ -148,8 +151,7 @@ class ClassPromotionsAdapter(
         dialogBinding.tvOk.setOnClickListener {
             if (selected != null) {
                 studentMutableList[poss].selected = selected
-                studentMutableList[poss].selected?.classID =
-                    studentMutableList[poss].nextSessionClasses?.get(nextSessionClassesPoss)?.classID
+                studentMutableList[poss].selected?.classID = studentMutableList[poss].nextSessionClasses?.get(nextSessionClassesPoss)?.classID
                 notifyItemChanged(poss)
                 dialog.dismiss()
             } else {

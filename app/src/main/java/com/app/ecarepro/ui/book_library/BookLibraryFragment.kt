@@ -3,13 +3,13 @@ package com.app.ecarepro.ui.book_library
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -30,7 +30,8 @@ import kotlinx.coroutines.launch
 class BookLibraryFragment : Fragment() {
 
     private lateinit var bookLibraryBinding: FragmentBookLibraryBinding
-    private val latestBookViewModel: LatestBookViewModel by viewModels()
+    private val latestBookViewModel : LatestBookViewModel by viewModels()
+
 
 
     override fun onCreateView(
@@ -38,7 +39,7 @@ class BookLibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        bookLibraryBinding = FragmentBookLibraryBinding.inflate(inflater, container, false)
+        bookLibraryBinding=FragmentBookLibraryBinding.inflate(inflater,container,false)
         return bookLibraryBinding.root
     }
 
@@ -53,7 +54,7 @@ class BookLibraryFragment : Fragment() {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                    }
+                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
@@ -64,7 +65,7 @@ class BookLibraryFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data != null) {
+                        if (it.data!=null){
 
                             setUpViewPager(it.data)
 
@@ -85,25 +86,24 @@ class BookLibraryFragment : Fragment() {
 
 
         bookLibraryBinding.ivSearch.setOnClickListener {
-            findNavController().navigate(R.id.librarySearchFragment)
+             findNavController().navigate(R.id.librarySearchFragment)
         }
 
         bookLibraryBinding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (bookLibraryBinding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_scool -> {
 
-                    bookLibraryBinding.wvMegabook.isVisible = false
-                    bookLibraryBinding.viewPager.isVisible = true
-                    bookLibraryBinding.tabLayout.isVisible = true
+                    bookLibraryBinding.wvMegabook.isVisible=false
+                    bookLibraryBinding.viewPager.isVisible=true
+                    bookLibraryBinding.tabLayout.isVisible=true
 
 
                 }
-
                 R.id.btn_class_megabook -> {
 
-                    bookLibraryBinding.wvMegabook.isVisible = true
-                    bookLibraryBinding.viewPager.isVisible = false
-                    bookLibraryBinding.tabLayout.isVisible = false
+                    bookLibraryBinding.wvMegabook.isVisible=true
+                    bookLibraryBinding.viewPager.isVisible=false
+                    bookLibraryBinding.tabLayout.isVisible=false
 
 
                 }
@@ -119,11 +119,12 @@ class BookLibraryFragment : Fragment() {
     private fun setUpMegaBook(megaBookLink: String) {
 
         bookLibraryBinding.wvMegabook.zoomIn()
-        bookLibraryBinding.wvMegabook.settings.loadWithOverviewMode = true
+        bookLibraryBinding.wvMegabook.settings .loadWithOverviewMode = true
         bookLibraryBinding.wvMegabook.settings.javaScriptEnabled = true
         bookLibraryBinding.wvMegabook.settings.supportZoom()
-        bookLibraryBinding.wvMegabook.settings.builtInZoomControls = true
-        bookLibraryBinding.wvMegabook.webViewClient = object : WebViewClient() {
+        bookLibraryBinding.wvMegabook.settings.builtInZoomControls=true
+        bookLibraryBinding.wvMegabook.webViewClient= object  : WebViewClient(){
+
 
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -155,14 +156,12 @@ class BookLibraryFragment : Fragment() {
                     0 -> {
                         LatestBookFragment(data.latestBook, 0)
                     }
-
                     1 -> {
                         LatestBookFragment(data.latestBook, 1)
                     }
-
-                    else -> LatestBookFragment(data.latestBook, 0)
+                    else -> LatestBookFragment(data.latestBook,  0)
                 }
-            }
+             }
 
         }
 

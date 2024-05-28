@@ -19,6 +19,8 @@ import com.app.ecarepro.databinding.FragmentAttendenceBinding
 import com.app.ecarepro.model.MonthModel
 import com.app.ecarepro.model.YearModel
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.syllabus.SyllabusListAdapter
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,7 +30,7 @@ import java.util.Calendar
 @AndroidEntryPoint
 class AttendanceFragment : Fragment() {
 
-    private var yearSelected: Int = 0
+    private   var yearSelected: Int = 0
     private var monthSelected: Int = 0
     private var monthModelArrayList = ArrayList<MonthModel>()
     private var yearModelArrayList = ArrayList<YearModel>()
@@ -50,20 +52,20 @@ class AttendanceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.autoCompleteMonth.onItemClickListener =
+        binding.autoCompleteMonth.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                monthSelected = monthModelArrayList[pos].monthID
+                monthSelected=monthModelArrayList[pos].monthID
 
-                attendanceViewModel.staffAttendance(monthSelected, yearSelected)
+                attendanceViewModel.staffAttendance(monthSelected,yearSelected)
 
             }
 
-        binding.autoCompleteYear.onItemClickListener =
+        binding.autoCompleteYear.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                yearSelected = yearModelArrayList[pos].yearId.toInt()
-                attendanceViewModel.staffAttendance(monthSelected, yearSelected)
+                yearSelected=yearModelArrayList[pos].yearId.toInt()
+                attendanceViewModel.staffAttendance(monthSelected,yearSelected)
 
             }
 
@@ -99,7 +101,7 @@ class AttendanceFragment : Fragment() {
 
                                 monthDataString.clear()
                                 yearModelArrayList.forEach { data ->
-                                    monthDataString.add(data.yearId.toString())
+                                    monthDataString.add(data.yearId.toString() )
                                 }
 
                                 val arrayAdapter = ArrayAdapter(
@@ -117,7 +119,7 @@ class AttendanceFragment : Fragment() {
 
                                 monthDataString.clear()
                                 monthModelArrayList.forEach { data ->
-                                    monthDataString.add(data.month.toString())
+                                    monthDataString.add(data.month.toString() )
                                 }
 
                                 val arrayAdapter = ArrayAdapter(
@@ -129,7 +131,7 @@ class AttendanceFragment : Fragment() {
                             }
 
 
-                            if (it.data.attendance != null) {
+                            if (it.data.attendance!=null) {
 
                                 binding.rvAttendence.isVisible = true
                                 binding.tvNoData.isVisible = false
@@ -159,7 +161,7 @@ class AttendanceFragment : Fragment() {
             }
         }
 
-        attendanceViewModel.staffAttendance(monthSelected, yearSelected)
+        attendanceViewModel.staffAttendance(monthSelected,yearSelected)
 
     }
 

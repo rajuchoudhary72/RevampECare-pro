@@ -90,14 +90,12 @@ class ChatFragment : Fragment() {
         }
 
     }
-
     private fun showRecipients() {
         RecipientsDialog.getInstance(
             (chatViewModel.uiState.value as ChatUiState.Success).recipients
         )
             .show(childFragmentManager, "")
     }
-
     private fun handleUiState(uiState: ChatUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 

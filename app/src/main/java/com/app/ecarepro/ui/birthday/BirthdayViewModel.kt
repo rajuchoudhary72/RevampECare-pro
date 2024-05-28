@@ -2,6 +2,8 @@ package com.app.ecarepro.ui.birthday
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.NetworkActivityCalender
+import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
@@ -16,10 +18,8 @@ class BirthdayViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val birthdayMutableStateFlow: MutableStateFlow<NetworkResult<NetworkBirthday>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+    private val birthdayMutableStateFlow: MutableStateFlow<NetworkResult<NetworkBirthday>> = MutableStateFlow(
+        NetworkResult.Loading())
     val birthdayStateFlow: StateFlow<NetworkResult<NetworkBirthday>> = birthdayMutableStateFlow
 
     fun birthday(
@@ -27,10 +27,10 @@ class BirthdayViewModel @Inject constructor(
         rptType: Int,
         monthNo: Int,
         date: String,
-    ) = viewModelScope.launch {
+    )=viewModelScope.launch {
         runCatching {
             birthdayMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.birthday(userType, rptType, monthNo, date)
+            userRepository.birthday( userType, rptType, monthNo,date)
         }.onSuccess {
             birthdayMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

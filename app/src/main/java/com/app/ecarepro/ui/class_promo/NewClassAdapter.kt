@@ -2,10 +2,12 @@ package com.app.ecarepro.ui.class_promo
 
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+
 import com.app.ecarepro.databinding.ItemBinding
 import com.app.ecarepro.model.NextSessionClasse
 import com.app.ecarepro.ui.common.IItemListener

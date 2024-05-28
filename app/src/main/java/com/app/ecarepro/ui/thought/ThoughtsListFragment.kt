@@ -2,13 +2,13 @@ package com.app.ecarepro.ui.thought
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -66,7 +66,7 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
                 }
 
                 else -> {
-                    getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR, true)
+                    getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR,true)
                 }
             }
         }
@@ -76,7 +76,7 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
             findNavController().navigate(R.id.addThoughtsBlankFragment)
         }
 
-        getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR, false)
+        getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR,false)
 
         lifecycleScope.launch {
             thoughtsViewModel._postStateFlow.collectLatest {
@@ -118,22 +118,16 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
                     is ResponseStateCreateTou.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
-
                     is ResponseStateCreateTou.Failure -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Log.d("main", "Error" + it.msg.toString())
                     }
-
                     is ResponseStateCreateTou.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         fragmentThoughtsListBinding.recyclerThoughts.isVisible = true
 
-                    }
-
-                    else -> {}
-                }
-            }
-        }
+                    } else -> {}
+                } } }
 
 
     }

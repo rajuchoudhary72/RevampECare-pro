@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="answerData"
             type="com.app.ecarepro.model.Answer" />
@@ -28,10 +27,10 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
-                app:imageUrl="@{answerData.photo}"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
                 app:strokeColor="?attr/colorOutlineVariant"
                 app:strokeWidth="1dp"
+                app:imageUrl="@{answerData.photo}"
                 tools:src="@drawable/default_profile" />
 
             <LinearLayout
@@ -58,11 +57,12 @@
 
             <ImageView
                 android:id="@+id/dot"
-                isVisible="@{answerData.mine}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                isVisible="@{answerData.mine}"
                 app:srcCompat="@drawable/delete" />
+
 
 
         </RelativeLayout>
@@ -71,8 +71,8 @@
             android:id="@+id/tv_que"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="40dp"
             android:fontFamily="@font/ubuntu_medium"
             android:text="@{answerData.answer}"
 
@@ -83,8 +83,8 @@
             android:id="@+id/updated_on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{answerData.answeredOn}"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:text="@{answerData.answeredOn}" />
 
 
         <com.google.android.material.divider.MaterialDivider

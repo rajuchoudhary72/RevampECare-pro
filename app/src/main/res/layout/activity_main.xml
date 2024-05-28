@@ -22,9 +22,9 @@
         android:fitsSystemWindows="true">
 
         <LinearLayout
+            android:background="@color/green_40"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/green_40"
             android:orientation="vertical">
 
             <include

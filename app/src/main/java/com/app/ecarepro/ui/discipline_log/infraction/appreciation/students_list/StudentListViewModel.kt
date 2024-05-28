@@ -16,17 +16,14 @@ class StudentListViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val studentListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStudentList>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val studentListStateFlow: StateFlow<NetworkResult<NetworkStudentList>> =
-        studentListMutableStateFlow
+    private val studentListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStudentList>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val studentListStateFlow: StateFlow<NetworkResult<NetworkStudentList>> = studentListMutableStateFlow
 
-    fun getStudentList(
+    fun  getStudentList(
         scholarType: Int,
         showAll: Boolean
-    ) = viewModelScope.launch {
+    )=viewModelScope.launch {
         runCatching {
             studentListMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStudentList(scholarType, showAll)
