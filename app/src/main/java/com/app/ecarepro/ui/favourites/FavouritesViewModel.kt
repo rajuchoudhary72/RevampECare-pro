@@ -3,8 +3,8 @@ package com.app.ecarepro.ui.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Favourites
-import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.home.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -63,17 +63,10 @@ class FavouritesViewModel @Inject constructor(
 
     fun saveFavourites(func: (Boolean, String) -> Unit) {
         viewModelScope.launch {
+            val maxSl: Int = (uiState.value as FavouritesUiState.Success).favourites.maxByOrNull { it.slNo?:0 }?.slNo?:0
             appRepository
-                .updateFavourites(updatedItems.map {
-                    FavouritesUpdateDto(
-                        isSelected = it.isSelected,
-                        slNo = it.slNo,
-                        isModified = true,
-                        sbChMenuID = it.sbChMenuID,
-                        fvtID = it.fvtID,
-                        menuID = it.menuID,
-                        chMenuID = it.chMenuID
-                    )
+                .updateFavourites(updatedItems.mapIndexed { index, favourites ->
+                    favourites.copy(isModified = true, slNo = maxSl.plus(index+1))
                 })
                 .collectLatest { result ->
                     if (result.isSuccess) {

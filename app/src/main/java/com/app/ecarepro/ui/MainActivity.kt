@@ -2,6 +2,7 @@ package com.app.ecarepro.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -58,6 +59,8 @@ class MainActivity : AppCompatActivity() {
 
     private var expandedMenuId: Int = -1
 
+    private var listenMenuItemClickEvent = true
+
 
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
@@ -88,16 +91,6 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
-
-        Picasso.setSingletonInstance(Picasso.Builder(this).build())
-
-        lifecycleScope.launch {
-            systemViewModel.user.collectLatest {
-                if (it != null) {
-                    userData = it
-                }
-            }
-        }
     }
 
 
@@ -184,11 +177,15 @@ class MainActivity : AppCompatActivity() {
                         title(menu.title)
                         icon(menu.icon)
                         clickListener { _ ->
-                            getFragmentId(menu.menuID)
-                            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+
+                            getFragmentId(menu.menuID)?.let {
+                                hideMoreItemMenu()
+                                navController.navigate(it)
+                            }
+
                         }
                     }
-                }else{
+                } else {
                     menu.childMenus.forEach { childMenu ->
                         if(childMenu.childMenus.isNullOrEmpty()){
                             menuCard {
@@ -197,11 +194,17 @@ class MainActivity : AppCompatActivity() {
                                 icon(childMenu.icon)
                                 parentMenuIcon(menu.icon)
                                 clickListener { _ ->
-                                    getFragmentId(menu.menuID, childMenu.chMenuID)
-                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                    getFragmentId(
+                                        menu.menuID,
+                                        childMenu.chMenuID
+                                    )?.let {
+                                        hideMoreItemMenu()
+                                        navController.navigate(it)
+                                    }
+
                                 }
                             }
-                        }else{
+                        } else {
                             childMenu.childMenus.forEach { childChildMenu ->
                                 menuCard {
                                     id(childChildMenu.menuID)
@@ -209,8 +212,14 @@ class MainActivity : AppCompatActivity() {
                                     icon(childChildMenu.icon)
                                     parentMenuIcon(childMenu.icon)
                                     clickListener { _ ->
-                                        getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)
-                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+                                        getFragmentId(
+                                            childChildMenu.menuID,
+                                            childChildMenu.chMenuID
+                                        )?.let {
+                                            hideMoreItemMenu()
+                                            navController.navigate(it)
+                                        }
+
                                     }
                                 }
                             }
@@ -220,6 +229,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun hideMoreItemMenu() {
+        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+        binding.appBarMain.contentMain.bottomNavigationView.onMenuItemClick(0)
+        listenMenuItemClickEvent = false
+    }
+
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
             menu.forEach { parentMenu ->
@@ -536,6 +552,10 @@ class MainActivity : AppCompatActivity() {
         //binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
+            if (listenMenuItemClickEvent.not()) {
+                listenMenuItemClickEvent = true
+                return@setOnMenuItemClickListener
+            }
             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
 
             when (position) {

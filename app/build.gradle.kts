@@ -53,9 +53,16 @@ android {
     productFlavors {
         create("dev") {
             dimension = "build"
+            resValue("string", "app_name", "ECarePro - Dev")
         }
         create("prod") {
             dimension = "build"
+            resValue("string", "app_name", "ECarePro")
+        }
+        create("beta") {
+            dimension = "build"
+            applicationIdSuffix = ".beta"
+            resValue("string", "app_name", "ECarePro - Beta")
         }
     }
 
