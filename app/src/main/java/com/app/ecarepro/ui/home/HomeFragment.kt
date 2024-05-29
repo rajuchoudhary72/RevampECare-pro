@@ -11,11 +11,11 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
@@ -239,9 +239,12 @@ class HomeFragment : Fragment() {
                             id(card.link)
                             card(card)
                             clickListener { _ ->
-                                (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    card.menuID,
+                                    card.chmenuID
+                                )
                                     ?.let {
-                                       /* findNavController().navigate(it)*/
+                                        /* findNavController().navigate(it)*/
                                     }
                             }
                         }
@@ -269,35 +272,66 @@ class HomeFragment : Fragment() {
                         id(favouriteSlider.title)
                         data(favouriteSlider)
                         clickListener { _ ->
-                            if (favouriteSlider.chMenuID>0){
-                                    (requireActivity() as MainActivity).getFragmentId(favouriteSlider.menuID, favouriteSlider.chMenuID)
-                            }else{
-                                if (favouriteSlider.title!!.contains(getString(R.string.assessment), true)) {
+                            if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID,
+                                    favouriteSlider.chMenuID,
+                                    favouriteSlider.sbChMenuID
+                                )
+                            } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID,
+                                    favouriteSlider.chMenuID
+                                )
+                            } else if (favouriteSlider.menuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID
+                                )
+                            } else {
+                                if (favouriteSlider.title!!.contains(
+                                        getString(R.string.assessment),
+                                        true
+                                    )
+                                ) {
                                     schoolData?.let {
                                         it.assessmentMarksURL?.let { url ->
-                                            webViewCall(url, getString(R.string.assessment_headling))
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.assessment_headling)
+                                            )
                                         }
                                     }
-                                }else if (favouriteSlider.title.contains(getString(R.string.marks_manager), true)) {
+                                } else if (favouriteSlider.title.contains(
+                                        getString(R.string.marks_manager),
+                                        true
+                                    )
+                                ) {
                                     schoolData?.let {
                                         it.marksEntryURL?.let { url ->
-                                            webViewCall(url, getString(R.string.marks_entry_heading))
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.marks_entry_heading)
+                                            )
                                         }
                                     }
-                                }else if (favouriteSlider.title.contains(getString(R.string.website), true)) {
+                                } else if (favouriteSlider.title.contains(
+                                        getString(R.string.website),
+                                        true
+                                    )
+                                ) {
                                     schoolData?.let {
                                         it.webSite?.let { url ->
                                             webViewCall(url, getString(R.string.website_txt))
                                         }
                                     }
-                                }else{
-                                    (requireActivity() as MainActivity).getFragmentId(favouriteSlider.menuID)
+                                } else {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID
+                                    )
                                 }
 
                             }
                         }
-                /*        clickListener {
-                            _ -> navigateToFavourites(favouriteSlider) }*/
                     }
                 }
                 addMoreFavourites {
@@ -328,7 +362,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.classSyllabus)
         } else if (favouriteSlider.module.contains("activity", true)) {
             findNavController().navigate(R.id.calenderActivityNavHost)
-        } else if (favouriteSlider.module.contains("payslip", true)||favouriteSlider.module.contains("pay slip", true)) {
+        } else if (favouriteSlider.module.contains(
+                "payslip",
+                true
+            ) || favouriteSlider.module.contains("pay slip", true)
+        ) {
             findNavController().navigate(R.id.paySlipFragment)
         } else if (favouriteSlider.module.contains("Questionnaire", true)) {
             findNavController().navigate(R.id.questionnaireListFragment)
@@ -359,13 +397,13 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.studentIDFragment)
         } else if (favouriteSlider.module.contains("SMS Addon", true)) {
             findNavController().navigate(R.id.medicalClassFragment)
-        }else if (favouriteSlider.module.contains("Teachers", true)) {
+        } else if (favouriteSlider.module.contains("Teachers", true)) {
             findNavController().navigate(R.id.subjectTeacherFragment)
-        }else if (favouriteSlider.module.contains("Classmates", true)) {
+        } else if (favouriteSlider.module.contains("Classmates", true)) {
             findNavController().navigate(R.id.classMateFragment)
-        }else if (favouriteSlider.module.contains("Survey", true)) {
+        } else if (favouriteSlider.module.contains("Survey", true)) {
             findNavController().navigate(R.id.surveyListFragment)
-             }
+        }
         /*start Web view module call  from here */
         else if (favouriteSlider.module.contains("Website", true)) {
             schoolData?.let {

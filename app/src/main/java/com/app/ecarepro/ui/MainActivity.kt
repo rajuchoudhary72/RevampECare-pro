@@ -213,8 +213,9 @@ class MainActivity : AppCompatActivity() {
                                     parentMenuIcon(childMenu.icon)
                                     clickListener { _ ->
                                         getFragmentId(
-                                            childChildMenu.menuID,
-                                            childChildMenu.chMenuID
+                                            menu.menuID,
+                                            childMenu.chMenuID,
+                                            childChildMenu.sbChMenuID
                                         ).let {
                                             hideMoreItemMenu()
                                         }
@@ -282,7 +283,7 @@ class MainActivity : AppCompatActivity() {
                                     getFragmentId(
                                         parentMenu.menuID,
                                         menu.chMenuID,
-                                        childChildMenu.chMenuID
+                                        childChildMenu.sbChMenuID
                                     )
                                 }
                             }

@@ -27,7 +27,6 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Firebase.messaging.token
     }
 
 
