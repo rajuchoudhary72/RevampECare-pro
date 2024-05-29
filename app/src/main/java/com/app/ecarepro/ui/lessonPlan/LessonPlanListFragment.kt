@@ -66,6 +66,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         binding = FragmentLessionPlanListBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         lessonPlanListAdapter = LessonPlanListAdapter(lessonArrayList, this)
+
         with(binding) {
             recyclerLessonPlan.adapter = lessonPlanListAdapter
             if (activity is AppCompatActivity) {

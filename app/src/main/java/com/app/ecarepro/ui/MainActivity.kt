@@ -315,7 +315,8 @@ class MainActivity : AppCompatActivity() {
             5 -> navController.navigate(R.id.classSyllabus)
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
-            12 ->  navController.navigate(R.id.conversationReportFragment)
+           // 12 ->  navController.navigate(R.id.conversationReportFragment)
+            12 ->  navController.navigate(R.id.mediaGalleryFragment)
             13 ->  navController.navigate(R.id.bookLibraryFragment)
             //  14 ->  navController.navigate(R.id.webViewFragment)
 

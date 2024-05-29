@@ -81,6 +81,8 @@ import retrofit2.http.Query
 import com.app.ecarepro.ui.survey.SurveyListResponse
 
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
+import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -89,10 +91,13 @@ import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkClassmateLST
+import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
+import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkRouteList
@@ -103,6 +108,8 @@ import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVideoAlbum
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
@@ -736,4 +743,67 @@ interface UserService {
     suspend fun submitSurveyQuestions(
         @Body model: SurveyQuestionsSubmitRequest
     ): CommonResponse
+
+    @GET("Gallery/PhotoAlbumTypes")
+    suspend fun getPhotoAlbumTypes( ): NetworkAlbumType
+
+    @GET("Gallery/PhotoAlbums")
+    suspend fun getPhotoAlbums(
+        @Query("typeID") typeID: Int,
+        @Query("pg") pg: Int,
+    ): NetworkPhotoAlbum
+
+    @GET("Gallery/PhotoAlbumDTL")
+    suspend fun getPhotoAlbumDTL(
+        @Query("ID") iD: String,
+        @Query("pg") pg: Int,
+    ): NetworkAlbumPhotoDetails
+
+    @GET("Gallery/VideoAlbums")
+    suspend fun getVideoAlbums(
+        @Query("pg") pg: Int,
+    ): NetworkVideoAlbum
+
+    @GET("Gallery/VideoAlbumDTL")
+    suspend fun getVideoAlbumDTL(
+        @Query("ID") id: String,
+        @Query("pg") pg: Int,
+    ): NetworkVideoAlbumDTL
+
+    @GET("Gallery/Favorites")
+    suspend fun getFavorites(
+        @Query("pg") pg: Int,
+    ): NetworkFavorites
+
+    @GET("Gallery/ManageFavorites")
+    suspend fun manageFavorites(
+        @Query("ID") id: String,
+        @Query("GalleryType") galleryType: Int,
+        @Query("Action") action: String
+    ): CommonResponse
+
+    @GET("Gallery/Like")
+    suspend fun manageLikes(
+        @Query("ID") id: String,
+        @Query("GalleryType") galleryType: Int,
+        @Query("like") like: Boolean
+    ): CommonResponse
+
+    @GET("Gallery/MediaGallery")
+    suspend fun getMediaGallery(
+        @Query("pg") pg: Int,
+        @Query("QueryType") queryType: Int,
+        @Query("Year") year: Int,
+        @Query("Date") date: String,
+        @Query("Query") query: String
+    ): NetworkMediaGallery
+
+
+
+
+
+
+
+
+
 }
