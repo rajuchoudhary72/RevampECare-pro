@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="com.app.ecarepro.data.network.model.Slider" />
+            type="com.app.ecarepro.data.network.model.Menu" />
 
         <variable
             name="clickListener"
@@ -31,7 +31,7 @@
 
             <ImageView
                 android:id="@+id/image"
-                imageUrl="@{data.imgPath}"
+                imageUrl="@{data.icon}"
                 placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:text="@{data.module}"
+                android:text="@{data.title}"
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="@+id/image"
                 app:layout_constraintStart_toStartOf="@+id/image"

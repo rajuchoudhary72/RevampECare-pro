@@ -11,5 +11,5 @@ interface AppRepository {
     fun getNotifications(): Flow<Result<List<Notification>>>
     fun registerDevice(registerDevice: RegisterDevice): Flow<Result<String>>
     fun getFavourites(): Flow<Result<List<Favourites>>>
-    fun updateFavourites(items:List<FavouritesUpdateDto>): Flow<Result<String>>
+    fun updateFavourites(items:List<Favourites>): Flow<Result<String>>
 }

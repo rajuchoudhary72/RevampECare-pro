@@ -84,7 +84,7 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun updateFavourites(items: List<FavouritesUpdateDto>): Flow<Result<String>> {
+    override fun updateFavourites(items: List<Favourites>): Flow<Result<String>> {
         return flow {
             try {
                 val response = appService.updateFavourites(items)

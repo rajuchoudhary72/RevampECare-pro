@@ -204,6 +204,10 @@ class ComposeViewModel @Inject constructor(
             null
         } else if (attachments.size == 1) {
             attachments.first()
+
+
+            //val bitmap = FileAccess.bitmapFromUri(context, imgUri)
+
             val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
 
             val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)

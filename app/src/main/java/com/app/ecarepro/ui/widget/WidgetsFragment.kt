@@ -65,7 +65,7 @@ class WidgetsFragment : Fragment() {
     }
 
     private fun initView() {
-        var controller: EpoxyController? = null
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.recyclerView.apply {
 

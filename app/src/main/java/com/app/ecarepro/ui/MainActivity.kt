@@ -15,6 +15,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
+    private var listenMenuItemClickEvent = true
 
 
     private val topLevelFragments = mutableListOf(
@@ -184,8 +186,8 @@ class MainActivity : AppCompatActivity() {
                         title(menu.title)
                         icon(menu.icon)
                         clickListener { _ ->
+                            hideMoreItemMenu()
                             getFragmentId(menu.menuID)
-                            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                         }
                     }
                 }else{
@@ -197,8 +199,8 @@ class MainActivity : AppCompatActivity() {
                                 icon(childMenu.icon)
                                 parentMenuIcon(menu.icon)
                                 clickListener { _ ->
+                                    hideMoreItemMenu()
                                     getFragmentId(menu.menuID, childMenu.chMenuID)
-                                    binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                                 }
                             }
                         }else{
@@ -209,8 +211,8 @@ class MainActivity : AppCompatActivity() {
                                     icon(childChildMenu.icon)
                                     parentMenuIcon(childMenu.icon)
                                     clickListener { _ ->
+                                        hideMoreItemMenu()
                                         getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)
-                                        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
                                     }
                                 }
                             }
@@ -219,6 +221,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    private fun hideMoreItemMenu() {
+        binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
+        binding.appBarMain.contentMain.bottomNavigationView.onMenuItemClick(0)
+        listenMenuItemClickEvent = false
     }
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
@@ -317,8 +324,6 @@ class MainActivity : AppCompatActivity() {
             //11 ->  navController.navigate(R.id.feeModule)
             12 ->  navController.navigate(R.id.conversationReportFragment)
             13 ->  navController.navigate(R.id.bookLibraryFragment)
-            //  14 ->  navController.navigate(R.id.webViewFragment)
-
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
             17 ->  navController.navigate(R.id.attendanceFragment)
             18 ->  navController.navigate(R.id.reportCardDetailsNavHostFragment)
@@ -327,6 +332,7 @@ class MainActivity : AppCompatActivity() {
             21 ->  navController.navigate(R.id.thoughtsListFragment)
             22 ->  navController.navigate(R.id.appointmentReportFragment)
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
+            27 ->  navController.navigate(R.id.lessonPlanListFragment)
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
             32 ->  navController.navigate(R.id.studentIDFragment)
@@ -335,17 +341,14 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
       fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {
             1 -> {
                 when (childMenuId) {
-
                     1 -> {
                         navController.navigate(R.id.studentListFragment2,Bundle( ).apply {
                             putString(Constant.TO,  Constant.PROFILE_FRA_STU)
                         })
-
                     }
                     2 -> {
                         navController.navigate(R.id.studentAttendanceReportFragment)
@@ -355,10 +358,8 @@ class MainActivity : AppCompatActivity() {
                             putString(Constant.TO,  Constant.FRA_STU_LEAVE)
                         })
                     }
-
                 }
             }
-
             2 -> {
                 when (childMenuId) {
 
@@ -467,7 +468,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
+            31 -> {
+                when (childMenuId) {
+                    40 ->  navController.navigate(R.id.calenderActivityNavHost)
+                }
+            }
         }
     }
 
@@ -478,7 +483,6 @@ class MainActivity : AppCompatActivity() {
             .setMessage(getString(R.string.are_you_sure_to_logout))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 systemViewModel.logout {
-
                     val intent = Intent(this, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
@@ -537,6 +541,10 @@ class MainActivity : AppCompatActivity() {
         //binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
+            if (listenMenuItemClickEvent.not()) {
+                listenMenuItemClickEvent = true
+                return@setOnMenuItemClickListener
+            }
             binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
 
             when (position) {

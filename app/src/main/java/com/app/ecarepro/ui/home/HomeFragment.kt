@@ -23,6 +23,7 @@ import com.app.ecarepro.addMoreFavourites
 import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.data.network.model.Card
+import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
@@ -263,14 +264,42 @@ class HomeFragment : Fragment() {
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
 
-                uiState.favourites.forEach { favouriteSlider: Slider ->
+                uiState.favourites.forEach { favouriteSlider: Menu ->
                     cardOption {
-                        id(favouriteSlider.module)
+                        id(favouriteSlider.title)
                         data(favouriteSlider)
-                        clickListener { _ -> navigateToFavourites(favouriteSlider) }
+                        clickListener { _ ->
+                            if (favouriteSlider.chMenuID>0){
+                                    (requireActivity() as MainActivity).getFragmentId(favouriteSlider.menuID, favouriteSlider.chMenuID)
+                            }else{
+                                if (favouriteSlider.title!!.contains(getString(R.string.assessment), true)) {
+                                    schoolData?.let {
+                                        it.assessmentMarksURL?.let { url ->
+                                            webViewCall(url, getString(R.string.assessment_headling))
+                                        }
+                                    }
+                                }else if (favouriteSlider.title.contains(getString(R.string.marks_manager), true)) {
+                                    schoolData?.let {
+                                        it.marksEntryURL?.let { url ->
+                                            webViewCall(url, getString(R.string.marks_entry_heading))
+                                        }
+                                    }
+                                }else if (favouriteSlider.title.contains(getString(R.string.website), true)) {
+                                    schoolData?.let {
+                                        it.webSite?.let { url ->
+                                            webViewCall(url, getString(R.string.website_txt))
+                                        }
+                                    }
+                                }else{
+                                    (requireActivity() as MainActivity).getFragmentId(favouriteSlider.menuID)
+                                }
+
+                            }
+                        }
+                /*        clickListener {
+                            _ -> navigateToFavourites(favouriteSlider) }*/
                     }
                 }
-
                 addMoreFavourites {
                     id("add more")
                     clickListener { _ ->
@@ -299,7 +328,7 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.classSyllabus)
         } else if (favouriteSlider.module.contains("activity", true)) {
             findNavController().navigate(R.id.calenderActivityNavHost)
-        } else if (favouriteSlider.module.contains("pay slip", true)) {
+        } else if (favouriteSlider.module.contains("payslip", true)||favouriteSlider.module.contains("pay slip", true)) {
             findNavController().navigate(R.id.paySlipFragment)
         } else if (favouriteSlider.module.contains("Questionnaire", true)) {
             findNavController().navigate(R.id.questionnaireListFragment)
