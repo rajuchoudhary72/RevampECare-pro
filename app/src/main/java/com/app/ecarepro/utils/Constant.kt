@@ -41,6 +41,13 @@ class Constant {
         const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
         const val TO = "to"
+        const val GALLERY_TYPE = "galleryType"
+        const val GALLERY_TYPE_PHOTO = 1
+        const val GALLERY_TYPE_VIDEO = 2
+        const val GALLERY_ACTION_TYPE = "galleryActionType"
+        const val GALLERY_ACTION_ADD = "add"
+        const val GALLERY_ACTION_REMOVE = "remove"
+
 
         const val TODAY = 1
         const val UP_COMING = 2

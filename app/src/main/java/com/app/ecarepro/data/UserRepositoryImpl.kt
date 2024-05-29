@@ -82,6 +82,8 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
+import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -90,10 +92,13 @@ import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkClassmateLST
+import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
+import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkRouteList
@@ -104,6 +109,8 @@ import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVideoAlbum
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
@@ -945,6 +952,53 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getQuestionPaper(classID, yrID)
     }
 
+    override suspend fun getPhotoAlbumTypes(): NetworkAlbumType {
+        return  userService.getPhotoAlbumTypes()
+    }
+
+    override suspend fun getPhotoAlbums(typeID: Int, pg: Int): NetworkPhotoAlbum {
+        return userService.getPhotoAlbums(typeID, pg)
+    }
+
+    override suspend fun getPhotoAlbumDTL(iD: String, pg: Int): NetworkAlbumPhotoDetails {
+        return userService.getPhotoAlbumDTL(iD, pg)
+    }
+
+    override suspend fun getVideoAlbums(pg: Int): NetworkVideoAlbum {
+        return userService.getVideoAlbums(pg)
+    }
+
+    override suspend fun getVideoAlbumDTL(id: String, pg: Int): NetworkVideoAlbumDTL {
+        return userService.getVideoAlbumDTL(id, pg)
+    }
+
+    override suspend fun getFavorites(pg: Int): NetworkFavorites {
+        return userService.getFavorites(pg)
+    }
+
+    override suspend fun manageFavorites(
+        id: String,
+        galleryType: Int,
+        action: String
+    ): CommonResponse {
+        return userService.manageFavorites(id, galleryType, action)
+    }
+
+    override suspend fun manageLikes(id: String, galleryType: Int, like: Boolean): CommonResponse {
+
+        return userService.manageLikes(id, galleryType, like)
+    }
+
+    override suspend fun getMediaGallery(
+        pg: Int,
+        queryType: Int,
+        year: Int,
+        date: String,
+        query: String
+    ): NetworkMediaGallery {
+        return userService.getMediaGallery(pg, queryType, year, date, query)
+    }
+
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
         return userService.surveyList(pg, isReport)
     }
@@ -952,6 +1006,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
         return userService.surveyQuestions(id)
     }
+
+
 
     override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
         return userService.submitSurveyQuestions(model)

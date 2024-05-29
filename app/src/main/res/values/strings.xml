@@ -264,7 +264,7 @@
     <string name="doj">DOJ:</string>
     <string name="father_spouse_name">Father/Spouse Name</string>
     <string name="father_spouse_mobile_no">Father/Spouse Mobile No</string>
-     <string name="aadhar_card_number">Aadhar Card Number</string>
+    <string name="aadhar_card_number">Aadhar Card Number</string>
     <string name="pan_card_number">Pan Card Number</string>
     <string name="sp">:</string>
     <string name="early_out">Early Out</string>
@@ -281,7 +281,7 @@
     <string name="pan_number">PAN Number</string>
     <string name="admissio_n_no">Admissio n No.</string>
     <string name="house">House</string>
-     <string name="bloodgroup">BloodGroup</string>
+    <string name="bloodgroup">BloodGroup</string>
     <string name="caste">Caste</string>
     <string name="diseno">DiseNo</string>
     <string name="aadhaar_number">Aadhaar Number</string>
@@ -531,7 +531,7 @@
     <string name="present_days">Present Days:</string>
     <string name="late_days">Late days:</string>
     <string name="absent_days">Absent days:</string>
-      <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
+    <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
     <string name="attendance_between_01_aug_2021_to_09_oct_2021">Attendance between: %s</string>
     <string name="statistical">Statistical</string>
     <string name="boys">Boy(s)</string>
@@ -539,7 +539,7 @@
     <string name="school_bus">School/College Bus</string>
     <string name="self_bus">Self Conveyance</string>
     <string name="students">Students</string>
-     <string name="transport">Transport</string>
+    <string name="transport">Transport</string>
     <string name="app_user_report">App User Report</string>
     <string name="survey">Survey</string>
     <string name="filter_by">Filter by</string>
@@ -555,4 +555,19 @@
     <string name="specific">Specific</string>
     <string name="clear_all">Clear All</string>
     <string name="apply">Apply</string>
+    <string name="photo">Photo</string>
+    <string name="video">Video</string>
+    <string name="favourate">Favourate</string>
+    <string name="more">more...</string>
+    <string name="add_favourites">Add Favourites</string>
+    <string name="gallery">gallery</string>
+    <string name="newspaper">NewsPaper:</string>
+    <string name="news_paper">News Paper :</string>
+    <string name="published_on">Published On:</string>
+    <string name="_35_34_4444">35-34-4444</string>
+    <string name="_34_344_3444">34-344-3444</string>
+    <string name="search_by">Search By</string>
+    <string name="select_publish_date">Select Publish Date</string>
+    <string name="enter_headline">Enter Headline</string>
+    <string name="description">Description :</string>
 </resources>

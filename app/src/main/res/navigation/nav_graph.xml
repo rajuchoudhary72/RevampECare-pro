@@ -767,4 +767,45 @@
         android:id="@+id/conversationReportFragment"
         android:name="com.app.ecarepro.ui.con_report.ConversationReportFragment"
         android:label="ConversationReportFragment" />
+    <fragment
+        android:id="@+id/photoAlbumTypeNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.PhotoAlbumTypeNavHostFragment"
+        android:label="PhotoAlbumTypeNavHostFragment" >
+        <action
+            android:id="@+id/action_photoAlbumTypeNavHostFragment_to_photoAlbumDTLFragment"
+            app:destination="@id/photoAlbumDTLFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoAlbumDTLFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.photoAlbum.photoAlbumDTL.PhotoAlbumDTLFragment"
+        android:label="PhotoAlbumDTLFragment" />
+    <fragment
+        android:id="@+id/videoAlbumFragment"
+        android:name="com.app.ecarepro.ui.gallery.video.VideoAlbumFragment"
+        android:label="VideoAlbumFragment" >
+        <action
+            android:id="@+id/action_videoAlbumFragment_to_videoAlbumDTLFragment"
+            app:destination="@id/videoAlbumDTLFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoAlbumDTLFragment"
+        android:name="com.app.ecarepro.ui.gallery.video.videoAlbumDTL.VideoAlbumDTLFragment"
+        android:label="VideoAlbumDTLFragment" >
+        <action
+            android:id="@+id/action_videoAlbumDTLFragment_to_photoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoSliderFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment"
+        android:label="PhotoSliderFragment" />
+    <fragment
+        android:id="@+id/mediaGalleryFragment"
+        android:name="com.app.ecarepro.ui.gallery.mediaGallery.MediaGalleryFragment"
+        android:label="fragment_media_gallery"
+        tools:layout="@layout/fragment_media_gallery" />
+    <fragment
+        android:id="@+id/mediaDetailsFragment"
+        android:name="com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment"
+        android:label="MediaDetailsFragment" />
 </navigation>

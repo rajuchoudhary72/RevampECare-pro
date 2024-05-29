@@ -8,6 +8,8 @@ import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
+import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppointments
@@ -27,6 +29,7 @@ import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkClassmateLST
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
+import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
@@ -38,10 +41,12 @@ import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
 import com.app.ecarepro.data.network.model.NetworkMarkAttendance
+import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPaySlip
+import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
 import com.app.ecarepro.data.network.model.NetworkQuestionPaper
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
@@ -70,6 +75,8 @@ import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
 import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.NetworkVideoAlbum
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostLeaveAction
@@ -608,4 +615,52 @@ interface UserRepository {
          classID: Int,
           yrID: Int
     ): NetworkQuestionPaper
+
+    suspend fun getPhotoAlbumTypes( ): NetworkAlbumType
+
+    suspend fun getPhotoAlbums(
+         typeID: Int,
+          pg: Int,
+    ): NetworkPhotoAlbum
+
+
+    suspend fun getPhotoAlbumDTL(
+          iD: String,
+          pg: Int,
+    ): NetworkAlbumPhotoDetails
+
+     suspend fun getVideoAlbums(
+          pg: Int,
+    ): NetworkVideoAlbum
+
+    suspend fun getVideoAlbumDTL(
+          id: String,
+          pg: Int,
+    ): NetworkVideoAlbumDTL
+
+
+    suspend fun getFavorites(
+          pg: Int,
+    ): NetworkFavorites
+
+    suspend fun manageFavorites(
+          id: String,
+         galleryType: Int,
+          action: String
+    ): CommonResponse
+
+    suspend fun manageLikes(
+        id: String,
+         galleryType: Int,
+         like: Boolean
+    ): CommonResponse
+
+    suspend fun getMediaGallery(
+          pg: Int,
+          queryType: Int,
+         year: Int,
+          date: String,
+         query: String
+    ): NetworkMediaGallery
+
 }
