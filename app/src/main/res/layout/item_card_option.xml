@@ -19,7 +19,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}"
-        app:cardBackgroundColor="@color/md_theme_dark_onBackground"
         app:contentPadding="10dp"
         app:strokeColor="@color/green_10"
         app:strokeWidth="1dp">
@@ -34,6 +33,7 @@
                 imageUrl="@{data.icon}"
                 placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="48dp"
+                app:tint="@color/md_theme_light_primary"
                 android:layout_height="48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

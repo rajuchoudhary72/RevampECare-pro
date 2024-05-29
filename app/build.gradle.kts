@@ -15,6 +15,14 @@ kapt {
 }
 
 android {
+    signingConfigs {
+        create("beta") {
+            storeFile = file("app/eCareBeta.jks")
+            storePassword = "eCarePro"
+            keyAlias = "ecareProAndroidBeta"
+            keyPassword = "eCarePro"
+        }
+    }
     namespace = "com.app.ecarepro"
     compileSdk = 34
 
@@ -63,6 +71,7 @@ android {
             dimension = "build"
             applicationIdSuffix = ".beta"
             resValue("string", "app_name", "e-Care Beta")
+            signingConfig = signingConfigs.getByName("beta")
         }
     }
 

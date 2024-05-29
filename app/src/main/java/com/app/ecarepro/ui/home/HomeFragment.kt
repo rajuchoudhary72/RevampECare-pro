@@ -239,10 +239,23 @@ class HomeFragment : Fragment() {
                             id(card.link)
                             card(card)
                             clickListener { _ ->
-                                (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
+                                if (card.menuID > 0 && card.chmenuID > 0 && card.sbChMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        card.menuID, card.chmenuID,card.sbChMenuID
+                                    )
+                                } else if (card.menuID > 0 && card.chmenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        card.menuID, card.chmenuID
+                                    )
+                                } else if (card.menuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        card.menuID
+                                    )
+                                }
+                               /* (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
                                     ?.let {
-                                       /* findNavController().navigate(it)*/
-                                    }
+                                       *//* findNavController().navigate(it)*//*
+                                    }*/
                             }
                         }
                     }
@@ -269,10 +282,27 @@ class HomeFragment : Fragment() {
                         id(favouriteSlider.title)
                         data(favouriteSlider)
                         clickListener { _ ->
-                            if (favouriteSlider.chMenuID>0){
-                                    (requireActivity() as MainActivity).getFragmentId(favouriteSlider.menuID, favouriteSlider.chMenuID)
-                            }else{
-                                if (favouriteSlider.title!!.contains(getString(R.string.assessment), true)) {
+                            if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID,
+                                    favouriteSlider.chMenuID,
+                                    favouriteSlider.sbChMenuID
+                                )
+                            } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID,
+                                    favouriteSlider.chMenuID
+                                )
+                            } else if (favouriteSlider.menuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID
+                                )
+                            } else {
+                                if (favouriteSlider.title!!.contains(
+                                        getString(R.string.assessment),
+                                        true
+                                    )
+                                ) {
                                     schoolData?.let {
                                         it.assessmentMarksURL?.let { url ->
                                             webViewCall(url, getString(R.string.assessment_headling))
@@ -290,8 +320,6 @@ class HomeFragment : Fragment() {
                                             webViewCall(url, getString(R.string.website_txt))
                                         }
                                     }
-                                }else{
-                                    (requireActivity() as MainActivity).getFragmentId(favouriteSlider.menuID)
                                 }
 
                             }

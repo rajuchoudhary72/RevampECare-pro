@@ -15,14 +15,12 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
+
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.cardOption
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
@@ -37,6 +35,8 @@ import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.drawerChildChildItem
+import com.app.ecarepro.menuCard
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.menuCard
 
@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
                     menu.childMenus.forEach { childMenu ->
                         if(childMenu.childMenus.isNullOrEmpty()){
                             menuCard {
-                                id(childMenu.menuID)
+                                id(menu.menuID, childMenu.menuID)
                                 title(childMenu.title)
                                 icon(childMenu.icon)
                                 parentMenuIcon(menu.icon)
@@ -206,13 +206,17 @@ class MainActivity : AppCompatActivity() {
                         }else{
                             childMenu.childMenus.forEach { childChildMenu ->
                                 menuCard {
-                                    id(childChildMenu.menuID)
+                                    id(menu.menuID, childMenu.chMenuID, childChildMenu.menuID)
                                     title(childChildMenu.title)
                                     icon(childChildMenu.icon)
                                     parentMenuIcon(childMenu.icon)
                                     clickListener { _ ->
                                         hideMoreItemMenu()
-                                        getFragmentId(childChildMenu.menuID, childChildMenu.chMenuID)
+                                        getFragmentId(
+                                            menu.menuID,
+                                            childMenu.chMenuID,
+                                            childChildMenu.sbChMenuID
+                                        )
                                     }
                                 }
                             }
@@ -273,8 +277,9 @@ class MainActivity : AppCompatActivity() {
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
                                     getFragmentId(
-                                        childChildMenu.menuID,
-                                        childChildMenu.chMenuID
+                                        parentMenu.menuID,
+                                        menu.chMenuID,
+                                        childChildMenu.sbChMenuID
                                     )
                                 }
                             }
@@ -313,9 +318,9 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(R.id.timeTableNavHostFragment)
                     }
 
-                } /*else {
+                } else {
                     navController.navigate(R.id.timeTableNavHostFragment)
-                }*/
+                }
 
             }
 
@@ -332,10 +337,13 @@ class MainActivity : AppCompatActivity() {
             20 ->  navController.navigate(R.id.questionnaireListFragment)
             21 ->  navController.navigate(R.id.thoughtsListFragment)
             22 ->  navController.navigate(R.id.appointmentReportFragment)
+            24 ->  navController.navigate(R.id.appointmentReportFragment)
+            25 ->  navController.navigate(R.id.excellenceAwardFragment)
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
             27 ->  navController.navigate(R.id.lessonPlanListFragment)
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
+             30 ->  navController.navigate(R.id.transportAttendanceFragment)
             32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
@@ -419,7 +427,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     16 -> navController.navigate(R.id.questionPaperFragment)
-                    42 -> navController.navigate(R.id.smsMsgReportFragment)
+                 //   42 -> navController.navigate(R.id.smsMsgReportFragment)
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                      47 -> navController.navigate(R.id.surveyListFragment)
@@ -477,7 +485,45 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int) {
+        when (menuID) {
+            1 -> {
+                when (childMenuId) {
+                    41 -> {
+                        when (childChildMenuId) {
+                            1 -> {
+                                navController.navigate(R.id.classPromotionFragment)
+                            }
+                            2 -> {
+                                navController.navigate(R.id.assignRollNoFragment)
+                            }
+                            3 -> {
+                                navController.navigate(R.id.assignHomeFragment)
+                            }
+                        }
+                    }
+                }
+            }
 
+            8 -> {
+                when (childMenuId) {
+                    42 -> {
+                        when (childChildMenuId) {
+                            4 -> {
+                                navController.navigate(R.id.smsMsgReportFragment)
+                            }
+                            5 -> {
+                                navController.navigate(R.id.SMSConsumptionFragment)
+                            }
+                            6 -> {
+                                navController.navigate(R.id.rechargeLogFragment)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     fun logout() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.logout))
