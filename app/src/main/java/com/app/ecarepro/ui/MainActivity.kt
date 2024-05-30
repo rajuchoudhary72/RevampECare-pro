@@ -442,6 +442,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+
             10 -> {
                 when (childMenuId) {
                     18 ->  navController.navigate(R.id.attendanceFragment)
