@@ -5,6 +5,7 @@ import android.os.Build
 import android.provider.Settings.Secure
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
 import com.google.firebase.ktx.Firebase
@@ -37,6 +38,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun registerToken(token: String) {
         GlobalScope.launch {
             val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
@@ -49,7 +51,8 @@ class ECareProMessagingService : FirebaseMessagingService() {
                         osVersion = "OS " + Build.VERSION.SDK_INT,
                         deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
                         deviceType = 1,
-                        imeI1 = macAddress,
+                        imeI1 = (application
+                            .getSystemService(TELEPHONY_SERVICE) as TelephonyManager).primaryImei,
                         imeI2 = macAddress,
                         deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
                     )

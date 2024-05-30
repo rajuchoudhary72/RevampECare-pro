@@ -337,7 +337,14 @@ class MainActivity : AppCompatActivity() {
             20 ->  navController.navigate(R.id.questionnaireListFragment)
             21 ->  navController.navigate(R.id.thoughtsListFragment)
             22 ->  navController.navigate(R.id.appointmentReportFragment)
-            24 ->  navController.navigate(R.id.appointmentReportFragment)
+            24 -> {
+                if (userData.userType == Constant.STUDENT_TYPE) {
+                        navController.navigate(R.id.infractionSelectFragment)
+                } else {
+                    navController.navigate(R.id.appointmentReportFragment)
+                }
+
+            }
             25 ->  navController.navigate(R.id.excellenceAwardFragment)
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
             27 ->  navController.navigate(R.id.lessonPlanListFragment)
@@ -480,6 +487,14 @@ class MainActivity : AppCompatActivity() {
             31 -> {
                 when (childMenuId) {
                     40 ->  navController.navigate(R.id.calenderActivityNavHost)
+                }
+            }
+            /*gallery*/
+            34 -> {
+                when (childMenuId) {
+                    48 ->  navController.navigate(R.id.photoAlbumTypeNavHostFragment)
+                    49 ->  navController.navigate(R.id.videoAlbumFragment)
+                    50 ->  navController.navigate(R.id.videoAlbumFragment)
                 }
             }
         }
