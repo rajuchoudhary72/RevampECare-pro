@@ -19,6 +19,7 @@ import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentPromotedClass
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -150,8 +151,7 @@ class ClassPromotionFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            Toast.makeText(context, "${it.data.message}", Toast.LENGTH_LONG).show()
-
+                            mainActivity().showMessage("${it.data.message}")
                         }
 
                     }
@@ -202,7 +202,7 @@ class ClassPromotionFragment : Fragment() {
         }
 
         if (requestList.isEmpty()) {
-            Toast.makeText(context, "Add Message here", Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Add Message here")
             return
         }
 

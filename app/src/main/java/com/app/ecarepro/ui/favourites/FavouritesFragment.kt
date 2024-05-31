@@ -15,6 +15,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentFavouritesBinding
 import com.app.ecarepro.favourite
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -52,7 +53,7 @@ class FavouritesFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
         if (uiState is FavouritesUiState.Success) {
             binding.recyclerView.withModels {
@@ -78,7 +79,7 @@ class FavouritesFragment : Fragment() {
             (requireActivity() as MainActivity).showLoader(true)
             mViewModel.saveFavourites() { isSuccess, message ->
                 (requireActivity() as MainActivity).showLoader(false)
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage(message)
                 if (isSuccess) {
                     setFragmentResult("favourites", bundleOf("isUpdate" to true))
                     findNavController().popBackStack()

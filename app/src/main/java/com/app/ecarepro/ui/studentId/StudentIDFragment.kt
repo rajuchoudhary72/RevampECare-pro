@@ -28,6 +28,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentIdBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.FileAccess
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.snackbar.Snackbar
@@ -239,11 +240,7 @@ class StudentIDFragment : Fragment() {
                 startImagePicker()
             } else {
                 // Permission denied, show a message to the user
-                Toast.makeText(
-                    requireContext(),
-                    "Permission denied, cannot pick image",
-                    Toast.LENGTH_SHORT
-                ).show()
+                mainActivity().showMessage("Permission denied, cannot pick image")
             }
         }
     }
@@ -292,11 +289,7 @@ class StudentIDFragment : Fragment() {
 
 
                     } else {
-                        Toast.makeText(
-                            context,
-                            "Oops...!!! could not proceed, the image height must be greater than 252 pixels.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 252 pixels.")
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -321,7 +314,7 @@ class StudentIDFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(it.message?:"")
                     }
 
                     is NetworkResult.Success -> {
@@ -494,7 +487,8 @@ class StudentIDFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(it.message?:"")
+
                     }
 
                     is NetworkResult.Success -> {
@@ -539,9 +533,7 @@ class StudentIDFragment : Fragment() {
                                 Snackbar.LENGTH_LONG
                             ).show()
                         }
-                        Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
-
-
+                        mainActivity().showMessage(it.message?:"")
                     }
                 }
             }
@@ -560,5 +552,5 @@ class StudentIDFragment : Fragment() {
     }
 
     private fun Context.toast(message: CharSequence) =
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        mainActivity().showMessage(message.toString())
 }

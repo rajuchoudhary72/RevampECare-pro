@@ -30,6 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentExcellenceAwardBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.PdfDocumentAdapter
 
 
@@ -208,13 +209,12 @@ class ExcellenceAwardFragment : Fragment() {
                 document.writeTo(FileOutputStream(camFile))
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(requireActivity(), "Something wrong: $e", Toast.LENGTH_LONG).show()
+                mainActivity().showMessage("Something wrong: $e")
             }
 
             // close the document
             document.close()
             return camFile
-            //  Toast.makeText(this, "PDF of Scroll is created!!!", Toast.LENGTH_SHORT).show();
         } catch (e: IOException) {
             e.printStackTrace()
         }

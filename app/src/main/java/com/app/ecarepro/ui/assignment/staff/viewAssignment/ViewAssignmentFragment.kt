@@ -24,6 +24,7 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.databinding.FragmentViewAssignmentBinding
 import com.app.ecarepro.model.AssignSubmitStudent
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
@@ -249,7 +250,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         btn_canel.setOnClickListener { dialog.dismiss() }
         btn_submit.setOnClickListener {
             if (tv_date.text.toString() == "") {
-                Toast.makeText(context, "Please Select Date", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Please Select Date")
             } else {
                  offlineSubmited(t, tv_date.text.toString())
                 dialog.dismiss()

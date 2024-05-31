@@ -15,8 +15,10 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
@@ -29,11 +31,11 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="32dp"
                 app:navigationIcon="@drawable/ic_arrow_back_24px"
                 app:title="Compose Message"
                 app:titleTextAppearance="?attr/textAppearanceTitleMedium"
-                app:titleTextColor="@color/white"
-                app:topWindowInsetToPadding="@{true}">
+                app:titleTextColor="@color/white">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_recipient"
@@ -56,12 +58,16 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/view_pager"
-            bottomWindowInsetToPadding="@{true}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/send_message_layout"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.airbnb.epoxy.Carousel
                 android:id="@+id/recipientsRecyclerView"
@@ -83,7 +89,6 @@
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/horizontal_margin"
                 android:autofillHints="true"
-                android:text="@={viewModel.subject}"
                 android:background="@drawable/bg_outline_round_corner_green_10"
                 android:fontFamily="@font/calibri_regular"
                 android:hint="@string/subject_line"
@@ -92,6 +97,7 @@
                 android:minHeight="42dp"
                 android:paddingHorizontal="10dp"
                 android:scrollbars="vertical"
+                android:text="@={viewModel.subject}"
                 app:layout_constraintTop_toBottomOf="@id/recipientsRecyclerView"
                 tools:ignore="LabelFor" />
 
@@ -251,82 +257,93 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/send_message_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#0D5FA150"
-                android:padding="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/attachments">
-
-                <EditText
-                    android:id="@+id/message"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:autofillHints="true"
-                    android:background="@drawable/bg_outline_round_corner_green_10"
-                    android:fontFamily="@font/calibri_regular"
-                    android:hint="@string/enter_your_message_here"
-                    android:inputType="textMultiLine"
-                    android:maxLines="4"
-                    android:text="@={viewModel.message}"
-                    android:minHeight="42dp"
-                    android:padding="10dp"
-                    android:scrollbars="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_reply_message"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="LabelFor" />
-
-                <ImageView
-                    android:id="@+id/btnAddAttachment"
-                    isVisible="@{viewModel.attachmentVisible}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:src="@drawable/baseline_attach_file_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/message"
-                    app:layout_constraintEnd_toEndOf="@+id/message"
-                    app:layout_constraintTop_toTopOf="@+id/message"
-                    tools:ignore="ContentDescription" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_reply_message"
-                    style="@style/Widget.Material3.Button.Icon"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:gravity="center_vertical"
-                    android:insetTop="0dp"
-                    android:enabled="@{viewModel.message.length()>0}"
-                    android:insetBottom="0dp"
-                    app:cornerRadius="10dp"
-                    app:icon="@drawable/ic_sent"
-                    app:iconTint="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.airbnb.epoxy.Carousel
-                android:id="@+id/attachments"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#0D5FA150"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group"
                 isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="recipientsRecyclerView,txtSubject,attachments"
+                app:constraint_referenced_ids="recipientsRecyclerView,txtSubject"
                 tools:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/send_message_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#0D5FA150"
+                    android:padding="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <EditText
+                        android:id="@+id/message"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_weight="1"
+                        android:autofillHints="true"
+                        android:background="@drawable/bg_outline_round_corner_green_10"
+                        android:fontFamily="@font/calibri_regular"
+                        android:hint="@string/enter_your_message_here"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:minHeight="42dp"
+                        android:padding="10dp"
+                        android:scrollbars="vertical"
+                        android:text="@={viewModel.message}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_reply_message"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="LabelFor" />
+
+                    <ImageView
+                        android:id="@+id/btnAddAttachment"
+                        isVisible="@{viewModel.attachmentVisible}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:src="@drawable/baseline_attach_file_24"
+                        app:layout_constraintBottom_toBottomOf="@+id/message"
+                        app:layout_constraintEnd_toEndOf="@+id/message"
+                        app:layout_constraintTop_toTopOf="@+id/message"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_reply_message"
+                        style="@style/Widget.Material3.Button.Icon"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:enabled="@{viewModel.message.length()>0}"
+                        android:gravity="center_vertical"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_sent"
+                        app:iconTint="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.airbnb.epoxy.Carousel
+                    android:id="@+id/attachments"
+                    isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#0D5FA150"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

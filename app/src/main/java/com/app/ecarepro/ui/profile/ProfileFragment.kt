@@ -31,6 +31,7 @@ import com.app.ecarepro.profileLogout
 import com.app.ecarepro.profileWardDetails
 import com.app.ecarepro.space
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.FileAccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,7 +81,7 @@ class ProfileFragment : Fragment() {
             ext = imageExt
         ) { _, message ->
             (requireActivity() as MainActivity).showLoader(false)
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(message)
         }
     }
 
@@ -131,7 +132,7 @@ class ProfileFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is ProfileUiState.Success) {

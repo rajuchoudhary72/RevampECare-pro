@@ -18,6 +18,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.mainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
 
@@ -82,16 +83,14 @@ class SignInFragment : Fragment() {
                             }
 
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Authenticated " + it.authenticated,
-                                Toast.LENGTH_SHORT
-                            ).show()
+
+                            mainActivity().showMessage("Authenticated " + it.authenticated)
+
 
                         }
 
                     }
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    mainActivity().showMessage(it.message?:"")
                     Log.i("Token Aut", it.authToken.toString())
                 }
             } else {
@@ -104,7 +103,7 @@ class SignInFragment : Fragment() {
                         binding.textUserName.isEnabled = false
                         binding.textUserName.isClickable = false
                     }
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    mainActivity().showMessage(it.message?:"")
                 }
             }
         }

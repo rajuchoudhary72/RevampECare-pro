@@ -45,18 +45,28 @@ class WidgetsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             mViewModel.card.collectLatest {
                 binding.recyclerView.withModels {
-                    it.forEachIndexed { index, card ->
+                    it.forEachIndexed { index, favouriteSlider ->
                         dashboardCard {
                             id(index)
-                            card(card)
+                            card(favouriteSlider)
                             clickListener { _ ->
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    card.menuID,
-                                    card.chmenuID
-                                )
-                                   /* ?.let { findNavController().navigate(it) }*/
+                                if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID,
+                                        favouriteSlider.sbChMenuID
+                                    )
+                                } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID
+                                    )
+                                } else if (favouriteSlider.menuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID
+                                    )
+                                }
                             }
-
                         }
                     }
                 }

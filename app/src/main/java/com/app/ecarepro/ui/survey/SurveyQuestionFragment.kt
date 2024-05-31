@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.SurveyQuestionBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.lassi.common.extenstions.hide
 import com.lassi.common.extenstions.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -112,11 +113,8 @@ class SurveyQuestionFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(
-                            requireContext(),
-                            "Your response has been recorded \n Thanks for your response.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    mainActivity().showMessage("Your response has been recorded \n" +
+                            " Thanks for your response.")
                         findNavController().popBackStack()
                     }
 
@@ -137,11 +135,7 @@ class SurveyQuestionFragment : Fragment() {
                 }
                 if (!check) {
                     binding.rvSurveyList.smoothScrollToPosition(i)
-                    Toast.makeText(
-                        requireContext(),
-                        "Please attempt all the mandatory questions.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mainActivity().showMessage("Please attempt all the mandatory questions.")
                     return
                 }
             }

@@ -2,21 +2,18 @@ package com.app.ecarepro.ui.thought.add_thoughts
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentAddThoughtsBlankBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.thought.ThoughtsViewModel
-import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.ResponseStateCreateTou
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,13 +25,13 @@ class AddThoughtsBlankFragment : Fragment() {
 
     private lateinit var binding: FragmentAddThoughtsBlankBinding
 
-    private val thoughtsViewModel : ThoughtsViewModel by viewModels()
+    private val thoughtsViewModel: ThoughtsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentAddThoughtsBlankBinding.inflate(inflater,container,false)
+    ): View {
+        binding = FragmentAddThoughtsBlankBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -44,12 +41,14 @@ class AddThoughtsBlankFragment : Fragment() {
 
         binding.textFiledThoughts.doAfterTextChanged {
             if (it != null) {
-                binding.btnAdd.isEnabled = it.isNotEmpty() && binding.textFiledAuther.text!!.isNotEmpty()
+                binding.btnAdd.isEnabled =
+                    it.isNotEmpty() && binding.textFiledAuther.text!!.isNotEmpty()
             }
         }
         binding.textFiledAuther.doAfterTextChanged {
             if (it != null) {
-                binding.btnAdd.isEnabled = it.isNotEmpty() && binding.textFiledThoughts.text!!.isNotEmpty()
+                binding.btnAdd.isEnabled =
+                    it.isNotEmpty() && binding.textFiledThoughts.text!!.isNotEmpty()
             }
 
         }
@@ -65,20 +64,22 @@ class AddThoughtsBlankFragment : Fragment() {
 
         lifecycleScope.launch {
             thoughtsViewModel._createTouStateFlow.collectLatest {
-                when(it){
+                when (it) {
 
-                    is ResponseStateCreateTou.Loading->{
+                    is ResponseStateCreateTou.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
 
                     }
-                    is ResponseStateCreateTou.Failure->{
+
+                    is ResponseStateCreateTou.Failure -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(activity,it.msg.toString(),Toast.LENGTH_LONG).show()
-                        Log.d("main", "Error"+it.msg.toString())
+                        mainActivity().showMessage(it.msg.toString())
+                        Log.d("main", "Error" + it.msg.toString())
                     }
-                    is ResponseStateCreateTou.Success->{
+
+                    is ResponseStateCreateTou.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(activity,"Successfully!!!",Toast.LENGTH_LONG).show()
+                        mainActivity().showMessage("Successfully!!!")
                         findNavController().popBackStack()
                     }
 
@@ -86,8 +87,6 @@ class AddThoughtsBlankFragment : Fragment() {
                 }
             }
         }
-
-
 
 
     }

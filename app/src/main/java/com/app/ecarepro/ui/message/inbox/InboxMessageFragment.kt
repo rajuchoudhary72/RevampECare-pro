@@ -19,6 +19,7 @@ import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.recentMessageCard
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.E_MMM_DD_YYYY_HH_MM_A
 import com.app.ecarepro.utils.HH_MM_A
 import com.app.ecarepro.utils.PaginationScrollListener
@@ -94,7 +95,7 @@ class InboxMessageFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is InboxMessageUiState.Success || uiState == InboxMessageUiState.EmptyInbox) {

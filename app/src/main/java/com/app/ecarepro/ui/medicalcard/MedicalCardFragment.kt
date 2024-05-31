@@ -16,6 +16,7 @@ import com.app.ecarepro.databinding.FragmentMedicalCardBinding
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -118,13 +119,12 @@ class MedicalCardFragment : Fragment(), ItemListener<Dtl> {
                         (requireActivity() as MainActivity).showLoader(false)
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(it.message?:"")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-
-                        Toast.makeText(requireContext(), "Updated successfully", Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage("Updated successfully")
 
 
                     }

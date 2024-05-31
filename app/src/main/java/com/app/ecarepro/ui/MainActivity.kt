@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -30,6 +31,7 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
@@ -71,6 +73,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.itemDrawerHeader.imgUserAvatar.setOnClickListener {
+            navController.navigate(R.id.profileFragment)
+            systemViewModel.openDrawer(false)
+        }
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -626,4 +633,16 @@ class MainActivity : AppCompatActivity() {
         if (show)
             loader = progressDialog()
     }
+
+    fun showMessage(message: String) {
+        Snackbar.make(
+            binding.appBarMain.contentMain.bottomNavigationView,
+            message,
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
+}
+
+fun Fragment.mainActivity(): MainActivity {
+   return requireActivity() as MainActivity
 }

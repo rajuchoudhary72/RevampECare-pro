@@ -22,6 +22,7 @@ import com.app.ecarepro.model.defaulter_report_filter.Installment
 import com.app.ecarepro.model.defaulter_report_filter.School
 import com.app.ecarepro.model.defaulter_report_filter.Section
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -273,31 +274,31 @@ class DefaulterReportFragment : Fragment() {
             var isValidated = true
             if (binding.dateFrom.text.toString() == "From Date") {
                 isValidated = false
-                Toast.makeText(context, "Select From Date", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Select From Date")
             }
             if (binding.dateTo.text.toString() == "To Date") {
                 isValidated = false
-                Toast.makeText(context, "Select To Date", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Select To Date")
             }
             if (sectionid == "") {
                 isValidated = false
-                Toast.makeText(context, "Please Select Section", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Please Select Section")
             }
             if (installid == "") {
                 isValidated = false
-                Toast.makeText(context, "Please Select Installment", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Please Select Installment")
             }
             if (feetypeid == "") {
                 isValidated = false
-                Toast.makeText(context, "Please Select Fee Type", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Please Select Fee Type")
             }
             if (schoolid == "") {
                 isValidated = false
-                Toast.makeText(context, "Please Select School", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Please Select School")
             }
             if (classid == "") {
                 isValidated = false
-                Toast.makeText(context, "Please Select Class", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Please Select Class")
             }
 
 

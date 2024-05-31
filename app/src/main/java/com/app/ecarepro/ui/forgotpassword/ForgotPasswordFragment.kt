@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentForgotPasswordBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.addSystemWindowInsetToMargin
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -87,9 +88,7 @@ class ForgotPasswordFragment : Fragment() {
                 binding.textFiled.text.toString()
             ) {
                 (requireActivity() as MainActivity).showLoader(false)
-
-                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-
+                mainActivity().showMessage(it.message?:"")
                 if (it.errorCode == 0) {
                     findNavController().popBackStack()
                 }

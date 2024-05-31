@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.widget.Toast
+import com.app.ecarepro.ui.mainActivity
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
@@ -65,7 +66,6 @@ class WebViewFragment : Fragment() {
         binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             if (isStoragePermission()) if (url.endsWith(".pdf") || url.endsWith(".PDF")) {
-                //Toast.makeText(context, url.toString(), Toast.LENGTH_SHORT).show();
                 val request = DownloadManager.Request(Uri.parse(url))
                 request.allowScanningByMediaScanner()
                 Environment.getExternalStorageDirectory()
@@ -77,8 +77,7 @@ class WebViewFragment : Fragment() {
                 )
                 val dm =   requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
-                Toast.makeText(requireActivity(), "Downloading...", Toast.LENGTH_SHORT)
-                    .show()
+                mainActivity().showMessage("Downloading...")
             }
         }
         binding.webView.webViewClient = object : WebViewClient() {

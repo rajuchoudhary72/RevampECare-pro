@@ -21,6 +21,7 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 
 import com.app.ecarepro.databinding.FragmentEditAssignmentBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
@@ -101,21 +102,21 @@ class EditAssignmentFragment : Fragment() {
 
         if ( binding.etTitle.text.toString().isEmpty()){
             isValidate=false
-            Toast.makeText(requireContext(),"Enter Title", Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Enter Title")
         }
         if ( binding.ctvAssignmentDt.text.toString()==getString(R.string.assignment_date)){
             isValidate=false
-            Toast.makeText(requireContext(),"Select Assignment Date", Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Select Assignment Date")
         }
         if (viewAssignmentData!!.submitDate!=""){
             if ( binding.tvSubmissionDt.text.toString()==getString(R.string.submission_date)){
                 isValidate=false
-                Toast.makeText(requireContext(),"Select Submission Date", Toast.LENGTH_LONG).show()
+                mainActivity().showMessage("Select Submission Date")
             }
         }
         if ( binding.etDescription.text.toString().isEmpty()){
             isValidate=false
-            Toast.makeText(requireContext(),"Enter Data", Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Enter Date")
         }
 
 
@@ -157,7 +158,7 @@ class EditAssignmentFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                     } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(requireContext(),"Assignment Updated Successfully", Toast.LENGTH_LONG).show()
+                        mainActivity().showMessage("Assignment Updated Successfully")
                         findNavController().popBackStack()
                     }  }
                 } }

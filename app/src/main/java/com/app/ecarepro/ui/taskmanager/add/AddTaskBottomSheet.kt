@@ -23,6 +23,7 @@ import com.app.ecarepro.model.Title
 import com.app.ecarepro.model.Watcher
 import com.app.ecarepro.taskAssigneeCarouselItem
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.FileAccess
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
@@ -120,7 +121,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                 (requireActivity() as MainActivity).showLoader(true)
                 mViewModel.addTask { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    mainActivity().showMessage(message?:"")
                     if (isSuccess) {
                         findNavController().popBackStack()
                     }
@@ -132,11 +133,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
             selectAssinee.setOnClickListener {
                 if (mViewModel.selectedTitle.value?.assignees.isNullOrEmpty()) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Please select task first to select assignee.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mainActivity().showMessage("Please select task first to select assignee.")
                     return@setOnClickListener
                 }
                 selectAssignee(mViewModel.selectedTitle.value?.assignees)
@@ -158,7 +155,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is AddTaskUiState.Success) {
