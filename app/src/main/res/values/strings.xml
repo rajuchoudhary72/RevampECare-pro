@@ -128,6 +128,8 @@
     <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
     <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
     <string name="select_infraction_category">Select Infraction Category</string>
+    <string name="select_que_type">Select Question Type</string>
+
     <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
     <string name="select_apprec_category">Select Appreciation Category</string>
     <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
@@ -570,4 +572,15 @@
     <string name="select_publish_date">Select Publish Date</string>
     <string name="enter_headline">Enter Headline</string>
     <string name="description">Description :</string>
+    <string name="weightage">Weightage:</string>
+    <string name="created_on">Created On:</string>
+    <string name="question">Question:</string>
+    <string name="question_paper">Question Paper:</string>
+    <string name="que_type">Que Type:</string>
+    <string name="chapter">Chapter:</string>
+    <string name="add_question_bank">Add Question Bank</string>
+    <string name="question_type">Question Type</string>
+    <string name="select_chapter">Select Chapter</string>
+    <string name="enter_weightage">Enter Weightage</string>
+    <string name="enter_question">Enter Question</string>
 </resources>

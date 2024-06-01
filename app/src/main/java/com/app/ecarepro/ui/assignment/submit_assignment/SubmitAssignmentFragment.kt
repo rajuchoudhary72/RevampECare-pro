@@ -10,8 +10,10 @@ import androidx.fragment.app.viewModels
 import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSubmitAssignmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class SubmitAssignmentFragment : Fragment() {
 
     private lateinit var binding : FragmentSubmitAssignmentBinding

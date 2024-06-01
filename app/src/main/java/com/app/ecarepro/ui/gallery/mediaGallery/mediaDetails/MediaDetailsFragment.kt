@@ -5,10 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMediaDetailsBinding
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.imageUrl
+import com.squareup.picasso.Picasso
 
 
 class MediaDetailsFragment : Fragment() {
@@ -20,6 +22,7 @@ class MediaDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentMediaDetailsBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
          return binding.root
     }
 
@@ -27,24 +30,31 @@ class MediaDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
+
+            arguments?.getString(headline)?.let { headlineLoc ->
+                name.text=headlineLoc
+            }
+            arguments?.getString(newsName)?.let { newsNameLoc ->
+                tvNewspaper.text=newsNameLoc
+            }
+            arguments?.getString(publishedOn)?.let { publishedOnLoc ->
+                tvPubliOn.text=publishedOnLoc
+            }
+            arguments?.getString(updatedOn)?.let { updatedOnLoc ->
+                tvUpdtedOn.text=updatedOnLoc
+            }
+            arguments?.getString(description)?.let { descriptionLoc ->
+                tvDes.text=descriptionLoc
+            }
             arguments?.getString(fileName)?.let { photo ->
-                 ivPhoto.imageUrl(photo)
+                Picasso.get().load(photo)
+                    //.placeholder(R.drawable.default_profile)
+                    .into(ivPhoto)
             }
-            arguments?.getString(headline)?.let { t ->
-                name.text=t
-            }
-            arguments?.getString(newsName)?.let { t ->
-                tvNewspaper.text=t
-            }
-            arguments?.getString(publishedOn)?.let { t ->
-                tvPubliOn.text=t
-            }
-            arguments?.getString(updatedOn)?.let { t ->
-                tvUpdtedOn.text=t
-            }
-            arguments?.getString(description)?.let { t ->
-                tvDes.text=t
-            }
+
+
+
+
         }
 
 

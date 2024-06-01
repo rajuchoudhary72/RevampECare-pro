@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="questDetails"
+            type="com.app.ecarepro.model.QBQuestion" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_6sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical" >
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+             android:layout_marginHorizontal="@dimen/_5sdp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/word"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{questDetails.subject}"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/date_rel"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/classes"
+                    android:textColor="#C7C7C7"
+                    app:fontFamily="@font/ubuntu_light" />
+
+                <TextView
+                    android:id="@+id/tv_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#C7C7C7"
+
+                    android:layout_marginStart="@dimen/_10sdp"
+                    app:fontFamily="@font/ubuntu_light" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/chapter"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                    android:id="@+id/tv_chapter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="3dp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="@{questDetails.chapter}"
+                     android:textColor="#848484"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/que_type"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                    android:id="@+id/tv_que_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="3dp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:text="@{questDetails.queType}"
+                    android:textColor="#848484"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/question"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                    android:id="@+id/tv_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="3dp"
+                    android:text="@{questDetails.question}"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:textColor="#848484"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:drawablePadding="3dp"
+                        android:text="@string/created_on"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_create_on"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:paddingTop="3dp"
+                        android:text="@{questDetails.createdOn}"
+                        android:textColor="#848484"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentEnd="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:drawablePadding="3dp"
+                        android:text="@string/weightage"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+                    <TextView
+                        android:id="@+id/tv_weightage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:paddingTop="3dp"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text="@{questDetails.weightage}"
+                        android:textColor="#848484"
+                        app:fontFamily="@font/ubuntu_medium" />
+
+
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                  />
+
+            <LinearLayout
+                android:id="@+id/llEditDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+
+                >
+
+                <LinearLayout
+                    android:id="@+id/llDownload"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                     android:gravity="center"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/download"
+                        android:textColor="@color/brand_color"
+                        app:drawableTint="@color/brand_color"
+                        app:drawableLeftCompat="@drawable/download_24px" />
+
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"/>
+
+
+                <LinearLayout
+                    android:id="@+id/llEdit"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                     android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/edit"
+                         android:textColor="@color/brand_color"
+                         app:drawableLeftCompat="@drawable/ic_edit_pencil" />
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"/>
+
+                <LinearLayout
+                    android:id="@+id/llDelete"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                     android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/delete"
+                        android:textColor="@color/brand_color"
+                        app:drawableLeftCompat="@drawable/delete_white"
+                        app:drawableTint="@color/brand_color"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

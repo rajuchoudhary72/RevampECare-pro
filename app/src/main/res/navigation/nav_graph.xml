@@ -778,7 +778,11 @@
     <fragment
         android:id="@+id/photoAlbumDTLFragment"
         android:name="com.app.ecarepro.ui.gallery.photo.photoAlbum.photoAlbumDTL.PhotoAlbumDTLFragment"
-        android:label="PhotoAlbumDTLFragment" />
+        android:label="PhotoAlbumDTLFragment" >
+        <action
+            android:id="@+id/action_photoAlbumDTLFragment_to_photoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/videoAlbumFragment"
         android:name="com.app.ecarepro.ui.gallery.video.VideoAlbumFragment"
@@ -808,4 +812,23 @@
         android:id="@+id/mediaDetailsFragment"
         android:name="com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment"
         android:label="MediaDetailsFragment" />
+    <fragment
+        android:id="@+id/addQuestionBankFragment"
+        android:name="com.app.ecarepro.ui.question_bank.add_question_bank.AddQuestionBankFragment"
+        android:label="AddQuestionBankFragment" />
+    <fragment
+        android:id="@+id/favoritesListFragment"
+        android:name="com.app.ecarepro.ui.gallery.favorites.FavoritesListFragment"
+        android:label="FavoritesListFragment" />
+    <fragment
+        android:id="@+id/questionBankFragment2"
+        android:name="com.app.ecarepro.ui.question_bank.QuestionBankFragment"
+        android:label="fragment_question_bank"
+        tools:layout="@layout/fragment_question_bank" />
+    <fragment
+        android:id="@+id/youTubeVideoPlayerFragment"
+        android:name="com.app.ecarepro.ui.gallery.videoPlay.YouTubeVideoPlayerFragment"
+        android:label="YouTubeVideoPlayerFragment"
+        android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+        />
 </navigation>

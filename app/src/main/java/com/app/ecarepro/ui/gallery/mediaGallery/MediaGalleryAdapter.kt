@@ -58,6 +58,11 @@ class MediaGalleryAdapter(
             item.tvNewspaper.text=data.newsName
             item.tvPubliOn.text=data.publishedOn
             item.tvUpdtedOn.text=data.updatedOn
+            item.cvMain.setOnClickListener {
+                mediaGalleryFragment.onItemClick(data,0,false)
+            }
+
+
 
 
 

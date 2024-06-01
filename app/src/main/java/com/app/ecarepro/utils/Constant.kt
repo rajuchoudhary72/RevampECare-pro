@@ -25,6 +25,7 @@ class Constant {
          const val REJECT_APPOINTMENT_URL = "rejectappointment/"
         const val BOOK_ID_ARGUMENT = "bookID"
         const val URL_ARGUMENT = "url"
+        const val FULL_URL_ARGUMENT = "full_url"
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val STUDENT_ID_ARGUMENT = "StudentID"
         const val STAFF_ID_ARGUMENT = "StaffID"
@@ -99,6 +100,10 @@ class Constant {
         const val UP_TRIP= 1
         const val DOWN_TRIP= 2
         const val DROP_STUDENT_TRIP= 3
+
+        const val DOWNLOAD= 1
+        const val EDIT= 2
+        const val DELETE= 3
 
         const val TRUE_VALUE = 1
         const val FALSE_VALUE = 0
