@@ -50,11 +50,19 @@ class WidgetsFragment : Fragment() {
                             id(index)
                             card(card)
                             clickListener { _ ->
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    card.menuID,
-                                    card.chmenuID
-                                )
-                                   /* ?.let { findNavController().navigate(it) }*/
+                                if (card.menuID > 0 && card.chmenuID > 0 && card.sbChMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        card.menuID, card.chmenuID,card.sbChMenuID
+                                    )
+                                } else if (card.menuID > 0 && card.chmenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        card.menuID, card.chmenuID
+                                    )
+                                } else if (card.menuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        card.menuID
+                                    )
+                                }
                             }
 
                         }
@@ -65,7 +73,7 @@ class WidgetsFragment : Fragment() {
     }
 
     private fun initView() {
-        var controller: EpoxyController? = null
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.recyclerView.apply {
 

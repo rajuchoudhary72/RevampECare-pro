@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">ECareProNew</string>
     <string name="action_settings">Settings</string>
     <!--School/College Code-->
     <string name="help">Help</string>
@@ -583,4 +582,7 @@
     <string name="select_chapter">Select Chapter</string>
     <string name="enter_weightage">Enter Weightage</string>
     <string name="enter_question">Enter Question</string>
+    <string name="marks_manager">Marks Manager</string>
+    <string name="assessment">Assessment</string>
+    <string name="website">Website</string>
 </resources>

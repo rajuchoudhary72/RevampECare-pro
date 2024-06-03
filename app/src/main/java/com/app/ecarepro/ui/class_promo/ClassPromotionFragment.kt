@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassPromotionBinding
 import com.app.ecarepro.model.MyClasseX
@@ -49,7 +50,7 @@ class ClassPromotionFragment : Fragment() {
             spClass.adapter = classAdapter
             btnSubmit.setOnClickListener { submitDetails() }
         }
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -77,24 +78,29 @@ class ClassPromotionFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            Log.d("List", "${it.data.students.size}")
-                            it.data.students.let { list ->
-                                list.forEach { item ->
-                                    studentListArrayList.add(item!!)
-                                }
-                                if (studentListArrayList.isEmpty()) {
-                                    binding.tvNoRecord.visibility = View.VISIBLE
-                                    binding.rvStuAtt.visibility = View.GONE
-                                    binding.btnSubmit.visibility = View.GONE
-                                } else {
-                                    binding.tvNoRecord.visibility = View.GONE
-                                    binding.rvStuAtt.visibility = View.VISIBLE
-                                    binding.btnSubmit.visibility = View.VISIBLE
-                                }
+                            if (it.data.students!=null){
+                                Log.d("List", "${it.data.students.size}")
+                                it.data.students.let { list ->
+                                    list.forEach { item ->
+                                        studentListArrayList.add(item!!)
+                                    }
+                                    if (studentListArrayList.isEmpty()) {
+                                        binding.tvNoRecord.visibility = View.VISIBLE
+                                        binding.rvStuAtt.visibility = View.GONE
+                                        binding.btnSubmit.visibility = View.GONE
+                                    } else {
+                                        binding.tvNoRecord.visibility = View.GONE
+                                        binding.rvStuAtt.visibility = View.VISIBLE
+                                        binding.btnSubmit.visibility = View.VISIBLE
+                                    }
 
-                                mStudentAdapter.notifyDataSetChanged()
+                                    mStudentAdapter.notifyDataSetChanged()
+                                }
+                            }else{
+                                binding.tvNoRecord.visibility = View.VISIBLE
+                                binding.rvStuAtt.visibility = View.GONE
+                                binding.btnSubmit.visibility = View.GONE
                             }
-
 
                         }
 

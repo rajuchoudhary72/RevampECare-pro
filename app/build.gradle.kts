@@ -15,15 +15,23 @@ kapt {
 }
 
 android {
+    signingConfigs {
+        create("beta") {
+            storeFile = file("app/eCareBeta.jks")
+            storePassword = "eCarePro"
+            keyAlias = "ecareProAndroidBeta"
+            keyPassword = "eCarePro"
+        }
+    }
     namespace = "com.app.ecarepro"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.franciscan.ecare_proNew"
+        applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,9 +61,17 @@ android {
     productFlavors {
         create("dev") {
             dimension = "build"
+            resValue("string", "app_name", "e-Care-Dev")
         }
         create("prod") {
             dimension = "build"
+            resValue("string", "app_name", "e-Care")
+        }
+        create("beta") {
+            dimension = "build"
+            applicationIdSuffix = ".beta"
+            resValue("string", "app_name", "e-Care Beta")
+            signingConfig = signingConfigs.getByName("beta")
         }
     }
 

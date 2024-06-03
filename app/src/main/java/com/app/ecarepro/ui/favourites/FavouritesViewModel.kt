@@ -63,17 +63,10 @@ class FavouritesViewModel @Inject constructor(
 
     fun saveFavourites(func: (Boolean, String) -> Unit) {
         viewModelScope.launch {
+            val maxSl: Int = (uiState.value as FavouritesUiState.Success).favourites.maxByOrNull { it.slNo?:0 }?.slNo?:0
             appRepository
-                .updateFavourites(updatedItems.map {
-                    FavouritesUpdateDto(
-                        isSelected = it.isSelected,
-                        slNo = it.slNo,
-                        isModified = true,
-                        sbChMenuID = it.sbChMenuID,
-                        fvtID = it.fvtID,
-                        menuID = it.menuID,
-                        chMenuID = it.chMenuID
-                    )
+                .updateFavourites(updatedItems.mapIndexed { index, favourites ->
+                    favourites.copy(isModified = true, slNo = maxSl.plus(index+1))
                 })
                 .collectLatest { result ->
                     if (result.isSuccess) {
