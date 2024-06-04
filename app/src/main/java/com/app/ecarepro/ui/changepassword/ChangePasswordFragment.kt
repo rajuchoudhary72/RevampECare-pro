@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentChangePasswordBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -41,7 +42,7 @@ class ChangePasswordFragment : Fragment() {
                 (requireActivity() as MainActivity).showLoader(true)
                 changePasswordViewModel.changePassword { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+                    mainActivity().showMessage(message)
                 }
             }
         }

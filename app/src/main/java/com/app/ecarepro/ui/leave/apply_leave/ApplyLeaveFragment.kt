@@ -24,7 +24,8 @@ import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
- import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +85,8 @@ class  ApplyLeaveFragment : Fragment() {
                     binding.tvNumberDays.text=days.toString()
 
 
-                }  else Toast.makeText(requireContext(),"Select To Date", Toast.LENGTH_LONG).show()
+                }  else
+                    mainActivity().showMessage("Select To Date")
             }   }
 
 
@@ -297,26 +299,26 @@ class  ApplyLeaveFragment : Fragment() {
         var validate=true
         if (binding.tvStartDate.text.toString().isEmpty()){
             validate=false
-            Toast.makeText(requireContext(),"Select From Date",Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Select From Date")
         }
         if (binding.tvEndDate.text.toString().isEmpty()){
             validate=false
-            Toast.makeText(requireContext(),"Select To Date",Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Select To Date")
 
         }
         if (selectedLeaveTypeID == 0){
             validate=false
-            Toast.makeText(requireContext(),"Select Leave Type",Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Select Leave Type")
 
         }
         if (binding.textFiledReason.text.toString().isEmpty()){
             validate=false
-            Toast.makeText(requireContext(),"Enter Reason",Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Enter Reason")
 
         }
         if (!binding.cbLeaveTc.isChecked){
             validate=false
-            Toast.makeText(requireContext(),"Please Check Term and Condition",Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Please Check Term and Condition")
 
         }
 

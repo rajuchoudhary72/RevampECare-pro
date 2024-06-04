@@ -29,6 +29,7 @@ import com.app.ecarepro.model.MyClasseTeacherOf
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentRllNo
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -227,7 +228,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
             requestList.add(AssignRollNoBodyItem(d.houseID,d.rollNumber,d.stID))
         }
         assignRollNoViewModel.assignRollNumber(requestList).invokeOnCompletion {
-            Toast.makeText(requireContext(),"Roll Number Assign Successfully",Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Roll Number Assign Successfully")
             menuHost.removeMenuProvider(this)
         }
 

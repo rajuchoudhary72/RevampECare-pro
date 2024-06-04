@@ -32,6 +32,7 @@ import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
@@ -175,17 +176,13 @@ class HomeFragment : Fragment() {
                     (requireActivity() as MainActivity).showLoader(true)
                     mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(message)
                         if (isSuccess) {
                             builder.dismiss()
                         }
                     }
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Please go throw user undertaking and accept it",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    mainActivity().showMessage("Please go throw user undertaking and accept it")
                 }
             }
 
@@ -211,7 +208,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is HomeUiState.Success) {
