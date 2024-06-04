@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="-16dp"
-            android:background="@drawable/bg_round_corner_green"
+            android:background="@drawable/bg_round_corner_green_16"
             app:layout_constraintBottom_toBottomOf="@+id/barrier2"
             app:layout_constraintEnd_toEndOf="@+id/message"
             app:layout_constraintStart_toStartOf="@+id/message"
@@ -61,7 +61,8 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Vanjhali Waja | Angrej | Amrinder Gill | Full Music Video | Releasing on 31st July 2015" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
+            app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent"
             android:id="@+id/image"
             imageUrl="@{image}"
             isVisible="@{image!=null}"

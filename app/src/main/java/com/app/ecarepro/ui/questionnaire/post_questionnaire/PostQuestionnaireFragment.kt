@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentPostQustionnaireBinding
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,7 +56,7 @@ class PostQuestionnaireFragment : Fragment() {
                 imageString, "", imageExt
             )
 
-            Toast.makeText(activity, getString(R.string .successfully), Toast.LENGTH_LONG).show()
+            mainActivity().showMessage(getString(R.string .successfully))
             findNavController().popBackStack()
         }
 

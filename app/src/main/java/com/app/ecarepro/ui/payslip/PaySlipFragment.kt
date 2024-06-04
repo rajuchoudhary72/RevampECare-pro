@@ -21,6 +21,7 @@ import com.app.ecarepro.data.network.model.Year
 import com.app.ecarepro.databinding.FragmentPaySlipBinding
 import com.app.ecarepro.model.MonthlyPaySlip
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
@@ -152,11 +153,7 @@ class PaySlipFragment : Fragment() {
         binding.fbDowload.setOnClickListener {
             val androidDownloader = AndroidDownloader(requireContext())
             androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
-            Toast.makeText(
-                requireContext(),
-                "Download started, check you status bar for more information.",
-                Toast.LENGTH_SHORT
-            ).show()
+            mainActivity().showMessage("Download started, check you status bar for more information.")
         }
 
     }

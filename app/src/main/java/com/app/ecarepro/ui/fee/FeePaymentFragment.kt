@@ -19,6 +19,7 @@ import com.app.ecarepro.databinding.FragmentFeePaymentBinding
 import com.app.ecarepro.databinding.SmsRechargeLogItemBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.fee_report.collection.CollectionFeeReportListAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -90,7 +91,7 @@ class FeePaymentFragment : Fragment() {
                     wvFeePayment.loadUrl( it.feePayemtURL + "?token=" + tokenKey   )
                 }
             }else{
-                Toast.makeText(requireContext(),"Payment Option Disabled",Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Payment Option Disabled")
             }
 
         }

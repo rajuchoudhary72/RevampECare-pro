@@ -38,6 +38,7 @@ import com.app.ecarepro.model.RouteLST
 import com.app.ecarepro.model.StopLST
 import com.app.ecarepro.model.StuLst
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.transport_attendance.adapter.RouterPopUpListAdapter
 import com.app.ecarepro.ui.transport_attendance.adapter.StoppersPopUpListAdapter
 import com.app.ecarepro.ui.transport_attendance.adapter.StudentListToMarkAttAdapter
@@ -96,7 +97,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                 if (routeLSTList.isNotEmpty()){
                     popUpRouter()
                 }else{
-                    Toast.makeText(requireContext(),"No Route Data",Toast.LENGTH_LONG).show()
+                    mainActivity().showMessage("No Route Data")
                 }
 
             }
@@ -104,7 +105,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                 if (stopLSTList.isNotEmpty()){
                     popUpStoppers()
                 }else{
-                    Toast.makeText(requireContext(),"No Stoppers Data",Toast.LENGTH_LONG).show()
+                    mainActivity().showMessage("No Stoppers Data")
                 }
             }
 
@@ -228,15 +229,15 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         }
         var isValidate= true
         if (!routeSelected ){
-            Toast.makeText(requireContext(),"Please Select Route",Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Please Select Route")
             isValidate= false
         }
         if (!stoppersSelected ){
-            Toast.makeText(requireContext(),"Please Select Route",Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Please Select Route")
             isValidate= false
         }
         if (tripType==0 ){
-            Toast.makeText(requireContext(),"Please Select Route",Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Please Select Route")
             isValidate= false
         }
         if (isValidate){
@@ -354,7 +355,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
     override fun onItemClick(t: StuLst, pos: Int, action: Int) {
         if (action==Constant.DROP_CONFORM){
             transportAttendanceViewModel.dropToStudent(t.stID,Constant.currentDate(),true).invokeOnCompletion {
-                Toast.makeText(requireContext(),"Updated Successfully!!!",Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("Updated Successfully!!!")
             }
         }else{
             studentListToMarkAtt[pos].isSelected=true
@@ -459,7 +460,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
             requestList,
             tripType
         ).invokeOnCompletion {
-            Toast.makeText(requireContext(),"Attendance Marked Successfully",Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Attendance Marked Successfully")
         }
 
 

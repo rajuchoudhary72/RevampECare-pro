@@ -18,6 +18,7 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.databinding.FragmentInstitutionCodeBinding
 import com.app.ecarepro.schoolCode
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.searchinstitution.SearchInstitutionFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -90,12 +91,7 @@ class InstitutionCodeFragment : Fragment() {
                 if (it?.errorCode == 0) {
                     navigateToSignFragment(it.schoolCode)
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        it?.message ?: "Something went wrong",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    mainActivity().showMessage(it!!.message.toString())
                 }
             }
         }

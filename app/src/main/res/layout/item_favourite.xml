@@ -51,6 +51,7 @@
             <ImageView
                 android:id="@+id/image"
                 imageUrl="@{icon}"
+                placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:tint="@color/grey_60"
@@ -59,7 +60,7 @@
                 app:layout_constraintStart_toEndOf="@+id/img_drag"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription"
-                tools:src="@drawable/ic_assignment" />
+                tools:src="@drawable/img_school_placeholder" />
 
             <TextView
                 android:id="@+id/text_title"

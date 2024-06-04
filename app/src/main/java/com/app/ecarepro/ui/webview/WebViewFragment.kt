@@ -22,6 +22,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.widget.Toast
+import com.app.ecarepro.ui.mainActivity
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
@@ -77,8 +78,7 @@ class WebViewFragment : Fragment() {
                 )
                 val dm =   requireActivity().getSystemService(DOWNLOAD_SERVICE) as DownloadManager
                 dm.enqueue(request)
-                Toast.makeText(requireActivity(), "Downloading...", Toast.LENGTH_SHORT)
-                    .show()
+                mainActivity().showMessage("Downloading...")
             }
         }
         binding.webView.webViewClient = object : WebViewClient() {

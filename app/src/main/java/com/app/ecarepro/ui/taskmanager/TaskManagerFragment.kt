@@ -16,6 +16,7 @@ import com.app.ecarepro.model.Task
 import com.app.ecarepro.task
 import com.app.ecarepro.taskSummary
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.taskmanager.add.AddTaskBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
@@ -59,7 +60,7 @@ class TaskManagerFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is TaskManagerUiState.Success && uiState.tasksDto != null) {
@@ -235,7 +236,8 @@ class TaskManagerFragment : Fragment() {
                 (requireActivity() as MainActivity).showLoader(true)
                 mViewModel.updateTask(task, items[which].id) { _, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    mainActivity().showMessage(message?:"")
+
                 }
                 dialog.dismiss()
             }

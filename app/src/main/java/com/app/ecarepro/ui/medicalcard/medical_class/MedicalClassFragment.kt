@@ -19,6 +19,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.MedicalClassBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.medicalcard.MedicineCardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -109,7 +110,7 @@ class MedicalClassFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(it.message?:"")
                     }
 
                     is NetworkResult.Success -> {
