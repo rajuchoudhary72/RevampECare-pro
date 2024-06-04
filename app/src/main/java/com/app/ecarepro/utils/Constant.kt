@@ -88,7 +88,7 @@ class Constant {
 
         const val FILTER_NAME = 0
         const val FILTER_ROLL_NO = 1
-        const val FILTER_ADMISSION_NO = 2
+        const val FILTER_ADMISSION_NO = 1
 
 
 

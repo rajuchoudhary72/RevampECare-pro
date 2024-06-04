@@ -1,25 +1,37 @@
 package com.app.ecarepro.ui.appointment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.ecarepro.model.Appointment
 import com.app.ecarepro.databinding.FragmentAppointmentSubBinding
+import com.app.ecarepro.model.Appointment
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.SharedViewModel
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class AppointmentSubFragment(private val appointments: List<Appointment>, private val appType: Int) : Fragment(), ItemListener<Appointment> {
+class AppointmentSubFragment(
+    private val appointments: List<Appointment>,
+    private val appType: Int,
+    private val all: Boolean,
+    private val from: String,
+    private val to: String,
+    private val appointType: Int
+) : Fragment(), ItemListener<Appointment> {
 
     private lateinit var binding: FragmentAppointmentSubBinding
     private val appointmentSubViewModel: AppointmentSubViewModel by viewModels()
+    private val sharedViewModelInstance: SharedViewModel by viewModels()
+    private val appointmentViewModel: AppointmentViewModel by viewModels()
+
+
 
 
     override fun onCreateView(
@@ -71,14 +83,48 @@ class AppointmentSubFragment(private val appointments: List<Appointment>, privat
         when(pos){
             Constant.CHECK_IN -> {
                 appointmentSubViewModel.appointmentAction(Constant.CHECK_IN,t.appId)
+
+                getAllAppointment()
             }
             Constant.CHECK_OUT-> {
                 appointmentSubViewModel.appointmentAction(Constant.CHECK_OUT,t.appId)
+                getAllAppointment()
             }
             Constant.APPROVE ->{
                 appointmentSubViewModel.approveAppointment( t.appId.toString() )
+                getAllAppointment()
             }
 
         }
     }
+
+    private fun getAllAppointment(){
+        when (appointType) {
+            Constant.TODAY -> {
+                appointmentViewModel.appointmentOverview(
+                    Constant.currentDate(),
+                    Constant.currentDate(),
+                    all
+                )
+            }
+
+            Constant.UP_COMING -> {
+                appointmentViewModel.appointmentOverview(
+                    Constant.currentDate(),
+                    "",
+                    all
+                )
+            }
+
+            Constant.DATE_RANGE -> {
+                appointmentViewModel.appointmentOverview(
+                    from,
+                    to,
+                    all
+                )
+            }
+        }
+    }
+
+
 }

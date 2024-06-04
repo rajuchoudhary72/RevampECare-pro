@@ -30,8 +30,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:text="Name"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:textColor="@color/grey_60"
+                    android:text="@string/name"
 
                     />
 
@@ -40,7 +41,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp"
+                    android:textColor="@color/grey_60"
+                    android:layout_marginStart="5dp"
                     android:text="@{stuData.studentName}"
                     />
 
@@ -55,17 +57,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu_medium"
+                    android:fontFamily="@font/ubuntu_regular"
                     android:text="@string/submitted_on_date"
-
-                    />
+                    android:textColor="@color/grey_60"
+                     />
 
                 <TextView
                     android:id="@+id/tvsubOn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp"
+                    android:textColor="@color/grey_60"
+                    android:layout_marginStart="5dp"
                     android:text="@{stuData.submittedOn}"
                     />
 
@@ -79,23 +82,30 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu_medium"
+                    android:fontFamily="@font/ubuntu_regular"
                     android:text="@string/submitted_by"
-
-                    />
+                    android:textColor="@color/grey_60"
+                     />
 
                 <TextView
                     android:id="@+id/tvSubmittedBy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp"
+                    android:textColor="@color/grey_60"
+                    android:layout_marginStart="5dp"
 
                     />
 
             </LinearLayout>
 
         </LinearLayout>
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
 
         <LinearLayout
             android:id="@+id/llEditDelete"
@@ -103,7 +113,7 @@
             android:layout_height="wrap_content"
             android:visibility="visible"
 
-            android:baselineAligned="false">
+            >
 
             <LinearLayout
                 android:id="@+id/llView"
@@ -111,8 +121,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:background="@color/brand_color"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="visible"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -121,10 +132,19 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="View"
-                    android:textColor="@color/white" />
+                    android:text="@string/view"
+                    android:textColor="@color/brand_color"
+                    app:drawableTint="@color/brand_color"
+                     />
 
             </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+
+
 
             <LinearLayout
                 android:id="@+id/llDownload"
@@ -132,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:background="@color/brand_color"
                 android:gravity="center">
 
                 <TextView
@@ -142,38 +161,17 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Downlaod"
-                    android:textColor="@color/white"
-                    app:drawableTint="@color/white" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llDelete"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:background="@color/brand_color"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="Delete"
-                    android:textColor="@color/white"
-                    app:drawableLeftCompat="@drawable/delete_white" />
+                    android:text="@string/download"
+                    android:textColor="@color/brand_color"
+                     app:drawableTint="@color/brand_color"
+                    />
             </LinearLayout>
 
         </LinearLayout>
 
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp" />
+            android:layout_height="2dp" />
 
 
     </LinearLayout>

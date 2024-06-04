@@ -90,7 +90,7 @@ class BirthdayFragment : Fragment() {
                     monthSelected=monthModelArrayList[pos].monthID
                     rptType=2
                     birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
-
+                    binding.tvDate.text=getString(R.string.select_date)
                 }
 
 
@@ -155,8 +155,8 @@ class BirthdayFragment : Fragment() {
     private fun bindMonthArray() {
         monthModelArrayList = ArrayList<MonthModel>()
 
-        val monthMode = MonthModel(0, "Select Month")
-        monthModelArrayList.add(monthMode)
+       /* val monthMode = MonthModel(0, "Select Month")
+        monthModelArrayList.add(monthMode)*/
 
         val monthModel1 = MonthModel(1, "January")
         monthModelArrayList.add(monthModel1)
