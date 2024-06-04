@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentAddThoughtsBlankBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.thought.ThoughtsViewModel
 import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.ResponseStateCreateTou
@@ -73,12 +74,12 @@ class AddThoughtsBlankFragment : Fragment() {
                     }
                     is ResponseStateCreateTou.Failure->{
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(activity,it.msg.toString(),Toast.LENGTH_LONG).show()
+                        mainActivity().showMessage(it.msg.toString())
                         Log.d("main", "Error"+it.msg.toString())
                     }
                     is ResponseStateCreateTou.Success->{
                         (requireActivity() as MainActivity).showLoader(false)
-                        Toast.makeText(activity,"Successfully!!!",Toast.LENGTH_LONG).show()
+                        mainActivity().showMessage("Successfully!!!")
                         findNavController().popBackStack()
                     }
 

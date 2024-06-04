@@ -21,6 +21,7 @@ import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.sentMessageCard
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.MessageViewModel
 import com.app.ecarepro.ui.message.chat.MessageType
 import com.app.ecarepro.utils.PaginationScrollListener
@@ -170,7 +171,7 @@ class SentMessageFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is SentMessageUiState.Success || uiState == SentMessageUiState.EmptyInbox) {

@@ -33,6 +33,7 @@ import com.app.ecarepro.taskDetailHistoryItem
 import com.app.ecarepro.taskDetails
 import com.app.ecarepro.taskDetailsDate
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.taskmanager.add.selectDate
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.FileAccess
@@ -65,7 +66,7 @@ class TaskDetailsFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(true)
         mViewModel.updateAttachment(imageString, imageExt){ message:String ->
             (requireActivity() as MainActivity).showLoader(false)
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(message?:"")
         }
     }
 
@@ -110,7 +111,7 @@ class TaskDetailsFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is TaskDetailsUiState.Success && uiState.taskDetails != null) {
@@ -131,8 +132,7 @@ class TaskDetailsFragment : Fragment() {
                                     it
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
-                                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
-                                        .show()
+                                    mainActivity().showMessage(message?:"")
                                 }
                             }
                         } else if (v.id == R.id.description) {
@@ -147,8 +147,7 @@ class TaskDetailsFragment : Fragment() {
                                     it
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
-                                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
-                                        .show()
+                                    mainActivity().showMessage(message?:"")
 
                                 }
                             }
@@ -171,8 +170,7 @@ class TaskDetailsFragment : Fragment() {
                                 it
                             ) { isSuccess, message ->
                                 (requireActivity() as MainActivity).showLoader(false)
-                                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
-                                    .show()
+                                mainActivity().showMessage(message?:"")
                             }
                         }
                     }
@@ -185,8 +183,7 @@ class TaskDetailsFragment : Fragment() {
                                 it
                             ) { isSuccess, message ->
                                 (requireActivity() as MainActivity).showLoader(false)
-                                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
-                                    .show()
+                                mainActivity().showMessage(message?:"")
                             }
                         }
                     }

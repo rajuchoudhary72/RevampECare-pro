@@ -22,6 +22,7 @@ import com.app.ecarepro.databinding.FragmentTransportAttendanceReportBinding
 import com.app.ecarepro.model.RouteLST
 import com.app.ecarepro.model.StopLST
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.transport_attendance.adapter.RouterPopUpListAdapter
 import com.app.ecarepro.ui.transport_attendance.adapter.StoppersPopUpListAdapter
 import com.app.ecarepro.utils.Constant
@@ -73,7 +74,7 @@ class TransportAttendanceReportFragment : Fragment() {
                 if (routeLSTList.isNotEmpty()) {
                     popUpRouter()
                 } else {
-                    Toast.makeText(requireContext(), "No Route Data", Toast.LENGTH_LONG).show()
+                    mainActivity().showMessage("No Route Data")
                 }
 
             }
@@ -81,7 +82,7 @@ class TransportAttendanceReportFragment : Fragment() {
                 if (stopLSTList.isNotEmpty()) {
                     popUpStoppers()
                 } else {
-                    Toast.makeText(requireContext(), "No Stoppers Data", Toast.LENGTH_LONG).show()
+                    mainActivity().showMessage("No Stoppers Data")
                 }
             }
 
@@ -186,15 +187,15 @@ class TransportAttendanceReportFragment : Fragment() {
         }
         var isValidate = true
         if (!routeSelected) {
-            Toast.makeText(requireContext(), "Please Select Route", Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Please Select Route")
             isValidate = false
         }
         if (!stoppersSelected) {
-            Toast.makeText(requireContext(), "Please Select Route", Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Please Select Route")
             isValidate = false
         }
         if (binding. tvSelectDate.text.toString() == getString(R.string.select_date)) {
-            Toast.makeText(requireContext(), "Please Select Date", Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage("Please Select Date")
             isValidate = false
         }
 

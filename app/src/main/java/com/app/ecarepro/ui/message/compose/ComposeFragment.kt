@@ -41,6 +41,7 @@ import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.databinding.FragmentComposeBinding
 import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
@@ -116,7 +117,7 @@ class ComposeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is ComposeUiState.Success) {
@@ -219,7 +220,7 @@ class ComposeFragment : Fragment() {
             (requireActivity() as MainActivity).showLoader(true)
             composeViewModel.sendMessage { isSuccess, message ->
                 (requireActivity() as MainActivity).showLoader(false)
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage(message?:"")
                 if (isSuccess) {
                     findNavController().popBackStack()
                 }
@@ -283,7 +284,7 @@ class ComposeFragment : Fragment() {
             override fun onReadyForRecord() {}
 
             override fun onRecordFailed(errorMessage: String?) {
-                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage(errorMessage?:"")
             }
         }).show(childFragmentManager, "VOICE")
     }
@@ -427,14 +428,13 @@ class ComposeFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkCameraPermissions()
             } else {
-                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT)
-                    .show()
+                mainActivity().showMessage("Camera permission denied")
             }
         } else if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationFetch()
             } else {
-                Toast.makeText(requireContext(), "GPS permission denied", Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage("GPS permission denied")
             }
         }
     }

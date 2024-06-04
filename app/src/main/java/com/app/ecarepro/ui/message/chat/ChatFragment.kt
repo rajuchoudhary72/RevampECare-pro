@@ -19,6 +19,7 @@ import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.receiverChatMessage
 import com.app.ecarepro.senderChatMessage
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.FileClickListener
 import com.rubensousa.decorator.LinearMarginDecoration
@@ -73,7 +74,7 @@ class ChatFragment : Fragment() {
 
         binding.btnReplyMessage.setOnClickListener {
             chatViewModel.replyMessage { _, message ->
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                mainActivity().showMessage(message)
             }
         }
 
@@ -100,7 +101,7 @@ class ChatFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is ChatUiState.Success || uiState == ChatUiState.EmptyInbox) {
