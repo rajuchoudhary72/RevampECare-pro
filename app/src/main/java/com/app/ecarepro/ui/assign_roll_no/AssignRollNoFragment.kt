@@ -37,16 +37,16 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AssignRollNoFragment : Fragment(), MenuProvider {
 
+    private var studentListArrayList = mutableListOf<StudentRllNo>()
     private lateinit var menuHost: MenuHost
     private var selectedFilterType: Int= Constant.FILTER_NAME
     private lateinit var selectedClassData: MyClasseTeacherOf
     private lateinit var binding :FragmentAssignRollNoBinding
     private val assignRollNoViewModel: AssignRollNoViewModel by viewModels()
     private lateinit var mMyClass: List<MyClasseTeacherOf>
-    private var studentListArrayList = mutableListOf<StudentRllNo>()
 
     private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
-    private val nameFilter = listOf("Name", "Roll No", "Admission" )
+    private val nameFilter = listOf("Name",  "Admission" )
 
 
 
@@ -80,7 +80,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
         binding.autoCompleteClass.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->
                 selectedClassData=mMyClass[pos]
-                getStudentListToAssignRollNo()
+                 getStudentListToAssignRollNo()
             }
         binding.autoCompleteFilter.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->
@@ -88,15 +88,13 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                     0 ->{
                        selectedFilterType=Constant.FILTER_NAME
                     }
+
                     1 ->{
-                        selectedFilterType=Constant.FILTER_ROLL_NO
-                    }
-                    2 ->{
                         selectedFilterType=Constant.FILTER_ADMISSION_NO
                     }
                 }
                 if (selectedClassData!=null){
-                    getStudentListToAssignRollNo()
+                     getStudentListToAssignRollNo()
                 }
             }
 
@@ -151,8 +149,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
    }
 
     private fun getStudentListToAssignRollNo( ){
-        studentListArrayList.clear()
-        lifecycleScope.launch {
+         lifecycleScope.launch {
             assignRollNoViewModel.assignRollNoStateFlow.collectLatest {
                 when (it) {
 
@@ -179,10 +176,12 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                                 binding.tvNoData.isVisible=false
 
 
-                                studentListArrayList.addAll(it.data.students)
+                                studentListArrayList= it.data.students.toMutableList()
 
-                                val assignRollNoListAdapter = AssignRollNoListAdapter( studentListArrayList ,
+                                val assignRollNoListAdapter = AssignRollNoListAdapter(
+                                    it.data.students.toMutableList(),
                                     this@AssignRollNoFragment)
+
 
                                 binding.recyclerAssignRollno.apply {
                                     setHasFixedSize(true)

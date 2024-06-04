@@ -99,6 +99,7 @@ import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkQuestionBank
 import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkRouteList
 import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
@@ -111,9 +112,13 @@ import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
+import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
@@ -797,6 +802,35 @@ interface UserService {
         @Query("Date") date: String,
         @Query("Query") query: String
     ): NetworkMediaGallery
+
+    @GET("QuestionBank/MyQuestionBank")
+    suspend fun getMyQuestionBank(  ): NetworkQuestionBank
+
+    @GET("QuestionBank/Create")
+    suspend fun getQuestionBankCreate(  ): NetworkQuestionBankCreate
+
+    @GET("QuestionBank/GetSubject")
+    suspend fun getQuestionBankSubject(
+        @Query("ClassID") classID: Int
+    ): NetworkQuestionBankSubject
+
+    @GET("QuestionBank/GetChapters")
+    suspend fun getQuestionBankChapters(
+        @Query("ClassID") classID: Int,
+        @Query("SubID") subID: Int
+    ): NetworkQuestionBankChapters
+
+    @POST("QuestionBank/PostQuestion")
+    suspend fun submitPostQuestion(
+        @Body model: NetworkPostQuestionBank
+    ): CommonResponse
+
+
+    @GET("QuestionBank/DeleteQuestion")
+    suspend fun getDeleteQuestion(
+        @Query("ID") id: String
+    ): CommonResponse
+
 
 
 

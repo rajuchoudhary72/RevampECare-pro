@@ -2,6 +2,7 @@ package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
 import retrofit2.http.Body
@@ -32,6 +33,6 @@ interface AppService {
 
     @POST("App/UpdateFavoriteMenus")
     suspend fun updateFavourites(
-        @Body request: List<FavouritesUpdateDto>
+        @Body request: List<Favourites>
     ): CommonResponse
 }

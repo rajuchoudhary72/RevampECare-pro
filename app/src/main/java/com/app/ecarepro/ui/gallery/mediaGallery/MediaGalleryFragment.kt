@@ -185,7 +185,7 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
         mediaGalleryViewModel.getMediaGallery(
             pageIndex,
             queryType,
-            yearList[yearPosition].toInt(),
+            0,
             binding.tvPubDate.text.toString(),
             binding.edSearch.text.toString())
 
@@ -263,9 +263,11 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
         relOk.setOnClickListener {
 
             if (isSearchBySelected) {
+                pageIndex=1
                 binding.tvSearchBy.text = searchByList[searchByPostition]
                 queryType=searchByPostition
                  setupSearchByDropDown(searchByPostition)
+
                 builder.dismiss()
             }
 
@@ -312,6 +314,7 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
 
             if (isYearSelected) {
                 binding.tvYear.text = yearList[yearPosition]
+                pageIndex=1
                 mediaGalleryViewModel.getMediaGallery(
                     pageIndex,
                     queryType,

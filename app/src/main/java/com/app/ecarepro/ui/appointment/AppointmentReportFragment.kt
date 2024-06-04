@@ -2,12 +2,13 @@ package com.app.ecarepro.ui.appointment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAppointmentReportBinding
@@ -15,6 +16,7 @@ import com.app.ecarepro.model.Appointment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.SharedViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,11 +34,17 @@ class AppointmentReportFragment : Fragment() {
     private lateinit var binding: FragmentAppointmentReportBinding
     private val appointmentViewModel: AppointmentViewModel by viewModels()
     private var all = true
-    private var appointType = Constant.TODAY
+    private var  appointType = Constant.TODAY
     private val dateFrom: Calendar = Calendar.getInstance()
 
     private val dateTo: Calendar = Calendar.getInstance()
     private val arrayList = ArrayList<Appointment>()
+
+    var from = ""
+    var to = ""
+
+
+    private val sharedViewModelInstance: SharedViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -46,6 +54,7 @@ class AppointmentReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAppointmentReportBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -89,6 +98,9 @@ class AppointmentReportFragment : Fragment() {
 
 
         }
+
+
+
     }
 
     private fun setUpPager() {
@@ -97,9 +109,24 @@ class AppointmentReportFragment : Fragment() {
 
 
 
-        fragmentList.add(AppointmentSubFragment(arrayList, Constant.APPOINTMENT_APPROVE))
-        fragmentList.add(AppointmentSubFragment(arrayList, Constant.APPOINTMENT_PENDING))
-        fragmentList.add(AppointmentSubFragment(arrayList, Constant.APPOINTMENT_REJECT))
+        fragmentList.add(AppointmentSubFragment(
+            arrayList, Constant.APPOINTMENT_APPROVE, all,
+            "",
+            "",
+            appointType
+        ))
+        fragmentList.add(AppointmentSubFragment(
+            arrayList, Constant.APPOINTMENT_PENDING, all,
+            "",
+            "",
+            appointType
+        ))
+        fragmentList.add(AppointmentSubFragment(
+            arrayList, Constant.APPOINTMENT_REJECT, all,
+            "",
+            "",
+            appointType
+        ))
 
 
         val viewPagerAdapter = ViewPagerAdapter(
@@ -154,8 +181,8 @@ class AppointmentReportFragment : Fragment() {
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
         val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         dateFormat.format(Date(dateFrom.timeInMillis))
-        val from = dateFormat.format(Date(dateFrom.timeInMillis))
-        val to = dateFormat.format(Date(dateTo.timeInMillis))
+          from = dateFormat.format(Date(dateFrom.timeInMillis))
+          to = dateFormat.format(Date(dateTo.timeInMillis))
 
         binding.apply {
             dateFrom.text = from
@@ -167,7 +194,7 @@ class AppointmentReportFragment : Fragment() {
 
     }
 
-    private fun getAppointments() {
+    fun getAppointments() {
         lifecycleScope.launch {
             appointmentViewModel.appointmentsStateFlow.collectLatest {
 
@@ -193,9 +220,33 @@ class AppointmentReportFragment : Fragment() {
 
 
 
-                                fragmentList.add(AppointmentSubFragment(it.data.appointments, Constant.APPOINTMENT_APPROVE))
-                                fragmentList.add(AppointmentSubFragment(it.data.appointments, Constant.APPOINTMENT_PENDING))
-                                fragmentList.add(AppointmentSubFragment(it.data.appointments, Constant.APPOINTMENT_REJECT))
+                                fragmentList.add(
+                                    AppointmentSubFragment(
+                                        it.data.appointments,
+                                        Constant.APPOINTMENT_APPROVE,
+                                        all,
+                                        from, to,
+                                        appointType
+                                    )
+                                )
+                                fragmentList.add(
+                                    AppointmentSubFragment(
+                                        it.data.appointments,
+                                        Constant.APPOINTMENT_PENDING,
+                                        all,
+                                        from, to,
+                                        appointType
+                                    )
+                                )
+                                fragmentList.add(
+                                    AppointmentSubFragment(
+                                        it.data.appointments,
+                                        Constant.APPOINTMENT_REJECT,
+                                        all,
+                                        from, to,
+                                        appointType
+                                    )
+                                )
 
 
                                 val viewPagerAdapter = ViewPagerAdapter(
@@ -246,5 +297,6 @@ class AppointmentReportFragment : Fragment() {
 
 
     }
+
 
 }

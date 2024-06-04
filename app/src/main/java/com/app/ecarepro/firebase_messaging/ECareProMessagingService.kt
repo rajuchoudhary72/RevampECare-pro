@@ -1,9 +1,11 @@
 package com.app.ecarepro.firebase_messaging
 
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings.Secure
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
 import com.google.firebase.ktx.Firebase
@@ -14,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -22,17 +25,6 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     @Inject
     lateinit var appRepository: AppRepository
-
-    override fun onCreate() {
-        super.onCreate()
-        Firebase.messaging.token
-            .addOnSuccessListener {
-                registerToken(it)
-            }
-            .addOnFailureListener {
-                Log.e("FCM", it.message ?: "")
-            }
-    }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
@@ -46,8 +38,12 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun registerToken(token: String) {
         GlobalScope.launch {
+            val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+            val wInfo = wifiManager.connectionInfo
+            val macAddress = wInfo.macAddress
             appRepository
                 .registerDevice(
                     RegisterDevice(
@@ -57,13 +53,12 @@ class ECareProMessagingService : FirebaseMessagingService() {
                         deviceType = 1,
                         imeI1 = (application
                             .getSystemService(TELEPHONY_SERVICE) as TelephonyManager).primaryImei,
-                        imeI2 = (application
-                            .getSystemService(TELEPHONY_SERVICE) as TelephonyManager).imei,
-                        deviceID = Secure.getString(application.contentResolver, Secure.ANDROID_ID)
+                        imeI2 = macAddress,
+                        deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
                     )
                 )
                 .collectLatest {
-
+                    println(it)
                 }
         }
     }

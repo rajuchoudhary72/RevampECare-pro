@@ -48,6 +48,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
     ): View? {
         binding = FragmentPhotoAlbumDTLBinding.inflate(inflater, container, false)
         photoAlbumId = requireArguments().getString(Constant.ID).toString()
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         photoAlbumAdapter = PhotoAlbumDTLAdapter(this@PhotoAlbumDTLFragment)
         binding.rvAlbum.apply {
             setHasFixedSize(true)
@@ -164,7 +165,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     override fun onItemClick(t: Photo, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.action_videoAlbumDTLFragment_to_photoSliderFragment,
+        findNavController().navigate(R.id.action_photoAlbumDTLFragment_to_photoSliderFragment ,
             Bundle().apply {
                 putString(Constant.ID, t.id)
                 putString(Constant.URL_ARGUMENT, t.photoPath)

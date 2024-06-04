@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">ECareProNew</string>
     <string name="action_settings">Settings</string>
     <!--School/College Code-->
     <string name="help">Help</string>
@@ -28,7 +27,7 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title">Title</string>
+    <string name="title">Title : </string>
     <string name="notice">Notice</string>
     <string name="circular">Circular</string>
     <string name="payslip">PaySlip</string>
@@ -128,6 +127,8 @@
     <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
     <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
     <string name="select_infraction_category">Select Infraction Category</string>
+    <string name="select_que_type">Select Question Type</string>
+
     <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
     <string name="select_apprec_category">Select Appreciation Category</string>
     <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
@@ -160,8 +161,8 @@
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="recipient_s">Recipient(s)</string>
-    <string name="assigned_on">Assigned On:</string>
-    <string name="to_be_submitted_on">To Be Submitted On:</string>
+    <string name="assigned_on">Assigned on:</string>
+    <string name="to_be_submitted_on">To be submitted on:</string>
     <string name="space" />
     <string name="delete">Delete</string>
     <string name="subject">"Subject: "</string>
@@ -190,7 +191,7 @@
     <string name="create_assignment">Create Assignment</string>
     <string name="update">Update</string>
     <string name="select_year">Select Year</string>
-    <string name="select_month">Select Month</string>
+    <string name="select_month">Month</string>
     <string name="peroid">Peroid</string>
     <string name="select_date">Select Date</string>
     <string name="student">Student</string>
@@ -570,4 +571,19 @@
     <string name="select_publish_date">Select Publish Date</string>
     <string name="enter_headline">Enter Headline</string>
     <string name="description">Description :</string>
+    <string name="weightage">Weightage:</string>
+    <string name="created_on">Created On:</string>
+    <string name="question">Question:</string>
+    <string name="question_paper">Question Paper:</string>
+    <string name="que_type">Que Type:</string>
+    <string name="chapter">Chapter:</string>
+    <string name="add_question_bank">Add Question Bank</string>
+    <string name="question_type">Question Type</string>
+    <string name="select_chapter">Select Chapter</string>
+    <string name="enter_weightage">Enter Weightage</string>
+    <string name="enter_question">Enter Question</string>
+    <string name="marks_manager">Marks Manager</string>
+    <string name="assessment">Assessment</string>
+    <string name="website">Website</string>
+    <string name="select_academic_year">Select Academic Year</string>
 </resources>

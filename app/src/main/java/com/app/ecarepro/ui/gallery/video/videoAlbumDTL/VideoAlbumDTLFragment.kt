@@ -92,7 +92,13 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
 
                         if (it.data!=null){
 
+
+
                             if (it.data.videos!=null){
+
+                                if (pageIndex==1){
+                                    albumDTLAdapter.clearData()
+                                }
 
                                 binding.rvAlbum.isVisible=true
                                 binding.tvNoAlbum.isVisible=false
@@ -169,6 +175,7 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
             Bundle().apply {
                 putString(Constant.ID, t.id)
                 putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.url))
+                putString(Constant.FULL_URL_ARGUMENT, t.url)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_VIDEO)
                 putBoolean("isLiked", t.isLike)
                 putBoolean("isFav", t.isFavourite)

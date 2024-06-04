@@ -193,9 +193,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             downloadFile(viewAssignmentData!!.file)
         }
 
-        binding.fbAdd.setOnClickListener {
-            findNavController().navigate(R.id.postAssignmentFragment)
-        }
+
 
     }
 
@@ -211,13 +209,17 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     }
 
     override fun onItemClick(t: AssignSubmitStudent, pos: Int, boolean: Boolean) {
-         if (pos==1){
-             openFile(t.asgFile)
-         }else if (pos==2){
-             downloadFile(t.asgFile)
-         }else if (pos==3){
-             dateSelctedPoPUp(t)
-         }
+        when (pos) {
+            1 -> {
+                openFile(t.asgFile)
+            }
+            2 -> {
+                downloadFile(t.asgFile)
+            }
+            3 -> {
+                dateSelctedPoPUp(t)
+            }
+        }
     }
 
 

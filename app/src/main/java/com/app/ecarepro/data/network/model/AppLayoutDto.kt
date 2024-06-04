@@ -36,7 +36,9 @@ data class Menu(
     @SerializedName("menuID")
     val menuID: Int,
     @SerializedName("chMenuID")
-    val chMenuID: Int?,
+    val chMenuID: Int,
+    @SerializedName("sbChMenuID")
+    val sbChMenuID: Int,
     @SerializedName("slNo")
     val slNo: Int,
     @SerializedName("title")
@@ -63,6 +65,8 @@ data class ChildMenu(
     val chMenuID: Int,
     @SerializedName("childMenus")
     val childMenus: List<ChildMenu>?,
+    @SerializedName("sbChMenuID")
+    val sbChMenuID: Int,
     @SerializedName("icon")
     val icon: String?,
     @SerializedName("menuID")

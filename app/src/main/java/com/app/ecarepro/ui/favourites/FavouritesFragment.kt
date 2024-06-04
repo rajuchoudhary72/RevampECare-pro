@@ -58,8 +58,8 @@ class FavouritesFragment : Fragment() {
             binding.recyclerView.withModels {
                 uiState.favourites.forEach {
                     favourite {
-                        id(it.menuID)
-                        icon(it.getImageUrl())
+                        id(it.menuID, it.chMenuID, it.sbChMenuID)
+                        icon(it.icon)
                         title(it.title)
                         isChecked(it.isSelected)
                         clickListener { _ ->

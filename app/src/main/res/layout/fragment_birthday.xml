@@ -22,7 +22,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="All Notice"
+            app:title="Birthday Report"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -165,6 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_marginHorizontal="5dp"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 tools:listitem="@layout/birthday_list_item"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -180,7 +181,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:visibility="gone"
-                android:text="@string/no_notice_available"
+                android:text="@string/no_data_found"
                 android:textSize="16sp"
 
                 />

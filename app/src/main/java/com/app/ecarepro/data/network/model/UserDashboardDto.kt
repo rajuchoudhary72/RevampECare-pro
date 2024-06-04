@@ -142,7 +142,9 @@ data class Card(
     @SerializedName("menuID")
     val menuID: Int,
     @SerializedName("chmenuID")
-    val chmenuID: Int
+    val chmenuID: Int,
+    @SerializedName("sbChMenuID")
+    val sbChMenuID: Int
 ) : Serializable {
     fun getIconUrl() = icon
 }

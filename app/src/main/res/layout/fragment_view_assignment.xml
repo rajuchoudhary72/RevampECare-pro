@@ -35,7 +35,7 @@
             android:theme="@style/MyThemeOverlay_Toolbar"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:title="View Assignment"
+            app:title="Assignment Details"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />
@@ -59,7 +59,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                      android:text="@string/subject"
-                    android:textSize="12dp"
 
                     />
 
@@ -69,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
                      android:textColor="@color/grey_40"
+                    android:layout_marginStart="5dp"
                      />
 
             </LinearLayout>
@@ -82,7 +82,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                      android:text="@string/title"
-                    android:textSize="12sp"
 
                     />
 
@@ -91,8 +90,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp"
-                    android:textColor="@color/grey_40"
+                     android:textColor="@color/grey_40"
+                    android:layout_marginStart="5dp"
                     />
 
             </LinearLayout>
@@ -123,15 +122,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                      android:text="@string/assigned_on"
-                    android:textSize="12sp"
-                    />
+                     />
 
                 <TextView
                     android:id="@+id/tvAssignmentDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
                     android:textColor="@color/grey_40"
                     />
 
@@ -146,7 +144,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                      android:text="@string/to_be_submitted_on"
-                    android:textSize="12sp"
 
                     />
 
@@ -155,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
                     android:textColor="@color/grey_40"
                     />
 
@@ -163,13 +160,19 @@
 
         </LinearLayout>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            />
+
+
         <LinearLayout
             android:id="@+id/llEditDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
 
-            android:baselineAligned="false">
+            >
 
             <LinearLayout
                 android:id="@+id/llView"
@@ -177,8 +180,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:background="@color/brand_color"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="visible"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -187,11 +191,19 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="View"
-                    android:textColor="@color/white"
+                    android:text="@string/view"
+                    android:textColor="@color/brand_color"
+                    app:drawableTint="@color/brand_color"
                     app:drawableLeftCompat="@drawable/view_white" />
 
             </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+
+
 
             <LinearLayout
                 android:id="@+id/llDownload"
@@ -199,7 +211,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:background="@color/brand_color"
                 android:gravity="center">
 
                 <TextView
@@ -209,35 +220,20 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Downlaod"
-                    android:textColor="@color/white"
+                    android:text="@string/download"
+                    android:textColor="@color/brand_color"
                     app:drawableLeftCompat="@drawable/download_24px"
-                    app:drawableTint="@color/white" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llDelete"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:background="@color/brand_color"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="Delete"
-                    android:textColor="@color/white"
-                    app:drawableLeftCompat="@drawable/delete_white" />
+                    app:drawableTint="@color/brand_color"
+                    />
             </LinearLayout>
 
         </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            />
+
 
 
         <LinearLayout
@@ -247,7 +243,7 @@
             android:background="@color/md_theme_light_primary"
             android:gravity="center"
             android:orientation="vertical"
-            android:layout_marginTop="25dp">
+             android:layout_marginTop="25dp">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/toggleButton_type_noti"
@@ -257,10 +253,11 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 app:checkedButton="@id/btn_submit"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="5dp"
-                app:selectionRequired="true"
-                app:singleSelection="true">
+                 app:selectionRequired="true"
+                app:singleSelection="true"
+                android:paddingHorizontal="3dp"
+
+                >
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_submit"
@@ -304,9 +301,6 @@
             android:layout_margin="10dp"
             />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_submit_list"
@@ -320,18 +314,6 @@
     </LinearLayout>
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="15dp"
-            android:text="@string/create_assignment"
-            android:textColor="@android:color/white"
-            android:src="@drawable/rounded_add_24"
-
-            />
 
     </RelativeLayout>
 </layout>
