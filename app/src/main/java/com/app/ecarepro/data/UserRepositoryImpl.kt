@@ -100,6 +100,7 @@ import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkQuestionBank
 import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkRouteList
 import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
@@ -115,10 +116,14 @@ import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import javax.inject.Inject
@@ -997,6 +1002,33 @@ class UserRepositoryImpl @Inject constructor(
         query: String
     ): NetworkMediaGallery {
         return userService.getMediaGallery(pg, queryType, year, date, query)
+    }
+
+    override suspend fun getMyQuestionBank(): NetworkQuestionBank {
+        return userService.getMyQuestionBank()
+    }
+
+    override suspend fun getQuestionBankCreate(): NetworkQuestionBankCreate {
+        return userService.getQuestionBankCreate()
+    }
+
+    override suspend fun getQuestionBankSubject(classID: Int): NetworkQuestionBankSubject {
+        return userService.getQuestionBankSubject(classID)
+    }
+
+    override suspend fun getQuestionBankChapters(
+        classID: Int,
+        subID: Int
+    ): NetworkQuestionBankChapters {
+        return userService.getQuestionBankChapters(classID, subID)
+    }
+
+    override suspend fun submitPostQuestion(model: NetworkPostQuestionBank): CommonResponse {
+        return userService.submitPostQuestion(model)
+    }
+
+    override suspend fun getDeleteQuestion(id: String): CommonResponse {
+        return userService.getDeleteQuestion(id)
     }
 
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {

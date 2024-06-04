@@ -492,6 +492,21 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+            29 -> {
+                when(childMenuId){
+                    38 ->  navController.navigate(R.id.addQuestionBankFragment)
+                    39 ->  navController.navigate(R.id.questionBankFragment2)
+
+                }
+            }
+            34 -> {
+                when(childMenuId){
+                    48 ->  navController.navigate(R.id.photoAlbumTypeNavHostFragment)
+                    49 ->  navController.navigate(R.id.videoAlbumFragment)
+                    50 ->  navController.navigate(R.id.favoritesListFragment)
+                    51 ->  navController.navigate(R.id.mediaGalleryFragment)
+                }
+            }
 
             31 -> {
                 when (childMenuId) {

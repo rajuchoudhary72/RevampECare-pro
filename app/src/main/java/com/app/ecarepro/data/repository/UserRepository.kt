@@ -48,6 +48,7 @@ import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkQuestionBank
 import com.app.ecarepro.data.network.model.NetworkQuestionPaper
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkRechargeLog
@@ -83,10 +84,14 @@ import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.StudentTeacherResponse
@@ -104,6 +109,8 @@ import kotlinx.coroutines.flow.Flow
  import retrofit2.http.GET
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.Body
+
 interface UserRepository {
 
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
@@ -662,5 +669,26 @@ interface UserRepository {
           date: String,
          query: String
     ): NetworkMediaGallery
+
+    suspend fun getMyQuestionBank(  ): NetworkQuestionBank
+
+    suspend fun  getQuestionBankCreate(  ): NetworkQuestionBankCreate
+
+    suspend fun getQuestionBankSubject(
+         classID: Int
+    ): NetworkQuestionBankSubject
+
+    suspend fun getQuestionBankChapters(
+         classID: Int,
+         subID: Int
+    ): NetworkQuestionBankChapters
+
+    suspend fun submitPostQuestion(
+          model: NetworkPostQuestionBank
+    ): CommonResponse
+
+    suspend fun getDeleteQuestion(
+          id: String
+    ): CommonResponse
 
 }

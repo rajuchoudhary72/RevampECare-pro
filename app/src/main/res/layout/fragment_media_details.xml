@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:fitsSystemWindows="true"
         tools:context=".ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment">
 
 
@@ -23,7 +24,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Defaulter Report"
+            app:title="Media Details"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
