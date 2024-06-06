@@ -336,7 +336,7 @@ class MainActivity : AppCompatActivity() {
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
            // 12 ->  navController.navigate(R.id.conversationReportFragment)
-            12 ->  navController.navigate(R.id.mediaGalleryFragment)
+            12 ->  navController.navigate(R.id.bookLibraryFragment)
             13 ->  navController.navigate(R.id.bookLibraryFragment)
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
             17 ->  navController.navigate(R.id.attendanceFragment)

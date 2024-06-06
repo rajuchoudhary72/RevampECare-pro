@@ -231,28 +231,27 @@ class HomeFragment : Fragment() {
                             )
                         )
                     )
-                    uiState.cards.forEach { card: Card ->
+                    uiState.cards.forEach { favouriteSlider: Card ->
                         dashboardCard {
-                            id(card.link)
-                            card(card)
+                            id(favouriteSlider.link)
+                            card(favouriteSlider)
                             clickListener { _ ->
-                                if (card.menuID > 0 && card.chmenuID > 0 && card.sbChMenuID > 0) {
+                                if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
                                     (requireActivity() as MainActivity).getFragmentId(
-                                        card.menuID, card.chmenuID,card.sbChMenuID
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID,
+                                        favouriteSlider.sbChMenuID
                                     )
-                                } else if (card.menuID > 0 && card.chmenuID > 0) {
+                                } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
                                     (requireActivity() as MainActivity).getFragmentId(
-                                        card.menuID, card.chmenuID
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID
                                     )
-                                } else if (card.menuID > 0) {
+                                } else if (favouriteSlider.menuID > 0) {
                                     (requireActivity() as MainActivity).getFragmentId(
-                                        card.menuID
+                                        favouriteSlider.menuID
                                     )
                                 }
-                               /* (requireActivity() as MainActivity).getFragmentId(card.menuID, card.chmenuID)
-                                    ?.let {
-                                       *//* findNavController().navigate(it)*//*
-                                    }*/
                             }
                         }
                     }

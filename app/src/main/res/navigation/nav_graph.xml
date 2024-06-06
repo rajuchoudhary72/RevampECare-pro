@@ -227,14 +227,7 @@
             android:id="@+id/action_circularDetailsFragment_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/bookLibraryFragment"
-        android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
-        android:label="BookLibraryFragment" >
-        <action
-            android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
-            app:destination="@id/bookDetailsFragment" />
-    </fragment>
+
 
     <fragment
         android:id="@+id/latestBookFragment"
@@ -276,6 +269,16 @@
         android:id="@+id/calenderActivityNavHost"
         android:name="com.app.ecarepro.ui.calender.CalenderActivityNavHost"
         android:label="CalenderActivityNavHost" />
+
+
+    <fragment
+        android:id="@+id/bookLibraryFragment"
+        android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
+        android:label="BookLibraryFragment" >
+        <action
+            android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/paySlipFragment"
         android:name="com.app.ecarepro.ui.payslip.PaySlipFragment"

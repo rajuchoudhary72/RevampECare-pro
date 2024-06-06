@@ -141,8 +141,8 @@ data class Card(
     val data2: String?,
     @SerializedName("menuID")
     val menuID: Int,
-    @SerializedName("chmenuID")
-    val chmenuID: Int,
+    @SerializedName("chMenuID")
+    val chMenuID: Int,
     @SerializedName("sbChMenuID")
     val sbChMenuID: Int
 ) : Serializable {
