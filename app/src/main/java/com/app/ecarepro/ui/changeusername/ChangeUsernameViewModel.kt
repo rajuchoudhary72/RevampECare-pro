@@ -24,8 +24,14 @@ class ChangeUsernameViewModel @Inject constructor(
         flow = currentUsername,
         flow2 = newUsername,
     ) { current, new ->
-        current.isNotEmpty() && new.isNotEmpty()
+        validateUsername(current) && validateUsername(new)
     }.asLiveData()
+
+    private fun validateUsername(username: String): Boolean {
+        if(username.isEmpty()) return false
+        val usernameRegex = "^[a-zA-Z0-9]{5,10}$".toRegex()
+        return usernameRegex.matches(username)
+    }
 
 
     fun changeUsername(result: (Boolean, String) -> Unit) {

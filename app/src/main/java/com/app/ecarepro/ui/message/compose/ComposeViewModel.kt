@@ -171,8 +171,8 @@ class ComposeViewModel @Inject constructor(
                                 receiverType = it.receiverType
                             )
                         },
-                        recipientType = 3,
-                        msgType = 2,
+                        recipientType = contacts.value.firstOrNull()?.receiverType,
+                        msgType = getMessageType(),
                         attachment = getAttachment(),
                         multipleAttachments = getMultipleAttachment()
                     )
@@ -190,6 +190,19 @@ class ComposeViewModel @Inject constructor(
             }
         }
 
+    }
+
+    private fun getMessageType(): Int {
+        val attachments = attachments.value
+        return if (attachments.isEmpty()) {
+            1
+        } else if (attachments.all { AttachmentType.PDF.name == it.name }) {
+            5
+        } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
+            3
+        } else {
+            2
+        }
     }
 
     private fun getMultipleAttachment(): List<String>? {
