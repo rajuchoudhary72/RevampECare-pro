@@ -146,6 +146,8 @@ class ProfileFragment : Fragment() {
                     contactNumber(uiState.profile.emergencyContactNo)
                     canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
                     canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)
+                    profileImageStatus(uiState.profile.userImgReq?.profileImg)
+                    bannerImageStatus(uiState.profile.userImgReq?.coverImg)
                     clickListener { v: View ->
                         when (v.id) {
                             R.id.fabBannerImage -> {
