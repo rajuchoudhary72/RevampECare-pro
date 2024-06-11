@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -132,7 +131,7 @@ class ProfileFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is ProfileUiState.Success) {
@@ -145,8 +144,8 @@ class ProfileFragment : Fragment() {
                     designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
                     contactNumber(uiState.profile.emergencyContactNo)
-                    canEditBannerImage(uiState.profile.canChangeCoverImg)
-                    canEditProfileImage(uiState.profile.canChangeProfileImg)
+                    canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
+                    canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)
                     clickListener { v: View ->
                         when (v.id) {
                             R.id.fabBannerImage -> {
@@ -178,9 +177,9 @@ class ProfileFragment : Fragment() {
                     account {
                         id(it.userId)
                         name(
-                            if(it.name.isNullOrEmpty()){
+                            if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
-                            }else {
+                            } else {
                                 it.name + "(${it.roleName})"
                             }
 
