@@ -113,7 +113,8 @@ class SignInFragment : Fragment() {
                 binding.textUserName.isEnabled = true
                 binding.textUserName.isClickable = true
                 binding.textUserName.requestFocus()
-                userNameValid
+                binding.textUserName.setText(binding.textUserName.text.toString())
+                userNameValid = false
             } else {
                 findNavController().popBackStack()
             }
