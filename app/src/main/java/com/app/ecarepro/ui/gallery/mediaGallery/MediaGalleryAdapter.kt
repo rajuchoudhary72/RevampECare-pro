@@ -5,10 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.Album
-import com.app.ecarepro.data.network.model.FavList
-import com.app.ecarepro.databinding.ItemFavListPhotoVideoBinding
-import com.app.ecarepro.databinding.ItemMediaBinding
-import com.app.ecarepro.utils.YoutubeURL
+import com.app.ecarepro.databinding.ItemGallerymoduleBinding
 import com.squareup.picasso.Picasso
 
 class MediaGalleryAdapter(
@@ -16,12 +13,12 @@ class MediaGalleryAdapter(
 ) :
     RecyclerView.Adapter<MediaGalleryAdapter.NoticeViewHolder>() {
 
-    private lateinit var bindingm: ItemMediaBinding
+    private lateinit var bindingm: ItemGallerymoduleBinding
     private var albumList = mutableListOf<Album>()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
-        bindingm = ItemMediaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm = ItemGallerymoduleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoticeViewHolder(bindingm)
     }
 
@@ -46,7 +43,7 @@ class MediaGalleryAdapter(
     }
 
 
- inner   class NoticeViewHolder(val item: ItemMediaBinding) : RecyclerView.ViewHolder(item.root) {
+ inner   class NoticeViewHolder(val item: ItemGallerymoduleBinding) : RecyclerView.ViewHolder(item.root) {
 
         fun bind(data: Album) {
 

@@ -21,7 +21,7 @@ class SelectRecipientsViewModel @Inject constructor(
     }
 
     fun addContacts(contact: List<Contact>) {
-        if (selectedContacts.all { it.receiverType == contact.first().receiverType }.not()) {
+        if (selectedContacts.all { it.receiverType == contact.firstOrNull()?.receiverType }.not()) {
             clearAllSelectedContact()
         }
         selectedContacts.addAll(contact)

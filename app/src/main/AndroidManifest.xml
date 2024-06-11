@@ -63,9 +63,10 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.app.ecarepro.fileprovider"
+            android:authorities="${applicationId}.myFileProvider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />

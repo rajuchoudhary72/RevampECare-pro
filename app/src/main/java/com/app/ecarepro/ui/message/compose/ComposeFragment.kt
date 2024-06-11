@@ -20,7 +20,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -43,6 +42,8 @@ import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
+import com.app.ecarepro.utils.FileUtils
+import com.app.ecarepro.utils.getFile
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -69,6 +70,8 @@ class ComposeFragment : Fragment() {
 
     private var lastClickAttachmentType: AttachmentType? = null
 
+    private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
+
     private val mPermissionSettingResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             requestExternalStoragePermission()
@@ -81,6 +84,40 @@ class ComposeFragment : Fragment() {
                 val selectedMedia =
                     it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
                 composeViewModel.setAttachments(selectedMedia)
+            }
+        }
+
+    private val pdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let { data ->
+                    if (data.data != null) {
+                        val mImageUri: Uri = data.data!!
+                        composeViewModel.setAttachments(
+                            listOf(
+                                MiMedia(
+                                    path = mImageUri.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            )
+                        )
+                    } else {
+                        if (data.clipData != null) {
+                            val count: Int = data.clipData!!.itemCount
+                            val files = mutableListOf<MiMedia>()
+                            for (i in 0 until count) {
+                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                                files.add(
+                                    MiMedia(
+                                        path = imageUri.toString(),
+                                        name = lastClickAttachmentType?.name
+                                    )
+                                )
+                            }
+                            composeViewModel.setAttachments(files)
+                        }
+                    }
+                }
             }
         }
 
@@ -108,8 +145,8 @@ class ComposeFragment : Fragment() {
                 viewLifecycleOwner.lifecycle,
                 Lifecycle.State.CREATED
             ).collectLatest { uiState: ComposeUiState ->
-                    handleUiState(uiState)
-                }
+                handleUiState(uiState)
+            }
         }
     }
 
@@ -117,7 +154,7 @@ class ComposeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is ComposeUiState.Success) {
@@ -220,7 +257,7 @@ class ComposeFragment : Fragment() {
             (requireActivity() as MainActivity).showLoader(true)
             composeViewModel.sendMessage { isSuccess, message ->
                 (requireActivity() as MainActivity).showLoader(false)
-                mainActivity().showMessage(message?:"")
+                mainActivity().showMessage(message ?: "")
                 if (isSuccess) {
                     findNavController().popBackStack()
                 }
@@ -247,13 +284,13 @@ class ComposeFragment : Fragment() {
         binding.btnBrowsePdf.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.PDF
-            requestExternalStoragePermission()
+            launchPicker()
         }
 
         binding.btnBrowseAudio.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.AUDIO
-            requestExternalStoragePermission()
+            launchPicker()
         }
 
         binding.btnGallery.setOnClickListener {
@@ -284,7 +321,7 @@ class ComposeFragment : Fragment() {
             override fun onReadyForRecord() {}
 
             override fun onRecordFailed(errorMessage: String?) {
-                mainActivity().showMessage(errorMessage?:"")
+                mainActivity().showMessage(errorMessage ?: "")
             }
         }).show(childFragmentManager, "VOICE")
     }
@@ -311,34 +348,29 @@ class ComposeFragment : Fragment() {
 
     /**
      *   If Android device SDK is >= 30 and wants to access document (only for choose the non media file)
-     *   then ask for "android.permission.MANAGE_EXTERNAL_STORAGE" permission
      */
     private fun requestExternalStoragePermission() {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                if (Environment.isExternalStorageManager()) {
-                    launchPicker()
-
-                } else {
-                    try {
-                        val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                        intent.addCategory("android.intent.category.DEFAULT")
-                        intent.data = Uri.parse(
-                            String.format("package:%s", requireContext().packageName)
-                        )
-                        mPermissionSettingResult.launch(intent)
-                    } catch (e: Exception) {
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
-                        mPermissionSettingResult.launch(intent)
-                    }
-                }
-            }
-
-            else -> {
-                launchPicker()
-            }
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                12342
+            )
+        } else {
+            // Permission is already granted, start image picker
+            launchPicker()
         }
+    }
+
+    private fun pickImage(type: String) {
+
+
     }
 
     private fun launchPicker() {
@@ -365,16 +397,21 @@ class ComposeFragment : Fragment() {
     }
 
     private fun launchAudioPicker() {
-        val intent = getLasiIntent().setMediaType(MediaType.AUDIO).setMaxCount(1).build()
-        receiveData.launch(intent)
+        val intent = Intent()
+        intent.type = "audio/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pdfLauncher.launch(intent)
     }
 
     private fun launchPdfPicker() {
-        val intent =
-            getLasiIntent().setMediaType(MediaType.DOC).setMaxCount(7).setSupportedFileTypes(
-                "pdf"
-            ).build()
-        receiveData.launch(intent)
+        val intent = Intent()
+        intent.type = "application/pdf"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        pdfLauncher.launch(intent)
     }
 
     private fun getLasiIntent() =
@@ -435,6 +472,14 @@ class ComposeFragment : Fragment() {
                 startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
+            }
+        } else if (requestCode == 12342) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted, start image picker
+                launchPicker()
+            } else {
+                // Permission denied, show a message to the user
+                mainActivity().showMessage("Permission denied, cannot pick image")
             }
         }
     }
@@ -524,6 +569,7 @@ class ComposeFragment : Fragment() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
+
     companion object {
         private const val REQUEST_IMAGE_CAPTURE = 1003
         private const val REQUEST_CAMERA_PERMISSION = 1001
@@ -532,5 +578,9 @@ class ComposeFragment : Fragment() {
 }
 
 enum class AttachmentType {
-    CAMERA, GALLERY, RECORDING, AUDIO, PDF
+    CAMERA,
+    GALLERY,
+    RECORDING,
+    AUDIO,
+    PDF
 }

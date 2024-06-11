@@ -25,10 +25,13 @@ class ChangePasswordViewModel @Inject constructor(
         flow2 = newPassword,
         flow3 = confirmPassword,
     ) { current, new, confirm ->
-        (current.isNotEmpty() && new.isNotEmpty() && confirm.isNotEmpty()) && new == confirm
+        (current.isNotEmpty() && validatePassword(new) && new == confirm)
     }.asLiveData()
 
-
+    private fun validatePassword(password: String): Boolean {
+        val passwordRegex = "^(?=.*[0-9!@\$%^&*])(?=.*[a-zA-Z])[a-zA-Z0-9!@\$%^&*]{5,10}$".toRegex()
+        return passwordRegex.matches(password)
+    }
     fun changePassword(result: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository

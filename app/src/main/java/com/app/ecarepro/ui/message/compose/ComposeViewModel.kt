@@ -1,6 +1,10 @@
 package com.app.ecarepro.ui.message.compose
 
 import android.content.Context
+import android.net.Uri
+import android.net.wifi.WifiManager
+import android.util.Base64
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -19,6 +23,8 @@ import com.app.ecarepro.model.ComposeMessageType
 import com.app.ecarepro.ui.message.chat.getDeviceIpAddress
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.FileAccess
+import com.app.ecarepro.utils.getFile
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.lassi.data.media.MiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,7 +37,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import javax.inject.Inject
+
 
 @HiltViewModel
 class ComposeViewModel @Inject constructor(
@@ -131,7 +142,7 @@ class ComposeViewModel @Inject constructor(
                             sMSType = smsType?.typeID,
                             geoCoordinate = currentLocation.toString().replace("(", "")
                                 .replace(")", ""),
-                            uID = /*userDataStore.getUser().userId*/ 32,
+                            uID = userDataStore.getUser()?.userId,
                             uType = userDataStore.getUser()?.userType
                         )
                     )
@@ -147,12 +158,15 @@ class ComposeViewModel @Inject constructor(
 
                     }
             } else {
+                val wifiManager = context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
+                val wInfo = wifiManager.connectionInfo
+                val macAddress = wInfo.macAddress
                 messageRepository.sendMessage(
                     SendMessageRequest(
                         device = 1,
                         geoCoordinate = currentLocation.toString().replace("(", "")
                             .replace(")", ""),
-                        ipAddress = context.getDeviceIpAddress(),
+                        ipAddress = macAddress,
                         subject = subject.value,
                         body = message.value,
                         classIDs = null,
@@ -162,8 +176,8 @@ class ComposeViewModel @Inject constructor(
                                 receiverType = it.receiverType
                             )
                         },
-                        recipientType = 3,
-                        msgType = 2,
+                        recipientType = contacts.value.firstOrNull()?.receiverType,
+                        msgType = getMessageType(),
                         attachment = getAttachment(),
                         multipleAttachments = getMultipleAttachment()
                     )
@@ -182,19 +196,35 @@ class ComposeViewModel @Inject constructor(
         }
 
     }
-
+    private fun getMessageType(): Int {
+        val attachments = attachments.value
+        return if (attachments.isEmpty()) {
+            1
+        } else if (attachments.all { AttachmentType.PDF.name == it.name }) {
+            5
+        } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
+            3
+        } else {
+            2
+        }
+    }
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value
         if (attachments.isEmpty() || attachments.size == 1)
             return null
 
-        return attachments.map {
-            FileAccess.bitmapToByteArrayBase64String(
-                FileAccess.bitmapFromFile(
-                    context,
-                    it.path!!
+        return attachments.map { attachment ->
+            if (isPdf(attachment)) {
+                val file = context.getFile(attachment.path?.toUri())
+                getBase64StringFromUri(file!!.toUri()) ?: ""
+            } else {
+                FileAccess.bitmapToByteArrayBase64String(
+                    FileAccess.bitmapFromFile(
+                        context,
+                        attachment.path!!
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -203,24 +233,68 @@ class ComposeViewModel @Inject constructor(
         return if (attachments.isEmpty()) {
             null
         } else if (attachments.size == 1) {
-            attachments.first()
-
-
-            //val bitmap = FileAccess.bitmapFromUri(context, imgUri)
-
-            val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
-
-            val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-
-            val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
-            Attachment(
-                attachment = imageString,
-                fileExt = imageExt,
-                fileURL = null
-            )
+            val attachment = attachments.first()
+            if (isPdf(attachment)) {
+                val file = context.getFile(attachment.path?.toUri())
+                val attach = getBase64StringFromUri(file!!.toUri())
+                Attachment(
+                    attachment = attach,
+                    fileExt = getFileExtension(file),
+                    fileURL = null
+                )
+            } else {
+                val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
+                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+                Attachment(
+                    attachment = imageString,
+                    fileExt = imageExt,
+                    fileURL = null
+                )
+            }
         } else {
             null
         }
+    }
+
+    private fun isPdf(attachment: MiMedia) =
+        mutableListOf(AttachmentType.PDF.name, AttachmentType.AUDIO.name).contains(attachment.name)
+
+    private fun getFileExtension(file: File): String {
+        val name = file.name
+        val lastIndexOf = name.lastIndexOf(".")
+        if (lastIndexOf == -1) {
+            return ""
+        }
+        return name.substring(lastIndexOf + 1)
+    }
+
+    private fun getBase64StringFromUri(uri: Uri): String? {
+        val imageStream: InputStream
+        return try {
+            imageStream = requireNotNull(context.contentResolver.openInputStream(uri))
+            val bytes: ByteArray = readBytes(
+                imageStream
+            )
+            Base64.encodeToString(bytes, Base64.DEFAULT)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun readBytes(inputStream: InputStream): ByteArray {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+
+        var len: Int
+        while ((inputStream.read(buffer).also { len = it }) != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+
+        return byteBuffer.toByteArray()
     }
 
     private fun generateDataFromSelectedContacts(): List<Data>? {
