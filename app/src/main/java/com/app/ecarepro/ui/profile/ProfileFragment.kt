@@ -164,6 +164,7 @@ class ProfileFragment : Fragment() {
                     }
                 }
 
+
                 if (profileViewModel.isParent()) {
                     buildParentModels(uiState.profile)
                 } else if (profileViewModel.isStudent()) {
