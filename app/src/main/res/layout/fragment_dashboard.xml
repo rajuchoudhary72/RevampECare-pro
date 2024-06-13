@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:liftOnScroll="true"
+            android:visibility="gone"
             app:liftOnScrollTargetViewId="@id/recycler_view">
 
             <com.google.android.material.appbar.MaterialToolbar

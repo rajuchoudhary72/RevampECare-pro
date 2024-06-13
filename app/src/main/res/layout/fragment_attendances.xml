@@ -15,6 +15,7 @@
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recycler_view">
 
