@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -25,6 +26,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAddLessonBinding
 import com.app.ecarepro.model.AuditorLst
 import com.app.ecarepro.model.MySubject
+import com.app.ecarepro.model.RequiredField
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
@@ -38,6 +40,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
+    private var isAuditorySelected: Boolean=false
+    private lateinit var requiredFiled: RequiredField
     private var lPlanId: String= ""
     private lateinit var auditorSelectDat: AuditorLst
     private lateinit var classData: NetworkMyClass
@@ -84,11 +88,16 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
             popUpSelectSubject( )
         }
         binding.ctvSelectClass.setOnClickListener {
-            if (classData!=null){
-                if (classData.myClasses!=null){
-                    popUpSelectClass(classData.myClasses!!)
+            if (isSubSelected){
+                if (classData!=null){
+                    if (classData.myClasses!=null){
+                        popUpSelectClass(classData.myClasses!!)
+                    }
                 }
+            }else{
+                Toast.makeText(requireContext(),"Select Subject ",Toast.LENGTH_SHORT).show()
             }
+
 
         }
 
@@ -107,29 +116,34 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         }
 
         binding.btnSubmit.setOnClickListener {
-             addLessonViewModel.postLessonPlan(
-            imageString,
-            imageExt,
-            "",
-                 auditorSelectDat.auditor,
-                 selectClassData.classID.toString(),
-                 binding.etClosure.text.toString(),
-                 binding.tvExtensionReq.text.toString(),
-                 "",
-                 binding.ctvFromDate.text.toString(),
-                 binding.etIntroduction.text.toString(),
-                 binding.etActivity.text.toString(),
-                 0,
-                 binding.tvLearningOutcomesReq.text.toString(),
-                 binding.etObjective.text.toString(),
-                 binding.etOtherResources.text.toString(),
-                 binding.etResources.text.toString(),
-                 binding.cbOpenStudent.isChecked,
-                 selectSubjectData.subID,
-                 binding.ctvToDate.text.toString(),
-                 binding.etTopic.text.toString(),
-                 binding.etLink.text.toString()
-             )
+
+            if (isValidate()){
+                addLessonViewModel.postLessonPlan(
+                    imageString,
+                    imageExt,
+                    "",
+                    auditorSelectDat.auditor,
+                    selectClassData.classID.toString(),
+                    binding.etClosure.text.toString(),
+                    binding.tvExtensionReq.text.toString(),
+                    "",
+                    binding.ctvFromDate.text.toString(),
+                    binding.etIntroduction.text.toString(),
+                    binding.etActivity.text.toString(),
+                    0,
+                    binding.tvLearningOutcomesReq.text.toString(),
+                    binding.etObjective.text.toString(),
+                    binding.etOtherResources.text.toString(),
+                    binding.etResources.text.toString(),
+                    binding.cbOpenStudent.isChecked,
+                    selectSubjectData.subID,
+                    binding.ctvToDate.text.toString(),
+                    binding.etTopic.text.toString(),
+                    binding.etLink.text.toString()
+                )
+            }
+
+
         }
 
 
@@ -155,6 +169,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
                      binding.requiredData = it.data.requiredField
                         subjectList=it.data.subjects
+                       requiredFiled=it.data.requiredField
 
 
 
@@ -243,6 +258,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         }
 
     override fun onItemClick(t: AuditorLst, pos: Int, boolean: Boolean) {
+        isAuditorySelected=true
         auditorSelectDat=t
     }
 
@@ -371,8 +387,11 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
                     if (it.data != null) {
 
+
+
                         if (it.data.lessonPlans != null) {
                             val data= it.data.lessonPlans
+
                             auditorSelectDat=AuditorLst( data.auditoryIds, data.auditoryTxt )
                             selectClassData=MyClasseItem(0,data.classesName,data.classIds,false   )
                             binding.etClosure.setText(data.closure)
@@ -398,6 +417,82 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                 } }  } }
         addLessonViewModel.getLessonPlanDTL( id, teacherID)
 
+
+    }
+
+    private fun isValidate() : Boolean {
+        var isValidate=true
+
+        if (requiredFiled.isAttachmentRequired){
+            if (imageString==""){
+                isValidate=false
+                Toast.makeText(requireContext(),"Please select Attachment",Toast.LENGTH_SHORT).show()
+            }
+        }
+        if (requiredFiled.isAuditoryRequired){
+            if (!isAuditorySelected){
+                isValidate=false
+                Toast.makeText(requireContext(),"Please select Auditory",Toast.LENGTH_SHORT).show()
+            }
+        }
+        if (requiredFiled.isClosureRequired){
+            if (binding.etClosure.text.isEmpty()){
+                isValidate=false
+                binding.etClosure.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isExtensionTopicRequired){
+            if (binding.etExtension.text.isEmpty()){
+                isValidate=false
+                binding.etExtension.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isIntroductionRequired){
+            if (binding.etIntroduction.text.isEmpty()){
+                isValidate=false
+                binding.etIntroduction.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isLearningOutcomesRequired){
+            if (binding.etLearningOutcomes.text.isEmpty()){
+                isValidate=false
+                binding.etLearningOutcomes.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isObjectiveRequired){
+            if (binding.etObjective.text.isEmpty()){
+                isValidate=false
+                binding.etObjective.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isOtherResourcesRequired){
+            if (binding.etOtherResources.text.isEmpty()){
+                isValidate=false
+                binding.etOtherResources.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isResourcesRequired){
+            if (binding.etResources.text.isEmpty()){
+                isValidate=false
+                binding.etResources.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isTopicRequired){
+            if (binding.etTopic.text.isEmpty()){
+                isValidate=false
+                binding.etTopic.error="Mandatory Field"
+            }
+        }
+        if (requiredFiled.isYoutubeLinksRequired){
+            if (binding.etLink.text.isEmpty()){
+                isValidate=false
+                binding.etLink.error="Mandatory Field"
+            }
+        }
+
+
+
+        return isValidate
 
     }
 

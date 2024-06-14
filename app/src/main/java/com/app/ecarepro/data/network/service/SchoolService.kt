@@ -46,6 +46,7 @@ interface SchoolService {
     suspend fun getNotices(
         @Query("pg") pg: Int,
         @Query("ClassID") classID: Int,
+        @Query("isClassNotice") isClassNotice: Boolean,
     ): NetworkNotice
 
     @GET("School/Circulars")

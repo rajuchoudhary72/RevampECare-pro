@@ -10,7 +10,6 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -32,11 +31,11 @@ class SystemViewModel @Inject constructor(
 
     val refresh = MutableSharedFlow<Boolean>()
     val user = userDataStore.getUserAsFlow()
-    var userType : String = ""
+    var userRoleName : String = ""
 
     init {
         viewModelScope.launch {
-            userType = userDataStore.getRoleName().toString()
+            userRoleName = userDataStore.getRoleName().toString()
         }
     }
 

@@ -9,15 +9,15 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.FragmentLatestBookBinding
 import com.app.ecarepro.model.LatestBook
+import com.app.ecarepro.databinding.FragmentLatestBookBinding
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class LatestBookFragment(private val latestBook: List<LatestBook> , private val i: Int) : Fragment() , ItemListener<LatestBook> {
+class LatestBookFragment(private val latestBook: List<LatestBook>, private val i: Int) : Fragment() , ItemListener<LatestBook> {
 
     private lateinit var latestBookBinding: FragmentLatestBookBinding
 

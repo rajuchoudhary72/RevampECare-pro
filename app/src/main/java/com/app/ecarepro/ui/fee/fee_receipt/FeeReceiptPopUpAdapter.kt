@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.model.FeeReceiptSession
@@ -34,6 +35,8 @@ class FeeReceiptPopUpAdapter(private var routeLSTList: List<FeeReceiptSession>,
 
         holder.itemName.text=routeLSTList[holder.bindingAdapterPosition].yearname
 
+        holder.circleImageViewProfile.isVisible=false
+
         holder.llMain.setOnClickListener {
             lastIndex=holder.bindingAdapterPosition
              itemListener.onItemClick(routeLSTList[holder.bindingAdapterPosition],1,true)
@@ -53,6 +56,7 @@ class FeeReceiptPopUpAdapter(private var routeLSTList: List<FeeReceiptSession>,
 
         val itemName: TextView = itemView.findViewById(R.id.tv_staff_name)
          val llMain: LinearLayout = itemView.findViewById(R.id.llMain)
+         val circleImageViewProfile: ImageView = itemView.findViewById(R.id.circleImageViewProfile)
 
     }
 

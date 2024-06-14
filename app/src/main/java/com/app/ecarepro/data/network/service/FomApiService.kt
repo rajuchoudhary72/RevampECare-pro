@@ -37,7 +37,7 @@ interface FomApiService {
         @Body request: DefaultReportBody
     ): List<DefaulterDataList>
 
-    @GET
+    @POST
     suspend fun getFeeReceipt(
         @Url url: String,
         @Body request: FeeReceiptRequest

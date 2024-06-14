@@ -676,7 +676,11 @@
     <fragment
         android:id="@+id/assignmentListFragment"
         android:name="com.app.ecarepro.ui.assignment.AssignmentListFragment"
-        android:label="AssignmentListFragment" />
+        android:label="AssignmentListFragment" >
+        <action
+            android:id="@+id/action_assignmentListFragment_to_submitAssignmentFragment"
+            app:destination="@id/submitAssignmentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/appointmentReportFragment"
         android:name="com.app.ecarepro.ui.appointment.AppointmentReportFragment"
@@ -822,7 +826,11 @@
     <fragment
         android:id="@+id/favoritesListFragment"
         android:name="com.app.ecarepro.ui.gallery.favorites.FavoritesListFragment"
-        android:label="FavoritesListFragment" />
+        android:label="FavoritesListFragment" >
+        <action
+            android:id="@+id/action_favoritesListFragment_to_photoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
     <fragment
         android:id="@+id/questionBankFragment2"
         android:name="com.app.ecarepro.ui.question_bank.QuestionBankFragment"
@@ -834,4 +842,9 @@
         android:label="YouTubeVideoPlayerFragment"
         android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
         />
+    <fragment
+        android:id="@+id/submitAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.submit_assignment.SubmitAssignmentFragment"
+        android:label="SubmitAssignmentFragment" />
+
 </navigation>

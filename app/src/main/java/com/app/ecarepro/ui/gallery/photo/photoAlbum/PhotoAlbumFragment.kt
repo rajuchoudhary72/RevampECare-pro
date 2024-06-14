@@ -88,6 +88,10 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
                                 binding.tvNoData.isVisible=false
                                 isLoading=true
 
+                                if (pageIndex==1){
+                                    photoAlbumAdapter.clearData()
+                                }
+
                                 photoAlbumAdapter.setData(it.data.albums.toMutableList())
 
                             }else{

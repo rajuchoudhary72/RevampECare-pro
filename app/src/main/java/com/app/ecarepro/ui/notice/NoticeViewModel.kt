@@ -26,10 +26,10 @@ class NoticeViewModel @Inject constructor(
         NetworkResult.Loading())
     val _myClassStateFlow: StateFlow<NetworkResult<NetworkMyClass>> = myClassStateFlow
 
-        fun getNotice(pg: Int,classID: Int )=viewModelScope.launch {
+        fun getNotice(pg: Int,classID: Int, isClassNotice: Boolean )=viewModelScope.launch {
             runCatching {
                 noticeStateFlow.value =NetworkResult.Loading()
-                schoolRepository.getNotice(pg, classID)
+                schoolRepository.getNotice(pg, classID,isClassNotice)
             }.onSuccess {
                 noticeStateFlow.value =NetworkResult.Success(it)
             }.onFailure {

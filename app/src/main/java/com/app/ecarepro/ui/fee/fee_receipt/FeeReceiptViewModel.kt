@@ -25,8 +25,29 @@ class FeeReceiptViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     ) : ViewModel() {
 
-    val schoolData = MutableLiveData<NetworkSchool>()
-    val userData = MutableLiveData<NetworkUserDetailsDto>()
+
+
+    var feePaymentURL : String = ""
+    lateinit var schoolDetails : NetworkSchool
+    lateinit var userDetails : NetworkUserDetailsDto
+
+    init {
+
+
+        viewModelScope.launch {
+            schoolDetails = userDataStore.getSchoolData()!!
+         }
+        viewModelScope.launch {
+            userDetails = userDataStore.getUser()!!
+        }
+
+        viewModelScope.launch {
+            feePaymentURL = userDataStore.getSchoolData()?.feePayemtURL.toString()
+        }
+
+
+
+    }
 
 
     private val feeReceiptMutableStateFlow: MutableStateFlow<NetworkResult<NetworkFeeReceipt>> = MutableStateFlow(
@@ -37,11 +58,20 @@ class FeeReceiptViewModel @Inject constructor(
 
     fun getFeeReceipt(
         url: String,
-        request: FeeReceiptRequest
+        sessionid:Int
+
     )=viewModelScope.launch {
         runCatching {
             feeReceiptMutableStateFlow.value = NetworkResult.Loading()
-            fomApiRepository.getFeeReceipt( url,request)
+            fomApiRepository.getFeeReceipt(
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/feereceipt",
+                FeeReceiptRequest(
+                userDataStore.getSchoolData()!!.schoolCode,
+                    userDataStore.getUserNameID().toString(),
+                "",
+                "",
+                sessionid
+            ))
         }.onSuccess {
             feeReceiptMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -51,12 +81,6 @@ class FeeReceiptViewModel @Inject constructor(
     }
 
 
-    init {
-        viewModelScope.launch {
-            schoolData.postValue(userDataStore.getSchoolData())
-            userData.postValue(userDataStore.getUser())
-        }
-    }
 
 
 

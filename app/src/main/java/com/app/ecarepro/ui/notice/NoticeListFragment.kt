@@ -40,6 +40,8 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
     private lateinit var binding :  FragmentNoticeListBinding
     private lateinit var mMyClass: List<MyClasseItem>
     private var mMyClassDataString: ArrayList<String> = ArrayList()
+    private var noticeType=""
+    private var userType=""
 
 
 
@@ -54,14 +56,24 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
             mnoticeViewModel = noticeViewModel
 
         }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-
+        try {
+            noticeType= requireArguments().getString(Constant.NOTICE_TYPE).toString()
+            userType= requireArguments().getString(Constant.USER_TYPE).toString()
+        }catch (_:Exception){}
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (noticeType==Constant.NOTICE_CLASS){
+            if (userType==Constant.USER_STAFF){
+                binding.autoInputClassInputLayout.isVisible=true
+            }
+        }
 
         lifecycleScope.launch {
             noticeViewModel._noticeStateFlow.collectLatest {
@@ -149,7 +161,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                 R.id.btn_noti -> {
 
                     binding.autoInputClassInputLayout.visibility = View.GONE
-                    fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
+                    fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID,noticeType==Constant.NOTICE_CLASS)
                 }
 
                 else -> {
@@ -165,19 +177,19 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
         binding.autoCompleteClass.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                mMyClass[pos].classID?.let { fetchNotices(0, it) }
+                mMyClass[pos].classID?.let { fetchNotices(0, it,noticeType==Constant.NOTICE_CLASS) }
 
             }
 
-        fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID)
+        fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID,noticeType==Constant.NOTICE_CLASS)
         getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
 
     }
 
 
-    private fun fetchNotices(pg: Int, classID: Int) {
+    private fun fetchNotices(pg: Int, classID: Int, isClassNotice: Boolean) {
 
-        noticeViewModel.getNotice(pg, classID)
+        noticeViewModel.getNotice(pg, classID,isClassNotice)
     }
 
     private fun getMyClass(subID: Int, iD: Int  ) {

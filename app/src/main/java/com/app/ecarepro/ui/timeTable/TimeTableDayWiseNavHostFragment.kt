@@ -14,7 +14,7 @@ import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class TimeTableDayWiseNavHostFragment(val data: NetworkTeachersTimetable) : Fragment() {
+class TimeTableDayWiseNavHostFragment(val data: NetworkTeachersTimetable, val toFragment: String) : Fragment() {
 
 
     private lateinit var binding : FragmentTiemTableDayWiseNavHostBinding
@@ -37,7 +37,7 @@ class TimeTableDayWiseNavHostFragment(val data: NetworkTeachersTimetable) : Frag
                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
                 data.data.forEach { itemDat ->
-                    fragmentList.add( DayWiseTimeTableFragment(itemDat  ))
+                    fragmentList.add( DayWiseTimeTableFragment(itemDat, toFragment  ))
                 }
 
                 val viewPagerAdapter = ViewPagerAdapter(

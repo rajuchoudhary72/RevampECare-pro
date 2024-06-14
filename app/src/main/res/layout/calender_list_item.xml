@@ -22,17 +22,63 @@
                 android:id="@+id/rel_day"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5dp">
-
+                   android:layout_marginStart="5dp">
 
 
                 <TextView
                     android:id="@+id/day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                     android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}"
-                     android:text="@{dataActivity.fromDate}"
+                    android:layout_marginHorizontal="25dp"
+                    android:text="@{dataActivity.fromDate}"
+                    android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/rel_day"
+                android:id="@+id/rel_to"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                 android:layout_marginStart="5dp"
+                android:visibility="gone"
+                >
+
+
+
+                <TextView
+                    android:id="@+id/to_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}"
+                    android:text="@string/to_small"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginHorizontal="25dp"
+                    />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/rel_to"
+                android:id="@+id/rel_end_day"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:visibility="gone"
+                 >
+
+
+
+                <TextView
+                    android:id="@+id/end_day"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}"
+                    android:text="@{dataActivity.tillDate}"
                     android:layout_marginHorizontal="25dp"
                     />
 

@@ -42,6 +42,15 @@ class Constant {
         const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
         const val TO = "to"
+        const val NOTICE_TYPE = "notice_type"
+        const val NOTICE_CLASS = "notice_class"
+        const val NOTICE_SCHOOL = "notice_school"
+        const val USER_TYPE = "user_type"
+        const val USER_STAFF = "user_staff"
+        const val USER_PARENT_STUDENT = "user_parent_student"
+
+        const val url = "url"
+
         const val GALLERY_TYPE = "galleryType"
         const val GALLERY_TYPE_PHOTO = 1
         const val GALLERY_TYPE_VIDEO = 2
@@ -74,6 +83,7 @@ class Constant {
         const val FRA_LESSON_PLAN = "FragmentLessonPlan"
         const val FRA_STAFF_LEAVE = "FragmentStaffLeave"
         const val FRA_STU_LEAVE = "FragmentStudentLeave"
+        const val DATE = "DATE"
 
 
 
@@ -86,9 +96,11 @@ class Constant {
         const val PAGE_INDEX = 1
         const val THOUGHTS_DIR = 1
 
+
+
         const val FILTER_NAME = 0
         const val FILTER_ROLL_NO = 1
-        const val FILTER_ADMISSION_NO = 1
+        const val FILTER_ADMISSION_NO = 2
 
 
 
@@ -115,6 +127,11 @@ class Constant {
         const val APPOINTMENT_PENDING = 0
         const val APPOINTMENT_APPROVE = 1
         const val APPOINTMENT_REJECT = 2
+
+        const val PRINCIPAL =  "Principal"
+        const val MANAGEMENT =  "Management"
+
+
 
         fun getLongTimeDate(sessionStart: String?): Long {
             val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())

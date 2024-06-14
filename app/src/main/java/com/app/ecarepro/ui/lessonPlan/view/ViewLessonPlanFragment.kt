@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,8 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentViewLessonPlanBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.lessonPlan.LessonPlanListAdapter
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,9 +49,12 @@ class ViewLessonPlanFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         getLessonPlanDTL(lPlanId,0)
 
     }
+
+
 
     private fun getLessonPlanDTL(
         id: String,
@@ -56,12 +62,17 @@ class ViewLessonPlanFragment : Fragment() {
     ) {
 
         lifecycleScope.launch {
-            viewLessonPlanViewModel.viewLessonPlanStateFlow.collectLatest {  when (it) {
-                is NetworkResult.Loading -> {
-                    (requireActivity() as MainActivity).showLoader(true)
-                } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
+            viewLessonPlanViewModel.viewLessonPlanStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
+
+                    is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
 
                     if (it.data != null) {
@@ -69,6 +80,7 @@ class ViewLessonPlanFragment : Fragment() {
                         if (it.data.lessonPlans != null) {
 
                            binding.lessonData=it.data.lessonPlans
+
                            binding.tvPlanDuration.text= buildString {
                                append(it.data.lessonPlans.fromDate)
                                append(" to ")
@@ -89,9 +101,16 @@ class ViewLessonPlanFragment : Fragment() {
                                 binding. tvStatus.text="Approved"
 
                             }
-                            binding.llFile.setOnClickListener {
-
+                            if (it.data.lessonPlans.fileName!=null){
+                                binding.llFile.setOnClickListener { _ ->
+                                    downloadFile(it.data.lessonPlans.fileName,)
+                                }
+                            }else{
+                                binding.llFile.isVisible=false
                             }
+
+                            binding.cvDetailsApprove.isVisible = it.data.lessonPlans.status != 1
+
 
 
 
@@ -104,4 +123,18 @@ class ViewLessonPlanFragment : Fragment() {
 
 
     }
+
+    private fun downloadFile(fileSource:String){
+        findNavController().navigate(
+            R.id.photoViewFragmentFragment,
+            bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+        )
+    }
+
+
+
+
+
+
+
 }

@@ -100,6 +100,7 @@ class AttendanceFragment : Fragment() {
 
 
                                 monthDataString.clear()
+
                                 yearModelArrayList.forEach { data ->
                                     monthDataString.add(data.yearId.toString() )
                                 }

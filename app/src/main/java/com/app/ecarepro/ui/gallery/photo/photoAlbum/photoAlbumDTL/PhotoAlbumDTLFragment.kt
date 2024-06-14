@@ -106,6 +106,10 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                     binding.tvMore.setVisibility(View.GONE)
                                 }
 
+                                if (pageIndex==1){
+                                    photoAlbumAdapter.clearData()
+                                }
+
                                 photoAlbumAdapter.setData(it.data.photos.toMutableList())
 
                             } else {

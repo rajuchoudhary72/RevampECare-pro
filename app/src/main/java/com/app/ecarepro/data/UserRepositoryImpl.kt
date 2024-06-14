@@ -20,7 +20,6 @@ import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
-import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
@@ -45,7 +44,6 @@ import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
@@ -84,18 +82,16 @@ import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
 import com.app.ecarepro.data.network.model.NetworkAlbumType
-import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
-import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
-import com.app.ecarepro.data.network.model.NetworkClassmateLST
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkLibraryDTL
 import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
@@ -117,7 +113,6 @@ import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
-import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
@@ -176,6 +171,7 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)
                 userDataStore.saveRoleName(it.roleName ?: "")
+                userDataStore.saveUserNameID(userName ?: "")
             }
 
         }
@@ -235,9 +231,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getActivityCaledar()
     }
 
-    override suspend fun getLibraryDetails(): NetworkLatestBook {
-        return userService.getLibraryDetails()
+    override suspend fun getLibraryDTL(): NetworkLibraryDTL {
+        return userService.getLibraryDTL()
     }
+
 
     override suspend fun getBookDetails(bookID: Int, id: Int): NetworkBookDetails {
         return userService.getBookDetails(bookID, id)
@@ -791,7 +788,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.teachersTimetable(id)
     }
 
-    override suspend fun classTimetable(id: String): NetworkTeachersTimetable {
+    override suspend fun classTimetable(id: String?): NetworkTeachersTimetable {
         return userService.classTimetable(id)
     }
 

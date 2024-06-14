@@ -35,8 +35,11 @@ class InfractionListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentInfractionListBinding.inflate(inflater,container,false)
-        studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
-        if(activity is AppCompatActivity){
+        try {
+            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+
+        }catch (e:Exception){}
+         if(activity is AppCompatActivity){
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
             (activity as AppCompatActivity).supportActionBar?.apply {
                 title = " Infractions"
@@ -91,12 +94,12 @@ class InfractionListFragment : Fragment() {
                                 append(it.data.studentDTL.contactMob)
                             }
 
-                            if (it.data.recentInfractions.isNotEmpty()){
+                            if (it.data.records!=null){
                                 binding.recyclerInfractionList.isVisible=true
                                 binding.tvNoData.isVisible=false
 
                                 val circularAdapter = InfractionListAdapter(
-                                    it.data.recentInfractions,
+                                    it.data.records,
                                     this@InfractionListFragment
                                 )
 
@@ -121,7 +124,7 @@ class InfractionListFragment : Fragment() {
             }
 
         }
-        infractionListViewModel.addInfraction(studentID)
+        infractionListViewModel.getInfractions(studentID)
 
 
     }

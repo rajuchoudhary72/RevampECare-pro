@@ -29,8 +29,7 @@ import com.app.ecarepro.model.MyClasseTeacherOf
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentRllNo
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.utils.Constant
+ import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -47,7 +46,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
     private lateinit var mMyClass: List<MyClasseTeacherOf>
 
     private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
-    private val nameFilter = listOf("Name",  "Admission" )
+    private val nameFilter = listOf("Name", "Roll No", "Admission" )
 
 
 
@@ -91,6 +90,10 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                     }
 
                     1 ->{
+                        selectedFilterType=Constant.FILTER_ROLL_NO
+                    }
+
+                    2 ->{
                         selectedFilterType=Constant.FILTER_ADMISSION_NO
                     }
                 }
@@ -227,7 +230,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
             requestList.add(AssignRollNoBodyItem(d.houseID,d.rollNumber,d.stID))
         }
         assignRollNoViewModel.assignRollNumber(requestList).invokeOnCompletion {
-            mainActivity().showMessage("Roll Number Assign Successfully")
+            Toast.makeText( requireContext() ,"Roll Number Assign Successfully",Toast.LENGTH_SHORT).show()
             menuHost.removeMenuProvider(this)
         }
 

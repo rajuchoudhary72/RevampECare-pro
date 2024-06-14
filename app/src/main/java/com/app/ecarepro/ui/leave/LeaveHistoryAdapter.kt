@@ -2,11 +2,9 @@ package com.app.ecarepro.ui.leave
 
 import android.app.AlertDialog
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.LeaveListItemBinding
 import com.app.ecarepro.databinding.StaffLeaveListItemBinding
 import com.app.ecarepro.model.Dtl
 
@@ -21,52 +19,26 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaveHistoryViewHolder {
         binding=StaffLeaveListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
-        return LeaveHistoryViewHolder(binding.root)
+        return LeaveHistoryViewHolder(binding )
     }
 
     override fun getItemCount(): Int = leaveList.size
 
     override fun onBindViewHolder(holder: LeaveHistoryViewHolder, position: Int) {
 
-        binding.data=leaveList[position]
-       val data =leaveList[position]
-        binding.dot.setOnClickListener {
-            deleteAlert(position)
-        }
-        binding.tvAppliedOn.text= buildString {
-            append("Applied On : ")
-            append(data.submittedOn)
-        }
-        binding.tvTtlLeaves.text= buildString {
-            append("Total Leave(s): ")
-            append(data.duration)
-            append(" Day")
-        }
-        binding.tvReason.text= buildString {
-            append("Reason: ")
-            append(data.reason)
 
-        }
-        binding.tvActionOn.text= buildString {
-            append("On: ")
-            append(data.actionOn)
-
-        }
-        binding.relViewAttac.setOnClickListener {
-            leaveHistoryFragment.onItemClick(leaveList[position],2,false)
-        }
-
+        holder.bind(leaveList[position])
 
 
    }
 
-    private fun deleteAlert(position: Int) {
+    private fun deleteAlert(data: Dtl) {
         val builder = AlertDialog.Builder(leaveHistoryFragment.context)
         builder.setTitle(leaveHistoryFragment.getString(R.string.delete_alert))
         builder.setMessage(leaveHistoryFragment.getString(R.string.delete_alert_are_you_sure))
 
         builder.setPositiveButton( R.string.yes) { _, _ ->
-            leaveHistoryFragment.onItemClick(leaveList[position],1,false)
+            leaveHistoryFragment.onItemClick(data,1,false)
 
         }
 
@@ -82,7 +54,49 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
 
 
 
-    class LeaveHistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+   inner class LeaveHistoryViewHolder(val binding: StaffLeaveListItemBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(data: Dtl) {
+
+
+            binding.data=data
+
+
+             binding.dot.setOnClickListener {
+
+                deleteAlert(data)
+            }
+            if (data.status=="Approved"){
+                binding.tvStatus.setBackgroundResource(R.drawable.background_box_rectangle_app_color)
+            }else{
+                binding.tvStatus.setBackgroundResource(R.drawable.tv_bg_rounded_status_blue)
+            }
+            binding.tvAppliedOn.text= buildString {
+                append("Applied On : ")
+                append(data.submittedOn)
+            }
+            binding.tvTtlLeaves.text= buildString {
+                append("Total Leave(s): ")
+                append(data.duration)
+                append(" Day")
+            }
+            binding.tvReason.text= buildString {
+                append("Reason: ")
+                append(data.reason)
+
+            }
+            binding.tvActionOn.text= buildString {
+                append("On: ")
+                append(data.actionOn)
+
+            }
+            binding.relViewAttac.setOnClickListener {
+                leaveHistoryFragment.onItemClick(data,2,false)
+            }
+
+
+
+        }
+    }
 
 
 }

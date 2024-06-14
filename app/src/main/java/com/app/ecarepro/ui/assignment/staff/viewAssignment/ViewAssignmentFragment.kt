@@ -188,10 +188,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
         binding.llView.setOnClickListener {
-            openFile(viewAssignmentData!!.file)
+            openFile(viewAssignmentData!!.asgFile)
         }
         binding.llDownload.setOnClickListener {
-            downloadFile(viewAssignmentData!!.file)
+            downloadFile(viewAssignmentData!!.asgFile)
         }
 
 
@@ -206,7 +206,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
     private fun downloadFile(fileSource:String){
         val androidDownloader = AndroidDownloader(requireContext())
-        androidDownloader.downloadFile(fileSource, getString(R.string.circular))
+        androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
     }
 
     override fun onItemClick(t: AssignSubmitStudent, pos: Int, boolean: Boolean) {

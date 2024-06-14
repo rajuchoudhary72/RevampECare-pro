@@ -5,21 +5,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAssignmentListBinding
 import com.app.ecarepro.model.Assignment
-import com.app.ecarepro.model.Dtl
-import com.app.ecarepro.ui.calender.CalenderListAdapter
+import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.assignment.staff.TeacherAssignmentViewModel
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-
-class AssignmentListFragment(private val assignments: List<Assignment>?) : Fragment(), ItemListener<Assignment> {
+@AndroidEntryPoint
+class AssignmentListFragment(
+    private val assignments: List<Assignment>?,
+    val userType: String,
+    val assignmentType: String,
+    val assignmentID: String
+) : Fragment(), ItemListener<Assignment> {
 
     private lateinit var binding : FragmentAssignmentListBinding
+    private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
+    private val assignmentNavHostViewModel : AssignmentNavHostViewModel by viewModels()
+
 
 
 
@@ -40,7 +54,7 @@ class AssignmentListFragment(private val assignments: List<Assignment>?) : Fragm
 
             val assignmentListAdapter =
                 AssignmentListAdapter(assignments,
-                    this@AssignmentListFragment)
+                    this@AssignmentListFragment,userType)
 
             binding.rvAssignment.apply {
                 setHasFixedSize(true)
@@ -62,7 +76,17 @@ class AssignmentListFragment(private val assignments: List<Assignment>?) : Fragm
 
     override fun onItemClick(t: Assignment, pos: Int, boolean: Boolean) {
 
-        if (pos==1){
+        when (pos) {
+            1 -> {
+                findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })
+            }
+            2 -> {
+                findNavController().navigate(R.id.action_assignmentListFragment_to_submitAssignmentFragment,Bundle( ).apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })
+            }
 
         }
 

@@ -8,9 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LessonPlanListItemBinding
 import com.app.ecarepro.model.LessonPlan
+import com.app.ecarepro.utils.Constant
 
-class LessonPlanListAdapter(private var lessonPlanList: MutableList<LessonPlan>,
-                            private var lessonPlanListFragment: LessonPlanListFragment) :
+class LessonPlanListAdapter(
+    private var lessonPlanList: MutableList<LessonPlan>,
+    private var lessonPlanListFragment: LessonPlanListFragment,
+    private val userType: String
+) :
     RecyclerView.Adapter<LessonPlanListAdapter.NoticeViewHolder>() {
 
 
@@ -31,6 +35,12 @@ class LessonPlanListAdapter(private var lessonPlanList: MutableList<LessonPlan>,
          val data = lessonPlanList[position]
 
         with(binding!!) {
+
+            if (   userType == Constant.PRINCIPAL ||  userType ==  Constant.MANAGEMENT) {
+                 llDelete.isVisible=false
+                llEdit.isVisible=false
+            }
+
             tvHeading.text=data.topic
             tvPlanSubj.text=data.subject
             tvPlanClass.text=data.classesName

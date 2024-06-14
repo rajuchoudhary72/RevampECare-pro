@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentOpenPdfBinding
 import com.app.ecarepro.ui.MainActivity
@@ -26,6 +27,7 @@ class OpenPdfFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         openPdfBinding= FragmentOpenPdfBinding.inflate(inflater,container,false)
+        openPdfBinding.toolbarPdf.setNavigationOnClickListener { findNavController().popBackStack() }
 
 
         url= requireArguments().getString("url").toString()

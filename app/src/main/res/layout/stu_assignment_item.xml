@@ -360,18 +360,21 @@
 
             </LinearLayout>
 
+
+
             <com.google.android.material.divider.MaterialDivider
                 android:layout_width="1dp"
                 android:layout_height="match_parent"/>
 
-
             <LinearLayout
-                android:id="@+id/llEdit"
+                android:id="@+id/llSubmit"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -380,33 +383,9 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/edit"
+                    android:text="@string/submit"
                     android:textColor="@color/brand_color"
-                    app:drawableLeftCompat="@drawable/ic_edit_pencil" />
-            </LinearLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="1dp"
-                android:layout_height="match_parent"/>
-
-            <LinearLayout
-                android:id="@+id/llDelete"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/delete"
-                    android:textColor="@color/brand_color"
-                    app:drawableLeftCompat="@drawable/delete_white"
+                    app:drawableLeftCompat="@drawable/ic_upload"
                     app:drawableTint="@color/brand_color"
                     />
             </LinearLayout>

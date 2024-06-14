@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAssignmentNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -21,6 +23,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AssignmentNavHostFragment : Fragment() {
 
+    private   var assignmentType: String=""
+    private   var assignmentID: String=""
     private lateinit var binding : FragmentAssignmentNavHostBinding
     private val assignmentNavHostViewModel : AssignmentNavHostViewModel by viewModels()
 
@@ -30,7 +34,11 @@ class AssignmentNavHostFragment : Fragment() {
     ): View  {
 
         binding=FragmentAssignmentNavHostBinding.inflate(inflater,container,false)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            assignmentType= requireArguments().getString(Constant.ASSIGNMENT_TYPE).toString()
+            assignmentID= requireArguments().getString(Constant.ID).toString()
+        }catch (_:Exception){}
          return binding.root
     }
 
@@ -62,7 +70,8 @@ class AssignmentNavHostFragment : Fragment() {
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
                                  it.data.subjectAssignments.forEach { assignmentsData ->
-                                    fragmentList.add(AssignmentListFragment(assignmentsData.assignments))
+                                    fragmentList.add(AssignmentListFragment(assignmentsData.assignments,
+                                       assignmentNavHostViewModel.userType,assignmentType,assignmentID ))
                                  }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
@@ -97,7 +106,15 @@ class AssignmentNavHostFragment : Fragment() {
             }
         }
 
-        assignmentNavHostViewModel.getAssignment()
+        if (assignmentType==Constant.CLASS_ASSIGNMENT){
+            assignmentNavHostViewModel.getClassAssignment(assignmentID)
+        }else{
+            assignmentNavHostViewModel.getAssignment()
+        }
+
+
+
+
 
     }
 }

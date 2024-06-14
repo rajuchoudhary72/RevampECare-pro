@@ -33,6 +33,9 @@ interface UserDataStore {
     suspend fun getRoleName( ): String?
 
     suspend fun saveRoleName(roleName: String)
+    suspend fun saveUserNameID(userNameId: String)
+
+    suspend fun getUserNameID( ): String?
 
     suspend fun saveUserType(userType: Int)
 

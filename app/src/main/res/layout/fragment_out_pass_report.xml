@@ -10,6 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.transport_attendance.out_pass.OutPassReportFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -67,17 +68,16 @@
                         <TextView
                             android:id="@+id/tv_select_date"
                             android:layout_width="match_parent"
-                            android:layout_height="52dp"
-                            android:layout_marginHorizontal="@dimen/_10sdp"
-                            android:layout_marginVertical="@dimen/_5sdp"
+                            android:layout_height="0dp"
+                             android:layout_marginVertical="@dimen/_5sdp"
+                            android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/edit_text_box_des_log"
-                            android:fontFamily="@font/ubuntu_light"
+                            android:fontFamily="@font/ubuntu_medium"
                             android:gravity="center_vertical"
                             android:padding="13dp"
                             android:text="@string/select_date"
-                            android:visibility="visible"
-                            app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
+                              />
 
 
                     </LinearLayout>
@@ -100,8 +100,8 @@
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/iv_no_item"
                 android:layout_gravity="center"
                 android:fontFamily="@font/ubuntu_medium"

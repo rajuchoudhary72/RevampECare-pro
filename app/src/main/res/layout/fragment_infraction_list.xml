@@ -225,7 +225,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/no_circuler_available"
+            android:text="@string/no_data_found"
             android:textSize="16sp"
             android:visibility="gone"
 

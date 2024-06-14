@@ -33,6 +33,7 @@ class PhotoSliderFragment : Fragment() {
     private   var  isLike: Boolean  = false
     private   var  isFav: Boolean  = false
     private   var  likes: Int  = 0
+    private var totalLikes = 0
 
 
 
@@ -59,6 +60,7 @@ class PhotoSliderFragment : Fragment() {
         }
         binding.photoView.imageUrl(url)
         binding.tvNumberLike.text=likes.toString()
+        totalLikes=likes
 
         if (galleryType==Constant.GALLERY_TYPE_VIDEO ){
             binding.ivVideoPlay.isVisible=true
@@ -100,10 +102,15 @@ class PhotoSliderFragment : Fragment() {
 
         binding.llLike.setOnClickListener {
             isLike = if (isLike){
+                totalLikes -= 1
+                binding.tvNumberLike.text=totalLikes.toString()
                 binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
                 photoSliderViewModel.manageLikes(Id,galleryType,false )
                 false
             }else{
+
+                totalLikes += 1
+                binding.tvNumberLike.text=totalLikes.toString()
                 binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
                 photoSliderViewModel.manageLikes(Id,galleryType,true )
                 true

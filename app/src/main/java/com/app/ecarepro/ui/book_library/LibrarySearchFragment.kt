@@ -16,7 +16,6 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentLibrarySearchBinding
 import com.app.ecarepro.model.BookDTL
-import com.app.ecarepro.model.LatestBook
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.book_library.view_model.BookSearchViewModel
 import com.app.ecarepro.utils.Constant
@@ -44,6 +43,18 @@ class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+        fragmentLibrarySearchBinding.edSearch.doAfterTextChanged {
+            getSearchData()
+        }
+
+
+
+
+    }
+
+    private fun getSearchData(){
         lifecycleScope.launch {
             bookSearchViewModel._bookSearchStateFlow.collectLatest {
                 when (it) {
@@ -90,25 +101,12 @@ class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
                 }
             }
         }
+        if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
+            bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
+        }else{
+            bookSearchViewModel.getLibrarySearch( "",Constant.PAGE_INDEX)
 
-       /* fragmentLibrarySearchBinding.ivSearch.setOnClickListener {
-            if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
-                bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
-            }
-        }*/
-
-        fragmentLibrarySearchBinding.edSearch.doAfterTextChanged {
-            if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
-                bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
-            }else{
-                bookSearchViewModel.getLibrarySearch( "",Constant.PAGE_INDEX)
-
-            }
         }
-
-
-
-
     }
 
     override fun onItemClick(t: BookDTL, pos: Int, boolean: Boolean) {

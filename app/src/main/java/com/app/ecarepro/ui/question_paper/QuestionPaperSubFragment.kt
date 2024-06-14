@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.QuestionPaper
 import com.app.ecarepro.databinding.FragmentQuestionPaperSubBinding
+import com.app.ecarepro.utils.AndroidDownloader
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 
 
@@ -20,7 +25,8 @@ class QuestionPaperSubFragment( val questionPapers: List<QuestionPaper>) : Fragm
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentQuestionPaperSubBinding.inflate(inflater,container,false)
-         return binding.root
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,6 +60,14 @@ class QuestionPaperSubFragment( val questionPapers: List<QuestionPaper>) : Fragm
     }
 
     override fun onItemClick(t: QuestionPaper, pos: Int, boolean: Boolean) {
-
+        if (pos==1){
+              findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                putString(Constant.url, t.file)
+            })
+        }
+        if (pos==2){
+            val androidDownloader = AndroidDownloader(requireContext())
+            androidDownloader.downloadFile(t.file, getString(R.string.question_paper) )
+        }
     }
 }

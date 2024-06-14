@@ -28,14 +28,16 @@ class CollectionFeeReportViewModel @Inject constructor(
 
 
     fun feeCollectionReport(
-        url: String,
-        senderId : String,
         dateFrom : String,
         dateTo : String,
     )=viewModelScope.launch {
         runCatching {
             feeCollectionMutableStateFlow.value = NetworkResult.Loading()
-            fomApiRepository.feeCollectionReport( url, senderId, dateFrom, dateTo)
+            fomApiRepository.feeCollectionReport(
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/Collection",
+                userDataStore.getSchoolData()!!.schoolCode,
+                dateFrom,
+                dateTo)
         }.onSuccess {
             feeCollectionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
