@@ -29,6 +29,7 @@ import com.app.ecarepro.databinding.FragmentLessionPlanListBinding
 import com.app.ecarepro.model.LessonPlan
 import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
@@ -223,11 +224,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                                 )
                                 binding.autoCompleteSub.setAdapter(arrayAdapter)
                             } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "No Subject Assign",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                mainActivity().showMessage("No Subject Assign")
 
                             }
                         }
@@ -275,11 +272,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
 
                             } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "No Class Assign",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                mainActivity().showMessage("No Class Assign")
                             }
 
                         }

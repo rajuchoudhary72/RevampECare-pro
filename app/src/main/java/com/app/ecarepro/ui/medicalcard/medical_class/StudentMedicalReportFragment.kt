@@ -27,6 +27,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.MedicalReportBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.medicalcard.MedicineCardViewModel
 import com.app.ecarepro.utils.PdfDocumentAdapter
 import com.squareup.picasso.Picasso
@@ -79,7 +80,7 @@ class StudentMedicalReportFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(it.message?:"")
                     }
 
                     is NetworkResult.Success -> {
@@ -190,7 +191,7 @@ class StudentMedicalReportFragment : Fragment() {
 
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(requireContext(), "Something wrong: $e", Toast.LENGTH_LONG).show()
+                mainActivity().showMessage("Something wrong: $e")
             }
 
             document.close()

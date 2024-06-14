@@ -27,6 +27,7 @@ import com.app.ecarepro.databinding.FragmentStaffApplyLeaveBinding
 import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.leave.LeaveHistoryAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
@@ -113,7 +114,8 @@ class StaffApplyLeaveFragment : Fragment() {
 
 
 
-            } else Toast.makeText(requireContext(), "Select To Date", Toast.LENGTH_LONG).show()
+            } else
+                mainActivity().showMessage("Select To Date")
         }
 
 
@@ -273,23 +275,21 @@ class StaffApplyLeaveFragment : Fragment() {
         var validate = true
         if (binding.tvStartDate.text.toString().isEmpty()) {
             validate = false
-            Toast.makeText(requireContext(), "Select From Date", Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Select From Date")
         }
         if (binding.tvEndDate.text.toString().isEmpty()) {
             validate = false
-            Toast.makeText(requireContext(), "Select To Date", Toast.LENGTH_LONG).show()
+            mainActivity().showMessage("Select To Date")
 
         }
 
         if (binding.textFiledReason.text.toString().isEmpty()) {
             validate = false
-            Toast.makeText(requireContext(), "Enter Reason", Toast.LENGTH_LONG).show()
-
+            mainActivity().showMessage("Enter Reason")
         }
         if (!binding.cbLeaveTc.isChecked) {
             validate = false
-            Toast.makeText(requireContext(), "Please Check Term and Condition", Toast.LENGTH_LONG)
-                .show()
+            mainActivity().showMessage("Please Check Term and Condition")
 
         }
         if (imageString==""){

@@ -14,6 +14,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentNotificationBinding
 import com.app.ecarepro.notificationCard
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -64,7 +65,7 @@ class NotificationFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is NotificationUiState.Success) {

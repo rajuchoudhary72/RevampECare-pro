@@ -27,6 +27,7 @@ import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.selectableClassView
 import com.app.ecarepro.selectableRecipient
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.MessageViewModel
 import com.rubensousa.decorator.LinearDividerDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -302,7 +303,7 @@ class SelectRecipientPagerFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         binding.recyclerView.withModels {

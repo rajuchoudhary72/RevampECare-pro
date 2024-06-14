@@ -192,7 +192,7 @@ class ComposeViewModel @Inject constructor(
             FileAccess.bitmapToByteArrayBase64String(
                 FileAccess.bitmapFromFile(
                     context,
-                    attachments.first().path!!
+                    it.path!!
                 )
             )
         }

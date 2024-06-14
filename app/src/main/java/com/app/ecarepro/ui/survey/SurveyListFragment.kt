@@ -21,6 +21,7 @@ import com.app.ecarepro.databinding.SurveyLayoutBinding
 import com.app.ecarepro.model.MonthModel
 import com.app.ecarepro.model.YearModel
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.staffAttendence.AttendanceViewModel
 import com.app.ecarepro.ui.staffAttendence.StaffAttendenceListAdapter
 import com.lassi.common.extenstions.hide
@@ -96,26 +97,14 @@ class SurveyListFragment : Fragment() {
                                         else if (data.resultDeclared){
                                             // mContext.startActivity(Intent(mContext, ActivitySurveyResult::class.java).putExtra("surId", surveyModel.getSurID()) )
 
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Survey Result",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            mainActivity().showMessage("Survey Result")
                                         }
 
 
                                         else if (data.isResponded)
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Thanks for your response. Your response has already been recorded.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            mainActivity().showMessage("Thanks for your response. Your response has already been recorded.")
                                         else
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Survey Closed",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            mainActivity().showMessage("Survey Closed")
                                     }
 
                                 binding.rvSurveyList.apply {

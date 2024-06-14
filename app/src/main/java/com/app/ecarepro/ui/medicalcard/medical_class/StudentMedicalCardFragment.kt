@@ -17,6 +17,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.StudentMedicalCardBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.medicalcard.MedicineCardViewModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -77,7 +78,7 @@ class StudentMedicalCardFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
-                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                        mainActivity().showMessage(it.message?:"")
                     }
 
                     is NetworkResult.Success -> {

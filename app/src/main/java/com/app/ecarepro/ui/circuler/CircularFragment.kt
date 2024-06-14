@@ -23,6 +23,7 @@ import com.app.ecarepro.databinding.FragmentCirculerBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.Circular
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,7 +58,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
             if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
                 circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
             }else {
-                 Toast.makeText(requireContext(),"Please enter title!!!",Toast.LENGTH_LONG ).show()
+                mainActivity().showMessage("Please enter title!!!")
             }
         }
         return fragmentCircularBinding.root

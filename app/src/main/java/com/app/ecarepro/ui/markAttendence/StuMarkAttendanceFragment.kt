@@ -35,6 +35,7 @@ import com.app.ecarepro.model.ClassesForSubTeach
 import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.model.StudentListMarkAtt
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -342,7 +343,7 @@ class StuMarkAttendanceFragment : Fragment(),  MenuProvider, ItemListener<Studen
                 } is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.data != null) {
-                        Toast.makeText(requireContext(),"Successfully Uploaded!!!",Toast.LENGTH_LONG).show()
+                        mainActivity().showMessage("Successfully Uploaded!!!")
                           } } }  } }
         stuMarkAttendanceViewModel.postMarkAttendance(
             classID,

@@ -22,6 +22,7 @@ import com.app.ecarepro.databinding.FragmentConversationBinding
 import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.imageUrl
 import com.rubensousa.decorator.LinearMarginDecoration
@@ -98,7 +99,7 @@ class ConversationFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is ConversationMessageUiState.Success || uiState == ConversationMessageUiState.EmptyInbox) {
