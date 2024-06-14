@@ -309,7 +309,7 @@ class ComposeViewModel @Inject constructor(
             val bytes: ByteArray = readBytes(
                 imageStream
             )
-            Base64.encodeToString(bytes, Base64.DEFAULT)
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
         } catch (e: IOException) {
             e.printStackTrace()
             null
