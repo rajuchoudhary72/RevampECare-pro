@@ -45,9 +45,6 @@ class BookLibraryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
         lifecycleScope.launch {
             latestBookViewModel._latestBookStateFlow.collectLatest {
                 when (it) {

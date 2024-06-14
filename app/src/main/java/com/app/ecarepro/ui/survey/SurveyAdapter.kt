@@ -1,19 +1,20 @@
 package com.app.ecarepro.ui.survey
 
-import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.SurveyItemBinding
-import com.app.ecarepro.databinding.TeacherItemBinding
-import com.app.ecarepro.model.Student
 import com.app.ecarepro.utils.getDateTimeFormatted
 
-class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss:Int, data: AllSurvey) -> Unit) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
+class SurveyAdapter(
+    private var syllabusLST: List<AllSurvey>,
+    val callback: (poss: Int, data: AllSurvey) -> Unit
+) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
         val binding =
             SurveyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,12 +26,12 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
 
         val binding = DataBindingUtil.getBinding<SurveyItemBinding>(holder.itemView)
-        val surveyModel=syllabusLST[position]
+        val surveyModel = syllabusLST[position]
         // bindingm.attData = syllabusLST[position]
-        if (binding!=null){
+        if (binding != null) {
             binding.tvTest.text = surveyModel.description
             holder.itemView.setOnClickListener {
-                callback.invoke(position,surveyModel)
+                callback.invoke(position, surveyModel)
             }
 
 
@@ -60,8 +61,8 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss
                     binding.tvRespondedOn.setText(
                         "RESPONDED ON: " + surveyModel.respondedOn?.let {
                             (
-                                it
-                            )
+                                    it
+                                    )
                         }
                     )
                     binding.tvRespondedOn.setVisibility(View.VISIBLE)
@@ -81,10 +82,14 @@ class SurveyAdapter(private var syllabusLST: List<AllSurvey>,val callback: (poss
                 }
                 //  notifyDataSetChanged();
             })
+
+            binding.rootContainer.setBackgroundColor(
+                ContextCompat.getColor(
+                    binding.rootContainer.context,
+                    if (surveyModel.isOpen) R.color.grey_10 else R.color.white
+                )
+            )
         }
-
-
-
     }
 
 

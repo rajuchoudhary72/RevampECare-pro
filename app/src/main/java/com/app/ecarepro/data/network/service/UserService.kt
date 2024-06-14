@@ -151,6 +151,13 @@ interface UserService {
     @GET("Library/DTL")
     suspend fun getLibraryDetails(): NetworkLatestBook
 
+
+    @GET("Academic/TeachersAssignment")
+    suspend fun teachersAssignment(
+        @Query("ID") iD: String,
+    ): NetworkTeacherAssignment
+
+
     @GET("Library/BookDTL")
     suspend fun getBookDetails(
         @Query("BookID") bookID: Int,
@@ -355,10 +362,7 @@ interface UserService {
     ): CommonResponse
 
 
-    @GET("Academic/TeachersAssignment")
-    suspend fun teachersAssignment(
-        @Query("ID") iD: String,
-    ): NetworkTeacherAssignment
+
 
     @GET("Academic/DeleteAssignment")
     suspend fun deleteAssignment(

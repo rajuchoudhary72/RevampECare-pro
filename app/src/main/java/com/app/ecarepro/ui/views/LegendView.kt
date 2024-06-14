@@ -9,9 +9,13 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import com.airbnb.epoxy.ModelProp
+import com.airbnb.epoxy.ModelView
+import com.airbnb.epoxy.TextProp
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.LegendViewBinding
+import com.app.ecarepro.databinding.ItemLegendViewBinding
 
+@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 @SuppressLint("Recycle")
 class LegendView @JvmOverloads constructor(
     context: Context,
@@ -19,10 +23,10 @@ class LegendView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private var binding: LegendViewBinding
+    private var binding: ItemLegendViewBinding
 
     init {
-        binding = LegendViewBinding.inflate(LayoutInflater.from(context), this, true)
+        binding = ItemLegendViewBinding.inflate(LayoutInflater.from(context), this, true)
         orientation = VERTICAL
 
         attrs?.let {
@@ -45,19 +49,22 @@ class LegendView @JvmOverloads constructor(
     }
 
     fun setImageTint(color: Int) {
-        if (color != -1 )
+        if (color != -1)
             binding.image.imageTintList = ColorStateList.valueOf(color)
     }
 
+    @ModelProp(ModelProp.Option.DoNotHash)
     fun setImage(drawable: Drawable?) {
-        binding.image.isVisible = drawable!=null
+        binding.image.isVisible = drawable != null
         binding.image.setImageDrawable(drawable)
     }
 
+    @ModelProp
     fun setTitle(value: String) {
         binding.title.text = value
     }
 
+    @ModelProp
     fun setSubTitle(value: String?) {
         binding.subTitle.text = value
     }

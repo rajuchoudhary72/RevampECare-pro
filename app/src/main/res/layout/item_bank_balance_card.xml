@@ -60,50 +60,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <ImageView
-                android:id="@+id/img_pnb"
-                android:layout_width="65dp"
-                android:layout_height="26dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/punjab_national_bank_new_logo"
-                app:layout_constraintStart_toStartOf="parent"
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/banks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:layout_constraintTop_toBottomOf="@+id/title"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/text_estimated_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹ 1,26,37,980"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@+id/img_pnb"
-                app:layout_constraintTop_toBottomOf="@+id/img_pnb" />
-
-
-            <ImageView
-                android:id="@+id/img_axis"
-                android:layout_width="100dp"
-                android:layout_height="26dp"
-                android:src="@drawable/axis_bank_logo"
-                app:layout_constraintBottom_toBottomOf="@+id/img_pnb"
-                app:layout_constraintStart_toEndOf="@id/guidelineCenter"
-                app:tint="@color/red"
-                tools:ignore="ContentDescription" />
-
-
-            <TextView
-                android:id="@+id/text_received_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                tools:text="₹3,43,90,000"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="@+id/img_axis"
-                app:layout_constraintTop_toBottomOf="@+id/img_axis" />
-
+                app:spanCount="2"
+                tools:itemCount="4"
+                tools:layout_editor_absoluteX="0dp"
+                tools:listitem="@layout/item_legend_view" />
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/chartView"
@@ -116,7 +83,7 @@
                 android:id="@+id/groupCollapsed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="img_pnb,text_estimated_amount,img_axis,text_received_amount" />
+                app:constraint_referenced_ids="banks" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

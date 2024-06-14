@@ -14,6 +14,14 @@
             type="java.lang.String" />
 
         <variable
+            name="profileImageStatus"
+            type="java.lang.Integer" />
+
+        <variable
+            name="bannerImageStatus"
+            type="java.lang.Integer" />
+
+        <variable
             name="canEditBannerImage"
             type="java.lang.Boolean" />
 
@@ -61,6 +69,25 @@
             tools:ignore="ContentDescription"
             tools:src="@drawable/frame_192" />
 
+
+        <TextView
+            isVisible="@{bannerImageStatus != 1 || bannerImageStatus != 2}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/horizontal_margin"
+            android:background="@drawable/rounded_bg_button"
+            tools:backgroundTint="@color/darkYellow"
+            android:backgroundTint="@{profileImageStatus == 1 ? @color/darkYellow : @color/red}"
+            android:fontFamily="@font/calibri_regular"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text='@{bannerImageStatus == 1 ? "Pending" : "Rejected"}'
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Pending" />
+
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileImage"
             imageUrl="@{profileImage}"
@@ -79,6 +106,25 @@
             tools:src="@drawable/img_message_user" />
 
         <TextView
+            android:id="@+id/imgStatus"
+            isVisible="@{profileImageStatus != 1 || profileImageStatus != 2}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@drawable/rounded_bg_button"
+            android:backgroundTint="@{profileImageStatus == 1 ? @color/darkYellow : @color/red}"
+            android:fontFamily="@font/calibri_regular"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_4sdp"
+            android:text='@{profileImageStatus == 1 ? "Pending" : "Rejected"}'
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profileImage"
+            tools:backgroundTint="@color/darkYellow"
+            tools:text="Pending" />
+
+        <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,7 +133,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileImage"
+            app:layout_constraintTop_toBottomOf="@id/imgStatus"
             tools:text="@string/change_password" />
 
         <TextView
@@ -131,10 +177,10 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="@color/green"
+            android:onClick="@{clickListener}"
             android:padding="3dp"
             android:src="@drawable/baseline_add_24"
             android:tint="@color/white"
-            android:onClick="@{clickListener}"
             app:contentPadding="4dp"
             app:layout_constraintBottom_toBottomOf="@id/profileImage"
             app:layout_constraintEnd_toEndOf="@id/profileImage"
@@ -149,8 +195,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/horizontal_margin"
-            android:onClick="@{clickListener}"
             android:backgroundTint="@color/green"
+            android:onClick="@{clickListener}"
             android:src="@drawable/ic_edit"
             app:fabCustomSize="36dp"
             app:layout_constraintBottom_toBottomOf="@id/bannerImage"
