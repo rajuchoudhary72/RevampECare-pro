@@ -315,7 +315,7 @@ class ComposeFragment : Fragment() {
     private fun openAudioRecorder() {
         VoiceSenderDialog(object : AudioRecordListener {
             override fun onAudioReady(audioUri: String?) {
-                composeViewModel.setAttachments(listOf(MiMedia(path = audioUri)))
+                composeViewModel.setAttachments(listOf(MiMedia(path = audioUri, name = AttachmentType.RECORDING.name)))
             }
 
             override fun onReadyForRecord() {}

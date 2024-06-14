@@ -25,7 +25,11 @@ class AuthInterceptor @Inject constructor(
         requestBuilder.addHeader("Content-Type", "application/json")
         requestBuilder.addHeader("Accept", "application/json")
 
-        val isLoginApi = loginApis.any { it.contains(chain.request().url.pathSegments.last()) }
+        val isLoginApi = loginApis.any {
+            it.contains(
+                chain.request().url.pathSegments.take(2).joinToString("/")
+            )
+        }
 
         val authToken = runBlocking {
             if (isLoginApi) {

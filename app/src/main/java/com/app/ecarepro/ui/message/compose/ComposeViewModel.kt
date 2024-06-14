@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
@@ -215,8 +216,13 @@ class ComposeViewModel @Inject constructor(
 
         return attachments.map { attachment ->
             if (isPdf(attachment)) {
-                val file = context.getFile(attachment.path?.toUri())
-                getBase64StringFromUri(file!!.toUri()) ?: ""
+                if (attachment.name == AttachmentType.RECORDING.name) {
+                    val file = File(attachment.path)
+                    getBase64StringFromUri(file) ?: ""
+                } else {
+                    val file = context.getFile(attachment.path?.toUri())
+                    getBase64StringFromUri(file!!.toUri()) ?: ""
+                }
             } else {
                 FileAccess.bitmapToByteArrayBase64String(
                     FileAccess.bitmapFromFile(
@@ -235,13 +241,23 @@ class ComposeViewModel @Inject constructor(
         } else if (attachments.size == 1) {
             val attachment = attachments.first()
             if (isPdf(attachment)) {
-                val file = context.getFile(attachment.path?.toUri())
-                val attach = getBase64StringFromUri(file!!.toUri())
-                Attachment(
-                    attachment = attach,
-                    fileExt = getFileExtension(file),
-                    fileURL = null
-                )
+                if (attachment.name == AttachmentType.RECORDING.name) {
+                    val file = File(attachment.path)
+                    val attach = getBase64StringFromUri(file)
+                    Attachment(
+                        attachment = attach,
+                        fileExt = getFileExtension(file),
+                        fileURL = null
+                    )
+                } else {
+                    val file = context.getFile(attachment.path?.toUri())
+                    val attach = getBase64StringFromUri(file!!.toUri())
+                    Attachment(
+                        attachment = attach,
+                        fileExt = getFileExtension(file),
+                        fileURL = null
+                    )
+                }
             } else {
                 val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
@@ -258,7 +274,11 @@ class ComposeViewModel @Inject constructor(
     }
 
     private fun isPdf(attachment: MiMedia) =
-        mutableListOf(AttachmentType.PDF.name, AttachmentType.AUDIO.name).contains(attachment.name)
+        mutableListOf(
+            AttachmentType.PDF.name,
+            AttachmentType.AUDIO.name,
+            AttachmentType.RECORDING.name
+        ).contains(attachment.name)
 
     private fun getFileExtension(file: File): String {
         val name = file.name
@@ -276,13 +296,25 @@ class ComposeViewModel @Inject constructor(
             val bytes: ByteArray = readBytes(
                 imageStream
             )
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+    private fun getBase64StringFromUri(file: File): String? {
+        val imageStream: InputStream
+        return try {
+            imageStream = FileInputStream(file)
+            val bytes: ByteArray = readBytes(
+                imageStream
+            )
             Base64.encodeToString(bytes, Base64.DEFAULT)
         } catch (e: IOException) {
             e.printStackTrace()
             null
         }
     }
-
     @Throws(IOException::class)
     private fun readBytes(inputStream: InputStream): ByteArray {
         val byteBuffer = ByteArrayOutputStream()
