@@ -14,6 +14,7 @@ class AuthInterceptor @Inject constructor(
     @ApplicationContext val context: Context,
     private val userDataStore: UserDataStore
 ) : Interceptor {
+
     private val loginApis = mutableListOf(
         "School/DTL",
         "User/Verify",

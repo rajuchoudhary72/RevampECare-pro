@@ -36,6 +36,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLeaveListBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -99,6 +100,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
     override fun onItemClick(t: Dtl, pos: Int, boolean: Boolean) {
 
         if (pos==1){
+
             lifecycleScope.launch {
                 leaveHistoryViewModel.leaveDeleteStateFlow.collectLatest {
                     when (it) {

@@ -49,7 +49,7 @@ class QuestionPaperFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getClasses()
+
 
         binding.apply {
             binding.autoCompleteClass.onItemClickListener =
@@ -65,6 +65,8 @@ class QuestionPaperFragment : Fragment() {
                     getQuestionPaper(classSelectedID, mYearList[pos].yrID)
                 }
         }
+
+        getClasses()
 
     }
 
@@ -84,6 +86,9 @@ class QuestionPaperFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
+
+                        mMyClassDataString.clear()
+
                         if (it.data != null) {
                             if (it.data.myClasses != null) {
                                 mMyClass = it.data.myClasses
@@ -128,6 +133,8 @@ class QuestionPaperFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
 
+                            yearClassDataString.clear()
+
                             if (it.data.academicYear != null) {
                                 mYearList = it.data.academicYear.toMutableList()
                                 mYearList.forEach { data ->
@@ -136,9 +143,9 @@ class QuestionPaperFragment : Fragment() {
                                 val arrayAdapter = ArrayAdapter(
                                     requireContext(),
                                     R.layout.view_drop_down_menu,
-                                    mMyClassDataString
+                                    yearClassDataString
                                 )
-                                binding.autoCompleteClass.setAdapter(arrayAdapter)
+                                binding.autoCompleteSelectYear.setAdapter(arrayAdapter)
                             }
                             if (it.data.qP_List != null) {
                                 val fragmentList: ArrayList<Fragment> = ArrayList()

@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LatestBookListItemBinding
-
 import com.app.ecarepro.model.LatestBook
- import com.squareup.picasso.Picasso
+
+import com.squareup.picasso.Picasso
 
 class LatestBookAdapter(private var latestBookList: List<LatestBook>,
                         private var latestBookFragment: LatestBookFragment ) :

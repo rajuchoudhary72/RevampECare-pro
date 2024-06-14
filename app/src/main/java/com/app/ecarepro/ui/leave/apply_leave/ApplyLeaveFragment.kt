@@ -52,7 +52,7 @@ class  ApplyLeaveFragment : Fragment() {
     ): View  {
 
         binding= FragmentApplyLeaveBinding.inflate(inflater,container,false)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
          return binding.root
     }
 

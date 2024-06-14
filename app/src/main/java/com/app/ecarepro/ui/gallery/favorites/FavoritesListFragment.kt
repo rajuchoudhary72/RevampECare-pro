@@ -20,6 +20,7 @@ import com.app.ecarepro.databinding.FragmentPhotoAlbumBinding
 import com.app.ecarepro.model.AlbumVideo
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -83,12 +84,15 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
 
                         if (it.data!=null){
 
-                            if (it.data.list!=null){
+                            if (it.data.list.isNotEmpty()){
 
                                 binding.rvPhotoAlbum.isVisible=true
                                 binding.tvNoData.isVisible=false
                                 isLoading=true
 
+                                if (pageIndex==1){
+                                    favoritesListAdapter.clearData()
+                                }
                                 favoritesListAdapter.setData(it.data.list.toMutableList())
 
                             }else{
@@ -99,6 +103,9 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
 
                             }
 
+                        }else{
+                            binding.rvPhotoAlbum.isVisible=false
+                            binding.tvNoData.isVisible=true
                         }
 
                     }
@@ -152,12 +159,18 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
     }
 
     override fun onItemClick(t: FavList, pos: Int, boolean: Boolean) {
-        this@FavoritesListFragment. findNavController().
-        navigate(R.id.action_videoAlbumFragment_to_videoAlbumDTLFragment, Bundle().apply {
-            putString(Constant.ID, t.id)
 
+        findNavController().navigate(R.id.action_favoritesListFragment_to_photoSliderFragment,
+            Bundle().apply {
+                putString(Constant.ID, t.id)
+                putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.fileName))
+                putString(Constant.FULL_URL_ARGUMENT, t.fileName)
+                putInt(Constant.GALLERY_TYPE, t.galleryType)
+                putBoolean("isLiked", t.islLike == 1 )
+                putBoolean("isFav", t.isFavourite)
+                putInt("likes", t.totalLike)
+            })
 
-        })
     }
 
 }

@@ -1031,7 +1031,7 @@
                             android:background="@drawable/rectangle_border_gray_corner_radius"
                             android:gravity="center_vertical"
                             android:padding="@dimen/_5sdp"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/tv_name"

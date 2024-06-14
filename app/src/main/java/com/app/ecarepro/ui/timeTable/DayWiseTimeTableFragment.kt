@@ -13,7 +13,7 @@ import com.app.ecarepro.model.TimeTableData
 import com.app.ecarepro.ui.assignment.AssignmentListAdapter
 
 
-class DayWiseTimeTableFragment(private val timeTableData: TimeTableData   ) : Fragment() {
+class DayWiseTimeTableFragment(private val timeTableData: TimeTableData, val toFragment: String) : Fragment() {
 
 
     private lateinit var binding : FragmentDayWiseTimeTableBinding
@@ -36,7 +36,7 @@ class DayWiseTimeTableFragment(private val timeTableData: TimeTableData   ) : Fr
 
             val assignmentListAdapter =
                 DayWiseListAdapter(timeTableData.timeTable,
-                    this@DayWiseTimeTableFragment)
+                    this@DayWiseTimeTableFragment,toFragment)
 
             binding.rvTimeTable.apply {
                 setHasFixedSize(true)

@@ -40,12 +40,19 @@ import java.util.concurrent.TimeUnit
 class StaffApplyLeaveFragment : Fragment() {
 
 
+    private var isSessionFromSelected: Boolean=false
+    private var isSessionToSelected: Boolean=false
     private var days: Long = 0
+    private var sessionFromPos  = 0
+    private var sessionToPos  = 0
     private lateinit var binding: FragmentStaffApplyLeaveBinding
     private val leaveApplyLeaveViewModel: StaffApplyLeaveViewModel by viewModels()
     private   var imageExt: String =""
     private   var imageString: String =""
-    private   var halfdayDTL: List<HalfdayDTL> =ArrayList()
+    private   var halfdayDTL = mutableListOf<HalfdayDTL>()
+    private val sessionList = listOf<String> ("Session 1","Session 2")
+
+
 
 
     override fun onCreateView(
@@ -54,7 +61,7 @@ class StaffApplyLeaveFragment : Fragment() {
     ): View {
 
         binding = FragmentStaffApplyLeaveBinding.inflate(inflater, container, false)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -68,6 +75,9 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.tvStartDate.text=Constant.currentDate()
         binding.tvEndDate.text=Constant.currentDate()
 
+        val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu, sessionList)
+        binding.autoCompleteSessionTo.setAdapter(arrayAdapter)
+        binding.autoCompleteSessionFrom.setAdapter(arrayAdapter)
 
 
         binding.llStartDate.setOnClickListener {
@@ -127,6 +137,21 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
 
             if (validateData()) {
+
+                if (sessionFromPos==2){
+                    halfdayDTL.add(HalfdayDTL(
+                        binding.tvStartDate.text.toString(),
+                        2
+                    ))
+                }
+                if (sessionToPos==1){
+                    halfdayDTL.add(HalfdayDTL(
+                        binding.tvEndDate.text.toString(),
+                        1
+                    ))
+                }
+
+
                 leaveApplyLeaveViewModel.leaveApply(
                     leaveID,
                     binding.tvStartDate.text.toString(),
@@ -163,6 +188,20 @@ class StaffApplyLeaveFragment : Fragment() {
             }
 
         }
+
+
+        binding.autoCompleteSessionFrom.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                isSessionFromSelected=true
+                sessionFromPos=position
+
+              }
+        binding.autoCompleteSessionTo.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                isSessionToSelected=true
+               sessionToPos=position
+             }
+
 
 
 
@@ -230,7 +269,7 @@ class StaffApplyLeaveFragment : Fragment() {
             }
         }
 
-    fun validateData(): Boolean {
+    private fun validateData(): Boolean {
         var validate = true
         if (binding.tvStartDate.text.toString().isEmpty()) {
             validate = false
@@ -252,6 +291,17 @@ class StaffApplyLeaveFragment : Fragment() {
             Toast.makeText(requireContext(), "Please Check Term and Condition", Toast.LENGTH_LONG)
                 .show()
 
+        }
+        if (imageString==""){
+            validate = false
+            Toast.makeText(requireContext(), "Attachment is mandatory", Toast.LENGTH_LONG)
+                .show()
+        }
+        if (!isSessionFromSelected){
+            validate = false
+        }
+        if (!isSessionToSelected){
+            validate = false
         }
 
         return validate

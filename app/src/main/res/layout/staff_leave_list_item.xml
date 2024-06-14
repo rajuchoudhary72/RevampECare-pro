@@ -19,13 +19,13 @@
             android:id="@+id/rel_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             android:padding="10dp"
+             android:padding="5dp"
              >
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/user_img"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
                 app:strokeColor="?attr/colorOutlineVariant"
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/user_img"
                 >
@@ -175,21 +175,22 @@
                 android:id="@+id/tv_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tv_bg_rounded_status_blue"
-                android:paddingVertical="2dp"
+
+                 android:paddingVertical="2dp"
                 android:paddingHorizontal="8dp"
                 android:text="@{data.status}"
                 android:textColor="@color/white"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="10dp" />
+                android:layout_marginStart="10dp"
+                />
 
             <TextView
                 android:id="@+id/tv_action_on"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="2dp"
-                android:paddingHorizontal="8dp"
-                 android:layout_marginEnd="10dp"
+                 android:layout_marginStart="5dp"
+                android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/tv_status"
                 isVisible="@{data.status.equals(`Approved`)}"
                 />
@@ -226,15 +227,15 @@
             android:id="@+id/rel_approve_by"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
+            android:padding="5dp"
 
             isVisible="@{data.status.equals(`Approved`)}"
              >
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/im_approve_by"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_centerVertical="true"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
                 app:strokeColor="?attr/colorOutlineVariant"

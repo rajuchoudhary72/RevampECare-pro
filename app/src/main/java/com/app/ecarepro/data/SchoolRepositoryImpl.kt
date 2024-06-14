@@ -68,8 +68,8 @@ class SchoolRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNotice(pg: Int, classID: Int): NetworkNotice {
-        return schoolService.getNotices(pg, classID)
+    override suspend fun getNotice(pg: Int, classID: Int,isClassNotice: Boolean): NetworkNotice {
+        return schoolService.getNotices(pg, classID,isClassNotice)
 
     }
 

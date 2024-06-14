@@ -134,6 +134,7 @@ class CollectionFeeReportFragment : Fragment() {
                 }
             }
         }
-        collectionFeeReportViewModel.feeCollectionReport("","","","")
+        collectionFeeReportViewModel.feeCollectionReport( binding.dateFrom.text.toString(),
+            binding.dateTo.text.toString())
     }
 }

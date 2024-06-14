@@ -144,15 +144,14 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             tools:listitem="@layout/transport_att_student_list_item"
-
-            />
+             />
 
         <TextView
             android:id="@+id/tv_no_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_no_item"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_300sdp"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
             android:text="@string/no_data_found"

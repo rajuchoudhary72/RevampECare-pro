@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.lessonPlan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
 import com.app.ecarepro.data.network.model.NetworkMarkAttendance
@@ -19,8 +20,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LessonPlanListViewModel  @Inject constructor(
-    private val  userRepository: UserRepository
+    private val  userRepository: UserRepository,
+    private val userDataStore: UserDataStore,
 ) : ViewModel() {
+
+    var userType : String = ""
+
+    init {
+        viewModelScope.launch {
+            userType = userDataStore.getRoleName().toString()
+        }
+    }
 
 
     private val lessonPlanListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLessonPlanList>> = MutableStateFlow(

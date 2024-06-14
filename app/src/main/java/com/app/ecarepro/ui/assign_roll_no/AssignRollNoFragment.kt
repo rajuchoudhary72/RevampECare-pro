@@ -46,7 +46,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
     private lateinit var mMyClass: List<MyClasseTeacherOf>
 
     private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
-    private val nameFilter = listOf("Name",  "Admission" )
+    private val nameFilter = listOf("Name", "Roll No", "Admission" )
 
 
 
@@ -90,6 +90,10 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                     }
 
                     1 ->{
+                        selectedFilterType=Constant.FILTER_ROLL_NO
+                    }
+
+                    2 ->{
                         selectedFilterType=Constant.FILTER_ADMISSION_NO
                     }
                 }

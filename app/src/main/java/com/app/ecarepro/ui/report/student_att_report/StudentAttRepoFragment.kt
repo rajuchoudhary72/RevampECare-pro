@@ -52,22 +52,22 @@ class StudentAttRepoFragment : Fragment() {
             getStudentAttendance()
 
             binding.llStart.setOnClickListener {
-                ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+                ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                     override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                        binding.tvStartDate.text = date
+                        binding.tvStartDate.text = Constant.dateToShow(date.toString())
                         getStudentAttendance()
                      }
 
-                })
+                }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
             }
             binding.llEnd.setOnClickListener {
-                ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+                ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                     override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                        binding.tvEndDate.text = date
+                        binding.tvEndDate.text = Constant.dateToShow(date.toString())
                         getStudentAttendance()
                     }
 
-                })
+                }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
             }
         }
 
@@ -101,7 +101,7 @@ class StudentAttRepoFragment : Fragment() {
 
                             setupAttDetails(it.data)
 
-                            if (it.data.attendance.isNotEmpty()) {
+                            if (it.data.attendance!=null) {
                                 binding.rvAttendanceList.isVisible = true
 
                                 val studentRepoAttAdapter = StudentAttAdapter(
@@ -130,8 +130,8 @@ class StudentAttRepoFragment : Fragment() {
 
         }
 
-        studentAttRepoViewModel.getStudentAttendance( binding.tvFrom.text.toString(),
-            binding.tvTo.text.toString(),"0",id)
+        studentAttRepoViewModel.getStudentAttendance( binding.tvStartDate.text.toString(),
+            binding.tvEndDate.text.toString(),"0",id)
 
 
     }
@@ -154,26 +154,28 @@ class StudentAttRepoFragment : Fragment() {
 
 
 
-            perPresent.text = buildString {
-                append(
-                    ((data.totalPresent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                )
-                append("%")  }
-            perAbsent.text = buildString {
-                append(
-                    ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                )
-                append("%")  }
-            perLeave.text = buildString {
-                append(
-                    ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                )
-                append("%")  }
-            tvLateCircle.text = buildString {
-                append(
-                    ((data.totalLates * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                )
-                append("%")  }
+            try {
+                perPresent.text = buildString {
+                    append(
+                        ((data.totalPresent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
+                    )
+                    append("%")  }
+                perAbsent.text = buildString {
+                    append(
+                        ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
+                    )
+                    append("%")  }
+                perLeave.text = buildString {
+                    append(
+                        ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
+                    )
+                    append("%")  }
+                tvLateCircle.text = buildString {
+                    append(
+                        ((data.totalLates * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
+                    )
+                    append("%")  }
+            }catch (_:Exception){ }
 
 
 

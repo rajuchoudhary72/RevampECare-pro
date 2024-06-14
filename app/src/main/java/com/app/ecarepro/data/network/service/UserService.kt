@@ -20,7 +20,6 @@ import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
-import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
@@ -69,7 +68,6 @@ import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
- import com.app.ecarepro.ui.medicine_issue.MedicineIssued
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
@@ -83,18 +81,16 @@ import com.app.ecarepro.ui.survey.SurveyListResponse
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
 import com.app.ecarepro.data.network.model.NetworkAlbumType
-import com.app.ecarepro.data.network.model.NetworkAllTeacher
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
-import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
-import com.app.ecarepro.data.network.model.NetworkClassmateLST
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkLibraryDTL
 import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
@@ -113,14 +109,12 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
-import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.FeeSummery
-import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 interface UserService {
@@ -149,7 +143,10 @@ interface UserService {
 
 
     @GET("Library/DTL")
-    suspend fun getLibraryDetails(): NetworkLatestBook
+    suspend fun getLibraryDTL(): NetworkLibraryDTL
+
+
+
 
     @GET("Library/BookDTL")
     suspend fun getBookDetails(
@@ -585,7 +582,7 @@ interface UserService {
 
     @GET("Academic/ClassTimetable")
     suspend fun classTimetable(
-        @Query("ID") id: String
+        @Query("ID") id: String?
     ): NetworkTeachersTimetable
 
     @GET("Appointment/Overview")

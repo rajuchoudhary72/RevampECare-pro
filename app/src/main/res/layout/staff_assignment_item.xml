@@ -128,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:drawablePadding="4dp"
-                            android:text="Status: "
+                            android:text="@string/status_s"
                              />
 
                         <TextView
@@ -178,11 +178,44 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/date_rel2"
+                        android:id="@+id/rl_class"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/date_rel"
-                        android:layout_marginTop="10dp">
+                         android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/tv_class_place"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginTop="3dp"
+                            android:drawablePadding="3dp"
+                            android:text="@string/classes"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvClass"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:layout_toEndOf="@+id/tv_class_place"
+                            android:paddingTop="3dp"
+                            android:layout_marginStart="5dp"
+                             android:textColor="@color/grey_40"
+
+                            app:fontFamily="@font/ubuntu_medium" />
+
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/date_rel2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/rl_class"
+                         >
 
                         <TextView
                             android:id="@+id/clock2"

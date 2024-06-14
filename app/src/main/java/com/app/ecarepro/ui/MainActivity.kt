@@ -37,8 +37,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.menuCard
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
 
 
 @AndroidEntryPoint
@@ -294,7 +292,7 @@ class MainActivity : AppCompatActivity() {
         when (menuID) {
             3 -> {
                 if (userData.userType == Constant.STAFF_TYPE) {
-                    if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
+                    if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
                         navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
                             putString(Constant.TO, Constant.FRA_ASSI)
                         })
@@ -309,18 +307,25 @@ class MainActivity : AppCompatActivity() {
             }
 
             4 -> {
-                if (userData.userType == Constant.STAFF_TYPE) {
-                    if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
-                        navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
-                            putString(Constant.TO, Constant.FRA_TIMETABLE)
-                        })
-                    } else {
-                        navController.navigate(R.id.timeTableNavHostFragment)
-                    }
+                try {
+                    if (userData.userType == Constant.STAFF_TYPE) {
+                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                            navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_TIMETABLE)
+                            })
+                        } else {
+                            navController.navigate(R.id.timeTableNavHostFragment)
+                        }
 
-                } else {
-                    navController.navigate(R.id.timeTableNavHostFragment)
+                    } else {
+                        navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                            putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
+                        })
+                    }
+                }catch (e:Exception){
+
                 }
+
 
             }
 
@@ -328,7 +333,7 @@ class MainActivity : AppCompatActivity() {
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
            // 12 ->  navController.navigate(R.id.conversationReportFragment)
-            12 ->  navController.navigate(R.id.mediaGalleryFragment)
+            12 ->  navController.navigate(R.id.bookLibraryFragment )
             13 ->  navController.navigate(R.id.bookLibraryFragment)
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
             17 ->  navController.navigate(R.id.attendanceFragment)
@@ -350,7 +355,7 @@ class MainActivity : AppCompatActivity() {
             27 ->  navController.navigate(R.id.lessonPlanListFragment)
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
-             30 ->  navController.navigate(R.id.transportAttendanceFragment)
+             30 ->  navController.navigate(R.id.selectTransportTypeFragment)
             32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
@@ -413,8 +418,22 @@ class MainActivity : AppCompatActivity() {
             7 -> {
                 when (childMenuId) {
                     10 -> navController.navigate(R.id.circularFragment)
-                    11 -> navController.navigate(R.id.noticeListFragment)
-                    12 -> navController.navigate(R.id.noticeListFragment)
+
+                    11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
+                    })
+                    12 ->if (userData.userType == Constant.STAFF_TYPE) {
+                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                            putString(Constant.USER_TYPE, Constant.USER_STAFF)
+                        })
+                    }else{
+                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                            putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
+                        })
+
+                    }
                 }
             }
             8 -> {
@@ -422,7 +441,7 @@ class MainActivity : AppCompatActivity() {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
                     14 -> navController.navigate(R.id.birthdayFragment)
                     15 ->   if (userData.userType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userType == "Principal" || systemViewModel.userType == "Management") {
+                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
                             navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
                                 putString(Constant.TO, Constant.FRA_LESSON_PLAN)
                             })
@@ -455,6 +474,8 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     18 ->  navController.navigate(R.id.attendanceFragment)
                     20 ->  navController.navigate(R.id.paySlipFragment)
+                    43 ->  navController.navigate(R.id.feePaymentFragment)
+                    44 ->  navController.navigate(R.id.feeReceiptFragment)
                 }
             }
 

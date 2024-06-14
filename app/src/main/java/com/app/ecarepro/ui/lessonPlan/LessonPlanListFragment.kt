@@ -35,7 +35,6 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.Date
 
 
 @AndroidEntryPoint
@@ -65,7 +64,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
     ): View {
         binding = FragmentLessionPlanListBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        lessonPlanListAdapter = LessonPlanListAdapter(lessonArrayList, this)
+        lessonPlanListAdapter = LessonPlanListAdapter(lessonArrayList, this,lessonPlanListViewModel.userType)
 
         with(binding) {
             recyclerLessonPlan.adapter = lessonPlanListAdapter
@@ -151,6 +150,10 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         setUpClassFilter()
         setSubjectFilter()
         setStatusFilter()
+
+        if ( lessonPlanListViewModel. userType == Constant.PRINCIPAL || lessonPlanListViewModel. userType ==  Constant.MANAGEMENT) {
+            binding.fbAdd.isVisible=false
+        }
 
     }
 

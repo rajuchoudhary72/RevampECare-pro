@@ -35,8 +35,11 @@ class AppreciationListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentAppreciationListBinding.inflate(inflater,container,false)
-        studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
-        if(activity is AppCompatActivity){
+        try {
+            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+
+        }catch (e:Exception){}
+         if(activity is AppCompatActivity){
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
             (activity as AppCompatActivity).supportActionBar?.apply {
                 title = "Appreciations"
@@ -91,12 +94,12 @@ class AppreciationListFragment : Fragment() {
                                 append(it.data.studentDTL.contactMob)
                             }
 
-                            if (it.data.recentAppreciations.isNotEmpty()){
+                            if (it.data.records!=null){
                                 binding.recyclerInfractionList.isVisible=true
                                 binding.tvNoData.isVisible=false
 
                                 val appreciationListAdapter = AppreciationListAdapter(
-                                    it.data.recentAppreciations,
+                                    it.data.records,
                                     this@AppreciationListFragment
                                 )
 
@@ -115,13 +118,14 @@ class AppreciationListFragment : Fragment() {
                     }
 
 
+                    else -> {}
                 }
 
 
             }
 
         }
-        appreciationListViewModel.addAppreciation(studentID)
+        appreciationListViewModel.getAppreciations(studentID)
 
 
     }

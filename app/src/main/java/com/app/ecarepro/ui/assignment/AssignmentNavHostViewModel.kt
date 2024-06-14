@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.assignment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -14,8 +15,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AssignmentNavHostViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userDataStore: UserDataStore,
 ) : ViewModel() {
+
+    var userType : String = ""
+
+    init {
+        viewModelScope.launch {
+            userType = userDataStore.getRoleName().toString()
+        }
+    }
 
     private val assignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAssignments>> = MutableStateFlow(
         NetworkResult.Loading())
@@ -25,6 +35,20 @@ class AssignmentNavHostViewModel @Inject constructor(
         runCatching {
             assignmentMutableStateFlow.value = NetworkResult.Loading()
             userRepository.assignment( )
+        }.onSuccess {
+            assignmentMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            assignmentMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
+    fun getClassAssignment(
+        id: String
+    )=viewModelScope.launch {
+        runCatching {
+            assignmentMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.getClassAssignment( id)
         }.onSuccess {
             assignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

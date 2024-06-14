@@ -9,6 +9,7 @@ import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,6 +17,10 @@ import javax.inject.Inject
 class StaffListViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
+
+    val showSearchView = MutableStateFlow(false)
+    val searchQuery = MutableStateFlow("")
+
 
     private val staffListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStaffList>> = MutableStateFlow(
         NetworkResult.Loading())
@@ -33,6 +38,19 @@ class StaffListViewModel @Inject constructor(
             staffListMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
+    }
+
+    fun showSearchBar() {
+        showSearchView.update { true }
+    }
+
+    fun clearSearchQuery() {
+        if (searchQuery.value.isEmpty()) {
+            showSearchView.update { false }
+        } else
+            searchQuery.update {
+                ""
+            }
     }
 
 }

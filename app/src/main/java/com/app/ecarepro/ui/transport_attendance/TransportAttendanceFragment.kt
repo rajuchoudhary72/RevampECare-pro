@@ -62,7 +62,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
     private val transportAttendanceViewModel : TransportAttendanceViewModel by viewModels()
 
     private lateinit var routeLSTList: List<RouteLST>
-    private   var stopLSTList: List<StopLST> = ArrayList()
+    private   var stopLSTList = mutableListOf<StopLST>()
 
     private var tripType = 0
     private var p  = 0
@@ -174,7 +174,10 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            stopLSTList=it.data.stopLST
+
+                            stopLSTList.clear()
+
+                            stopLSTList.addAll(it.data.stopLST)
                          }
                     }
                 }
@@ -198,7 +201,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
 
-                            if (it.data.stuLst!=null){
+                            if (it.data.stuLst.isNotEmpty()){
 
                                 binding.recyclerStudentAttMark.isVisible=true
                                 binding.tvNoData.isVisible=false
@@ -217,8 +220,8 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                                 studentListToMarkAtt=it.data.stuLst
 
                             }else{
-                                binding.recyclerStudentAttMark.isVisible=false
-                                binding.tvNoData.isVisible=true
+                                binding.recyclerStudentAttMark.visibility=View.GONE
+                                binding.tvNoData.visibility=View.VISIBLE
                             }
 
                         }
@@ -232,11 +235,11 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
             isValidate= false
         }
         if (!stoppersSelected ){
-            Toast.makeText(requireContext(),"Please Select Route",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"Please Select Stoppes",Toast.LENGTH_SHORT).show()
             isValidate= false
         }
         if (tripType==0 ){
-            Toast.makeText(requireContext(),"Please Select Route",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"Please Select Trip Type",Toast.LENGTH_SHORT).show()
             isValidate= false
         }
         if (isValidate){
@@ -275,7 +278,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         relOk.setOnClickListener {
             binding.tvSelectRoute.text= routerSelectData.routeName
             routeSelected=true
-
+            getStoppersList()
             builder.dismiss()
         }
 

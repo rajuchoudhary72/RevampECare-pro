@@ -17,5 +17,7 @@ data class NetworkViewAssignment(
     val status: Any,
     val subjectID: Int,
     val submitDate: String,
+    val hasAttachment: Boolean,
+    val asgFile: String,
     val title: String
 )

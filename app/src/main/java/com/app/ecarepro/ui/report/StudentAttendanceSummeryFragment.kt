@@ -30,7 +30,7 @@ import kotlin.math.roundToInt
 
 
 @AndroidEntryPoint
-class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary> {
+class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> {
 
     private lateinit var binding: FragmentStudentAttedanceReportBinding
     private val studentAttRepoViewModel: StudentAttSummeryViewModel by viewModels()
@@ -44,24 +44,27 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
     }
 
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvDate.text=Constant.currentDate()
+        binding.tvDate.text = Constant.currentDate()
 
         binding.tvDate.setOnClickListener {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvDate.text = date
-                    studentAttRepoViewModel.getAttendanceSummary( binding.tvDate.text.toString() )
+                    binding.tvDate.text = Constant.dateToShow(date.toString())
+                    studentAttRepoViewModel.getAttendanceSummary(binding.tvDate.text.toString())
                 }
-
-            })
+            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
         }
 
         getStudentAttRepo()
 
     }
+
+
 
     private fun getStudentAttRepo() {
 
@@ -71,25 +74,26 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                        binding.rvAttReport.isVisible = false
+                        binding.nestedScrollView.isVisible = false
                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        binding.rvAttReport.isVisible = false
+                        binding.nestedScrollView.isVisible = false
                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        binding.rvAttReport.isVisible = true
+                        binding.nestedScrollView.isVisible = true
 
                         if (it.data != null) {
 
-                            if (it.data.classSummary != null){
+                            if (it.data.classSummary != null) {
                                 setupAttDeatils(it.data)
                                 if (it.data.classSummary.isNotEmpty()) {
-                                    binding.rvAttReport.isVisible = true
+
+                                    binding.nestedScrollView.isVisible = true
 
                                     val studentRepoAttAdapter = StudentRepoAttAdapter(
                                         it.data.classSummary,
@@ -102,12 +106,18 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
                                         adapter = studentRepoAttAdapter
                                     }
                                 } else {
-                                    binding.rvAttReport.isVisible = false
-                                }
-                            }   } }  }    }
-                         }
+                                    binding.nestedScrollView.isVisible = false
+                                    binding.tvNoData.isVisible=true
 
-        studentAttRepoViewModel.getAttendanceSummary( binding.tvDate.text.toString() )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        studentAttRepoViewModel.getAttendanceSummary(binding.tvDate.text.toString())
 
     }
 
@@ -119,19 +129,19 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
         with(binding) {
 
             tvAbsentCount.text = buildString {
-                 append(data.totalAbsent)
+                append(data.totalAbsent)
             }
             tvLateCount.text = buildString {
-                 append(data.totalLate)
+                append(data.totalLate)
             }
             tvLeaveCount.text = buildString {
-                 append(data.totalLeave)
+                append(data.totalLeave)
             }
             tvPresentCount.text = buildString {
-                 append(data.totalPresent)
+                append(data.totalPresent)
             }
 
-            try{
+            try {
                 tvPresentPer.text = buildString {
                     append(
                         ((data.totalPresent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
@@ -159,15 +169,17 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
                     append("%")
                 }
 
-                binding.pieChartView.aa_drawChartWithChartModel(getBarChartModel(
-                    ((data.totalPresent * 100 / totalStudent * 100.0).roundToInt()) ,
-                    ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt())  ,
-                    ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt()) ,
-                    ((data.totalLate * 100 / totalStudent * 100.0).roundToInt() )
-                ))
+                binding.pieChartView.aa_drawChartWithChartModel(
+                    getBarChartModel(
+                        setCalculatedPercentageToInt(data.totalPresent,totalStudent.toInt()),
+                         ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt()),
+                        ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt()),
+                        ((data.totalLate * 100 / totalStudent * 100.0).roundToInt())
+                    )
+                )
 
 
-            } catch (_: Exception){
+            } catch (_: Exception) {
 
             }
 
@@ -177,10 +189,13 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
 
     }
 
-    private fun getBarChartModel(present: Int,leave: Int,absent: Int,late: Int) = AAChartModel()
+    private fun getBarChartModel(present: Int, leave: Int, absent: Int, late: Int) = AAChartModel()
 
         .chartType(AAChartType.Pie)
         .dataLabelsEnabled(true)
+        .colorsTheme(
+            arrayOf("#4DAC3C","#FF352F","#FFD700","#FFFEA11C")
+        )
         .series(
             arrayOf(
                 AASeriesElement()
@@ -189,12 +204,11 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
                     .innerSize("70%")
                     .borderWidth(0)
                     .allowPointSelect(false)
-
                     .data(
                         arrayOf(
                             arrayOf("Present", present),
-                            arrayOf("Leave", leave),
                             arrayOf("Absent", absent),
+                            arrayOf("Leave", leave),
                             arrayOf("Late", late)
                         )
                     )
@@ -205,8 +219,18 @@ class StudentAttendanceSummeryFragment : Fragment() , ItemListener<ClassSummary>
         findNavController().navigate(
             R.id.action_studentAttendanceReportFragment_to_classAttendanceFragment,
             Bundle().apply {
-                putString(Constant.CLASS_ID_ARGUMENT , t.id)
+                putString(Constant.CLASS_ID_ARGUMENT, t.id)
+                putString(Constant.NAME, t.className)
+                putString(Constant.DATE, binding.tvDate.text.toString())
             })
+    }
+
+    private fun setCalculatedPercentage(day: Int, totalDay: Int): String {
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toString() + "%"
+    }
+
+    private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Int {
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toInt()
     }
 
 
