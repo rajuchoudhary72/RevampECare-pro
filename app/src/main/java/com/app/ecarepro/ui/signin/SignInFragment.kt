@@ -109,7 +109,18 @@ class SignInFragment : Fragment() {
             findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
         }
         binding.btnPrevious.setOnClickListener {
-            findNavController().popBackStack()
+            if (userNameValid) {
+                binding.textInputLayoutPassword.isVisible = false
+                binding.textPassword.setText("")
+                binding.textInputLayoutUserName.isEnabled = true
+                binding.textUserName.isEnabled = true
+                binding.textUserName.isClickable = true
+                binding.textUserName.requestFocus()
+                binding.textUserName.setText(binding.textUserName.text.toString())
+                userNameValid = false
+            } else {
+                findNavController().popBackStack()
+            }
         }
 
     }

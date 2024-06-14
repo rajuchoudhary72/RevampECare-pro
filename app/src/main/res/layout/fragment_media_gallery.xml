@@ -139,7 +139,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            tools:listitem="@layout/item_media"
+            tools:listitem="@layout/item_gallerymodule"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
             />

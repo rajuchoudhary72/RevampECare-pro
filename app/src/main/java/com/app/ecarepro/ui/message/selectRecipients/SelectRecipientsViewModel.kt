@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.app.ecarepro.data.network.model.Contact
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import android.util.Log
 
 @HiltViewModel
 class SelectRecipientsViewModel @Inject constructor(
@@ -21,10 +22,11 @@ class SelectRecipientsViewModel @Inject constructor(
     }
 
     fun addContacts(contact: List<Contact>) {
-        if (selectedContacts.all { it.receiverType == contact.first().receiverType }.not()) {
+        if (contact.isNotEmpty() && selectedContacts.all { it.receiverType == contact.firstOrNull()?.receiverType }.not()) {
             clearAllSelectedContact()
         }
         selectedContacts.addAll(contact)
+        Log.e("Raju", selectedContacts.size.toString() )
     }
 
     fun removeContact(contact: Contact) {
@@ -40,6 +42,7 @@ class SelectRecipientsViewModel @Inject constructor(
     }
 
     fun isContactsSelected(contacts: List<Contact>): Boolean {
+        Log.e("RAJU IS Selected", contacts.size.toString() + "  ->  " + selectedContacts.size.toString() )
         if (contacts.isEmpty()) return false
         return selectedContacts.containsAll(contacts)
     }
