@@ -117,7 +117,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
         binding.btnSubmit.setOnClickListener {
 
-            if (isValidate()){
+            if (isValidate()) {
                 addLessonViewModel.postLessonPlan(
                     imageString,
                     imageExt,
@@ -125,13 +125,13 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     auditorSelectDat.auditor,
                     selectClassData.classID.toString(),
                     binding.etClosure.text.toString(),
-                    binding.tvExtensionReq.text.toString(),
+                    binding.etExtension.text.toString(),
                     "",
                     binding.ctvFromDate.text.toString(),
                     binding.etIntroduction.text.toString(),
                     binding.etActivity.text.toString(),
                     0,
-                    binding.tvLearningOutcomesReq.text.toString(),
+                    binding.etLearningOutcomes.text.toString(),
                     binding.etObjective.text.toString(),
                     binding.etOtherResources.text.toString(),
                     binding.etResources.text.toString(),
@@ -141,6 +141,26 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     binding.etTopic.text.toString(),
                     binding.etLink.text.toString()
                 )
+
+                 lifecycleScope.launch {
+                     addLessonViewModel.postLessonStateFlow.collectLatest {
+                         when (it) {
+                             is NetworkResult.Loading -> {
+                                 (requireActivity() as MainActivity).showLoader(true)
+                             } is NetworkResult.Error -> {
+                                 (requireActivity() as MainActivity).showLoader(false)
+                             } is NetworkResult.Success -> {
+                                 (requireActivity() as MainActivity).showLoader(false)
+
+                             Toast.makeText(requireContext(),"Submitted Successfully!!!",Toast.LENGTH_SHORT).show()
+
+                             findNavController().popBackStack()
+
+                             }
+                         }
+
+                     }
+                 }
             }
 
 
@@ -395,12 +415,12 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                             auditorSelectDat=AuditorLst( data.auditoryIds, data.auditoryTxt )
                             selectClassData=MyClasseItem(0,data.classesName,data.classIds,false   )
                             binding.etClosure.setText(data.closure)
-                            binding.tvExtensionReq.text = data.extensionTopic
+                            binding.etExtension.setText(data.extensionTopic)
                             lPlanId=data.id
                             binding.ctvFromDate.text=data.fromDate
                             binding.etIntroduction.setText(data.introduction)
                             binding.etActivity.setText(data.kinestheticActivity)
-                            binding.tvLearningOutcomesReq.text=data.learningOutcomes
+                            binding.etLearningOutcomes.setText(data.learningOutcomes)
                             binding.etObjective.setText(data.objective)
                             binding.etOtherResources.setText(data.otherResources)
                             binding.etResources.setText(data.resources)
@@ -409,6 +429,8 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                             binding.ctvToDate.text =data.tillDate
                             binding.etTopic.setText(data.topic)
                             binding.etLink.setText(data.youtubeLinks)
+                            binding.ctvSelectSubject.text=data.subject
+                            binding.ctvSelectClass.text=data.classesName
 
                         }
 

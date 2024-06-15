@@ -115,7 +115,7 @@
     <string name="select_attachment">Select Attachment</string>
     <string name="i_agree">I agree</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
-    <string name="_02">02</string>
+    <string name="_02">0</string>
     <string name="submit">Submit</string>
     <string name="submitted_on">"To Be Submitted On: "</string>
     <string name="submitted_on_date">"Submitted On: "</string>
@@ -589,4 +589,5 @@
     <string name="assessment">Assessment</string>
     <string name="website">Website</string>
     <string name="select_academic_year">Select Academic Year</string>
+    <string name="auto_assign">Auto Assign</string>
 </resources>

@@ -37,7 +37,9 @@ class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
     ): View  {
 
         fragmentLibrarySearchBinding=FragmentLibrarySearchBinding.inflate(inflater,container,false)
-         return fragmentLibrarySearchBinding.root
+        fragmentLibrarySearchBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
+        return fragmentLibrarySearchBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

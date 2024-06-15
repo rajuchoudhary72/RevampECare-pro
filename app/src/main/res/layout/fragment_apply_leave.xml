@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:fitsSystemWindows="true"
         tools:context=".ui.leave.apply_leave.ApplyLeaveFragment">
 
 
@@ -35,7 +36,8 @@
             android:id="@+id/ll_main_leave_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             android:orientation="vertical">
+             android:orientation="vertical"
+             >
 
         <LinearLayout
             android:id="@+id/ll_toole"
@@ -59,7 +61,9 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
                 app:selectionRequired="true"
-                app:singleSelection="true">
+                app:singleSelection="true"
+               android:visibility="gone"
+                >
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_leave_req"
@@ -333,20 +337,38 @@
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="vertical"
             android:id="@+id/ll_leave_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            >
+             >
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_leave_history"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                tools:listitem="@layout/leave_list_item" />
+                 tools:listitem="@layout/leave_list_item" />
+
+
+            <TextView
+                android:id="@+id/tv_no_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_300sdp"
+                android:text="@string/no_history_available"
+                android:textSize="16sp"
+                android:visibility="gone"
+
+                />
 
         </LinearLayout>
+
+
+
 
     </LinearLayout>
 </layout>
