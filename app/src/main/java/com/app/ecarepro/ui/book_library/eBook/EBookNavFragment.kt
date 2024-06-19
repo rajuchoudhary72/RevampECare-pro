@@ -25,17 +25,17 @@ import kotlinx.coroutines.launch
 class EBookNavFragment : Fragment() {
 
 
-    private lateinit var binding:  FragmentENavBookBinding
-    private val eBookViewModel : EBookViewModel by viewModels()
+    private lateinit var binding: FragmentENavBookBinding
+    private val eBookViewModel: EBookViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentENavBookBinding.inflate(inflater,container,false)
+        binding = FragmentENavBookBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        return  binding.root
+        return binding.root
     }
 
 
@@ -59,9 +59,9 @@ class EBookNavFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            setUpViewPager(it.data.books,it.data.megaBookLink)
+                            setUpViewPager(it.data.books, it.data.megaBookLink)
 
 
                         }
@@ -73,14 +73,15 @@ class EBookNavFragment : Fragment() {
             }
         }
 
-        eBookViewModel.getEBook("%27%27",0)
+        eBookViewModel.getEBook("%27%27", 0)
 
 
     }
 
     private fun setUpViewPager(data: List<Book>, megaBookLink: String) {
 
-        val tabItem = mutableListOf(getString(R.string.my_school_library), getString(R.string.mega_e_book))
+        val tabItem =
+            mutableListOf(getString(R.string.my_school_library), getString(R.string.mega_e_book))
 
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int {
@@ -91,12 +92,14 @@ class EBookNavFragment : Fragment() {
 
                 return when (position) {
                     0 -> {
-                        EBookFragment(data )
+                        EBookFragment(data)
                     }
+
                     1 -> {
-                        MegaEBookCollectionFragment(megaBookLink )
+                        MegaEBookCollectionFragment(megaBookLink)
                     }
-                    else -> EBookFragment(data  )
+
+                    else -> EBookFragment(data)
                 }
             }
 
