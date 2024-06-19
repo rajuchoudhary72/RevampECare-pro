@@ -93,9 +93,7 @@ class EBookNavFragment : Fragment() {
                 return when (position) {
                     0 -> {
                         EBookFragment(data)
-                    }
-
-                    1 -> {
+                    } 1 -> {
                         MegaEBookCollectionFragment(megaBookLink)
                     }
 
