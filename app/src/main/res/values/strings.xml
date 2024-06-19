@@ -31,7 +31,7 @@
     <string name="notice">Notice</string>
     <string name="circular">Circular</string>
     <string name="payslip">PaySlip</string>
-     <string name="syallabus">Syllabus</string>
+    <string name="syallabus">Syllabus</string>
     <string name="class_notice">Class Notice</string>
     <string name="pdf_details">  PDF Details :</string>
     <string name="view">View</string>
@@ -110,7 +110,7 @@
     <string name="day_s_1">1 Day(s)</string>
     <string name="suggested">Suggested</string>
     <string name="select_reason">Select Reason</string>
-     <string name="enter_your_reason">Enter Your Reason</string>
+    <string name="enter_your_reason">Enter Your Reason</string>
     <string name="select_proof">Select Proof</string>
     <string name="select_attachment">Select Attachment</string>
     <string name="i_agree">I agree</string>
@@ -590,4 +590,12 @@
     <string name="website">Website</string>
     <string name="select_academic_year">Select Academic Year</string>
     <string name="auto_assign">Auto Assign</string>
+    <string name="accession_number">Accession Number : </string>
+    <string name="sl_no">Sl.No.</string>
+    <string name="cost">Cost : </string>
+    <string name="fine_amount">Fine Amount : </string>
+    <string name="issue_on">Issue On :</string>
+    <string name="exp_return_date">Exp. Return Date :</string>
+    <string name="return_on">Return On :</string>
+    <string name="my_school_library">My School Library</string>
 </resources>

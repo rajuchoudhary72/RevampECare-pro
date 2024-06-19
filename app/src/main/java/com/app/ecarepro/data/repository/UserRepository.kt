@@ -26,6 +26,7 @@ import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
+import com.app.ecarepro.data.network.model.NetworkEBook
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
@@ -102,6 +103,7 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.Query
 
 interface UserRepository {
 
@@ -681,6 +683,15 @@ interface UserRepository {
 
     suspend fun getDeleteQuestion(
           id: String
+    ): CommonResponse
+
+    suspend fun getEBook(
+         query: String,
+          mode: Int
+    ): NetworkEBook
+
+    suspend fun getEBookDetails(
+         accessionNo: String
     ): CommonResponse
 
 }
