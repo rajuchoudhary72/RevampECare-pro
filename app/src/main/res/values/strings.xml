@@ -27,7 +27,7 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title">Title</string>
+    <string name="title">Title : </string>
     <string name="notice">Notice</string>
     <string name="circular">Circular</string>
     <string name="payslip">PaySlip</string>
@@ -105,6 +105,7 @@
     <string name="leave_history">Leave History</string>
     <string name="leave_request">Leave Request</string>
     <string name="status">Status</string>
+    <string name="status_s">Status : </string>
     <string name="day_s">Day(s)</string>
     <string name="day_s_1">1 Day(s)</string>
     <string name="suggested">Suggested</string>
@@ -114,7 +115,7 @@
     <string name="select_attachment">Select Attachment</string>
     <string name="i_agree">I agree</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
-    <string name="_02">02</string>
+    <string name="_02">0</string>
     <string name="submit">Submit</string>
     <string name="submitted_on">"To Be Submitted On: "</string>
     <string name="submitted_on_date">"Submitted On: "</string>
@@ -127,6 +128,8 @@
     <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
     <string name="save_amp_notify"><![CDATA[Save & Notify]]></string>
     <string name="select_infraction_category">Select Infraction Category</string>
+    <string name="select_que_type">Select Question Type</string>
+
     <string name="select_infraction_subcategory">Select Infraction Subcategory</string>
     <string name="select_apprec_category">Select Appreciation Category</string>
     <string name="select_apprec_subcategory">Select Appreciation Subcategory</string>
@@ -159,8 +162,8 @@
     <string name="share">Share</string>
     <string name="download">Download</string>
     <string name="recipient_s">Recipient(s)</string>
-    <string name="assigned_on">Assigned On:</string>
-    <string name="to_be_submitted_on">To Be Submitted On:</string>
+    <string name="assigned_on">Assigned on:</string>
+    <string name="to_be_submitted_on">To be submitted on:</string>
     <string name="space" />
     <string name="delete">Delete</string>
     <string name="subject">"Subject: "</string>
@@ -189,7 +192,7 @@
     <string name="create_assignment">Create Assignment</string>
     <string name="update">Update</string>
     <string name="select_year">Select Year</string>
-    <string name="select_month">Select Month</string>
+    <string name="select_month">Month</string>
     <string name="peroid">Peroid</string>
     <string name="select_date">Select Date</string>
     <string name="student">Student</string>
@@ -263,7 +266,7 @@
     <string name="doj">DOJ:</string>
     <string name="father_spouse_name">Father/Spouse Name</string>
     <string name="father_spouse_mobile_no">Father/Spouse Mobile No</string>
-     <string name="aadhar_card_number">Aadhar Card Number</string>
+    <string name="aadhar_card_number">Aadhar Card Number</string>
     <string name="pan_card_number">Pan Card Number</string>
     <string name="sp">:</string>
     <string name="early_out">Early Out</string>
@@ -280,7 +283,7 @@
     <string name="pan_number">PAN Number</string>
     <string name="admissio_n_no">Admissio n No.</string>
     <string name="house">House</string>
-     <string name="bloodgroup">BloodGroup</string>
+    <string name="bloodgroup">BloodGroup</string>
     <string name="caste">Caste</string>
     <string name="diseno">DiseNo</string>
     <string name="aadhaar_number">Aadhaar Number</string>
@@ -352,6 +355,7 @@
     <string name="total_leave">Total Leave</string>
     <string name="total_late">Total Late</string>
     <string name="add_lesson">Add Lesson</string>
+    <string name="lesson">Lesson</string>
     <string name="objectives">Objectives :</string>
     <string name="comments">Comments :</string>
     <string name="visual_youtube_link">Visual-YouTube link</string>
@@ -365,6 +369,7 @@
     <string name="search_by_subjects">Search By Subjects</string>
     <string name="search_by_status">Search By Status</string>
     <string name="to">To:</string>
+    <string name="to_small">to</string>
     <string name="select_classes">Select Classes :</string>
     <string name="select_subjects">Select Subjects :</string>
     <string name="select_status">Select Status :</string>
@@ -508,7 +513,7 @@
     <string name="new_balance">New Balance</string>
     <string name="recharged_volume">Recharged Volume</string>
     <string name="previous_balance">Previous Balance</string>
-    <string name="select_session">Select Session</string>
+    <string name="select_session">Session</string>
 
     <string name="change_school_college"><u>Change School/College</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
@@ -530,7 +535,7 @@
     <string name="present_days">Present Days:</string>
     <string name="late_days">Late days:</string>
     <string name="absent_days">Absent days:</string>
-      <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
+    <string name="attendance_in_session_2021_2022">Attendance in session: %s</string>
     <string name="attendance_between_01_aug_2021_to_09_oct_2021">Attendance between: %s</string>
     <string name="statistical">Statistical</string>
     <string name="boys">Boy(s)</string>
@@ -538,7 +543,7 @@
     <string name="school_bus">School/College Bus</string>
     <string name="self_bus">Self Conveyance</string>
     <string name="students">Students</string>
-     <string name="transport">Transport</string>
+    <string name="transport">Transport</string>
     <string name="app_user_report">App User Report</string>
     <string name="survey">Survey</string>
     <string name="filter_by">Filter by</string>
@@ -554,7 +559,43 @@
     <string name="specific">Specific</string>
     <string name="clear_all">Clear All</string>
     <string name="apply">Apply</string>
+    <string name="photo">Photo</string>
+    <string name="video">Video</string>
+    <string name="favourate">Favourate</string>
+    <string name="more">more...</string>
+    <string name="add_favourites">Add Favourites</string>
+    <string name="gallery">gallery</string>
+    <string name="newspaper">NewsPaper:</string>
+    <string name="news_paper">News Paper :</string>
+    <string name="published_on">Published On:</string>
+    <string name="_35_34_4444">35-34-4444</string>
+    <string name="_34_344_3444">34-344-3444</string>
+    <string name="search_by">Search By</string>
+    <string name="select_publish_date">Select Publish Date</string>
+    <string name="enter_headline">Enter Headline</string>
+    <string name="description">Description :</string>
+    <string name="weightage">Weightage:</string>
+    <string name="created_on">Created On:</string>
+    <string name="question">Question:</string>
+    <string name="question_paper">Question Paper:</string>
+    <string name="que_type">Que Type:</string>
+    <string name="chapter">Chapter:</string>
+    <string name="add_question_bank">Add Question Bank</string>
+    <string name="question_type">Question Type</string>
+    <string name="select_chapter">Select Chapter</string>
+    <string name="enter_weightage">Enter Weightage</string>
+    <string name="enter_question">Enter Question</string>
     <string name="marks_manager">Marks Manager</string>
     <string name="assessment">Assessment</string>
     <string name="website">Website</string>
+    <string name="select_academic_year">Select Academic Year</string>
+    <string name="auto_assign">Auto Assign</string>
+    <string name="accession_number">Accession Number : </string>
+    <string name="sl_no">Sl.No.</string>
+    <string name="cost">Cost : </string>
+    <string name="fine_amount">Fine Amount : </string>
+    <string name="issue_on">Issue On :</string>
+    <string name="exp_return_date">Exp. Return Date :</string>
+    <string name="return_on">Return On :</string>
+    <string name="my_school_library">My School Library</string>
 </resources>

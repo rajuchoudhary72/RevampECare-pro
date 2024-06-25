@@ -488,7 +488,6 @@ class StudentIDFragment : Fragment() {
                         // binding.rvMedicineIssue.isVisible = false
                         Log.d("main", "Error$it")
                         mainActivity().showMessage(it.message?:"")
-
                     }
 
                     is NetworkResult.Success -> {
@@ -534,6 +533,8 @@ class StudentIDFragment : Fragment() {
                             ).show()
                         }
                         mainActivity().showMessage(it.message?:"")
+
+
                     }
                 }
             }

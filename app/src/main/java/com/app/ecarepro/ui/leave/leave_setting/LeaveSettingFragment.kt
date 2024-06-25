@@ -41,6 +41,7 @@ class LeaveSettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentLeaveSettingBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
          return binding.root
     }
 
@@ -63,7 +64,7 @@ class LeaveSettingFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-
+                        leaveTypesDataString.clear()
                         if (it.data !=null) {
                             leaveTypeList=it.data.leaveDetails
                             it.data.leaveDetails.forEach { data ->
@@ -110,6 +111,8 @@ class LeaveSettingFragment : Fragment() {
             }else{
                 mainActivity().showMessage("Select Leave Type")
             }
+
         }
+
     }
 }

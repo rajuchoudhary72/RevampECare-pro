@@ -5,6 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,14 +16,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.databinding.FragmentAttendenceBinding
 import com.app.ecarepro.databinding.SurveyLayoutBinding
+import com.app.ecarepro.model.MonthModel
+import com.app.ecarepro.model.YearModel
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.staffAttendence.AttendanceViewModel
+import com.app.ecarepro.ui.staffAttendence.StaffAttendenceListAdapter
 import com.lassi.common.extenstions.hide
 import com.lassi.common.extenstions.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @AndroidEntryPoint
 class SurveyListFragment : Fragment() {
@@ -83,14 +93,18 @@ class SurveyListFragment : Fragment() {
                                                 bundle
                                             )
 
-                                        } else if (data.resultDeclared) {
+                                        }
+                                        else if (data.resultDeclared){
                                             // mContext.startActivity(Intent(mContext, ActivitySurveyResult::class.java).putExtra("surId", surveyModel.getSurID()) )
+
                                             mainActivity().showMessage("Survey Result")
-                                        } else if (data.isResponded)
+                                        }
+
+
+                                        else if (data.isResponded)
                                             mainActivity().showMessage("Thanks for your response. Your response has already been recorded.")
                                         else
                                             mainActivity().showMessage("Survey Closed")
-
                                     }
 
                                 binding.rvSurveyList.apply {

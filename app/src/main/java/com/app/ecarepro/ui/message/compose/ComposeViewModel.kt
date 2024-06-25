@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.message.compose
 
 import android.content.Context
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.util.Base64
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
@@ -23,6 +24,7 @@ import com.app.ecarepro.ui.message.chat.getDeviceIpAddress
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.getFile
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.lassi.data.media.MiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -141,7 +143,7 @@ class ComposeViewModel @Inject constructor(
                             sMSType = smsType?.typeID,
                             geoCoordinate = currentLocation.toString().replace("(", "")
                                 .replace(")", ""),
-                            uID = /*userDataStore.getUser().userId*/ 32,
+                            uID = userDataStore.getUser()?.userId,
                             uType = userDataStore.getUser()?.userType
                         )
                     )
@@ -157,12 +159,15 @@ class ComposeViewModel @Inject constructor(
 
                     }
             } else {
+                val wifiManager = context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
+                val wInfo = wifiManager.connectionInfo
+                val macAddress = wInfo.macAddress
                 messageRepository.sendMessage(
                     SendMessageRequest(
                         device = 1,
                         geoCoordinate = currentLocation.toString().replace("(", "")
                             .replace(")", ""),
-                        ipAddress = context.getDeviceIpAddress(),
+                        ipAddress = macAddress,
                         subject = subject.value,
                         body = message.value,
                         classIDs = null,
@@ -192,7 +197,6 @@ class ComposeViewModel @Inject constructor(
         }
 
     }
-
     private fun getMessageType(): Int {
         val attachments = attachments.value
         return if (attachments.isEmpty()) {
@@ -205,7 +209,6 @@ class ComposeViewModel @Inject constructor(
             2
         }
     }
-
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value
         if (attachments.isEmpty() || attachments.size == 1)
@@ -220,7 +223,6 @@ class ComposeViewModel @Inject constructor(
                     val file = context.getFile(attachment.path?.toUri())
                     getBase64StringFromUri(file!!.toUri()) ?: ""
                 }
-
             } else {
                 FileAccess.bitmapToByteArrayBase64String(
                     FileAccess.bitmapFromFile(
@@ -256,7 +258,6 @@ class ComposeViewModel @Inject constructor(
                         fileURL = null
                     )
                 }
-
             } else {
                 val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
@@ -295,13 +296,12 @@ class ComposeViewModel @Inject constructor(
             val bytes: ByteArray = readBytes(
                 imageStream
             )
-            Base64.encodeToString(bytes, Base64.DEFAULT)
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
         } catch (e: IOException) {
             e.printStackTrace()
             null
         }
     }
-
     private fun getBase64StringFromUri(file: File): String? {
         val imageStream: InputStream
         return try {
@@ -309,13 +309,12 @@ class ComposeViewModel @Inject constructor(
             val bytes: ByteArray = readBytes(
                 imageStream
             )
-            Base64.encodeToString(bytes, Base64.DEFAULT)
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
         } catch (e: IOException) {
             e.printStackTrace()
             null
         }
     }
-
     @Throws(IOException::class)
     private fun readBytes(inputStream: InputStream): ByteArray {
         val byteBuffer = ByteArrayOutputStream()

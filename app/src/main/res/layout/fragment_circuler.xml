@@ -23,7 +23,7 @@
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Circuler"
+            app:title="@string/circular"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />
@@ -152,13 +152,14 @@
 
         <TextView
             android:id="@+id/tv_no_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/iv_no_item"
             android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
+            android:layout_marginTop="@dimen/_200sdp"
             android:text="@string/no_circuler_available"
             android:textSize="16sp"
 

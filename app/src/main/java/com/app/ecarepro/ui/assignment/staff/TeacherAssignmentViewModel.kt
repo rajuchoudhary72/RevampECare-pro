@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.assignment.staff
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
@@ -14,8 +15,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TeacherAssignmentViewModel @Inject constructor(
+    private val userDataStore: UserDataStore,
     private val userRepository: UserRepository
 ) : ViewModel() {
+
+
+    var userType : String = ""
+
+    init {
+        viewModelScope.launch {
+            userType = userDataStore.getRoleName().toString()
+        }
+    }
 
     private val teacAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkTeacherAssignment>> = MutableStateFlow(
         NetworkResult.Loading())

@@ -296,7 +296,7 @@ class ComposeFragment : Fragment() {
         binding.btnGallery.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.GALLERY
-            launchPicker()
+            requestExternalStoragePermission()
         }
 
         binding.btnRecord.setOnClickListener {

@@ -32,7 +32,7 @@ interface SchoolRepository {
     fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?>
     suspend fun getSchools(): List<School>
     fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool>
-    suspend fun getNotice(pg: Int,classID: Int): NetworkNotice
+    suspend fun getNotice(pg: Int,classID: Int, isClassNotice: Boolean): NetworkNotice
     suspend fun getCirculars(pg: Int,yrID: Int,title :String): NetworkCircular
     suspend fun getNoticeDTL( ntID: Int, iD: Int ): NetworkNoticDetails
     suspend fun getCircularDTL( cirID: Int, iD: Int ): NetworkCircularDetails

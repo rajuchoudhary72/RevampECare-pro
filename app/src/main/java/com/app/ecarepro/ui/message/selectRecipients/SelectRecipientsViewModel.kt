@@ -1,10 +1,10 @@
 package com.app.ecarepro.ui.message.selectRecipients
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.app.ecarepro.data.network.model.Contact
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import android.util.Log
 
 @HiltViewModel
 class SelectRecipientsViewModel @Inject constructor(
@@ -26,7 +26,7 @@ class SelectRecipientsViewModel @Inject constructor(
             clearAllSelectedContact()
         }
         selectedContacts.addAll(contact)
-        Log.e("HARI", selectedContacts.size.toString() )
+        Log.e("Raju", selectedContacts.size.toString() )
     }
 
     fun removeContact(contact: Contact) {
@@ -42,7 +42,7 @@ class SelectRecipientsViewModel @Inject constructor(
     }
 
     fun isContactsSelected(contacts: List<Contact>): Boolean {
-        Log.e("HARI IS Selected", contacts.size.toString() + "  ->  " + selectedContacts.size.toString() )
+        Log.e("RAJU IS Selected", contacts.size.toString() + "  ->  " + selectedContacts.size.toString() )
         if (contacts.isEmpty()) return false
         return selectedContacts.containsAll(contacts)
     }

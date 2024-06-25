@@ -4,13 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="assData"
+            type="com.app.ecarepro.model.Assignment" />
     </data>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:fitsSystemWindows="true"
         tools:context=".ui.assignment.submit_assignment.SubmitAssignmentFragment">
 
 
@@ -22,6 +25,8 @@
             app:layout_collapseMode="pin"
             app:titleCentered="true"
             android:elevation="8dp"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+
             app:title="Submit Assignment"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:theme="@style/MyThemeOverlay_Toolbar"
@@ -57,7 +62,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/grey_60"
+                    android:text="@{assData.subject}"
+                    />
 
             </LinearLayout>
 
@@ -79,7 +88,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/grey_60"
+                    android:text="@{assData.title}"
+                    />
 
             </LinearLayout>
 
@@ -95,7 +108,10 @@
                     android:autoLink="web"
                     android:fontFamily="@font/ubuntu_light"
                     android:linksClickable="true"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                     android:textColor="@color/grey_60"
+                    android:text="@{assData.asgData}"
+                    />
 
             </RelativeLayout>
 
@@ -117,7 +133,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/grey_60"
+                    android:text="@{assData.asgDate}"
+                    />
 
             </LinearLayout>
 
@@ -139,9 +159,47 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/grey_60"
+                    android:text="@{assData.submitDate}"
+                    />
 
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:layout_marginTop="@dimen/_15sdp"
+                android:background="@drawable/rectangle_border_gray_corner_radius"
+                 android:padding="7dp"
+                android:visibility="gone"
+
+                 >
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:lines="1"
+                    android:padding="7dp"
+                    android:text="@string/attachment"
+                    android:textColor="#545454" />
+
+                <ImageView
+                    android:id="@+id/ivFileRemove"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/tb_doc_picker_ic_icon_cancel" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -206,7 +264,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/ctvCamera"
+                        android:id="@+id/tv_browse_photo"
                         android:layout_width="0dp"
                         android:layout_weight="0.8"
                         android:layout_height="wrap_content"
@@ -221,11 +279,11 @@
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
                         android:background="@color/grey_light"
-                        android:layout_marginVertical="3dp"></View>
+                        android:layout_marginVertical="3dp" />
 
                     <TextView
                         android:layout_weight="1"
-                        android:id="@+id/ctv_browse_photo"
+                        android:id="@+id/tv_browse_file"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:drawablePadding="3dp"

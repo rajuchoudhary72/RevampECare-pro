@@ -9,18 +9,27 @@
             type="com.app.ecarepro.model.Assignment" />
     </data>
 
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_6sdp"
+        app:strokeWidth="@dimen/_2sdp"
+        >
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey_light"
-        android:orientation="vertical"
+         android:orientation="vertical"
         >
 
         <LinearLayout
             android:id="@+id/ll_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white">
+             >
 
 
             <RelativeLayout
@@ -263,6 +272,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/llStatus"
+                        android:visibility="gone"
                         android:layout_marginTop="8dp">
 
 
@@ -313,21 +323,28 @@
 
         </LinearLayout>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            />
+
         <LinearLayout
             android:id="@+id/llEditDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            android:weightSum="1.5">
+
+            >
 
             <LinearLayout
                 android:id="@+id/llView"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
-                android:layout_weight="0.5"
-                android:background="@color/brand_color"
-                android:gravity="center">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="visible"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -336,20 +353,28 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="View"
-                    android:textColor="@color/white"
+                    android:text="@string/view"
+                    android:textColor="@color/brand_color"
+                    app:drawableTint="@color/brand_color"
                     app:drawableLeftCompat="@drawable/view_white" />
 
             </LinearLayout>
 
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
             <LinearLayout
-                android:id="@+id/llEdit"
+                android:id="@+id/llSubmit"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
-                android:layout_weight="0.5"
-                android:background="@color/brand_color"
-                android:gravity="center">
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="gone"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -358,39 +383,20 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="Edit"
-                    android:textColor="@color/white"
-                    app:drawableLeftCompat="@drawable/ic_edit_pencil" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llDelete"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="0.5"
-                android:background="@color/brand_color"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="Delete"
-                    android:textColor="@color/white"
-                    app:drawableLeftCompat="@drawable/delete_white" />
+                    android:text="@string/submit"
+                    android:textColor="@color/brand_color"
+                    app:drawableLeftCompat="@drawable/ic_upload"
+                    app:drawableTint="@color/brand_color"
+                    />
             </LinearLayout>
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:background="@color/grey_light" />
+
+
 
 
     </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 </layout>

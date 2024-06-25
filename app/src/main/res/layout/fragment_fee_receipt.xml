@@ -10,6 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.fee.fee_receipt.FeeReceiptFragment">
 
 
@@ -22,7 +23,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Fee Receipt"
+            app:title="Fee Report"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -96,21 +97,21 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                tools:listitem="@layout/item_collection_report"
+                tools:listitem="@layout/item_fee_receipt"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
+android:visibility="gone"
                 />
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/iv_no_item"
                 android:fontFamily="@font/ubuntu_medium"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:visibility="gone"
-                android:text="@string/no_notice_available"
+                android:text="@string/no_data_found"
                 android:textSize="16sp"
 
                 />

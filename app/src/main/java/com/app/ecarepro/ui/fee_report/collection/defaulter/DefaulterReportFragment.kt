@@ -216,7 +216,7 @@ class DefaulterReportFragment : Fragment() {
                 }
             }
         }
-        defaulterFeeReportViewModel.defaulterFilters("")
+        defaulterFeeReportViewModel.defaulterFilters( )
     }
 
 
@@ -304,8 +304,7 @@ class DefaulterReportFragment : Fragment() {
 
         if (isValidated){
             defaulterFeeReportViewModel.getDefaulterReport(
-                "",
-                "",
+
                 binding.dateFrom.text.toString(),
                 binding.dateTo.text.toString(),
                 schoolid,

@@ -42,9 +42,11 @@ class ApplyLeaveFragment : Fragment() {
     private lateinit var leaveTypeList: List<LeaveTypes>
     private lateinit var binding: FragmentApplyLeaveBinding
     private val leaveApplyLeaveViewModel: ApplyLeaveViewModel by viewModels()
-    private lateinit var imageExt: String
-    private lateinit var imageString: String
-    private lateinit var halfdayDTL: List<HalfdayDTL>
+    private var imageExt = ""
+    private var imageString = ""
+    private var days: Long = 0
+
+    private var halfdayDTL = mutableListOf<HalfdayDTL>()
 
 
     override fun onCreateView(
@@ -53,7 +55,7 @@ class ApplyLeaveFragment : Fragment() {
     ): View {
 
         binding = FragmentApplyLeaveBinding.inflate(inflater, container, false)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -64,37 +66,37 @@ class ApplyLeaveFragment : Fragment() {
         binding.llStartDate.setOnClickListener {
             ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvStartDate.text = date
+                    binding.tvStartDate.text = Constant.dateToShow(date.toString())
                 }
-
             })
+        }
 
-            binding.llEndDate.setOnClickListener {
-                if (binding.tvStartDate.text.toString().isNotEmpty()) {
-                    ECareDataPicker(
-                        requireActivity(),
-                        true,
-                        object : ECareDataPicker.PickerCallback {
-                            override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                                binding.tvEndDate.text = date
+        binding.llEndDate.setOnClickListener {
+            if (binding.tvStartDate.text.toString().isNotEmpty()) {
+                ECareDataPicker(
+                    requireActivity(),
+                    true,
+                    object : ECareDataPicker.PickerCallback {
+                        override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                            binding.tvEndDate.text = Constant.dateToShow(date.toString())
+
+                            val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
+                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
+
+
+
+
+                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+
+                            binding.tvNumberDays.text = buildString {
+                                append(days + 1)
                             }
-                        }).setMinDate(Constant.getLongTimeDate(binding.tvEndDate.text.toString()))
+                        }
+                    }).setMinDate(Constant.getLongTimeDate(binding.tvStartDate.text.toString()))
 
 
-                    val diff =
-                        Constant.getLongTimeDate(binding.tvStartDate.text.toString()) - Constant.getLongTimeDate(
-                            binding.tvEndDate.text.toString()
-                        )
-
-                    val days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-
-                    binding.tvNumberDays.text = days.toString()
-
-
-                } else {
-                    mainActivity().showMessage("Select To Date")
-                }
-            }
+            } else
+                mainActivity().showMessage("Select To Date")
         }
 
 
@@ -157,186 +159,209 @@ class ApplyLeaveFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        findNavController().popBackStack()
-
-                    }
-                }
-            }
-        }
-
-        leaveApplyLeaveViewModel.leaveSetting()
-
-        binding.autoCompleteReason.onItemClickListener =
-            AdapterView.OnItemClickListener { _, _, position, _ ->
-                selectedLeaveTypeID = leaveTypeList[position].lvSgID
-            }
-
-        binding.btnSubmit.setOnClickListener {
-
-            if (validateData()) {
-                leaveApplyLeaveViewModel.leaveApply(
-                    selectedLeaveTypeID,
-                    binding.tvStartDate.text.toString(),
-                    binding.tvEndDate.text.toString(),
-                    binding.tvNumberDays.text.toString().toInt(),
-                    halfdayDTL,
-                    binding.textFiledReason.text.toString(),
-                    imageString,
-                    imageExt
-
-                )
-            }
-
-        }
-
-        binding.toggleButtonTypeLeave.addOnButtonCheckedListener { _, _, _ ->
-            when (binding.toggleButtonTypeLeave.checkedButtonId) {
-                R.id.btn_leave_req -> {
-                    binding.llLeaveHistory.isVisible = false
-                    binding.llMainLeaveRequest.isVisible = true
-                }
-
-                else -> {
-                    binding.llLeaveHistory.isVisible = true
-                    binding.llMainLeaveRequest.isVisible = false
-                }
-            }
-        }
-
-
-        lifecycleScope.launch {
-            leaveApplyLeaveViewModel.leaveHistoryStateFlow.collectLatest {
-                when (it) {
-
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
-
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        binding.rvLeaveHistory.isVisible = false
-                        Log.d("main", "Error$it")
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        binding.rvLeaveHistory.isVisible = true
-
-                        if (it.data != null) {
-
-                            binding.rvLeaveHistory.isVisible = true
-
-                            val leaveHistoryAdapter = StudentLeaveHistoryAdapter(
-                                it.data.dtl,
-                                this@ApplyLeaveFragment
-                            )
-
-                            binding.rvLeaveHistory.apply {
-                                setHasFixedSize(true)
-                                layoutManager = LinearLayoutManager(activity)
-                                adapter = leaveHistoryAdapter
-                            }
-
+                        if (it.data?.errorCode ==0){
+                            findNavController().popBackStack()
+                            Toast.makeText(requireContext(),"Submitted Successfully!!!",Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(requireContext(), it.data!!.message,Toast.LENGTH_SHORT).show()
 
                         }
+                    }
+                }
+            }
+        }
 
+            leaveApplyLeaveViewModel.leaveSetting()
 
+            binding.autoCompleteReason.onItemClickListener =
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    selectedLeaveTypeID = leaveTypeList[position].lvSgID
+                }
+
+            binding.btnSubmit.setOnClickListener {
+
+                if (validateData()) {
+                    leaveApplyLeaveViewModel.leaveApply(
+                        selectedLeaveTypeID,
+                        binding.tvStartDate.text.toString(),
+                        binding.tvEndDate.text.toString(),
+                        binding.tvNumberDays.text.toString().toInt(),
+                        halfdayDTL,
+                        binding.textFiledReason.text.toString(),
+                        imageString,
+                        imageExt
+
+                    )
+                }
+
+            }
+
+            binding.toggleButtonTypeLeave.addOnButtonCheckedListener { _, _, _ ->
+                when (binding.toggleButtonTypeLeave.checkedButtonId) {
+                    R.id.btn_leave_req -> {
+                        binding.llLeaveHistory.isVisible = false
+                        binding.llMainLeaveRequest.isVisible = true
+                    }
+
+                    else -> {
+                        binding.llLeaveHistory.isVisible = true
+                        binding.llMainLeaveRequest.isVisible = false
                     }
                 }
             }
 
+
+            /* lifecycleScope.launch {
+                 leaveApplyLeaveViewModel.leaveHistoryStateFlow.collectLatest {
+                     when (it) {
+
+                         is NetworkResult.Loading -> {
+                             (requireActivity() as MainActivity).showLoader(true)
+                         }
+
+                         is NetworkResult.Error -> {
+                             (requireActivity() as MainActivity).showLoader(false)
+                             binding.rvLeaveHistory.isVisible = false
+                             Log.d("main", "Error$it")
+                         }
+
+                         is NetworkResult.Success -> {
+                             (requireActivity() as MainActivity).showLoader(false)
+                             binding.rvLeaveHistory.isVisible = true
+
+                             if (it.data != null) {
+
+                             if (it.data.dtl != null) {
+
+                                 binding.rvLeaveHistory.isVisible = true
+
+                                 val leaveHistoryAdapter = StudentLeaveHistoryAdapter(
+                                     it.data.dtl,
+                                     this@ApplyLeaveFragment
+                                 )
+
+                                 binding.rvLeaveHistory.apply {
+                                     setHasFixedSize(true)
+                                     layoutManager = LinearLayoutManager(activity)
+                                     adapter = leaveHistoryAdapter
+                                 }
+
+
+                             }else{
+                                 binding.rvLeaveHistory.isVisible = false
+                                 binding.tvNoData.isVisible = true
+                             }
+
+                             }else{
+                                 binding.rvLeaveHistory.isVisible = false
+                                 binding.tvNoData.isVisible = true
+                             }
+
+
+                         }
+                     }
+                 }
+
+             }
+
+             leaveApplyLeaveViewModel.leaveHistory()
+     */
         }
 
-        leaveApplyLeaveViewModel.leaveHistory()
-
-    }
 
 
-    private fun selectImageOptionDialog() {
-        val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo),
-            getString(R.string.choose_library),
-            getString(R.string.cancel)
 
-        )
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo))
-        builder.setItems(items) { dialog, item ->
-            FileAccess.checkPermission(this@ApplyLeaveFragment)
-            if (items[item] == getString(R.string.take_photo)) {
-                cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
-                galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
-                dialog.dismiss()
+
+        private fun selectImageOptionDialog() {
+            val items = arrayOf<CharSequence>(
+                getString(R.string.take_photo),
+                getString(R.string.choose_library),
+                getString(R.string.cancel)
+
+            )
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle(getString(R.string.add_photo))
+            builder.setItems(items) { dialog, item ->
+                FileAccess.checkPermission(this@ApplyLeaveFragment)
+                if (items[item] == getString(R.string.take_photo)) {
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                } else if (items[item] == getString(R.string.choose_library)) {
+                    galleryLauncher.launch(FileAccess.galleryIntent())
+                } else if (items[item] == getString(R.string.cancel)) {
+                    dialog.dismiss()
+                }
             }
-        }
-        builder.show()
-    }
-
-    private val galleryLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val data = it.data
-                val imgUri = data?.data
-                binding.attachmentImage.setImageURI(imgUri)
-
-                val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
-
-                imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-
-                imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-
-                binding.imageViewCancel.isVisible = true
-                binding.attachmentImage.isVisible = true
-
-            }
+            builder.show()
         }
 
-    private val cameraLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                if (result?.data != null) {
-                    val bitmap = result.data?.extras?.get("data") as Bitmap
-                    binding.attachmentImage.setImageBitmap(bitmap)
+        private val galleryLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    val data = it.data
+                    val imgUri = data?.data
+                    binding.attachmentImage.setImageURI(imgUri)
+
+                    val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
 
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
                     imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+
                     binding.imageViewCancel.isVisible = true
                     binding.attachmentImage.isVisible = true
 
                 }
             }
+
+        private val cameraLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    if (result?.data != null) {
+                        val bitmap = result.data?.extras?.get("data") as Bitmap
+                        binding.attachmentImage.setImageBitmap(bitmap)
+
+                        imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
+                        imageExt =
+                            FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                        binding.imageViewCancel.isVisible = true
+                        binding.attachmentImage.isVisible = true
+
+                    }
+                }
+            }
+
+        private fun validateData(): Boolean {
+            var validate = true
+            if (binding.tvStartDate.text.toString().isEmpty()) {
+                validate = false
+                mainActivity().showMessage("Select From Date")
+            }
+            if (binding.tvEndDate.text.toString().isEmpty()) {
+                validate = false
+                mainActivity().showMessage("Select To Date")
+
+            }
+            if (selectedLeaveTypeID == 0) {
+                validate = false
+                mainActivity().showMessage("Select Leave Type")
+
+            }
+            if (binding.textFiledReason.text.toString().isEmpty()) {
+                validate = false
+                mainActivity().showMessage("Enter Reason")
+
+            }
+            if (!binding.cbLeaveTc.isChecked) {
+                validate = false
+                mainActivity().showMessage("Please Check Term and Condition")
+
+            }
+
+            return validate
         }
 
-    private fun validateData(): Boolean {
-        var validate = true
-        if (binding.tvStartDate.text.toString().isEmpty()) {
-            validate = false
-            mainActivity().showMessage("Select From Date")
-        }
-        if (binding.tvEndDate.text.toString().isEmpty()) {
-            validate = false
-            mainActivity().showMessage("Select To Date")
-        }
-        if (selectedLeaveTypeID == 0) {
-            validate = false
-            mainActivity().showMessage("Select Leave Type")
-        }
-        if (binding.textFiledReason.text.toString().isEmpty()) {
-            validate = false
-            mainActivity().showMessage("Enter Reason")
-        }
-        if (!binding.cbLeaveTc.isChecked) {
-            validate = false
-            mainActivity().showMessage("Please Check Term and Condition")
-        }
 
-        return validate
     }
-
-
-}

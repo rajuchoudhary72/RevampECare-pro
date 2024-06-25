@@ -11,16 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStaffListBinding
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.students_list.StudentListAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,11 +29,17 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
     private lateinit var binding: FragmentStaffListBinding
     private val staffListViewModel: StaffListViewModel by viewModels()
     private var toFragment: String= ""
+
+    private   var teacherList: List<Staff>? = null
+    private lateinit var teacherListFilter: List<Staff>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStaffListBinding.inflate(inflater, container, false)
+        binding = FragmentStaffListBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = staffListViewModel
+        }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         try {
             toFragment= requireArguments().getString(Constant.TO).toString()
@@ -46,6 +49,21 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        lifecycleScope.launch {
+            staffListViewModel.searchQuery.collectLatest {
+
+                if (it.isNotEmpty() && teacherList!=null){
+                    teacherListFilter = teacherList!!.filter { s -> s .name.lowercase().contains(it.lowercase())   }
+                    setupRecycleViewStudentList(teacherListFilter)
+                }else{
+                    teacherList?.let { it1 -> setupRecycleViewStudentList(it1) }
+                }
+
+
+            }
+        }
 
         getStaffList()
 
@@ -73,33 +91,18 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.rvStaffList.isVisible = true
 
-                        if (it.data != null) {
+                        if (it.data!=null){
+
+                            setupRecycleViewStudentList(it.data.staffs)
 
 
-                            if (it.data.staffs.isNotEmpty()) {
-                                binding.rvStaffList.isVisible = true
-                                binding.tvNoData.isVisible = false
-
-                                val circularAdapter = StaffListAdapter(
-                                    it.data.staffs,
-                                    this@StaffListFragment
-                                )
-
-                                binding.rvStaffList.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = GridLayoutManager(activity, 2)
-                                    adapter = circularAdapter
-                                }
-                            } else {
-                                binding.rvStaffList.isVisible = false
-                                binding.tvNoData.isVisible = true
-                            }
 
                         }
 
                     }
 
 
+                    else -> {}
                 }
 
 
@@ -118,5 +121,31 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
             })
         }
 
+    }
+
+    private fun setupRecycleViewStudentList(staffs: List<Staff>) {
+        if ( staffs != null) {
+
+
+            if ( staffs.isNotEmpty()) {
+                binding.rvStaffList.isVisible = true
+                binding.tvNoData.isVisible = false
+
+                val circularAdapter = StaffListAdapter(
+                     staffs,
+                    this@StaffListFragment
+                )
+
+                binding.rvStaffList.apply {
+                    setHasFixedSize(true)
+                    layoutManager = GridLayoutManager(activity, 2)
+                    adapter = circularAdapter
+                }
+            } else {
+                binding.rvStaffList.isVisible = false
+                binding.tvNoData.isVisible = true
+            }
+
+        }
     }
 }

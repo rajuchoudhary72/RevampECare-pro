@@ -133,7 +133,6 @@ class TaskDetailsFragment : Fragment() {
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
                                     mainActivity().showMessage(message?:"")
-
                                 }
                             }
                         } else if (v.id == R.id.description) {
@@ -149,7 +148,6 @@ class TaskDetailsFragment : Fragment() {
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
                                     mainActivity().showMessage(message?:"")
-
 
                                 }
                             }

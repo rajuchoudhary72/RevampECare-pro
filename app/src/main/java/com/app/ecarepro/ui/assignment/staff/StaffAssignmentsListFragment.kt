@@ -48,6 +48,14 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if ( teacherAssignmentViewModel. userType == Constant.PRINCIPAL || teacherAssignmentViewModel. userType ==  Constant.MANAGEMENT) {
+            binding.fbPostAssignment.isVisible=false
+        }
+
+        binding.fbPostAssignment.setOnClickListener {
+            findNavController().navigate(R.id.postAssignmentFragment)
+        }
+
         lifecycleScope.launch {
             teacherAssignmentViewModel.teacAssignmentStateFlow.collectLatest {
 
@@ -71,7 +79,8 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
 
                                 val assignmentListAdapter =
                                     StaffAssignmentListAdapter(it.data.assignments,
-                                        this@StaffAssignmentsListFragment)
+                                        this@StaffAssignmentsListFragment,
+                                        teacherAssignmentViewModel.userType)
 
                                 binding.rvAssignment.apply {
                                     setHasFixedSize(true)
@@ -107,30 +116,31 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     }
 
     override fun onItemClick(t: TeacherAssignment, pos: Int, boolean: Boolean) {
-        if (pos==1){
-             findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
-                putString(Constant.ASSIGNMENT_ID, t.id)
-            })
-        } else if (pos==2){
-            findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_editAssignmentFragment,Bundle( ).apply {
-                putString(Constant.ASSIGNMENT_ID, t.id)
-            })
-        }
-
-        else
-        if (pos==3){
-            teacherAssignmentViewModel.deleteAssignment(t.id)
-            lifecycleScope.launch {
-                teacherAssignmentViewModel.deleteAssignmentStateFlow.collectLatest {
-                    when (it) {  is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }  is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    } is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        teacherAssignmentViewModel.teachersAssignment(staffId)
-                    }  }
-                } }
+        when (pos) {
+            1 -> {
+                findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })
+            }
+            2 -> {
+                findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_editAssignmentFragment,Bundle( ).apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })
+            }
+            3 -> {
+                teacherAssignmentViewModel.deleteAssignment(t.id)
+                lifecycleScope.launch {
+                    teacherAssignmentViewModel.deleteAssignmentStateFlow.collectLatest {
+                        when (it) {  is NetworkResult.Loading -> {
+                            (requireActivity() as MainActivity).showLoader(true)
+                        }  is NetworkResult.Error -> {
+                            (requireActivity() as MainActivity).showLoader(false)
+                        } is NetworkResult.Success -> {
+                            (requireActivity() as MainActivity).showLoader(false)
+                            teacherAssignmentViewModel.teachersAssignment(staffId)
+                        }  }
+                    } }
+            }
         }
 
     }

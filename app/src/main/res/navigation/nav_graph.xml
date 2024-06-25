@@ -227,14 +227,7 @@
             android:id="@+id/action_circularDetailsFragment_to_openPdfFragment"
             app:destination="@id/openPdfFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/bookLibraryFragment"
-        android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
-        android:label="BookLibraryFragment" >
-        <action
-            android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
-            app:destination="@id/bookDetailsFragment" />
-    </fragment>
+
 
     <fragment
         android:id="@+id/latestBookFragment"
@@ -276,6 +269,16 @@
         android:id="@+id/calenderActivityNavHost"
         android:name="com.app.ecarepro.ui.calender.CalenderActivityNavHost"
         android:label="CalenderActivityNavHost" />
+
+
+    <fragment
+        android:id="@+id/bookLibraryFragment"
+        android:name="com.app.ecarepro.ui.book_library.BookLibraryFragment"
+        android:label="BookLibraryFragment" >
+        <action
+            android:id="@+id/action_bookLibraryFragment_to_bookDetailsFragment"
+            app:destination="@id/bookDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/paySlipFragment"
         android:name="com.app.ecarepro.ui.payslip.PaySlipFragment"
@@ -673,7 +676,11 @@
     <fragment
         android:id="@+id/assignmentListFragment"
         android:name="com.app.ecarepro.ui.assignment.AssignmentListFragment"
-        android:label="AssignmentListFragment" />
+        android:label="AssignmentListFragment" >
+        <action
+            android:id="@+id/action_assignmentListFragment_to_submitAssignmentFragment"
+            app:destination="@id/submitAssignmentFragment" />
+    </fragment>
     <fragment
         android:id="@+id/appointmentReportFragment"
         android:name="com.app.ecarepro.ui.appointment.AppointmentReportFragment"
@@ -767,4 +774,91 @@
         android:id="@+id/conversationReportFragment"
         android:name="com.app.ecarepro.ui.con_report.ConversationReportFragment"
         android:label="ConversationReportFragment" />
+    <fragment
+        android:id="@+id/photoAlbumTypeNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.PhotoAlbumTypeNavHostFragment"
+        android:label="PhotoAlbumTypeNavHostFragment" >
+        <action
+            android:id="@+id/action_photoAlbumTypeNavHostFragment_to_photoAlbumDTLFragment"
+            app:destination="@id/photoAlbumDTLFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoAlbumDTLFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.photoAlbum.photoAlbumDTL.PhotoAlbumDTLFragment"
+        android:label="PhotoAlbumDTLFragment" >
+        <action
+            android:id="@+id/action_photoAlbumDTLFragment_to_photoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoAlbumFragment"
+        android:name="com.app.ecarepro.ui.gallery.video.VideoAlbumFragment"
+        android:label="VideoAlbumFragment" >
+        <action
+            android:id="@+id/action_videoAlbumFragment_to_videoAlbumDTLFragment"
+            app:destination="@id/videoAlbumDTLFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoAlbumDTLFragment"
+        android:name="com.app.ecarepro.ui.gallery.video.videoAlbumDTL.VideoAlbumDTLFragment"
+        android:label="VideoAlbumDTLFragment" >
+        <action
+            android:id="@+id/action_videoAlbumDTLFragment_to_photoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/photoSliderFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment"
+        android:label="PhotoSliderFragment" />
+    <fragment
+        android:id="@+id/mediaGalleryFragment"
+        android:name="com.app.ecarepro.ui.gallery.mediaGallery.MediaGalleryFragment"
+        android:label="fragment_media_gallery"
+        tools:layout="@layout/fragment_media_gallery" />
+    <fragment
+        android:id="@+id/mediaDetailsFragment"
+        android:name="com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment"
+        android:label="MediaDetailsFragment" />
+    <fragment
+        android:id="@+id/addQuestionBankFragment"
+        android:name="com.app.ecarepro.ui.question_bank.add_question_bank.AddQuestionBankFragment"
+        android:label="AddQuestionBankFragment" />
+    <fragment
+        android:id="@+id/favoritesListFragment"
+        android:name="com.app.ecarepro.ui.gallery.favorites.FavoritesListFragment"
+        android:label="FavoritesListFragment" >
+        <action
+            android:id="@+id/action_favoritesListFragment_to_photoSliderFragment"
+            app:destination="@id/photoSliderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/questionBankFragment2"
+        android:name="com.app.ecarepro.ui.question_bank.QuestionBankFragment"
+        android:label="fragment_question_bank"
+        tools:layout="@layout/fragment_question_bank" />
+    <fragment
+        android:id="@+id/youTubeVideoPlayerFragment"
+        android:name="com.app.ecarepro.ui.gallery.videoPlay.YouTubeVideoPlayerFragment"
+        android:label="YouTubeVideoPlayerFragment"
+        android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+        />
+    <fragment
+        android:id="@+id/submitAssignmentFragment"
+        android:name="com.app.ecarepro.ui.assignment.submit_assignment.SubmitAssignmentFragment"
+        android:label="SubmitAssignmentFragment" >
+        <argument
+            android:name="assignemtDetails"
+            app:argType="com.app.ecarepro.model.Assignment" />
+    </fragment>
+    <fragment
+        android:id="@+id/EBookFragment"
+        android:name="com.app.ecarepro.ui.book_library.eBook.EBookFragment"
+        android:label="fragment_e_book"
+        tools:layout="@layout/fragment_e_book" />
+    <fragment
+        android:id="@+id/EBookNavFragment"
+        android:name="com.app.ecarepro.ui.book_library.eBook.EBookNavFragment"
+        android:label="fragment_e_nav_book"
+        tools:layout="@layout/fragment_e_nav_book" />
+
 </navigation>

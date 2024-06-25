@@ -32,7 +32,6 @@ class ChangePasswordViewModel @Inject constructor(
         val passwordRegex = "^(?=.*[0-9!@\$%^&*])(?=.*[a-zA-Z])[a-zA-Z0-9!@\$%^&*]{5,10}$".toRegex()
         return passwordRegex.matches(password)
     }
-
     fun changePassword(result: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository

@@ -30,9 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
+        versionCode = 6
+        versionName = "1.1.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -151,4 +150,7 @@ dependencies {
     implementation("com.github.AsynctaskCoffee:VoiceRecorder:beta-0.5")
     implementation("com.github.dhaval2404:imagepicker:2.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+
 }

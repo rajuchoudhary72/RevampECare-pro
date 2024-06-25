@@ -32,6 +32,8 @@ class NoticeDetailsFragment : Fragment() {
 
     private val _noticeDetailsViewModel : NoticeDetailsViewModel by viewModels()
 
+    var noticeID = 0
+
 
 
     override fun onCreateView(
@@ -42,9 +44,9 @@ class NoticeDetailsFragment : Fragment() {
             lifecycleOwner= viewLifecycleOwner
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
+        noticeDetailsBinding.toolbarNoticDetail.setNavigationOnClickListener { findNavController().popBackStack() }
+          noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
 
-        val noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
-        _noticeDetailsViewModel.getNoticeDTL(noticeID,1)
 
 
         return noticeDetailsBinding.root
@@ -90,6 +92,7 @@ class NoticeDetailsFragment : Fragment() {
             }
         }
 
+        _noticeDetailsViewModel.getNoticeDTL(noticeID,1)
 
     }
 }

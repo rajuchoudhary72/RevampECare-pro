@@ -2,8 +2,6 @@ package com.app.ecarepro.ui.timeTable
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.network.model.NetworkActivityCalender
-import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.repository.UserRepository
@@ -28,6 +26,20 @@ class TimeTableNavHostViewModel @Inject constructor(
         runCatching {
             timeTableMutableStateFlow.value = NetworkResult.Loading()
             userRepository.teachersTimetable( id)
+        }.onSuccess {
+            timeTableMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            timeTableMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
+    fun classTimetable(
+        id: String?
+    )=viewModelScope.launch {
+        runCatching {
+            timeTableMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.classTimetable( id)
         }.onSuccess {
             timeTableMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

@@ -4,17 +4,16 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.databinding.StaffAssignmentItemBinding
-import com.app.ecarepro.databinding.StuAssignmentItemBinding
-import com.app.ecarepro.model.Activity
-import com.app.ecarepro.model.Assignment
 import com.app.ecarepro.model.TeacherAssignment
+import com.app.ecarepro.utils.Constant
 
 class StaffAssignmentListAdapter(
     private var activityLST: List<TeacherAssignment>,
-    private var activityCalenderFragment: StaffAssignmentsListFragment
+    private var activityCalenderFragment: StaffAssignmentsListFragment,
+    val userType: String
 ) :
     RecyclerView.Adapter<StaffAssignmentListAdapter.AssignmentListAdapter>() {
 
@@ -24,32 +23,21 @@ class StaffAssignmentListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListAdapter {
         bindingm =
             StaffAssignmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AssignmentListAdapter(bindingm.root)
+        return AssignmentListAdapter(bindingm )
     }
 
     override fun getItemCount(): Int = activityLST.size
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
-        bindingm.assignmentData = activityLST[position]
 
-        bindingm.llView.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position],1,false)
-        }
-        bindingm.llDelete.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position],3,false)
-        }
-        bindingm.llEdit.setOnClickListener {
-            activityCalenderFragment.onItemClick(activityLST[position],2,false)
-        }
-        val data=activityLST[position]
-        if (data.isActive){
-            bindingm.tvStatus.text="  Active"
-            bindingm.tvStatus.setTextColor(Color.parseColor("#4DAC3C"))
 
-        }else{
-            bindingm.tvStatus.text="  InActive"
-            bindingm.tvStatus.setTextColor(Color.parseColor("#848484"))
-        }
+
+
+        holder.bind(activityLST[position])
+
+
+
+
 
 
 
@@ -57,7 +45,39 @@ class StaffAssignmentListAdapter(
      }
 
 
-    class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {
+   inner class AssignmentListAdapter(val bindingm: StaffAssignmentItemBinding) : RecyclerView.ViewHolder(bindingm.root) {
+
+        fun bind(teacherAssignment: TeacherAssignment) {
+
+            bindingm.assignmentData = teacherAssignment
+
+            if ( userType == Constant.PRINCIPAL || userType ==  Constant.MANAGEMENT) {
+                bindingm.llDelete.isVisible=false
+                bindingm.llEdit.isVisible=false
+            }
+
+            bindingm.tvClass.text = teacherAssignment.`class`
+
+            bindingm.llView.setOnClickListener {
+                activityCalenderFragment.onItemClick(teacherAssignment,1,false)
+            }
+            bindingm.llDelete.setOnClickListener {
+                activityCalenderFragment.onItemClick(teacherAssignment,3,false)
+            }
+            bindingm.llEdit.setOnClickListener {
+                activityCalenderFragment.onItemClick(teacherAssignment,2,false)
+            }
+             if (teacherAssignment.isActive){
+                bindingm.tvStatus.text="  Active"
+                bindingm.tvStatus.setTextColor(Color.parseColor("#4DAC3C"))
+
+            }else{
+                bindingm.tvStatus.text="  InActive"
+                bindingm.tvStatus.setTextColor(Color.parseColor("#848484"))
+            }
+
+        }
+
     }
 
 

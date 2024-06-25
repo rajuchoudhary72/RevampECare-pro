@@ -88,7 +88,9 @@ class ForgotPasswordFragment : Fragment() {
                 binding.textFiled.text.toString()
             ) {
                 (requireActivity() as MainActivity).showLoader(false)
+
                 mainActivity().showMessage(it.message?:"")
+
                 if (it.errorCode == 0) {
                     findNavController().popBackStack()
                 }

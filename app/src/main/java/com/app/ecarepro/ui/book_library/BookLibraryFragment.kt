@@ -15,11 +15,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.NetworkLatestBook
+import com.app.ecarepro.data.network.model.NetworkLibraryDTL
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBookLibraryBinding
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.book_library.view_model.LatestBookViewModel
+import com.app.ecarepro.ui.book_library.view_model.BookLibraryViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 class BookLibraryFragment : Fragment() {
 
     private lateinit var bookLibraryBinding: FragmentBookLibraryBinding
-    private val latestBookViewModel : LatestBookViewModel by viewModels()
+    private val latestBookViewModel : BookLibraryViewModel by viewModels()
 
 
 
@@ -40,16 +40,15 @@ class BookLibraryFragment : Fragment() {
     ): View {
 
         bookLibraryBinding=FragmentBookLibraryBinding.inflate(inflater,container,false)
+        bookLibraryBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         return bookLibraryBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
         lifecycleScope.launch {
-            latestBookViewModel._latestBookStateFlow.collectLatest {
+            latestBookViewModel.libraryDTLStateFlow.collectLatest {
                 when (it) {
 
                     is NetworkResult.Loading -> {
@@ -80,7 +79,7 @@ class BookLibraryFragment : Fragment() {
             }
         }
 
-        latestBookViewModel.getLibraryDetails()
+        latestBookViewModel.getLibraryDTL()
 
 
 
@@ -141,7 +140,7 @@ class BookLibraryFragment : Fragment() {
     }
 
 
-    private fun setUpViewPager(data: NetworkLatestBook) {
+    private fun setUpViewPager(data: NetworkLibraryDTL) {
 
         val tabItem = mutableListOf(getString(R.string.latest_book), getString(R.string.my_account))
 
@@ -154,12 +153,12 @@ class BookLibraryFragment : Fragment() {
 
                 return when (position) {
                     0 -> {
-                        LatestBookFragment(data.latestBook, 0)
+                        LatestBookFragment(data.latestBook,  )
                     }
                     1 -> {
-                        LatestBookFragment(data.latestBook, 1)
+                        LibraryMyAccountFragment(data.myAccount )
                     }
-                    else -> LatestBookFragment(data.latestBook,  0)
+                    else -> LatestBookFragment(data.latestBook )
                 }
              }
 

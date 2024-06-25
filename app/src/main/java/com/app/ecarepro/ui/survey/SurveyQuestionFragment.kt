@@ -113,8 +113,8 @@ class SurveyQuestionFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                    mainActivity().showMessage("Your response has been recorded \n" +
-                            " Thanks for your response.")
+                        mainActivity().showMessage("Your response has been recorded \n" +
+                                " Thanks for your response.")
                         findNavController().popBackStack()
                     }
 

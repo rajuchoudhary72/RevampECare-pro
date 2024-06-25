@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CircularFragment : Fragment(), ItemListener<Circular> {
 
+    private var isYearSelected: Boolean=false
     private var selectedYearID: Int=0
     private var yearList: List<AcademicYear> = ArrayList<AcademicYear>()
     private val circularViewModel :CircularViewModel   by viewModels()
@@ -48,6 +49,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     ): View {
 
         fragmentCircularBinding= FragmentCirculerBinding.inflate(inflater,container,false)
+        fragmentCircularBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         fragmentCircularBinding.tvSelectSession.setOnClickListener {
             popUpSelectAcademicYears()
         }
@@ -57,14 +59,8 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                 circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
             }else {
                 mainActivity().showMessage("Please enter title!!!")
-
             }
         }
-
-
-
-
-
         return fragmentCircularBinding.root
 
     }
@@ -157,18 +153,22 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text="Select Academic Year"
+        tvHeading.text= getString(R.string.select_academic_year)
         builder.setView(view)
 
         relOk.setOnClickListener {
-            fragmentCircularBinding.tvSelectSession.text= selectedYearData!!.session
-            circularViewModel.getCirculars(1, selectedYearID,"")
-            builder.dismiss()
+            if (isYearSelected){
+                fragmentCircularBinding.tvSelectSession.text= selectedYearData!!.session
+                circularViewModel.getCirculars(1, selectedYearID,"")
+                builder.dismiss()
+            }
+
 
         }
 
         val yearAdapter= PopUpListAdapter(yearList, object : ItemListener<AcademicYear>{
             override fun onItemClick(t: AcademicYear, pos: Int, boolean: Boolean) {
+               isYearSelected=true
                 selectedYearData = t
                 selectedYearID=t.yrID
             }

@@ -1,15 +1,16 @@
 package com.app.ecarepro.ui.dashbord.model
 
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.BankBalance
 import com.app.ecarepro.databinding.ItemBankBalanceCardBinding
-import com.app.ecarepro.ui.views.LegendViewModel_
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
+import com.app.ecarepro.utils.rupeeText
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import androidx.recyclerview.widget.GridLayoutManager
+import com.app.ecarepro.ui.views.LegendViewModel_
 
 class BankBalanceModel(val bankBalance: List<BankBalance>) :
     ViewBindingKotlinModel<ItemBankBalanceCardBinding>(R.layout.item_bank_balance_card) {
@@ -36,6 +37,7 @@ class BankBalanceModel(val bankBalance: List<BankBalance>) :
                 }
             }
         }
+
         chartView.aa_drawChartWithChartModel(getBarChartModel(bankBalance))
     }
 
@@ -55,9 +57,8 @@ class BankBalanceModel(val bankBalance: List<BankBalance>) :
                             arrayOf(it.accountName, it.balnce?.toDouble() ?: 0.0)
                         }.toTypedArray()
 
-                    )
+                )
             )
         )
-
 
 }

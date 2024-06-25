@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -19,6 +20,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.update
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
@@ -81,11 +83,12 @@ class SignInFragment : Fragment() {
                             }
 
                         } else {
-                            mainActivity().showMessage("Authenticated " + it.authenticated)
+                            mainActivity().showMessage(" " + it.authenticated)
+
                         }
 
                     }
-                    mainActivity().showMessage(it.message ?: "")
+                    mainActivity().showMessage("You are Successfully  login... ")
                     Log.i("Token Aut", it.authToken.toString())
                 }
             } else {
@@ -98,7 +101,7 @@ class SignInFragment : Fragment() {
                         binding.textUserName.isEnabled = false
                         binding.textUserName.isClickable = false
                     }
-                    mainActivity().showMessage(it.message ?: "")
+                    mainActivity().showMessage(it.message?:"")
                 }
             }
         }

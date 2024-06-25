@@ -54,8 +54,11 @@ class StudentRepoAttAdapter(private var classSummaryList: List<ClassSummary>,
             }
 
             cvMain.setOnClickListener {
-                studentAttendanceReportFragment.onItemClick(data,1,false)
-            }
+                if (data.present+data.absent+data.late+data.leave+data.present>0){
+                    studentAttendanceReportFragment.onItemClick(data,1,false)
+
+                }
+             }
         }
 
 

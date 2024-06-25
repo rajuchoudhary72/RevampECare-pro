@@ -36,6 +36,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLeaveListBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -63,6 +64,9 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
                         binding.rvLeaveHistory.isVisible = true
 
                         if (it.data != null) {
+                        if (it.data.dtl != null) {
+
+
 
                             binding.rvLeaveHistory.isVisible = true
                             binding.tvNoData.isVisible = false
@@ -79,6 +83,14 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
                             }
 
 
+                        }else{
+                            binding.rvLeaveHistory.isVisible = false
+                            binding.tvNoData.isVisible = true
+                        }
+
+                        }else{
+                            binding.rvLeaveHistory.isVisible = false
+                            binding.tvNoData.isVisible = true
                         }
 
 
@@ -92,13 +104,14 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
 
         binding.fbApplyForLeave.setOnClickListener {
-            findNavController().navigate(R.id.leaveSettingFragment)
+            findNavController().navigate(R.id.applyLeaveFragment)
         }
     }
 
     override fun onItemClick(t: Dtl, pos: Int, boolean: Boolean) {
 
         if (pos==1){
+
             lifecycleScope.launch {
                 leaveHistoryViewModel.leaveDeleteStateFlow.collectLatest {
                     when (it) {

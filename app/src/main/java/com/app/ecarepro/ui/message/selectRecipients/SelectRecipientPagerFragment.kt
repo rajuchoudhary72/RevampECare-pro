@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -19,6 +20,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.Contact
+import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.model.StaffTypeDto
 import com.app.ecarepro.databinding.FragmentPagerSelectRecipientsBinding
@@ -27,8 +29,10 @@ import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.selectableClassView
 import com.app.ecarepro.selectableRecipient
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.MessageViewModel
+import com.app.ecarepro.utils.Constant
 import com.rubensousa.decorator.LinearDividerDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -49,7 +53,8 @@ class SelectRecipientPagerFragment : Fragment() {
     private val messageViewModel: MessageViewModel by activityViewModels()
 
     private var searchQuery: String? = null
-
+    private lateinit var userData: NetworkUserDetailsDto
+    private val systemViewModel: SystemViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -100,7 +105,20 @@ class SelectRecipientPagerFragment : Fragment() {
                 size = resources.getDimensionPixelSize(R.dimen.divider_size)
             )
         )
-
+       /* viewLifecycleOwner.lifecycleScope.launch {
+            launch {
+            systemViewModel.user.collectLatest {
+                if (it != null) {
+                    userData = it
+                }
+            }
+        }
+    }
+        if (userData.userType == Constant.STUDENT_TYPE||userData.userType == Constant.PARENT_TYPE) {
+            binding.spinnerLayout.isVisible =false
+        }else{
+            binding.spinnerLayout.isVisible =true
+        }*/
         viewLifecycleOwner.lifecycleScope.launch {
 
             launch {

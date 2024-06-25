@@ -134,6 +134,56 @@
 
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_marginHorizontal="10dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                android:layout_marginBottom="10dp"
+
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteSessionFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:text="@string/select_session"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_marginHorizontal="10dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                android:layout_marginBottom="10dp"
+
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteSessionTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:text="@string/select_session"
+                    tools:ignore="LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
 
 
 

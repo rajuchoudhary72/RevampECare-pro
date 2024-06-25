@@ -26,13 +26,11 @@ class ChangeUsernameViewModel @Inject constructor(
     ) { current, new ->
         validateUsername(current) && validateUsername(new)
     }.asLiveData()
-
     private fun validateUsername(username: String): Boolean {
         if(username.isEmpty()) return false
         val usernameRegex = "^[a-zA-Z0-9]{5,10}$".toRegex()
         return usernameRegex.matches(username)
     }
-
 
     fun changeUsername(result: (Boolean, String) -> Unit) {
         viewModelScope.launch {

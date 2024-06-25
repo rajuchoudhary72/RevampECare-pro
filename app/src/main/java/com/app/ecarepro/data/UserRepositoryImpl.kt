@@ -20,7 +20,6 @@ import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
-import com.app.ecarepro.data.network.model.NetworkLatestBook
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkMyClass
@@ -45,7 +44,6 @@ import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkUser
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
@@ -82,19 +80,24 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
-import com.app.ecarepro.data.network.model.NetworkAllTeacher
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
+import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
-import com.app.ecarepro.data.network.model.NetworkClassAssignments
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
-import com.app.ecarepro.data.network.model.NetworkClassmateLST
+import com.app.ecarepro.data.network.model.NetworkEBook
+import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkLibraryDTL
+import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkOutPassReport
+import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkQuestionBank
 import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkRouteList
 import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
@@ -104,14 +107,19 @@ import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVideoAlbum
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
-import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBody
+import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import javax.inject.Inject
@@ -164,6 +172,7 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)
                 userDataStore.saveRoleName(it.roleName ?: "")
+                userDataStore.saveUserNameID(userName ?: "")
             }
 
         }
@@ -223,9 +232,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getActivityCaledar()
     }
 
-    override suspend fun getLibraryDetails(): NetworkLatestBook {
-        return userService.getLibraryDetails()
+    override suspend fun getLibraryDTL(): NetworkLibraryDTL {
+        return userService.getLibraryDTL()
     }
+
 
     override suspend fun getBookDetails(bookID: Int, id: Int): NetworkBookDetails {
         return userService.getBookDetails(bookID, id)
@@ -779,7 +789,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.teachersTimetable(id)
     }
 
-    override suspend fun classTimetable(id: String): NetworkTeachersTimetable {
+    override suspend fun classTimetable(id: String?): NetworkTeachersTimetable {
         return userService.classTimetable(id)
     }
 
@@ -945,6 +955,88 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getQuestionPaper(classID, yrID)
     }
 
+    override suspend fun getPhotoAlbumTypes(): NetworkAlbumType {
+        return  userService.getPhotoAlbumTypes()
+    }
+
+    override suspend fun getPhotoAlbums(typeID: Int, pg: Int): NetworkPhotoAlbum {
+        return userService.getPhotoAlbums(typeID, pg)
+    }
+
+    override suspend fun getPhotoAlbumDTL(iD: String, pg: Int): NetworkAlbumPhotoDetails {
+        return userService.getPhotoAlbumDTL(iD, pg)
+    }
+
+    override suspend fun getVideoAlbums(pg: Int): NetworkVideoAlbum {
+        return userService.getVideoAlbums(pg)
+    }
+
+    override suspend fun getVideoAlbumDTL(id: String, pg: Int): NetworkVideoAlbumDTL {
+        return userService.getVideoAlbumDTL(id, pg)
+    }
+
+    override suspend fun getFavorites(pg: Int): NetworkFavorites {
+        return userService.getFavorites(pg)
+    }
+
+    override suspend fun manageFavorites(
+        id: String,
+        galleryType: Int,
+        action: String
+    ): CommonResponse {
+        return userService.manageFavorites(id, galleryType, action)
+    }
+
+    override suspend fun manageLikes(id: String, galleryType: Int, like: Boolean): CommonResponse {
+
+        return userService.manageLikes(id, galleryType, like)
+    }
+
+    override suspend fun getMediaGallery(
+        pg: Int,
+        queryType: Int,
+        year: Int,
+        date: String,
+        query: String
+    ): NetworkMediaGallery {
+        return userService.getMediaGallery(pg, queryType, year, date, query)
+    }
+
+    override suspend fun getMyQuestionBank(): NetworkQuestionBank {
+        return userService.getMyQuestionBank()
+    }
+
+    override suspend fun getQuestionBankCreate(): NetworkQuestionBankCreate {
+        return userService.getQuestionBankCreate()
+    }
+
+    override suspend fun getQuestionBankSubject(classID: Int): NetworkQuestionBankSubject {
+        return userService.getQuestionBankSubject(classID)
+    }
+
+    override suspend fun getQuestionBankChapters(
+        classID: Int,
+        subID: Int
+    ): NetworkQuestionBankChapters {
+        return userService.getQuestionBankChapters(classID, subID)
+    }
+
+    override suspend fun submitPostQuestion(model: NetworkPostQuestionBank): CommonResponse {
+        return userService.submitPostQuestion(model)
+    }
+
+    override suspend fun getDeleteQuestion(id: String): CommonResponse {
+        return userService.getDeleteQuestion(id)
+    }
+
+    override suspend fun getEBook(query: String, mode: Int): NetworkEBook {
+        return userService.getEBook(query, mode)
+    }
+
+    override suspend fun getEBookDetails(accessionNo: String): CommonResponse {
+        return userService.getEBookDetails(accessionNo)
+    }
+
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
         return userService.surveyList(pg, isReport)
     }
@@ -952,6 +1044,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
         return userService.surveyQuestions(id)
     }
+
+
 
     override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
         return userService.submitSurveyQuestions(model)

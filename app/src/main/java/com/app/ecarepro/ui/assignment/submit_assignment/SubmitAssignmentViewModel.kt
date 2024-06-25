@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SubmitAssignmentViewModel @Inject constructor(
     private var userRepository: UserRepository
 ) : ViewModel() {

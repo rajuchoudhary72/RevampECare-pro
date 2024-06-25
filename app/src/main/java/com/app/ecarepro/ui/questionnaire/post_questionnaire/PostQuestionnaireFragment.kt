@@ -55,6 +55,7 @@ class PostQuestionnaireFragment : Fragment() {
                 binding.textFiledThoughts.text.toString(),
                 imageString, "", imageExt
             )
+
             mainActivity().showMessage(getString(R.string .successfully))
             findNavController().popBackStack()
         }

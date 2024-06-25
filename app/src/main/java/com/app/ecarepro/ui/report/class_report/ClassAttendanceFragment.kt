@@ -31,6 +31,8 @@ import kotlinx.coroutines.launch
 class ClassAttendanceFragment : Fragment()  {
 
     private var classId: String  =  ""
+    private var className: String  =  ""
+    private var date: String  =  ""
     private lateinit var binding :  FragmentClassAttendanceBinding
     private val classAttViewModel : ClassAttViewModel by viewModels()
     private lateinit var mMyClass: List<MyClasseItem>
@@ -41,7 +43,10 @@ class ClassAttendanceFragment : Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentClassAttendanceBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         classId= requireArguments().getString(Constant.CLASS_ID_ARGUMENT).toString()
+        className= requireArguments().getString(Constant.NAME).toString()
+        date= requireArguments().getString(Constant.DATE).toString()
          return binding.root
     }
 
@@ -49,17 +54,20 @@ class ClassAttendanceFragment : Fragment()  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvDate.text= Constant.currentDate()
+        binding.tvDate.text= date
+        binding.autoCompleteClass.setText(className,false)
 
         binding.tvDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvDate.text = date
+                    binding.tvDate.text = Constant.dateToShow(date.toString())
                     classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
                 }
 
-            })
+            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
         }
+
+
 
         binding.autoCompleteClass.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->

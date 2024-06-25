@@ -124,8 +124,8 @@ class MedicalCardFragment : Fragment(), ItemListener<Dtl> {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage("Updated successfully")
 
+                        mainActivity().showMessage("Updated successfully")
 
                     }
                 }

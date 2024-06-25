@@ -9,15 +9,15 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.FragmentLatestBookBinding
 import com.app.ecarepro.model.LatestBook
+import com.app.ecarepro.databinding.FragmentLatestBookBinding
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class LatestBookFragment(private val latestBook: List<LatestBook> , private val i: Int) : Fragment() , ItemListener<LatestBook> {
+class LatestBookFragment(private val latestBook: List<LatestBook> ) : Fragment() , ItemListener<LatestBook> {
 
     private lateinit var latestBookBinding: FragmentLatestBookBinding
 
@@ -34,7 +34,7 @@ class LatestBookFragment(private val latestBook: List<LatestBook> , private val 
         super.onViewCreated(view, savedInstanceState)
 
 
-        if (i==0){
+
             if (latestBook!=null){
 
                 latestBookBinding.rvLatestBook.isVisible=true
@@ -51,11 +51,7 @@ class LatestBookFragment(private val latestBook: List<LatestBook> , private val 
                 latestBookBinding.rvLatestBook.isVisible=false
                 latestBookBinding.tvNoData.isVisible=true
             }
-        }else if (i==1){
-            latestBookBinding.rvLatestBook.isVisible=false
-            latestBookBinding.tvNoData.isVisible=true
-            latestBookBinding.tvNoData.text="No Account Data"
-        }
+
 
 
 

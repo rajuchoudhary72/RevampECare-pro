@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.fee.fee_receipt
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -23,6 +25,7 @@ import com.app.ecarepro.model.FeeReceipt
 import com.app.ecarepro.model.FeeReceiptSession
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.AndroidDownloader
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -41,8 +44,9 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFeeReceiptBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -53,7 +57,61 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
         binding.tvSelectSession.setOnClickListener {
             popUpSessionList()
         }
-        getFeeReceipt(sessionSelectData)
+
+        lifecycleScope.launch {
+            feeReceiptViewModel.feeReceiptStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error$it")
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+
+                            sessionListData = it.data.session_data.toMutableList()
+
+                            if (  it.data.receipt_data.isNotEmpty()) {
+
+                                binding.recyclerFeeReceipt.isVisible = true
+                                binding.tvNoData.isVisible = false
+
+
+
+                                val feeReportAdapter = FeeReportAdapter(
+                                    it.data.receipt_data,
+                                    this@FeeReceiptFragment
+                                )
+
+                                binding.recyclerFeeReceipt.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = feeReportAdapter
+                                }
+
+
+                            } else {
+                                binding.recyclerFeeReceipt.isVisible = false
+                                binding.tvNoData.isVisible = true
+                            }
+
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+        feeReceiptViewModel.getFeeReceipt(
+            feeReceiptViewModel.feePaymentURL.replace("mlogin.aspx", "")+"/api/feereceipt",
+             0
+        )
+
 
     }
 
@@ -66,7 +124,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
 
-        tvHeading.text = "Select Session"
+        tvHeading.text = getString(R.string.select_session)
         builder.setView(view)
 
 
@@ -74,7 +132,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
             if (isSessionSelected) {
                 binding.tvSelectSession.text = sessionSelectData.yearname
-                getFeeReceipt(sessionSelectData)
+                getFeeReceipt(sessionSelectData.yrid)
                 builder.dismiss()
             }
 
@@ -104,74 +162,17 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     }
 
 
-    private fun getFeeReceipt(sessionSelectData: FeeReceiptSession) {
-        lifecycleScope.launch {
-            feeReceiptViewModel.feeReceiptStateFlow.collectLatest {
-                when (it) {
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
+    private fun getFeeReceipt( yearID : Int) {
 
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error$it")
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
-
-                            if (it.data.receipt_data != null) {
-
-                                binding.recyclerFeeReceipt.isVisible = true
-                                binding.tvNoData.isVisible = false
-
-                                sessionListData = it.data.session_data.toMutableList()
-
-                                val feeReportAdapter = FeeReportAdapter(
-                                    it.data.receipt_data,
-                                    this@FeeReceiptFragment
-                                )
-
-                                binding.recyclerFeeReceipt.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = feeReportAdapter
-                                }
-
-
-                            } else {
-                                binding.recyclerFeeReceipt.isVisible = false
-                                binding.tvNoData.isVisible = true
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-
-        feeReceiptViewModel.schoolData.observe(viewLifecycleOwner) { schoolData ->
-            feeReceiptViewModel.userData.observe(viewLifecycleOwner) { userData ->
-
-                feeReceiptViewModel.getFeeReceipt(
-                    schoolData.feePayemtURL.toString(),
-                    FeeReceiptRequest(
-                        schoolData.schoolCode.toString(),
-                        userData.userId.toString(),
-                        "",
-                        "",
-                        sessionSelectData.yrid
-                    )
-                )
-
-            }
-
-
-        }
+        feeReceiptViewModel.getFeeReceipt(
+            feeReceiptViewModel.feePaymentURL.replace("mlogin.aspx", "")+"/api/feereceipt",
+            0
+        )
     }
 
     override fun onItemClick(t: FeeReceipt, pos: Int, boolean: Boolean) {
+
+
 
 
         }

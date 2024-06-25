@@ -33,7 +33,7 @@ data class NetworkSchool(
     @SerializedName("marksEntryURL")
     val marksEntryURL: String?,
     @SerializedName("message")
-    val message: String?,
+    val message: String,
     @SerializedName("schAdd_1")
     val schAdd1: String?,
     @SerializedName("schAdd_2")

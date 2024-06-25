@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.Year
@@ -46,6 +47,7 @@ class PaySlipFragment : Fragment() {
     ): View {
 
         binding=FragmentPaySlipBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -152,7 +154,6 @@ class PaySlipFragment : Fragment() {
             val androidDownloader = AndroidDownloader(requireContext())
             androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
             mainActivity().showMessage("Download started, check you status bar for more information.")
-
         }
 
     }

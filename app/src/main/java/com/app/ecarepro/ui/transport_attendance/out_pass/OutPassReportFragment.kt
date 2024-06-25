@@ -9,10 +9,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentOutPassReportBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,6 +32,7 @@ class OutPassReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentOutPassReportBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
@@ -36,7 +40,17 @@ class OutPassReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.apply {
 
+            tvSelectDate.setOnClickListener {
+                ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                    override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                        tvSelectDate.text = Constant.dateToShow(date.toString())
+                        getOutPassReport( tvSelectDate.text.toString())
+                    }
+                })
+            }
+        }
 
 
     }
@@ -56,7 +70,7 @@ class OutPassReportFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
 
-                            if (it.data.stuLst!=null){
+                            if (it.data.stuLst.isNotEmpty()){
 
                                 binding.recyclerOutPassReport.isVisible=true
                                 binding.tvNoData.isVisible=false

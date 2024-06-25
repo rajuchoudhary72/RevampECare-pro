@@ -92,8 +92,6 @@ class FileAccess {
 
         }
 
-
-
           private fun getRealPathFromURI(uri: Uri?, inContext: Context): String? {
             val cursor: Cursor? = inContext.contentResolver.query(uri!!, null, null, null, null)
             cursor?.moveToFirst()
@@ -107,48 +105,7 @@ class FileAccess {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             return Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
         }
-        // Function to convert Uri to ByteArray
-        fun uriToByteArray(context: Context, imgUri: Uri): ByteArray? {
-            try {
-                val contentResolver: ContentResolver = context.contentResolver
-                val inputStream: InputStream? = contentResolver.openInputStream(imgUri)
 
-                inputStream?.let {
-                    // Decode the input stream to a bitmap
-                    val bitmap = BitmapFactory.decodeStream(it)
-
-                    // Convert bitmap to byte array
-                    val byteArrayOutputStream = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-                    return byteArrayOutputStream.toByteArray()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            return null
-        }
-
-
-        fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
-            return context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                BitmapFactory.decodeStream(inputStream)
-            }
-        }
-        fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            return byteArrayOutputStream.toByteArray()
-        }
-        fun byteArrayToBase64(byteArray: ByteArray): String {
-            return Base64.encodeToString(byteArray, Base64.NO_WRAP)
-        }
-        fun uriToBase64(context: Context, uri: Uri): String? {
-            val bitmap = uriToBitmap(context, uri)
-            return bitmap?.let {
-                val byteArray = bitmapToByteArray(it)
-                byteArrayToBase64(byteArray)
-            }
-        }
     }
 
 }

@@ -20,7 +20,6 @@ import com.app.ecarepro.model.Section
 
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
-import com.app.ecarepro.ui.mainActivity
 import com.squareup.picasso.Picasso
 
 

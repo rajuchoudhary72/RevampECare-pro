@@ -33,11 +33,12 @@ class DefaulterFeeReportViewModel @Inject constructor(
 
 
     fun defaulterFilters(
-        url: String
+
     )=viewModelScope.launch {
         runCatching {
             defaultFilterMutableStateFlow.value = NetworkResult.Loading()
-            fomApiRepository.defaulterFilters( url )
+            fomApiRepository.defaulterFilters(
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter" )
         }.onSuccess {
             defaultFilterMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -48,8 +49,7 @@ class DefaulterFeeReportViewModel @Inject constructor(
 
 
     fun getDefaulterReport(
-        url: String,
-        senderid : String,
+
         DateFrom : String,
         DateTo : String,
         schoolid : String,
@@ -60,7 +60,10 @@ class DefaulterFeeReportViewModel @Inject constructor(
     )=viewModelScope.launch {
         runCatching {
             defaultersDataMutableStateFlow.value = NetworkResult.Loading()
-            fomApiRepository.getDefaulterReport(url, senderid, DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid )
+            fomApiRepository.getDefaulterReport(
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter",
+                userDataStore.getSchoolData()!!.schoolCode,
+                DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid )
         }.onSuccess {
             defaultersDataMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

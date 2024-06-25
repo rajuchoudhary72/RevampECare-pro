@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -131,7 +132,7 @@ class ProfileFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message ?: "")
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is ProfileUiState.Success) {
@@ -163,6 +164,7 @@ class ProfileFragment : Fragment() {
                     }
                 }
 
+
                 if (profileViewModel.isParent()) {
                     buildParentModels(uiState.profile)
                 } else if (profileViewModel.isStudent()) {
@@ -179,9 +181,9 @@ class ProfileFragment : Fragment() {
                     account {
                         id(it.userId)
                         name(
-                            if (it.name.isNullOrEmpty()) {
+                            if(it.name.isNullOrEmpty()){
                                 "N/A (${it.roleName})"
-                            } else {
+                            }else {
                                 it.name + "(${it.roleName})"
                             }
 

@@ -33,7 +33,7 @@ class ClassAttSubFragment(val attReport: List<AttReport>) : Fragment() , ItemLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (attReport !=null){
+        if (attReport.isNotEmpty() || attReport!= null){
 
 
 
@@ -59,12 +59,15 @@ class ClassAttSubFragment(val attReport: List<AttReport>) : Fragment() , ItemLis
     }
 
     override fun onItemClick(t: AttReport, pos: Int, boolean: Boolean) {
-        findNavController().navigate(R.id.action_classAttendanceFragment_to_studentAttRepoFragment2).apply {
-            Bundle().apply {
-                putString(Constant.ID , t.id)
-            }
+
+
+            findNavController().navigate(
+                R.id.action_classAttendanceFragment_to_studentAttRepoFragment2,
+                Bundle().apply {
+                    putString(Constant.ID, t.id)
+
+                })
         }
     }
 
 
-}

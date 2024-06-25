@@ -7,7 +7,7 @@
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -37,17 +37,19 @@
             android:id="@+id/rv_assignment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/stu_assignment_item" />
+            tools:listitem="@layout/stu_assignment_item"
+            android:layout_below="@+id/toolbar"
+             />
 
         <TextView
             android:id="@+id/tv_no_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
             android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             android:text="@string/no_assinment_available"
             android:textSize="16sp"
 
@@ -55,9 +57,20 @@
 
 
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fb_post_assignment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/post_assignment"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/_15sdp"
+            app:icon="@drawable/rounded_add_24"
+            />
 
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 
 </layout>

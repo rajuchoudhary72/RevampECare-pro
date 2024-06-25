@@ -2,27 +2,20 @@ package com.app.ecarepro.ui.home
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.app.ecarepro.ui.attendance.AttendanceFragment
-import com.app.ecarepro.ui.dashbord.DashboardFragment
-import com.app.ecarepro.ui.feed.FeedsFragment
 import dagger.hilt.android.scopes.FragmentScoped
 
 @FragmentScoped
-class HomeViewPagerAdapter(fragment: Fragment) :
+class HomeViewPagerAdapter(fragment: Fragment, val originalList: List<Fragment>) :
     FragmentStateAdapter(fragment) {
 
+    private val newList: List<Fragment> =
+        listOf(originalList.last()) + originalList + listOf(originalList.first())
 
     override fun getItemCount(): Int {
-        return 4
+        return originalList.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when(position){
-            0 -> HomeFragment()
-            1 -> DashboardFragment()
-            2 -> AttendanceFragment()
-            3 -> FeedsFragment()
-            else -> HomeFragment()
-        }
+        return originalList[position]
     }
 }

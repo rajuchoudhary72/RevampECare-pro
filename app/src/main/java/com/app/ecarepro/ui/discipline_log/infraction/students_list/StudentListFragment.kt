@@ -35,15 +35,9 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
         savedInstanceState: Bundle?
     ): View  {
         binding= FragmentStudentListBinding.inflate(inflater,container,false)
-        if(activity is AppCompatActivity){
-            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-            (activity as AppCompatActivity).supportActionBar?.apply {
-                title = "Students List"
-
-                setDisplayHomeAsUpEnabled(true)
-                setDisplayShowHomeEnabled(true)
-            }
-        }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.title="Students List"
+        binding.rbGroupSchoolType.isVisible=false
          return binding.root
     }
 

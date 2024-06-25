@@ -14,8 +14,9 @@ class AuthInterceptor @Inject constructor(
     @ApplicationContext val context: Context,
     private val userDataStore: UserDataStore
 ) : Interceptor {
+
     private val loginApis = mutableListOf(
-        "School/DTL",
+        "School/Verify",
         "User/Verify",
         "User/Login",
     )
@@ -33,9 +34,9 @@ class AuthInterceptor @Inject constructor(
 
         val authToken = runBlocking {
             if (isLoginApi) {
-                Constant.AUTH_BEFORE_LOGIN
+                Constant.AUTH_BEFORE_LOGIN_NEW
             } else
-                userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN
+                userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN_NEW
         }
 
         Log.e(AUTH_TOKEN, authToken)
