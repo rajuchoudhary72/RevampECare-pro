@@ -87,6 +87,7 @@ import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
+import com.app.ecarepro.data.network.model.NetworkEBook
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
@@ -1026,6 +1027,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getDeleteQuestion(id: String): CommonResponse {
         return userService.getDeleteQuestion(id)
+    }
+
+    override suspend fun getEBook(query: String, mode: Int): NetworkEBook {
+        return userService.getEBook(query, mode)
+    }
+
+    override suspend fun getEBookDetails(accessionNo: String): CommonResponse {
+        return userService.getEBookDetails(accessionNo)
     }
 
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {

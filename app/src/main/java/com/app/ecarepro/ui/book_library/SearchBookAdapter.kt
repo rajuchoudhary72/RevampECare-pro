@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.book_library
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.SearchBookListItemBinding
@@ -26,16 +27,18 @@ class SearchBookAdapter(private var latestBookList: List<BookDTL>,
 
     override fun onBindViewHolder(holder: ThoughtsViewHolder, position: Int) {
 
-        bindingm.latestBookData=latestBookList[position]
+        val bindings= DataBindingUtil.bind<SearchBookListItemBinding>(holder.itemView)
+
+        bindings!!.latestBookData=latestBookList[position]
 
 
-        bindingm.ivI.setOnClickListener {
+        bindings.ivI.setOnClickListener {
             librarySearchFragment.onItemClick(latestBookList[position],1,true)
         }
 
         Picasso.get().load(latestBookList[position].coverImg).
         placeholder(R.drawable.ic_library_big_image)
-            .into(bindingm.userImg)
+            .into(bindings.userImg)
 
 
     }

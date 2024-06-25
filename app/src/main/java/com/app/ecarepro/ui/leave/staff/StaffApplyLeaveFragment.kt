@@ -140,18 +140,18 @@ class StaffApplyLeaveFragment : Fragment() {
 
             if (validateData()) {
 
-                if (sessionFromPos==2){
+                /*if (sessionFromPos==1){
                     halfdayDTL.add(HalfdayDTL(
                         binding.tvStartDate.text.toString(),
                         2
                     ))
                 }
-                if (sessionToPos==1){
+                if (sessionToPos==0){
                     halfdayDTL.add(HalfdayDTL(
                         binding.tvEndDate.text.toString(),
                         1
                     ))
-                }
+                }*/
 
 
                 leaveApplyLeaveViewModel.leaveApply(

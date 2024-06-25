@@ -40,6 +40,8 @@ class BookLibraryFragment : Fragment() {
     ): View {
 
         bookLibraryBinding=FragmentBookLibraryBinding.inflate(inflater,container,false)
+        bookLibraryBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         return bookLibraryBinding.root
     }
 
@@ -151,12 +153,12 @@ class BookLibraryFragment : Fragment() {
 
                 return when (position) {
                     0 -> {
-                        LatestBookFragment(data.latestBook, 0)
+                        LatestBookFragment(data.latestBook,  )
                     }
                     1 -> {
-                        LatestBookFragment(data.latestBook, 1)
+                        LibraryMyAccountFragment(data.myAccount )
                     }
-                    else -> LatestBookFragment(data.latestBook,  0)
+                    else -> LatestBookFragment(data.latestBook )
                 }
              }
 

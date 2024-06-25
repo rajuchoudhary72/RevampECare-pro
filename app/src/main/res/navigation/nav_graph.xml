@@ -845,6 +845,20 @@
     <fragment
         android:id="@+id/submitAssignmentFragment"
         android:name="com.app.ecarepro.ui.assignment.submit_assignment.SubmitAssignmentFragment"
-        android:label="SubmitAssignmentFragment" />
+        android:label="SubmitAssignmentFragment" >
+        <argument
+            android:name="assignemtDetails"
+            app:argType="com.app.ecarepro.model.Assignment" />
+    </fragment>
+    <fragment
+        android:id="@+id/EBookFragment"
+        android:name="com.app.ecarepro.ui.book_library.eBook.EBookFragment"
+        android:label="fragment_e_book"
+        tools:layout="@layout/fragment_e_book" />
+    <fragment
+        android:id="@+id/EBookNavFragment"
+        android:name="com.app.ecarepro.ui.book_library.eBook.EBookNavFragment"
+        android:label="fragment_e_nav_book"
+        tools:layout="@layout/fragment_e_nav_book" />
 
 </navigation>

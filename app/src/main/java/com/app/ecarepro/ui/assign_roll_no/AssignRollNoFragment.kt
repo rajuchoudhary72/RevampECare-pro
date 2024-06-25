@@ -29,7 +29,7 @@ import com.app.ecarepro.model.MyClasseTeacherOf
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentRllNo
 import com.app.ecarepro.ui.MainActivity
- import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,123 +37,152 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AssignRollNoFragment : Fragment(), MenuProvider {
 
+    private lateinit var assignRollNoListAdapter: AssignRollNoListAdapter
     private var studentListArrayList = mutableListOf<StudentRllNo>()
     private lateinit var menuHost: MenuHost
-    private var selectedFilterType: Int= Constant.FILTER_NAME
+    private var selectedFilterType: Int = Constant.FILTER_NAME
     private lateinit var selectedClassData: MyClasseTeacherOf
-    private lateinit var binding :FragmentAssignRollNoBinding
+    private lateinit var binding: FragmentAssignRollNoBinding
     private val assignRollNoViewModel: AssignRollNoViewModel by viewModels()
     private lateinit var mMyClass: List<MyClasseTeacherOf>
 
-    private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
-    private val nameFilter = listOf("Name", "Roll No", "Admission" )
-
+    private var mMyClassDataString: ArrayList<String> = ArrayList()
+    private val nameFilter = listOf("Name", "Roll No", "Admission")
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentAssignRollNoBinding.inflate(inflater,container,false)
+        binding = FragmentAssignRollNoBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        if(activity is AppCompatActivity){
+        if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         }
-          menuHost  = requireActivity()
+        menuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
-         return binding.root
+        assignRollNoListAdapter =
+            AssignRollNoListAdapter(studentListArrayList, this@AssignRollNoFragment)
+
+        with(binding) {
+            recyclerAssignRollno.adapter = assignRollNoListAdapter
+        }
+
+        return binding.root
     }
 
-     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,nameFilter)
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.view_drop_down_menu, nameFilter)
         binding.autoCompleteFilter.setAdapter(arrayAdapter)
 
-         binding.autoCompleteFilter.setText("Name",false)
+        binding.autoCompleteFilter.setText("Name", false)
 
-
-        getMyClass( )
-
-        binding.autoCompleteClass.onItemClickListener=
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                selectedClassData=mMyClass[pos]
-                 getStudentListToAssignRollNo()
+        binding.btAutoAssign.setOnClickListener {
+            var rollNo=1
+            var index=0
+            for (a in studentListArrayList){
+                  studentListArrayList[index].rollNumber= rollNo.toString()
+                rollNo += 1
+                index += 1
             }
-        binding.autoCompleteFilter.onItemClickListener=
+            assignRollNoListAdapter.setData(studentListArrayList)
+        }
+
+
+        getMyClass()
+
+        binding.autoCompleteClass.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
-                when(pos){
-                    0 ->{
-                       selectedFilterType=Constant.FILTER_NAME
+                selectedClassData = mMyClass[pos]
+                getStudentListToAssignRollNo()
+            }
+        binding.autoCompleteFilter.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+                when (pos) {
+                    0 -> {
+                        selectedFilterType = Constant.FILTER_NAME
                     }
 
-                    1 ->{
-                        selectedFilterType=Constant.FILTER_ROLL_NO
+                    1 -> {
+                        selectedFilterType = Constant.FILTER_ROLL_NO
                     }
 
-                    2 ->{
-                        selectedFilterType=Constant.FILTER_ADMISSION_NO
+                    2 -> {
+                        selectedFilterType = Constant.FILTER_ADMISSION_NO
                     }
                 }
-                if (selectedClassData!=null){
-                     getStudentListToAssignRollNo()
+                if (selectedClassData != null) {
+                    getStudentListToAssignRollNo()
                 }
             }
+
+
+
 
 
     }
 
-   fun getMyClass(  ){
-       lifecycleScope.launch {
-           assignRollNoViewModel.classTeacherOfStateFlow.collectLatest {
-               when (it) {
+    fun getMyClass() {
+        lifecycleScope.launch {
+            assignRollNoViewModel.classTeacherOfStateFlow.collectLatest {
+                when (it) {
 
-                   is NetworkResult.Loading -> {
-                       (requireActivity() as MainActivity).showLoader(true)
-                   }
-                   is NetworkResult.Error -> {
-                       (requireActivity() as MainActivity).showLoader(false)
-                   }
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
 
-                   is NetworkResult.Success -> {
-                       (requireActivity() as MainActivity).showLoader(false)
-                       if (it.data!=null){
-                           if (it.data.myClasses!=null) {
-                               mMyClass=it.data.myClasses
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
 
-                               mMyClass.forEach { data ->
-                                   mMyClassDataString.add(data.className.toString())
-                               }
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (it.data.myClasses != null) {
+                                mMyClass = it.data.myClasses
+
+                                mMyClass.forEach { data ->
+                                    mMyClassDataString.add(data.className.toString())
+                                }
 
 
-                                if (mMyClass!=null && mMyClass.isNotEmpty()){
-                                    selectedClassData=mMyClass[0]
-                                    binding.autoCompleteClass.setText(selectedClassData.className,false)
-                                    if (selectedClassData!=null){
-                                        getStudentListToAssignRollNo( )
+                                if (mMyClass != null && mMyClass.isNotEmpty()) {
+                                    selectedClassData = mMyClass[0]
+                                    binding.autoCompleteClass.setText(
+                                        selectedClassData.className,
+                                        false
+                                    )
+                                    if (selectedClassData != null) {
+                                        getStudentListToAssignRollNo()
                                     }
                                 }
 
 
-                               val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,mMyClassDataString)
-                               binding.autoCompleteClass.setAdapter(arrayAdapter)
-                           }
-                       }
+                                val arrayAdapter = ArrayAdapter(
+                                    requireContext(),
+                                    R.layout.view_drop_down_menu,
+                                    mMyClassDataString
+                                )
+                                binding.autoCompleteClass.setAdapter(arrayAdapter)
+                            }
+                        }
 
 
-                   }
+                    }
 
 
-               }
-           }
-       }
-       assignRollNoViewModel.getClassTeacherOf()
-   }
+                }
+            }
+        }
+        assignRollNoViewModel.getClassTeacherOf()
+    }
 
-    private fun getStudentListToAssignRollNo( ){
-         lifecycleScope.launch {
+    private fun getStudentListToAssignRollNo() {
+        lifecycleScope.launch {
             assignRollNoViewModel.assignRollNoStateFlow.collectLatest {
                 when (it) {
 
@@ -172,29 +201,22 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerAssignRollno.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data.students!=null){
+                            if (it.data.students != null) {
 
-                                binding.recyclerAssignRollno.isVisible=true
-                                binding.tvNoData.isVisible=false
-
-
-                                studentListArrayList= it.data.students.toMutableList()
-
-                                val assignRollNoListAdapter = AssignRollNoListAdapter(
-                                    it.data.students.toMutableList(),
-                                    this@AssignRollNoFragment)
+                                binding.recyclerAssignRollno.isVisible = true
+                                binding.tvNoData.isVisible = false
 
 
-                                binding.recyclerAssignRollno.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = assignRollNoListAdapter
-                                }
-                            }else{
-                                binding.recyclerAssignRollno.isVisible=false
-                                binding.tvNoData.isVisible=true
+                                binding.btAutoAssign.isVisible = true
+                                studentListArrayList= it.data.students as MutableList<StudentRllNo>
+
+                                assignRollNoListAdapter.setData(it.data.students.toMutableList())
+
+                            } else {
+                                binding.recyclerAssignRollno.isVisible = false
+                                binding.tvNoData.isVisible = true
                             }
 
                         }
@@ -205,7 +227,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                 }
             }
         }
-        assignRollNoViewModel.getStudentListToAssignRollNo(selectedClassData.id,selectedFilterType)
+        assignRollNoViewModel.getStudentListToAssignRollNo(selectedClassData.id, selectedFilterType)
     }
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -218,6 +240,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                 uploadAssignRollNo()
                 true
             }
+
             else -> false
         }
     }
@@ -226,14 +249,14 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
 
         val requestList = mutableListOf<AssignRollNoBodyItem>()
 
-        studentListArrayList.forEach { d->
-            requestList.add(AssignRollNoBodyItem(d.houseID,d.rollNumber,d.stID))
+        studentListArrayList.forEach { d ->
+            requestList.add(AssignRollNoBodyItem(d.houseID, d.rollNumber, d.stID))
         }
         assignRollNoViewModel.assignRollNumber(requestList).invokeOnCompletion {
-            Toast.makeText( requireContext() ,"Roll Number Assign Successfully",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Roll Number Assign Successfully", Toast.LENGTH_SHORT)
+                .show()
             menuHost.removeMenuProvider(this)
         }
-
 
 
     }

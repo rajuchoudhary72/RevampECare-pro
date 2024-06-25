@@ -64,6 +64,9 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
                         binding.rvLeaveHistory.isVisible = true
 
                         if (it.data != null) {
+                        if (it.data.dtl != null) {
+
+
 
                             binding.rvLeaveHistory.isVisible = true
                             binding.tvNoData.isVisible = false
@@ -80,6 +83,14 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
                             }
 
 
+                        }else{
+                            binding.rvLeaveHistory.isVisible = false
+                            binding.tvNoData.isVisible = true
+                        }
+
+                        }else{
+                            binding.rvLeaveHistory.isVisible = false
+                            binding.tvNoData.isVisible = true
                         }
 
 
@@ -93,7 +104,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
 
         binding.fbApplyForLeave.setOnClickListener {
-            findNavController().navigate(R.id.leaveSettingFragment)
+            findNavController().navigate(R.id.applyLeaveFragment)
         }
     }
 

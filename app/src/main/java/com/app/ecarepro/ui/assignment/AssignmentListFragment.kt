@@ -78,14 +78,20 @@ class AssignmentListFragment(
 
         when (pos) {
             1 -> {
-                findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
+              /*  this@AssignmentListFragment.findNavController() .navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
+                    putString(Constant.ASSIGNMENT_ID, t.id)
+                })*/
+                findNavController().navigate(R.id.viewAssignmentFragment,Bundle().apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                 })
             }
             2 -> {
-                findNavController().navigate(R.id.action_assignmentListFragment_to_submitAssignmentFragment,Bundle( ).apply {
+                /*this@AssignmentListFragment.findNavController() .navigate(R.id.action_assignmentListFragment_to_submitAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
-                })
+                })*/
+                findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+                     putParcelable(Constant.ASSIGNMENT_ID, t)
+                 })
             }
 
         }

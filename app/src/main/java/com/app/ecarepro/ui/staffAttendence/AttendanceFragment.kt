@@ -30,7 +30,7 @@ import java.util.Calendar
 @AndroidEntryPoint
 class AttendanceFragment : Fragment() {
 
-    private   var yearSelected: Int = 0
+    private var yearSelected: Int = 0
     private var monthSelected: Int = 0
     private var monthModelArrayList = ArrayList<MonthModel>()
     private var yearModelArrayList = ArrayList<YearModel>()
@@ -52,20 +52,20 @@ class AttendanceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        binding.autoCompleteMonth.onItemClickListener=
+        binding.autoCompleteMonth.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                monthSelected=monthModelArrayList[pos].monthID
+                monthSelected = monthModelArrayList[pos].monthID
 
-                attendanceViewModel.staffAttendance(monthSelected,yearSelected)
+                attendanceViewModel.staffAttendance(monthSelected, yearSelected)
 
             }
 
-        binding.autoCompleteYear.onItemClickListener=
+        binding.autoCompleteYear.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                yearSelected=yearModelArrayList[pos].yearId.toInt()
-                attendanceViewModel.staffAttendance(monthSelected,yearSelected)
+                yearSelected = yearModelArrayList[pos].yearId.toInt()
+                attendanceViewModel.staffAttendance(monthSelected, yearSelected)
 
             }
 
@@ -102,7 +102,7 @@ class AttendanceFragment : Fragment() {
                                 monthDataString.clear()
 
                                 yearModelArrayList.forEach { data ->
-                                    monthDataString.add(data.yearId.toString() )
+                                    monthDataString.add(data.yearId.toString())
                                 }
 
                                 val arrayAdapter = ArrayAdapter(
@@ -120,7 +120,7 @@ class AttendanceFragment : Fragment() {
 
                                 monthDataString.clear()
                                 monthModelArrayList.forEach { data ->
-                                    monthDataString.add(data.month.toString() )
+                                    monthDataString.add(data.month.toString())
                                 }
 
                                 val arrayAdapter = ArrayAdapter(
@@ -132,22 +132,30 @@ class AttendanceFragment : Fragment() {
                             }
 
 
-                            if (it.data.attendance!=null) {
+                            if (it.data.attendance != null) {
 
-                                binding.rvAttendence.isVisible = true
-                                binding.tvNoData.isVisible = false
+                                if (it.data.attendance.isNotEmpty()) {
 
-                                val noticeAdapter =
-                                    StaffAttendenceListAdapter(
-                                        it.data.attendance,
-                                        this@AttendanceFragment
-                                    )
+                                    binding.rvAttendence.isVisible = true
+                                    binding.tvNoData.isVisible = false
 
-                                binding.rvAttendence.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = noticeAdapter
+                                    val noticeAdapter =
+                                        StaffAttendenceListAdapter(
+                                            it.data.attendance,
+                                            this@AttendanceFragment
+                                        )
+
+                                    binding.rvAttendence.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = noticeAdapter
+                                    }
+
+                                } else {
+                                    binding.rvAttendence.isVisible = false
+                                    binding.tvNoData.isVisible = true
                                 }
+
                             } else {
                                 binding.rvAttendence.isVisible = false
                                 binding.tvNoData.isVisible = true
@@ -162,7 +170,7 @@ class AttendanceFragment : Fragment() {
             }
         }
 
-        attendanceViewModel.staffAttendance(monthSelected,yearSelected)
+        attendanceViewModel.staffAttendance(monthSelected, yearSelected)
 
     }
 

@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.assign_roll_no
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -59,17 +60,31 @@ class AssignRollNoListAdapter(
         init {
             binding.apply {
                 edtRoll.doAfterTextChanged {
+                    if (edtRoll.text.toString().isNotEmpty()) {
 
-                    studentRllNoList.forEach { d ->
-                        studentRllNoList[absoluteAdapterPosition].rollNumber =
-                            edtRoll.text.toString()
-
-                        if (getCountNumber(edtRoll.text.toString()) > 1) {
-                            edtRoll.error = "Already Assigned"
+                        if (edtRoll.text.isNotEmpty()) {
+                            if (edtRoll.text.toString().toInt() > 0) {
+                                edtRoll.error = null
+                            } else {
+                                edtRoll.error = "Invalid Roll No"
+                            }
+                        } else {
+                            edtRoll.error = null
                         }
 
+                        studentRllNoList.forEach { d ->
+                            studentRllNoList[absoluteAdapterPosition].rollNumber =
+                                edtRoll.text.toString()
+
+                            if (getCountNumber(edtRoll.text.toString()) > 1) {
+                                edtRoll.error = "Already Assigned"
+                            }
+                        }
 
                     }
+
+
+
 
 
                 }
@@ -88,6 +103,16 @@ class AssignRollNoListAdapter(
             }
         }
         return count
+    }
+
+    fun setData(lessonList: MutableList<StudentRllNo>) {
+        studentRllNoList = lessonList
+        notifyDataSetChanged()
+    }
+
+    fun clearData() {
+        studentRllNoList.clear()
+        notifyDataSetChanged()
     }
 
 

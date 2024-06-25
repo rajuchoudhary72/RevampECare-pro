@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentOpenImageBinding
 import com.app.ecarepro.utils.Constant
 import com.squareup.picasso.Callback
@@ -22,6 +23,7 @@ class OpenImageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentOpenImageBinding.inflate(inflater,container,false)
+
         return binding.root
     }
 
@@ -31,6 +33,10 @@ class OpenImageFragment : Fragment() {
          val imageUrl=  requireArguments().getString(Constant.URL_ARGUMENT)
 
         binding.pbIma.isVisible=true
+
+        binding.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         Picasso.get()
             .load(imageUrl)

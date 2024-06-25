@@ -86,6 +86,7 @@ import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
+import com.app.ecarepro.data.network.model.NetworkEBook
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractions
@@ -830,6 +831,17 @@ interface UserService {
     @GET("QuestionBank/DeleteQuestion")
     suspend fun getDeleteQuestion(
         @Query("ID") id: String
+    ): CommonResponse
+
+    @GET("Library/eBooks")
+    suspend fun getEBook(
+        @Query("query") query: String ,
+        @Query("mode") mode: Int
+    ): NetworkEBook
+
+    @GET("Library/OnlineCode")
+    suspend fun getEBookDetails(
+        @Query("AccessionNo") accessionNo: String
     ): CommonResponse
 
 

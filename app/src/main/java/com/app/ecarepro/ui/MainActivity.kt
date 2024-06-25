@@ -344,9 +344,18 @@ class MainActivity : AppCompatActivity() {
             //11 ->  navController.navigate(R.id.feeModule)
            // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 ->  navController.navigate(R.id.bookLibraryFragment )
-            13 ->  navController.navigate(R.id.bookLibraryFragment)
+            13 ->  navController.navigate(R.id.EBookNavFragment)
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
-            17 ->  navController.navigate(R.id.attendanceFragment)
+
+            17 -> {
+                try {
+                    if (userData.userType == Constant.STAFF_TYPE) {
+                        navController.navigate(R.id.attendanceFragment)
+                    }  else{
+                        navController.navigate(R.id.showAttendanceFragment)
+                    }
+                }catch (_:Exception){}
+            }
             18 ->  navController.navigate(R.id.reportCardDetailsNavHostFragment)
             19 ->  navController.navigate(R.id.leaveHistoryFragment)
             20 ->  navController.navigate(R.id.questionnaireListFragment)
