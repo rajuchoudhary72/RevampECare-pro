@@ -16,7 +16,6 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             app:layout_constraintTop_toTopOf="parent"
-
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -39,8 +38,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@color/white"
-            android:orientation="vertical">
+             android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/rel_post"
@@ -49,8 +47,9 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
+                android:visibility="gone"
                 android:layout_marginBottom="10dp"
-                android:background="@color/white">
+                 >
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/user_img"

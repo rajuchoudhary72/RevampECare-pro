@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="syllabusData"
+            type="com.app.ecarepro.model.Syllabuse" />
+    </data>
+
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_6sdp"
+        app:strokeWidth="@dimen/_2sdp"
+        >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:orientation="vertical"
+        >
+
+        <LinearLayout
+             android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+             >
+
+            <LinearLayout
+                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                >
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/title"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                     android:paddingTop="3dp"
+                    android:text="@{syllabusData.title}"
+                    android:textColor="#848484"
+                   android:layout_marginStart="@dimen/_5sdp"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/classes"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="3dp"
+                    android:text="@{syllabusData.classSTD}"
+                    android:textColor="#848484"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/subject"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="3dp"
+                    android:text="@{syllabusData.subject}"
+                    android:textColor="#848484"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:drawablePadding="3dp"
+                    android:text="@string/update_on"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+                <TextView
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:paddingTop="3dp"
+                    android:text="@{syllabusData.updatedOn}"
+                    android:textColor="#848484"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    app:fontFamily="@font/ubuntu_medium" />
+
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            />
+
+        <LinearLayout
+            android:id="@+id/llEditDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+
+            >
+
+            <LinearLayout
+                android:id="@+id/llView"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/view"
+                    android:textColor="@color/brand_color"
+                    app:drawableTint="@color/brand_color"
+                    app:drawableLeftCompat="@drawable/view_white" />
+
+            </LinearLayout>
+
+
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:id="@+id/llDownload"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/download"
+                    android:textColor="@color/brand_color"
+                    app:drawableLeftCompat="@drawable/download_24px"
+                    app:drawableTint="@color/brand_color"
+                    />
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:id="@+id/llEdit"
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/edit"
+                    android:textColor="@color/brand_color"
+                    app:drawableLeftCompat="@drawable/ic_edit"
+                    app:drawableTint="@color/brand_color"
+                    />
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="1dp"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:id="@+id/llDelete"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="5dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="@string/delete"
+                    android:textColor="@color/brand_color"
+                    app:drawableLeftCompat="@drawable/delete"
+                    app:drawableTint="@color/brand_color"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+    </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

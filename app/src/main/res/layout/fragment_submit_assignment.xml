@@ -214,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/ed_around"
-                android:background="@color/grey_10">
+                android:background="@color/grey_light">
 
                 <EditText
                     android:id="@+id/et_answer"
@@ -226,6 +226,7 @@
                     android:hint="@string/type_your_message_with_word_limit"
                     android:padding="7dp"
                     android:drawablePadding="5dp"
+                    android:textColorHint="@color/grey_60"
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine" />
 
