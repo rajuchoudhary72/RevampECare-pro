@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.1.4"
+        versionCode = 7
+        versionName = "1.1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -69,7 +69,7 @@ android {
         create("beta") {
             dimension = "build"
             applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "e-Care Beta")
+            resValue("string", "app_name", "e-Care")
             signingConfig = signingConfigs.getByName("beta")
         }
     }

@@ -16,7 +16,7 @@ class AuthInterceptor @Inject constructor(
 ) : Interceptor {
 
     private val loginApis = mutableListOf(
-        "School/Verify",
+        "School/DTL",
         "User/Verify",
         "User/Login",
     )

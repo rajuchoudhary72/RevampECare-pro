@@ -4,7 +4,6 @@ import android.app.Application
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings.Secure
-import android.telephony.TelephonyManager
 import androidx.appcompat.app.AppCompatDelegate
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
@@ -15,7 +14,6 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
