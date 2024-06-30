@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.AdmissionComparison
@@ -222,7 +224,16 @@ class DashboardFragment : Fragment() {
         if (data == null) {
             return
         }
-        TeachersBirthdayCarouselModel(data)
+        TeachersBirthdayCarouselModel(data, onClick = {
+            findNavController().navigate(
+                R.id.birthdayFragment, bundleOf(
+                    "rType" to it.rType,
+                    "monthSelected" to it.month,
+                    "dateSelected" to it.date,
+                    "uType" to it.uType
+                    )
+            )
+        })
             .id("1e5e")
             .addTo(this)
     }

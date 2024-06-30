@@ -33,7 +33,7 @@ interface SchoolService {
     @GET("School/WalkThrough")
     suspend fun getWalkThroughData(): NetworkWalkThrough
 
-    @GET("School/Verify")
+    @GET("School/DTL")
     suspend fun validateSchoolCode(@Query("SchCode") schoolCode: String): NetworkSchool
 
     @GET("School/List")

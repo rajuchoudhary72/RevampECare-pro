@@ -21,7 +21,7 @@ data class LoginResponseDto(
     val roleName: String?,
     @SerializedName("name")
     val name: String?,
-    @SerializedName("photo")
+    @SerializedName("photoPath")
     val photo: String?,
     @SerializedName("status")
     val status: String?

@@ -9,6 +9,10 @@
             name="classSummary"
             type="com.app.ecarepro.data.network.model.ClassSummary" />
 
+        <variable
+            name="onClickView"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -48,6 +52,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Class LKG" />
+
+            <TextView
+                style="@style/ThemeOverlay.Material3.Button.TextButton"
+                android:id="@+id/btn_view"
+                android:layout_width="wrap_content"
+                isVisible="@{classSummary.isMarked()}"
+                android:drawablePadding="@dimen/_8sdp"
+                android:textColor="@color/green"
+                android:fontFamily="@font/calibri_bold"
+                android:onClick="@{onClickView}"
+                android:drawableEnd="@drawable/ic_arrow_right"
+                android:layout_height="wrap_content"
+                android:text="@string/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBaseline_toBaselineOf="@+id/title"
+                tools:text="View" />
 
 
             <com.app.ecarepro.ui.views.LegendView

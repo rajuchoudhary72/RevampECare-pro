@@ -26,4 +26,7 @@ interface SchoolDao {
 
     @Delete
     fun deleteSchool(userEntity: SchoolEntity)
+
+    @Query("DELETE FROM users")
+    suspend fun nukeTable()
 }

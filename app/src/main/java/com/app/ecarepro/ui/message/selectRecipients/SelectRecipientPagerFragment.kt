@@ -105,22 +105,17 @@ class SelectRecipientPagerFragment : Fragment() {
                 size = resources.getDimensionPixelSize(R.dimen.divider_size)
             )
         )
-       /* viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             launch {
-            systemViewModel.user.collectLatest {
-                if (it != null) {
-                    userData = it
+                systemViewModel.user.collectLatest {
+                    if (it != null) {
+                        userData = it
+                    }
                 }
             }
         }
-    }
-        if (userData.userType == Constant.STUDENT_TYPE||userData.userType == Constant.PARENT_TYPE) {
-            binding.spinnerLayout.isVisible =false
-        }else{
-            binding.spinnerLayout.isVisible =true
-        }*/
-        viewLifecycleOwner.lifecycleScope.launch {
 
+        viewLifecycleOwner.lifecycleScope.launch {
             launch {
                 messageViewModel.messageSettings.collectLatest { settings ->
                     binding.filterRadioGroup.isVisible =

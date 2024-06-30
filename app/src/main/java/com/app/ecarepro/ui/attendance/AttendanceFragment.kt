@@ -4,18 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.classAttendanceCard
 import com.app.ecarepro.databinding.FragmentAttendancesBinding
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.utils.Constant
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -51,11 +57,27 @@ class AttendanceFragment : Fragment() {
                         classAttendanceCard {
                             id(classSummary.classID)
                             classSummary(classSummary)
+                            onClickView { _ ->
+                                findNavController().navigate(
+                                    R.id.classAttendanceFragment,
+                                    bundleOf(
+                                        Constant.CLASS_ID_ARGUMENT to classSummary.classID,
+                                        Constant.DATE to getCurrentDate(),
+                                        Constant.NAME to classSummary.className
+                                    )
+                                )
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    fun getCurrentDate(): String {
+        val now = Date()
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return formatter.format(now)
     }
 
     private fun initView() {
