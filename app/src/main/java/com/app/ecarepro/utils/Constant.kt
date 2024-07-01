@@ -164,5 +164,21 @@ class Constant {
             val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             return df.format(c)
         }
+
+       /* fun incrementDateByDay( noOfDays:Int):Long{
+            val c = Calendar.getInstance()
+            c.time = Calendar.getInstance().time
+            c.add(Calendar.DATE, noOfDays)
+             return  getLongTimeDate(df.format(c))
+        }*/
+
+       /* fun incrementDateByDay( noOfDays:Int): Date? {
+            val c = Calendar.getInstance()
+            c.time = Calendar.getInstance().time
+            val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            df.format(c)
+            c.add(Calendar.DATE, noOfDays)
+            return c.time
+        }*/
     }
 }

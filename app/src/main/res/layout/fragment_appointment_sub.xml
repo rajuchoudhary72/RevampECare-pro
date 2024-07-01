@@ -30,7 +30,7 @@
             android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
             android:gravity="center"
-            android:visibility="visible"
+            android:visibility="gone"
             android:text="@string/no_data_found"
             android:textSize="16sp"
 

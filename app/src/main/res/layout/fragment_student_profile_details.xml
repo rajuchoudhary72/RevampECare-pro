@@ -443,7 +443,7 @@
                 android:padding="@dimen/_7sdp"
                 android:text="@string/father_s_details"
                 android:textAllCaps="true"
-                android:textColor="@color/grey_80"
+                android:textColor="@color/grey_60"
                 android:textSize="@dimen/_14sdp" />
 
             <LinearLayout
@@ -484,8 +484,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.fatherName}"
-                    android:textColor="@color/grey_60"
+                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
 
                 <TextView

@@ -46,6 +46,7 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
                 mThoughtsViewModel = thoughtsViewModel
 
             }
+        fragmentThoughtsListBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         initRecycleView()
 
         return fragmentThoughtsListBinding.root

@@ -64,15 +64,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_margin="10dp"
-                            android:background="@drawable/background_box_rectangle_white"
+                            android:background="@drawable/background_box_rectangle_white_round"
                             android:fontFamily="@font/ubuntu_light"
                             android:gravity="center_vertical"
                             android:padding="10dp"
-                            android:text="Select Academic Year"
+                            android:text="@string/select_academic_year"
                             android:textSize="16sp"
                             android:visibility="visible"
                             app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
-                        />
+
 
 
                         <LinearLayout
@@ -89,7 +89,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"
                                  android:paddingHorizontal="10dp"
-                                android:background="@drawable/background_box_rectangle_white"
+                                android:background="@drawable/background_box_rectangle_white_round"
                                 android:fontFamily="@font/ubuntu_light"
                                 android:gravity="center_vertical"
                                 android:maxLines="1"
@@ -139,6 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                tools:listitem="@layout/circular_list_item"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                  app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
