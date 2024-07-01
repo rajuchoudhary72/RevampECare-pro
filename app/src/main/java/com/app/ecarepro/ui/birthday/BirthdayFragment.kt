@@ -47,21 +47,28 @@ class BirthdayFragment : Fragment() {
         binding = FragmentBirthdayBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         /*from dashboard birthday cart  click event */
-        rptType = requireArguments().getInt("rType")
-        userType = requireArguments().getInt("uType")
-        monthSelectedNew = requireArguments().getString("monthSelected").toString()
-        dateSelected = requireArguments().getString("dateSelected").toString()
+        try {
+            rptType = requireArguments().getInt("rType")
+            userType = requireArguments().getInt("uType")
+            monthSelected = requireArguments().getString("monthSelected").toString().toInt()
+            dateSelected = requireArguments().getString("dateSelected").toString()
+        }catch (e:Exception){}
 
         if (dateSelected.isEmpty()) {
             binding.tvDate.text = Constant.currentDate()
         } else {
             binding.tvDate.text = dateSelected
         }
+
+        bindMonthArray()
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         binding.toggleButtonTypeUser.addOnButtonCheckedListener { _, _, _ ->
             when (binding.toggleButtonTypeUser.checkedButtonId) {
@@ -106,7 +113,7 @@ class BirthdayFragment : Fragment() {
             })
         }
 
-        bindMonthArray()
+
 
         binding.autoCompleteMonth.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
@@ -175,6 +182,25 @@ class BirthdayFragment : Fragment() {
         }
 
         birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
+
+        if (monthSelected!=null){
+            monthModelArrayList.forEach { d->
+                if (monthSelected==d.monthID){
+                    binding.autoCompleteMonth.setText(d.month,false)
+                }
+            }
+        }
+
+        if (dateSelected=="null"){
+            binding.tvDate.text="Date"
+        }
+
+        if (userType==Constant.STAFF_TYPE){
+            binding.toggleButtonTypeUser.check(R.id.btn_class_staff)
+        }else{
+            binding.toggleButtonTypeUser.check(R.id.btn_student)
+        }
+
 
 
     }
