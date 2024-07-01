@@ -39,20 +39,20 @@ class ECateProApp : Application() {
                 val wInfo = wifiManager.connectionInfo
                 val macAddress = wInfo.macAddress
                 appRepository
-                    .registerDevice(
-                        RegisterDevice(
-                            fcmToken = token,
-                            osVersion = "OS " + Build.VERSION.SDK_INT,
-                            deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
-                            deviceType = 1,
-                            imeI1 = macAddress,
-                            imeI2 = macAddress,
-                            deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
+                        .registerDevice(
+                                RegisterDevice(
+                                        fcmToken = token,
+                                        osVersion = "OS " + Build.VERSION.SDK_INT,
+                                        deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
+                                        deviceType = 1,
+                                        imeI1 = macAddress,
+                                        imeI2 = macAddress,
+                                        deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
+                                )
                         )
-                    )
-                    .collectLatest {
-                        println(it)
-                    }
+                        .collectLatest {
+                            println(it)
+                        }
             }
         }
     }
