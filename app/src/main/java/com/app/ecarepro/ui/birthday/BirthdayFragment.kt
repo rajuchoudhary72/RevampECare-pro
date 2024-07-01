@@ -125,8 +125,7 @@ class BirthdayFragment : Fragment() {
                     monthSelected,
                     binding.tvDate.text.toString()
                 )
-                binding.tvDate.text = getString(R.string.select_date)
-            }
+             }
 
 
 
@@ -192,7 +191,7 @@ class BirthdayFragment : Fragment() {
         }
 
         if (dateSelected=="null"){
-            binding.tvDate.text="Date"
+            binding.tvDate.text = Constant.currentDate()
         }
 
         if (userType==Constant.STAFF_TYPE){
