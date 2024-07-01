@@ -228,10 +228,10 @@ class DashboardFragment : Fragment() {
             findNavController().navigate(
                 R.id.birthdayFragment,
                 Bundle().apply {
-                    putString("rType",  it.rType)
-                    putString("monthSelected", it.Month)
-                    putString("dateSelected", it.Date)
-                    putString("uType", it.uType)
+                    putInt("rType",  it.rtype)
+                    putString("monthSelected", it.month)
+                    putString("dateSelected", it.date)
+                    putInt("uType", it.utype)
                 })
 
           /*  findNavController().navigate(

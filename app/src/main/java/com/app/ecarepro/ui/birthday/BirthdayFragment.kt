@@ -37,26 +37,24 @@ class BirthdayFragment : Fragment() {
     private val birthdayViewModel: BirthdayViewModel by viewModels()
 
 
-    private var rType: String  =  ""
-    private var monthSelectedNew: String  =  ""
-    private var dateSelected: String  =  ""
-    private var uType: String  =  ""
+    private var monthSelectedNew: String = ""
+    private var dateSelected: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentBirthdayBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        /*from dashboard birthday cart  click event */
+        rptType = requireArguments().getInt("rType")
+        userType = requireArguments().getInt("uType")
+        monthSelectedNew = requireArguments().getString("monthSelected").toString()
+        dateSelected = requireArguments().getString("dateSelected").toString()
 
-
-        rType= requireArguments().getString("rType").toString()
-        monthSelectedNew= requireArguments().getString("monthSelected").toString()
-        dateSelected= requireArguments().getString("dateSelected").toString()
-        uType= requireArguments().getString("uType").toString()
-        if (uType.isNullOrEmpty()){
+        if (dateSelected.isEmpty()) {
             binding.tvDate.text = Constant.currentDate()
-        }else{
+        } else {
             binding.tvDate.text = dateSelected
         }
         return binding.root
