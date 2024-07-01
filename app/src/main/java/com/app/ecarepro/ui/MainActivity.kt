@@ -600,11 +600,15 @@ class MainActivity : AppCompatActivity() {
             .setTitle(getString(R.string.logout))
             .setMessage(getString(R.string.are_you_sure_to_logout))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                systemViewModel.logout {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    Runtime.getRuntime().exit(0)
+                try {
+                    systemViewModel.logout {
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        Runtime.getRuntime().exit(0)
+                    }
+                }catch (e:Exception){
+
                 }
             }
             .setNegativeButton(getString(R.string.no)) { _, _ ->

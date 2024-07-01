@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SystemViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
-    private val appRepository: AppRepository
+    private val appRepository: AppRepository,
 ) : ViewModel() {
 
     private val _openNavigationDrawer = MutableLiveData(false)
@@ -31,7 +31,7 @@ class SystemViewModel @Inject constructor(
 
     val refresh = MutableSharedFlow<Boolean>()
     val user = userDataStore.getUserAsFlow()
-    var userRoleName : String = ""
+    var userRoleName: String = ""
 
     init {
         viewModelScope.launch {
@@ -50,7 +50,7 @@ class SystemViewModel @Inject constructor(
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
-                        favroiteMenus = response.favoriteMenus?: emptyList()
+                        favroiteMenus = response.favoriteMenus ?: emptyList()
                     )
                 } else {
                     val error = result.exceptionOrNull() ?: IllegalArgumentException(
@@ -79,8 +79,12 @@ class SystemViewModel @Inject constructor(
 
     fun logout(onDataClear: () -> Unit) {
         viewModelScope.launch {
-            userDataStore.clear()
-            onDataClear()
+            try {
+                userDataStore.clear()
+                onDataClear()
+            } catch (e: Exception) {
+                e.toString()
+            }
         }
     }
 
