@@ -16,7 +16,12 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.utils.Constant
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class AttendanceFragment : Fragment() {
@@ -51,13 +56,34 @@ class AttendanceFragment : Fragment() {
                         classAttendanceCard {
                             id(classSummary.classID)
                             classSummary(classSummary)
+                            onClickView { _ ->
+                                findNavController().navigate(
+                                    R.id.classAttendanceFragment,
+                                    Bundle().apply {
+                                        putString(Constant.CLASS_ID_ARGUMENT, classSummary.id)
+                                        putString(Constant.NAME, classSummary.className)
+                                        putString(Constant.DATE, getCurrentDate())
+                                    })
+                               /* findNavController().navigate(
+                                    R.id.classAttendanceFragment,
+                                    bundleOf(
+                                        Constant.CLASS_ID_ARGUMENT to classSummary.id,
+                                        Constant.DATE to getCurrentDate(),
+                                        Constant.NAME to classSummary.className
+                                    )
+                                )*/
+                            }
                         }
                     }
                 }
             }
         }
     }
-
+    fun getCurrentDate(): String {
+        val now = Date()
+        val formatter = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+        return formatter.format(now)
+    }
     private fun initView() {
         binding.toolbar.setNavigationOnClickListener {
             systemViewModel.navigateBack(true)

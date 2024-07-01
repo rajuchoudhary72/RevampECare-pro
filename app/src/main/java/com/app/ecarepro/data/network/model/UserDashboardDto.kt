@@ -117,7 +117,15 @@ data class BirthDayCard(
     @SerializedName("icon")
     val icon: String?,
     @SerializedName("link")
-    val link: String?
+    val link: String?,
+    @SerializedName("utype")
+    val uType: String?,
+    @SerializedName("rtype")
+    val rType: String?,
+    @SerializedName("date")
+    val Date: String?,
+    @SerializedName("month")
+    val Month: String?
 ) {
     fun getIconUrl() = BASE_URL_COM + icon
 }
