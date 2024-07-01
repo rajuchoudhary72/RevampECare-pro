@@ -301,18 +301,20 @@ class MainActivity : AppCompatActivity() {
       fun getFragmentId(menuID: Int) {
         when (menuID) {
             3 -> {
-                if (userData.userType == Constant.STAFF_TYPE) {
-                    if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                        navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
-                            putString(Constant.TO, Constant.FRA_ASSI)
-                        })
-                    } else {
-                        navController.navigate(R.id.staffAssignmentsListFragment)
-                    }
+                try {
+                    if (userData.userType == Constant.STAFF_TYPE) {
+                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                            navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_ASSI)
+                            })
+                        } else {
+                            navController.navigate(R.id.staffAssignmentsListFragment)
+                        }
 
-                }else{
-                    navController.navigate(R.id.assignmentNavHostFragment)
-                }
+                    }else{
+                        navController.navigate(R.id.assignmentNavHostFragment)
+                    }
+                }catch (e:Exception){}
 
             }
 
@@ -339,7 +341,13 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            5 -> navController.navigate(R.id.classSyllabus)
+            5 ->   if (userData.userType == Constant.STAFF_TYPE) {
+                navController.navigate(R.id.teacherSyllabusFragment)
+            }else{
+                navController.navigate(R.id.classSyllabus)
+            }
+
+
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
            // 12 ->  navController.navigate(R.id.conversationReportFragment)

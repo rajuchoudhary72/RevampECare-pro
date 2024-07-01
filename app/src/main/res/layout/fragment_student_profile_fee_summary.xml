@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center"
-                    android:background="@drawable/background_box_rectangle_black"
+                    android:background="@drawable/background_box_rectangle_white_round"
                     android:drawablePadding="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center"
@@ -240,7 +240,8 @@
                     <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                         android:id="@+id/pieChartView"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_200sdp" />
+                        android:layout_height="@dimen/_200sdp"
+                         />
                 </LinearLayout>
 
                 <LinearLayout

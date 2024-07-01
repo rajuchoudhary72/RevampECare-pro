@@ -52,8 +52,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
+                 android:orientation="vertical"
                 android:paddingBottom="10dp">
 
 
@@ -70,7 +69,9 @@
                         android:id="@+id/rel_update"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"
+                        >
 
 
                         <com.google.android.material.imageview.ShapeableImageView
@@ -284,7 +285,7 @@
                 android:layout_height="1dp"
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
+             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -307,7 +308,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/ed_around"
             isInvisible="@{questionData.answered}"
-            android:background="@color/grey_10"
+            android:background="@color/grey_light"
             android:layout_alignParentBottom="true"
              >
 
@@ -338,7 +339,7 @@
                     android:layout_height="wrap_content"
                     android:padding="6dp"
                     android:enabled="false"
-                    android:background="@color/white"
+                    android:background="@drawable/edit_text_bg_post_answer"
                     android:src="@drawable/send_icon_light"
                      />
 

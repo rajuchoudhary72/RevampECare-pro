@@ -598,4 +598,6 @@
     <string name="exp_return_date">Exp. Return Date :</string>
     <string name="return_on">Return On :</string>
     <string name="my_school_library">My School Library</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="add_syllabus">Add Syllabus</string>
 </resources>

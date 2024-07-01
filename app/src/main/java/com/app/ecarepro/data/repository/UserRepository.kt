@@ -68,6 +68,7 @@ import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
+import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
@@ -80,6 +81,7 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
@@ -103,6 +105,7 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.Body
 import retrofit2.http.Query
 
 interface UserRepository {
@@ -140,6 +143,11 @@ interface UserRepository {
 
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
+
+    suspend fun staffMyClass(
+         subID: Int,
+         onlyClass: Boolean
+    ): NetworkMyClass
     suspend fun getPayslip(): NetworkPaySlip
 
     suspend fun getThoughts(
@@ -308,6 +316,8 @@ interface UserRepository {
     suspend fun deleteAssignment(iD: String): CommonResponse
 
     suspend fun mySubjects(classID: Int): NetworkMySubjects
+
+    suspend fun staffSubjects( classSTD: Int ): NetworkMySubjects
 
     suspend fun createAssignment(
           asgDate: String,
@@ -692,6 +702,16 @@ interface UserRepository {
 
     suspend fun getEBookDetails(
          accessionNo: String
+    ): CommonResponse
+
+    suspend fun getTeacherSyllabuses( ): NetworkTeacherSyllabus
+
+    suspend fun saveSyllabus(
+          request: PostSyllabus,
+    ): CommonResponse
+
+    suspend fun deleteSyllabus(
+         ID: String
     ): CommonResponse
 
 }

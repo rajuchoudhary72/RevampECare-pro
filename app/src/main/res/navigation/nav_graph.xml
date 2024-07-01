@@ -860,5 +860,13 @@
         android:name="com.app.ecarepro.ui.book_library.eBook.EBookNavFragment"
         android:label="fragment_e_nav_book"
         tools:layout="@layout/fragment_e_nav_book" />
+    <fragment
+        android:id="@+id/teacherSyllabusFragment"
+        android:name="com.app.ecarepro.ui.syllabus.teacher.TeacherSyllabusFragment"
+        android:label="TeacherSyllabusFragment" />
+    <fragment
+        android:id="@+id/addSyllabusFragment"
+        android:name="com.app.ecarepro.ui.syllabus.teacher.add_syllabus.AddSyllabusFragment"
+        android:label="AddSyllabusFragment" />
 
 </navigation>

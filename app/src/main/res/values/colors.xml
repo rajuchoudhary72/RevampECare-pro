@@ -83,6 +83,11 @@
     <color name="grey_20">#331E1D0E</color>
     <color name="grey_10">#1A1E1D0E</color>
     <color name="grey_light">#f3f3f3</color>
+    <color name="background_box_rectangle_white_black">#FFFFFFFF</color>
+    <color name="white_grey">#FFFFFFFF</color>
+    <color name="white_black">#FFFFFFFF</color>
+
+
 
 
 

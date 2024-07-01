@@ -17,11 +17,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
+import com.app.ecarepro.model.Holiday
+import com.app.ecarepro.model.LeaveTerms
 import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class ApplyLeaveFragment : Fragment() {
 
+    private lateinit var leaveTerm: LeaveTerms
     private var selectedLeaveTypeID: Int = 0
     private var leaveTypesDataString: ArrayList<String> = ArrayList()
     private lateinit var leaveTypeList: List<LeaveTypes>
@@ -45,8 +47,14 @@ class ApplyLeaveFragment : Fragment() {
     private var imageExt = ""
     private var imageString = ""
     private var days: Long = 0
+    private var holidayList = mutableListOf<Holiday>()
 
     private var halfdayDTL = mutableListOf<HalfdayDTL>()
+    var timestampBack: Long = 0
+    var timestampforward: Long = 0
+
+    var timestampOneDay = "86400000".toLong()
+
 
 
     override fun onCreateView(
@@ -63,36 +71,41 @@ class ApplyLeaveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+
         binding.llStartDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+
+            val currentTimestamp = System.currentTimeMillis()
+            timestampforward=currentTimestamp+leaveTerm.forwardDays * timestampOneDay
+            timestampBack=currentTimestamp-leaveTerm.backwardDays * timestampOneDay
+
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
                 }
-            })
+            },timestampBack,timestampforward)
         }
 
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
+
+                val timestampforward=Constant.getLongTimeDate(binding.tvStartDate.text.toString())+timestampOneDay*leaveTerm.daysLimit
+                val timestampBack=Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
-                    true,
+                    false,
                     object : ECareDataPicker.PickerCallback {
                         override fun onSelect(date: String?, isCurrentDate: Boolean) {
                             binding.tvEndDate.text = Constant.dateToShow(date.toString())
 
                             val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
                                     Constant.getLongTimeDate(binding.tvStartDate.text.toString())
-
-
-
-
                             days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
 
                             binding.tvNumberDays.text = buildString {
                                 append(days + 1)
                             }
                         }
-                    }).setMinDate(Constant.getLongTimeDate(binding.tvStartDate.text.toString()))
+                    },timestampBack,timestampforward)
 
 
             } else
@@ -127,16 +140,22 @@ class ApplyLeaveFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
 
                         if (it.data != null) {
-                            leaveTypeList = it.data.leaveTypes
-                            it.data.leaveTypes.forEach { data ->
-                                leaveTypesDataString.add(data.suggestion)
-                            }
-                            val arrayAdapter = ArrayAdapter(
-                                requireContext(),
-                                R.layout.view_drop_down_menu,
-                                leaveTypesDataString
-                            )
-                            binding.autoCompleteReason.setAdapter(arrayAdapter)
+
+                            holidayList = it.data.holidayList.holiday as MutableList<Holiday>
+                            leaveTerm=it.data.leaveTerms
+
+                             if (it.data.leaveTypes!=null){
+                                 leaveTypeList = it.data.leaveTypes
+                                 it.data.leaveTypes.forEach { data ->
+                                     leaveTypesDataString.add(data.suggestion)
+                                 }
+                                 val arrayAdapter = ArrayAdapter(
+                                     requireContext(),
+                                     R.layout.view_drop_down_menu,
+                                     leaveTypesDataString
+                                 )
+                                 binding.autoCompleteReason.setAdapter(arrayAdapter)
+                             }
                         }
 
                     }
@@ -362,6 +381,8 @@ class ApplyLeaveFragment : Fragment() {
 
             return validate
         }
+
+
 
 
     }

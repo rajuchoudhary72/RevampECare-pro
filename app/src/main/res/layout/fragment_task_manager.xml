@@ -60,7 +60,7 @@
                         isVisible="@{viewModel.showSearchView}"
                         android:minWidth="1000dp"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="50dp"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/bg_round_corner_green"
                         android:backgroundTint="@color/white"
