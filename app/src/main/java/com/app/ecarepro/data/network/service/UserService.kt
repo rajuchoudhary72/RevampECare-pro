@@ -582,6 +582,7 @@ interface UserService {
 
     @GET("User/AppDashboard")
     suspend fun getUserDashboard(
+        @Query("Device") device: Int = 1
     ): UserDashboardDto
 
 

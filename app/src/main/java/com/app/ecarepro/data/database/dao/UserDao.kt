@@ -23,4 +23,7 @@ interface UserDao {
 
     @Delete
     fun deleteUser(userEntity: UserEntity)
+
+    @Query("DELETE FROM users")
+    suspend fun nukeTable()
 }

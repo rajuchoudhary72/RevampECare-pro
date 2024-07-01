@@ -44,7 +44,9 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import androidx.navigation.fragment.findNavController
+import androidx.core.os.bundleOf
+import com.app.ecarepro.utils.Constant
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -222,7 +224,25 @@ class DashboardFragment : Fragment() {
         if (data == null) {
             return
         }
-        TeachersBirthdayCarouselModel(data)
+        TeachersBirthdayCarouselModel(data, onClick = {
+            findNavController().navigate(
+                R.id.birthdayFragment,
+                Bundle().apply {
+                    putInt("rType",  it.rtype)
+                    putString("monthSelected", it.month)
+                    putString("dateSelected", it.date)
+                    putInt("uType", it.utype)
+                })
+
+          /*  findNavController().navigate(
+                R.id.birthdayFragment, bundleOf(
+                    "rType" to it.rType,
+                    "monthSelected" to it.month,
+                    "dateSelected" to it.date,
+                    "uType" to it.uType
+                )
+            )*/
+        })
             .id("1e5e")
             .addTo(this)
     }

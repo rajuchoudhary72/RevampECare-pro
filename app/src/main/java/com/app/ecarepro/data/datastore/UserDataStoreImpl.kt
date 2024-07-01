@@ -61,18 +61,18 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getUser(): NetworkUserDetailsDto? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null
-        return userDatabase.getUser(userId).asNetworkUserDetailsDto()
+        return userDatabase.getUser(userId)?.asNetworkUserDetailsDto()
     }
 
     override fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>> {
         return userDatabase
             .getUsersFlow()
             .map {
-                it.map {
+                it?.map {
                     it.asNetworkUserDetailsDto().copy(
                         school = schoolDatabase.getSchool(it.schoolCode ?: "").asNetworkSchool()
                     )
-                }
+                }?: emptyList()
             }
     }
 
@@ -119,7 +119,7 @@ class UserDataStoreImpl @Inject constructor(
                     null
                 )
             }
-            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it.asNetworkUserDetailsDto() }
+            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it?.asNetworkUserDetailsDto() }
         }
     }
 
@@ -233,7 +233,7 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getAuthToken(): String? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null
-        return userDatabase.getUser(userId).authToken
+        return userDatabase.getUser(userId)?.authToken
     }
 
     override suspend fun saveSlides(sliders: List<Slide>) {
@@ -252,8 +252,10 @@ class UserDataStoreImpl @Inject constructor(
 
     override suspend fun clear() {
         GlobalScope.launch {
+            eCareProDatabase.userDao().nukeTable()
+            eCareProDatabase.schoolDao().nukeTable()
             context.dataStore.edit { it.clear() }
-            eCareProDatabase.clearAllTables()
+         //   eCareProDatabase.clearAllTables()
         }
     }
 

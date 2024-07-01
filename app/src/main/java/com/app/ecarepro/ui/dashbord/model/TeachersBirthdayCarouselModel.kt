@@ -6,7 +6,7 @@ import com.app.ecarepro.databinding.ItemTeachersBirthdayCarouselCardBinding
 import com.app.ecarepro.teacherBirthdayCard
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 
-class TeachersBirthdayCarouselModel(val data: List<BirthDayCard>) :
+class TeachersBirthdayCarouselModel(val data: List<BirthDayCard>, val onClick: (BirthDayCard) -> Unit) :
     ViewBindingKotlinModel<ItemTeachersBirthdayCarouselCardBinding>(R.layout.item_teachers_birthday_carousel_card) {
     override fun ItemTeachersBirthdayCarouselCardBinding.bind() {
         carousel.numViewsToShowOnScreen = 1.8f
@@ -15,6 +15,7 @@ class TeachersBirthdayCarouselModel(val data: List<BirthDayCard>) :
                 teacherBirthdayCard{
                     id(it.heading)
                     data(it)
+                    clickListener{_ -> onClick(it)}
                 }
 
             }
