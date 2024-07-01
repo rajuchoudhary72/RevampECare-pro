@@ -41,8 +41,8 @@ class BirthdayFragment : Fragment() {
     private var dateSelected: String = ""
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?,
     ): View {
         binding = FragmentBirthdayBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -52,7 +52,8 @@ class BirthdayFragment : Fragment() {
             userType = requireArguments().getInt("uType")
             monthSelected = requireArguments().getString("monthSelected").toString().toInt()
             dateSelected = requireArguments().getString("dateSelected").toString()
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
 
         if (dateSelected.isEmpty()) {
             binding.tvDate.text = Constant.currentDate()
@@ -75,10 +76,10 @@ class BirthdayFragment : Fragment() {
                 R.id.btn_student -> {
                     userType = Constant.STUDENT_TYPE
                     birthdayViewModel.birthday(
-                        userType,
-                        rptType,
-                        monthSelected,
-                        binding.tvDate.text.toString()
+                            userType,
+                            rptType,
+                            monthSelected,
+                            binding.tvDate.text.toString()
                     )
 
 
@@ -87,10 +88,10 @@ class BirthdayFragment : Fragment() {
                 else -> {
                     userType = Constant.STAFF_TYPE
                     birthdayViewModel.birthday(
-                        userType,
-                        rptType,
-                        monthSelected,
-                        binding.tvDate.text.toString()
+                            userType,
+                            rptType,
+                            monthSelected,
+                            binding.tvDate.text.toString()
                     )
 
                 }
@@ -103,10 +104,10 @@ class BirthdayFragment : Fragment() {
                     binding.tvDate.text = date
                     rptType = 1
                     birthdayViewModel.birthday(
-                        userType,
-                        rptType,
-                        monthSelected,
-                        binding.tvDate.text.toString()
+                            userType,
+                            rptType,
+                            monthSelected,
+                            binding.tvDate.text.toString()
                     )
 
                 }
@@ -116,16 +117,16 @@ class BirthdayFragment : Fragment() {
 
 
         binding.autoCompleteMonth.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                monthSelected = monthModelArrayList[pos].monthID
-                rptType = 2
-                birthdayViewModel.birthday(
-                    userType,
-                    rptType,
-                    monthSelected,
-                    binding.tvDate.text.toString()
-                )
-             }
+                AdapterView.OnItemClickListener { parent, view, pos, id ->
+                    monthSelected = monthModelArrayList[pos].monthID
+                    rptType = 2
+                    birthdayViewModel.birthday(
+                            userType,
+                            rptType,
+                            monthSelected,
+                            binding.tvDate.text.toString()
+                    )
+                }
 
 
 
@@ -157,8 +158,8 @@ class BirthdayFragment : Fragment() {
                                 binding.tvNoData.isVisible = false
 
                                 val noticeAdapter = BirthListAdapter(
-                                    it.data.usersBirthday,
-                                    this@BirthdayFragment
+                                        it.data.usersBirthday,
+                                        this@BirthdayFragment
                                 )
 
                                 binding.recyclerNotice.apply {
@@ -182,24 +183,23 @@ class BirthdayFragment : Fragment() {
 
         birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
 
-        if (monthSelected!=null){
-            monthModelArrayList.forEach { d->
-                if (monthSelected==d.monthID){
-                    binding.autoCompleteMonth.setText(d.month,false)
+        if (monthSelected != null) {
+            monthModelArrayList.forEach { d ->
+                if (monthSelected == d.monthID) {
+                    binding.autoCompleteMonth.setText(d.month, false)
                 }
             }
         }
 
-        if (dateSelected=="null"){
+        if (dateSelected == "null") {
             binding.tvDate.text = Constant.currentDate()
         }
 
-        if (userType==Constant.STAFF_TYPE){
+        if (userType == Constant.STAFF_TYPE) {
             binding.toggleButtonTypeUser.check(R.id.btn_class_staff)
-        }else{
+        } else {
             binding.toggleButtonTypeUser.check(R.id.btn_student)
         }
-
 
 
     }
@@ -257,9 +257,9 @@ class BirthdayFragment : Fragment() {
         }
 
         val arrayAdapter = ArrayAdapter(
-            requireContext(),
-            R.layout.view_drop_down_menu,
-            monthDataString
+                requireContext(),
+                R.layout.view_drop_down_menu,
+                monthDataString
         )
         binding.autoCompleteMonth.setAdapter(arrayAdapter)
 
