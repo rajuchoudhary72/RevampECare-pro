@@ -84,6 +84,7 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
+import com.app.ecarepro.data.network.model.NetworkBusLocation
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkEBook
@@ -107,6 +108,7 @@ import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
@@ -869,6 +871,14 @@ interface UserService {
     suspend fun deleteSyllabus(
         @Query("ID") ID: String
     ): CommonResponse
+
+    @GET("GPS/GetVehicleNumber")
+    suspend fun getVehicleNumber(  ): NetworkVehicleNumber
+
+    @GET("GPS/Location")
+    suspend fun busLocation(
+        @Query("VehicleNumber") vehicleNumber: String
+    ): NetworkBusLocation
 
 
 

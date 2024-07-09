@@ -33,13 +33,13 @@ class ReportCardListAdapter(
         bindingm.tvUpdateOn.text= "Updated On : ${data.updatedOn}"
 
         bindingm.llView.setOnClickListener {
-            reportCardDetailsFragment.onItemClick(data,1,false)
+            reportCardDetailsFragment.onItemClick(data,1,true)
         }
         bindingm.llBackView.setOnClickListener {
             reportCardDetailsFragment.onItemClick(data,1,false)
         }
         bindingm.llDownload.setOnClickListener {
-            reportCardDetailsFragment.onItemClick(data,2,false)
+            reportCardDetailsFragment.onItemClick(data,2,true)
         }
         bindingm.llBackDownload.setOnClickListener {
             reportCardDetailsFragment.onItemClick(data,2,false)

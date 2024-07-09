@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentReportCardNavHostBinding
 import com.app.ecarepro.ui.MainActivity
@@ -30,6 +31,7 @@ class ReportCardDetailsNavHostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding = FragmentReportCardNavHostBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         return binding.root
     }
 
