@@ -27,5 +27,11 @@ class StudentProfileDetailsFragment(private val profile: Profile) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.studentData=profile
+        if (profile.isBoarding){
+            binding.tvBoarding.text = profile.classification
+        }else{
+            binding.tvBoarding.text =""
+        }
+
     }
 }
