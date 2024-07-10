@@ -428,8 +428,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.boarding ?  studentData.classification : ' ' }"
-                    android:textColor="@color/grey_60"
+                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
             </LinearLayout>
 

@@ -65,18 +65,19 @@ class StudentProfileAttendanceFragment(
 
 
     private fun setCalculatedPercentage(day: Int, totalDay: Int): String {
-        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toString() + "%"
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toString()
     }
 
-    private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Int {
-        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toInt()
+    private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Double {
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00)
     }
 
     private fun getBarChartModel(present: Int, leave: Int, absent: Int, late: Int) = AAChartModel()
 
         .chartType(AAChartType.Pie)
          .colorsTheme(
-            arrayOf("#4DAC3C","#FF352F","#FFD700","#FFFEA11C")
+
+             arrayOf("#4DAC3C","#FF352F","#FFD700","#FFFEA11C")
         )
         .dataLabelsEnabled(true)
         .series(
@@ -84,7 +85,7 @@ class StudentProfileAttendanceFragment(
                 AASeriesElement()
 
                     .name("Student")
-                    .size("80%")
+                    .size("60%")
                     .innerSize("70%")
                     .borderWidth(0)
                     .allowPointSelect(false)
@@ -183,22 +184,22 @@ class StudentProfileAttendanceFragment(
             try {
                 tvPresentDay.text = buildString {
                     append("(")
-                    append(setCalculatedPercentage(attendanceDTL.present, attendanceDTL.working))
+                    append(setCalculatedPercentageToInt(attendanceDTL.present, attendanceDTL.working))
                     append("%)")
                 }
                 tvAbsentDay.text = buildString {
                     append("(")
-                    append(setCalculatedPercentage(attendanceDTL.absent, attendanceDTL.working))
+                    append(setCalculatedPercentageToInt(attendanceDTL.absent, attendanceDTL.working))
                     append("%)")
                 }
                 tvLeaveDay.text = buildString {
                     append("(")
-                    append(setCalculatedPercentage(attendanceDTL.leave, attendanceDTL.working))
+                    append(setCalculatedPercentageToInt(attendanceDTL.leave, attendanceDTL.working))
                     append("%)")
                 }
                 tvLateDay.text = buildString {
                     append("(")
-                    append(setCalculatedPercentage(attendanceDTL.late, attendanceDTL.working))
+                    append(setCalculatedPercentageToInt(attendanceDTL.late, attendanceDTL.working))
                     append("%)")
                 }
 
