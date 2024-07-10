@@ -90,6 +90,7 @@ dependencies {
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
     implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
     kapt(libs.hilt.android.compiler)
 
     /* Database */

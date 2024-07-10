@@ -351,8 +351,8 @@ class MainActivity : AppCompatActivity() {
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
            // 12 ->  navController.navigate(R.id.conversationReportFragment)
-            12 ->  navController.navigate(R.id.bookLibraryFragment )
-            13 ->  navController.navigate(R.id.EBookNavFragment)
+             12 ->  navController.navigate(R.id.bookLibraryFragment )
+             13 ->  navController.navigate(R.id.EBookNavFragment)
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
@@ -385,6 +385,7 @@ class MainActivity : AppCompatActivity() {
              30 ->  navController.navigate(R.id.selectTransportTypeFragment)
             32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
+            35 ->  navController.navigate(R.id.busLocationFragment )
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }

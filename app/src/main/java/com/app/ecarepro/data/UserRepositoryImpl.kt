@@ -85,6 +85,7 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
+import com.app.ecarepro.data.network.model.NetworkBusLocation
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkEBook
@@ -108,6 +109,7 @@ import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
@@ -1057,6 +1059,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun deleteSyllabus(ID: String): CommonResponse {
         return userService.deleteSyllabus(ID)
+    }
+
+    override suspend fun getVehicleNumber(): NetworkVehicleNumber {
+         return userService.getVehicleNumber()
+    }
+
+    override suspend fun busLocation(vehicleNumber: String): NetworkBusLocation {
+        return userService.busLocation(vehicleNumber)
     }
 
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {

@@ -868,5 +868,9 @@
         android:id="@+id/addSyllabusFragment"
         android:name="com.app.ecarepro.ui.syllabus.teacher.add_syllabus.AddSyllabusFragment"
         android:label="AddSyllabusFragment" />
+    <fragment
+        android:id="@+id/busLocationFragment"
+        android:name="com.app.ecarepro.ui.bus_location.BusLocationFragment"
+        android:label="BusLocationFragment" />
 
 </navigation>
