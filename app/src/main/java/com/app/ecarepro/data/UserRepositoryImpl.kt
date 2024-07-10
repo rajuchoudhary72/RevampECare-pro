@@ -85,6 +85,7 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
+import com.app.ecarepro.data.network.model.NetworkBusLocation
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkEBook
@@ -105,14 +106,17 @@ import com.app.ecarepro.data.network.model.NetworkSMSConsumption
 import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
 import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
+import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
@@ -476,6 +480,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun mySubjects(classID :Int): NetworkMySubjects {
         return userService.mySubjects(classID)
+    }
+
+    override suspend fun staffSubjects(classSTD: Int): NetworkMySubjects {
+        return userService.staffSubjects(classSTD)
     }
 
     override suspend fun createAssignment(
@@ -848,6 +856,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.staffMyClass()
     }
 
+    override suspend fun staffMyClass(subID: Int, onlyClass: Boolean): NetworkMyClass {
+        return userService.staffMyClass(subID, onlyClass)
+    }
+
     override suspend fun getPayslip(): NetworkPaySlip {
         return userService.getPayslip()
     }
@@ -1035,6 +1047,26 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getEBookDetails(accessionNo: String): CommonResponse {
         return userService.getEBookDetails(accessionNo)
+    }
+
+    override suspend fun getTeacherSyllabuses(): NetworkTeacherSyllabus {
+        return userService.getTeacherSyllabuses()
+    }
+
+    override suspend fun saveSyllabus(request: PostSyllabus): CommonResponse {
+        return userService.saveSyllabus(request)
+    }
+
+    override suspend fun deleteSyllabus(ID: String): CommonResponse {
+        return userService.deleteSyllabus(ID)
+    }
+
+    override suspend fun getVehicleNumber(): NetworkVehicleNumber {
+         return userService.getVehicleNumber()
+    }
+
+    override suspend fun busLocation(vehicleNumber: String): NetworkBusLocation {
+        return userService.busLocation(vehicleNumber)
     }
 
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {

@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.AdmissionComparison
@@ -46,7 +44,9 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import androidx.navigation.fragment.findNavController
+import androidx.core.os.bundleOf
+import com.app.ecarepro.utils.Constant
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -226,13 +226,22 @@ class DashboardFragment : Fragment() {
         }
         TeachersBirthdayCarouselModel(data, onClick = {
             findNavController().navigate(
+                R.id.birthdayFragment,
+                Bundle().apply {
+                    putInt("rType",  it.rtype)
+                    putString("monthSelected", it.month)
+                    putString("dateSelected", it.date)
+                    putInt("uType", it.utype)
+                })
+
+          /*  findNavController().navigate(
                 R.id.birthdayFragment, bundleOf(
                     "rType" to it.rType,
                     "monthSelected" to it.month,
                     "dateSelected" to it.date,
                     "uType" to it.uType
-                    )
-            )
+                )
+            )*/
         })
             .id("1e5e")
             .addTo(this)

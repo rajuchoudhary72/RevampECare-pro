@@ -43,7 +43,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
     ): View {
 
         binding = FragmentQuestionnaireListBinding.inflate(inflater, container, false)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         noticeAdapter = QuestionnaireAdapter(
             ArrayList(),
             this@QuestionnaireListFragment

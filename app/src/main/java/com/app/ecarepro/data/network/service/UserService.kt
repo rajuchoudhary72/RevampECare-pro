@@ -84,6 +84,7 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
+import com.app.ecarepro.data.network.model.NetworkBusLocation
 import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkEBook
@@ -104,11 +105,14 @@ import com.app.ecarepro.data.network.model.NetworkSMSConsumption
 import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
 import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
+import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
+import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
@@ -178,6 +182,12 @@ interface UserService {
     suspend fun staffMyClass(
         /* @Query("SubID") subID: Int,
          @Query("ID") iD: Int*/
+    ): NetworkMyClass
+
+    @GET("Staff/MyClass")
+    suspend fun staffMyClass(
+         @Query("SubID") subID: Int,
+         @Query("OnlyClass") onlyClass: Boolean
     ): NetworkMyClass
 
     @GET("Staff/Payslip")
@@ -370,6 +380,11 @@ interface UserService {
     @GET("Staff/MySubjects")
     suspend fun mySubjects(
         @Query("ClassID") classID: Int
+    ): NetworkMySubjects
+
+    @GET("Staff/Subjects")
+    suspend fun staffSubjects(
+        @Query("ClassSTD") classSTD: Int
     ): NetworkMySubjects
 
     @POST("Academic/CreateAssignment")
@@ -569,6 +584,7 @@ interface UserService {
 
     @GET("User/AppDashboard")
     suspend fun getUserDashboard(
+        @Query("Device") device: Int = 1
     ): UserDashboardDto
 
 
@@ -844,6 +860,25 @@ interface UserService {
         @Query("AccessionNo") accessionNo: String
     ): CommonResponse
 
+    @GET("Admin/Syllabuses")
+    suspend fun getTeacherSyllabuses( ): NetworkTeacherSyllabus
+
+    @POST("Admin/SaveSyllabus")
+    suspend fun saveSyllabus(
+        @Body request: PostSyllabus,
+    ): CommonResponse
+    @GET("Admin/DeleteSyllabus")
+    suspend fun deleteSyllabus(
+        @Query("ID") ID: String
+    ): CommonResponse
+
+    @GET("GPS/GetVehicleNumber")
+    suspend fun getVehicleNumber(  ): NetworkVehicleNumber
+
+    @GET("GPS/Location")
+    suspend fun busLocation(
+        @Query("VehicleNumber") vehicleNumber: String
+    ): NetworkBusLocation
 
 
 

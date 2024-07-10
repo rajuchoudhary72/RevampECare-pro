@@ -23,18 +23,28 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import com.app.ecarepro.data.datastore.UserDataStore
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SelectRecipientsPagerViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
+    private val userDataStore: UserDataStore
 ) : ViewModel() {
 
     val recipientsType = savedStateHandle.getStateFlow(
         SelectRecipientPagerFragment.RECIPIENTS_TYPE,
         RecipientsType.PARENTS
     )
+    val user = userDataStore.getUserAsFlow()
+
+    val showStaffTypeSpinner = combine(
+        flow = recipientsType,
+        flow2 = user
+    ){recipientsType, user ->
+        recipientsType == RecipientsType.STAFFS && user?.userType == 3
+    }.asLiveData()
 
     private val scholarType = MutableStateFlow(ScholarType.ALL)
 

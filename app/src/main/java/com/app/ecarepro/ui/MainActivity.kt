@@ -301,18 +301,20 @@ class MainActivity : AppCompatActivity() {
       fun getFragmentId(menuID: Int) {
         when (menuID) {
             3 -> {
-                if (userData.userType == Constant.STAFF_TYPE) {
-                    if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                        navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
-                            putString(Constant.TO, Constant.FRA_ASSI)
-                        })
-                    } else {
-                        navController.navigate(R.id.staffAssignmentsListFragment)
-                    }
+                try {
+                    if (userData.userType == Constant.STAFF_TYPE) {
+                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                            navController.navigate(R.id.classAndTeacherListFragment, Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_ASSI)
+                            })
+                        } else {
+                            navController.navigate(R.id.staffAssignmentsListFragment)
+                        }
 
-                }else{
-                    navController.navigate(R.id.assignmentNavHostFragment)
-                }
+                    }else{
+                        navController.navigate(R.id.assignmentNavHostFragment)
+                    }
+                }catch (e:Exception){}
 
             }
 
@@ -339,12 +341,18 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            5 -> navController.navigate(R.id.classSyllabus)
+            5 ->   if (userData.userType == Constant.STAFF_TYPE) {
+                navController.navigate(R.id.teacherSyllabusFragment)
+            }else{
+                navController.navigate(R.id.classSyllabus)
+            }
+
+
             10 ->  navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
            // 12 ->  navController.navigate(R.id.conversationReportFragment)
-            12 ->  navController.navigate(R.id.bookLibraryFragment )
-            13 ->  navController.navigate(R.id.EBookNavFragment)
+             12 ->  navController.navigate(R.id.bookLibraryFragment )
+             13 ->  navController.navigate(R.id.EBookNavFragment)
             16 ->  navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
@@ -377,6 +385,7 @@ class MainActivity : AppCompatActivity() {
              30 ->  navController.navigate(R.id.selectTransportTypeFragment)
             32 ->  navController.navigate(R.id.studentIDFragment)
             33 ->  navController.navigate(R.id.surveyListFragment)
+            35 ->  navController.navigate(R.id.busLocationFragment )
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -600,11 +609,15 @@ class MainActivity : AppCompatActivity() {
             .setTitle(getString(R.string.logout))
             .setMessage(getString(R.string.are_you_sure_to_logout))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                systemViewModel.logout {
-                    val intent = Intent(this, MainActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    startActivity(intent)
-                    Runtime.getRuntime().exit(0)
+                try {
+                    systemViewModel.logout {
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                        Runtime.getRuntime().exit(0)
+                    }
+                }catch (e:Exception){
+
                 }
             }
             .setNegativeButton(getString(R.string.no)) { _, _ ->

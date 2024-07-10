@@ -29,6 +29,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title : </string>
     <string name="notice">Notice</string>
+    <string name="report_card">Report Card</string>
     <string name="circular">Circular</string>
     <string name="payslip">PaySlip</string>
     <string name="syallabus">Syllabus</string>
@@ -598,4 +599,10 @@
     <string name="exp_return_date">Exp. Return Date :</string>
     <string name="return_on">Return On :</string>
     <string name="my_school_library">My School Library</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="add_syllabus">Add Syllabus</string>
+    <string name="refresh">Refresh</string>
+    <string name="speed">Speed:</string>
+    <string name="no_bus_found">No Bus Found</string>
+    <string name="bus_location">Bus Location</string>
 </resources>

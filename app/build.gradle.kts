@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 6
-        versionName = "1.1.4"
+        versionCode = 9
+        versionName = "1.1.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -69,7 +69,7 @@ android {
         create("beta") {
             dimension = "build"
             applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "e-Care Beta")
+            resValue("string", "app_name", "e-Care")
             signingConfig = signingConfigs.getByName("beta")
         }
     }
@@ -90,6 +90,7 @@ dependencies {
     /* Dependency Injection -> Hilt */
     implementation(libs.hilt.android)
     implementation(libs.play.services.location)
+    implementation(libs.play.services.maps)
     kapt(libs.hilt.android.compiler)
 
     /* Database */

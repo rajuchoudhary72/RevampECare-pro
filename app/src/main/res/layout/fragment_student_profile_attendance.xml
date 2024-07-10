@@ -40,7 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_gravity="center"
-                        android:background="@drawable/background_box_rectangle_black"
+                        android:background="@drawable/background_box_rectangle_white_round"
                         android:drawablePadding="@dimen/_10sdp"
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center"
@@ -49,8 +49,7 @@
                         android:paddingEnd="@dimen/_10sdp"
                         android:paddingRight="@dimen/_10sdp"
                         android:text="@string/select_year"
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_14sdp"
+                         android:textSize="@dimen/_14sdp"
                         android:visibility="visible"
                         android:layout_marginStart="@dimen/_10sdp"
                         app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
@@ -77,12 +76,14 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3">
+                        android:layout_weight="3"
+                         >
 
                         <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                             android:id="@+id/pieChartView"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_200sdp"
+                             android:layout_height="@dimen/_200sdp"
+                            android:backgroundTint="@color/transparent"
                              />
                     </LinearLayout>
 
@@ -120,7 +121,8 @@
                                 android:layout_marginStart="@dimen/_2sdp"
                                 android:fontFamily="@font/ubuntu_medium"
                                 android:textColor="@color/grey_60"
-                                android:textSize="@dimen/_11sdp" />
+                                android:textSize="@dimen/_11sdp"
+                                 />
                         </LinearLayout>
 
                         <LinearLayout

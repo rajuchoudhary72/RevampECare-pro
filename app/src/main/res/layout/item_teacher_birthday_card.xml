@@ -8,7 +8,6 @@
         <variable
             name="data"
             type="com.app.ecarepro.data.network.model.BirthDayCard" />
-
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />

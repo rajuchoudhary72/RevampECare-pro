@@ -145,8 +145,12 @@ class ProfileFragment : Fragment() {
                     designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
                     contactNumber(uiState.profile.emergencyContactNo)
+                /*    canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
+                    canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)*/
+
                     canEditBannerImage(uiState.profile.canChangeCoverImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.coverImg != 1))
                     canEditProfileImage(uiState.profile.canChangeProfileImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.profileImg != 1))
+
                     profileImageStatus(uiState.profile.userImgReq?.profileImg)
                     bannerImageStatus(uiState.profile.userImgReq?.coverImg)
                     clickListener { v: View ->
