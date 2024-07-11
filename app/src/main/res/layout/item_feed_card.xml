@@ -8,7 +8,9 @@
         <variable
             name="feed"
             type="com.app.ecarepro.model.Feed" />
-
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -17,6 +19,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="16dp"
         app:contentPadding="12dp"
+        android:onClick="@{clickListener}"
         app:strokeColor="@color/grey_10"
         app:strokeWidth="1dp">
 

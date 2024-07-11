@@ -21,7 +21,8 @@ import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
-
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
 
@@ -76,9 +77,11 @@ class SignInFragment : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
+                            mainActivity().showMessage("You are Successfully  login... ")
                             if (arguments?.containsKey("add_account") == true) {
                                 findNavController().popBackStack()
                             } else {
+                                systemViewModel.registerDeviceToken()
                                 findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                             }
 
@@ -87,8 +90,10 @@ class SignInFragment : Fragment() {
 
                         }
 
+                    }else    if (it.errorCode == 401) {
+                        mainActivity().showMessage(" " + it.message)
                     }
-                    mainActivity().showMessage("You are Successfully  login... ")
+
                     Log.i("Token Aut", it.authToken.toString())
                 }
             } else {

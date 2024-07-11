@@ -16,6 +16,9 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import android.graphics.Rect
+import android.view.MotionEvent
 
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -237,7 +240,7 @@ class MainActivity : AppCompatActivity() {
     private fun hideMoreItemMenu() {
         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
         binding.appBarMain.contentMain.bottomNavigationView.onMenuItemClick(0)
-        listenMenuItemClickEvent = false
+      //  listenMenuItemClickEvent = false
     }
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
         binding.recyclerViewNavView.withModels {
@@ -379,7 +382,30 @@ class MainActivity : AppCompatActivity() {
             }
             25 ->  navController.navigate(R.id.excellenceAwardFragment)
             26 ->  navController.navigate(R.id.selectMarkAttendanceFragment)
-            27 ->  navController.navigate(R.id.lessonPlanListFragment)
+
+
+            27 -> {
+                try {
+                    if (userData.userType == Constant.STAFF_TYPE) {
+                        if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
+                            /*schoolData?.let {
+                                it.marksEntryURL?.let { url ->
+                                    webViewCall(
+                                        url,
+                                        getString(R.string.marks_entry_heading)
+                                    )
+                                }
+                            }*/
+                        } else {
+                            navController.navigate(R.id.lessonPlanListFragment)
+                        }
+
+                    }else{
+                        navController.navigate(R.id.lessonPlanListFragment)
+                    }
+                }catch (e:Exception){}
+
+            }
             28 ->  navController.navigate(R.id.lessonPlanListFragment)
              23 ->  navController.navigate(R.id.taskManagerFragment)
              30 ->  navController.navigate(R.id.selectTransportTypeFragment)
@@ -389,6 +415,12 @@ class MainActivity : AppCompatActivity() {
             51 ->  navController.navigate(R.id.excellenceAwardFragment)
 
         }
+    }
+    private fun webViewCall(url: String, title: String) {
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("url", url)
+        navController.navigate(R.id.webViewFragment, bundle)
     }
       fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {
@@ -567,6 +599,13 @@ class MainActivity : AppCompatActivity() {
 
     fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int) {
         when (menuID) {
+            6 -> {
+                when (childMenuId) {
+                    7 -> navController.navigate(R.id.composeFragment)
+                    8 -> navController.navigate(R.id.messageFragment)
+                    9 -> navController.navigate(R.id.messageFragment)
+                }
+            }
             1 -> {
                 when (childMenuId) {
                     41 -> {
@@ -639,7 +678,16 @@ class MainActivity : AppCompatActivity() {
                 }
             ))
     }
-
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if(binding.appBarMain.contentMain.moreItemContainer.isVisible){
+            val viewRect = Rect()
+            binding.appBarMain.contentMain.moreItemContainer.getGlobalVisibleRect(viewRect)
+            if (!viewRect.contains(ev!!.rawX.toInt(), ev.rawY.toInt())) {
+                hideMoreItemMenu()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
     private fun setUpBottomNavigationView() {
         val menuItems = arrayOf(
             CbnMenuItem(
