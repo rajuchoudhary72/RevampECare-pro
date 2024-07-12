@@ -63,7 +63,7 @@ fun SchoolEntity.asNetworkSchool(): NetworkSchool {
         supportDays = supportDays,
         themColor = themColor,
         webSite = webSite,
-        slider = Gson().fromJson(slides, object : TypeToken<List<Slider>>() {}.type),
+        slider = emptyList(),
         status = "0",
         message = "",
         errorCode = 0,

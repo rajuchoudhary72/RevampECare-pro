@@ -62,8 +62,8 @@ class InstitutionCodeFragment : Fragment() {
             lifecycleScope.launch {
                 binding.carouselSchool.isVisible = schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()
             }
-            schools.forEach { school ->
-                binding.carouselSchool.withModels {
+            binding.carouselSchool.withModels {
+                schools.forEach { school ->
                     schoolCode {
                         id(school.schoolCode)
                         photo(school.logo)
@@ -89,7 +89,11 @@ class InstitutionCodeFragment : Fragment() {
             institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
                 (requireActivity() as MainActivity).showLoader(false)
                 if (it?.errorCode == 0) {
-                    navigateToSignFragment(it.schoolCode)
+                    if(it.isStudentLoginBlocked == true){
+                        mainActivity().showMessage("you are block by admin by this school so please co-coordinate to this school admin!")
+                    }else{
+                        navigateToSignFragment(it.schoolCode)
+                    }
                 } else {
                     if (it != null) {
                         mainActivity().showMessage(it.message.toString())

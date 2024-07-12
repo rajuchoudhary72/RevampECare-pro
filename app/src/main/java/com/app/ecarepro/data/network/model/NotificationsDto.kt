@@ -32,5 +32,7 @@ data class Notification(
     @SerializedName("sentOn")
     val sentOn: String?,
     @SerializedName("title")
-    val title: String?
+    val title: String?,
+    @SerializedName("chMenuID")
+    val chMenuID: Int?
 )

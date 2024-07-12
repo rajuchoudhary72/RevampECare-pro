@@ -62,6 +62,8 @@ data class NetworkSchool(
     val themColor: String?,
     @SerializedName("webSite")
     val webSite: String?,
+    @SerializedName("isStudentLoginBlocked")
+    val isStudentLoginBlocked: Boolean? = false,
     val isSelected: Boolean = false
 )
 
@@ -100,6 +102,6 @@ fun NetworkSchool.asNetworkSchool(): SchoolEntity {
         supportDays = supportDays,
         themColor = themColor,
         webSite = webSite,
-        slides = Gson().toJson(slider)
+        slides = ""
     )
 }

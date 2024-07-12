@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
@@ -16,13 +17,25 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.app.Application.WIFI_SERVICE
+import android.content.Context
+import android.net.wifi.WifiManager
+import android.os.Build
+import android.provider.Settings.Secure
+import android.util.Log
+import com.app.ecarepro.data.network.model.RegisterDevice
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
 ) : ViewModel() {
-
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
@@ -91,6 +104,32 @@ class SystemViewModel @Inject constructor(
     fun refreshAppLayout() {
         viewModelScope.launch {
             refresh.emit(true)
+        }
+    }
+    fun registerDeviceToken(){
+        Firebase.messaging.token.addOnSuccessListener { token ->
+            viewModelScope.launch {
+                val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
+                val wInfo = wifiManager.connectionInfo
+                val macAddress = wInfo.macAddress
+                appRepository
+                    .registerDevice(
+                        RegisterDevice(
+                            fcmToken = token,
+                            osVersion = "OS " + Build.VERSION.SDK_INT,
+                            deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
+                            deviceType = 1,
+                            imeI1 = macAddress,
+                            imeI2 = macAddress,
+                            deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID)
+                        )
+                    )
+                    .collectLatest {
+                        println(it)
+                    }
+            }
+        }.addOnFailureListener {
+            Log.e("Failed to get token", it.message.toString())
         }
     }
 }
