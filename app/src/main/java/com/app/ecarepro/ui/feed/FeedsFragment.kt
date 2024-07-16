@@ -16,6 +16,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentFeedsBinding
 import com.app.ecarepro.feedCard
 import com.app.ecarepro.loadMoreView
+import com.app.ecarepro.model.Feed
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
@@ -25,6 +26,7 @@ import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.noDataFoundView
 
 
 @AndroidEntryPoint
@@ -112,10 +114,15 @@ class FeedsFragment : Fragment() {
                     }
 
                     is FeedsUiState.Success -> {
-                        uiState.feeds.forEach { feed ->
+                        uiState.feeds.forEach { feed: Feed ->
                             feedCard {
                                 id(feed.id)
                                 feed(feed)
+                                clickListener { _->
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        feed.menuID, feed.chMenuID
+                                    )
+                                }
                             }
                         }
 

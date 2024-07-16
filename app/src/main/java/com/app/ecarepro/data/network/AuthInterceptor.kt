@@ -19,6 +19,7 @@ class AuthInterceptor @Inject constructor(
         "School/DTL",
         "User/Verify",
         "User/Login",
+        "School/List"
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {

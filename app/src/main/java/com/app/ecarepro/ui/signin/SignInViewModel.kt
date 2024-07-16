@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
@@ -27,7 +28,13 @@ class SignInViewModel @Inject constructor(
 
     val isUserAuthenticated = MutableLiveData(false)
 
-    val school = schoolDatabase.getSchoolsFlow().map { it.lastOrNull() }.asLiveData()
+    val school = userDataStore.getCurrentSchoolCodeAsFlow().flatMapLatest {
+        if (it.isNullOrEmpty()) {
+            schoolDatabase.getSchoolsFlow().map { it.lastOrNull() }
+        } else {
+            schoolDatabase.getSchoolFlow(it)
+        }
+    }.asLiveData()
 
     init {
         viewModelScope.launch {

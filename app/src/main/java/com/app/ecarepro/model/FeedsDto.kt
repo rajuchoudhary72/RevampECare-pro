@@ -26,7 +26,13 @@ data class Feed(
     @SerializedName("hasAttachment")
     val hasAttachment: Boolean?,
     @SerializedName("id")
-    val id: Int?,
+    val id: String?,
+    @SerializedName("menuID")
+    val menuID: Int,
+    @SerializedName("chMenuID")
+    val chMenuID: Int,
+    @SerializedName("sbChMenuID")
+    val sbChMenuID: Int,
     @SerializedName("mdlID")
     val mdlID: Int?,
     @SerializedName("module")

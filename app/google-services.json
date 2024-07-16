@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "71010075382-i51g9bihnic8npfjli43vi4p1eb2fk1e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.franciscan.ecare_pro",
+            "certificate_hash": "0be640f203965585c2e0ee9d630d3259f56684a6"
+          }
+        },
+        {
+          "client_id": "71010075382-m31mgsehnd1qenj5pq0j4s4pflvcr6kj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.franciscan.ecare_pro",
+            "certificate_hash": "23e2bdecdf9b90cc6fa134cbb028132527ab4bfa"
+          }
+        },
+        {
           "client_id": "71010075382-n251rn3idemb42ieseeap39u2amg1f2q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -23,54 +39,11 @@
           }
         },
         {
-          "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDuuczWFdZ-yQZQyymaKTDagD4lHF_Fn8w"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "71010075382-8ur0op8gbcdu6mt6uf2nquk92p2fknqp.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.franciscan.eCareProNew"
-              }
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:71010075382:android:c818517cd781612c",
-        "android_client_info": {
-          "package_name": "com.franciscan.palmboard"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "71010075382-7qvkth4m1jhet7od0iv404udepjjbcpu.apps.googleusercontent.com",
+          "client_id": "71010075382-qj4r9sed24bjqh03l0emqu2kufdj1nrq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.franciscan.palmboard",
-            "certificate_hash": "c8637e8ad3d71c8c39fbd19167e1bfac6c476fb8"
+            "package_name": "com.franciscan.ecare_pro",
+            "certificate_hash": "50f88243e83b460baa35fdfbe1a57d8f47768b68"
           }
         },
         {
@@ -80,15 +53,14 @@
       ],
       "api_key": [
         {
+          "current_key": "AIzaSyDwK8dgfRt44IQNWYOsHGHzd_31EVrIIKo"
+        },
+        {
           "current_key": "AIzaSyDuuczWFdZ-yQZQyymaKTDagD4lHF_Fn8w"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
@@ -102,9 +74,45 @@
               }
             }
           ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:71010075382:android:f2baab624ded9fd00b62d7",
+        "android_client_info": {
+          "package_name": "com.franciscan.ecare_pro.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwK8dgfRt44IQNWYOsHGHzd_31EVrIIKo"
         },
-        "ads_service": {
-          "status": 2
+        {
+          "current_key": "AIzaSyDuuczWFdZ-yQZQyymaKTDagD4lHF_Fn8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "71010075382-8ur0op8gbcdu6mt6uf2nquk92p2fknqp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.franciscan.eCareProNew"
+              }
+            }
+          ]
         }
       }
     }

@@ -122,8 +122,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
     }
 
     private fun setupAttDeatils(data: NetworkAttedanceSummary) {
-        val totalStudent: Double =
-            (data.totalPresent + data.totalAbsent + data.totalLeave + data.totalLate).toDouble()
+        val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave + data.totalLate
 
 
         with(binding) {
@@ -143,38 +142,38 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 
             try {
                 tvPresentPer.text = buildString {
-                    append(
-                        ((data.totalPresent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                        append(setCalculatedPercentageToInt(data.totalPresent, totalStudent))
+
                     append("%")
                 }
 
                 tvAbsentPer.text = buildString {
-                    append(
-                        ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalAbsent, totalStudent))
                     append("%")
                 }
 
                 tvLeavePer.text = buildString {
-                    append(
-                        ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalLeave, totalStudent))
+
                     append("%")
                 }
                 tvLatePer.text = buildString {
-                    append(
-                        ((data.totalLate * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalLate, totalStudent))
+
                     append("%")
                 }
 
                 binding.pieChartView.aa_drawChartWithChartModel(
                     getBarChartModel(
-                        setCalculatedPercentageToInt(data.totalPresent,totalStudent.toInt()),
-                         ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt()),
-                        ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt()),
-                        ((data.totalLate * 100 / totalStudent * 100.0).roundToInt())
+                        setCalculatedPercentageToInt(data.totalPresent, totalStudent),
+                        setCalculatedPercentageToInt(data.totalLeave, totalStudent),
+                        setCalculatedPercentageToInt(data.totalAbsent, totalStudent),
+                        setCalculatedPercentageToInt(data.totalLate, totalStudent),
+
                     )
                 )
 
@@ -189,7 +188,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 
     }
 
-    private fun getBarChartModel(present: Int, leave: Int, absent: Int, late: Int) = AAChartModel()
+    private fun getBarChartModel(present: Double, leave: Double, absent: Double, late: Double) = AAChartModel()
 
         .chartType(AAChartType.Pie)
         .dataLabelsEnabled(true)
@@ -226,12 +225,14 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
     }
 
     private fun setCalculatedPercentage(day: Int, totalDay: Int): String {
-        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toString() + "%"
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toString()
     }
 
-    private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Int {
-        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00).toInt()
+    private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Double {
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00)
     }
+
+
 
 
 }
