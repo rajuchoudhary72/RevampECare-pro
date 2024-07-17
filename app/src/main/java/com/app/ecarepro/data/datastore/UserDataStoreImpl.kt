@@ -252,10 +252,9 @@ class UserDataStoreImpl @Inject constructor(
 
     override suspend fun clear() {
         GlobalScope.launch {
+            context.dataStore.edit { it.clear() }
             eCareProDatabase.userDao().nukeTable()
             eCareProDatabase.schoolDao().nukeTable()
-            context.dataStore.edit { it.clear() }
-         //   eCareProDatabase.clearAllTables()
         }
     }
 

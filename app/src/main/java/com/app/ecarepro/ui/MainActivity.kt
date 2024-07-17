@@ -1,9 +1,11 @@
 package com.app.ecarepro.ui
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -17,34 +19,29 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import android.graphics.Rect
-import android.view.MotionEvent
-
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
+import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
+import com.app.ecarepro.menuCard
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
-import com.google.android.material.snackbar.Snackbar
-import com.app.ecarepro.data.datastore.UserDataStore
 import javax.inject.Inject
 
 
@@ -310,7 +307,7 @@ class MainActivity : AppCompatActivity() {
     fun getFragmentId(menuID: Int) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
-             UType = userDataStore.getUserType()!!
+                UType = userDataStore.getUserType()!!
             }
 
             when (menuID) {
@@ -429,13 +426,13 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-                14-> {
+                14 -> {
                     try {
                         lifecycleScope.launch {
                             userDataStore.getSchoolData()?.let {
-                                if (it.assessmentMarksURL==null){
+                                if (it.assessmentMarksURL == null) {
                                     showMessage("Assessments are currently unavailable for you!")
-                                }else{
+                                } else {
                                     it.assessmentMarksURL?.let { url ->
                                         webViewCall(
                                             url,
@@ -449,13 +446,14 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-                37-> {
+
+                37 -> {
                     try {
                         lifecycleScope.launch {
                             userDataStore.getSchoolData()?.let {
-                                if (it.webSite==null){
+                                if (it.webSite == null) {
                                     showMessage("Website are currently unavailable for you!")
-                                }else{
+                                } else {
                                     it.webSite?.let { url ->
                                         webViewCall(
                                             url,
@@ -484,11 +482,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun webViewCall(url: String, title: String) {
 
-        if(url.contains("marksEntryURL")){
-            systemViewModel.getTokenKey{token ->
-                if(token.isNullOrEmpty()){
+        if (url.contains("marksEntryURL")) {
+            systemViewModel.getTokenKey { token ->
+                if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
-                }else{
+                } else {
                     val bundle = Bundle()
                     bundle.putString("title", title)
                     bundle.putString("url", "$url?token=$token")
@@ -496,7 +494,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        }else{
+        } else {
             val bundle = Bundle()
             bundle.putString("title", title)
             bundle.putString("url", url)
@@ -748,12 +746,12 @@ class MainActivity : AppCompatActivity() {
                 try {
                     systemViewModel.logout {
                         val intent = Intent(this, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         Runtime.getRuntime().exit(0)
                     }
                 } catch (e: Exception) {
-
+                    e.printStackTrace()
                 }
             }
             .setNegativeButton(getString(R.string.no)) { _, _ ->
