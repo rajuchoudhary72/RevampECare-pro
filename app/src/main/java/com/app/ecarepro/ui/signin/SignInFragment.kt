@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -19,10 +18,12 @@ import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.update
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
+import com.google.firebase.messaging.FirebaseMessaging
+import java.io.IOException
+import java.util.concurrent.ExecutionException
+
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
 
@@ -81,7 +82,30 @@ class SignInFragment : Fragment() {
                             if (arguments?.containsKey("add_account") == true) {
                                 findNavController().popBackStack()
                             } else {
-                                systemViewModel.registerDeviceToken()
+                                FirebaseMessaging.getInstance().token
+                                    .addOnCompleteListener(OnCompleteListener { task ->
+                                        if (!task.isSuccessful) {
+                                            Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                                            return@OnCompleteListener
+                                        }
+
+                                        // Get new FCM registration token
+                                        val token = task.result
+
+                                        // Log and toast
+                                        Log.d("FCM Token", token)
+                                        systemViewModel.registerDeviceToken(token)
+                                    })
+                                    .addOnFailureListener { e ->
+                                        if (e is IOException) {
+                                            Log.e("FCM Token", "Network error", e)
+                                        } else if (e is ExecutionException) {
+                                            Log.e("FCM Token", "Execution error", e)
+                                        } else {
+                                            Log.e("FCM Token", "Unknown error", e)
+                                        }
+                                    }
+
                                 findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                             }
 

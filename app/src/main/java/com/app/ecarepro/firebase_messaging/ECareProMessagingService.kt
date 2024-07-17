@@ -28,12 +28,15 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        // Handle FCM messages here.
         Firebase.messaging.token
     }
 
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        Log.d("FCM Token", "Refreshed token: $token")
+        // Send token to your server or save it locally
         registerToken(token)
 
     }
