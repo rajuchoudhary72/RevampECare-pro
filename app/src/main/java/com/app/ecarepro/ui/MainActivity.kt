@@ -312,180 +312,197 @@ class MainActivity : AppCompatActivity() {
             userDataStore.getUser()?.let {
              UType = userDataStore.getUserType()!!
             }
-        }
-        when (menuID) {
-            3 -> {
-                try {
-                    if (UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_ASSI)
-                                })
+
+            when (menuID) {
+                3 -> {
+                    try {
+                        if (UType == Constant.STAFF_TYPE) {
+                            if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                                navController.navigate(
+                                    R.id.classAndTeacherListFragment,
+                                    Bundle().apply {
+                                        putString(Constant.TO, Constant.FRA_ASSI)
+                                    })
+                            } else {
+                                navController.navigate(R.id.staffAssignmentsListFragment)
+                            }
+
                         } else {
-                            navController.navigate(R.id.staffAssignmentsListFragment)
+                            navController.navigate(R.id.assignmentNavHostFragment)
                         }
-
-                    } else {
-                        navController.navigate(R.id.assignmentNavHostFragment)
+                    } catch (e: Exception) {
                     }
-                } catch (e: Exception) {
+
                 }
 
-            }
+                4 -> {
+                    try {
+                        if (UType == Constant.STAFF_TYPE) {
+                            if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                                navController.navigate(
+                                    R.id.classAndTeacherListFragment,
+                                    Bundle().apply {
+                                        putString(Constant.TO, Constant.FRA_TIMETABLE)
+                                    })
+                            } else {
+                                navController.navigate(R.id.timeTableNavHostFragment)
+                            }
 
-            4 -> {
-                try {
-                    if (UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_TIMETABLE)
-                                })
                         } else {
-                            navController.navigate(R.id.timeTableNavHostFragment)
+                            navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                                putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
+                            })
                         }
+                    } catch (e: Exception) {
 
-                    } else {
-                        navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
-                            putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
-                        })
                     }
-                } catch (e: Exception) {
+
 
                 }
 
-
-            }
-
-            5 -> if (UType == Constant.STAFF_TYPE) {
-                navController.navigate(R.id.teacherSyllabusFragment)
-            } else {
-                navController.navigate(R.id.classSyllabus)
-            }
-
-
-            10 -> navController.navigate(R.id.calenderActivityNavHost)
-            //11 ->  navController.navigate(R.id.feeModule)
-            // 12 ->  navController.navigate(R.id.conversationReportFragment)
-            12 -> navController.navigate(R.id.bookLibraryFragment)
-            13 -> navController.navigate(R.id.EBookNavFragment)
-            16 -> navController.navigate(R.id.calenderActivityNavHost)
-
-            17 -> {
-                try {
-                    if (UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.attendanceFragment)
-                    } else {
-                        navController.navigate(R.id.showAttendanceFragment)
-                    }
-                } catch (_: Exception) {
-                }
-            }
-
-            18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
-            19 -> navController.navigate(R.id.leaveHistoryFragment)
-            20 -> navController.navigate(R.id.questionnaireListFragment)
-            21 -> navController.navigate(R.id.thoughtsListFragment)
-            22 -> navController.navigate(R.id.appointmentReportFragment)
-            24 -> {
-                if (UType == Constant.STUDENT_TYPE) {
-                    navController.navigate(R.id.infractionSelectFragment)
+                5 -> if (UType == Constant.STAFF_TYPE) {
+                    navController.navigate(R.id.teacherSyllabusFragment)
                 } else {
-                    navController.navigate(R.id.appointmentReportFragment)
+                    navController.navigate(R.id.classSyllabus)
                 }
 
-            }
 
-            25 -> navController.navigate(R.id.excellenceAwardFragment)
-            26 -> navController.navigate(R.id.selectMarkAttendanceFragment)
+                10 -> navController.navigate(R.id.calenderActivityNavHost)
+                //11 ->  navController.navigate(R.id.feeModule)
+                // 12 ->  navController.navigate(R.id.conversationReportFragment)
+                12 -> navController.navigate(R.id.bookLibraryFragment)
+                13 -> navController.navigate(R.id.EBookNavFragment)
+                16 -> navController.navigate(R.id.calenderActivityNavHost)
+
+                17 -> {
+                    try {
+                        if (UType == Constant.STAFF_TYPE) {
+                            navController.navigate(R.id.attendanceFragment)
+                        } else {
+                            navController.navigate(R.id.showAttendanceFragment)
+                        }
+                    } catch (_: Exception) {
+                    }
+                }
+
+                18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
+                19 -> navController.navigate(R.id.leaveHistoryFragment)
+                20 -> navController.navigate(R.id.questionnaireListFragment)
+                21 -> navController.navigate(R.id.thoughtsListFragment)
+                22 -> navController.navigate(R.id.appointmentReportFragment)
+                24 -> {
+                    if (UType == Constant.STUDENT_TYPE) {
+                        navController.navigate(R.id.infractionSelectFragment)
+                    } else {
+                        navController.navigate(R.id.appointmentReportFragment)
+                    }
+
+                }
+
+                25 -> navController.navigate(R.id.excellenceAwardFragment)
+                26 -> navController.navigate(R.id.selectMarkAttendanceFragment)
 
 
-            27 -> {
-                try {
-                    if (UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
-                            lifecycleScope.launch {
-                                userDataStore.getSchoolData()?.let {
-                                    it.marksEntryURL?.let { url ->
+                27 -> {
+                    try {
+                        if (UType == Constant.STAFF_TYPE) {
+                            if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
+                                lifecycleScope.launch {
+                                    userDataStore.getSchoolData()?.let {
+                                        it.marksEntryURL?.let { url ->
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.marks_entry_heading)
+                                            )
+                                        }
+                                    }
+                                }
+                            } else {
+                                navController.navigate(R.id.lessonPlanListFragment)
+                            }
+
+                        } else {
+                            navController.navigate(R.id.lessonPlanListFragment)
+                        }
+                    } catch (e: Exception) {
+                    }
+
+                }
+
+                14-> {
+                    try {
+                        lifecycleScope.launch {
+                            userDataStore.getSchoolData()?.let {
+                                if (it.assessmentMarksURL==null){
+                                    showMessage("Assessments are currently unavailable for you!")
+                                }else{
+                                    it.assessmentMarksURL?.let { url ->
                                         webViewCall(
                                             url,
-                                            getString(R.string.marks_entry_heading)
+                                            getString(R.string.assessment_headling)
                                         )
                                     }
                                 }
                             }
-                        } else {
-                            navController.navigate(R.id.lessonPlanListFragment)
                         }
-
-                    } else {
-                        navController.navigate(R.id.lessonPlanListFragment)
+                    } catch (e: Exception) {
                     }
-                } catch (e: Exception) {
+
                 }
-
-            }
-
-            14-> {
-                try {
-                    lifecycleScope.launch {
-                        userDataStore.getSchoolData()?.let {
-                            if (it.assessmentMarksURL==null){
-                                showMessage("Assessments are currently unavailable for you!")
-                            }else{
-                                it.assessmentMarksURL?.let { url ->
-                                    webViewCall(
-                                        url,
-                                        getString(R.string.assessment_headling)
-                                    )
+                37-> {
+                    try {
+                        lifecycleScope.launch {
+                            userDataStore.getSchoolData()?.let {
+                                if (it.webSite==null){
+                                    showMessage("Website are currently unavailable for you!")
+                                }else{
+                                    it.webSite?.let { url ->
+                                        webViewCall(
+                                            url,
+                                            getString(R.string.website_txt)
+                                        )
+                                    }
                                 }
                             }
                         }
+                    } catch (e: Exception) {
                     }
-                } catch (e: Exception) {
+
                 }
 
-            }
-            37-> {
-                try {
-                    lifecycleScope.launch {
-                        userDataStore.getSchoolData()?.let {
-                            if (it.webSite==null){
-                                showMessage("Website are currently unavailable for you!")
-                            }else{
-                                it.webSite?.let { url ->
-                                    webViewCall(
-                                        url,
-                                        getString(R.string.website_txt)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                }
+                28 -> navController.navigate(R.id.lessonPlanListFragment)
+                23 -> navController.navigate(R.id.taskManagerFragment)
+                30 -> navController.navigate(R.id.selectTransportTypeFragment)
+                32 -> navController.navigate(R.id.studentIDFragment)
+                33 -> navController.navigate(R.id.surveyListFragment)
+                35 -> navController.navigate(R.id.busLocationFragment)
+                51 -> navController.navigate(R.id.excellenceAwardFragment)
 
             }
-
-            28 -> navController.navigate(R.id.lessonPlanListFragment)
-            23 -> navController.navigate(R.id.taskManagerFragment)
-            30 -> navController.navigate(R.id.selectTransportTypeFragment)
-            32 -> navController.navigate(R.id.studentIDFragment)
-            33 -> navController.navigate(R.id.surveyListFragment)
-            35 -> navController.navigate(R.id.busLocationFragment)
-            51 -> navController.navigate(R.id.excellenceAwardFragment)
-
         }
     }
 
     private fun webViewCall(url: String, title: String) {
-        val bundle = Bundle()
-        bundle.putString("title", title)
-        bundle.putString("url", url)
-        navController.navigate(R.id.webViewFragment, bundle)
+
+        if(url.contains("marksEntryURL")){
+            systemViewModel.getTokenKey{token ->
+                if(token.isNullOrEmpty()){
+                    showMessage("Something went wrong")
+                }else{
+                    val bundle = Bundle()
+                    bundle.putString("title", title)
+                    bundle.putString("url", "$url?token=$token")
+                    navController.navigate(R.id.webViewFragment, bundle)
+                }
+            }
+
+        }else{
+            val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("url", url)
+            navController.navigate(R.id.webViewFragment, bundle)
+        }
+
     }
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {
