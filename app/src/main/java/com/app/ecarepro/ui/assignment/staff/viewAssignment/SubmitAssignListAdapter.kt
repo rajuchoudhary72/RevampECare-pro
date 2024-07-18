@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 
@@ -41,19 +42,21 @@ class SubmitAssignListAdapter(
 
         }
 
+        if (data.asgFile==null){
+            bindingm.llView.isVisible=false
+            bindingm.llDownload.isVisible=false
+        }else{
+            bindingm.llView.isVisible=true
+            bindingm.llDownload.isVisible=true
+        }
+
         bindingm.llView.setOnClickListener {
             viewAssignmentFragment.onItemClick(data,1,false)
         }
         bindingm.llDownload.setOnClickListener {
             viewAssignmentFragment.onItemClick(data,2,false)
         }
-
-
-
-
-
-
-     }
+  }
 
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {

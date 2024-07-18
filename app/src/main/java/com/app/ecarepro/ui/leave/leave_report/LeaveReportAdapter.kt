@@ -1,17 +1,12 @@
 package com.app.ecarepro.ui.leave.leave_report
 
-import android.app.AlertDialog
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LeaveReportListItemBinding
-import com.app.ecarepro.databinding.StaffLeaveListItemBinding
 import com.app.ecarepro.model.Dtl
-import com.app.ecarepro.model.LessonPlan
 
 class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                          private var leaveReportFragment: LeaveReportFragment
@@ -19,6 +14,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
     RecyclerView.Adapter<LeaveReportAdapter.LeaveHistoryViewHolder>() {
 
         private lateinit var binding:   LeaveReportListItemBinding
+        private var canTalkeAction = false
 
 
 
@@ -51,7 +47,11 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
             llFile.setOnClickListener {
                 leaveReportFragment.onItemClick(data,0,false)
             }
-            llApproveRej.isVisible=data.status=="Pending"
+
+            if (canTalkeAction){
+                llApproveRej.isVisible=data.status=="Pending"
+            }
+
 
 
 
@@ -64,9 +64,12 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
    }
 
-    fun setData(leaveList:   MutableList<Dtl>){
+    fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean){
+        this.canTalkeAction=canTalkeAction
         this. leaveList.addAll(leaveList)
+
         notifyDataSetChanged()
+
     }
     fun clearData(){
         leaveList.clear()

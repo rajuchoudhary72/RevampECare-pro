@@ -6,49 +6,57 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
+import android.widget.ArrayAdapter
 import android.widget.RadioGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentListBinding
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class StudentListFragment : Fragment() , ItemListener<Student> {
+class StudentListFragment : Fragment(), ItemListener<Student> {
 
-    private   var studentList: List<Student>? = null
+    private var filterPos: Int=0
+    private var studentList: List<Student>? = null
     private lateinit var studentListFilter: List<Student>
-    private var toFragment: String= ""
-    private lateinit var binding : FragmentStudentListBinding
+    private var toFragment: String = ""
+    private lateinit var binding: FragmentStudentListBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
+    private var schoolType = 2
+
+    private val filterList= listOf<String>("Name","Admission Number","Class","Father Name","Contact Number", )
+
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding= FragmentStudentListBinding.inflate(inflater,container,false).apply {
+    ): View {
+        binding = FragmentStudentListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = studentListViewModel
         }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-           try {
-               toFragment= requireArguments().getString(Constant.TO).toString()
-           }catch (_:Exception){}
-         return binding.root
+        try {
+            toFragment = requireArguments().getString(Constant.TO).toString()
+        } catch (_: Exception) {
+        }
+        return binding.root
     }
 
 
@@ -59,12 +67,22 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
                     R.id.rb_all -> {
+                        schoolType = 2
+                        studentListViewModel.getStudentList(schoolType, false)
 
-                           }
+                    }
+
                     R.id.rb_boarding -> {
-                          }
+                        schoolType = 1
+                        studentListViewModel.getStudentList(schoolType, false)
+
+                    }
+
                     R.id.rb_day_scolar -> {
-                          }
+                        schoolType = 0
+                        studentListViewModel.getStudentList(schoolType, false)
+
+                    }
 
                 }
             })
@@ -72,10 +90,31 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
         lifecycleScope.launch {
             studentListViewModel.searchQuery.collectLatest {
 
-                if (it.isNotEmpty() && studentList!=null){
-                    studentListFilter = studentList!!.filter { s -> s .name.lowercase().contains(it.lowercase())   }
-                    setupRecycleViewStudentList(studentListFilter)
-                }else{
+                if (it.isNotEmpty() && studentList != null) {
+                    when (filterPos){
+                        0 -> {
+                            studentListFilter =  studentList!!.filter { s -> s.name.lowercase().contains(it.lowercase()) }
+
+                        }
+                        1 -> {
+                            studentListFilter =  studentList!!.filter { s -> s.admissionNumber.lowercase().contains(it.lowercase()) }
+
+                        }
+                        2 -> {
+                            studentListFilter =  studentList!!.filter { s -> s.`class`.lowercase().contains(it.lowercase()) }
+
+                        }
+                        3 -> {
+                            studentListFilter =  studentList!!.filter { s -> s.fatherName.lowercase().contains(it.lowercase()) }
+
+                        }
+                        4 -> {
+                            studentListFilter =  studentList!!.filter { s -> s.contactMob.lowercase().contains(it.lowercase()) }
+
+                        }
+                    }
+                     setupRecycleViewStudentList(studentListFilter)
+                } else {
                     studentList?.let { it1 -> setupRecycleViewStudentList(it1) }
                 }
 
@@ -102,10 +141,10 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.rvStudentList.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            setupRecycleViewStudentList(it.data.students )
-
+                            studentList = it.data.students
+                            setupRecycleViewStudentList(it.data.students)
 
 
                         }
@@ -121,30 +160,34 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
 
         }
 
-        studentListViewModel.getStudentList(2,false)
+
+        studentListViewModel.getStudentList(schoolType, false)
+        checkIsBoarding()
+        buildSearchFilter(filterList)
+
 
     }
 
 
     private fun setupRecycleViewStudentList(students: List<Student>) {
-        if (  students.isNotEmpty()){
-            binding.rvStudentList.isVisible=true
-            binding.tvNoData.isVisible=false
+        if (students.isNotEmpty()) {
+            binding.rvStudentList.isVisible = true
+            binding.tvNoData.isVisible = false
 
-            studentList=  students
+
 
             val circularAdapter = StudentListAdapter(
-                  students,
+                students,
                 this@StudentListFragment
             )
             binding.rvStudentList.apply {
                 setHasFixedSize(true)
-                layoutManager = GridLayoutManager(activity,2)
+                layoutManager = GridLayoutManager(activity, 2)
                 adapter = circularAdapter
             }
-        }else{
-            binding.rvStudentList.isVisible=false
-            binding.tvNoData.isVisible=true
+        } else {
+            binding.rvStudentList.isVisible = false
+            binding.tvNoData.isVisible = true
         }
     }
 
@@ -153,31 +196,80 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
 
         when (toFragment) {
             Constant.FRA_ADD_APPRE -> {
-                findNavController().navigate(R.id.action_studentListFragment2_to_addAppreciationFragment,Bundle( ).apply {
-                    putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
-                })
+                findNavController().navigate(
+                    R.id.action_studentListFragment2_to_addAppreciationFragment,
+                    Bundle().apply {
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                    })
             }
+
             Constant.FRA_VIEW_APPRE -> {
-                findNavController().navigate(R.id.action_studentListFragment2_to_appreciationListFragment,Bundle( ).apply {
-                    putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
-                })
+                findNavController().navigate(
+                    R.id.action_studentListFragment2_to_appreciationListFragment,
+                    Bundle().apply {
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                    })
             }
+
             Constant.FRA_ADD_INFE -> {
-                findNavController().navigate(R.id.action_studentListFragment2_to_addInfractionFragment,Bundle( ).apply {
-                    putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
-                })
+                findNavController().navigate(
+                    R.id.action_studentListFragment2_to_addInfractionFragment,
+                    Bundle().apply {
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                    })
             }
+
             Constant.FRA_VIEW_INFE -> {
-                findNavController().navigate(R.id.action_studentListFragment2_to_infractionListFragment,Bundle( ).apply {
-                    putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
-                })
+                findNavController().navigate(
+                    R.id.action_studentListFragment2_to_infractionListFragment,
+                    Bundle().apply {
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                    })
             }
+
             Constant.PROFILE_FRA_STU -> {
-                findNavController().navigate(R.id.action_studentListFragment2_to_studentProfileNavHostFragment,Bundle( ).apply {
-                    putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
-                })
+                findNavController().navigate(
+                    R.id.action_studentListFragment2_to_studentProfileNavHostFragment,
+                    Bundle().apply {
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                    })
             }
         }
 
     }
+
+    private fun checkIsBoarding(){
+        (requireActivity() as MainActivity).showLoader(true)
+        lifecycleScope.launch {
+            userDataStore.getSchoolData()?.let {
+                it.schoolCode.let { schoolCode ->
+                    studentListViewModel.validateSchoolCode(schoolCode ) { it1 ->
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it1?.errorCode == 0) {
+                            binding.rbGroupSchoolType.isVisible= it1.isBoardingSchool!!
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+    }
+
+
+    private fun buildSearchFilter(filterList: List<String>) {
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            filterList)
+        binding.taskList.setAdapter(adapter)
+
+        binding.taskList.setOnItemClickListener { _, _, position, _ ->
+            filterPos =position
+         }
+    }
+
+
+
 }

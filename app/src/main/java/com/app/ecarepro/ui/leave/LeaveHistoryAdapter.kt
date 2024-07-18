@@ -3,9 +3,11 @@ package com.app.ecarepro.ui.leave
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffLeaveListItemBinding
+import com.app.ecarepro.databinding.StudentsLeaveListItemBinding
 import com.app.ecarepro.model.Dtl
 
 class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
@@ -13,12 +15,12 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
 ) :
     RecyclerView.Adapter<LeaveHistoryAdapter.LeaveHistoryViewHolder>() {
 
-        private lateinit var binding:   StaffLeaveListItemBinding
+        private lateinit var binding:   StudentsLeaveListItemBinding
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaveHistoryViewHolder {
-        binding=StaffLeaveListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        binding=StudentsLeaveListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return LeaveHistoryViewHolder(binding )
     }
 
@@ -54,7 +56,7 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
 
 
 
-   inner class LeaveHistoryViewHolder(val binding: StaffLeaveListItemBinding) : RecyclerView.ViewHolder(binding.root){
+   inner class LeaveHistoryViewHolder(val binding: StudentsLeaveListItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(data: Dtl) {
 
 
@@ -89,9 +91,15 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
                 append(data.actionOn)
 
             }
-            binding.relViewAttac.setOnClickListener {
-                leaveHistoryFragment.onItemClick(data,2,false)
+            if (data.attachment!=null && data.attachment.isNotEmpty()){
+                binding.relViewAttac.isVisible=true
+                binding.relViewAttac.setOnClickListener {
+                    leaveHistoryFragment.onItemClick(data,2,false)
+                }
+            }else{
+                binding.relViewAttac.isVisible=false
             }
+
 
 
 
