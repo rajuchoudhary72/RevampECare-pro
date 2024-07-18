@@ -2,7 +2,7 @@
     <string name="action_settings">Settings</string>
     <!--School/College Code-->
     <string name="help">Help</string>
-    <string name="please_enter_school_college_code">Please Enter School/College Code</string>
+    <string name="please_enter_school_college_code">Please Enter School Code</string>
     <string name="find_your_school_college_code"><u>Fine Your School Code</u></string>
     <string name="continue_">Continue</string>
     <string name="search_your_school_college">Search Your School/College</string>

@@ -101,7 +101,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
                                 when (position) {
                                     0 -> {
-                                        tab.text = "Full Profile"
+                                        tab.text = "Personal Profile"
                                     }
 
                                     1 -> {
