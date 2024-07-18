@@ -38,19 +38,6 @@
                 tools:ignore="ContentDescription" />
 
 
-            <TextView
-                android:id="@+id/title"
-                topWindowInsetToMargin="@{true}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/ubuntu_medium"
-                android:text="Enter School/College Code"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textColor="?attr/colorOnPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
 
             <com.google.android.material.button.MaterialButton
@@ -71,13 +58,25 @@
                 android:id="@+id/img_ecare_logo"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ecare_logo_with_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/guideline"
                 tools:ignore="ContentDescription" />
 
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="Enter School Code"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="?attr/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_ecare_logo"  />
 
             <com.mukeshsolanki.OtpView
                 android:id="@+id/text_institution_code"
@@ -97,7 +96,7 @@
                 app:OtpViewType="none"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_ecare_logo" />
+                app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
             <com.google.android.material.button.MaterialButton

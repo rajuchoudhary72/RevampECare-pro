@@ -547,7 +547,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        if(url.contains("MarksManager")){
+        if(title.contains("Mark")){
             systemViewModel.getTokenKey{token ->
                 if(token.isNullOrEmpty()){
                     showMessage("Something went wrong")
