@@ -605,4 +605,5 @@
     <string name="speed">Speed:</string>
     <string name="no_bus_found">No Bus Found</string>
     <string name="bus_location">Bus Location</string>
+    <string name="select_search_filter">Select Search Filter</string>
 </resources>

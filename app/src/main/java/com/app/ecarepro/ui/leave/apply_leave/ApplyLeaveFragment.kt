@@ -70,6 +70,8 @@ class ApplyLeaveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvStartDate.text=Constant.currentDate()
+        binding.tvEndDate.text=Constant.currentDate()
 
 
         binding.llStartDate.setOnClickListener {

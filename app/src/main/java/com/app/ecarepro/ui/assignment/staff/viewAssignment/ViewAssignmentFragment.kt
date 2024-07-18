@@ -215,7 +215,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 openFile(t.asgFile)
             }
             2 -> {
-                downloadFile(t.asgFile)
+
+                if (t.asgFile!=null){
+                    downloadFile(t.asgFile)
+                }
             }
             3 -> {
                 dateSelctedPoPUp(t)

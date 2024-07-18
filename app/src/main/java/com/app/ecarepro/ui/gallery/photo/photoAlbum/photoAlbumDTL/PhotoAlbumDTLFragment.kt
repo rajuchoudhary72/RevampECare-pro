@@ -1,6 +1,9 @@
 package com.app.ecarepro.ui.gallery.photo.photoAlbum.photoAlbumDTL
 
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.Html.fromHtml
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -96,6 +99,13 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                 isLoading = true
 
                                 binding.tvHeading.text = it.data.title
+
+                                binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                    fromHtml(it.data.description, Html.FROM_HTML_MODE_COMPACT)
+                                } else {
+                                    fromHtml(it.data.description)
+                                }
+
                                 binding.tvDes.text = it.data.description
                                 binding.tvDatePhoto.text =
                                     it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
