@@ -1,11 +1,9 @@
 package com.app.ecarepro.ui
 
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -19,29 +17,48 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import android.graphics.Rect
+import android.net.wifi.WifiManager
+import android.os.Build
+import android.provider.Settings
+import android.telephony.TelephonyManager
+import android.util.Log
+import android.view.MotionEvent
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
-import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
-import com.app.ecarepro.menuCard
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.drawerChildChildItem
+import com.app.ecarepro.menuCard
+import com.app.ecarepro.drawerChildChildItem
+import com.app.ecarepro.menuCard
+import com.google.android.material.snackbar.Snackbar
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.repository.AppRepository
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.GlobalScope
+import java.io.IOException
+import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 
 
@@ -53,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userData: NetworkUserDetailsDto
 
 
+    @Inject
+    lateinit var appRepository: AppRepository
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
@@ -113,8 +132,54 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
 
+                // Get new FCM registration token
+                val token = task.result
+
+                // Log and toast
+                Log.d("FCM Token", token)
+                registerToken(token)
+             //   Toast.makeText(baseContext, token, Toast.LENGTH_SHORT).show()
+            })
+            .addOnFailureListener { e ->
+                if (e is IOException) {
+                    Log.e("FCM Token", "Network error", e)
+                } else if (e is ExecutionException) {
+                    Log.e("FCM Token", "Execution error", e)
+                } else {
+                    Log.e("FCM Token", "Unknown error", e)
+                }
+            }
+    }
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    private fun registerToken(token: String) {
+        GlobalScope.launch {
+            val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
+            val wInfo = wifiManager.connectionInfo
+            val macAddress = wInfo.macAddress
+            appRepository
+                .registerDevice(
+                    RegisterDevice(
+                        fcmToken = token,
+                        osVersion = "OS " + Build.VERSION.SDK_INT,
+                        deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
+                        deviceType = 1,
+                        imeI1 =macAddress,
+                        imeI2 = macAddress,
+                        deviceID = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                    )
+                )
+                .collectLatest {
+                    println(it)
+                }
+        }
+    }
 
     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
@@ -307,9 +372,8 @@ class MainActivity : AppCompatActivity() {
     fun getFragmentId(menuID: Int) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
-                UType = userDataStore.getUserType()!!
+             UType = userDataStore.getUserType()!!
             }
-
             when (menuID) {
                 3 -> {
                     try {
@@ -415,10 +479,12 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             } else {
+                                Toast.makeText(baseContext, "internal page", Toast.LENGTH_SHORT).show()
                                 navController.navigate(R.id.lessonPlanListFragment)
                             }
 
                         } else {
+                            Toast.makeText(baseContext, "external page", Toast.LENGTH_SHORT).show()
                             navController.navigate(R.id.lessonPlanListFragment)
                         }
                     } catch (e: Exception) {
@@ -426,13 +492,13 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-                14 -> {
+                14-> {
                     try {
                         lifecycleScope.launch {
                             userDataStore.getSchoolData()?.let {
-                                if (it.assessmentMarksURL == null) {
+                                if (it.assessmentMarksURL==null){
                                     showMessage("Assessments are currently unavailable for you!")
-                                } else {
+                                }else{
                                     it.assessmentMarksURL?.let { url ->
                                         webViewCall(
                                             url,
@@ -446,14 +512,13 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-
-                37 -> {
+                37-> {
                     try {
                         lifecycleScope.launch {
                             userDataStore.getSchoolData()?.let {
-                                if (it.webSite == null) {
+                                if (it.webSite==null){
                                     showMessage("Website are currently unavailable for you!")
-                                } else {
+                                }else{
                                     it.webSite?.let { url ->
                                         webViewCall(
                                             url,
@@ -478,15 +543,15 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
     }
 
     private fun webViewCall(url: String, title: String) {
-
-        if (url.contains("marksEntryURL")) {
-            systemViewModel.getTokenKey { token ->
-                if (token.isNullOrEmpty()) {
+        if(url.contains("MarksManager")){
+            systemViewModel.getTokenKey{token ->
+                if(token.isNullOrEmpty()){
                     showMessage("Something went wrong")
-                } else {
+                }else{
                     val bundle = Bundle()
                     bundle.putString("title", title)
                     bundle.putString("url", "$url?token=$token")
@@ -494,13 +559,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        } else {
+        }else{
             val bundle = Bundle()
             bundle.putString("title", title)
             bundle.putString("url", url)
             navController.navigate(R.id.webViewFragment, bundle)
         }
-
     }
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {

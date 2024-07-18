@@ -232,12 +232,13 @@
                         android:id="@+id/attachmentImage"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
-                        android:layout_margin="5dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="5dp"
                         android:ellipsize="end"
-                        android:fontFamily="@font/ubuntu_medium"
-                         android:layout_marginStart="10dp"
-                         />
+                        android:fontFamily="@font/ubuntu_medium" />
 
                     <ImageView
                         android:id="@+id/image_view_cancel"

@@ -1,34 +1,35 @@
 package com.app.ecarepro.ui
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.UserInfo
+import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import android.app.Application.WIFI_SERVICE
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings.Secure
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.RegisterDevice
-import com.app.ecarepro.data.network.model.UserInfo
-import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
-import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
@@ -36,6 +37,7 @@ class SystemViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository
+
 ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
@@ -107,10 +109,8 @@ class SystemViewModel @Inject constructor(
             refresh.emit(true)
         }
     }
-
-    fun registerDeviceToken() {
-        Firebase.messaging.token.addOnSuccessListener { token ->
-            viewModelScope.launch {
+    fun registerDeviceToken(token: String) {
+        GlobalScope.launch {
                 val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
                 val wInfo = wifiManager.connectionInfo
                 val macAddress = wInfo.macAddress
@@ -130,11 +130,8 @@ class SystemViewModel @Inject constructor(
                         println(it)
                     }
             }
-        }.addOnFailureListener {
-            Log.e("Failed to get token", it.message.toString())
-        }
-    }
 
+    }
     fun getTokenKey(function: (String?) -> Unit) {
         viewModelScope.launch {
             try {
