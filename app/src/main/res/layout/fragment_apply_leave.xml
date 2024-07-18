@@ -173,7 +173,7 @@
                 android:layout_marginHorizontal="13dp"
                 android:background="@drawable/circle_calender"
                 android:gravity="center"
-                android:text="@string/_02"
+                android:text="1"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:fontFamily="@font/ubuntu_light" />

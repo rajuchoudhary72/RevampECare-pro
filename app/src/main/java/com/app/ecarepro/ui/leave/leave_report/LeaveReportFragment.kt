@@ -14,21 +14,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.FragmentLeaveReportBinding
 import com.app.ecarepro.model.Dtl
-import com.app.ecarepro.model.LessonPlan
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.lessonPlan.LessonPlanListAdapter
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
@@ -136,7 +131,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                             binding.tvNoData.isVisible = false
 
 
-                            leaveReportAdapter.setData(it.data.dtl.toMutableList())
+                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction)
 
                         }else{
                             binding.recyclerLeaveReport.isVisible = false
