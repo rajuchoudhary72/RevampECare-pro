@@ -95,9 +95,7 @@ class InstitutionCodeFragment : Fragment() {
                         navigateToSignFragment(it.schoolCode)
                     }
                 } else {
-                    if (it != null) {
-                        mainActivity().showMessage(it.message.toString())
-                    }
+                    mainActivity().showMessage("Please enter a valid school code.")
                 }
             }
         }

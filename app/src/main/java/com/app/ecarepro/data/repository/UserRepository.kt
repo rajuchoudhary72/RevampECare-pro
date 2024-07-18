@@ -128,6 +128,9 @@ interface UserRepository {
         password: String
     ): LoginResponseDto
 
+
+    suspend fun logout(): Flow<Result<Boolean>>
+
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
     ): Flow<Result<CommonResponse>>

@@ -57,6 +57,10 @@ class SignInFragment : Fragment() {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
 
+        binding.btnHelp.setOnClickListener {
+            findNavController().navigate(R.id.helpFragment)
+        }
+
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
                 R.id.schoolCodeFragment,
@@ -135,7 +139,7 @@ class SignInFragment : Fragment() {
             }
         }
         binding.btnForgotPassword.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
+            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
         }
         binding.btnPrevious.setOnClickListener {
             if (userNameValid) {

@@ -1,5 +1,7 @@
 package com.app.ecarepro.data
 
+import android.content.Context
+import android.provider.Settings.Secure
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
@@ -129,7 +131,10 @@ import com.app.ecarepro.ui.survey.SurveyListResponse
 import javax.inject.Inject
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import dagger.hilt.android.qualifiers.ApplicationContext
+
 class UserRepositoryImpl @Inject constructor(
+    @ApplicationContext val context: Context,
     private val userService: UserService,
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository
@@ -179,6 +184,21 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.saveUserNameID(userName ?: "")
             }
 
+        }
+    }
+
+    override suspend fun logout(): Flow<Result<Boolean>> {
+        return flow {
+            try {
+                val response = userService.logout(deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID))
+                if (response.errorCode == 0) {
+                    emit(Result.success(true))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
         }
     }
 

@@ -30,6 +30,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
+import com.app.ecarepro.emptyFav
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
@@ -275,73 +276,83 @@ class HomeFragment : Fragment() {
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
 
-                uiState.favourites.forEach { favouriteSlider: Menu ->
-                    cardOption {
-                        id(favouriteSlider.title)
-                        data(favouriteSlider)
-                        clickListener { _ ->
-                            if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    favouriteSlider.menuID,
-                                    favouriteSlider.chMenuID,
-                                    favouriteSlider.sbChMenuID
-                                )
-                            } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    favouriteSlider.menuID,
-                                    favouriteSlider.chMenuID
-                                )
-                            } else if (favouriteSlider.menuID > 0) {
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    favouriteSlider.menuID
-                                )
-                            } else {
-                                if (favouriteSlider.title!!.contains(
-                                        getString(R.string.assessment),
-                                        true
+                if(uiState.favourites.isEmpty()){
+                    emptyFav {
+                        id("fave")
+                        spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                    }
+                }else{
+                    uiState.favourites.forEach { favouriteSlider: Menu ->
+                        cardOption {
+                            id(favouriteSlider.title)
+                            data(favouriteSlider)
+                            clickListener { _ ->
+                                if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID,
+                                        favouriteSlider.sbChMenuID
                                     )
-                                ) {
-                                    schoolData?.let {
-                                        it.assessmentMarksURL?.let { url ->
-                                            webViewCall(
-                                                url,
-                                                getString(R.string.assessment_headling)
-                                            )
-                                        }
-                                    }
-                                } else if (favouriteSlider.title.contains(
-                                        getString(R.string.marks_manager),
-                                        true
+                                } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID
                                     )
-                                ) {
-                                    schoolData?.let {
-                                        it.marksEntryURL?.let { url ->
-                                            webViewCall(
-                                                url,
-                                                getString(R.string.marks_entry_heading)
-                                            )
-                                        }
-                                    }
-                                } else if (favouriteSlider.title.contains(
-                                        getString(R.string.website),
-                                        true
-                                    )
-                                ) {
-                                    schoolData?.let {
-                                        it.webSite?.let { url ->
-                                            webViewCall(url, getString(R.string.website_txt))
-                                        }
-                                    }
-                                } else {
+                                } else if (favouriteSlider.menuID > 0) {
                                     (requireActivity() as MainActivity).getFragmentId(
                                         favouriteSlider.menuID
                                     )
-                                }
+                                } else {
+                                    if (favouriteSlider.title!!.contains(
+                                            getString(R.string.assessment),
+                                            true
+                                        )
+                                    ) {
+                                        schoolData?.let {
+                                            it.assessmentMarksURL?.let { url ->
+                                                webViewCall(
+                                                    url,
+                                                    getString(R.string.assessment_headling)
+                                                )
+                                            }
+                                        }
+                                    } else if (favouriteSlider.title.contains(
+                                            getString(R.string.marks_manager),
+                                            true
+                                        )
+                                    ) {
+                                        schoolData?.let {
+                                            it.marksEntryURL?.let { url ->
+                                                webViewCall(
+                                                    url,
+                                                    getString(R.string.marks_entry_heading)
+                                                )
+                                            }
+                                        }
+                                    } else if (favouriteSlider.title.contains(
+                                            getString(R.string.website),
+                                            true
+                                        )
+                                    ) {
+                                        schoolData?.let {
+                                            it.webSite?.let { url ->
+                                                webViewCall(url, getString(R.string.website_txt))
+                                            }
+                                        }
+                                    } else {
+                                        (requireActivity() as MainActivity).getFragmentId(
+                                            favouriteSlider.menuID
+                                        )
+                                    }
 
+                                }
                             }
                         }
                     }
                 }
+
+
+
                 addMoreFavourites {
                     id("add more")
                     clickListener { _ ->

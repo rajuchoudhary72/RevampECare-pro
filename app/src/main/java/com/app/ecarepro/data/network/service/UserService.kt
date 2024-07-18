@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.network.service
 
+import android.provider.Settings.Secure
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
@@ -138,6 +139,12 @@ interface UserService {
     suspend fun login(
         @Body request: UserLoginRequestDto,
     ): LoginResponseDto
+
+    @GET("User/LogOut")
+    suspend fun logout(
+        @Query("DeviceType") deviceType: Int = 1,
+        @Query("deviceID") deviceID: String ,
+    ): CommonResponse
 
 
     @GET("Academic/ClassSyllabus")
