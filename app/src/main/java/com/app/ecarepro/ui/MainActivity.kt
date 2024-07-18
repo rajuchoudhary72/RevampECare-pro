@@ -547,11 +547,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        val bundle = Bundle()
+        if(url.contains("MarksManager")){
+            systemViewModel.getTokenKey{token ->
+                if(token.isNullOrEmpty()){
+                    showMessage("Something went wrong")
+                }else{
+                    val bundle = Bundle()
+                    bundle.putString("title", title)
+                    bundle.putString("url", "$url?token=$token")
+                    navController.navigate(R.id.webViewFragment, bundle)
+                }
+            }
 
-        bundle.putString("title", title)
-        bundle.putString("url", url)
-        navController.navigate(R.id.webViewFragment, bundle)
+        }else{
+            val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("url", url)
+            navController.navigate(R.id.webViewFragment, bundle)
+        }
     }
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {
@@ -797,12 +810,12 @@ class MainActivity : AppCompatActivity() {
                 try {
                     systemViewModel.logout {
                         val intent = Intent(this, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)
                         Runtime.getRuntime().exit(0)
                     }
                 } catch (e: Exception) {
-
+                    e.printStackTrace()
                 }
             }
             .setNegativeButton(getString(R.string.no)) { _, _ ->

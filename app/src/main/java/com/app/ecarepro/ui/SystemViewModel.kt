@@ -23,6 +23,8 @@ import android.os.Build
 import android.provider.Settings.Secure
 import android.util.Log
 import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.utils.Constant
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -34,6 +36,8 @@ class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
+    private val userRepository: UserRepository
+
 ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
@@ -127,6 +131,18 @@ class SystemViewModel @Inject constructor(
                     }
             }
 
+    }
+    fun getTokenKey(function: (String?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                function(
+                    userRepository
+                        .getGenerateToken(Constant.DEVICE_TYPE).tokenKey
+                )
+            } catch (e: Exception) {
+                function(null)
+            }
+        }
     }
 }
 
