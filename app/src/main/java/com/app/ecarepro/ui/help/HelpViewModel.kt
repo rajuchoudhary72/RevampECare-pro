@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.help
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.app.ecarepro.data.database.databases.SchoolDatabase
@@ -12,7 +13,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HelpViewModel @Inject constructor(
-    private val schoolDatabase: SchoolDatabase
+    private val  schoolDatabase: SchoolDatabase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    val school = schoolDatabase.getSchoolsFlow().map { it.lastOrNull() }.asLiveData()
+    val schoolCode = savedStateHandle.get<String>("schoolCode")
+        ?: throw IllegalArgumentException("School code required")
+    val school = schoolDatabase.getSchoolFlow(schoolCode).asLiveData()
 }

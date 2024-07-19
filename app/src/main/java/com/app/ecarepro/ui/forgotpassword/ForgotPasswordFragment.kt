@@ -88,7 +88,11 @@ class ForgotPasswordFragment : Fragment() {
                 ) {
                     (requireActivity() as MainActivity).showLoader(false)
 
-                    mainActivity().showMessage(it.message ?: "")
+                    if (it.errorCode == 404) {
+                        mainActivity().showMessage("Invalid credentials so please check again")
+                    } else {
+                        mainActivity().showMessage(it.message ?: "")
+                    }
 
                     if (it.errorCode == 0) {
                         findNavController().popBackStack()
