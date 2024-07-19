@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.app.ecarepro.ui.help.HelpViewModel" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -54,6 +58,7 @@
                 android:id="@+id/img_institute_logo"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                imageUrl="@{viewModel.school.logo}"
                 android:layout_marginTop="30dp"
                 android:src="@drawable/img_school_placeholder"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +74,8 @@
                 android:layout_marginTop="@dimen/horizontal_margin"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center"
-                android:text="Jain Girls Secondary School"
+                android:text="@{viewModel.school.schoolName}"
+                tools:text="Jain Girls Secondary School"
                 android:textAppearance="?attr/textAppearanceTitleLarge"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +88,8 @@
                 android:layout_marginHorizontal="40dp"
                 android:fontFamily="@font/ubuntu_regular"
                 android:gravity="center"
-                android:text="Noida, UP"
+                tools:text="Noida, UP"
+                android:text="@{viewModel.school.schAdd1}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +120,8 @@
                 android:fontFamily="@font/ubuntu_regular"
                 android:gravity="center"
                 android:autoLink="phone"
-                android:text="+91 9778768831"
+                android:text="@{viewModel.school.supportPhone}"
+                tools:text="+91 9778768831"
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 android:textColor="?attr/colorPrimary"
                 app:layout_constraintBaseline_toBaselineOf="@+id/label_contact_number"
@@ -144,7 +152,8 @@
                 android:fontFamily="@font/ubuntu_regular"
                 android:gravity="center"
                 android:autoLink="email"
-                android:text="test@gmail.com"
+                tools:text="test@gmail.com"
+                android:text="@{viewModel.school.contactEmail}"
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 app:layout_constraintBaseline_toBaselineOf="@+id/label_email"
                 app:layout_constraintStart_toStartOf="@+id/text_contact_number" />

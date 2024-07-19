@@ -93,13 +93,19 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun logout(onDataClear: () -> Unit) {
+
+    fun logout(onDataClear: (Boolean) -> Unit) {
         viewModelScope.launch {
-            try {
-                userDataStore.clear()
-                onDataClear()
-            } catch (e: Exception) {
-                e.toString()
+            userRepository.logout().collectLatest { result ->
+                if (result.isSuccess) {
+                    try {
+                        userDataStore.clear()
+                        onDataClear(true)
+                    } catch (e: Exception) {
+                        e.toString()
+                        onDataClear(false)
+                    }
+                }
             }
         }
     }

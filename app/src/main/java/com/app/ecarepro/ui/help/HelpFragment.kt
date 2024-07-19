@@ -23,7 +23,10 @@ class HelpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHelpBinding.inflate(inflater, container, false)
+        _binding = FragmentHelpBinding.inflate(inflater, container, false).apply {
+            viewModel = mViewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
         return binding.root
 
     }
@@ -35,8 +38,8 @@ class HelpFragment : Fragment() {
 
         binding.btnFaq.setOnClickListener {
             val bundle = Bundle()
-            bundle.putString("title", "Help")
-            bundle.putString("url", "https://www.franciscansolutions.com/faq-v2.aspx")
+            bundle.putString("title", "F&Q")
+            bundle.putString("url", "https://www.franciscansolutions.com/Default.aspx#faqBox    ")
             findNavController().navigate(R.id.webViewFragment,bundle)
         }
 

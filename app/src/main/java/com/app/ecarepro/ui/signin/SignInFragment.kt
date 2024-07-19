@@ -56,7 +56,9 @@ class SignInFragment : Fragment() {
         binding.textPassword.doAfterTextChanged {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
-
+        binding.btnHelp.setOnClickListener {
+            findNavController().navigate(R.id.helpFragment)
+        }
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
                 R.id.schoolCodeFragment,
@@ -78,7 +80,6 @@ class SignInFragment : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
-                            mainActivity().showMessage("You are Successfully  login... ")
                             if (arguments?.containsKey("add_account") == true) {
                                 findNavController().popBackStack()
                             } else {
@@ -115,7 +116,7 @@ class SignInFragment : Fragment() {
                         }
 
                     }else    if (it.errorCode == 401) {
-                        mainActivity().showMessage(" " + it.message)
+                        mainActivity().showMessage("Invalid password")
                     }
 
                     Log.i("Token Aut", it.authToken.toString())
@@ -129,13 +130,14 @@ class SignInFragment : Fragment() {
                         binding.textInputLayoutUserName.isEnabled = false
                         binding.textUserName.isEnabled = false
                         binding.textUserName.isClickable = false
+                    }else{
+                        mainActivity().showMessage("Invalid username")
                     }
-                    mainActivity().showMessage(it.message?:"")
                 }
             }
         }
         binding.btnForgotPassword.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
+            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
         }
         binding.btnPrevious.setOnClickListener {
             if (userNameValid) {

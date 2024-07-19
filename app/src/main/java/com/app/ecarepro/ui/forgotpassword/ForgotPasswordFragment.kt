@@ -7,8 +7,6 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -46,9 +44,11 @@ class ForgotPasswordFragment : Fragment() {
                 R.id.btn_parent -> {
                     2
                 }
+
                 R.id.btn_staff -> {
                     3
                 }
+
                 else -> {
                     1
                 }
@@ -62,6 +62,7 @@ class ForgotPasswordFragment : Fragment() {
                     binding.textFiled.inputType = InputType.TYPE_CLASS_PHONE
                     "mob"
                 }
+
                 else -> {
                     binding.tilTextFiled.hint = "Email Address"
                     binding.textFiled.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
@@ -71,28 +72,27 @@ class ForgotPasswordFragment : Fragment() {
         }
 
 
-        binding.textFiled.doAfterTextChanged {
-            if (mViewModel.rcvOn == "mob") {
-                binding.btnNext.isEnabled = it?.length == 10
-            } else {
-                binding.btnNext.isEnabled = isValidEmail(it)
-            }
-
-        }
 
         binding.btnClose.setOnClickListener { findNavController().popBackStack() }
 
         binding.btnNext.setOnClickListener {
-            (requireActivity() as MainActivity).showLoader(true)
-            mViewModel.getCredentials(
-                binding.textFiled.text.toString()
-            ) {
-                (requireActivity() as MainActivity).showLoader(false)
+            val value = binding.textFiled.text.toString()
+            if (mViewModel.rcvOn == "mob" && value.length != 10) {
+                (requireActivity() as MainActivity).showMessage("Please enter a valid 10 digit mobile number.")
+            } else if (mViewModel.rcvOn == "email" && !isValidEmail(value)) {
+                (requireActivity() as MainActivity).showMessage("Please enter a valid email address.")
+            } else {
+                (requireActivity() as MainActivity).showLoader(true)
+                mViewModel.getCredentials(
+                    binding.textFiled.text.toString()
+                ) {
+                    (requireActivity() as MainActivity).showLoader(false)
 
-                mainActivity().showMessage(it.message?:"")
+                    mainActivity().showMessage(it.message ?: "")
 
-                if (it.errorCode == 0) {
-                    findNavController().popBackStack()
+                    if (it.errorCode == 0) {
+                        findNavController().popBackStack()
+                    }
                 }
             }
         }

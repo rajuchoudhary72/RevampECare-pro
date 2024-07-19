@@ -808,7 +808,13 @@ class MainActivity : AppCompatActivity() {
             .setMessage(getString(R.string.are_you_sure_to_logout))
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 try {
-                    systemViewModel.logout {
+                    showLoader(true)
+                    systemViewModel.logout {isSuccess ->
+                        showLoader(false)
+                        if(isSuccess.not()){
+                            showMessage("Something went wrong!")
+                            return@logout
+                        }
                         val intent = Intent(this, MainActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                         startActivity(intent)

@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.forgotpassword
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -12,8 +13,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ForgotPasswordViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val userDataStore: UserDataStore
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    val schoolCode = savedStateHandle.get<String>("schoolCode")
+        ?: throw IllegalArgumentException("School code required")
 
     var userType = 1
     var rcvOn = "mob"
@@ -24,7 +28,7 @@ class ForgotPasswordViewModel @Inject constructor(
                 userRepository.getCredentials(
                     userType = userType,
                     rcvOn = rcvOn,
-                    schoolCode = userDataStore.getSchoolData()?.schoolCode!!,
+                    schoolCode = schoolCode,
                     email = if (rcvOn == "email") value else null,
                     mobile = if (rcvOn == "mob") value else null
                 )

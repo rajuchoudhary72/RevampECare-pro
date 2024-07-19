@@ -25,6 +25,9 @@ class SearchInstitutionViewModel @Inject constructor(
             flow = searchQuery,
             flow2 = _schools
         ) { query, schools ->
+            if (query.isEmpty()) {
+                return@combine emptyList()
+            }
             schools.filter {
                 it.schoolCode?.contains(query, true) == true || it.address?.contains(
                     query,
