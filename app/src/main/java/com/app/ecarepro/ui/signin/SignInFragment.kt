@@ -58,7 +58,7 @@ class SignInFragment : Fragment() {
         }
 
         binding.btnHelp.setOnClickListener {
-            findNavController().navigate(R.id.helpFragment)
+            findNavController().navigate(R.id.helpFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
         }
 
         binding.btnFindSchoolCollege.setOnClickListener {
