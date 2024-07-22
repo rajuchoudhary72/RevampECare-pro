@@ -5,11 +5,10 @@ import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -18,7 +17,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
@@ -30,6 +28,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
+import com.app.ecarepro.emptyFav
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
@@ -49,7 +48,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import com.app.ecarepro.emptyFav
 
 
 @AndroidEntryPoint
@@ -80,6 +78,12 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
         binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
+        binding.btnSearch.setOnClickListener {
+            findNavController().navigate(
+                R.id.searchFragment,
+                bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })
+            )
+        }
         binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
@@ -129,6 +133,7 @@ class HomeFragment : Fragment() {
 
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
+                        binding.btnSearch.isVisible = uiState.searchOption.isNotEmpty()
                         mViewModel.setFavourite(uiState.favroiteMenus)
                         uiState.userInfo.let { user ->
                             binding.apply {
@@ -211,7 +216,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is HomeUiState.Success) {
@@ -275,12 +280,12 @@ class HomeFragment : Fragment() {
                     id("fav")
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
-                if(uiState.favourites.isEmpty()){
+                if (uiState.favourites.isEmpty()) {
                     emptyFav {
                         id("fave")
                         spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                     }
-                }else {
+                } else {
 
                     uiState.favourites.forEach { favouriteSlider: Menu ->
                         cardOption {

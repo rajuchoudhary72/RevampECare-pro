@@ -94,6 +94,7 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCrea
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
@@ -261,6 +262,8 @@ interface UserRepository {
        scholarType: Int,
          showAll: Boolean
     ): NetworkStudentList
+
+    suspend fun getStudents(): Flow<Result<List<Student>>>
 
     suspend fun getStudentMedicalCard(
        stID: String
