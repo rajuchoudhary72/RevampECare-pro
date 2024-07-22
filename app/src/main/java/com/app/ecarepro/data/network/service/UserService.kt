@@ -1,6 +1,5 @@
 package com.app.ecarepro.data.network.service
 
-import android.provider.Settings.Secure
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
@@ -123,12 +122,19 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubj
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import android.provider.Settings.Secure
+
 interface UserService {
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,
         @Query("Username") username: String
     ): NetworkUserDetailsDto
+    @GET("User/LogOut")
+    suspend fun logout(
+        @Query("DeviceType") deviceType: Int = 1,
+        @Query("deviceID") deviceID: String ,
+    ): CommonResponse
 
     @POST("User/GetCredentials")
     suspend fun getCredentials(
@@ -139,12 +145,6 @@ interface UserService {
     suspend fun login(
         @Body request: UserLoginRequestDto,
     ): LoginResponseDto
-
-    @GET("User/LogOut")
-    suspend fun logout(
-        @Query("DeviceType") deviceType: Int = 1,
-        @Query("deviceID") deviceID: String ,
-    ): CommonResponse
 
 
     @GET("Academic/ClassSyllabus")

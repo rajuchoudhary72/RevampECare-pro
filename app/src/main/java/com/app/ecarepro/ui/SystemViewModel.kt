@@ -1,32 +1,35 @@
 package com.app.ecarepro.ui
 
-import android.app.Application.WIFI_SERVICE
-import android.content.Context
-import android.net.wifi.WifiManager
-import android.os.Build
-import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
-import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
-import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
-import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.app.Application.WIFI_SERVICE
+import android.content.Context
+import android.net.wifi.WifiManager
+import android.os.Build
+import android.provider.Settings.Secure
+import android.util.Log
+import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.utils.Constant
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
@@ -90,6 +93,7 @@ class SystemViewModel @Inject constructor(
         }
     }
 
+
     fun logout(onDataClear: (Boolean) -> Unit) {
         viewModelScope.launch {
             userRepository.logout().collectLatest { result ->
@@ -103,7 +107,6 @@ class SystemViewModel @Inject constructor(
                     }
                 }
             }
-
         }
     }
 
@@ -112,31 +115,29 @@ class SystemViewModel @Inject constructor(
             refresh.emit(true)
         }
     }
-
     fun registerDeviceToken(token: String) {
         GlobalScope.launch {
-            val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
-            val wInfo = wifiManager.connectionInfo
-            val macAddress = wInfo.macAddress
-            appRepository
-                .registerDevice(
-                    RegisterDevice(
-                        fcmToken = token,
-                        osVersion = "OS " + Build.VERSION.SDK_INT,
-                        deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
-                        deviceType = 1,
-                        imeI1 = macAddress,
-                        imeI2 = macAddress,
-                        deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID)
+                val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
+                val wInfo = wifiManager.connectionInfo
+                val macAddress = wInfo.macAddress
+                appRepository
+                    .registerDevice(
+                        RegisterDevice(
+                            fcmToken = token,
+                            osVersion = "OS " + Build.VERSION.SDK_INT,
+                            deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
+                            deviceType = 1,
+                            imeI1 = macAddress,
+                            imeI2 = macAddress,
+                            deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID)
+                        )
                     )
-                )
-                .collectLatest {
-                    println(it)
-                }
-        }
+                    .collectLatest {
+                        println(it)
+                    }
+            }
 
     }
-
     fun getTokenKey(function: (String?) -> Unit) {
         viewModelScope.launch {
             try {

@@ -3,7 +3,7 @@
     <!--School/College Code-->
     <string name="help">Help</string>
     <string name="please_enter_school_college_code">Please Enter School Code</string>
-    <string name="find_your_school_college_code"><u>Fine Your School Code</u></string>
+    <string name="find_your_school_college_code"><u>Find Your School Code</u></string>
     <string name="continue_">Continue</string>
     <string name="search_your_school_college">Search Your School</string>
     <string name="enter_your_search_query_here">Enter your search query here…</string>
@@ -605,4 +605,7 @@
     <string name="speed">Speed:</string>
     <string name="no_bus_found">No Bus Found</string>
     <string name="bus_location">Bus Location</string>
+    <string name="select_search_filter">Select Search Filter</string>
+    <string name="students_list">Students List</string>
+    <string name="staff_list">Staff List</string>
 </resources>

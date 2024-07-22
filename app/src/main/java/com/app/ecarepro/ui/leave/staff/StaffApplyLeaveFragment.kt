@@ -26,8 +26,7 @@ import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.databinding.FragmentStaffApplyLeaveBinding
 import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.leave.LeaveHistoryAdapter
-import com.app.ecarepro.ui.mainActivity
+ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess

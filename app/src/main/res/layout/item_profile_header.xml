@@ -81,11 +81,11 @@
             android:fontFamily="@font/calibri_regular"
             android:paddingHorizontal="@dimen/_8sdp"
             android:paddingVertical="@dimen/_4sdp"
-            android:text='@{bannerImageStatus == 1 ? "Pending" : "Rejected"}'
+            android:text='@{bannerImageStatus == 1 ? "Pending" : "Cover photo is rejected"}'
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Pending" />
+            tools:text="Cover photo is rejected" />
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -116,13 +116,13 @@
             android:fontFamily="@font/calibri_regular"
             android:paddingHorizontal="@dimen/_8sdp"
             android:paddingVertical="@dimen/_4sdp"
-            android:text='@{profileImageStatus == 1 ? "Pending" : "Rejected"}'
+            android:text='@{profileImageStatus == 1 ? "Pending" : "Profile photo is rejected"}'
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileImage"
             tools:backgroundTint="@color/darkYellow"
-            tools:text="Pending" />
+            tools:text="Profile photo is rejected" />
 
         <TextView
             android:id="@+id/name"

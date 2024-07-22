@@ -166,7 +166,7 @@
 
             <LinearLayout
                 android:id="@+id/llView"
-                android:layout_width="10dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
@@ -196,10 +196,10 @@
 
             <LinearLayout
                 android:id="@+id/llDownload"
-                android:layout_width="10dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 android:gravity="center"
                 android:visibility="visible"
                 >
@@ -224,7 +224,7 @@
 
             <LinearLayout
                 android:id="@+id/llEdit"
-                android:layout_width="10dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
@@ -252,7 +252,7 @@
 
             <LinearLayout
                 android:id="@+id/llDelete"
-                android:layout_width="10dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"

@@ -235,10 +235,13 @@ class PostAssignmentFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectSubject.text= subjectData .subjectName
-            isSubjectSelected = true
-            getMyClasses(subjectData.subID)
-            builder.dismiss()
+            if (isSubjectSelected){
+                binding.tvSelectSubject.text= subjectData .subjectName
+
+                getMyClasses(subjectData.subID)
+                builder.dismiss()
+
+            }
 
         }
 
@@ -246,6 +249,7 @@ class PostAssignmentFragment : Fragment() {
             override fun onItemClick(t: MySubject, pos: Int, boolean: Boolean) {
 
                 subjectData=t
+                isSubjectSelected = true
             }
 
         })
@@ -275,9 +279,11 @@ class PostAssignmentFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectClass.text= subjectData .subjectName
-            isClassSelected = true
-             builder.dismiss()
+            if (isClassSelected){
+                binding.tvSelectClass.text= subjectData .subjectName
+
+                builder.dismiss()
+            }
 
         }
 
@@ -285,6 +291,7 @@ class PostAssignmentFragment : Fragment() {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
                 classData=t
+                isClassSelected = true
             }
 
         })

@@ -30,7 +30,6 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
-import com.app.ecarepro.emptyFav
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
@@ -50,6 +49,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import com.app.ecarepro.emptyFav
 
 
 @AndroidEntryPoint
@@ -275,13 +275,13 @@ class HomeFragment : Fragment() {
                     id("fav")
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
-
                 if(uiState.favourites.isEmpty()){
                     emptyFav {
                         id("fave")
                         spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                     }
-                }else{
+                }else {
+
                     uiState.favourites.forEach { favouriteSlider: Menu ->
                         cardOption {
                             id(favouriteSlider.title)
@@ -349,6 +349,7 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
+
                 }
 
 

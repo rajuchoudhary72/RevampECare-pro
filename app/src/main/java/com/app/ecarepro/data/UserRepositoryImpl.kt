@@ -1,7 +1,5 @@
 package com.app.ecarepro.data
 
-import android.content.Context
-import android.provider.Settings.Secure
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
@@ -131,6 +129,8 @@ import com.app.ecarepro.ui.survey.SurveyListResponse
 import javax.inject.Inject
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import android.content.Context
+import android.provider.Settings.Secure
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class UserRepositoryImpl @Inject constructor(
@@ -186,7 +186,6 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
-
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {
             try {
@@ -201,7 +200,6 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
-
     override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
         return flow {
             try {

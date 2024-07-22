@@ -72,7 +72,7 @@ class UserDataStoreImpl @Inject constructor(
                     it.asNetworkUserDetailsDto().copy(
                         school = schoolDatabase.getSchool(it.schoolCode ?: "").asNetworkSchool()
                     )
-                } ?: emptyList()
+                }?: emptyList()
             }
     }
 
@@ -119,14 +119,16 @@ class UserDataStoreImpl @Inject constructor(
                     null
                 )
             }
-            else userDatabase.getUserFlow(getCurrentUserId()!!)
-                .map { it?.asNetworkUserDetailsDto() }
+            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it?.asNetworkUserDetailsDto() }
         }
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
         if (schoolDatabase.getSchoolData(school.schoolCode) == null)
             schoolDatabase.insertSchool(school.asNetworkSchool())
+       /* val schoolCode = getCurrentSchoolCode()
+        if (schoolCode.isNullOrEmpty())
+            setCurrentSchoolCode(school.schoolCode)*/
         setCurrentSchoolCode(school.schoolCode)
     }
 

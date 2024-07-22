@@ -113,6 +113,7 @@ import retrofit2.http.Query
 interface UserRepository {
 
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
+    suspend fun logout(): Flow<Result<Boolean>>
 
     suspend fun getCredentials(
         schoolCode: String,
@@ -127,9 +128,6 @@ interface UserRepository {
         userName: String,
         password: String
     ): LoginResponseDto
-
-
-    suspend fun logout(): Flow<Result<Boolean>>
 
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto

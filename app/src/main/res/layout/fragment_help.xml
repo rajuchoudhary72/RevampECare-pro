@@ -145,14 +145,15 @@
 
             <TextView
                 android:id="@+id/text_email"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:paddingRight="@dimen/_5sdp"
                 android:layout_marginTop="20dp"
                 android:drawablePadding="@dimen/vertical_margin"
                 android:fontFamily="@font/ubuntu_regular"
-                android:gravity="center"
                 android:autoLink="email"
-                tools:text="test@gmail.com"
+                tools:text="testsklfhliewkur908375980r3uwropaj;lsam@gmail.com"
                 android:text="@{viewModel.school.contactEmail}"
                 android:textAppearance="?attr/textAppearanceBodyLarge"
                 app:layout_constraintBaseline_toBaselineOf="@+id/label_email"

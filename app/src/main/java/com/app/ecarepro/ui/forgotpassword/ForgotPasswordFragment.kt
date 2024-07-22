@@ -94,7 +94,6 @@ class ForgotPasswordFragment : Fragment() {
                         mainActivity().showMessage(it.message ?: "")
                     }
 
-
                     if (it.errorCode == 0) {
                         findNavController().popBackStack()
                     }
