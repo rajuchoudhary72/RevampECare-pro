@@ -96,7 +96,8 @@
                 android:id="@+id/groupCollapsed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="lv_left,lv_repeater" />
+                app:constraint_referenced_ids="lv_left,lv_repeater"
+                tools:ignore="NotSibling" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

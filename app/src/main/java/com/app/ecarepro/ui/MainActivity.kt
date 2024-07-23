@@ -467,31 +467,22 @@ class MainActivity : AppCompatActivity() {
                 27 -> {
                     try {
                         if (UType == Constant.STAFF_TYPE) {
-                            if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
-                                lifecycleScope.launch {
-                                    userDataStore.getSchoolData()?.let {
-                                        it.marksEntryURL?.let { url ->
-                                            webViewCall(
-                                                url,
-                                                getString(R.string.marks_entry_heading)
-                                            )
-                                        }
+                            lifecycleScope.launch {
+                                userDataStore.getSchoolData()?.let {
+                                    it.marksEntryURL?.let { url ->
+                                        webViewCall(
+                                            url,
+                                            getString(R.string.marks_entry_heading)
+                                        )
                                     }
                                 }
-                            } else {
-                                Toast.makeText(baseContext, "internal page", Toast.LENGTH_SHORT).show()
-                                navController.navigate(R.id.lessonPlanListFragment)
                             }
-
                         } else {
-                            Toast.makeText(baseContext, "external page", Toast.LENGTH_SHORT).show()
                             navController.navigate(R.id.lessonPlanListFragment)
                         }
                     } catch (e: Exception) {
                     }
-
                 }
-
                 14-> {
                     try {
                         lifecycleScope.launch {

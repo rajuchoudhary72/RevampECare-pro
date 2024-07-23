@@ -60,7 +60,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="@dimen/_3sdp"
-                    android:layout_toEndOf="@+id/tv_sub_item"
                     android:orientation="vertical">
 
 

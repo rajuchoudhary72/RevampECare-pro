@@ -76,6 +76,7 @@
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/calibri_regular"
                         android:hint="@string/search"
+                        sdfhsdkjh
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:paddingHorizontal="10dp"

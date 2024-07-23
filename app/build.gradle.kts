@@ -17,7 +17,7 @@ kapt {
 android {
     signingConfigs {
         create("beta") {
-            storeFile = file("app/eCareBeta.jks")
+            storeFile = file("eCareBeta.jks")
             storePassword = "eCarePro"
             keyAlias = "ecareProAndroidBeta"
             keyPassword = "eCarePro"
@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 11
-        versionName = "1.1.9"
+        versionCode = 12
+        versionName = "1.1.10"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
