@@ -39,7 +39,7 @@ class SearchPagerViewModel @Inject constructor(
                 searchModule(query, type)
             }
 
-            "Students" -> {
+            "Student" -> {
                 searchStudent(query, type)
             }
 
