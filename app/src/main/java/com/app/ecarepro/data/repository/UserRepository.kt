@@ -94,6 +94,7 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCrea
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
@@ -443,6 +444,8 @@ interface UserRepository {
     ): NetworkLessonPlanDTL
 
     suspend fun getStaffList(): NetworkStaffList
+
+    suspend fun getStaffs(): Flow<Result<List<Staff>>>
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 

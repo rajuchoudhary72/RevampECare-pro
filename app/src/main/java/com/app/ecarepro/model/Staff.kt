@@ -14,4 +14,10 @@ Staff(
     val photo: String,
     val qualification: String,
     val sid: Int
-)
+){
+    fun details() = "Designation: $designation\n" +
+            "Mobile: $mobile\n" +
+            "Email: $email\n" +
+            "Marital Status: $maritialStatus\n" +
+            "Gender: $gender"
+}

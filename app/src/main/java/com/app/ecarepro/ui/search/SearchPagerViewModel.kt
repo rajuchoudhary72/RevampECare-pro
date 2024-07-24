@@ -1,8 +1,11 @@
 package com.app.ecarepro.ui.search
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.search.SearchPagerFragment.Companion.SEARCH_TYPE
 import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_MODULE
@@ -23,6 +26,8 @@ class SearchPagerViewModel @Inject constructor(
     private val searchQuery = MutableStateFlow("")
 
     private val students = mutableListOf<Student>()
+    private val staffs = mutableListOf<Staff>()
+    private val modules = mutableListOf<Menu>()
 
     val uiState: Flow<SearchUiState> = combine(
         flow = searchType, flow2 = searchQuery
@@ -31,7 +36,7 @@ class SearchPagerViewModel @Inject constructor(
     }.flatMapLatest { (type, query) ->
         when (type) {
             "Module" -> {
-                searchStudent(query, type)
+                searchModule(query, type)
             }
 
             "Students" -> {
@@ -39,8 +44,32 @@ class SearchPagerViewModel @Inject constructor(
             }
 
             else -> {
-                searchStudent(query, type)
+                searchStaff(query, type)
             }
+        }
+    }
+
+    private fun searchModule(query: String, type: String): Flow<SearchUiState> = channelFlow {
+        if (query.isEmpty()) {
+            send(SearchUiState.Default)
+        } else {
+            send(filterModule(query, type))
+        }
+    }
+
+    private fun filterModule(query: String, type: String): SearchUiState {
+        val filteredModules = modules.filter {
+            it.title?.contains(query, true) ?: false
+        }
+        Log.e("Search", "setModules: ${filteredModules.size}", )
+        return if (filteredModules.isEmpty()) {
+            SearchUiState.NoResultFound
+        } else {
+            SearchUiState.Success(
+                searchQuery = query,
+                searchType = type,
+                modules = filteredModules
+            )
         }
     }
 
@@ -83,6 +112,53 @@ class SearchPagerViewModel @Inject constructor(
         }
     }
 
+    private suspend fun searchStaff(query: String, type: String): Flow<SearchUiState> =
+        channelFlow {
+            if (query.isEmpty()) {
+                send(SearchUiState.Default)
+            } else {
+                if (staffs.isEmpty()) {
+                    send(SearchUiState.Loading)
+                    userRepository.getStaffs().collectLatest { result ->
+                        if (result.isSuccess) {
+                            staffs.addAll(result.getOrNull()!!)
+                            send(filterStaffs(query, type))
+                        } else {
+                            send(SearchUiState.Error(result.exceptionOrNull()!!))
+                        }
+                    }
+                } else {
+                    send(filterStaffs(query, type))
+                }
+            }
+        }
+
+    private fun filterStaffs(
+        query: String,
+        type: String
+    ): SearchUiState {
+        val filteredStaffs = staffs.filter {
+            it.name.contains(query, true)
+        }
+        return if (filteredStaffs.isEmpty()) {
+            SearchUiState.NoResultFound
+        } else {
+            SearchUiState.Success(
+                searchQuery = query,
+                searchType = type,
+                staffs = filteredStaffs
+            )
+        }
+    }
+
+    fun setModules(modules: List<Menu>) {
+        this.modules.apply {
+            clear()
+            addAll(modules)
+            Log.e("Search", "setModules: ${modules.size}", )
+        }
+    }
+
     fun updateSearchQuery(query: String) {
         searchQuery.value = query
     }
@@ -105,7 +181,9 @@ sealed interface SearchUiState {
     data class Success(
         val searchQuery: String? = "",
         val searchType: String? = SEARCH_TYPE_MODULE,
-        val students: List<Student>,
+        val students: List<Student> = emptyList(),
+        val staffs: List<Staff> = emptyList(),
+        val modules: List<Menu> = emptyList(),
     ) : SearchUiState
 
     data class Error(

@@ -9,11 +9,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.databinding.FragmentSearchPagerBinding
+import com.app.ecarepro.menuCard
+import com.app.ecarepro.model.Staff
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.searchResultStudent
+import com.app.ecarepro.ui.MainActivityUiState
+import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_MODULE
 import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_STUDENT
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -29,6 +36,7 @@ class SearchPagerFragment : Fragment() {
 
     private val searchPagerViewModel: SearchPagerViewModel by viewModels()
     private val searchViewModel: SearchViewModel by activityViewModels()
+    private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +65,15 @@ class SearchPagerFragment : Fragment() {
 
     private fun setupObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
+
+            launch {
+                systemViewModel.uiState.collectLatest { uiState ->
+                    if (uiState is MainActivityUiState.Success) {
+                        searchPagerViewModel.setModules(uiState.menus)
+                    }
+                }
+            }
+
             launch {
                 searchViewModel.searchQuery.collectLatest { query ->
                     searchPagerViewModel.updateSearchQuery(query)
@@ -85,18 +102,85 @@ class SearchPagerFragment : Fragment() {
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
             } else if (uiState is SearchUiState.Success) {
-                if (uiState.searchType == SEARCH_TYPE_STUDENT) {
-                    uiState.students.forEach { student ->
-                        searchResultStudent {
-                            id(student. stID)
-                            student(student)
+                when (uiState.searchType) {
+                    SEARCH_TYPE_STUDENT -> {
+                        uiState.students.forEach { student ->
+                            searchResultStudent {
+                                id(student.stID)
+                                photo(student.photo)
+                                title(student.nameAndClass())
+                                details(student.details())
+                            }
+                        }
+                    }
+                    SEARCH_TYPE_MODULE -> {
+                        buildModuleModels(uiState.modules)
+                    }
+                    else -> {
+                        uiState.staffs.forEach { staff: Staff ->
+                            searchResultStudent {
+                                id(staff.id)
+                                photo(staff.photo)
+                                title(staff.name)
+                                details(staff.details())
+                            }
                         }
                     }
                 }
             }
         }
+    }
 
-
+    private fun EpoxyController.buildModuleModels(modules: List<Menu>) {
+        modules.forEach { menu ->
+            if (menu.childMenus.isNullOrEmpty()) {
+                menuCard {
+                    id(menu.menuID)
+                    title(menu.title)
+                    icon(menu.icon)
+                    clickListener { _ ->
+                        mainActivity().getFragmentId(menu.menuID)
+                    }
+                }
+            } else {
+                menu.childMenus.forEach { childMenu ->
+                    if (childMenu.childMenus.isNullOrEmpty()) {
+                        menuCard {
+                            id(menu.menuID, childMenu.menuID)
+                            title(childMenu.title)
+                            icon(childMenu.icon)
+                            parentMenuIcon(menu.icon)
+                            clickListener { _ ->
+                                mainActivity().getFragmentId(
+                                    menu.menuID,
+                                    childMenu.chMenuID
+                                )
+                            }
+                        }
+                    } else {
+                        childMenu.childMenus.forEach { childChildMenu ->
+                            menuCard {
+                                id(
+                                    menu.menuID,
+                                    childMenu.chMenuID,
+                                    childChildMenu.menuID
+                                )
+                                title(childChildMenu.title)
+                                icon(childChildMenu.icon)
+                                parentMenuIcon(childMenu.icon)
+                                clickListener { _ ->
+                                    mainActivity().getFragmentId(
+                                        menu.menuID,
+                                        childMenu.chMenuID,
+                                        childChildMenu.sbChMenuID
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

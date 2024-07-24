@@ -115,6 +115,7 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
@@ -608,6 +609,21 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getStaffList(): NetworkStaffList {
         return userService.getStaffList()
+    }
+
+    override suspend fun getStaffs(): Flow<Result<List<Staff>>> {
+        return flow {
+            try {
+                val response = userService.getStaffList()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.staffs))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
     }
 
     override suspend fun getStaffProfile(sId: Int): NetworkStaffProfile {
