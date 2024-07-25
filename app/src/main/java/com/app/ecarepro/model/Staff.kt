@@ -1,7 +1,6 @@
 package com.app.ecarepro.model
 
-data class
-Staff(
+data class Staff(
     val designation: String,
     val email: String,
     val gender: String,

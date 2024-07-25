@@ -59,9 +59,15 @@ class SearchPagerViewModel @Inject constructor(
 
     private fun filterModule(query: String, type: String): SearchUiState {
         val filteredModules = modules.filter {
-            it.title?.contains(query, true) ?: false
+            it.title?.contains(query, true) ?: false ||
+                    it.childMenus?.any { it.title?.contains(query, true) ?: false } ?: false ||
+                    it.childMenus?.any {
+                        it.childMenus?.any {
+                            it.title?.contains(query, true) ?: false
+                        } ?: false
+                    } ?: false
         }
-        Log.e("Search", "setModules: ${filteredModules.size}", )
+        Log.e("Search", "setModules: ${filteredModules.size}")
         return if (filteredModules.isEmpty()) {
             SearchUiState.NoResultFound
         } else {
@@ -100,10 +106,10 @@ class SearchPagerViewModel @Inject constructor(
     ): SearchUiState {
         val filteredStudents = students.filter {
             it.name.contains(query, true) ||
-            it.admissionNumber.contains(query, true) ||
-            it.`class`.contains(query, true) ||
-            it.fatherName.contains(query, true) ||
-            it.contactMob.contains(query, true)
+                    it.admissionNumber.contains(query, true) ||
+                    it.`class`.contains(query, true) ||
+                    it.fatherName.contains(query, true) ||
+                    it.contactMob.contains(query, true)
         }
         return if (filteredStudents.isEmpty()) {
             SearchUiState.NoResultFound
@@ -143,9 +149,9 @@ class SearchPagerViewModel @Inject constructor(
     ): SearchUiState {
         val filteredStaffs = staffs.filter {
             it.name.contains(query, true) ||
-            it.designation.contains(query, true) ||
-            it.email.contains(query, true) ||
-            it.mobile.contains(query, true)
+                    it.designation.contains(query, true) ||
+                    it.email.contains(query, true) ||
+                    it.mobile.contains(query, true)
         }
         return if (filteredStaffs.isEmpty()) {
             SearchUiState.NoResultFound
@@ -162,7 +168,7 @@ class SearchPagerViewModel @Inject constructor(
         this.modules.apply {
             clear()
             addAll(modules)
-            Log.e("Search", "setModules: ${modules.size}", )
+            Log.e("Search", "setModules: ${modules.size}")
         }
     }
 

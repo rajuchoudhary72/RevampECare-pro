@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.Menu
@@ -22,6 +23,7 @@ import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_MODULE
 import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_STUDENT
+import com.app.ecarepro.utils.Constant
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,6 +112,12 @@ class SearchPagerFragment : Fragment() {
                                 photo(student.photo)
                                 title(student.nameAndClass())
                                 details(student.details())
+                                clickListener { _ ->
+                                    findNavController().navigate(
+                                        R.id.studentProfileNavHostFragment,
+                                        bundleOf(Constant.STUDENT_ID_ARGUMENT to student.stID)
+                                    )
+                                }
                             }
                         }
                     }
@@ -119,10 +127,16 @@ class SearchPagerFragment : Fragment() {
                     else -> {
                         uiState.staffs.forEach { staff: Staff ->
                             searchResultStudent {
-                                id(staff.id)
+                                id(staff.id + staff.name + staff.sid)
                                 photo(staff.photo)
                                 title(staff.name)
                                 details(staff.details())
+                                clickListener { _ ->
+                                    findNavController().navigate(
+                                        R.id.staffProfileNavHostFragment,
+                                        bundleOf(Constant.STAFF_ID_ARGUMENT to staff.sid)
+                                    )
+                                }
                             }
                         }
                     }

@@ -17,10 +17,15 @@
             name="details"
             type="java.lang.String" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:onClick="@{clickListener}"
         android:layout_height="wrap_content">
 
         <com.google.android.material.imageview.ShapeableImageView
