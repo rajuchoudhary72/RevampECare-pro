@@ -131,6 +131,8 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.model.Staff
+import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 
 class UserRepositoryImpl @Inject constructor(
@@ -622,7 +624,34 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getClassAttendance(id: String, attDate: String): NetworkClassAttendance {
         return userService.getClassAttendance(id, attDate)
     }
-
+    override suspend fun getStudents(): Flow<Result<List<Student>>> {
+        return flow {
+            try {
+                val response = userService.getStudentList(2, true)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.students))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override suspend fun getStaffs(): Flow<Result<List<Staff>>> {
+        return flow {
+            try {
+                val response = userService.getStaffList()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.staffs))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun getStudentAttendance(
         from: String,
         till: String,

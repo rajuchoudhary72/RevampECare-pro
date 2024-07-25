@@ -13,6 +13,7 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import com.app.ecarepro.model.Student
 
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -94,6 +95,7 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCrea
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
@@ -132,6 +134,8 @@ interface UserRepository {
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
     ): Flow<Result<CommonResponse>>
+    suspend fun getStudents(): Flow<Result<List<Student>>>
+    suspend fun getStaffs(): Flow<Result<List<Staff>>>
 
     suspend fun changePassword(
         password: String,

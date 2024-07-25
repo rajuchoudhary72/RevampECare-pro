@@ -1,7 +1,6 @@
 package com.app.ecarepro.model
 
-data class
-Staff(
+data class Staff(
     val designation: String,
     val email: String,
     val gender: String,
@@ -14,4 +13,10 @@ Staff(
     val photo: String,
     val qualification: String,
     val sid: Int
-)
+){
+    fun details() = "<b>Designation:</b> $designation<br>" +
+            "<b>Mobile:</b> $mobile<br>" +
+            "<b>Email:</b> $email<br>" +
+            "<b>Marital Status:</b> $maritialStatus<br>" +
+            "<b>Gender:</b> $gender"
+}

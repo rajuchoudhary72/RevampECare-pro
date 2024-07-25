@@ -482,7 +482,9 @@ class MainActivity : AppCompatActivity() {
                         }
                     } catch (e: Exception) {
                     }
+
                 }
+
                 14-> {
                     try {
                         lifecycleScope.launch {

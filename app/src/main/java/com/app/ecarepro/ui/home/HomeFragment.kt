@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -79,6 +80,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
+        binding.btnSearch.setOnClickListener {
+            findNavController().navigate(
+                R.id.searchFragment,
+                bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })
+            )
+        }
         binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
         binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
@@ -129,6 +136,7 @@ class HomeFragment : Fragment() {
 
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
+                        binding.btnSearch.isVisible = uiState.searchOption.isNotEmpty()
                         mViewModel.setFavourite(uiState.favroiteMenus)
                         uiState.userInfo.let { user ->
                             binding.apply {
