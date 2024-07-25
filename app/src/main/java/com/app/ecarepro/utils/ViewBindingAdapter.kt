@@ -3,6 +3,7 @@ package com.app.ecarepro.utils
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.graphics.drawable.Drawable
+import android.text.Html
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
@@ -125,4 +126,10 @@ fun TextView.rupeeText(rupee: Double?) {
 
 interface FileClickListener {
     fun onClick(file: String)
+}
+
+
+@BindingAdapter("htmlText")
+fun TextView.htmlText(html: String?) {
+    text = Html.fromHtml(html)
 }

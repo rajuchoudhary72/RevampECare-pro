@@ -99,7 +99,11 @@ class SearchPagerViewModel @Inject constructor(
         type: String
     ): SearchUiState {
         val filteredStudents = students.filter {
-            it.name.contains(query, true)
+            it.name.contains(query, true) ||
+            it.admissionNumber.contains(query, true) ||
+            it.`class`.contains(query, true) ||
+            it.fatherName.contains(query, true) ||
+            it.contactMob.contains(query, true)
         }
         return if (filteredStudents.isEmpty()) {
             SearchUiState.NoResultFound
@@ -138,7 +142,10 @@ class SearchPagerViewModel @Inject constructor(
         type: String
     ): SearchUiState {
         val filteredStaffs = staffs.filter {
-            it.name.contains(query, true)
+            it.name.contains(query, true) ||
+            it.designation.contains(query, true) ||
+            it.email.contains(query, true) ||
+            it.mobile.contains(query, true)
         }
         return if (filteredStaffs.isEmpty()) {
             SearchUiState.NoResultFound

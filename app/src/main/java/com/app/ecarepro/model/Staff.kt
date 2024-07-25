@@ -15,9 +15,9 @@ Staff(
     val qualification: String,
     val sid: Int
 ){
-    fun details() = "Designation: $designation\n" +
-            "Mobile: $mobile\n" +
-            "Email: $email\n" +
-            "Marital Status: $maritialStatus\n" +
-            "Gender: $gender"
+    fun details() = "<b>Designation:</b> $designation<br>" +
+            "<b>Mobile:</b> $mobile<br>" +
+            "<b>Email:</b> $email<br>" +
+            "<b>Marital Status:</b> $maritialStatus<br>" +
+            "<b>Gender:</b> $gender"
 }

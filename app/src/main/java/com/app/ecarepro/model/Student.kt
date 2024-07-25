@@ -19,9 +19,9 @@ data class Student(
 
     fun nameAndClass() = "$name (${`class`})"
 
-    fun details() = "Admission No: $admissionNumber\n" +
-            "DOB: $dob\n" +
-            "Father Name: $fatherName\n" +
-            "Contact Number: $contactMob\n" +
-            "Contact Person: $contactPerson"
+    fun details() = "<b>Admission No:</b> $admissionNumber<br>" +
+            "<b>DOB:</b> $dob<br>" +
+            "<b>Father Name:</b> $fatherName<br>" +
+            "<b>Contact Number:</b> $contactMob<br>" +
+            "<b>Contact Person:</b> $contactPerson"
 }
