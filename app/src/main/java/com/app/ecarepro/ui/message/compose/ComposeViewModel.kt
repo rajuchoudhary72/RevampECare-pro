@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.util.Base64
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -158,41 +159,47 @@ class ComposeViewModel @Inject constructor(
                         }
 
                     }
-            } else {
-                val wifiManager = context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
-                val wInfo = wifiManager.connectionInfo
-                val macAddress = wInfo.macAddress
-                messageRepository.sendMessage(
-                    SendMessageRequest(
-                        device = 1,
-                        geoCoordinate = currentLocation.toString().replace("(", "")
-                            .replace(")", ""),
-                        ipAddress = macAddress,
-                        subject = subject.value,
-                        body = message.value,
-                        classIDs = null,
-                        recipient = contacts.value.map {
-                            Recipients(
-                                receiverID = it.receiverID,
-                                receiverType = it.receiverType
-                            )
-                        },
-                        recipientType = contacts.value.firstOrNull()?.receiverType,
-                        msgType = getMessageType(),
-                        attachment = getAttachment(),
-                        multipleAttachments = getMultipleAttachment()
+            }
+            else {
+                if (contacts.value.isEmpty()){
+                    result(false,"Please Select recipient")
+                }else{
+                    val wifiManager = context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
+                    val wInfo = wifiManager.connectionInfo
+                    val macAddress = wInfo.macAddress
+                    messageRepository.sendMessage(
+                        SendMessageRequest(
+                            device = 1,
+                            geoCoordinate = currentLocation.toString().replace("(", "")
+                                .replace(")", ""),
+                            ipAddress = macAddress,
+                            subject = subject.value,
+                            body = message.value,
+                            classIDs = null,
+                            recipient = contacts.value.map {
+                                Recipients(
+                                    receiverID = it.receiverID,
+                                    receiverType = it.receiverType
+                                )
+                            },
+                            recipientType = contacts.value.firstOrNull()?.receiverType,
+                            msgType = getMessageType(),
+                            attachment = getAttachment(),
+                            multipleAttachments = getMultipleAttachment()
+                        )
                     )
-                )
-                    .collectLatest { response ->
-                        if (response.isSuccess) {
-                            result(true, response.getOrNull() ?: "")
-                        } else {
-                            result(
-                                false,
-                                response.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
-                            )
+                        .collectLatest { response ->
+                            if (response.isSuccess) {
+                                result(true, response.getOrNull() ?: "")
+                            } else {
+                                result(
+                                    false,
+                                    response.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                                )
+                            }
                         }
-                    }
+                }
+
             }
         }
 

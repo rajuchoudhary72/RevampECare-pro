@@ -21,6 +21,7 @@ import com.app.ecarepro.data.network.model.TransactionDetail
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
 import com.app.ecarepro.messageFilePreview
+import android.text.Html
 
 
 @BindingAdapter("isVisible")
@@ -125,4 +126,10 @@ fun TextView.rupeeText(rupee: Double?) {
 
 interface FileClickListener {
     fun onClick(file: String)
+}
+
+
+@BindingAdapter("htmlText")
+fun TextView.htmlText(html: String?) {
+    text = Html.fromHtml(html)
 }

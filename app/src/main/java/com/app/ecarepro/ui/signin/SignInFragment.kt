@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -19,10 +18,12 @@ import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.update
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
+import com.google.firebase.messaging.FirebaseMessaging
+import java.io.IOException
+import java.util.concurrent.ExecutionException
+
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
 
@@ -55,7 +56,9 @@ class SignInFragment : Fragment() {
         binding.textPassword.doAfterTextChanged {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
-
+        binding.btnHelp.setOnClickListener {
+            findNavController().navigate(R.id.helpFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
+        }
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
                 R.id.schoolCodeFragment,
@@ -77,11 +80,33 @@ class SignInFragment : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
-                            mainActivity().showMessage("You are Successfully  login... ")
                             if (arguments?.containsKey("add_account") == true) {
                                 findNavController().popBackStack()
                             } else {
-                                systemViewModel.registerDeviceToken()
+                                FirebaseMessaging.getInstance().token
+                                    .addOnCompleteListener(OnCompleteListener { task ->
+                                        if (!task.isSuccessful) {
+                                            Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                                            return@OnCompleteListener
+                                        }
+
+                                        // Get new FCM registration token
+                                        val token = task.result
+
+                                        // Log and toast
+                                        Log.d("FCM Token", token)
+                                        systemViewModel.registerDeviceToken(token)
+                                    })
+                                    .addOnFailureListener { e ->
+                                        if (e is IOException) {
+                                            Log.e("FCM Token", "Network error", e)
+                                        } else if (e is ExecutionException) {
+                                            Log.e("FCM Token", "Execution error", e)
+                                        } else {
+                                            Log.e("FCM Token", "Unknown error", e)
+                                        }
+                                    }
+
                                 findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                             }
 
@@ -91,7 +116,7 @@ class SignInFragment : Fragment() {
                         }
 
                     }else    if (it.errorCode == 401) {
-                        mainActivity().showMessage(" " + it.message)
+                        mainActivity().showMessage("Invalid password")
                     }
 
                     Log.i("Token Aut", it.authToken.toString())
@@ -105,13 +130,14 @@ class SignInFragment : Fragment() {
                         binding.textInputLayoutUserName.isEnabled = false
                         binding.textUserName.isEnabled = false
                         binding.textUserName.isClickable = false
+                    }else{
+                        mainActivity().showMessage("Invalid username")
                     }
-                    mainActivity().showMessage(it.message?:"")
                 }
             }
         }
         binding.btnForgotPassword.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment)
+            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
         }
         binding.btnPrevious.setOnClickListener {
             if (userNameValid) {

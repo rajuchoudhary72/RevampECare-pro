@@ -69,7 +69,6 @@ class ComposeFragment : Fragment() {
     private val composeViewModel: ComposeViewModel by viewModels()
 
     private var lastClickAttachmentType: AttachmentType? = null
-
     private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
 
     private val mPermissionSettingResult =
@@ -255,6 +254,7 @@ class ComposeFragment : Fragment() {
 
         binding.btnReplyMessage.setOnClickListener {
             (requireActivity() as MainActivity).showLoader(true)
+
             composeViewModel.sendMessage { isSuccess, message ->
                 (requireActivity() as MainActivity).showLoader(false)
                 mainActivity().showMessage(message ?: "")

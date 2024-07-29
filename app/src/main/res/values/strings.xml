@@ -2,10 +2,10 @@
     <string name="action_settings">Settings</string>
     <!--School/College Code-->
     <string name="help">Help</string>
-    <string name="please_enter_school_college_code">Please Enter School/College Code</string>
-    <string name="find_your_school_college_code"><u>Fine Your School Code</u></string>
+    <string name="please_enter_school_college_code">Please Enter School Code</string>
+    <string name="find_your_school_college_code"><u>Find Your School Code</u></string>
     <string name="continue_">Continue</string>
-    <string name="search_your_school_college">Search Your School/College</string>
+    <string name="search_your_school_college">Search Your School</string>
     <string name="enter_your_search_query_here">Enter your search query here…</string>
     <string name="welcome_to">Welcome To</string>
     <string name="username">Username</string>
@@ -67,7 +67,7 @@
     <string name="enter_password">Enter Password</string>
     <string name="remember_me">Remember Me</string>
     <string name="powered_by">Powered by</string>
-    <string name="demo_school_name_franciscan_international_school">Franciscan International School</string>
+    <string name="demo_school_name_franciscan_international_school">Welcome to Franciscan e-Care</string>
     <string name="demo_school_location_greater_noida">Greater Noida</string>
     <string name="false_value">False</string>
     <string name="true_value">True</string>
@@ -112,7 +112,7 @@
     <string name="suggested">Suggested</string>
     <string name="select_reason">Select Reason</string>
     <string name="enter_your_reason">Enter Your Reason</string>
-    <string name="select_proof">Select Proof</string>
+    <string name="select_proof">Attach File</string>
     <string name="select_attachment">Select Attachment</string>
     <string name="i_agree">I agree</string>
     <string name="terms_and_conditions">Terms and Conditions</string>
@@ -352,7 +352,7 @@
     <string name="treatment">Treatment</string>
     <string name="tap_for_more">tap for more</string>
     <string name="from_s_till_today">From %s - Till Today</string>
-    <string name="total_school_college_days">Total School/College Days</string>
+    <string name="total_school_college_days">Total School Days</string>
     <string name="total_leave">Total Leave</string>
     <string name="total_late">Total Late</string>
     <string name="add_lesson">Add Lesson</string>
@@ -516,7 +516,7 @@
     <string name="previous_balance">Previous Balance</string>
     <string name="select_session">Session</string>
 
-    <string name="change_school_college"><u>Change School/College</u>></string>
+    <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
     <string name="student_not_found">Student not found</string>
@@ -541,7 +541,7 @@
     <string name="statistical">Statistical</string>
     <string name="boys">Boy(s)</string>
     <string name="girls">Girl(s)</string>
-    <string name="school_bus">School/College Bus</string>
+    <string name="school_bus">School Bus</string>
     <string name="self_bus">Self Conveyance</string>
     <string name="students">Students</string>
     <string name="transport">Transport</string>

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -85,6 +86,7 @@ class InstitutionCodeFragment : Fragment() {
         }
 
         binding.btnContinue.setOnClickListener {
+            binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
             (requireActivity() as MainActivity).showLoader(true)
             institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
                 (requireActivity() as MainActivity).showLoader(false)
@@ -95,9 +97,8 @@ class InstitutionCodeFragment : Fragment() {
                         navigateToSignFragment(it.schoolCode)
                     }
                 } else {
-                    if (it != null) {
-                        mainActivity().showMessage(it.message.toString())
-                    }
+                    binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
+                    mainActivity().showMessage("Please enter a valid school code.")
                 }
             }
         }
@@ -112,6 +113,7 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnHelp.setOnClickListener {
             findNavController().navigate(R.id.helpFragment)
         }
+
     }
 
     private fun navigateToSignFragment(schoolCode: String) {

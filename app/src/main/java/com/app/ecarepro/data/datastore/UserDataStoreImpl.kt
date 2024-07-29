@@ -126,9 +126,10 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun saveSchoolData(school: NetworkSchool) {
         if (schoolDatabase.getSchoolData(school.schoolCode) == null)
             schoolDatabase.insertSchool(school.asNetworkSchool())
-        val schoolCode = getCurrentSchoolCode()
+       /* val schoolCode = getCurrentSchoolCode()
         if (schoolCode.isNullOrEmpty())
-            setCurrentSchoolCode(school.schoolCode)
+            setCurrentSchoolCode(school.schoolCode)*/
+        setCurrentSchoolCode(school.schoolCode)
     }
 
     override suspend fun getSchoolData(): NetworkSchool? {
@@ -252,10 +253,9 @@ class UserDataStoreImpl @Inject constructor(
 
     override suspend fun clear() {
         GlobalScope.launch {
+            context.dataStore.edit { it.clear() }
             eCareProDatabase.userDao().nukeTable()
             eCareProDatabase.schoolDao().nukeTable()
-            context.dataStore.edit { it.clear() }
-         //   eCareProDatabase.clearAllTables()
         }
     }
 
