@@ -23,6 +23,7 @@ class StaffAttendanceModel(val staffAttendance: StaffAttendance) :
         lvPresent.setSubTitle(staffAttendance.present.toString())
         lvLeave.setSubTitle(staffAttendance.onLeave.toString())
         lvAbsent.setSubTitle(staffAttendance.absent.toString())
+        chartView.isClearBackgroundColor = true
 
         chartView.aa_drawChartWithChartModel(getBarChartModel(staffAttendance))
     }

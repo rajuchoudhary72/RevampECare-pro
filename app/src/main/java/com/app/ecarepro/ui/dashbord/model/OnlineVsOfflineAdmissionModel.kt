@@ -23,6 +23,7 @@ class OnlineVsOfflineAdmissionModel(val data: List<DataValue>) :
         lvOnline.setSubTitle(data.firstOrNull()?.value.toString())
         lvOffline.setTitle(data.getOrNull(1)?.data ?: "")
         lvOffline.setSubTitle(data.getOrNull(1)?.value.toString())
+        chartView.isClearBackgroundColor = true
 
         chartView.aa_drawChartWithChartModel(getBarChartModel(data))
     }

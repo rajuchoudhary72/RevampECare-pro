@@ -23,6 +23,7 @@ import android.view.MotionEvent
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
@@ -99,6 +100,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.appBarMain.contentMain.bottomNavigationView.isVisible =
                 topLevelFragments.contains(destination.id)
+            binding.appBarMain.contentMain.rlBottomNavigation.isVisible =
+                topLevelFragments.contains(destination.id)
         }
 
         setUpDrawer()
@@ -113,6 +116,34 @@ class MainActivity : AppCompatActivity() {
             systemViewModel.user.collectLatest {
                 if (it != null) {
                     userData = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            systemViewModel.bottomNavPosition.collectLatest { v->
+                when (v){
+                    0 ->{
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.menu).setChecked(true)
+
+                    }
+                    1 ->{
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.profile).setChecked(true)
+
+                    }
+                    2 ->{
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home).setChecked(true)
+
+                    }
+                    3 ->{
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.notification).setChecked(true)
+
+                    }
+                    4 ->{
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.message).setChecked(true)
+
+                    }
+
+
                 }
             }
         }
@@ -244,8 +275,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideMoreItemMenu() {
         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
-        binding.appBarMain.contentMain.bottomNavigationView.onMenuItemClick(0)
-        //  listenMenuItemClickEvent = false
+         //  listenMenuItemClickEvent = false
     }
 
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -798,35 +828,51 @@ class MainActivity : AppCompatActivity() {
                 R.id.messageFragment
             )
         )
-        binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
-        //binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
+     //   binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
+         binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
-        binding.appBarMain.contentMain.bottomNavigationView.setOnMenuItemClickListener { cbnMenuItem, position ->
-            if (listenMenuItemClickEvent.not()) {
-                listenMenuItemClickEvent = true
-                return@setOnMenuItemClickListener
-            }
-            binding.appBarMain.contentMain.moreItemContainer.slideVisibility(cbnMenuItem.icon == R.drawable.ic_dashboard)
+        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home).setChecked(true);
 
-            when (position) {
-                0 -> {
-                    navController.navigate(R.id.homeFragment)
+        binding.appBarMain.contentMain.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu -> {
+                    systemViewModel.openDrawer(true)
+                    true
                 }
-
-                1 -> {
+                R.id.profile -> {
                     navController.navigate(R.id.settingsFragment)
+                    true
                 }
-
-                3 -> {
+                R.id.home -> {
+                   // loadFragment(SettingFragment())
+                    navController.navigate(R.id.homeFragment)
+                    true
+                }
+                R.id.notification -> {
                     navController.navigate(R.id.notificationFragment)
+                    true
+                }
+                R.id.message -> {
+                    navController.navigate(R.id.messageFragment)
+                    true
                 }
 
-                4 -> {
-                    navController.navigate(R.id.messageFragment)
-                }
+                else -> {false}
             }
         }
+
+         lifecycleScope.launch {
+             systemViewModel.showDashboardValue.collectLatest { v->
+                 if (v){
+                     navController.navigate(R.id.action_homeFragment_to_homeViewPagerFragment)
+                 }
+             }
+
+         }
+
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -24,7 +24,7 @@ class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
         amount.subTitle("₹" + feeDefaulter.amount)
         total.subTitle(feeDefaulter.totalStudent.toString())
         defaulter.subTitle(feeDefaulter.dafaulterCount.toString())
-
+        chartView.isClearBackgroundColor = true
         chartView.aa_drawChartWithChartModel(getBarChartModel(feeDefaulter))
     }
 

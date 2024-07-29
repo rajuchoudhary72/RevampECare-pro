@@ -55,11 +55,11 @@ class NotificationFragment : Fragment() {
         }
 
         binding.recyclerView.apply {
-            addItemDecoration(
+           /* addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
-            )
+            )*/
         }
     }
 

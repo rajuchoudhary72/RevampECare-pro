@@ -29,6 +29,7 @@ class StudentStatisticModel(val data: List<DataValue>) :
 
         lvChristian.setTitle(data.getOrNull(2)?.data ?: "")
         lvChristian.setSubTitle(data.getOrNull(2)?.value.toString())
+        chartView.isClearBackgroundColor = true
 
         chartView.aa_drawChartWithChartModel(getBarChartModel(data))
     }

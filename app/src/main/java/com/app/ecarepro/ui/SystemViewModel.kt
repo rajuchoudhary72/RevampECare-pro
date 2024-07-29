@@ -40,9 +40,11 @@ class SystemViewModel @Inject constructor(
     val openNavigationDrawer = _openNavigationDrawer
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
-    val navigateBack = _navigateBack
+     val navigateBack = _navigateBack
 
     val refresh = MutableSharedFlow<Boolean>()
+    val showDashboardValue = MutableSharedFlow<Boolean>()
+    val bottomNavPosition = MutableSharedFlow<Int>()
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
 
@@ -106,6 +108,23 @@ class SystemViewModel @Inject constructor(
             refresh.emit(true)
         }
     }
+
+
+    fun showDashboard(v  : Boolean) {
+        viewModelScope.launch {
+            showDashboardValue.emit(v)
+        }
+    }
+
+
+    fun bottomNavPositionSet(v  : Int) {
+        viewModelScope.launch {
+            bottomNavPosition.emit(v)
+        }
+    }
+
+
+
     fun registerDeviceToken(){
         Firebase.messaging.token.addOnSuccessListener { token ->
             viewModelScope.launch {

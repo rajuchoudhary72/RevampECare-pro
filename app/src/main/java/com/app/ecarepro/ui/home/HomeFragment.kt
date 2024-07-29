@@ -78,7 +78,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
+       // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
         binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
                 ),
                 columnProvider = object : ColumnProvider {
                     override fun getNumberOfColumns(): Int {
-                        return 3
+                        return 4
                     }
 
                 },
@@ -263,11 +263,15 @@ class HomeFragment : Fragment() {
                     id("view_all_widget")
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                     clickListener { _ ->
-                        findNavController().navigate(
-                            R.id.widgetsFragment,
-                            bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
-                        )
+                        /*findNavController().navigate(
+                            R.id.homeViewPagerFragment,
+                           // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
+                        )*/
+
+                        systemViewModel.showDashboard(true)
                     }
+
+
                 }
 
                 labelCenter {

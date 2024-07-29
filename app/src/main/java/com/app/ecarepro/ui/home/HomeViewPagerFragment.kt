@@ -4,19 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentHomeViewPagerBinding
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.attendance.AttendanceFragment
+import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.dashbord.DashboardFragment
 import com.app.ecarepro.ui.feed.FeedsFragment
+import com.app.ecarepro.ui.timeTable.TimeTableDayWiseNavHostFragment
 import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
 import com.app.ecarepro.utils.SwipeDirection
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,22 +35,18 @@ class HomeViewPagerFragment : Fragment() {
     private var _binding: FragmentHomeViewPagerBinding? = null
     private val binding get() = _binding!!
 
+
+
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     private val fragments: List<Fragment> by lazy {
         mutableListOf(
-            HomeFragment(),
-            DashboardFragment(),
+             DashboardFragment(),
             AttendanceFragment(),
             FeedsFragment()
         )
     }
 
-    private val swipeControlTouchListener by lazy {
-        SwipeControlTouchListener().apply {
-            setSwipeDirection(SwipeDirection.LEFT)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,49 +59,82 @@ class HomeViewPagerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            systemViewModel.navigateBack.collectLatest {
-                if (binding.viewPager.currentItem != 0) {
-                    binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() - 1, false);
-                } else {
-                    findNavController().popBackStack()
+
+
+        val viewPagerAdapter = ViewPagerAdapter(
+            fragments,
+            activity?.supportFragmentManager!!,
+            lifecycle
+        )
+        binding.viewPager.adapter = viewPagerAdapter
+
+
+        TabLayoutMediator(
+            binding.tabLayout,
+            binding.viewPager
+        ) { tab, position ->
+            when (position) {
+
+                0 -> {
+                    tab.text = " Dashboard"
                 }
+
+                1 -> {
+                    tab.text = "Attendance"
+                }
+
+                2 -> {
+                    tab.text = "Feeds"
+                }
+            }
+        }.attach()
+
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu -> {
+                    systemViewModel.bottomNavPositionSet(0)
+                    systemViewModel.openDrawer(true)
+                    true
+                }
+                R.id.profile -> {
+                    systemViewModel.bottomNavPositionSet(1)
+                    binding.rlBottomNavigation.isVisible=false
+                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_settingsFragment)
+
+                    true
+                }
+                R.id.home -> {
+                    systemViewModel.bottomNavPositionSet(2)
+                    binding.rlBottomNavigation.isVisible=false
+                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_homeFragment)
+                    true
+                }
+                R.id.notification -> {
+                    systemViewModel.bottomNavPositionSet(3)
+                    binding.rlBottomNavigation.isVisible=false
+                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_notificationFragment)
+                    true
+                }
+                R.id.message -> {
+                    systemViewModel.bottomNavPositionSet(4)
+                    binding.rlBottomNavigation.isVisible=false
+                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_messageFragment)
+                    true
+                }
+
+                else -> {false}
             }
         }
 
-        binding.viewPager.apply {
-            //isUserInputEnabled = false
-            // setOnTouchListener(swipeControlTouchListener)
-            adapter = HomeViewPagerAdapter(this@HomeViewPagerFragment, fragments)
-            setPageTransformer(FadeOutTransformation())
-        }
-
-        // onInfinitePageChangeCallback(fragments.size + 2)
+        binding.bottomNavigationView.menu.forEach { it.isChecked = false }
+        binding.bottomNavigationView.menu.findItem(R.id.home).setChecked(true)
+        binding.bottomNavigationView.menu.findItem(R.id.home).setChecked(false)
 
     }
 
-    private fun onInfinitePageChangeCallback(listSize: Int) {
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
 
-                if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                    when (binding.viewPager.currentItem) {
-                        listSize - 1 -> binding.viewPager.setCurrentItem(1, false)
-                        0 -> binding.viewPager.setCurrentItem(listSize - 2, false)
-                    }
-                }
-            }
 
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-
-                if (position != 0 && position != listSize - 1) {
-                    // pageIndicatorView.setSelected(position-1)
-                }
-            }
-        })
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

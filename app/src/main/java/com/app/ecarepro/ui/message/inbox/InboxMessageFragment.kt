@@ -68,11 +68,11 @@ class InboxMessageFragment : Fragment() {
             inboxMessageViewModel.refresh()
         }
         binding.recyclerView.apply {
-            addItemDecoration(
+           /* addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
-            )
+            )*/
 
             addOnScrollListener(object :
                 PaginationScrollListener(layoutManager as LinearLayoutManager) {

@@ -152,6 +152,7 @@ dependencies {
     implementation("com.github.dhaval2404:imagepicker:2.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation("com.github.fornewid:neumorphism:0.3.2")
 
 
 }

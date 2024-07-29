@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:paddingTop="38dp"
-        app:navigationIcon="@drawable/ic_arrow_back_24px"
+         app:navigationIcon="@drawable/ic_arrow_back_24px"
         app:title="@string/settings"
         app:titleTextAppearance="?attr/textAppearanceTitleMedium"
         app:titleTextColor="@color/white" />
