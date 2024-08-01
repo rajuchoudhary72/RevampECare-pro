@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.databinding.FragmentSearchPagerBinding
 import com.app.ecarepro.menuCard
 import com.app.ecarepro.model.Staff
@@ -121,9 +120,11 @@ class SearchPagerFragment : Fragment() {
                             }
                         }
                     }
+
                     SEARCH_TYPE_MODULE -> {
                         buildModuleModels(uiState.modules)
                     }
+
                     else -> {
                         uiState.staffs.forEach { staff: Staff ->
                             searchResultStudent {
@@ -145,53 +146,24 @@ class SearchPagerFragment : Fragment() {
         }
     }
 
-    private fun EpoxyController.buildModuleModels(modules: List<Menu>) {
+    private fun EpoxyController.buildModuleModels(modules: List<Module>) {
         modules.forEach { menu ->
-            if (menu.childMenus.isNullOrEmpty()) {
-                menuCard {
-                    id(menu.menuID)
-                    title(menu.title)
-                    icon(menu.icon)
-                    clickListener { _ ->
+            menuCard {
+                id(menu.menuID, menu.parentMenuID, menu.parentParentMenuID)
+                title(menu.title)
+                icon(menu.icon)
+                parentMenuIcon(menu.parentIcon)
+                clickListener { _ ->
+                    if (menu.parentParentMenuID != null && menu.parentMenuID != null) {
+                        mainActivity().getFragmentId(
+                            menu.parentParentMenuID, menu.parentMenuID, menu.menuID
+                        )
+                    } else if (menu.parentParentMenuID == null && menu.parentMenuID != null) {
+                        mainActivity().getFragmentId(menu.parentMenuID, menu.menuID)
+                    } else {
                         mainActivity().getFragmentId(menu.menuID)
                     }
-                }
-            } else {
-                menu.childMenus.forEach { childMenu ->
-                    if (childMenu.childMenus.isNullOrEmpty()) {
-                        menuCard {
-                            id(menu.menuID, childMenu.menuID)
-                            title(childMenu.title)
-                            icon(childMenu.icon)
-                            parentMenuIcon(menu.icon)
-                            clickListener { _ ->
-                                mainActivity().getFragmentId(
-                                    menu.menuID,
-                                    childMenu.chMenuID
-                                )
-                            }
-                        }
-                    } else {
-                        childMenu.childMenus.forEach { childChildMenu ->
-                            menuCard {
-                                id(
-                                    menu.menuID,
-                                    childMenu.chMenuID,
-                                    childChildMenu.menuID
-                                )
-                                title(childChildMenu.title)
-                                icon(childChildMenu.icon)
-                                parentMenuIcon(childMenu.icon)
-                                clickListener { _ ->
-                                    mainActivity().getFragmentId(
-                                        menu.menuID,
-                                        childMenu.chMenuID,
-                                        childChildMenu.sbChMenuID
-                                    )
-                                }
-                            }
-                        }
-                    }
+
                 }
             }
         }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="attendance"
+            type="com.app.ecarepro.data.network.model.StaffAttendanceDetails" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="@dimen/_8sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image"
+                android:scaleType="centerCrop"
+                imageUrl="@{attendance.photo}"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                tools:src="@drawable/img_message_user" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:fontFamily="@font/calibri_bold"
+                android:text="@{attendance.name}"
+                app:layout_constraintBottom_toTopOf="@+id/designation"
+                app:layout_constraintStart_toEndOf="@+id/image"
+                app:layout_constraintTop_toTopOf="@id/image"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Rau d" />
+
+            <TextView
+                android:id="@+id/designation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:fontFamily="@font/calibri_regular"
+                android:text="@{attendance.designation}"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintStart_toEndOf="@+id/image"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                tools:text="Rau d" />
+
+
+            <TextView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:background="@drawable/bg_circle"
+                android:fontFamily="@font/ubuntu_bold"
+                android:gravity="center"
+                isVisible="@{attendance.isPrasent()}"
+                android:text="P"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/image" />
+
+            <TextView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:background="@drawable/bg_circle"
+                android:fontFamily="@font/ubuntu_bold"
+                android:gravity="center"
+                android:backgroundTint="@color/red"
+                android:text="A"
+                isVisible="@{attendance.isAbsent()}"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/image" />
+
+            <TextView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:background="@drawable/bg_circle"
+                android:fontFamily="@font/ubuntu_bold"
+                android:gravity="center"
+                isVisible="@{attendance.isHoliday()}"
+                android:backgroundTint="@color/golden_yellow"
+                android:text="H"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/image" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

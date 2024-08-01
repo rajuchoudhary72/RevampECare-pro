@@ -877,5 +877,9 @@
         android:id="@+id/searchFragment"
         android:name="com.app.ecarepro.ui.search.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/staffAttendanceFragment"
+        android:name="com.app.ecarepro.ui.staff.StaffAttendanceFragment"
+        android:label="StaffAttendanceFragment" />
 
 </navigation>

@@ -86,6 +86,7 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
@@ -120,6 +121,7 @@ import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
+import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
@@ -617,6 +619,24 @@ class UserRepositoryImpl @Inject constructor(
                 val response = userService.getStaffList()
                 if (response.errorCode == 0) {
                     emit(Result.success(response.staffs))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override suspend fun getStaffAttendance(
+        staffType: String?,
+        date: String,
+    ): Flow<Result<List<StaffAttendanceDetails>>> {
+        return flow {
+            try {
+                val response = userService.staffAttendance(staffType, date)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.dtl?: emptyList()))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
