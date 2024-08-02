@@ -13,8 +13,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/grey_10"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/grey_10">
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
@@ -106,6 +106,16 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/black" />
 
+                <View
+                    isVisible="@{viewModel.selectStaffType != null}"
+                    android:layout_width="3dp"
+                    android:layout_height="3dp"
+                    android:background="@drawable/tv_bg_rounded"
+                    android:backgroundTint="@color/red"
+                    app:layout_constraintStart_toEndOf="@+id/btn_filter"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_filter"
+                    app:layout_constraintTop_toTopOf="@+id/btn_filter" />
+
                 <ImageView
                     android:id="@+id/btn_show_search"
                     isVisible="@{!viewModel.isSearchViewVisible}"
@@ -132,10 +142,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/_8sdp"
                 android:id="@+id/ll_thoughts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@color/md_theme_light_primary"
                 android:fitsSystemWindows="true"
                 android:gravity="center"
@@ -199,9 +209,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="@dimen/_8sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -209,9 +219,9 @@
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
-                    android:backgroundTint="@color/white"
                     android:layout_weight="1"
                     android:background="@drawable/bg_rounded_corner_green"
+                    android:backgroundTint="@color/white"
                     android:fontFamily="@font/calibri_regular"
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
@@ -226,13 +236,13 @@
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="@dimen/_4sdp"
-                    android:backgroundTint="@color/white"
                     android:background="@drawable/bg_rounded_corner_green"
+                    android:backgroundTint="@color/white"
+                    android:drawableStart="@drawable/descending"
                     android:fontFamily="@font/calibri_regular"
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
                     android:paddingVertical="@dimen/_7sdp"
-                    android:drawableStart="@drawable/descending"
                     android:text="Destination"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
@@ -241,10 +251,10 @@
                     android:id="@+id/btn_sort_by_name"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:backgroundTint="@color/white"
                     android:layout_marginEnd="16dp"
-                    android:drawableStart="@drawable/descending"
                     android:background="@drawable/bg_rounded_corner_green"
+                    android:backgroundTint="@color/white"
+                    android:drawableStart="@drawable/descending"
                     android:fontFamily="@font/calibri_regular"
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_15sdp"
