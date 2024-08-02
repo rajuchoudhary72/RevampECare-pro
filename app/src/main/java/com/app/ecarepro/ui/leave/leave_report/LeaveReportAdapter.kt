@@ -52,16 +52,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 llApproveRej.isVisible=data.status=="Pending"
             }
 
-
-
-
         }
-
-
-
-
-
-
    }
 
     fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean){

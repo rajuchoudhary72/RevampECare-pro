@@ -1,6 +1,5 @@
 package com.app.ecarepro.ui.search
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.app.ecarepro.data.network.model.Menu
@@ -27,7 +26,7 @@ class SearchPagerViewModel @Inject constructor(
 
     private val students = mutableListOf<Student>()
     private val staffs = mutableListOf<Staff>()
-    private val modules = mutableListOf<Menu>()
+    private val modules = mutableListOf<Module>()
 
     val uiState: Flow<SearchUiState> = combine(
         flow = searchType, flow2 = searchQuery
@@ -58,16 +57,7 @@ class SearchPagerViewModel @Inject constructor(
     }
 
     private fun filterModule(query: String, type: String): SearchUiState {
-        val filteredModules = modules.filter {
-            it.title?.contains(query, true) ?: false ||
-                    it.childMenus?.any { it.title?.contains(query, true) ?: false } ?: false ||
-                    it.childMenus?.any {
-                        it.childMenus?.any {
-                            it.title?.contains(query, true) ?: false
-                        } ?: false
-                    } ?: false
-        }
-        Log.e("Search", "setModules: ${filteredModules.size}")
+        val filteredModules = modules.filter { it.title?.contains(query, true) ?: false }
         return if (filteredModules.isEmpty()) {
             SearchUiState.NoResultFound
         } else {
@@ -167,8 +157,49 @@ class SearchPagerViewModel @Inject constructor(
     fun setModules(modules: List<Menu>) {
         this.modules.apply {
             clear()
-            addAll(modules)
-            Log.e("Search", "setModules: ${modules.size}")
+            val menus = mutableListOf<Module>()
+            modules.forEach { menu ->
+                if (menu.childMenus.isNullOrEmpty()) {
+                    menus.add(
+                        Module(
+                            icon = menu.icon,
+                            menuID = menu.menuID,
+                            title = menu.title,
+                            url = menu.url
+                        )
+                    )
+                } else {
+                    menu.childMenus.forEach { childMenu ->
+                        if (childMenu.childMenus.isNullOrEmpty()) {
+                            menus.add(
+                                Module(
+                                    icon = childMenu.icon,
+                                    menuID = childMenu.menuID,
+                                    parentIcon = menu.icon,
+                                    title = childMenu.title,
+                                    url = childMenu.url,
+                                    parentMenuID = menu.menuID
+                                )
+                            )
+                        } else {
+                            childMenu.childMenus.forEach { childChildMenu ->
+                                menus.add(
+                                    Module(
+                                        icon = childChildMenu.icon,
+                                        menuID = childChildMenu.menuID,
+                                        parentIcon = childMenu.icon,
+                                        title = childChildMenu.title,
+                                        url = childChildMenu.url,
+                                        parentMenuID = childMenu.menuID,
+                                        parentParentMenuID = menu.menuID
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            addAll(menus)
         }
     }
 
@@ -196,7 +227,7 @@ sealed interface SearchUiState {
         val searchType: String? = SEARCH_TYPE_MODULE,
         val students: List<Student> = emptyList(),
         val staffs: List<Staff> = emptyList(),
-        val modules: List<Menu> = emptyList(),
+        val modules: List<Module> = emptyList(),
     ) : SearchUiState
 
     data class Error(
@@ -207,3 +238,13 @@ sealed interface SearchUiState {
 
     fun getErrorOrNull() = if (this is Error) this.error else null
 }
+
+data class Module(
+    val parentIcon: String? = null,
+    val icon: String?,
+    val menuID: Int,
+    val parentMenuID: Int? = null,
+    val parentParentMenuID: Int? = null,
+    val title: String?,
+    val url: String?
+)

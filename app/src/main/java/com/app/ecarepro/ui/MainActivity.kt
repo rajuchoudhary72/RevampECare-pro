@@ -601,7 +601,9 @@ class MainActivity : AppCompatActivity() {
                             putString(Constant.TO, Constant.FRA_STAFF_LEAVE)
                         })
                     }
-
+                    62 -> {
+                        navController.navigate(R.id.staffAttendanceFragment)
+                    }
                 }
             }
 

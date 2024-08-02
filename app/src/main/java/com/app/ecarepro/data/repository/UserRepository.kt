@@ -82,6 +82,7 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
@@ -377,6 +378,10 @@ interface UserRepository {
         userType:String
     ): AppUserWebResponse
 
+    suspend fun getStaffAttendance(
+        staffType: String? = null,
+        date: String,
+    ): Flow<Result<List<StaffAttendanceDetails>>>
     suspend fun getAttendance(
         from: String,
         till: String,

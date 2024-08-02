@@ -134,6 +134,8 @@ import android.provider.Settings.Secure
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
+import com.app.ecarepro.ui.attendance_section.Attendance
+import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 
 class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
@@ -562,7 +564,23 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getStaffList(): NetworkStaffList {
         return  userService.getStaffList()
     }
-
+    override suspend fun getStaffAttendance(
+        staffType: String?,
+        date: String,
+    ): Flow<Result<List<StaffAttendanceDetails>>> {
+        return flow {
+            try {
+                val response = userService.staffAttendance(staffType, date)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.dtl?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun getStaffProfile(sId: Int): NetworkStaffProfile {
         return userService.getStaffProfile(sId)
     }
