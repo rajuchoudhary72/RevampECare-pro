@@ -1,56 +1,65 @@
 package com.app.ecarepro.ui
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.Menu
-import com.app.ecarepro.data.network.model.NetworkSchool
-import com.app.ecarepro.data.network.model.UserInfo
-import com.app.ecarepro.data.repository.AppRepository
-import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import android.app.Application.WIFI_SERVICE
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings.Secure
-import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.RegisterDevice
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
+import com.app.ecarepro.data.network.model.SearchOption
+import com.app.ecarepro.data.network.model.UserInfo
+import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import com.app.ecarepro.utils.Constant
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
+    private val userRepository: UserRepository
+
 ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
-     val navigateBack = _navigateBack
+    val navigateBack = _navigateBack
 
     val refresh = MutableSharedFlow<Boolean>()
     val showDashboardValue = MutableSharedFlow<Boolean>()
     val bottomNavPosition = MutableSharedFlow<Int>()
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
+      var UType: Int = -1
 
     init {
         viewModelScope.launch {
             userRoleName = userDataStore.getRoleName().toString()
+        }
+
+        viewModelScope.launch {
+
+                UType = userDataStore.getUserType()!!
+
         }
     }
 
@@ -65,7 +74,8 @@ class SystemViewModel @Inject constructor(
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
-                        favroiteMenus = response.favoriteMenus ?: emptyList()
+                        favroiteMenus = response.favoriteMenus ?: emptyList(),
+                        searchOption = response.searchOptions ?: emptyList()
                     )
                 } else {
                     val error = result.exceptionOrNull() ?: IllegalArgumentException(
@@ -82,6 +92,15 @@ class SystemViewModel @Inject constructor(
                 scope = viewModelScope
             )
 
+    fun getSearchOptions(): List<SearchOption> {
+        val uiState = uiState.value
+        return if (uiState is MainActivityUiState.Success) {
+            uiState.searchOption
+        } else {
+            emptyList()
+        }
+    }
+
     fun openDrawer(open: Boolean) {
         _openNavigationDrawer.postValue(open)
     }
@@ -92,13 +111,19 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun logout(onDataClear: () -> Unit) {
+
+    fun logout(onDataClear: (Boolean) -> Unit) {
         viewModelScope.launch {
-            try {
-                userDataStore.clear()
-                onDataClear()
-            } catch (e: Exception) {
-                e.toString()
+            userRepository.logout().collectLatest { result ->
+                if (result.isSuccess) {
+                    try {
+                        userDataStore.clear()
+                        onDataClear(true)
+                    } catch (e: Exception) {
+                        e.toString()
+                        onDataClear(false)
+                    }
+                }
             }
         }
     }
@@ -108,7 +133,6 @@ class SystemViewModel @Inject constructor(
             refresh.emit(true)
         }
     }
-
 
     fun showDashboard(v  : Boolean) {
         viewModelScope.launch {
@@ -123,32 +147,40 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-
-
-    fun registerDeviceToken(){
-        Firebase.messaging.token.addOnSuccessListener { token ->
-            viewModelScope.launch {
-                val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
-                val wInfo = wifiManager.connectionInfo
-                val macAddress = wInfo.macAddress
-                appRepository
-                    .registerDevice(
-                        RegisterDevice(
-                            fcmToken = token,
-                            osVersion = "OS " + Build.VERSION.SDK_INT,
-                            deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
-                            deviceType = 1,
-                            imeI1 = macAddress,
-                            imeI2 = macAddress,
-                            deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID)
-                        )
+    fun registerDeviceToken(token: String) {
+        GlobalScope.launch {
+            val wifiManager = context.getSystemService(WIFI_SERVICE) as WifiManager
+            val wInfo = wifiManager.connectionInfo
+            val macAddress = wInfo.macAddress
+            appRepository
+                .registerDevice(
+                    RegisterDevice(
+                        fcmToken = token,
+                        osVersion = "OS " + Build.VERSION.SDK_INT,
+                        deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
+                        deviceType = 1,
+                        imeI1 = macAddress,
+                        imeI2 = macAddress,
+                        deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID)
                     )
-                    .collectLatest {
-                        println(it)
-                    }
+                )
+                .collectLatest {
+                    println(it)
+                }
+        }
+
+    }
+
+    fun getTokenKey(function: (String?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                function(
+                    userRepository
+                        .getGenerateToken(Constant.DEVICE_TYPE).tokenKey
+                )
+            } catch (e: Exception) {
+                function(null)
             }
-        }.addOnFailureListener {
-            Log.e("Failed to get token", it.message.toString())
         }
     }
 }
@@ -160,6 +192,7 @@ sealed interface MainActivityUiState {
         val userInfo: UserInfo,
         val menus: List<Menu>,
         val favroiteMenus: List<Menu>,
+        val searchOption: List<SearchOption> = emptyList(),
     ) : MainActivityUiState
 
     data class Error(

@@ -41,6 +41,9 @@ class OutPassReportAdapter(
            tvRollNo.text=data.rollNo
            tvRoute.text=data.route
            tvStop.text=data.stop
+            Picasso.get().load(data.photo)
+                .placeholder(R.drawable.default_profile)
+                .into(circleImageViewProfile)
          }
 
     }

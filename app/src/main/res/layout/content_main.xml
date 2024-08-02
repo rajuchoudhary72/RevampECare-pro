@@ -75,6 +75,7 @@
 
 
                 <RelativeLayout
+                    android:id="@+id/rl_main_search"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginHorizontal="@dimen/_30sdp"

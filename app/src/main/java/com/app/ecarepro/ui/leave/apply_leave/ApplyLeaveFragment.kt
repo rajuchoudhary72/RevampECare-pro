@@ -153,7 +153,7 @@ class ApplyLeaveFragment : Fragment() {
                                  }
                                  val arrayAdapter = ArrayAdapter(
                                      requireContext(),
-                                     R.layout.view_drop_down_menu,
+                                     android.R.layout.simple_list_item_1,
                                      leaveTypesDataString
                                  )
                                  binding.autoCompleteReason.setAdapter(arrayAdapter)
@@ -206,7 +206,7 @@ class ApplyLeaveFragment : Fragment() {
                         selectedLeaveTypeID,
                         binding.tvStartDate.text.toString(),
                         binding.tvEndDate.text.toString(),
-                        binding.tvNumberDays.text.toString().toInt(),
+                        binding.tvNumberDays.text.toString().toDouble(),
                         halfdayDTL,
                         binding.textFiledReason.text.toString(),
                         imageString,

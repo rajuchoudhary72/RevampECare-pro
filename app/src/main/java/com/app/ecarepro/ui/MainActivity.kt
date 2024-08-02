@@ -19,6 +19,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import android.graphics.Rect
 import android.view.MotionEvent
+import androidx.core.os.bundleOf
 
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private var expandedMenuId: Int = -1
     private var listenMenuItemClickEvent = true
-    private var UType: Int = -1
+
 
     @Inject
     lateinit var userDataStore: UserDataStore
@@ -91,6 +92,8 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.profileFragment)
             systemViewModel.openDrawer(false)
         }
+
+
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -340,13 +343,13 @@ class MainActivity : AppCompatActivity() {
     fun getFragmentId(menuID: Int) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
-             UType = userDataStore.getUserType()!!
+             systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
         when (menuID) {
             3 -> {
                 try {
-                    if (UType == Constant.STAFF_TYPE) {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
                             navController.navigate(
                                 R.id.classAndTeacherListFragment,
@@ -367,7 +370,7 @@ class MainActivity : AppCompatActivity() {
 
             4 -> {
                 try {
-                    if (UType == Constant.STAFF_TYPE) {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
                             navController.navigate(
                                 R.id.classAndTeacherListFragment,
@@ -390,7 +393,7 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            5 -> if (UType == Constant.STAFF_TYPE) {
+            5 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
                 navController.navigate(R.id.teacherSyllabusFragment)
             } else {
                 navController.navigate(R.id.classSyllabus)
@@ -406,7 +409,7 @@ class MainActivity : AppCompatActivity() {
 
             17 -> {
                 try {
-                    if (UType == Constant.STAFF_TYPE) {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         navController.navigate(R.id.attendanceFragment)
                     } else {
                         navController.navigate(R.id.showAttendanceFragment)
@@ -421,7 +424,7 @@ class MainActivity : AppCompatActivity() {
             21 -> navController.navigate(R.id.thoughtsListFragment)
             22 -> navController.navigate(R.id.appointmentReportFragment)
             24 -> {
-                if (UType == Constant.STUDENT_TYPE) {
+                if (systemViewModel.UType == Constant.STUDENT_TYPE) {
                     navController.navigate(R.id.infractionSelectFragment)
                 } else {
                     navController.navigate(R.id.appointmentReportFragment)
@@ -435,7 +438,7 @@ class MainActivity : AppCompatActivity() {
 
             27 -> {
                 try {
-                    if (UType == Constant.STAFF_TYPE) {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) { 
                         if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
                             lifecycleScope.launch {
                                 userDataStore.getSchoolData()?.let {
@@ -580,7 +583,7 @@ class MainActivity : AppCompatActivity() {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
                     })
 
-                    12 -> if (UType == Constant.STAFF_TYPE) {
+                    12 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         navController.navigate(R.id.noticeListFragment, Bundle().apply {
                             putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
                             putString(Constant.USER_TYPE, Constant.USER_STAFF)
@@ -599,7 +602,7 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
                     14 -> navController.navigate(R.id.birthdayFragment)
-                    15 -> if (UType == Constant.STAFF_TYPE) {
+                    15 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
                             navController.navigate(
                                 R.id.classAndTeacherListFragment,
@@ -649,7 +652,7 @@ class MainActivity : AppCompatActivity() {
 
             24 -> {
                 when (childMenuId) {
-                    21 -> if (UType == Constant.STAFF_TYPE) {
+                    21 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         navController.navigate(R.id.appreciationSelectionFragment)
 
                     } else {
@@ -657,7 +660,7 @@ class MainActivity : AppCompatActivity() {
 
                     }
 
-                    22 -> if (UType == Constant.STAFF_TYPE) {
+                    22 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
                         navController.navigate(R.id.infractionSelectFragment)
 
                     } else {
@@ -801,6 +804,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpBottomNavigationView() {
+
+        binding.appBarMain.contentMain.rlMainSearch.setOnClickListener {
+            navController.navigate(
+                R.id.searchFragment,
+                bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })
+            )
+        }
+
+
         val menuItems = arrayOf(
             CbnMenuItem(
                 R.drawable.ic_home,

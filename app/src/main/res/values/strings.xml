@@ -108,7 +108,7 @@
     <string name="status">Status</string>
     <string name="status_s">Status : </string>
     <string name="day_s">Day(s)</string>
-    <string name="day_s_1">1 Day(s)</string>
+    <string name="day_s_1">1.0 Day(s)</string>
     <string name="suggested">Suggested</string>
     <string name="select_reason">Select Reason</string>
     <string name="enter_your_reason">Enter Your Reason</string>
