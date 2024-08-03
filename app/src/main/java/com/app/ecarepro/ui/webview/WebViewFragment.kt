@@ -30,7 +30,6 @@ class WebViewFragment : Fragment() {
     private var _binding: FragmentWebViewBinding? = null
     private val binding get() = _binding!!
 
-    private val mViewModel: WebViewViewModel by viewModels()
     private val title by lazy { WebViewFragmentArgs.fromBundle(requireArguments()).title }
     private val url by lazy { WebViewFragmentArgs.fromBundle(requireArguments()).url }
     override fun onCreateView(
@@ -46,13 +45,10 @@ class WebViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.title = title
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
-       // loadUrl("https://www.franciscansolutions.com/faq-v2.aspx")
         loadUrl(url)
     }
 
     private fun loadUrl(url: String) {
-        binding.webView.loadUrl(url)
         binding.webView.settings.apply {
             builtInZoomControls = false
             displayZoomControls = false
@@ -99,6 +95,7 @@ class WebViewFragment : Fragment() {
                 return false
             }
         }
+        binding.webView.loadUrl(url)
     }
     private fun isStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -120,9 +117,4 @@ class WebViewFragment : Fragment() {
         }
         return true
     }
-
-   /* override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }*/
 }
