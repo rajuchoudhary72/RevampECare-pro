@@ -19,6 +19,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -154,23 +155,21 @@ class StaffAttendanceFragment : Fragment() {
                 multiSelectionEnabled = false
             )
             .onContactSelected {
-                it.firstOrNull()?.let { staffType -> viewModel.selectStaffType(staffType) }
+                viewModel.selectStaffType(it.firstOrNull())
             }
             .show(childFragmentManager, "")
     }
 
     private fun selectDate() {
-        val calendar = Calendar.getInstance()
-        val currentYear = calendar.get(Calendar.YEAR)
-        val minYear = currentYear - 10
-
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .setCalendarConstraints(
                 CalendarConstraints.Builder()
-                    .setStart(getCalendarConstraints(minYear, 1, 1).timeInMillis)
-                    .setEnd(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setValidator(FutureDateValidator())
+                    .setOpenAt(MaterialDatePicker.todayInUtcMilliseconds())
+                    .setStart(Calendar.getInstance().apply {add(Calendar.YEAR, -10)}.timeInMillis)
+                    .setEnd(Calendar.getInstance().timeInMillis)
                     .build()
             )
             .build()
@@ -182,14 +181,19 @@ class StaffAttendanceFragment : Fragment() {
         datePicker.show(childFragmentManager, "datePicker")
     }
 
-    private fun getCalendarConstraints(year: Int, month: Int, day: Int): Calendar {
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month - 1, day)
-        return calendar
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+}
+
+@Parcelize
+class FutureDateValidator() : CalendarConstraints.DateValidator {
+    override fun isValid(date: Long): Boolean {
+        val calender = Calendar.getInstance()
+        calender.add(Calendar.YEAR, -10)
+        return date in calender.timeInMillis..System.currentTimeMillis()
     }
 }

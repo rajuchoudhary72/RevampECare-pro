@@ -28,8 +28,8 @@ class StaffAttendanceViewModel @Inject constructor(
 
     val searchQuery = MutableStateFlow("")
     val date = MutableStateFlow(getFormatedDate())
-    private val sortByDesignation = MutableStateFlow(SortBy.ASC)
-    private val sortByName = MutableStateFlow(SortBy.ASC)
+    private val sortByDesignation = MutableStateFlow(SortBy.NON)
+    private val sortByName = MutableStateFlow(SortBy.NON)
     private val attendanceType = MutableStateFlow(AttendanceType.ALL)
     val selectStaffType = MutableStateFlow<StaffType?>(null)
     val staffTypes = MutableStateFlow<List<StaffType>>(emptyList())
@@ -74,22 +74,28 @@ class StaffAttendanceViewModel @Inject constructor(
 
     val uiState = combine(
         attendance, searchQuery, sortByDesignation, sortByName, attendanceType
-    ) { attendance: List<StaffAttendanceDetails>, searchQuery: String, sortByDesignation: SortBy, sortByName: SortBy, attendanceType:AttendanceType ->
+    ) { attendance: List<StaffAttendanceDetails>, searchQuery: String, sortByDesignation: SortBy, sortByName: SortBy, attendanceType: AttendanceType ->
         StaffAttendanceUiState.Success(
-            attendance = attendance.filter { it.name.contains(searchQuery, ignoreCase = true) }
-                .sortedBy { it.name }.apply {
-                    if (sortByName == SortBy.DESC) {
-                        reversed()
-                    }
-
-                    if (sortByDesignation == SortBy.DESC) {
-                        sortedBy { it.designation }
-                    }
-
-                    if(attendanceType == AttendanceType.ABSENT){
-                        filter { it.isAbsent == true || it.isHoliday == true }
-                    }else if(attendanceType == AttendanceType.PRESENT){
-                        filter { it.isPrasent == true }
+            attendance = attendance
+                .filter {
+                    it.name.contains(searchQuery, ignoreCase = true) &&
+                            when (attendanceType) {
+                                AttendanceType.ALL -> true
+                                AttendanceType.PRESENT -> it.isPrasent == true
+                                AttendanceType.ABSENT -> it.isAbsent == true
+                            }
+                }
+                .let { filteredList ->
+                    when {
+                        sortByName != SortBy.NON -> {
+                            if (sortByName == SortBy.DESC) filteredList.sortedByDescending { it.name }
+                            else filteredList.sortedBy { it.name }
+                        }
+                        sortByDesignation != SortBy.NON -> {
+                            if (sortByDesignation == SortBy.DESC) filteredList.sortedByDescending { it.designation }
+                            else filteredList.sortedBy { it.designation }
+                        }
+                        else -> filteredList
                     }
                 },
             searchQuery = searchQuery,
@@ -99,14 +105,44 @@ class StaffAttendanceViewModel @Inject constructor(
     }
 
     fun toggleSortByDesignation() {
+        sortByName.update {
+            SortBy.NON
+        }
         sortByDesignation.update {
-            if (it == SortBy.ASC) SortBy.DESC else SortBy.ASC
+            when (it) {
+                SortBy.NON -> {
+                    SortBy.ASC
+                }
+
+                SortBy.ASC -> {
+                    SortBy.DESC
+                }
+
+                else -> {
+                    SortBy.ASC
+                }
+            }
         }
     }
 
     fun toggleSortByName() {
+        sortByDesignation.update {
+            SortBy.NON
+        }
         sortByName.update {
-            if (it == SortBy.ASC) SortBy.DESC else SortBy.ASC
+            when (it) {
+                SortBy.NON -> {
+                    SortBy.DESC
+                }
+
+                SortBy.ASC -> {
+                    SortBy.DESC
+                }
+
+                else -> {
+                    SortBy.ASC
+                }
+            }
         }
     }
 
@@ -135,7 +171,7 @@ class StaffAttendanceViewModel @Inject constructor(
         getAttendance()
     }
 
-    fun selectStaffType(staffType: StaffType) {
+    fun selectStaffType(staffType: StaffType?) {
         selectStaffType.update {
             staffType
         }
@@ -173,7 +209,7 @@ sealed interface StaffAttendanceUiState {
 }
 
 enum class SortBy {
-    ASC, DESC
+    NON, ASC, DESC
 }
 
 enum class AttendanceType {

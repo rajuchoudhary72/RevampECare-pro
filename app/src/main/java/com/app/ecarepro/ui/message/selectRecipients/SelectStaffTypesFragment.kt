@@ -43,7 +43,7 @@ class SelectStaffTypesFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         multiSelectionEnabled = arguments?.getBoolean(MULTI_SELECTION_ENABLED, true) ?: true
 
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { dismiss() }
 
         binding.btnDone.setOnClickListener {
             onContactSelected?.invoke(selectStaffTypes)
@@ -70,7 +70,11 @@ class SelectStaffTypesFragment : DialogFragment() {
                                 if (selectStaffTypes.isEmpty()) {
                                     selectStaffTypes.add(type)
                                 } else {
-                                    selectStaffTypes[0] = type
+                                    if (selectStaffTypes.contains(type)) {
+                                        selectStaffTypes.remove(type)
+                                    } else {
+                                        selectStaffTypes[0] = type
+                                    }
                                 }
                             }
                             this@withModels.requestModelBuild()

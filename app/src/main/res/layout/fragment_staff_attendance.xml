@@ -13,8 +13,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/grey_10"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/grey_10">
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
@@ -105,6 +105,15 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:tint="@color/black" />
+                <View
+                    isVisible="@{viewModel.selectStaffType != null}"
+                    android:layout_width="3dp"
+                    android:layout_height="3dp"
+                    android:background="@drawable/tv_bg_rounded"
+                    android:backgroundTint="@color/red"
+                    app:layout_constraintStart_toEndOf="@+id/btn_filter"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_filter"
+                    app:layout_constraintTop_toTopOf="@+id/btn_filter" />
 
                 <ImageView
                     android:id="@+id/btn_show_search"
