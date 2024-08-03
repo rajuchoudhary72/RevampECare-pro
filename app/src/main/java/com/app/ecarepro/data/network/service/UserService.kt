@@ -526,7 +526,7 @@ interface UserService {
     @GET("Staff/CreateLessonPlan")
     suspend fun createLessonPlan(): NetworkCreateLesson
 
-    @GET("Report/StudentProfile")
+    @GET("Student/Profile")
     suspend fun getStudentProfile(
         @Query("StID") sId: Int
     ): NetworkStudentProfile

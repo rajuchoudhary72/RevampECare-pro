@@ -135,8 +135,6 @@ class StudentProfileNavHostFragment : Fragment() {
             }
         }
         studentProfileNavHostViewModel.getStudentProfile(sId)
-
-
     }
 
 }
