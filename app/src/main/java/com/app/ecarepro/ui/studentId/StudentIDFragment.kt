@@ -338,6 +338,8 @@ class StudentIDFragment : Fragment() {
                                 binding.tvDob.text = ss.dob?.ifEmpty { blankValue } ?: ""
                                 binding.tvAddhar.text =
                                     ss.aadhaarNumber?.ifEmpty { blankValue } ?: ""
+                                binding.tvPen.text =
+                                    ss.peN_Number?.ifEmpty { blankValue } ?: ""
                                 binding.tvClass.text =
                                     if (ss.className?.isEmpty() == true) "Class: $blankValue" else "Class: ${ss.className}"
                                 binding.tvRollNo.text =
