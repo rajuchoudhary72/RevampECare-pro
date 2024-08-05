@@ -85,17 +85,17 @@ class AttendanceFragment : Fragment() {
         return formatter.format(now)
     }
     private fun initView() {
-        binding.toolbar.setNavigationOnClickListener {
+        /*binding.toolbar.setNavigationOnClickListener {
             systemViewModel.navigateBack(true)
-        }
+        }*/
 
-        binding.recyclerView.apply {
+       /* binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
             )
-        }
+        }*/
     }
 
 

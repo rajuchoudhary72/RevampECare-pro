@@ -29,6 +29,7 @@ import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkEBook
+import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
@@ -195,6 +196,9 @@ interface UserRepository {
     ): CommonResponse
 
     fun getUserProfile(): Flow<Result<Profile>>
+    suspend fun getUserProfileEdit(
+        edit: Boolean
+    ): NetworkEditProfile
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
@@ -218,7 +222,7 @@ interface UserRepository {
         leaveID: Int,
         fromDate: String,
         tillDate: String,
-        duration: Int,
+        duration: Double,
         halfdayDTL: List<HalfdayDTL>,
         reason: String,
         attachment: String,

@@ -7,9 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,7 +45,7 @@ class TransportAttendanceReportFragment : Fragment() {
     private var routeSelected: Boolean = false
     private var stoppersSelected: Boolean = false
     private lateinit var routerSelectData: RouteLST
-
+    var selectAll: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,11 +62,11 @@ class TransportAttendanceReportFragment : Fragment() {
 
 
         binding.apply {
-
+            tvSelectDate.text=Constant.currentDate()
             tvSelectDate.setOnClickListener {
                 ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback  {
                     override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                        tvSelectDate.text=date
+                        tvSelectDate.text=Constant.dateToShow(date.toString())
                     }
                 })
             }
@@ -142,7 +143,7 @@ class TransportAttendanceReportFragment : Fragment() {
         transportAttReportViewModel.getStoppageList(routerSelectData.routeID.toString(), 0)
     }
 
-    private fun getStudentToMarkTransAttendance() {
+    private fun getStudentToMarkTransAttendance(ids: StringBuilder) {
         lifecycleScope.launch {
             transportAttReportViewModel.transAttendanceReportStateFlow.collectLatest {
                 when (it) {
@@ -202,7 +203,7 @@ class TransportAttendanceReportFragment : Fragment() {
         if (isValidate) {
             transportAttReportViewModel.getTransAttendanceReport(
                 routeID = routerSelectData.routeID,
-                stopIDs = stoppersSelectData.stopID.toString(),
+                stopIDs = ids.toString(),
                 attDate =  binding. tvSelectDate.text.toString()
             )
         }
@@ -248,36 +249,63 @@ class TransportAttendanceReportFragment : Fragment() {
         builder.show()
     }
 
-    private fun popUpStoppers() {
+    private fun popUpStoppers(){
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
-        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text = getString(R.string.select_stoppae)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
+        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        llSelectAll.isVisible=true
+        tvHeading.text=getString(R.string.select_stoppae)
         builder.setView(view)
 
-        relOk.setOnClickListener {
-            binding.tvSelectStoppage.text = stoppersSelectData.stopName
-            stoppersSelected = true
-            getStudentToMarkTransAttendance()
-            builder.dismiss()
-        }
-
-        val stoppersPopUpListAdapter =
-            StoppersPopUpListAdapter(stopLSTList, object : ItemListener<StopLST> {
-                override fun onItemClick(t: StopLST, pos: Int, boolean: Boolean) {
-                    stoppersSelectData = t
-                }
-            })
+        val stoppersPopUpListAdapter= StoppersPopUpListAdapter(stopLSTList,Constant.DOWN_TRIP,selectAll, object : ItemListener<StopLST> {
+            override fun onItemClick(t: StopLST, pos: Int, boolean: Boolean) {
+                stoppersSelectData = t
+            }  })
 
         rvYears.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
             adapter = stoppersPopUpListAdapter
         }
+
+        llSelectAll.setOnClickListener {
+            selectAll = !selectAll
+            for (i in stopLSTList) {
+                i .checked=selectAll
+            }
+            stoppersPopUpListAdapter.notifyDataSetChanged()
+            checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
+        }
+
+        relOk.setOnClickListener {
+            val ids = StringBuilder()
+            val name = StringBuilder()
+            stoppersSelected=true
+
+                for (stopLST in stopLSTList) {
+                    if (stopLST.checked) {
+                        if (ids.toString().isEmpty()) {
+                            ids.append(stopLST.stopID)
+                            name.append(stopLST.stopName)
+                        } else {
+                            ids.append(",").append(stopLST.stopID)
+                            name.append(",").append(stopLST.stopName)
+                        }
+                    }
+                }
+
+            binding.tvSelectStoppage.text= name
+            getStudentToMarkTransAttendance(ids)
+            builder.dismiss()
+        }
+
+
 
         relCancel.setOnClickListener {
             builder.dismiss()

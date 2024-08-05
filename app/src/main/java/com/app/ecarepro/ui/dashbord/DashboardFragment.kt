@@ -275,16 +275,16 @@ class DashboardFragment : Fragment() {
     }
 
     private fun initViews() {
-        binding.toolbar.setNavigationOnClickListener {
+        /*binding.toolbar.setNavigationOnClickListener {
             systemViewModel.navigateBack(true)
-        }
+        }*/
         binding.recyclerView.apply {
-            addItemDecoration(
+            /*addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin),
                     addBeforeFirstPosition = false
                 )
-            )
+            )*/
 
             /* withModels {
 

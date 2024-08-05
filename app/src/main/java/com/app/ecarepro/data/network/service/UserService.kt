@@ -123,6 +123,7 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 
 interface UserService {
@@ -410,11 +411,6 @@ interface UserService {
         @Query("ID") iD: String,
         @Query("NotSubmitted") notSubmitted: Boolean,
     ): NetworkSubmitAssignReport
-    @GET("Report/StaffAttendance")
-    suspend fun staffAttendance(
-        @Query("StaffType") staffType: String? = null,
-        @Query("AttDate") attDate: String,
-    ): StaffAttendanceDto
 
     @GET("Academic/OfflineSubmited")
     suspend fun offlineSubmited(
@@ -428,6 +424,12 @@ interface UserService {
         @Query("Month") month: Int,
         @Query("Year") year: Int,
     ): NetworkStaffAttendence
+
+    @GET("Report/StaffAttendance")
+    suspend fun staffAttendance(
+        @Query("StaffType") staffType: String? = null,
+        @Query("AttDate") attDate: String,
+    ): StaffAttendanceDto
 
     @GET("Report/Statistical")
     suspend fun statistical(): StaticGraphResponse
@@ -526,7 +528,7 @@ interface UserService {
     @GET("Staff/CreateLessonPlan")
     suspend fun createLessonPlan(): NetworkCreateLesson
 
-    @GET("Student/Profile")
+    @GET("Report/StudentProfile")
     suspend fun getStudentProfile(
         @Query("StID") sId: Int
     ): NetworkStudentProfile
@@ -584,6 +586,11 @@ interface UserService {
     suspend fun getUserProfile(
         @Query("Edit") edit: Boolean = true
     ): UserProfileDto
+
+    @GET("User/MyProfile")
+    suspend fun getUserProfileEdit(
+        @Query("Edit") edit: Boolean = true
+    ): NetworkEditProfile
 
     @POST("User/UploadProfileIMG")
     suspend fun uploadProfileIMG(

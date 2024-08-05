@@ -31,6 +31,7 @@
 
         <ImageView
             android:id="@+id/icon"
+            app:tint="@color/black"
             imageUrl="@{icon}"
             android:layout_width="24dp"
             android:layout_marginStart="40dp"
