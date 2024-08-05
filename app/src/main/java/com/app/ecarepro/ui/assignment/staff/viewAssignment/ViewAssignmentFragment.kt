@@ -187,6 +187,8 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         viewAssignmentViewModel.viewAssignment(assignmentId)
         viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
+
+
         binding.llView.setOnClickListener {
             openFile(viewAssignmentData!!.asgFile)
         }
@@ -205,6 +207,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     }
 
     private fun downloadFile(fileSource:String){
+
         val androidDownloader = AndroidDownloader(requireContext())
         androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
     }

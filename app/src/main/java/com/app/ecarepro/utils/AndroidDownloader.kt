@@ -11,6 +11,7 @@ class AndroidDownloader(context: Context) : Downloader {
 
     private val _downloadManager = context.getSystemService(DownloadManager::class.java)
     override fun downloadFile(url: String, downloadType: String, mimeType: String): Long {
+
         fileName = url.substring(url.lastIndexOf('/') + 1, url.length)
         val request = DownloadManager.Request(url.toUri())
             .setMimeType(mimeType)

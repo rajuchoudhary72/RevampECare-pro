@@ -24,9 +24,12 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.databinding.FragmentStaffApplyLeaveBinding
+import com.app.ecarepro.model.LeaveTerms
 import com.app.ecarepro.model.LeaveTypes
 import com.app.ecarepro.ui.MainActivity
- import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.leave.leave_setting.LeaveSettingDetailsAdapter
+import com.app.ecarepro.ui.leave.leave_setting.LeaveSettingViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
@@ -40,18 +43,25 @@ import java.util.concurrent.TimeUnit
 class StaffApplyLeaveFragment : Fragment() {
 
 
+    private lateinit var leaveTerm: LeaveTerms
     private var isSessionFromSelected: Boolean=false
     private var isSessionToSelected: Boolean=false
-    private var days: Long = 0
+    private var days: Double = 1.0
+    private var filterDays: Double = 1.0
     private var sessionFromPos  = 0
     private var sessionToPos  = 0
     private lateinit var binding: FragmentStaffApplyLeaveBinding
     private val leaveApplyLeaveViewModel: StaffApplyLeaveViewModel by viewModels()
+    private val leaveSettingViewModel : LeaveSettingViewModel by viewModels()
+
     private   var imageExt: String =""
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
     private val sessionList = listOf<String> ("Session 1","Session 2")
+    var timestampBack: Long = 0
+    var timestampforward: Long = 0
 
+    var timestampOneDay = "86400000".toLong()
 
 
 
@@ -75,42 +85,49 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.tvStartDate.text=Constant.currentDate()
         binding.tvEndDate.text=Constant.currentDate()
 
-        val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu, sessionList)
+        val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, sessionList)
         binding.autoCompleteSessionTo.setAdapter(arrayAdapter)
         binding.autoCompleteSessionFrom.setAdapter(arrayAdapter)
 
 
         binding.llStartDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+
+            val currentTimestamp = System.currentTimeMillis()
+            timestampforward=currentTimestamp+leaveTerm.forwardDays * timestampOneDay
+            timestampBack=currentTimestamp-leaveTerm.backwardDays * timestampOneDay
+
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
-                } })  }
+                }
+            },timestampBack,timestampforward)
+        }
+
+
 
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
+
+                val timestampforward=Constant.getLongTimeDate(binding.tvStartDate.text.toString())+timestampOneDay*leaveTerm.daysLimit
+                val timestampBack=Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
-                    true,
+                    false,
                     object : ECareDataPicker.PickerCallback {
                         override fun onSelect(date: String?, isCurrentDate: Boolean) {
                             binding.tvEndDate.text = Constant.dateToShow(date.toString())
 
-                            val diff =Constant.getLongTimeDate(  binding.tvEndDate.text.toString())-
-                                Constant.getLongTimeDate(binding.tvStartDate.text.toString())
-
-
-
-
-                             days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
+                            val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
+                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
+                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble()+1
 
                             binding.tvDuration.text = buildString {
-                                append(days+1)
+                                append(days )
                                 append(" ")
                                 append(getString(R.string.day_s))
                             }
                         }
-                    }).setMinDate(Constant.getLongTimeDate(binding.tvStartDate.text.toString()))
-
+                    },timestampBack,timestampforward)
 
 
             } else
@@ -139,25 +156,47 @@ class StaffApplyLeaveFragment : Fragment() {
 
             if (validateData()) {
 
-                /*if (sessionFromPos==1){
-                    halfdayDTL.add(HalfdayDTL(
-                        binding.tvStartDate.text.toString(),
-                        2
-                    ))
+                if (sessionFromPos==0 && sessionToPos==1){
+                    halfdayDTL.clear()
+                } else
+                    if (sessionFromPos==0 && sessionToPos==0){
+                        halfdayDTL.add(HalfdayDTL(
+                             Constant.toSystemDate(binding.tvEndDate.text.toString()),
+                            1
+                        ))
+                        days -= 0.5
+                    }else
+                        if (sessionFromPos==1 && sessionToPos==0){
+                            halfdayDTL.add(HalfdayDTL(
+                                Constant.toSystemDate(binding.tvStartDate.text.toString()),
+                                2
+                            ))
+                            halfdayDTL.add(HalfdayDTL(
+                                Constant.toSystemDate(binding.tvEndDate.text.toString()),
+                                1
+                            ))
+                            days -= 1
+                        }else
+                            if (sessionFromPos==1 && sessionToPos==1){
+                                halfdayDTL.add(HalfdayDTL(
+                                    Constant.toSystemDate(binding.tvStartDate.text.toString()),
+                                    2
+                                ))
+                                days -= 0.5
+                            }
+
+                binding.tvDuration.text = buildString {
+                    append(days )
+                    append(" ")
+                    append(getString(R.string.day_s))
                 }
-                if (sessionToPos==0){
-                    halfdayDTL.add(HalfdayDTL(
-                        binding.tvEndDate.text.toString(),
-                        1
-                    ))
-                }*/
 
 
                 leaveApplyLeaveViewModel.leaveApply(
                     leaveID,
                     binding.tvStartDate.text.toString(),
                     binding.tvEndDate.text.toString(),
-                    (days+1).toInt() ,
+                    days ,
                     halfdayDTL,
                     binding.textFiledReason.text.toString(),
                     imageString,
@@ -179,6 +218,7 @@ class StaffApplyLeaveFragment : Fragment() {
                             }
 
                             is NetworkResult.Success -> {
+                                mainActivity().showMessage(it.message.toString())
                                 (requireActivity() as MainActivity).showLoader(false)
                                 findNavController().popBackStack()
 
@@ -196,17 +236,46 @@ class StaffApplyLeaveFragment : Fragment() {
                 isSessionFromSelected=true
                 sessionFromPos=position
 
+ 
               }
         binding.autoCompleteSessionTo.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 isSessionToSelected=true
                sessionToPos=position
-             }
+              }
+
+        getTermDetails()
 
 
 
+    }
+
+    fun getTermDetails() {
+
+        lifecycleScope.launch {
+            leaveSettingViewModel.leaveSettingStateFlow.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error$it")
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        
+                        if (it.data !=null) {
+                            leaveTerm=it.data.leaveTerms
 
 
+                        }
+
+                    }  }  }  }
+        leaveSettingViewModel.leaveSetting()
     }
 
 
@@ -291,16 +360,18 @@ class StaffApplyLeaveFragment : Fragment() {
             mainActivity().showMessage("Please Check Term and Condition")
 
         }
-        if (imageString==""){
+        /*if (imageString==""){
             validate = false
-            Toast.makeText(requireContext(), "Attachment is mandatory", Toast.LENGTH_LONG)
-                .show()
-        }
+
+            mainActivity().showMessage("Attachment is mandatory")
+        }*/
         if (!isSessionFromSelected){
             validate = false
+            mainActivity().showMessage("Select From session ")
         }
         if (!isSessionToSelected){
             validate = false
+            mainActivity().showMessage("Select To session ")
         }
 
         return validate

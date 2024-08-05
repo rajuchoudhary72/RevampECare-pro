@@ -37,6 +37,7 @@ class BankBalanceModel(val bankBalance: List<BankBalance>) :
                 }
             }
         }
+        chartView.isClearBackgroundColor = true
 
         chartView.aa_drawChartWithChartModel(getBarChartModel(bankBalance))
     }

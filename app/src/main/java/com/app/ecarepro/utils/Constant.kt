@@ -150,6 +150,13 @@ class Constant {
             return  outputFormat.format(date!!)
         }
 
+        fun toSystemDate(inputDateStr:String):String {
+            val inputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault() )
+            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return  outputFormat.format(date!!)
+        }
+
         fun dateToShowCon(inputDateStr:String):String {
             val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.getDefault() )
             val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())

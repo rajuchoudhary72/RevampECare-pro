@@ -9,7 +9,10 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/background_dashboard"
+        >
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
@@ -18,6 +21,7 @@
             app:liftOnScroll="true"
             app:liftOnScrollTargetViewId="@id/recycler_view">
 
+<!--
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -27,6 +31,7 @@
                 app:titleTextAppearance="?attr/titleTextAppearance"
                 app:titleTextColor="@color/white"
                 app:topWindowInsetToPadding="@{true}" />
+-->
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -34,6 +39,8 @@
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_10sdp"
+
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <com.airbnb.epoxy.EpoxyRecyclerView
@@ -41,8 +48,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:layout_marginTop="@dimen/_10sdp"
+
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_feed_card" />
+                tools:listitem="@layout/item_feed_card"
+
+                />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -31,6 +31,9 @@ class EstimateCollectionModel(val feeCollection: FeeCollection) :
         textExpConcessionDue.rupeeText(feeCollection.due)
         textExpConcessionAmount.rupeeText(feeCollection.concession)
 
+        barChart.isClearBackgroundColor = true
+        lineChart.isClearBackgroundColor = true
+
         barChart.aa_drawChartWithChartModel(getBarChartModel(feeCollection))
         lineChart.aa_drawChartWithChartModel(getLineChartModel(feeCollection))
     }
@@ -41,7 +44,7 @@ class EstimateCollectionModel(val feeCollection: FeeCollection) :
         .margin(arrayOf(0, 0, 0, 0))
         .legendEnabled(false)
         .tooltipEnabled(false)
-        .series(
+         .series(
             arrayOf(
                 AASeriesElement()
                     .borderRadius(10)

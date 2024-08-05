@@ -20,6 +20,8 @@ class AdmissionComparisonModel(val admissionComparisonModel: AdmissionComparison
             barchartView.isVisible = this@AdmissionComparisonModel.isExpanded
             columChartView.isVisible = this@AdmissionComparisonModel.isExpanded.not()
         }
+        barchartView.isClearBackgroundColor = true
+        columChartView.isClearBackgroundColor = true
 
         barchartView.aa_drawChartWithChartModel(getBarChartModel(admissionComparisonModel))
         columChartView.aa_drawChartWithChartModel(getLineChartModel(admissionComparisonModel))

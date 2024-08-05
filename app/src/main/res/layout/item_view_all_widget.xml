@@ -9,45 +9,75 @@
             name="clickListener"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="clickListenerWidget"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{clickListener}"
-        android:background="@drawable/bg_view_all_widget">
+        android:weightSum="5"
+
+        >
+
+        <soup.neumorphism.NeumorphCardView
+            android:onClick="@{clickListenerWidget}"
+            app:neumorph_shapeAppearance="@style/CustomShapeAppearance"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="@dimen/_50sdp"
+            app:neumorph_backgroundColor="@color/brand_color"
+            app:neumorph_strokeColor="@color/background_dashboard"
+            app:neumorph_strokeWidth="@dimen/_1sdp"
+             >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_dashboard_new"
+                android:layout_margin="10dp"
+                />
+        </soup.neumorphism.NeumorphCardView>
 
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_layer"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="10dp"
-            android:src="@drawable/ic_layers"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/Button2"
+            app:neumorph_shapeAppearance="@style/CustomShapeAppearanceTwo"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="@dimen/_50sdp"
+            app:neumorph_backgroundColor="@color/background_dashboard"
+             app:neumorph_strokeWidth="@dimen/_1sdp"
+            android:onClick="@{clickListener}"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View all Widget"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View dashboard "
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/brand_color"
+                    />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:src="@drawable/ic_arrow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_arrow"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    tools:ignore="ContentDescription" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+            </RelativeLayout>
+        </soup.neumorphism.NeumorphCardView>
+
+
+
+    </LinearLayout>
+
+ </layout>

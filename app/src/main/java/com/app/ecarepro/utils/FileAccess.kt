@@ -8,19 +8,20 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import java.io.ByteArrayOutputStream
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
-import android.content.ContentResolver
 
-import java.io.InputStream
 class FileAccess {
 
 
@@ -106,6 +107,35 @@ class FileAccess {
             return Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
         }
 
+
+        fun writeResponseBodyToDisk(txt: String, receiptNo: String): File? {
+            try {
+                val dwldsPath = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "/eCarePro Download/Fee Certificate/"
+                )
+                if (!dwldsPath.exists()) {
+                    dwldsPath.mkdirs()
+                }
+
+                val file = File.createTempFile("Certificate_$receiptNo", ".pdf", dwldsPath)
+                val pdfAsBytes = Base64.decode(txt, 0)
+                val os = FileOutputStream(file, false)
+                os.write(pdfAsBytes)
+                os.flush()
+                os.close()
+                return file
+            } catch (e: IOException) {
+                return null
+            }
+        }
+
+
+
+
     }
+
+
+
 
 }

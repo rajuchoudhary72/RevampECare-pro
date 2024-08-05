@@ -43,6 +43,7 @@ class OutPassReportFragment : Fragment() {
         binding.apply {
 
             tvSelectDate.setOnClickListener {
+                tvSelectDate.text=Constant.currentDate()
                 ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                     override fun onSelect(date: String?, isCurrentDate: Boolean) {
                         tvSelectDate.text = Constant.dateToShow(date.toString())

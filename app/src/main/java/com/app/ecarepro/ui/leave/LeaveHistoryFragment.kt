@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentLeaveListBinding
 import com.app.ecarepro.model.Dtl
@@ -21,6 +22,7 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -28,8 +30,9 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
     private lateinit var binding: FragmentLeaveListBinding
     private val leaveHistoryViewModel: LeaveHistoryViewModel by viewModels()
-
-
+    private var UType: Int = -1
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +47,11 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        lifecycleScope.launch {
+            userDataStore.getUser()?.let {
+                UType = userDataStore.getUserType()!!
+            }
+        }
 
         lifecycleScope.launch {
             leaveHistoryViewModel.leaveHistoryStateFlow.collectLatest {
@@ -104,7 +112,12 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
 
         binding.fbApplyForLeave.setOnClickListener {
-            findNavController().navigate(R.id.applyLeaveFragment)
+            if (UType == Constant.STAFF_TYPE) {
+                findNavController().navigate(R.id.leaveSettingFragment)
+            } else {
+                findNavController().navigate(R.id.applyLeaveFragment)
+            }
+
         }
     }
 
