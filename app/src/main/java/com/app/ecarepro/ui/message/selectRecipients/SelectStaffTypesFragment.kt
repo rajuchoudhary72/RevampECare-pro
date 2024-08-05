@@ -22,6 +22,7 @@ class SelectStaffTypesFragment : DialogFragment() {
     private val selectStaffTypes = mutableListOf<StaffType>()
 
     private var onContactSelected: ((List<StaffType>) -> Unit)? = null
+    private var multiSelectionEnabled: Boolean = true
 
     fun onContactSelected(onContactSelected: (List<StaffType>) -> Unit): SelectStaffTypesFragment {
         this@SelectStaffTypesFragment.onContactSelected = onContactSelected
@@ -40,27 +41,41 @@ class SelectStaffTypesFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        multiSelectionEnabled = arguments?.getBoolean(MULTI_SELECTION_ENABLED, true) ?: true
 
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { dismiss() }
 
         binding.btnDone.setOnClickListener {
             onContactSelected?.invoke(selectStaffTypes)
             dismiss()
         }
-
+        (arguments?.getSerializable(STAFF_TYPES) as StaffTypeDto).let { dto ->
+            selectStaffTypes.addAll(dto.selectedStaffType ?: emptyList())
+        }
         binding.viewPager.withModels {
             (arguments?.getSerializable(STAFF_TYPES) as StaffTypeDto).let { dto ->
-                selectStaffTypes.addAll(dto.selectedStaffType ?: emptyList())
                 dto.staffType?.forEach { type ->
                     staffType {
                         id(type.staffTypeID)
                         isChecked(selectStaffTypes.contains(type))
                         text(type.staffType)
                         clickListener { _ ->
-                            if (selectStaffTypes.contains(type)) {
-                                selectStaffTypes.remove(type)
+                            if (multiSelectionEnabled) {
+                                if (selectStaffTypes.contains(type)) {
+                                    selectStaffTypes.remove(type)
+                                } else {
+                                    selectStaffTypes.add(type)
+                                }
                             } else {
-                                selectStaffTypes.add(type)
+                                if (selectStaffTypes.isEmpty()) {
+                                    selectStaffTypes.add(type)
+                                } else {
+                                    if (selectStaffTypes.contains(type)) {
+                                        selectStaffTypes.remove(type)
+                                    } else {
+                                        selectStaffTypes[0] = type
+                                    }
+                                }
                             }
                             this@withModels.requestModelBuild()
                         }
@@ -79,11 +94,14 @@ class SelectStaffTypesFragment : DialogFragment() {
 
     companion object {
         private const val STAFF_TYPES = "staff_types"
-        fun getInstance(staffTypeDto: StaffTypeDto) = SelectStaffTypesFragment().apply {
-            arguments = bundleOf(
-                STAFF_TYPES to staffTypeDto
-            )
-        }
+        private const val MULTI_SELECTION_ENABLED = "multiSelectionEnabled"
+        fun getInstance(staffTypeDto: StaffTypeDto, multiSelectionEnabled: Boolean = true) =
+            SelectStaffTypesFragment().apply {
+                arguments = bundleOf(
+                    STAFF_TYPES to staffTypeDto,
+                    MULTI_SELECTION_ENABLED to multiSelectionEnabled
+                )
+            }
     }
 
 }
