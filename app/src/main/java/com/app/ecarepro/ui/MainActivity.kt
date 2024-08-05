@@ -548,6 +548,7 @@ class MainActivity : AppCompatActivity() {
                     val bundle = Bundle()
                     bundle.putString("title", title)
                     bundle.putString("url", "$url?token=$token")
+                    Log.d("WebURL",  "$url?token=$token")
                     navController.navigate(R.id.webViewFragment, bundle)
                 }
             }

@@ -61,7 +61,7 @@ class WebViewFragment : Fragment() {
                wv_url.getSettings().setBuiltInZoomControls(true);*/
         binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-            if (isStoragePermission()) if (url.endsWith(".pdf") || url.endsWith(".PDF")) {
+            if (isStoragePermission()) {
                 //Toast.makeText(context, url.toString(), Toast.LENGTH_SHORT).show();
                 val request = DownloadManager.Request(Uri.parse(url))
                 request.allowScanningByMediaScanner()
