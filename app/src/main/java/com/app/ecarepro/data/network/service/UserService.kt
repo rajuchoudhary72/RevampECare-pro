@@ -123,6 +123,7 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.NetworkEditProfile
 
 interface UserService {
     @GET("User/Verify")
@@ -578,6 +579,11 @@ interface UserService {
     suspend fun getUserProfile(
         @Query("Edit") edit: Boolean = true
     ): UserProfileDto
+
+    @GET("User/MyProfile")
+    suspend fun getUserProfileEdit(
+        @Query("Edit") edit: Boolean = true
+    ): NetworkEditProfile
 
     @POST("User/UploadProfileIMG")
     suspend fun uploadProfileIMG(

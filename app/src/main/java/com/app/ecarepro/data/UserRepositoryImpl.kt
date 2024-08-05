@@ -131,6 +131,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -882,6 +883,10 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun getUserProfileEdit(edit: Boolean): NetworkEditProfile {
+        return userService.getUserProfileEdit(edit)
     }
 
     override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
