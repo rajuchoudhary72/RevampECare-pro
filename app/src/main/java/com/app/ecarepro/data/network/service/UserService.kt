@@ -124,6 +124,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.StaffAttendanceDto
 
 interface UserService {
     @GET("User/Verify")
@@ -423,6 +424,12 @@ interface UserService {
         @Query("Month") month: Int,
         @Query("Year") year: Int,
     ): NetworkStaffAttendence
+
+    @GET("Report/StaffAttendance")
+    suspend fun staffAttendance(
+        @Query("StaffType") staffType: String? = null,
+        @Query("AttDate") attDate: String,
+    ): StaffAttendanceDto
 
     @GET("Report/Statistical")
     suspend fun statistical(): StaticGraphResponse

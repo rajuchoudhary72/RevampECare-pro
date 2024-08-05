@@ -23,15 +23,15 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class EditProfileFragment : Fragment() {
 
-    private lateinit var  binding: FragmentEditProfileBinding
+    private lateinit var modelEditProfile: Profile
+    private lateinit var binding: FragmentEditProfileBinding
     private val viewModel: EditProfileViewModel by viewModels()
-    private val religionList = listOf("Hindu","Muslim","Sikh","Christian")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding=FragmentEditProfileBinding.inflate(inflater,container,false)
+        binding = FragmentEditProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -66,38 +66,78 @@ class EditProfileFragment : Fragment() {
         viewModel.getUserProfileEdit(true)
 
 
-
     }
 
     private fun setupView(profile: Profile) {
 
         binding.apply {
 
+            modelEditProfile = profile
+
+            textUserName.isEnabled = false
+
+            textName.isEnabled = false
+            textMobile.isEnabled = false
+            textUserPOB.isEnabled = false
+            textUserEmail.isEnabled = false
+
+
+
             textAnniversaryDate.setOnClickListener {
                 selectDate("Select start date") {
                     textAnniversaryDate.setText(it)
+                }
+            }
+            textAdmissionDate.setOnClickListener {
+                selectDate("Select start date") {
+                    textAdmissionDate.setText(it)
                 }
             }
 
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
-                profile.studentProfile.parentStaus.split("status"))
+                profile.parentsStatusLST.map { it.status })
             binding.parentStatus.setAdapter(adapter)
+            binding.parentStatus.setOnItemClickListener { _, _, position, _ -> }
 
-            binding.parentStatus.setOnItemClickListener { _, _, position, _ ->
-
-            }
-
-            val adapterreligion = ArrayAdapter(
+            val adapterReligion = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
-                religionList)
-            binding.religion.setAdapter(adapterreligion)
+                profile.relegionLST.map { it.relegion })
+            binding.religion.setAdapter(adapterReligion)
+            binding.religion.setOnItemClickListener { _, _, position, _ -> }
 
-            binding.religion.setOnItemClickListener { _, _, position, _ ->
+            val adapterFatherProfession =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    profile.professionLST.map { it.profession })
+            binding.fatherProfession.setAdapter(adapterFatherProfession)
+            binding.fatherProfession.setOnItemClickListener { _, _, position, _ -> }
 
-            }
+            val adapterFatherDesignation =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    profile.designationLST.map { it.designation })
+            binding.fatherDesignation.setAdapter(adapterFatherDesignation)
+            binding.fatherDesignation.setOnItemClickListener { _, _, position, _ -> }
+
+            val adapterMotherDesignation =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    profile.designationLST.map { it.designation })
+            binding.MotherDesignation.setAdapter(adapterMotherDesignation)
+            binding.MotherDesignation.setOnItemClickListener { _, _, position, _ -> }
+
+            val adapterMotherProfession =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    profile.professionLST.map { it.profession })
+            binding.MotherProfession.setAdapter(adapterMotherProfession)
+            binding.MotherProfession.setOnItemClickListener { _, _, position, _ -> }
+
+            val adapterBloodGroup =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    profile.bloodGroupLST.map { it.groupName })
+            binding.bloodGroup.setAdapter(adapterBloodGroup)
+            binding.bloodGroup.setOnItemClickListener { _, _, position, _ -> }
+
 
             textUserName.setText(profile.username)
             textName.setText(profile.name)
@@ -105,7 +145,7 @@ class EditProfileFragment : Fragment() {
             textUserPOB.setText(profile.studentProfile.birthPlace)
             textUserEmail.setText(profile.studentProfile.contactEmailID)
             textAnniversaryDate.setText(profile.studentProfile.parentAnniversaryDate)
-            parentStatus.setText(profile.studentProfile.parentStaus,false)
+            parentStatus.setText(profile.studentProfile.parentStaus, false)
 
             //Child's Details
 
@@ -113,8 +153,8 @@ class EditProfileFragment : Fragment() {
             textClass.setText(profile.studentProfile.className)
             textDOB.setText(profile.studentProfile.dob)
             textAdmissionDate.setText(profile.studentProfile.admissionDate)
-            bloodGroup.setText(profile.studentProfile.bloodGroup,false)
-            religion.setText(profile.studentProfile.religion,false)
+            bloodGroup.setText(profile.studentProfile.bloodGroup, false)
+            religion.setText(profile.studentProfile.religion, false)
             textAadhaar.setText(profile.studentProfile.aadhaarNumber)
 
             textAddress.setText(profile.studentProfile.address)
@@ -132,8 +172,8 @@ class EditProfileFragment : Fragment() {
 
             textFatherName.setText(profile.studentProfile.fatherName)
             textFatherDOB.setText(profile.studentProfile.fatherDOB)
-            fatherProfession.setText(profile.studentProfile.fatherProfession,false)
-            fatherDesignation.setText(profile.studentProfile.fatherDesignation,false)
+            fatherProfession.setText(profile.studentProfile.fatherProfession, false)
+            fatherDesignation.setText(profile.studentProfile.fatherDesignation, false)
 
             textFatherResidentialAddress.setText(profile.studentProfile.fatherResidentialAddress)
             textFatherOfficeAddress.setText(profile.studentProfile.fatherOfficeAddress)
@@ -144,16 +184,23 @@ class EditProfileFragment : Fragment() {
             textFatherAnnualIncome.setText(profile.studentProfile.fatherAnnualIncome)
             textFatherAadharNumber.setText(profile.studentProfile.fatherAadhaarNumber)
 
+            textMotherName.setText(profile.studentProfile.fatherName)
+            textMotherDOB.setText(profile.studentProfile.fatherDOB)
+            MotherProfession.setText(profile.studentProfile.motherProfession, false)
+            MotherDesignation.setText(profile.studentProfile.motherDesignation, false)
 
-
-
-
-
-
-
-
+            textMotherResidentialAddress.setText(profile.studentProfile.motherResidentialAddress)
+            textMotherOfficeAddress.setText(profile.studentProfile.motherOfficeAddress)
+            textMotherEmail1.setText(profile.studentProfile.motherEmail_1)
+            textMotherEmail2.setText(profile.studentProfile.motherEmail_2)
+            textMotherMobile1.setText(profile.studentProfile.motherMob_1)
+            textMotherMobile2.setText(profile.studentProfile.motherMob_2)
+            textMotherAnnualIncome.setText(profile.studentProfile.motherAnnualIncome)
+            textMotherAadharNumber.setText(profile.studentProfile.motherAadhaarNumber)
 
         }
+
+
 
     }
 }
