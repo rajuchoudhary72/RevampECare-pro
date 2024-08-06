@@ -199,6 +199,11 @@ interface UserRepository {
     suspend fun getUserProfileEdit(
         edit: Boolean
     ): NetworkEditProfile
+
+    suspend fun updateParentProfile(
+         request: com.app.ecarepro.ui.edit_profile.model.Profile
+    ): CommonResponse
+
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
@@ -210,6 +215,7 @@ interface UserRepository {
         applType: Int,
         pg: Int
     ): NetworkLeaveReport
+
 
     suspend fun leaveAction(
         applType: Int,

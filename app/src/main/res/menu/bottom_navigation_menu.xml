@@ -5,7 +5,8 @@
     <item
         android:id="@+id/menu"
         android:icon="@drawable/ic_menu_new"
-        android:title="Menu" />
+        android:title="Menu"
+         />
 
     <item
         android:icon="@drawable/ic_profile"

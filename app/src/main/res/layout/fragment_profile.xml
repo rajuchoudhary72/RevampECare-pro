@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey_10"
-        bottomWindowInsetToPadding="@{true}"
+        android:fitsSystemWindows="true"
+
         android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -20,10 +21,24 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:title="@string/profile"
+             app:title="@string/profile"
             app:titleTextAppearance="?attr/textAppearanceTitleMedium"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white"  >
+            <TextView
+                android:id="@+id/tv_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_profile"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/ubuntu_medium"
+                android:visibility="gone"
+                android:textAllCaps="true"
+                 />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
 
         <com.airbnb.epoxy.EpoxyRecyclerView
