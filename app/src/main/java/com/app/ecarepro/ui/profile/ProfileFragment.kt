@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -32,6 +33,7 @@ import com.app.ecarepro.profileWardDetails
 import com.app.ecarepro.space
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FileAccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +51,9 @@ class ProfileFragment : Fragment() {
     private val profileViewModel: ProfileViewModel by viewModels()
 
     private lateinit var photoType: PhotoType
+
+
+
 
     @Inject
     lateinit var userDataStore: UserDataStore
@@ -124,6 +129,8 @@ class ProfileFragment : Fragment() {
                 handleUiState(uiState)
             }
         }
+
+
 
 
     }
@@ -465,6 +472,10 @@ class ProfileFragment : Fragment() {
     private fun setUpViews() {
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        }
+       // binding.tvEditProfile.isVisible = Constant.PARENT_TYPE==  profileViewModel.userType
+        binding.tvEditProfile.setOnClickListener {
+            findNavController().navigate(R.id.editProfileFragment)
         }
     }
 

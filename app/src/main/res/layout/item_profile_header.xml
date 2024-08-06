@@ -29,6 +29,10 @@
             name="canEditProfileImage"
             type="java.lang.Boolean" />
 
+         <variable
+             name="canEditProfile"
+             type="java.lang.Boolean" />
+
         <variable
             name="name"
             type="java.lang.String" />
@@ -188,6 +192,21 @@
             app:strokeColor="@color/white"
             app:strokeWidth="3dp"
             tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_profile_edit"
+             isVisible="@{canEditProfile}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             tools:text="Edit Profile"
+            android:background="@drawable/rounded_bg_appcolor_button"
+             android:onClick="@{clickListener}"
+            android:layout_marginEnd="@dimen/_15sdp"
+             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/profileImage"
+            app:layout_constraintEnd_toEndOf="parent"
+               />
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabBannerImage"

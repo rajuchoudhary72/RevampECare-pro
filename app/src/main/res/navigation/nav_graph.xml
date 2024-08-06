@@ -924,4 +924,8 @@
         android:id="@+id/staffAttendanceFragment"
         android:name="com.app.ecarepro.ui.staff.StaffAttendanceFragment"
         android:label="StaffAttendanceFragment" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.app.ecarepro.ui.edit_profile.EditProfileFragment"
+        android:label="EditProfileFragment" />
 </navigation>

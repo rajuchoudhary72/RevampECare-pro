@@ -907,6 +907,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getUserProfileEdit(edit)
     }
 
+    override suspend fun updateParentProfile(request: com.app.ecarepro.ui.edit_profile.model.Profile): CommonResponse {
+        return userService.updateParentProfile(request)
+    }
+
     override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
         return flow {
             try {

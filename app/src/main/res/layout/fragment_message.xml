@@ -27,8 +27,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:navigationIcon="@drawable/ic_arrow_back_24px"
-                app:title="Message"
+                 app:title="Message"
                 app:titleTextAppearance="?attr/titleTextAppearance"
                 app:titleTextColor="@color/white"
                 app:topWindowInsetToPadding="@{true}">
