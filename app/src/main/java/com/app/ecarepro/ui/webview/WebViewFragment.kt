@@ -62,11 +62,8 @@ class WebViewFragment : Fragment() {
         binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             if (isStoragePermission()) {
-                //Toast.makeText(context, url.toString(), Toast.LENGTH_SHORT).show();
                 val request = DownloadManager.Request(Uri.parse(url))
                 request.allowScanningByMediaScanner()
-                Environment.getExternalStorageDirectory()
-                requireActivity().filesDir.path
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 request.setDestinationInExternalPublicDir(
                     Environment.DIRECTORY_DOWNLOADS,

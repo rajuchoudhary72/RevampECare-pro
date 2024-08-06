@@ -120,6 +120,8 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:hint="@string/enter_password"
+                app:passwordToggleEnabled="true"
+                tools:visibility="visible"
                 android:visibility="gone"
                 app:hintTextColor="@color/grey_40"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUserName"

@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import android.graphics.Rect
+import android.util.Log
 import android.view.MotionEvent
 import androidx.core.os.bundleOf
 
@@ -438,8 +439,7 @@ class MainActivity : AppCompatActivity() {
 
             27 -> {
                 try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) { 
-                        if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
                             lifecycleScope.launch {
                                 userDataStore.getSchoolData()?.let {
                                     it.marksEntryURL?.let { url ->
@@ -450,10 +450,6 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                        } else {
-                            navController.navigate(R.id.lessonPlanListFragment)
-                        }
-
                     } else {
                         navController.navigate(R.id.lessonPlanListFragment)
                     }
@@ -514,12 +510,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun webViewCall(url: String, title: String) {
-        val bundle = Bundle()
-        bundle.putString("title", title)
-        bundle.putString("url", url)
-        navController.navigate(R.id.webViewFragment, bundle)
+        if (title.contains("Mark")) {
+            systemViewModel.getTokenKey { token ->
+                if (token.isNullOrEmpty()) {
+                    showMessage("Something went wrong")
+                } else {
+                    val bundle = Bundle()
+                    bundle.putString("title", title)
+                    bundle.putString("url", "$url?token=$token")
+                    Log.d("WebURL",  "$url?token=$token")
+                    navController.navigate(R.id.webViewFragment, bundle)
+                }
+            }
+
+        } else {
+            val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("url", url)
+            Log.d("WebURL",  url)
+            navController.navigate(R.id.webViewFragment, bundle)
+        }
     }
+
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {

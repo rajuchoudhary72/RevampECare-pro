@@ -608,4 +608,5 @@
     <string name="select_search_filter">Select Search Filter</string>
     <string name="students_list">Students List</string>
     <string name="staff_list">Staff List</string>
+    <string name="select_leave_type">Select leave type</string>
 </resources>

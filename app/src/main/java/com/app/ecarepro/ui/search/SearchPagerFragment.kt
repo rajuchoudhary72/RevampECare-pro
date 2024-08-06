@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.databinding.FragmentSearchPagerBinding
 import com.app.ecarepro.menuCard
 import com.app.ecarepro.model.Staff
@@ -121,9 +120,11 @@ class SearchPagerFragment : Fragment() {
                             }
                         }
                     }
+
                     SEARCH_TYPE_MODULE -> {
                         buildModuleModels(uiState.modules)
                     }
+
                     else -> {
                         uiState.staffs.forEach { staff: Staff ->
                             searchResultStudent {
@@ -148,7 +149,7 @@ class SearchPagerFragment : Fragment() {
     private fun EpoxyController.buildModuleModels(modules: List<Module>) {
         modules.forEach { menu ->
             menuCard {
-                id(menu.menuID, menu.parentMenuID, menu.parentParentMenuID, menu.title.hashCode())
+                id(menu.menuID, menu.parentMenuID, menu.parentParentMenuID)
                 title(menu.title)
                 icon(menu.icon)
                 parentMenuIcon(menu.parentIcon)

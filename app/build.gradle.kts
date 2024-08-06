@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 12
-        versionName = "1.1.10"
+        versionCode = 13
+        versionName = "1.1.11"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
