@@ -96,8 +96,8 @@
                         android:id="@+id/search_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="@string/search"
+                         android:text="Global Search"
+                        android:textColor="@color/grey_40"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/iv_search"
                         android:layout_marginStart="5dp"
@@ -124,7 +124,14 @@
                     android:layout_height="wrap_content"
                      app:menu="@menu/bottom_navigation_menu"
                     android:background="@color/transparent"
-                     tools:visibility="visible" />
+                     tools:visibility="visible"
+                    app:labelVisibilityMode="labeled"
+
+                    app:itemIconTint="@color/bnv_tab_item_foreground"
+                app:itemTextColor="@color/bnv_tab_item_foreground"
+                    app:itemActiveIndicatorStyle="@android:color/transparent"
+
+                    />
 
 
             </LinearLayout>

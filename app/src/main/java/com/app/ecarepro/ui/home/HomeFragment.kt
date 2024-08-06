@@ -58,6 +58,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+
+
+
     private val mViewModel: HomeViewModel by viewModels()
 
     private val systemViewModel: SystemViewModel by activityViewModels()
@@ -79,12 +82,10 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
        // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
-        binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+       // binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
-                margin = resources.getDimensionPixelOffset(
-                    R.dimen.horizontal_margin
-                ),
+                margin = 8,
                 decorationLookup = object : DecorationLookup {
                     override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
                         return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_view_all_widget
@@ -94,9 +95,7 @@ class HomeFragment : Fragment() {
         )
         binding.recyclerView.addItemDecoration(
             GridMarginDecoration.create(
-                margin = resources.getDimensionPixelOffset(
-                    R.dimen.horizontal_margin
-                ),
+                margin =  8,
                 columnProvider = object : ColumnProvider {
                     override fun getNumberOfColumns(): Int {
                         return 4
@@ -107,7 +106,7 @@ class HomeFragment : Fragment() {
                     override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
                         return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_card_option
                     }
-                }
+                },
             )
         )
     }

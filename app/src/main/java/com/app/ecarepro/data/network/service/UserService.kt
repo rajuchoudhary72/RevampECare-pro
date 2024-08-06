@@ -125,6 +125,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.ui.edit_profile.model.Profile
 
 interface UserService {
     @GET("User/Verify")
@@ -591,6 +592,11 @@ interface UserService {
     suspend fun getUserProfileEdit(
         @Query("Edit") edit: Boolean = true
     ): NetworkEditProfile
+
+    @POST("User/UpdateParentProfile")
+    suspend fun updateParentProfile(
+        @Body request: Profile
+    ): CommonResponse
 
     @POST("User/UploadProfileIMG")
     suspend fun uploadProfileIMG(

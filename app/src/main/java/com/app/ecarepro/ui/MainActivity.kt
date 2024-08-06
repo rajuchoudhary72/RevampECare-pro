@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
-        R.id.settingsFragment,
+        R.id.profileFragment,
         R.id.notificationFragment,
         R.id.messageFragment,
     )
@@ -821,11 +821,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpBottomNavigationView() {
 
-        binding.appBarMain.contentMain.rlMainSearch.setOnClickListener {
+        binding.appBarMain.contentMain.searchBar.setOnClickListener {
             navController.navigate(
                 R.id.searchFragment,
                 bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })
             )
+        }
+        binding.appBarMain.contentMain.ivSetting.setOnClickListener {
+            navController.navigate(R.id.settingsFragment)
         }
 
 
@@ -868,7 +871,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.profile -> {
-                    navController.navigate(R.id.settingsFragment)
+                    navController.navigate(R.id.profileFragment)
                     true
                 }
                 R.id.home -> {

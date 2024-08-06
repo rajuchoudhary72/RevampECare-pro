@@ -78,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="8dp"
-                    android:text="Welcome" />
+                    android:textColor="@color/grey_60"
+                    android:text="@string/welcome" />
 
                 <TextView
                     android:id="@+id/txt_user_name"
@@ -139,9 +140,9 @@
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="4"
-                android:background="@color/background_dashboard"
+                 android:background="@color/background_dashboard"
                 android:layout_marginTop="@dimen/_50sdp"
-                tools:listitem="@layout/item_card_option" />
+                 tools:listitem="@layout/item_card_option" />
 
 
 
