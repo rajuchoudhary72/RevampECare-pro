@@ -468,8 +468,7 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
-    private fun setUpViews() {
+ private fun setUpViews() {
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
