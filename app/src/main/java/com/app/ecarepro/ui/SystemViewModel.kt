@@ -8,6 +8,8 @@ import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import com.app.ecarepro.data.repository.SchoolRepository
+
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
@@ -35,7 +37,8 @@ class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val schoolRepository: SchoolRepository
 
 ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
@@ -180,6 +183,16 @@ class SystemViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 function(null)
+            }
+        }
+    }
+
+    fun fetchSettings(){
+        viewModelScope.launch {
+            schoolRepository.getGeneralSettings().collectLatest {
+                it.onSuccess {
+                    userDataStore.saveGeneralSettings(it)
+                }
             }
         }
     }

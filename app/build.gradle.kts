@@ -154,5 +154,6 @@ dependencies {
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.github.fornewid:neumorphism:0.3.2")
 
+    implementation("androidx.browser:browser:1.2.0")
 
 }

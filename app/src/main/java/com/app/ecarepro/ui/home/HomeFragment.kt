@@ -456,5 +456,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         systemViewModel.refreshAppLayout()
+        systemViewModel.fetchSettings()
+
     }
 }
