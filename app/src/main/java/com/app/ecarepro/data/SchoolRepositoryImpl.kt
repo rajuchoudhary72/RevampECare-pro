@@ -2,6 +2,7 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
@@ -179,6 +180,21 @@ class SchoolRepositoryImpl @Inject constructor(
                 val response = schoolService.updateTaskAttachment(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: "Task Saved"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getGeneralSettings(): Flow<Result<List<Setting>>> {
+        return flow {
+            try {
+                val response = schoolService.getGeneralSettings()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.settings?: emptyList()))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

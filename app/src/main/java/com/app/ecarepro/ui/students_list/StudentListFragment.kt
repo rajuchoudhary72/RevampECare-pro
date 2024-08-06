@@ -63,29 +63,27 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rbGroupSchoolType.setOnCheckedChangeListener(
-            RadioGroup.OnCheckedChangeListener { group, checkedId ->
-                when (checkedId) {
-                    R.id.rb_all -> {
-                        schoolType = 2
-                        studentListViewModel.getStudentList(schoolType, false)
+        binding.rbGroupSchoolType.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.rb_all -> {
+                    schoolType = 2
+                    studentListViewModel.getStudentList(schoolType)
+                }
 
-                    }
-
-                    R.id.rb_boarding -> {
-                        schoolType = 1
-                        studentListViewModel.getStudentList(schoolType, false)
-
-                    }
-
-                    R.id.rb_day_scolar -> {
-                        schoolType = 0
-                        studentListViewModel.getStudentList(schoolType, false)
-
-                    }
+                R.id.rb_boarding -> {
+                    schoolType = 1
+                    studentListViewModel.getStudentList(schoolType)
 
                 }
-            })
+
+                R.id.rb_day_scolar -> {
+                    schoolType = 0
+                    studentListViewModel.getStudentList(schoolType)
+
+                }
+
+            }
+        }
 
         lifecycleScope.launch {
             studentListViewModel.searchQuery.collectLatest {
@@ -161,7 +159,7 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
         }
 
 
-        studentListViewModel.getStudentList(schoolType, false)
+        studentListViewModel.getStudentList(schoolType)
         checkIsBoarding()
         buildSearchFilter(filterList)
 

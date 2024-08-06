@@ -1,5 +1,6 @@
 package com.app.ecarepro.data.datastore
 
+import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
@@ -30,12 +31,12 @@ interface UserDataStore {
     fun getDashboardData(): Flow<UserDashboardDto?>
     suspend fun saveAuthToken(token: String)
 
-    suspend fun getRoleName( ): String?
+    suspend fun getRoleName(): String?
 
     suspend fun saveRoleName(roleName: String)
     suspend fun saveUserNameID(userNameId: String)
 
-    suspend fun getUserNameID( ): String?
+    suspend fun getUserNameID(): String?
 
     suspend fun saveUserType(userType: Int)
 
@@ -46,4 +47,6 @@ interface UserDataStore {
     suspend fun saveSlides(sliders: List<Slide>)
     fun getSlides(): Flow<List<Slide>>
     suspend fun clear()
+    suspend fun saveGeneralSettings(settings: List<Setting>)
+    suspend fun isGeneralSettingEnabled(key: String): Boolean
 }

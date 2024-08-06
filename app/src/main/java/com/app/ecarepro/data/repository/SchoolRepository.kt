@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
@@ -45,6 +46,7 @@ interface SchoolRepository {
     fun getTasks(): Flow<Result<List<Title>>>
     fun addTask(request: AddTaskDto): Flow<Result<String>>
     fun updateTaskImage(request: UpdateTaskAttachmentDto): Flow<Result<String>>
+    fun getGeneralSettings(): Flow<Result<List<Setting>>>
     fun updateTask(request: UpdateTaskDto): Flow<Result<String>>
     fun getWatchers(): Flow<Result<List<Watcher>>>
     suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList

@@ -2,6 +2,7 @@ package com.app.ecarepro.ui
 
 import android.content.Intent
 import android.graphics.Rect
+import android.net.Uri
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -547,24 +549,30 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(this, uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }
+    }
+
     private fun webViewCall(url: String, title: String) {
+       val tabIntent =  CustomTabsIntent.Builder()
+            .setToolbarColor(getColor(R.color.green)).build()
+
         if (title.contains("Mark")) {
             systemViewModel.getTokenKey { token ->
                 if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
                 } else {
-                    val bundle = Bundle()
-                    bundle.putString("title", title)
-                    bundle.putString("url", "$url?token=$token")
-                    navController.navigate(R.id.webViewFragment, bundle)
+                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
                 }
             }
-
         } else {
-            val bundle = Bundle()
-            bundle.putString("title", title)
-            bundle.putString("url", url)
-            navController.navigate(R.id.webViewFragment, bundle)
+            openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 

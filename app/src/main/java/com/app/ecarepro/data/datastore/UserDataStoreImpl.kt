@@ -13,6 +13,7 @@ import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asNetworkSchool
 import com.app.ecarepro.data.database.model.asNetworkUserDetailsDto
+import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
@@ -72,7 +73,7 @@ class UserDataStoreImpl @Inject constructor(
                     it.asNetworkUserDetailsDto().copy(
                         school = schoolDatabase.getSchool(it.schoolCode ?: "").asNetworkSchool()
                     )
-                }?: emptyList()
+                } ?: emptyList()
             }
     }
 
@@ -119,16 +120,17 @@ class UserDataStoreImpl @Inject constructor(
                     null
                 )
             }
-            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it?.asNetworkUserDetailsDto() }
+            else userDatabase.getUserFlow(getCurrentUserId()!!)
+                .map { it?.asNetworkUserDetailsDto() }
         }
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
         if (schoolDatabase.getSchoolData(school.schoolCode) == null)
             schoolDatabase.insertSchool(school.asNetworkSchool())
-       /* val schoolCode = getCurrentSchoolCode()
-        if (schoolCode.isNullOrEmpty())
-            setCurrentSchoolCode(school.schoolCode)*/
+        /* val schoolCode = getCurrentSchoolCode()
+         if (schoolCode.isNullOrEmpty())
+             setCurrentSchoolCode(school.schoolCode)*/
         setCurrentSchoolCode(school.schoolCode)
     }
 
@@ -238,7 +240,6 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveSlides(sliders: List<Slide>) {
-
         context.dataStore.edit { preferences ->
             preferences[slidesKey] = gson.toJson(sliders)
         }
@@ -259,6 +260,19 @@ class UserDataStoreImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveGeneralSettings(settings: List<Setting>) {
+        context.dataStore.edit { preferences ->
+            preferences[generalSettingsKey] = gson.toJson(settings)
+        }
+    }
+
+    override suspend fun isGeneralSettingEnabled(key: String): Boolean {
+        return context.dataStore.data.map { preferences ->
+            val itemType = object : TypeToken<List<Setting>>() {}.type
+            gson.fromJson<List<Setting>>(preferences[generalSettingsKey], itemType)
+                .firstOrNull { it.settingName == key }?.isEnabled ?: false
+        }.first()
+    }
 
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
@@ -271,6 +285,7 @@ class UserDataStoreImpl @Inject constructor(
         private val slidesKey = stringPreferencesKey("slides")
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
+        private val generalSettingsKey = stringPreferencesKey("generalSettings")
         private val userTypeKey = intPreferencesKey("userType")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }

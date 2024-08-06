@@ -14,6 +14,7 @@ import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
@@ -34,7 +35,8 @@ class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val schoolRepository: SchoolRepository
 
 ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
@@ -157,6 +159,16 @@ class SystemViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 function(null)
+            }
+        }
+    }
+
+    fun fetchSettings(){
+        viewModelScope.launch {
+            schoolRepository.getGeneralSettings().collectLatest {
+                it.onSuccess {
+                    userDataStore.saveGeneralSettings(it)
+                }
             }
         }
     }
