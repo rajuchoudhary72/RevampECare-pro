@@ -137,6 +137,7 @@ import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 
 class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
@@ -389,6 +390,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getInfractions(stID: Int): NetworkInfractions {
         return userService.getInfractions(stID)
+    }
+
+    override suspend fun disciplineLogDeleteLog(id: String, type: Int): CommonResponse {
+        return userService.disciplineLogDeleteLog(id, type)
     }
 
     override suspend fun saveInfraction(
@@ -907,7 +912,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getUserProfileEdit(edit)
     }
 
-    override suspend fun updateParentProfile(request: com.app.ecarepro.ui.edit_profile.model.Profile): CommonResponse {
+    override suspend fun updateParentProfile(request: UpdateProfileModel): CommonResponse {
         return userService.updateParentProfile(request)
     }
 

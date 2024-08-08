@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -15,16 +16,19 @@ import com.app.ecarepro.R
 
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentInfractionListBinding
+import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionListAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class InfractionListFragment : Fragment() {
+class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
     private var studentID: Int = 0
     private lateinit var binding: FragmentInfractionListBinding
@@ -129,5 +133,30 @@ class InfractionListFragment : Fragment() {
         infractionListViewModel.getInfractions(studentID)
 
 
+    }
+
+    override fun onItemClick(t: RecentInfraction, pos: Int, boolean: Boolean) {
+        infractionListViewModel.disciplineLogDeleteLog(t.id,1)
+        lifecycleScope.launch {
+            infractionListViewModel.deleteLogStateFlow.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                    if (it.data!=null){
+                        it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
+                        infractionListViewModel.getInfractions(studentID)
+                    }
+
+                }
+                }
+            }
+        }
     }
 }

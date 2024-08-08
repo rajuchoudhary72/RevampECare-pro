@@ -103,6 +103,7 @@ import com.app.ecarepro.model.StudentTeacherResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
@@ -201,7 +202,7 @@ interface UserRepository {
     ): NetworkEditProfile
 
     suspend fun updateParentProfile(
-         request: com.app.ecarepro.ui.edit_profile.model.Profile
+         request: UpdateProfileModel
     ): CommonResponse
 
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
@@ -258,6 +259,11 @@ interface UserRepository {
     suspend fun getInfractions(
         stID: Int
     ): NetworkInfractions
+
+    suspend fun disciplineLogDeleteLog(
+         id: String,
+          type: Int
+    ): CommonResponse
 
 
     suspend fun saveInfraction(

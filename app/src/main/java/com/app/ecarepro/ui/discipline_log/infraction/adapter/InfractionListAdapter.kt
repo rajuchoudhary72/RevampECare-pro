@@ -1,11 +1,15 @@
 package com.app.ecarepro.ui.discipline_log.infraction.adapter
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.DisciplineViewListItemBinding
+import com.app.ecarepro.databinding.ProfileUpdateRecordItemBinding
 import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment
 
@@ -26,26 +30,50 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
     override fun getItemCount(): Int = recentInfractions.size
 
     override fun onBindViewHolder(holder: CircularViewHolder, position: Int) {
-         val data=recentInfractions[position]
 
-        bindingm.tvMedicineName.text= buildString {
-            append(infractionListFragment.getString(R.string.category))
-            append(data.infraction)
-        }
-        bindingm.tvQuantity.text= buildString {
-            append(infractionListFragment.getString(R.string.instance_wit))
-            append(data.instance)
-        }
-        bindingm.tvDate.text= buildString {
-            append(infractionListFragment.getString(R.string.infraction_on))
-            append(data.infractionOn)
-        }
+        val binding = DataBindingUtil.getBinding<DisciplineViewListItemBinding>(holder.itemView)
+
+         if (binding!=null){
+             val data=recentInfractions[position]
+
+             binding.ivDelete.isVisible=data.canDelete
+
+             binding.tvMedicineName.text= buildString {
+                 append(infractionListFragment.getString(R.string.category))
+                 append(data.infraction)
+             }
+             binding.tvQuantity.text= buildString {
+                 append(infractionListFragment.getString(R.string.instance_wit))
+                 append(data.instance)
+             }
+             binding.tvDate.text= buildString {
+                 append(infractionListFragment.getString(R.string.infraction_on))
+                 append(data.infractionOn)
+             }
 
 
-        bindingm.tvReason.text= data.subInfraction
-        bindingm.tvDiagnosis.text= data.consequences
-        bindingm.tvRemark.text= data.correctiveAction
-        bindingm.tvAttdentName.text= data.staffName
+             binding.tvReason.text= data.subInfraction
+             binding.tvDiagnosis.text= data.consequences
+             binding.tvRemark.text= data.correctiveAction
+             binding.tvAttdentName.text= data.staffName
+
+             binding.ivDelete.setOnClickListener {
+                 val builder = AlertDialog.Builder(infractionListFragment.requireContext())
+                 builder.setTitle("Are you sure ?")
+                 builder.setMessage("Are you sure, You want to delete it")
+
+                 builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                     infractionListFragment.onItemClick(data,1,false)
+                 }
+
+                 builder.setNegativeButton(android.R.string.no) { dialog, which ->
+
+                 }
+
+                 builder.show()
+
+             }
+         }
 
 
 

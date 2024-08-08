@@ -179,7 +179,10 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
 
         studentListViewModel.getStudentList(schoolType, false)
         checkIsBoarding()
-        buildSearchFilter(filterList)
+
+
+
+
 
 
     }
@@ -199,6 +202,13 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
                 setHasFixedSize(true)
                 layoutManager = GridLayoutManager(activity, 2)
                 adapter = circularAdapter
+            }
+            val adapterFatherDesignation =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    filterList)
+            binding.taskList.setAdapter(adapterFatherDesignation)
+            binding.taskList.setOnItemClickListener { a, e, position, c ->
+                filterPos = position
             }
         } else {
             binding.rvStudentList.isVisible = false
@@ -272,18 +282,7 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
     }
 
 
-    private fun buildSearchFilter(filterList: List<String>) {
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            filterList
-        )
-        binding.taskList.setAdapter(adapter)
 
-        binding.taskList.setOnItemClickListener { _, _, position, _ ->
-            filterPos = position
-        }
-    }
 
 
 }

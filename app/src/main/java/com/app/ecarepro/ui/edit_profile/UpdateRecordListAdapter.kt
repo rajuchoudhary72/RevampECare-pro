@@ -29,8 +29,8 @@ class UpdateRecordListAdapter(
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
         val binding = DataBindingUtil.getBinding<ProfileUpdateRecordItemBinding>(holder.itemView)
         if (binding != null) {
-            binding.tvSrNo.text=position.toString()
-            binding.records = syllabusLST[position]
+            binding.tvSrNo.text=(position+1).toString()
+            binding.records = syllabusLST[position ]
         }
 
 

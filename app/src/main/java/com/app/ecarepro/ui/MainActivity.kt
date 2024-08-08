@@ -653,24 +653,30 @@ class MainActivity : AppCompatActivity() {
             }
 
             24 -> {
-                when (childMenuId) {
-                    21 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.appreciationSelectionFragment)
+                 lifecycleScope.launch {
+                     userDataStore.getUser()?.run {
+                         when (childMenuId) {
 
-                    } else {
-                        navController.navigate(R.id.appreciationListFragment)
+                             21 -> if (userType == Constant.STAFF_TYPE) {
+                                 navController.navigate(R.id.appreciationSelectionFragment)
 
-                    }
+                             } else {
+                                 navController.navigate(R.id.appreciationListFragment)
 
-                    22 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.infractionSelectFragment)
+                             }
 
-                    } else {
-                        navController.navigate(R.id.infractionListFragment)
+                             22 -> if (userType == Constant.STAFF_TYPE) {
+                                 navController.navigate(R.id.infractionSelectFragment)
 
-                    }
+                             } else {
+                                 navController.navigate(R.id.infractionListFragment)
 
-                }
+                             }
+
+                         }
+                     }
+                 }
+
             }
 
             29 -> {

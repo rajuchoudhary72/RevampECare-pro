@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
@@ -119,7 +120,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpViews()
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             profileViewModel.uiState.flowWithLifecycle(
@@ -130,7 +131,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-
+        setUpViews()
 
 
     }
@@ -472,7 +473,12 @@ class ProfileFragment : Fragment() {
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-       // binding.tvEditProfile.isVisible = Constant.PARENT_TYPE==  profileViewModel.userType
+     viewLifecycleOwner.lifecycleScope.launch {
+         userDataStore.getUser()?.run {
+             binding.tvEditProfile.isVisible =   Constant.PARENT_TYPE == userType
+         }
+     }
+
         binding.tvEditProfile.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)
         }
