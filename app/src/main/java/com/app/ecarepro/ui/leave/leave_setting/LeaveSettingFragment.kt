@@ -69,7 +69,7 @@ class LeaveSettingFragment : Fragment() {
                             it.data.leaveDetails.forEach { data ->
                                 leaveTypesDataString.add(data.leaveType .toString())
                             }
-                            val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,
+                            val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
                                 leaveTypesDataString)
                             binding.autoCompleteReason.setAdapter(arrayAdapter)
 

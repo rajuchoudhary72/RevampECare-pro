@@ -7,6 +7,9 @@ import android.os.Build
 import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import com.app.ecarepro.data.repository.SchoolRepository
+
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
@@ -14,7 +17,6 @@ import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
-import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
@@ -46,12 +48,21 @@ class SystemViewModel @Inject constructor(
     val navigateBack = _navigateBack
 
     val refresh = MutableSharedFlow<Boolean>()
+    val showDashboardValue = MutableSharedFlow<Boolean>()
+    val bottomNavPosition = MutableSharedFlow<Int>()
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
+      var UType: Int = -1
 
     init {
         viewModelScope.launch {
             userRoleName = userDataStore.getRoleName().toString()
+        }
+
+        viewModelScope.launch {
+
+                UType = userDataStore.getUserType()!!
+
         }
     }
 
@@ -123,6 +134,19 @@ class SystemViewModel @Inject constructor(
     fun refreshAppLayout() {
         viewModelScope.launch {
             refresh.emit(true)
+        }
+    }
+
+    fun showDashboard(v  : Boolean) {
+        viewModelScope.launch {
+            showDashboardValue.emit(v)
+        }
+    }
+
+
+    fun bottomNavPositionSet(v  : Int) {
+        viewModelScope.launch {
+            bottomNavPosition.emit(v)
         }
     }
 

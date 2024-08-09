@@ -5,10 +5,11 @@ import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -17,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
@@ -28,7 +30,6 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
-import com.app.ecarepro.emptyFav
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
@@ -57,6 +58,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+
+
+
     private val mViewModel: HomeViewModel by viewModels()
 
     private val systemViewModel: SystemViewModel by activityViewModels()
@@ -77,19 +81,11 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
-        binding.btnSearch.setOnClickListener {
-            findNavController().navigate(
-                R.id.searchFragment,
-                bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })
-            )
-        }
+       // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
         binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
-                margin = resources.getDimensionPixelOffset(
-                    R.dimen.horizontal_margin
-                ),
+                margin = 8,
                 decorationLookup = object : DecorationLookup {
                     override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
                         return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_view_all_widget
@@ -99,12 +95,10 @@ class HomeFragment : Fragment() {
         )
         binding.recyclerView.addItemDecoration(
             GridMarginDecoration.create(
-                margin = resources.getDimensionPixelOffset(
-                    R.dimen.horizontal_margin
-                ),
+                margin =  8,
                 columnProvider = object : ColumnProvider {
                     override fun getNumberOfColumns(): Int {
-                        return 3
+                        return 4
                     }
 
                 },
@@ -112,7 +106,7 @@ class HomeFragment : Fragment() {
                     override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
                         return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_card_option
                     }
-                }
+                },
             )
         )
     }
@@ -133,7 +127,6 @@ class HomeFragment : Fragment() {
 
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
-                        binding.btnSearch.isVisible = uiState.searchOption.isNotEmpty()
                         mViewModel.setFavourite(uiState.favroiteMenus)
                         uiState.userInfo.let { user ->
                             binding.apply {
@@ -216,7 +209,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message ?: "")
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is HomeUiState.Success) {
@@ -269,96 +262,89 @@ class HomeFragment : Fragment() {
                     id("view_all_widget")
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                     clickListener { _ ->
-                        findNavController().navigate(
-                            R.id.widgetsFragment,
-                            bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
-                        )
+                        /*findNavController().navigate(
+                            R.id.homeViewPagerFragment,
+                           // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
+                        )*/
+
+                        systemViewModel.showDashboard(true)
                     }
+
+
                 }
 
                 labelCenter {
                     id("fav")
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
-                if (uiState.favourites.isEmpty()) {
-                    emptyFav {
-                        id("fave")
-                        spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
-                    }
-                } else {
 
-                    uiState.favourites.forEach { favouriteSlider: Menu ->
-                        cardOption {
-                            id(favouriteSlider.title)
-                            data(favouriteSlider)
-                            clickListener { _ ->
-                                if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
-                                    (requireActivity() as MainActivity).getFragmentId(
-                                        favouriteSlider.menuID,
-                                        favouriteSlider.chMenuID,
-                                        favouriteSlider.sbChMenuID
+                uiState.favourites.forEach { favouriteSlider: Menu ->
+                    cardOption {
+                        id(favouriteSlider.title)
+                        data(favouriteSlider)
+                        clickListener { _ ->
+                            if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID,
+                                    favouriteSlider.chMenuID,
+                                    favouriteSlider.sbChMenuID
+                                )
+                            } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID,
+                                    favouriteSlider.chMenuID
+                                )
+                            } else if (favouriteSlider.menuID > 0) {
+                                (requireActivity() as MainActivity).getFragmentId(
+                                    favouriteSlider.menuID
+                                )
+                            } else {
+                                if (favouriteSlider.title!!.contains(
+                                        getString(R.string.assessment),
+                                        true
                                     )
-                                } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
-                                    (requireActivity() as MainActivity).getFragmentId(
-                                        favouriteSlider.menuID,
-                                        favouriteSlider.chMenuID
+                                ) {
+                                    schoolData?.let {
+                                        it.assessmentMarksURL?.let { url ->
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.assessment_headling)
+                                            )
+                                        }
+                                    }
+                                } else if (favouriteSlider.title.contains(
+                                        getString(R.string.marks_manager),
+                                        true
                                     )
-                                } else if (favouriteSlider.menuID > 0) {
+                                ) {
+                                    schoolData?.let {
+                                        it.marksEntryURL?.let { url ->
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.marks_entry_heading)
+                                            )
+                                        }
+                                    }
+                                } else if (favouriteSlider.title.contains(
+                                        getString(R.string.website),
+                                        true
+                                    )
+                                ) {
+                                    schoolData?.let {
+                                        it.webSite?.let { url ->
+                                            webViewCall(url, getString(R.string.website_txt))
+                                        }
+                                    }
+                                } else {
                                     (requireActivity() as MainActivity).getFragmentId(
                                         favouriteSlider.menuID
                                     )
-                                } else {
-                                    if (favouriteSlider.title!!.contains(
-                                            getString(R.string.assessment),
-                                            true
-                                        )
-                                    ) {
-                                        schoolData?.let {
-                                            it.assessmentMarksURL?.let { url ->
-                                                webViewCall(
-                                                    url,
-                                                    getString(R.string.assessment_headling)
-                                                )
-                                            }
-                                        }
-                                    } else if (favouriteSlider.title.contains(
-                                            getString(R.string.marks_manager),
-                                            true
-                                        )
-                                    ) {
-                                        schoolData?.let {
-                                            it.marksEntryURL?.let { url ->
-                                                webViewCall(
-                                                    url,
-                                                    getString(R.string.marks_entry_heading)
-                                                )
-                                            }
-                                        }
-                                    } else if (favouriteSlider.title.contains(
-                                            getString(R.string.website),
-                                            true
-                                        )
-                                    ) {
-                                        schoolData?.let {
-                                            it.webSite?.let { url ->
-                                                webViewCall(url, getString(R.string.website_txt))
-                                            }
-                                        }
-                                    } else {
-                                        (requireActivity() as MainActivity).getFragmentId(
-                                            favouriteSlider.menuID
-                                        )
-                                    }
-
                                 }
+
                             }
                         }
                     }
-
                 }
-
-
-
                 addMoreFavourites {
                     id("add more")
                     clickListener { _ ->
@@ -471,5 +457,6 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
+
     }
 }

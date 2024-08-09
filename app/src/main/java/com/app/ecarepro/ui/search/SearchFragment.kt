@@ -40,7 +40,6 @@ class SearchFragment : Fragment() {
         }
         return _binding?.root
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         searchViewModel.clearSearchQuery()

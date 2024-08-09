@@ -22,7 +22,6 @@ class SelectStaffTypesFragment : DialogFragment() {
     private val selectStaffTypes = mutableListOf<StaffType>()
 
     private var onContactSelected: ((List<StaffType>) -> Unit)? = null
-
     private var multiSelectionEnabled: Boolean = true
 
     fun onContactSelected(onContactSelected: (List<StaffType>) -> Unit): SelectStaffTypesFragment {
@@ -50,11 +49,9 @@ class SelectStaffTypesFragment : DialogFragment() {
             onContactSelected?.invoke(selectStaffTypes)
             dismiss()
         }
-
         (arguments?.getSerializable(STAFF_TYPES) as StaffTypeDto).let { dto ->
             selectStaffTypes.addAll(dto.selectedStaffType ?: emptyList())
         }
-
         binding.viewPager.withModels {
             (arguments?.getSerializable(STAFF_TYPES) as StaffTypeDto).let { dto ->
                 dto.staffType?.forEach { type ->
@@ -85,6 +82,7 @@ class SelectStaffTypesFragment : DialogFragment() {
                     }
                 }
             }
+
         }
     }
 

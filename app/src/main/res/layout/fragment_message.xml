@@ -12,7 +12,9 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background_dashboard"
+        >
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
@@ -25,8 +27,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:navigationIcon="@drawable/ic_arrow_back_24px"
-                app:title="Message"
+                 app:title="Message"
                 app:titleTextAppearance="?attr/titleTextAppearance"
                 app:titleTextColor="@color/white"
                 app:topWindowInsetToPadding="@{true}">
@@ -63,23 +64,50 @@
 
             </com.google.android.material.appbar.MaterialToolbar>
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabIndicatorFullWidth="true">
+                android:background="@color/background_dashboard"
+                >
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
+                <soup.neumorphism.NeumorphCardView
+                    android:id="@+id/Button1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Inbox" />
+                    app:neumorph_lightSource="leftTop"
+                    app:neumorph_shapeAppearance="@style/NeumorphButtonShapeAppearance"
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sent" />
+                    app:neumorph_backgroundColor="@color/background_dashboard"
+                    app:neumorph_strokeWidth="@dimen/_1sdp"
+                    >
 
-            </com.google.android.material.tabs.TabLayout>
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                         android:background="@color/background_dashboard"
+                        app:tabIndicatorFullWidth="false">
+
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Inbox" />
+
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sent" />
+
+                    </com.google.android.material.tabs.TabLayout>
+
+
+                </soup.neumorphism.NeumorphCardView>
+
+
+            </LinearLayout>
+
+
 
         </com.google.android.material.appbar.AppBarLayout>
 

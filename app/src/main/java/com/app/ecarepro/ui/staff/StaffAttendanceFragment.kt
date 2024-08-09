@@ -19,10 +19,9 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
 import java.util.Calendar
 import java.util.Date
 
@@ -135,11 +134,9 @@ class StaffAttendanceFragment : Fragment() {
                     R.id.btn_all -> {
                         viewModel.setAttendanceType(AttendanceType.ALL)
                     }
-
                     R.id.btn_present -> {
                         viewModel.setAttendanceType(AttendanceType.PRESENT)
                     }
-
                     else -> {
                         viewModel.setAttendanceType(AttendanceType.ABSENT)
                     }
@@ -184,6 +181,8 @@ class StaffAttendanceFragment : Fragment() {
         datePicker.show(childFragmentManager, "datePicker")
     }
 
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -195,6 +194,6 @@ class FutureDateValidator() : CalendarConstraints.DateValidator {
     override fun isValid(date: Long): Boolean {
         val calender = Calendar.getInstance()
         calender.add(Calendar.YEAR, -10)
-       return date in calender.timeInMillis..System.currentTimeMillis()
+        return date in calender.timeInMillis..System.currentTimeMillis()
     }
 }

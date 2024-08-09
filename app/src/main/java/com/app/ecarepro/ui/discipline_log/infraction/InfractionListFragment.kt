@@ -77,22 +77,24 @@ class InfractionListFragment : Fragment() {
 
                             binding.studentData=it.data.studentDTL
 
-                            binding.tvAdmissionNo.text= buildString {
-                                append(getString(R.string.admission_no))
-                                append(it.data.studentDTL.admissionNo)
-                            }
-                            binding.tvClassName.text= buildString {
-                                append(getString(R.string.classes))
-                                append(it.data.studentDTL.`class`)
-                            }
-                            binding.tvFatherName.text= buildString {
-                                append(getString(R.string.contact_person))
-                                append(it.data.studentDTL.contactPerson)
-                            }
-                            binding.tvContact.text= buildString {
-                                append(getString(R.string.contact_no))
-                                append(it.data.studentDTL.contactMob)
-                            }
+                             if (it.data.studentDTL!=null){
+                                 binding.tvAdmissionNo.text= buildString {
+                                     append(getString(R.string.admission_no))
+                                     append(it.data.studentDTL.admissionNo)
+                                 }
+                                 binding.tvClassName.text= buildString {
+                                     append(getString(R.string.classes))
+                                     append(it.data.studentDTL.`class`)
+                                 }
+                                 binding.tvFatherName.text= buildString {
+                                     append(getString(R.string.contact_person))
+                                     append(it.data.studentDTL.contactPerson)
+                                 }
+                                 binding.tvContact.text= buildString {
+                                     append(getString(R.string.contact_no))
+                                     append(it.data.studentDTL.contactMob)
+                                 }
+                             }
 
                             if (it.data.records!=null){
                                 binding.recyclerInfractionList.isVisible=true

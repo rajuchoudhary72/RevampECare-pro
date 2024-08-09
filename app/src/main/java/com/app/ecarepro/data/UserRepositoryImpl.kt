@@ -1,98 +1,56 @@
 package com.app.ecarepro.data
 
-import android.content.Context
-import android.provider.Settings.Secure
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
-import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
-import com.app.ecarepro.data.network.model.CommonResponse
+ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.GetCredentialsRequest
 import com.app.ecarepro.data.network.model.LoginResponseDto
-import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
 import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
-import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
-import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
-import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
-import com.app.ecarepro.data.network.model.NetworkAppreciations
-import com.app.ecarepro.data.network.model.NetworkAssignRollNo
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
 import com.app.ecarepro.data.network.model.NetworkBookDetails
-import com.app.ecarepro.data.network.model.NetworkBusLocation
-import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
-import com.app.ecarepro.data.network.model.NetworkClassTeacher
-import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
+import com.app.ecarepro.data.network.model.NetworkClassAttendance
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
-import com.app.ecarepro.data.network.model.NetworkEBook
-import com.app.ecarepro.data.network.model.NetworkFavorites
-import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
-import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
-import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
+import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkLessonPlanDTL
 import com.app.ecarepro.data.network.model.NetworkLessonPlanList
-import com.app.ecarepro.data.network.model.NetworkLibraryDTL
 import com.app.ecarepro.data.network.model.NetworkMarkAttendance
-import com.app.ecarepro.data.network.model.NetworkMediaGallery
-import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
-import com.app.ecarepro.data.network.model.NetworkOutPassReport
 import com.app.ecarepro.data.network.model.NetworkPaySlip
-import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
-import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
-import com.app.ecarepro.data.network.model.NetworkQuestionBank
 import com.app.ecarepro.data.network.model.NetworkQuestionPaper
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
-import com.app.ecarepro.data.network.model.NetworkRechargeLog
 import com.app.ecarepro.data.network.model.NetworkReportCardDetails
-import com.app.ecarepro.data.network.model.NetworkRouteList
-import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
-import com.app.ecarepro.data.network.model.NetworkSMSConsumption
-import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStaffList
 import com.app.ecarepro.data.network.model.NetworkStaffProfile
-import com.app.ecarepro.data.network.model.NetworkStoppage
 import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.network.model.NetworkStudentListToMarkAtt
 import com.app.ecarepro.data.network.model.NetworkStudentProfile
-import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
 import com.app.ecarepro.data.network.model.NetworkSubAppreciationTypes
 import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
-import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
-import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
-import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.NetworkVehicleNumber
-import com.app.ecarepro.data.network.model.NetworkVideoAlbum
-import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.PostAnswerPostData
-import com.app.ecarepro.data.network.model.PostLeaveAction
-import com.app.ecarepro.data.network.model.Profile
-import com.app.ecarepro.data.network.model.StaffAttendanceDetails
-import com.app.ecarepro.data.network.model.UploadPhotoRequest
-import com.app.ecarepro.data.network.model.UserDashboardDto
+ import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
-import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
-import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
-import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
+ import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_leave_request.LeaveRequestData
@@ -102,40 +60,83 @@ import com.app.ecarepro.data.network.model.post_mark_attedance.PostMarkAttedance
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_question.AddQuestionPostData
 import com.app.ecarepro.data.network.model.post_question.Attachment
-import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_save_appreaction.PostSaveAppreciation
 import com.app.ecarepro.data.network.model.post_save_infraction.PostSaveInfraction
-import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
-import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
-import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
-import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
-import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.data.network.model.submit_assignment.PostSubmitAssignment
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
-import com.app.ecarepro.model.FeeSummery
-import com.app.ecarepro.model.Staff
-import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
+ import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
-import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
-import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
-import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
-import com.app.ecarepro.ui.statical.StaticGraphResponse
+ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
+ import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
+import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
+import com.app.ecarepro.data.network.model.NetworkAlbumType
+import com.app.ecarepro.data.network.model.NetworkAppointments
+import com.app.ecarepro.data.network.model.NetworkAppreciations
+import com.app.ecarepro.data.network.model.NetworkAssignRollNo
+import com.app.ecarepro.data.network.model.NetworkBusLocation
+import com.app.ecarepro.data.network.model.NetworkClassTeacher
+import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
+import com.app.ecarepro.data.network.model.NetworkEBook
+import com.app.ecarepro.data.network.model.NetworkFavorites
+import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
+import com.app.ecarepro.data.network.model.NetworkInfractions
+import com.app.ecarepro.data.network.model.NetworkLeaveReport
+import com.app.ecarepro.data.network.model.NetworkLibraryDTL
+import com.app.ecarepro.data.network.model.NetworkMediaGallery
+import com.app.ecarepro.data.network.model.NetworkOutPassReport
+import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
+import com.app.ecarepro.data.network.model.NetworkProfileAttendanceDTL
+import com.app.ecarepro.data.network.model.NetworkQuestionBank
+import com.app.ecarepro.data.network.model.NetworkRechargeLog
+import com.app.ecarepro.data.network.model.NetworkRouteList
+import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
+import com.app.ecarepro.data.network.model.NetworkSMSConsumption
+import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
+import com.app.ecarepro.data.network.model.NetworkStoppage
+import com.app.ecarepro.data.network.model.NetworkStudentToMarkTransAttendane
+import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
+import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
+import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkVehicleNumber
+import com.app.ecarepro.data.network.model.NetworkVideoAlbum
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
+import com.app.ecarepro.data.network.model.PostLeaveAction
+import kotlinx.coroutines.flow.flow
+import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
+import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
+import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
+import com.app.ecarepro.data.network.model.post_trans_att.PostStudentToMarkAtt
+import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
+import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
+import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import javax.inject.Inject
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import android.content.Context
+import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.model.Staff
+import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
+import com.app.ecarepro.ui.attendance_section.Attendance
+import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 
 class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
@@ -190,16 +191,10 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
-
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {
             try {
-                val response = userService.logout(
-                    deviceID = Secure.getString(
-                        context.contentResolver,
-                        Secure.ANDROID_ID
-                    )
-                )
+                val response = userService.logout(deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID))
                 if (response.errorCode == 0) {
                     emit(Result.success(true))
                 } else {
@@ -210,7 +205,6 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
-
     override suspend fun changeUserName(changeUserNameRequestDto: ChangeUserNameRequestDto): Flow<Result<CommonResponse>> {
         return flow {
             try {
@@ -331,7 +325,7 @@ class UserRepositoryImpl @Inject constructor(
         action: Int,
         forwardedTo: Int
     ): CommonResponse {
-        return userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID))
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID))
     }
 
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {
@@ -342,7 +336,7 @@ class UserRepositoryImpl @Inject constructor(
         leaveID: Int,
         fromDate: String,
         tillDate: String,
-        duration: Int,
+        duration: Double,
         halfdayDTL: List<HalfdayDTL>,
         reason: String,
         attachment: String,
@@ -417,21 +411,6 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getStudentList(scholarType, showAll)
     }
 
-    override suspend fun getStudents(): Flow<Result<List<Student>>> {
-        return flow {
-            try {
-                val response = userService.getStudentList(2, true)
-                if (response.errorCode == 0) {
-                    emit(Result.success(response.students))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
     override suspend fun getStudentMedicalCard(stID: String): StudentMedicalCardResponse {
         return userService.getStudentMedicalCard(stID)
     }
@@ -443,7 +422,6 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getClassmates(): ClassMateResponse {
         return userService.getClassmates()
     }
-
     override suspend fun uploadPhoto(request: StudentIDRequest): CommonResponse {
         return userService.uploadPhoto(request)
     }
@@ -515,7 +493,7 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun teachersAssignment(iD: String): NetworkTeacherAssignment {
+    override suspend fun teachersAssignment(iD: String,): NetworkTeacherAssignment {
         return userService.teachersAssignment(iD)
     }
 
@@ -523,7 +501,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.deleteAssignment(iD)
     }
 
-    override suspend fun mySubjects(classID: Int): NetworkMySubjects {
+    override suspend fun mySubjects(classID :Int): NetworkMySubjects {
         return userService.mySubjects(classID)
     }
 
@@ -532,42 +510,25 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createAssignment(
-        asgDate: String,
-        asgID: Int,
-        attachment: String,
-        fileExt: String,
-        fileURL: String,
-        classID: Int,
-        classIDs: String,
-        `data`: String,
-        `file`: String,
-        id: String,
-        isActive: Boolean,
-        isFileRemoved: Boolean,
-        multipleSubmission: Boolean,
+          asgDate: String,
+          asgID: Int,
+          attachment: String,
+          fileExt: String,
+          fileURL: String,
+          classID: Int,
+          classIDs: String,
+          `data`: String,
+          `file`: String,
+          id: String,
+          isActive: Boolean,
+          isFileRemoved: Boolean,
+          multipleSubmission: Boolean,
 
-        subjectID: Int,
-        submitDate: String,
-        title: String
+          subjectID: Int,
+          submitDate: String,
+          title: String
     ): CommonResponse {
-        return userService.createAssignment(
-            PostCreateAssignment(
-                asgDate,
-                asgID,
-                Attachment(attachment, fileExt, fileURL),
-                classID,
-                classIDs,
-                data,
-                file,
-                id,
-                isActive,
-                isFileRemoved,
-                multipleSubmission,
-                subjectID,
-                submitDate,
-                title
-            )
-        )
+        return userService.createAssignment(PostCreateAssignment( asgDate, asgID, Attachment(attachment, fileExt, fileURL), classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title))
 
     }
 
@@ -578,19 +539,11 @@ class UserRepositoryImpl @Inject constructor(
         attDate: String,
         stuList: List<StudentAtt>
     ): CommonResponse {
-        return userService.postMarkAttendance(
-            PostMarkAttedance(
-                attDate,
-                classID,
-                mode,
-                stuList,
-                subID
-            )
-        )
+        return userService.postMarkAttendance(PostMarkAttedance(attDate,classID,mode,stuList,subID))
     }
 
-    override suspend fun getLessonPlanList(page: Int, id: String): NetworkLessonPlanList {
-        return userService.getLessonPlanList(page, id)
+    override suspend fun getLessonPlanList(page : Int,id: String): NetworkLessonPlanList {
+        return  userService.getLessonPlanList(page,id)
     }
 
     override suspend fun getLessonPlanFilter(
@@ -601,8 +554,8 @@ class UserRepositoryImpl @Inject constructor(
         subIds: String,
         status: Int,
 
-        ): NetworkLessonPlanList {
-        return userService.getLessonPlanFilter(filter, from, till, classIds, subIds, status)
+    ): NetworkLessonPlanList {
+        return userService.getLessonPlanFilter(filter, from, till, classIds, subIds, status )
     }
 
     override suspend fun getLessonPlanDTL(id: String, teacherID: Int): NetworkLessonPlanDTL {
@@ -610,24 +563,8 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getStaffList(): NetworkStaffList {
-        return userService.getStaffList()
+        return  userService.getStaffList()
     }
-
-    override suspend fun getStaffs(): Flow<Result<List<Staff>>> {
-        return flow {
-            try {
-                val response = userService.getStaffList()
-                if (response.errorCode == 0) {
-                    emit(Result.success(response.staffs))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
     override suspend fun getStaffAttendance(
         staffType: String?,
         date: String,
@@ -645,7 +582,6 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
-
     override suspend fun getStaffProfile(sId: Int): NetworkStaffProfile {
         return userService.getStaffProfile(sId)
     }
@@ -674,33 +610,10 @@ class UserRepositoryImpl @Inject constructor(
         youtubeLinks: String
     ): CommonResponse {
 
-        return userService.postLessonPlan(
-            PostLesson(
-                com.app.ecarepro.data.network.model.post_lesson.Attachment(
-                    attachment,
-                    fileExt,
-                    fileURL
-                ),
-                auditory,
-                classIds,
-                closure,
-                extensionTopic,
-                fileName,
-                fromDate,
-                introduction,
-                kinestheticActivity,
-                lPlnID,
-                learningOutcomes,
-                objective,
-                otherResources,
-                resources,
-                showToStudent,
-                subID,
-                tillDate,
-                topic,
-                youtubeLinks
-            )
-        )
+        return userService.postLessonPlan(PostLesson(
+            com.app.ecarepro.data.network.model.post_lesson.Attachment(attachment, fileExt, fileURL),
+            auditory, classIds, closure, extensionTopic, fileName, fromDate, introduction, kinestheticActivity, lPlnID, learningOutcomes, objective, otherResources, resources, showToStudent, subID, tillDate, topic, youtubeLinks
+        ))
     }
 
     override suspend fun createLessonPlan(): NetworkCreateLesson {
@@ -730,7 +643,34 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getClassAttendance(id: String, attDate: String): NetworkClassAttendance {
         return userService.getClassAttendance(id, attDate)
     }
-
+    override suspend fun getStudents(): Flow<Result<List<Student>>> {
+        return flow {
+            try {
+                val response = userService.getStudentList(2, true)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.students))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override suspend fun getStaffs(): Flow<Result<List<Staff>>> {
+        return flow {
+            try {
+                val response = userService.getStaffList()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.staffs))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun getStudentAttendance(
         from: String,
         till: String,
@@ -797,23 +737,15 @@ class UserRepositoryImpl @Inject constructor(
         stuAtt: List<StuAtt>,
         trip: Int
     ): CommonResponse {
-        return userService.postTransAttendance(
-            PostStudentToMarkAtt(
-                attDate,
-                routeID,
-                stopID,
-                stuAtt,
-                trip
-            )
-        )
+        return userService.postTransAttendance(PostStudentToMarkAtt(attDate, routeID, stopID, stuAtt, trip))
     }
 
     override suspend fun studentToDrop(
-        routeID: Int,
+        routeID : Int,
         stopID: Int,
         attDate: String
     ): NetworkStudentToMarkTransAttendane {
-        return userService.studentToDrop(routeID, stopID, attDate)
+        return userService.studentToDrop(routeID , stopID, attDate)
     }
 
     override suspend fun transAttendanceReport(
@@ -867,10 +799,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getSMSUses(fromDate, toDate, iD)
     }
 
-    override suspend fun getSMSConsumption(
-        fromDate: String,
-        toDate: String
-    ): NetworkSMSConsumption {
+    override suspend fun getSMSConsumption(fromDate: String, toDate: String): NetworkSMSConsumption {
         return userService.getSMSConsumption(fromDate, toDate)
     }
 
@@ -885,6 +814,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getGenerateToken(device: Int): NetworkGenerateTokenFeePay {
         return userService.getGenerateToken(device)
     }
+
 
 
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {
@@ -918,10 +848,9 @@ class UserRepositoryImpl @Inject constructor(
         return userService.appUsersCount()
     }
 
-    override suspend fun appUserReportWevResponse(userType: String): AppUserWebResponse {
+    override suspend fun appUserReportWevResponse(userType:String): AppUserWebResponse {
         return userService.appUsersWeb(userType)
     }
-
     override suspend fun getAttendance(
         from: String,
         till: String,
@@ -938,13 +867,8 @@ class UserRepositoryImpl @Inject constructor(
         return userService.classTimetable(id)
     }
 
-    override suspend fun birthday(
-        userType: Int,
-        rptType: Int,
-        monthNo: Int,
-        date: String
-    ): NetworkBirthday {
-        return userService.birthday(userType, rptType, monthNo, date)
+    override suspend fun birthday(userType: Int, rptType: Int, monthNo: Int, date:String): NetworkBirthday {
+        return userService.birthday(userType, rptType, monthNo,date)
     }
 
     override suspend fun reportCardDTL(stID: Int): NetworkReportCardDetails {
@@ -977,6 +901,14 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun getUserProfileEdit(edit: Boolean): NetworkEditProfile {
+        return userService.getUserProfileEdit(edit)
+    }
+
+    override suspend fun updateParentProfile(request: com.app.ecarepro.ui.edit_profile.model.Profile): CommonResponse {
+        return userService.updateParentProfile(request)
     }
 
     override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
@@ -1095,7 +1027,7 @@ class UserRepositoryImpl @Inject constructor(
             try {
                 val response = userService.saveUserUndertaking(id)
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: "Success"))
+                    emit(Result.success(response.message?:"Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
@@ -1110,7 +1042,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPhotoAlbumTypes(): NetworkAlbumType {
-        return userService.getPhotoAlbumTypes()
+        return  userService.getPhotoAlbumTypes()
     }
 
     override suspend fun getPhotoAlbums(typeID: Int, pg: Int): NetworkPhotoAlbum {
@@ -1204,7 +1136,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getVehicleNumber(): NetworkVehicleNumber {
-        return userService.getVehicleNumber()
+         return userService.getVehicleNumber()
     }
 
     override suspend fun busLocation(vehicleNumber: String): NetworkBusLocation {
@@ -1218,6 +1150,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
         return userService.surveyQuestions(id)
     }
+
 
 
     override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {

@@ -1,7 +1,6 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.AssignHouseRequest
-import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
@@ -16,6 +15,9 @@ import com.app.ecarepro.model.AppResponse
 import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.PromotionModel
+import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.GeneralSettingsDto
+
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TaskDto
@@ -25,7 +27,6 @@ import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.model.WatchersDto
 import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
-import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -40,7 +41,8 @@ interface SchoolService {
 
     @GET("School/List")
     suspend fun getSchools(): NetworkSchoolsDto
-
+    @GET("School/GeneralSettings")
+    suspend fun getGeneralSettings(): GeneralSettingsDto
     @GET("School/Notices")
     suspend fun getNotices(
         @Query("pg") pg: Int,
@@ -137,7 +139,4 @@ interface SchoolService {
         @Query("ID") id: String,
         @Query("Status") status: Int
     ): CommonResponse
-
-    @GET("School/GeneralSettings")
-    suspend fun getGeneralSettings(): GeneralSettingsDto
 }

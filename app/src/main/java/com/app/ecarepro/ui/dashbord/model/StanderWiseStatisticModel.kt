@@ -24,6 +24,7 @@ class StanderWiseStatisticModel(val statusWiseStatistics: List<StatusWiseStatist
         lvTc.setSubTitle(statusWiseStatistics.firstOrNull { it.data == "TC" }?.value.toString())
         lvRepeater.setSubTitle(statusWiseStatistics.firstOrNull { it.data == "REPEATER" }?.value.toString())
         lvStudying.setSubTitle(statusWiseStatistics.firstOrNull { it.data == "STUDYING" }?.value.toString())
+        chartView.isClearBackgroundColor = true
 
         chartView.aa_drawChartWithChartModel(getBarChartModel(statusWiseStatistics))
     }

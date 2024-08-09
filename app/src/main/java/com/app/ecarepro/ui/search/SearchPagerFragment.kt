@@ -149,7 +149,7 @@ class SearchPagerFragment : Fragment() {
     private fun EpoxyController.buildModuleModels(modules: List<Module>) {
         modules.forEach { menu ->
             menuCard {
-                id(menu.menuID, menu.parentMenuID, menu.parentParentMenuID, menu.title.hashCode())
+                id(menu.menuID, menu.parentMenuID, menu.parentParentMenuID)
                 title(menu.title)
                 icon(menu.icon)
                 parentMenuIcon(menu.parentIcon)

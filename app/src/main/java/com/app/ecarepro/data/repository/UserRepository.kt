@@ -13,6 +13,7 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.ui.survey.SurveyListResponse
+import com.app.ecarepro.model.Student
 
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -28,6 +29,7 @@ import com.app.ecarepro.data.network.model.NetworkClassTeacher
 import com.app.ecarepro.data.network.model.NetworkClassTeacherOf
 import com.app.ecarepro.data.network.model.NetworkCreateLesson
 import com.app.ecarepro.data.network.model.NetworkEBook
+import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
@@ -82,7 +84,6 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
-import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
@@ -97,7 +98,6 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubj
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.Staff
-import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
@@ -136,6 +136,8 @@ interface UserRepository {
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
     ): Flow<Result<CommonResponse>>
+    suspend fun getStudents(): Flow<Result<List<Student>>>
+    suspend fun getStaffs(): Flow<Result<List<Staff>>>
 
     suspend fun changePassword(
         password: String,
@@ -194,6 +196,14 @@ interface UserRepository {
     ): CommonResponse
 
     fun getUserProfile(): Flow<Result<Profile>>
+    suspend fun getUserProfileEdit(
+        edit: Boolean
+    ): NetworkEditProfile
+
+    suspend fun updateParentProfile(
+         request: com.app.ecarepro.ui.edit_profile.model.Profile
+    ): CommonResponse
+
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
@@ -206,6 +216,7 @@ interface UserRepository {
         pg: Int
     ): NetworkLeaveReport
 
+
     suspend fun leaveAction(
         applType: Int,
         lvID: Int,
@@ -217,7 +228,7 @@ interface UserRepository {
         leaveID: Int,
         fromDate: String,
         tillDate: String,
-        duration: Int,
+        duration: Double,
         halfdayDTL: List<HalfdayDTL>,
         reason: String,
         attachment: String,
@@ -265,8 +276,6 @@ interface UserRepository {
        scholarType: Int,
          showAll: Boolean
     ): NetworkStudentList
-
-    suspend fun getStudents(): Flow<Result<List<Student>>>
 
     suspend fun getStudentMedicalCard(
        stID: String
@@ -379,6 +388,10 @@ interface UserRepository {
         userType:String
     ): AppUserWebResponse
 
+    suspend fun getStaffAttendance(
+        staffType: String? = null,
+        date: String,
+    ): Flow<Result<List<StaffAttendanceDetails>>>
     suspend fun getAttendance(
         from: String,
         till: String,
@@ -446,13 +459,6 @@ interface UserRepository {
     ): NetworkLessonPlanDTL
 
     suspend fun getStaffList(): NetworkStaffList
-
-    suspend fun getStaffs(): Flow<Result<List<Staff>>>
-
-    suspend fun getStaffAttendance(
-        staffType: String? = null,
-        date: String,
-    ): Flow<Result<List<StaffAttendanceDetails>>>
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 

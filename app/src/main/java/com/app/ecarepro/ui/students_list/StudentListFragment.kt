@@ -30,7 +30,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StudentListFragment : Fragment(), ItemListener<Student> {
 
-    private var filterPos: Int=0
+    private var filterPos: Int = 0
     private var studentList: List<Student>? = null
     private lateinit var studentListFilter: List<Student>
     private var toFragment: String = ""
@@ -38,14 +38,15 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
 
-    private val filterList= listOf<String>("Name","Admission Number","Class","Father Name","Contact Number", )
+    private val filterList =
+        listOf<String>("Name", "Admission Number", "Class", "Father Name", "Contact Number")
 
     @Inject
     lateinit var userDataStore: UserDataStore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = FragmentStudentListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -63,55 +64,71 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.rbGroupSchoolType.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.rb_all -> {
-                    schoolType = 2
-                    studentListViewModel.getStudentList(schoolType)
+        binding.rbGroupSchoolType.setOnCheckedChangeListener(
+            RadioGroup.OnCheckedChangeListener { group, checkedId ->
+                when (checkedId) {
+                    R.id.rb_all -> {
+                        schoolType = 2
+                        studentListViewModel.getStudentList(schoolType)
+
+                    }
+
+                    R.id.rb_boarding -> {
+                        schoolType = 1
+                        studentListViewModel.getStudentList(schoolType)
+
+                    }
+
+                    R.id.rb_day_scolar -> {
+                        schoolType = 0
+                        studentListViewModel.getStudentList(schoolType)
+
+                    }
+
                 }
-
-                R.id.rb_boarding -> {
-                    schoolType = 1
-                    studentListViewModel.getStudentList(schoolType)
-
-                }
-
-                R.id.rb_day_scolar -> {
-                    schoolType = 0
-                    studentListViewModel.getStudentList(schoolType)
-
-                }
-
-            }
-        }
+            })
 
         lifecycleScope.launch {
             studentListViewModel.searchQuery.collectLatest {
 
                 if (it.isNotEmpty() && studentList != null) {
-                    when (filterPos){
+                    when (filterPos) {
                         0 -> {
-                            studentListFilter =  studentList!!.filter { s -> s.name.lowercase().contains(it.lowercase()) }
+                            studentListFilter = studentList!!.filter { s ->
+                                s.name.lowercase().contains(it.lowercase())
+                            }
 
                         }
+
                         1 -> {
-                            studentListFilter =  studentList!!.filter { s -> s.admissionNumber.lowercase().contains(it.lowercase()) }
+                            studentListFilter = studentList!!.filter { s ->
+                                s.admissionNumber.lowercase().contains(it.lowercase())
+                            }
 
                         }
+
                         2 -> {
-                            studentListFilter =  studentList!!.filter { s -> s.`class`.lowercase().contains(it.lowercase()) }
+                            studentListFilter = studentList!!.filter { s ->
+                                s.`class`.lowercase().contains(it.lowercase())
+                            }
 
                         }
+
                         3 -> {
-                            studentListFilter =  studentList!!.filter { s -> s.fatherName.lowercase().contains(it.lowercase()) }
+                            studentListFilter = studentList!!.filter { s ->
+                                s.fatherName.lowercase().contains(it.lowercase())
+                            }
 
                         }
+
                         4 -> {
-                            studentListFilter =  studentList!!.filter { s -> s.contactMob.lowercase().contains(it.lowercase()) }
+                            studentListFilter = studentList!!.filter { s ->
+                                s.contactMob.lowercase().contains(it.lowercase())
+                            }
 
                         }
                     }
-                     setupRecycleViewStudentList(studentListFilter)
+                    setupRecycleViewStudentList(studentListFilter)
                 } else {
                     studentList?.let { it1 -> setupRecycleViewStudentList(it1) }
                 }
@@ -158,6 +175,7 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
 
         }
 
+        /* now we  pass  this  boolean  from setting */
 
         studentListViewModel.getStudentList(schoolType)
         checkIsBoarding()
@@ -171,7 +189,6 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
         if (students.isNotEmpty()) {
             binding.rvStudentList.isVisible = true
             binding.tvNoData.isVisible = false
-
 
 
             val circularAdapter = StudentListAdapter(
@@ -236,21 +253,20 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
 
     }
 
-    private fun checkIsBoarding(){
+    private fun checkIsBoarding() {
         (requireActivity() as MainActivity).showLoader(true)
         lifecycleScope.launch {
             userDataStore.getSchoolData()?.let {
                 it.schoolCode.let { schoolCode ->
-                    studentListViewModel.validateSchoolCode(schoolCode ) { it1 ->
+                    studentListViewModel.validateSchoolCode(schoolCode) { it1 ->
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it1?.errorCode == 0) {
-                            binding.rbGroupSchoolType.isVisible= it1.isBoardingSchool!!
+                            binding.rbGroupSchoolType.isVisible = it1.isBoardingSchool!!
                         }
                     }
                 }
             }
         }
-
 
 
     }
@@ -260,14 +276,14 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_list_item_1,
-            filterList)
+            filterList
+        )
         binding.taskList.setAdapter(adapter)
 
         binding.taskList.setOnItemClickListener { _, _, position, _ ->
-            filterPos =position
-         }
+            filterPos = position
+        }
     }
-
 
 
 }

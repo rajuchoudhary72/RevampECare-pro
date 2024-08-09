@@ -19,97 +19,102 @@
 
     </data>
 
-    <com.google.android.material.card.MaterialCardView
+
+    <soup.neumorphism.NeumorphCardView
+        android:id="@+id/Button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/brand_color"
-        app:contentPadding="8dp"
-        animateBetweenColorsOnExpand="@{isExpanded}"
-        colorFrom="@{@color/green_80}"
-        app:cardElevation="@{isExpanded ? 3f:0f}"
-        colorTo="@{@color/light_green}"
-        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.BottomRoundedCorner"
-        app:strokeWidth="0dp">
+        app:neumorph_lightSource="leftTop"
+        app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true">
+        app:neumorph_backgroundColor="@color/background_dashboard"
+        app:neumorph_strokeWidth="@dimen/_1sdp"
+        >
 
 
-            <ImageView
-                android:id="@+id/image_arrow"
-                app:layout_constraintTop_toTopOf="@+id/title"
-                app:layout_constraintBottom_toBottomOf="@+id/title"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_width="wrap_content"
-                android:rotation="@{isExpanded ? 90:0}"
-                android:src="@{isExpanded ? @drawable/ic_arrow_right_black:@drawable/ic_arrow_right_white}"
-                tools:src="@drawable/ic_arrow_right_white"
-                android:layout_height="wrap_content"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:drawablePadding="6dp"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="center_vertical"
-                android:paddingVertical="5dp"
-                android:onClick="@{toggleCardVisibility}"
-                android:text="Today's Mode Wise Collection"
-                android:textColor="@{isExpanded ? @color/black:@color/white}"
-                app:layout_constraintStart_toEndOf="@+id/image_arrow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <TextView
-                android:id="@+id/text_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/ubuntu_light"
-                android:text="Total"
-                android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
-
-            <TextView
-                android:id="@+id/text_total_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/ubuntu_medium"
-                rupeeText="@{collectionModeWise.total()}"
-                tools:text="₹3,43,90,000"
-                android:textAppearance="?attr/textAppearanceTitleLarge"
-                android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_total" />
-
-
-            <LinearLayout
-                android:id="@+id/layoutCollections"
-                isVisible="@{isExpanded}"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                collectionItems="@{collectionModeWise.transactionDetails}"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
+                android:animateLayoutChanges="true"
+                android:layout_margin="@dimen/_10sdp"
+                >
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupCollapse"
-                isVisible="@{!isExpanded}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="text_total,text_total_collection" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/image_arrow"
+                    app:layout_constraintTop_toTopOf="@+id/title"
+                    app:layout_constraintBottom_toBottomOf="@+id/title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_width="wrap_content"
+                    android:rotation="@{isExpanded ? 90:0}"
+                    android:src="@{isExpanded ? @drawable/ic_arrow_right_black:@drawable/ic_arrow_right_white}"
+                    app:tint="@color/black"
+                    tools:src="@drawable/ic_arrow_right_white"
+                    android:layout_height="wrap_content"
+                    tools:ignore="ContentDescription" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:drawablePadding="6dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="5dp"
+                    android:onClick="@{toggleCardVisibility}"
+                    android:text="Today's Mode Wise Collection"
+
+                    app:layout_constraintStart_toEndOf="@+id/image_arrow"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/text_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:text="Total"
+                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
+
+                <TextView
+                    android:id="@+id/text_total_collection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_medium"
+                    rupeeText="@{collectionModeWise.total()}"
+                    tools:text="₹3,43,90,000"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_total" />
+
+
+                <LinearLayout
+                    android:id="@+id/layoutCollections"
+                    isVisible="@{isExpanded}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    collectionItems="@{collectionModeWise.transactionDetails}"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupCollapse"
+                    isVisible="@{!isExpanded}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="text_total,text_total_collection" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </soup.neumorphism.NeumorphCardView>
+
+
 
 
 </layout>

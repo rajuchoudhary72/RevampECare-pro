@@ -65,20 +65,20 @@ class FeedsFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.toolbar.setNavigationOnClickListener {
+       /* binding.toolbar.setNavigationOnClickListener {
             systemViewModel.navigateBack(true)
-        }
+        }*/
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
             feedsViewModel.refresh()
         }
         binding.recyclerView.apply {
-            addItemDecoration(
+            /*addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
-            )
+            )*/
 
             addOnScrollListener(object :
                 PaginationScrollListener(layoutManager as LinearLayoutManager) {

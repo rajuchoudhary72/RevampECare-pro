@@ -64,6 +64,7 @@
 
 
     <color name="brand_color">#4DAC3C</color>
+    <color name="brand_color_new">#4eac3c</color>
     <color name="brand_color2">#5FA150</color>
     <color name="component_color">#FFD786</color>
     <color name="accent_color">#5570F1</color>
@@ -93,6 +94,8 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="white_20_op">#8CFFFFFF</color>
+
     <color name="light_green">#F5FBF2</color>
     <color name="red">#FF352F</color>
     <color name="light_background_color">#F4F4FC</color>
@@ -157,6 +160,9 @@
     <color name="light_gray_gallerytext">#757575</color>
     <color name="absent_red">#FB4E4E</color>
     <color name="shimmer_color">#a2878787</color>
+    <color name="background_dashboard">#f0f0f0</color>
+
+
     <array name="multi_color_array">
         <item>@color/android</item>
         <item>@color/red</item>

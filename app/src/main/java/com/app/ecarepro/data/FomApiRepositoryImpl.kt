@@ -7,9 +7,14 @@ import com.app.ecarepro.data.network.model.post_fee_collection.FeeCollectionBody
 import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.network.model.DefaulterFilters
+import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
+import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
+import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
+import com.app.ecarepro.model.FeeCertificateList
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class FomApiRepositoryImpl @Inject constructor(
@@ -48,6 +53,17 @@ class FomApiRepositoryImpl @Inject constructor(
 
     override suspend fun getFeeReceipt(url: String,request: FeeReceiptRequest): NetworkFeeReceipt {
         return fomApiService.getFeeReceipt(url,request)
+    }
+
+    override suspend fun getFeeCertificate(url: String): FeeCertificateList {
+        return fomApiService.getFeeCertificate(url)
+    }
+
+    override suspend fun getFeeCertificateDownload(
+        url: String,
+        request: PostDataFeeCertificate
+    ): NetworkFeeCerDownload {
+        return fomApiService.getFeeCertificateDownload(url, request)
     }
 
 

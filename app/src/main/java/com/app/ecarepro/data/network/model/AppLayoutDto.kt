@@ -1,8 +1,8 @@
 package com.app.ecarepro.data.network.model
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 
 
 data class AppLayoutDto(
@@ -31,7 +31,6 @@ data class AppLayoutDto(
     @SerializedName("searchOptions")
     val searchOptions: List<SearchOption>?
 )
-
 @Parcelize
 data class SearchOption(
     @SerializedName("option")
@@ -39,7 +38,6 @@ data class SearchOption(
     @SerializedName("show")
     val show: Boolean
 ) : Parcelable
-
 data class Menu(
     @SerializedName("childMenus")
     val childMenus: List<ChildMenu>?,

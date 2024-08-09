@@ -94,7 +94,7 @@ fun NetworkSchool.asNetworkSchool(): SchoolEntity {
         schAdd1 = schAdd1,
         schAdd2 = schAdd2,
         schUpdatedOn = schUpdatedOn,
-        schoolName = schoolCode,
+        schoolName = schoolName,
         state = state,
         supportEmail = supportEmail,
         supportHours = supportHours,

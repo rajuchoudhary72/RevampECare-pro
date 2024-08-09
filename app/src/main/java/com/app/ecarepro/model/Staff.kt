@@ -16,7 +16,5 @@ data class Staff(
 ){
     fun details() = "<b>Designation:</b> $designation<br>" +
             "<b>Mobile:</b> $mobile<br>" +
-            "<b>Email:</b> $email<br>" +
-            "<b>Marital Status:</b> $maritialStatus<br>" +
-            "<b>Gender:</b> $gender"
+            "<b>Email:</b> $email<br>"
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -68,6 +69,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
     private var p  = 0
     private var a  = 0
     private var l  = 0
+    var selectAll: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -109,7 +111,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
             }
 
              val spinnerTripTypeAdapter = ArrayAdapter(requireActivity(),
-                 android.R.layout.simple_spinner_item,resources.getStringArray(R.array.tripType))
+                 android.R.layout.simple_list_item_1,resources.getStringArray(R.array.tripType))
             spinnerSelectTrip.adapter=spinnerTripTypeAdapter
 
             spinnerSelectTrip.onItemSelectedListener = object :
@@ -186,7 +188,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         transportAttendanceViewModel.getStoppageList(routerSelectData.routeID.toString(),tripType)
     }
 
-    private fun getStudentToMarkTransAttendance() {
+    private fun getStudentToMarkTransAttendance(ids: StringBuilder) {
         lifecycleScope.launch {
             transportAttendanceViewModel.studentToMarkTransAttendanceStateFlow.collectLatest {
                 when (it) {
@@ -235,7 +237,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
             isValidate= false
         }
         if (!stoppersSelected ){
-            Toast.makeText(requireContext(),"Please Select Stoppes",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"Please Select Stoppers",Toast.LENGTH_SHORT).show()
             isValidate= false
         }
         if (tripType==0 ){
@@ -252,10 +254,10 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
             }else{
                 transportAttendanceViewModel.getStudentToMarkTransAttendance(
                     routeIDs =   routerSelectData.routeID.toString(),
-                    stopID= stoppersSelectData.stopID,
+                    stopID= 0,
                     trip = tripType,
                     attDate =  Constant.currentDate().toString(),
-                    stopIDs = stoppersSelectData.stopID.toString()
+                    stopIDs =ids.toString()
 
                 )
             }
@@ -309,17 +311,13 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        llSelectAll.isVisible=true
         tvHeading.text=getString(R.string.select_stoppae)
         builder.setView(view)
 
-        relOk.setOnClickListener {
-            binding.tvSelectStoppage.text= stoppersSelectData.stopName
-            stoppersSelected=true
-            getStudentToMarkTransAttendance()
-            builder.dismiss()
-        }
-
-        val stoppersPopUpListAdapter= StoppersPopUpListAdapter(stopLSTList, object : ItemListener<StopLST> {
+        val stoppersPopUpListAdapter= StoppersPopUpListAdapter(stopLSTList,tripType,selectAll, object : ItemListener<StopLST> {
             override fun onItemClick(t: StopLST, pos: Int, boolean: Boolean) {
                 stoppersSelectData = t
             }  })
@@ -329,6 +327,40 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
             layoutManager = LinearLayoutManager(activity)
             adapter = stoppersPopUpListAdapter
         }
+
+        llSelectAll.setOnClickListener {
+            selectAll = !selectAll
+            for (i in stopLSTList) {
+                 i .checked=selectAll
+            }
+            stoppersPopUpListAdapter.notifyDataSetChanged()
+            checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
+        }
+
+        relOk.setOnClickListener {
+            val ids = StringBuilder()
+            val name = StringBuilder()
+             stoppersSelected=true
+            if (tripType== Constant.UP_TRIP || tripType==Constant.DOWN_TRIP) {
+
+                for (stopLST in stopLSTList) {
+                    if (stopLST.checked) {
+                        if (ids.toString().isEmpty()) {
+                            ids.append(stopLST.stopID)
+                            name.append(stopLST.stopName)
+                        } else {
+                            ids.append(",").append(stopLST.stopID)
+                            name.append(",").append(stopLST.stopName)
+                        }
+                    }
+                }
+            }
+            binding.tvSelectStoppage.text= name
+            getStudentToMarkTransAttendance(ids)
+            builder.dismiss()
+        }
+
+
 
         relCancel.setOnClickListener {
             builder.dismiss()
