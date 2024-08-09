@@ -465,7 +465,7 @@ class MainActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         userDataStore.getSchoolData()?.let {
                             if (it.assessmentMarksURL==null){
-                                showMessage("Assessments are currently unavailable for you!")
+                                showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
                             }else{
                                 it.assessmentMarksURL?.let { url ->
                                     webViewCall(

@@ -38,9 +38,9 @@ class SystemViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
-    private val schoolRepository: SchoolRepository
+    private val schoolRepository: SchoolRepository,
 
-) : ViewModel() {
+    ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
@@ -52,7 +52,7 @@ class SystemViewModel @Inject constructor(
     val bottomNavPosition = MutableSharedFlow<Int>()
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
-      var UType: Int = -1
+    var UType: Int = -1
 
     init {
         viewModelScope.launch {
@@ -60,9 +60,11 @@ class SystemViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-
+            try {
                 UType = userDataStore.getUserType()!!
-
+            } catch (e: NullPointerException) {
+                e.toString()
+            }
         }
     }
 
@@ -137,14 +139,14 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun showDashboard(v  : Boolean) {
+    fun showDashboard(v: Boolean) {
         viewModelScope.launch {
             showDashboardValue.emit(v)
         }
     }
 
 
-    fun bottomNavPositionSet(v  : Int) {
+    fun bottomNavPositionSet(v: Int) {
         viewModelScope.launch {
             bottomNavPosition.emit(v)
         }
@@ -187,7 +189,7 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun fetchSettings(){
+    fun fetchSettings() {
         viewModelScope.launch {
             schoolRepository.getGeneralSettings().collectLatest {
                 it.onSuccess {
