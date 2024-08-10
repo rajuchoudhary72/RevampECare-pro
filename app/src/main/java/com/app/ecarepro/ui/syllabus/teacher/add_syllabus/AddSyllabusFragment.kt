@@ -181,7 +181,7 @@ class AddSyllabusFragment : Fragment() {
             }
 
         }
-        val subjectListAdapter = ClassListAdapter(classesList, object : ItemListener<MyClasseItem> {
+        val subjectListAdapter = ClassListAdapter(classesList,false, object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
                 classData = t

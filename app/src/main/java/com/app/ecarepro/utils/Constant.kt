@@ -187,5 +187,215 @@ class Constant {
             c.add(Calendar.DATE, noOfDays)
             return c.time
         }*/
+
+
+
+        fun boldFindStartIndexes(sentence: String): List<Int> {
+            val indexes: MutableList<Int> = java.util.ArrayList()
+            val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            var startIndex = 0
+            var firstTime = true
+            for (word in words) {
+                if (word.length >= 2) {
+                    val start = word[0].toString()
+                    if (start == "*") {
+                        if (firstTime) {
+                            startIndex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            startIndex = sentence.indexOf(word, startIndex + 1)
+                        }
+                        indexes.add(startIndex)
+                    }
+                }
+            }
+
+            return indexes
+        }
+
+        fun boldFindEndStarIndexes(sentence: String): List<Int> {
+            val indexes: MutableList<Int> = java.util.ArrayList()
+            val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            var firstindex = 0
+            var firstTime = true
+            for (word in words) {
+                if (word.length >= 2) {
+                    if (word.endsWith("*")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 1
+                        indexes.add(endIndex)
+                    } else if (word.endsWith("*,")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 2
+                        indexes.add(endIndex)
+                    } else if (word.endsWith("*.")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 2
+                        indexes.add(endIndex)
+                    }
+                }
+            }
+
+            return indexes
+        }
+
+        fun italicFindStartIndexes(sentence: String): List<Int> {
+            val indexes: MutableList<Int> = java.util.ArrayList()
+            val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            var startIndex = 0
+            var firstTime = true
+            for (word in words) {
+                if (word.length >= 2) {
+                    val start = word[0].toString()
+                    if (start == "_") {
+                        if (firstTime) {
+                            startIndex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            startIndex = sentence.indexOf(word, startIndex + 1)
+                        }
+                        indexes.add(startIndex)
+                    }
+                }
+            }
+
+            return indexes
+        }
+
+        fun italicFindEndStarIndexes(sentence: String): List<Int> {
+            val indexes: MutableList<Int> = java.util.ArrayList()
+            val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            var firstindex = 0
+            var firstTime = true
+            for (word in words) {
+                if (word.length >= 2) {
+                    if (word.endsWith("_")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 1
+                        indexes.add(endIndex)
+                    } else if (word.endsWith("_,")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 2
+                        indexes.add(endIndex)
+                    } else if (word.endsWith("_.")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 2
+                        indexes.add(endIndex)
+                    }
+                }
+            }
+
+            return indexes
+        }
+
+        fun strikethroughFindEndStarIndexes(sentence: String): List<Int> {
+            val indexes: MutableList<Int> = java.util.ArrayList()
+            val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            var firstindex = 0
+            var firstTime = true
+            for (word in words) {
+                if (word.length >= 2) {
+                    if (word.endsWith("~")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 1
+                        indexes.add(endIndex)
+                    } else if (word.endsWith("~,")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 2
+                        indexes.add(endIndex)
+                    } else if (word.endsWith("~.")) {
+                        if (firstTime) {
+                            firstindex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            firstindex = sentence.indexOf(word, firstindex + 1)
+                        }
+                        val worlem = word.length
+                        val endIndex = firstindex + worlem - 2
+                        indexes.add(endIndex)
+                    }
+                }
+            }
+
+            return indexes
+        }
+
+        fun strikethroughFindStartIndexes(sentence: String): List<Int> {
+            val indexes: MutableList<Int> = java.util.ArrayList()
+            val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            var startIndex = 0
+            var firstTime = true
+            for (word in words) {
+                if (word.length >= 2) {
+                    val start = word[0].toString()
+                    if (start == "~") {
+                        if (firstTime) {
+                            startIndex = sentence.indexOf(word)
+                            firstTime = false
+                        } else {
+                            startIndex = sentence.indexOf(word, startIndex + 1)
+                        }
+                        indexes.add(startIndex)
+                    }
+                }
+            }
+
+            return indexes
+        }
+
     }
 }

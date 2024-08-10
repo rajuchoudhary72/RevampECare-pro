@@ -16,6 +16,7 @@ import com.app.ecarepro.databinding.FragmentAssignmentListBinding
 import com.app.ecarepro.model.Assignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.TeacherAssignmentViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,9 +90,14 @@ class AssignmentListFragment(
                 /*this@AssignmentListFragment.findNavController() .navigate(R.id.action_assignmentListFragment_to_submitAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                 })*/
-                findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
-                     putParcelable(Constant.ASSIGNMENT_ID, t)
-                 })
+                if (t.isSubmissionOpened==true){
+                    findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+                        putParcelable(Constant.ASSIGNMENT_ID, t)
+                    })
+                }else{
+                    mainActivity().showMessage("The submission deadline for this assignment has passed. ")
+                }
+
             }
 
         }

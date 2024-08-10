@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,8 +52,8 @@ class PostAssignmentFragment : Fragment() {
     private val postAssignmentViewModel : PostAssignmentViewModel by viewModels()
     private   var imageExt: String= ""
     private   var imageString: String=""
-
-
+    var selectAll: Boolean = false
+    val ids = StringBuilder()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -173,7 +175,7 @@ class PostAssignmentFragment : Fragment() {
                    0,
                    imageString,imageExt,"",
                    it,
-                   it.toString(),
+                   ids.toString(),
                    binding.etDescription.text.toString() ,
                    "",
                    "",
@@ -276,18 +278,39 @@ class PostAssignmentFragment : Fragment() {
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
         tvHeading.text= getText(R.string.lbl_select_class)
+        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        llSelectAll.isVisible=true
         builder.setView(view)
 
         relOk.setOnClickListener {
             if (isClassSelected){
-                binding.tvSelectClass.text= subjectData .subjectName
+
+
+                val name = StringBuilder()
+
+                    for (classeItem in classesList) {
+                        if (classeItem.checked == true) {
+                            if (ids.toString().isEmpty()) {
+                                ids.append(classeItem.classID)
+                                name.append(classeItem.className)
+                            } else {
+                                ids.append(",").append(classeItem.classID)
+                                name.append(",").append(classeItem.className)
+                            }
+                        }
+                    }
+
+
+
+                binding.tvSelectClass.text= name
 
                 builder.dismiss()
             }
 
         }
 
-        val subjectListAdapter= ClassListAdapter(classesList, object : ItemListener<MyClasseItem> {
+        val subjectListAdapter= ClassListAdapter(classesList, selectAll,  object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
                 classData=t
@@ -299,6 +322,15 @@ class PostAssignmentFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
             adapter = subjectListAdapter
+        }
+
+        llSelectAll.setOnClickListener {
+            selectAll = !selectAll
+            for (i in classesList) {
+                i .checked=selectAll
+            }
+            subjectListAdapter.notifyDataSetChanged()
+            checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
         }
 
         relCancel.setOnClickListener {
