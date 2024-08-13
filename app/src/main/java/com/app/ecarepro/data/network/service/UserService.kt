@@ -126,6 +126,7 @@ import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 
 interface UserService {
     @GET("User/Verify")
@@ -316,6 +317,12 @@ interface UserService {
     suspend fun getInfractions(
         @Query("StID") stID: Int
     ): NetworkInfractions
+
+    @GET("DisciplineLog/DeleteLog")
+    suspend fun disciplineLogDeleteLog(
+        @Query("ID") id: String,
+        @Query("type") type: Int
+    ): CommonResponse
 
 
     @POST("DisciplineLog/SaveInfraction")
@@ -595,7 +602,7 @@ interface UserService {
 
     @POST("User/UpdateParentProfile")
     suspend fun updateParentProfile(
-        @Body request: Profile
+        @Body request: UpdateProfileModel
     ): CommonResponse
 
     @POST("User/UploadProfileIMG")

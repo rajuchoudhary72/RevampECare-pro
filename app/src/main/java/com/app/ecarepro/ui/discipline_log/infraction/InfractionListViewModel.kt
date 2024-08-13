@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.discipline_log.infraction
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -22,6 +23,11 @@ class InfractionListViewModel @Inject constructor(
         NetworkResult.Loading())
     val addInfractionStateFlow: StateFlow<NetworkResult<NetworkInfractions>> = addInfractionMutableStateFlow
 
+    private val deleteLogMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val deleteLogStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteLogMutableStateFlow
+
+
     fun  getInfractions( stID: Int  )=viewModelScope.launch {
         runCatching {
             addInfractionMutableStateFlow.value = NetworkResult.Loading()
@@ -30,6 +36,21 @@ class InfractionListViewModel @Inject constructor(
             addInfractionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             addInfractionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
+    fun  disciplineLogDeleteLog(
+        id: String,
+        type: Int
+    )=viewModelScope.launch {
+        runCatching {
+            deleteLogMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.disciplineLogDeleteLog(id, type)
+        }.onSuccess {
+            deleteLogMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            deleteLogMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }

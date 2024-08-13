@@ -16,7 +16,7 @@
     </data>
 
     <LinearLayout
-        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:layout_width="90dp"
         android:layout_height="@dimen/_100sdp"
         android:onClick="@{clickListener}"

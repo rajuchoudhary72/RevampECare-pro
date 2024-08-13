@@ -12,6 +12,7 @@ import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.edit_profile.model.Profile
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +50,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun  updateParentProfile(
-        request: Profile
+        request: UpdateProfileModel
     )=viewModelScope.launch {
         runCatching {
             updateParentProfileMutableStateFlow.value = NetworkResult.Loading()

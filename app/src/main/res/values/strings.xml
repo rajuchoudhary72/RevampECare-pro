@@ -94,6 +94,7 @@
     <string name="choose_library">Choose from Library</string>
     <string name="cancel">Cancel</string>
     <string name="successfully">Successfully!!!</string>
+    <string name="submit_successfully">Submit Successfully!!!</string>
     <string name="delete_alert">Delete Alert</string>
     <string name="delete_alert_are_you_sure">Are you sure, You want to delete</string>
     <string name="lbl_total_leaves_1">Total Leaves: 1</string>

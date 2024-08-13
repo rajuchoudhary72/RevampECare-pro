@@ -25,6 +25,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionCatPopUpListAdapter
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionConsPopUpListAdapter
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.SubInfractionPopUpListAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -332,15 +333,19 @@ class AddInfractionFragment : Fragment() {
         var isValidate= true
         if (!infrTypeSelected){
             isValidate=false
-        }
+            mainActivity().showMessage(getString( R.string.select_infraction_category))
+        }else
         if (!SubInfrTypeSelected){
             isValidate=false
-        }
+            mainActivity().showMessage(getString( R.string.select_infraction_subcategory))
+        }else
         if (!infrConsSelected){
             isValidate=false
-        }
+            mainActivity().showMessage(getString( R.string.select_consequences))
+        }else
         if (binding.etPlanName.text.toString().isEmpty()){
             isValidate=false
+            mainActivity().showMessage(getString( R.string.enter_corrective_action))
         }
 
         if (isValidate){
@@ -351,25 +356,28 @@ class AddInfractionFragment : Fragment() {
                 infractionConsequence.consID,
                 binding.tvInstance.text.toString().toInt(),
                 Constant.currentDate(),
-                binding.etPlanName.text.toString())  }
+                binding.etPlanName.text.toString())
 
-        lifecycleScope.launch {
-            addInfractionViewModel.saveInfractionStateFlow.collectLatest {
-                when (it) {
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    } is NetworkResult.Error -> {
+            lifecycleScope.launch {
+                addInfractionViewModel.saveInfractionStateFlow.collectLatest {
+                    when (it) {
+                        is NetworkResult.Loading -> {
+                            (requireActivity() as MainActivity).showLoader(true)
+                        } is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                     } is NetworkResult.Success -> {
+                    } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
+                        mainActivity().showMessage(getString( R.string.submit_successfully))
+                       findNavController().popBackStack()
 
-                    findNavController().navigate(R.id.action_addInfractionFragment_to_infractionListFragment,Bundle( ).apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, studentID)
-                    })
-                     }
-                 }
+                    }
+                    }
+                }
             }
+
         }
+
+
 
 
 
