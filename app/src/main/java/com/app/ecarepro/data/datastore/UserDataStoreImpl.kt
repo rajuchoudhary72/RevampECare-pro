@@ -23,6 +23,7 @@ import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
+import com.app.ecarepro.data.network.Setting
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
@@ -80,6 +81,19 @@ class UserDataStoreImpl @Inject constructor(
         context.dataStore.edit { preferences ->
             preferences[currentUserId] = userId
         }
+    }
+    override suspend fun saveGeneralSettings(settings: List<Setting>) {
+        context.dataStore.edit { preferences ->
+            preferences[generalSettingsKey] = gson.toJson(settings)
+        }
+    }
+
+    override suspend fun isGeneralSettingEnabled(key: String): Boolean {
+        return context.dataStore.data.map { preferences ->
+            val itemType = object : TypeToken<List<Setting>>() {}.type
+            gson.fromJson<List<Setting>>(preferences[generalSettingsKey], itemType)
+                .firstOrNull { it.settingName == key }?.isEnabled ?: false
+        }.first()
     }
 
     override suspend fun getCurrentUserId(): Int? {
@@ -269,6 +283,7 @@ class UserDataStoreImpl @Inject constructor(
         private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
+        private val generalSettingsKey = stringPreferencesKey("generalSettings")
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")

@@ -18,7 +18,10 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import android.graphics.Rect
+import android.net.Uri
+import android.util.Log
 import android.view.MotionEvent
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.os.bundleOf
 
 import androidx.navigation.ui.AppBarConfiguration
@@ -438,8 +441,7 @@ class MainActivity : AppCompatActivity() {
 
             27 -> {
                 try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) { 
-                        if (systemViewModel.userRoleName == "Teacher" || systemViewModel.userRoleName == "Management") {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
                             lifecycleScope.launch {
                                 userDataStore.getSchoolData()?.let {
                                     it.marksEntryURL?.let { url ->
@@ -450,10 +452,6 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                        } else {
-                            navController.navigate(R.id.lessonPlanListFragment)
-                        }
-
                     } else {
                         navController.navigate(R.id.lessonPlanListFragment)
                     }
@@ -467,7 +465,7 @@ class MainActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         userDataStore.getSchoolData()?.let {
                             if (it.assessmentMarksURL==null){
-                                showMessage("Assessments are currently unavailable for you!")
+                                showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
                             }else{
                                 it.assessmentMarksURL?.let { url ->
                                     webViewCall(
@@ -514,12 +512,45 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun webViewCall(url: String, title: String) {
-        val bundle = Bundle()
-        bundle.putString("title", title)
-        bundle.putString("url", url)
-        navController.navigate(R.id.webViewFragment, bundle)
+    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(this, uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }
     }
+
+    private fun webViewCall(url: String, title: String) {
+        val tabIntent =  CustomTabsIntent.Builder()
+            .setToolbarColor(getColor(R.color.green)).build()
+        if (title.contains("Mark")) {
+            systemViewModel.getTokenKey { token ->
+                if (token.isNullOrEmpty()) {
+                    showMessage("Something went wrong")
+                } else {
+                  /*  val bundle = Bundle()
+                    bundle.putString("title", title)
+                    bundle.putString("url", "$url?token=$token")
+                    Log.d("WebURL",  "$url?token=$token")
+                    navController.navigate(R.id.webViewFragment, bundle)*/
+                    Log.d("WebURL",  "$url?token=$token")
+                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
+                }
+            }
+
+        } else {
+          /*  val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("url", url)
+            Log.d("WebURL",  url)
+            navController.navigate(R.id.webViewFragment, bundle)*/
+            Log.d("WebURL",  url)
+            openCustomTab(tabIntent, Uri.parse(url))
+        }
+    }
+
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {
         when (menuID) {

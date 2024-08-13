@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
        // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
-       // binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
@@ -456,5 +456,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         systemViewModel.refreshAppLayout()
+        systemViewModel.fetchSettings()
+
     }
 }

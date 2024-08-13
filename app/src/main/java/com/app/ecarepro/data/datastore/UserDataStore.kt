@@ -8,6 +8,7 @@ import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.Setting
 
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
@@ -26,6 +27,8 @@ interface UserDataStore {
     fun getSchoolAsFlow(): Flow<NetworkSchool?>
     suspend fun saveFeeds(feeds: FeedsDto)
     fun getFeeds(): Flow<List<Feed>>
+    suspend fun saveGeneralSettings(settings: List<Setting>)
+    suspend fun isGeneralSettingEnabled(key: String): Boolean
     suspend fun saveDashboardData(school: UserDashboardDto)
     fun getDashboardData(): Flow<UserDashboardDto?>
     suspend fun saveAuthToken(token: String)

@@ -94,7 +94,7 @@ class ReportCardStudentListFragment : Fragment(), ItemListener<Student> {
 
         }
 
-        studentListViewModel.getStudentList(2,false)
+        studentListViewModel.getStudentList(2)
 
 
     }
