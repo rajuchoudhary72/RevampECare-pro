@@ -174,7 +174,7 @@ class SearchPagerViewModel @Inject constructor(
                             menus.add(
                                 Module(
                                     icon = childMenu.icon,
-                                    menuID = childMenu.menuID,
+                                    menuID = childMenu.chMenuID,
                                     parentIcon = menu.icon,
                                     title = childMenu.title,
                                     url = childMenu.url,
@@ -186,11 +186,11 @@ class SearchPagerViewModel @Inject constructor(
                                 menus.add(
                                     Module(
                                         icon = childChildMenu.icon,
-                                        menuID = childChildMenu.menuID,
+                                        menuID = childChildMenu.chMenuID,
                                         parentIcon = childMenu.icon,
                                         title = childChildMenu.title,
                                         url = childChildMenu.url,
-                                        parentMenuID = childMenu.menuID,
+                                        parentMenuID = childMenu.chMenuID,
                                         parentParentMenuID = menu.menuID
                                     )
                                 )

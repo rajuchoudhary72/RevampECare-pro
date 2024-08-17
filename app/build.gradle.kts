@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 12
-        versionName = "1.1.10"
+        versionCode = 15
+        versionName = "1.1.13"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -154,5 +154,6 @@ dependencies {
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.github.fornewid:neumorphism:0.3.2")
 
+    implementation("androidx.browser:browser:1.2.0")
 
 }

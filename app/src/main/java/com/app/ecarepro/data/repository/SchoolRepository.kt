@@ -25,6 +25,7 @@ import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.data.network.Setting
 
 interface SchoolRepository {
     suspend fun fetchWalkThroughData()
@@ -39,6 +40,8 @@ interface SchoolRepository {
     suspend fun getClass(): ClassPromotionModel
     suspend fun getClassPromotions( classId: String): PromotionModel
     suspend fun submitClassPromotions( request: RequestClassPromotion): AppResponse
+    fun getGeneralSettings(): Flow<Result<List<Setting>>>
+
     fun getFeeds(pg: Int): Flow<Result<FeedsDto>>
     fun getTaskList(filter: Int): Flow<Result<TasksDto>>
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>

@@ -40,9 +40,9 @@ class StudentListViewModel @Inject constructor(
     val studentListStateFlow: StateFlow<NetworkResult<NetworkStudentList>> = studentListMutableStateFlow
 
     fun  getStudentList(
-        scholarType: Int,
-        showAll: Boolean
+        scholarType: Int
     )=viewModelScope.launch {
+        val showAll = userDataStore.isGeneralSettingEnabled("DisciplineLogStudent")
         runCatching {
             studentListMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStudentList(scholarType, showAll)
