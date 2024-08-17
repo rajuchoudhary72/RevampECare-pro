@@ -58,7 +58,17 @@ class StudentProfileFeeSummaryFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi(feeSummery)
+
+        if (academicYears.isNotEmpty()) {
+            for (i in academicYears) {
+                if (i.isCur) {
+                    selectedYearData=i
+                    binding.ctvSelectYear.text = i.session
+                    break
+                }}}
+
+
+        getAtt()
 
     }
 
@@ -189,6 +199,10 @@ class StudentProfileFeeSummaryFragment(
 
             ctvSelectYear.setOnClickListener {
                 popUpSelectAcademicYears()
+            }
+
+            tvAllPaidHistory.setOnClickListener {
+                popUpPaidHistory(feeSummery.paidHistory)
             }
 
             tvTotalFee.text = feeSummery.totalActualFee.toString()

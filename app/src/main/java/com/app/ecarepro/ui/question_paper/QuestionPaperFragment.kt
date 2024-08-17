@@ -99,7 +99,7 @@ class QuestionPaperFragment : Fragment() {
 
                                 val arrayAdapter = ArrayAdapter(
                                     requireContext(),
-                                    R.layout.view_drop_down_menu,
+                                    android.R.layout.simple_list_item_1,
                                     mMyClassDataString
                                 )
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
@@ -142,7 +142,7 @@ class QuestionPaperFragment : Fragment() {
                                 }
                                 val arrayAdapter = ArrayAdapter(
                                     requireContext(),
-                                    R.layout.view_drop_down_menu,
+                                    android.R.layout.simple_list_item_1,
                                     yearClassDataString
                                 )
                                 binding.autoCompleteSelectYear.setAdapter(arrayAdapter)

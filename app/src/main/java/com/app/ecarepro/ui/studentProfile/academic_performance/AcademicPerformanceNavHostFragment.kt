@@ -57,6 +57,7 @@ import kotlinx.coroutines.launch
              academicYears.forEach { a->
                  if (a.isCur){
                      selectedYearData=a
+                    binding.ctvSelectYear.text=a.session
                  }
              }
              getAcademicPerf()
