@@ -137,6 +137,7 @@ import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 
 class UserRepositoryImpl @Inject constructor(
@@ -515,25 +516,28 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createAssignment(
-          asgDate: String,
-          asgID: Int,
-          attachment: String,
-          fileExt: String,
-          fileURL: String,
-          classID: Int,
-          classIDs: String,
-          `data`: String,
-          `file`: String,
-          id: String,
-          isActive: Boolean,
-          isFileRemoved: Boolean,
-          multipleSubmission: Boolean,
+        asgDate: String,
+        asgID: Int,
 
-          subjectID: Int,
-          submitDate: String,
-          title: String
+        classID: Int,
+        classIDs: String,
+        `data`: String,
+        `file`: String,
+        id: String,
+        isActive: Boolean,
+        isFileRemoved: Boolean,
+        multipleSubmission: Boolean,
+
+        subjectID: Int,
+        submitDate: String,
+        title: String,
+        lateSubmission : Boolean,
+        attachments  : List<Attachment>,
+        classID_StID  : List<ClassID_StID>,
+        stIDs : String
     ): CommonResponse {
-        return userService.createAssignment(PostCreateAssignment( asgDate, asgID, Attachment(attachment, fileExt, fileURL), classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title))
+        return userService.createAssignment(PostCreateAssignment( asgDate, asgID,  classID, classIDs, data, file, id, isActive, isFileRemoved,
+            multipleSubmission, subjectID, submitDate, title,lateSubmission,attachments,classID_StID,stIDs))
 
     }
 

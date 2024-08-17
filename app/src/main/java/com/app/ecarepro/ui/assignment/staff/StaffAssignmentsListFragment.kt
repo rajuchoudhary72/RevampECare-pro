@@ -123,8 +123,10 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
                 })
             }
             2 -> {
-                findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_editAssignmentFragment,Bundle( ).apply {
+
+                findNavController().navigate(R.id.postAssignmentFragment, Bundle().apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
+                    putBoolean(Constant.EDIT.toString(), true)
                 })
             }
             3 -> {

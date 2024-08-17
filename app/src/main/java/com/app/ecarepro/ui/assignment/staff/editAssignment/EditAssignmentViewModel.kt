@@ -69,9 +69,9 @@ class EditAssignmentViewModel @Inject constructor(
     )=viewModelScope.launch {
         runCatching {
             createAssignmentMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.createAssignment( asgDate, asgID, attachment, fileExt, fileURL, classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title )
+           // userRepository.createAssignment( asgDate, asgID, attachment, fileExt, fileURL, classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title )
         }.onSuccess {
-            createAssignmentMutableStateFlow.value = NetworkResult.Success(it)
+           // createAssignmentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             createAssignmentMutableStateFlow.value = NetworkResult.Error(it.message)
         }

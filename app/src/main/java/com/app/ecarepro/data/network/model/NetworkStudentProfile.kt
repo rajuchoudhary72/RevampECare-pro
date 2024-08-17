@@ -6,6 +6,7 @@ import com.app.ecarepro.model.Library
 import com.app.ecarepro.model.MedicineIssued
 import com.app.ecarepro.model.Profile
 import com.app.ecarepro.model.ProfileAttendanceDTL
+import com.app.ecarepro.model.SiblingDetails
 import com.app.ecarepro.model.TransDetails
 
 data class NetworkStudentProfile(
@@ -24,6 +25,7 @@ data class NetworkStudentProfile(
     val leaveRecord: String,
     val library: Library,
     val medicineIssued: List<MedicineIssued>,
+    val siblingDetails: List<SiblingDetails>,
     val message: String,
     val profile: Profile,
     val status: String,

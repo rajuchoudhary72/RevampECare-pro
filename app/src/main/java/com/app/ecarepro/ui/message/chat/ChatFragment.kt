@@ -152,7 +152,7 @@ class ChatFragment : Fragment() {
                                 receiverChatMessage {
                                     id(message.msgID.toString() + message.body + message.sentOn)
                                     message(message.body)
-                                    date(message.sentOn)
+                                    date(message.sentOn)    
                                     files(message.filePaths ?: emptyList())
                                     image(
                                         if ((message.filePaths?.size

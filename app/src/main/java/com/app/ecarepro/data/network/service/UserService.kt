@@ -404,7 +404,7 @@ interface UserService {
         @Query("ClassSTD") classSTD: Int
     ): NetworkMySubjects
 
-    @POST("Academic/CreateAssignment")
+    @POST("Academic/PostAssignment")
     suspend fun createAssignment(
         @Body request: PostCreateAssignment,
     ): CommonResponse
@@ -536,7 +536,12 @@ interface UserService {
     @GET("Staff/CreateLessonPlan")
     suspend fun createLessonPlan(): NetworkCreateLesson
 
-    @GET("Report/StudentProfile")
+   /* @GET("Report/StudentProfile")
+    suspend fun getStudentProfile(
+        @Query("StID") sId: Int
+    ): NetworkStudentProfile*/
+
+    @GET("Student/Profile")
     suspend fun getStudentProfile(
         @Query("StID") sId: Int
     ): NetworkStudentProfile

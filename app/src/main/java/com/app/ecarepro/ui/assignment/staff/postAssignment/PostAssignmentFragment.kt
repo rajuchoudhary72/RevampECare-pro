@@ -20,15 +20,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkViewAssignment
+import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.databinding.FragmentPostAssignmentBinding
-import com.app.ecarepro.model.AcademicYear
+import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.MySubject
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.circuler.PopUpListAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
@@ -42,8 +43,10 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PostAssignmentFragment : Fragment() {
 
-     private lateinit var classData: MyClasseItem
-    private var isClassSelected: Boolean = false
+    private var isClassWise: Boolean=true
+    private var viewAssignmentData: NetworkViewAssignment? = null
+     private var isClassSelected: Boolean = false
+    private var isStudentSelected: Boolean = false
     private lateinit var classesList: List<MyClasseItem>
     private lateinit var subjectData: MySubject
     private var isSubjectSelected: Boolean = false
@@ -53,12 +56,23 @@ class PostAssignmentFragment : Fragment() {
     private   var imageExt: String= ""
     private   var imageString: String=""
     var selectAll: Boolean = false
+    var selectAllStudent: Boolean = false
     val ids = StringBuilder()
+    val studentIds = StringBuilder()
+    var attachmentsList = mutableListOf<Attachment>()
+    var classID_StID = mutableListOf<ClassID_StID>()
+    var isEdit: Boolean = false
+    private var assignmentId: String  = ""
+    private var studentList = mutableListOf<Student>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View  {
        binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
+       try {
+           assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
+           isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
+       }catch (e:Exception){}
         return  binding.root
     }
 
@@ -71,6 +85,19 @@ class PostAssignmentFragment : Fragment() {
             binding.tvSubmissionDt.isVisible=isChecked
         }
 
+        binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rbClassWise -> {
+                     binding.tvSelectstudent.isVisible=false
+                    isClassWise=true
+
+                }
+                R.id.rbStudentWise -> {
+                    binding.tvSelectstudent.isVisible=true
+                    isClassWise=false
+                }
+            }
+        }
 
 
         lifecycleScope.launch {
@@ -93,16 +120,29 @@ class PostAssignmentFragment : Fragment() {
         postAssignmentViewModel.mySubjects(Constant.DEFAULT_ID)
 
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
-        binding.tvSelectClass.setOnClickListener { popUpSelectClass() }
+        binding.tvSelectClass.setOnClickListener {
+            if (classesList!=null){
+                popUpSelectClass()
+            }
+
+        }
 
         binding.btnSubmit.setOnClickListener { uploadAssignment() }
 
         binding.tvAddAttac.setOnClickListener { selectImageOptionDialog() }
 
+        binding.tvSelectstudent.setOnClickListener {
+            if (studentList!=null){
+                popUpStudentListByClass(studentList)
+            }
+             }
+
         binding.llFile.setOnClickListener {
             binding.llFile.isVisible=false
             imageString=""
             imageExt=""
+
+            attachmentsList.clear()
 
         }
 
@@ -123,6 +163,11 @@ class PostAssignmentFragment : Fragment() {
 
             })
         }
+
+        if (isEdit){
+            setUpViewAssignment()
+        }
+
 
     }
 
@@ -169,23 +214,27 @@ class PostAssignmentFragment : Fragment() {
            }else{
                ""
            }
-           classData .classID?.let {
+
                postAssignmentViewModel.createAssignment(
                    binding.ctvAssignmentDt.text.toString(),
+                   if (isEdit) viewAssignmentData!!.asgID else 0 ,
                    0,
-                   imageString,imageExt,"",
-                   it,
-                   ids.toString(),
+                   if (isEdit) viewAssignmentData!!.classID.toString() else ids.toString(),
                    binding.etDescription.text.toString() ,
                    "",
                    "",
                    binding.cbActive.isChecked,
                    false,
                    binding.cbMultipleActive.isChecked,
-                   subjectData.subID,
+                   if (isEdit) viewAssignmentData!!.subjectID else subjectData.subID,
                    submitDate,
-                   binding.etTitle.text.toString()  )
-           }
+                   binding.etTitle.text.toString(),
+                   binding.cbLateSubmission.isChecked ,
+                   attachmentsList,
+                   classID_StID,
+                   ""
+               )
+
 
            lifecycleScope.launch {
                postAssignmentViewModel.createAssignmentStateFlow.collectLatest {
@@ -288,6 +337,7 @@ class PostAssignmentFragment : Fragment() {
 
 
                 val name = StringBuilder()
+                ids.clear()
 
                     for (classeItem in classesList) {
                         if (classeItem.checked == true) {
@@ -304,17 +354,18 @@ class PostAssignmentFragment : Fragment() {
 
 
                 binding.tvSelectClass.text= name
-
+               if (!isClassWise){
+                   getStudentListByClass(1,ids.toString(),2,false)
+               }
                 builder.dismiss()
             }
 
         }
 
-        val subjectListAdapter= ClassListAdapter(classesList, selectAll,  object : ItemListener<MyClasseItem> {
+         val subjectListAdapter= ClassListAdapter(classesList, selectAll,  object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
-                classData=t
-                isClassSelected = true
+                 isClassSelected = true
             }
 
         })
@@ -380,6 +431,9 @@ class PostAssignmentFragment : Fragment() {
 
                 imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
+                attachmentsList.clear()
+                attachmentsList.add(Attachment(imageString,imageExt,""))
+
             }
         }
 
@@ -394,10 +448,167 @@ class PostAssignmentFragment : Fragment() {
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
                     imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-
+                    attachmentsList.clear()
+                    attachmentsList.add(Attachment(imageString,imageExt,""))
 
                 }
             }
         }
+
+
+    fun getStudentListByClass(
+        recipientType: Int,
+        classIDs: String,
+        scholarType: Int,
+        byRollNo: Boolean,
+    ){
+        lifecycleScope.launch {
+            postAssignmentViewModel.studentParentCommsStateFlow.collectLatest {
+                when (it) {  is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                }  is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (it.data!=null){
+                        if (it.data.students!=null){
+                            studentList= it.data.students.toMutableList()
+                            popUpStudentListByClass(it.data.students)
+                        }
+
+                    }
+
+
+                }  }
+            } }
+        postAssignmentViewModel.studentParentComms(recipientType, classIDs, scholarType, byRollNo)
+    }
+
+
+    private fun popUpStudentListByClass(students: List<Student>) {
+
+        val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
+        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text= getText(R.string.lbl_select_Student)
+        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        llSelectAll.isVisible=true
+        builder.setView(view)
+
+        relOk.setOnClickListener {
+            if (isStudentSelected){
+
+
+                val name = StringBuilder()
+
+                for (student in students) {
+                    if (student.isSelected) {
+                        if (studentIds.toString().isEmpty()) {
+                            studentIds.append(student.stID)
+                            name.append(student.recipientName)
+                        } else {
+                            studentIds.append(",").append(student.stID)
+                            name.append(",").append(student.recipientName)
+                        }
+
+                        classID_StID.add(ClassID_StID(student.classID ,student.stID.toString()  ))
+                    }
+                }
+               binding.tvSelectstudent.text= name
+
+                 builder.dismiss()
+            }
+
+        }
+
+         if (isEdit){
+             val selectedStudents = mutableSetOf<String>()
+             viewAssignmentData!!.stIDs.split(",").map {
+                 selectedStudents.add(it)
+             }
+             for (student in students)  {
+                 student.isSelected = selectedStudents.contains(student.stID.toString())
+             }
+         }
+
+
+
+
+        val subjectListAdapter= StudentListAdapter(students, selectAll,  object : ItemListener<Student> {
+            override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
+                isStudentSelected = true
+            }
+
+        })
+        rvYears.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(activity)
+            adapter = subjectListAdapter
+        }
+
+        llSelectAll.setOnClickListener {
+            selectAllStudent = !selectAllStudent
+            for (i in students) {
+                i .isSelected=selectAllStudent
+            }
+            subjectListAdapter.notifyDataSetChanged()
+            checkImage.setImageResource(if (selectAllStudent) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
+        }
+
+        relCancel.setOnClickListener {
+            builder.dismiss()
+        }
+
+        builder.setCanceledOnTouchOutside(false)
+        builder.show()
+    }
+
+
+    fun setUpViewAssignment(){
+        lifecycleScope.launch {
+            postAssignmentViewModel.viewAssignmentStateFlow.collectLatest {
+                when (it) {  is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                }  is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                    val  data= it.data
+                    viewAssignmentData= it.data
+
+                    isSubjectSelected=true
+                    isClassSelected=true
+
+                    if (data!=null){
+                         binding.etTitle.setText(data.title)
+                        binding.etDescription.setText(data.data)
+                        binding.ctvAssignmentDt.text= data.asgDate
+                        binding.tvSubmissionDt.text= data.submitDate
+                        binding.tvSubmissionDt.isVisible = data.submitDate!=null && data.submitDate.isNotEmpty()
+                        binding.cbActive.isChecked= data.isActive
+                        binding.cbMultipleActive.isChecked= data.multipleSubmission
+                        binding.cbLateSubmission.isChecked= data.lateSubmission
+                       // binding.tvSelectClass.text=data.classIDs.toString()
+                       // binding.tvSelectSubject.text=data.su.toString()
+
+                        if (it.data.stIDs!=null){
+                            binding.tvSelectstudent.isVisible= it.data.stIDs.isNotEmpty()
+                        }
+                        binding.isSubmitDate.isChecked= data.submitDate.isNotEmpty()
+
+                        postAssignmentViewModel.getMyClass(data.subjectID,Constant.MY_CLASS_ID)
+
+
+                    }
+                }  }
+            } }
+
+        postAssignmentViewModel.viewAssignment(assignmentId)
+    }
 
 }

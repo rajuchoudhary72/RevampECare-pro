@@ -15,7 +15,7 @@ data class MyClasseItem(
     val classID: Int?,
     val className: String?,
     val id: String?,
-    var checked: Boolean?
+    var checked: Boolean
 )
 
 fun MyClasseItem.asExternalModel()=MyClasse(

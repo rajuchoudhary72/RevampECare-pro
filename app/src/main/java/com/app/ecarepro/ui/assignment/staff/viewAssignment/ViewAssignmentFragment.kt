@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
+    private var lateSubmit: Boolean=true
     private var viewAssignmentData: NetworkViewAssignment? = null
     private var submitList: Boolean=true
     private var assignmentId: String  = ""
@@ -63,7 +64,15 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_submit -> {
 
+                    lateSubmit=true
                     submitList=true
+                    viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false) 
+
+                }
+                R.id.btn_late_submit -> {
+
+                    submitList=true
+                    lateSubmit=true
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
                 }
@@ -89,8 +98,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                     viewAssignmentData= it.data
 
                     if (data!=null){
-                        binding.tvSubject.text= ""
-                        binding.tvTitle.text= data.title
+                         binding.tvTitle.text= data.title
                         binding.tvData.text= data.data
                         binding.tvAssignmentDate.text= data.asgDate
                         binding.tvSubmittedDate.text= data.submitDate
@@ -113,39 +121,81 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
 
                     if (submitList){
-                        if (it.data!=null){
-                            if (it.data.studentList!=null){
+                        if (lateSubmit){
+                            if (it.data!=null){
+                                if (it.data.studentList!=null){
 
-                                binding.rvSubmitList.isVisible=true
+                                    binding.rvSubmitList.isVisible=true
 
-                                val noticeAdapter = SubmitAssignListAdapter(it.data.studentList ,
-                                    this@ViewAssignmentFragment)
+                                    val lateList=it.data.studentList.filter { q ->
+                                        q.isLateSubmitted
+                                    }
 
-                                binding.rvSubmitList.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = noticeAdapter
+
+                                    val noticeAdapter = LateSubmitAssignListAdapter(lateList ,
+                                        this@ViewAssignmentFragment)
+
+                                    binding.rvSubmitList.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = noticeAdapter
+                                    }
+
+
+
+                                }else{
+                                    binding.rvSubmitList.isVisible=false
                                 }
+                            }
+
+                            binding.tvDetailsAssi.text= buildString {
+                                append("Submitted (")
+                                append(it.data!!.submittedBy)
+                                append("/")
+                                append(it.data.totalStudent)
+                                append("): Offline (")
+                                append(it.data.offlineSubmitted)
+                                append("): Online (")
+                                append(it.data.submittedBy-it.data.offlineSubmitted )
+                                append(")")
+
+                            }
+                        }else{
+                            if (it.data!=null){
+                                if (it.data.studentList!=null){
+
+                                    binding.rvSubmitList.isVisible=true
+
+                                    val noticeAdapter = SubmitAssignListAdapter(it.data.studentList ,
+                                        this@ViewAssignmentFragment)
+
+                                    binding.rvSubmitList.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = noticeAdapter
+                                    }
 
 
 
-                            }else{
-                                binding.rvSubmitList.isVisible=false
+                                }else{
+                                    binding.rvSubmitList.isVisible=false
+                                }
+                            }
+
+                            binding.tvDetailsAssi.text= buildString {
+                                append("Submitted (")
+                                append(it.data!!.submittedBy)
+                                append("/")
+                                append(it.data.totalStudent)
+                                append("): Offline (")
+                                append(it.data.offlineSubmitted)
+                                append("): Online (")
+                                append(it.data.submittedBy-it.data.offlineSubmitted )
+                                append(")")
+
                             }
                         }
 
-                        binding.tvDetailsAssi.text= buildString {
-                            append("Submitted (")
-                            append(it.data!!.submittedBy)
-                            append("/")
-                            append(it.data.totalStudent)
-                            append("): Offline (")
-                            append(it.data.offlineSubmitted)
-                            append("): Online (")
-                            append(it.data.submittedBy-it.data.offlineSubmitted )
-                            append(")")
-
-                        }
 
                     }else{
 
