@@ -928,4 +928,8 @@
         android:id="@+id/editProfileFragment"
         android:name="com.app.ecarepro.ui.edit_profile.EditProfileFragment"
         android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/appointmentFragment"
+        android:name="com.app.ecarepro.ui.appointment.v2.AppointmentFragment"
+        android:label="AppointmentFragment" />
 </navigation>

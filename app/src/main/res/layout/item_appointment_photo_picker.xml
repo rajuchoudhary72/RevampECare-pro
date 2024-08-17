@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="filedName"
+            type="java.lang.String" />
+
+        <variable
+            name="hintText"
+            type="java.lang.String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/filedNameDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/calibri_regular"
+            android:gravity="center_vertical"
+            android:text="@{filedName}"
+            app:drawableStartCompat="@drawable/avd_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="User Name" />
+
+        <TextView
+            android:id="@+id/filedName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/calibri_regular"
+            android:gravity="center_vertical"
+            android:text="@{filedName}"
+            app:drawableStartCompat="@drawable/avd_profile"
+            app:layout_constraintStart_toStartOf="@id/selector2"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="User Name" />
+
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="@dimen/_10sdp"
+            android:src="@drawable/asterick"
+            app:layout_constraintStart_toEndOf="@id/filedNameDate"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/red" />
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="@dimen/_10sdp"
+            android:src="@drawable/asterick"
+            app:layout_constraintStart_toEndOf="@id/filedName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/red" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selector1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/appointment_selector"
+            android:fontFamily="@font/ubuntu_bold"
+            android:gravity="center"
+            android:text="Capture Image"
+            android:textColor="@color/green"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_camera"
+            app:iconGravity="textTop"
+            app:iconSize="44dp"
+            app:iconTint="@color/green"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/selector2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filedNameDate" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/selector2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/appointment_selector"
+            android:fontFamily="@font/ubuntu_bold"
+            android:gravity="center"
+            android:text="Capture Image"
+            android:textColor="@color/green"
+            android:textSize="16sp"
+            app:icon="@drawable/ic_camera"
+            app:iconGravity="textTop"
+            app:iconSize="44dp"
+            app:iconTint="@color/green"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/selector1"
+            app:layout_constraintTop_toBottomOf="@id/filedNameDate" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

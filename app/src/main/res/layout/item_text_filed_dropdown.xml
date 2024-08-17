@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="filedName"
+            type="java.lang.String" />
+
+        <variable
+            name="hintText"
+            type="java.lang.String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/filedName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/avd_profile"
+            android:drawablePadding="5dp"
+            android:fontFamily="@font/calibri_regular"
+            android:gravity="center_vertical"
+            android:text="@{filedName}"
+            tools:text="User Name" />
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="@dimen/_10sdp"
+            android:src="@drawable/asterick"
+            app:layout_constraintStart_toEndOf="@id/filedName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/red" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutUserName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@{hintText}"
+            app:hintTextColor="@color/grey_40"
+            app:layout_constraintTop_toBottomOf="@+id/filedName"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerSmall"
+            tools:hint="@string/enter_user_name">
+
+            <AutoCompleteTextView
+                android:id="@+id/textUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

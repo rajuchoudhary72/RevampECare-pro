@@ -61,7 +61,7 @@ class SystemViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-                UType = userDataStore.getUserType()!!
+                UType = userDataStore.getUserType()?:1
 
         }
     }
