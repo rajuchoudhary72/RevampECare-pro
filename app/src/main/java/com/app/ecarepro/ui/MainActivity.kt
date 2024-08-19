@@ -1,6 +1,8 @@
 package com.app.ecarepro.ui
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,9 +21,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import android.graphics.Rect
 import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import android.view.MotionEvent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 
 import androidx.navigation.ui.AppBarConfiguration
@@ -50,6 +57,10 @@ import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.menuCard
 import com.google.android.material.snackbar.Snackbar
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import java.io.IOException
+import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 
 
@@ -82,11 +93,59 @@ class MainActivity : AppCompatActivity() {
         R.id.notificationFragment,
         R.id.messageFragment,
     )
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun enableNotificationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                Log.e("TestFCM", "onCreate: PERMISSION GRANTED")
 
+            }
+
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+
+                Snackbar.make(
+                    binding.appBarMain.contentMain.bottomNavigationView,
+                    "Please Enable Notification Permission",
+                    Snackbar.LENGTH_LONG
+                ).setAction("Settings") {
+                    // Responds to click on the action
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    val uri: Uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                }.show()
+            }
+
+            else -> {
+                // The registered ActivityResultCallback gets the result of this request
+                requestPermissionLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+        }
+    }
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+        } else {
+            // Explain to the user that the feature is unavailable because the
+            // features requires a permission that the user has denied. At the
+            // same time, respect the user's decision. Don't link to system
+            // settings in an effort to convince the user to change their
+            // decision.
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
+            enableNotificationPermission()
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -162,6 +221,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+
+                // Log and toast
+                Log.d("FCM Token", token)
+                systemViewModel.registerDeviceToken(token)
+            })
+            .addOnFailureListener { e ->
+                if (e is IOException) {
+                    Log.e("FCM Token", "Network error", e)
+                } else if (e is ExecutionException) {
+                    Log.e("FCM Token", "Execution error", e)
+                } else {
+                    Log.e("FCM Token", "Unknown error", e)
+                }
+            }
     }
 
 

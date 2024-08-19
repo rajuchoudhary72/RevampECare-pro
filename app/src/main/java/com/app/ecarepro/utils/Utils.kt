@@ -9,7 +9,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
+import com.app.ecarepro.ui.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.lang.String.format
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -21,7 +23,13 @@ fun Int.toPx(context: Context) =
 
 fun Context.getColorRes(@ColorRes colorId: Int) = ContextCompat.getColor(this, colorId)
 
-
+fun stringFormat2String(stringId1: MainActivity, stringId: Int, value1: String?, value2: String?): String? {
+    return format(
+        stringId1.getResources().getString(stringId),
+        value1,
+        value2
+    )
+}
 fun Context.progressDialog(): AlertDialog {
     return MaterialAlertDialogBuilder(this)
         .setView(R.layout.loading_bar)

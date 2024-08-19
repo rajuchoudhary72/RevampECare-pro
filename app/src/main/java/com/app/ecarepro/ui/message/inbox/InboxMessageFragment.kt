@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,7 +23,7 @@ import com.app.ecarepro.utils.E_MMM_DD_YYYY_HH_MM_A
 import com.app.ecarepro.utils.HH_MM_A
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.formatDate
-import com.rubensousa.decorator.LinearMarginDecoration
+import com.app.ecarepro.utils.stringFormat2String
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,7 +40,7 @@ class InboxMessageFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentInboxFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -112,7 +111,19 @@ class InboxMessageFragment : Fragment() {
                             recentMessageCard {
                                 id(message.id)
                                 name(message.name)
-                                designation(message.designation)
+                                if (message.senderType==3){
+                                    designation(message.designation)
+                                }else  if (message.senderType==1){
+                                    designation("Class :-"+message.className)
+                                }else{
+                                    designation(
+                                        stringFormat2String((requireActivity() as MainActivity),
+                                            R.string.InboxList,
+                                            message.childName,
+                                            message.className
+                                        )
+                                    )
+                                }
                                 photo(message.photo)
                                 date(message.sentOn)
                                 time(formatDate(message.sentOn, E_MMM_DD_YYYY_HH_MM_A, HH_MM_A))

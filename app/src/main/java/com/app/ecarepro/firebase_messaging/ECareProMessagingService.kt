@@ -35,11 +35,11 @@ class ECareProMessagingService : FirebaseMessagingService() {
     lateinit var appRepository: AppRepository
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
+
         // Handle FCM messages here.
         // Handle message
         Log.d("FCM", "From: ${remoteMessage.from}")
-
+        Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
         remoteMessage.data.isNotEmpty().let {
             Log.d("FCM", "Message data payload: " + remoteMessage.data)
         }
@@ -59,6 +59,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
             val title = ""
             val body = ""
         }
+        super.onMessageReceived(remoteMessage)
     }
 
     private fun sendNotification(messageBody: String?) {
@@ -136,14 +137,19 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     override fun onDeletedMessages() {
         super.onDeletedMessages()
+        Log.d(TAG, "Device not registered")
     }
 
     override fun onMessageSent(msgId: String) {
         super.onMessageSent(msgId)
+        Log.d(TAG, "msg send : $msgId")
     }
 
     override fun onSendError(msgId: String, exception: Exception) {
         super.onSendError(msgId, exception)
-
+        Log.d(TAG, "Network error: $exception")
+    }
+    companion object {
+        private const val TAG = "MyFirebaseMessagingService"
     }
 }
