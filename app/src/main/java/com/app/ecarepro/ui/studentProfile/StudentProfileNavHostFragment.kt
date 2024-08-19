@@ -78,7 +78,7 @@ class StudentProfileNavHostFragment : Fragment() {
                             val fragmentList: ArrayList<Fragment> = ArrayList();
 
 
-                            fragmentList.add(StudentProfileDetailsFragment(it.data.profile))
+                            fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
                             fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID))
                             fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery,it.data.academicYears,studentID))
                             fragmentList.add(StudentProfileLibraryTransFragment(it.data.library))

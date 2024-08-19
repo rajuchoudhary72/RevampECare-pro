@@ -14,10 +14,13 @@ data class NetworkViewAssignment(
     val isFileRemoved: Boolean,
     val message: String,
     val multipleSubmission: Boolean,
+    val lateSubmission: Boolean,
     val status: Any,
     val subjectID: Int,
     val submitDate: String,
     val hasAttachment: Boolean,
     val asgFile: String,
-    val title: String
+    val title: String,
+    val stIDs: String,
+
 )

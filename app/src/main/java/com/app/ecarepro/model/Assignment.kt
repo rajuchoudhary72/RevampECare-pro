@@ -16,6 +16,7 @@ data class Assignment(
     val id: String?,
     val isActive: Boolean?,
     val isSubmissionOpened: Boolean?,
+    val lateSubmission: Boolean ,
     val isSubmitted: Boolean?,
     val multipleSubmission: Boolean?,
     val photo: String?,

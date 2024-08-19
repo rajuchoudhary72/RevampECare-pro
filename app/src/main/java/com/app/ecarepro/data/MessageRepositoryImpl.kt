@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkConversationReport
+import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
@@ -253,6 +254,15 @@ class MessageRepositoryImpl @Inject constructor(
         tillDate: String?
     ): NetworkConversationReport {
         return messageService.getConversationReport(pg, fromDate, tillDate)
+    }
+
+    override suspend fun studentParentComms(
+        recipientType: Int,
+        classIDs: String,
+        scholarType: Int,
+        byRollNo: Boolean
+    ): NetworkStudentParentComms {
+        return messageService.studentParentComms(recipientType, classIDs, scholarType, byRollNo)
     }
 
 }

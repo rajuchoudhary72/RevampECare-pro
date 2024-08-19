@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="@dimen/_25sdp"
+                android:id="@+id/checkImage"
+                android:visibility="visible"
+                 android:src="@drawable/ic_baseline_check_box_unselectblank_24"
+                android:layout_height="@dimen/_25sdp"
+                android:paddingTop="@dimen/_5sdp"
+                />
+
+            <TextView
+                android:id="@+id/tv_item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 android:layout_marginRight="@dimen/_10sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                  android:textColor="@color/module"
+                android:layout_gravity="center_vertical"
+                   />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_class_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             android:layout_marginStart="@dimen/_25sdp"
+            android:fontFamily="@font/ubuntu_regular"
+             android:textColor="@color/grey_60"
+              />
+
+        <TextView
+            android:id="@+id/tv_roll_no"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_25sdp"
+            android:fontFamily="@font/ubuntu_regular"
+             android:textColor="@color/grey_60"
+             android:layout_marginBottom="@dimen/_5sdp"
+             />
+
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp" />
+
+    </LinearLayout>
+</layout>

@@ -5,6 +5,8 @@ data class AssignSubmitStudent(
     val asgFile: String,
     val asgSubID: Int,
     val isOfflineSubmitted: Boolean,
+    val isLateSubmitted: Boolean,
+
     val rollNumber: String,
     val stID: Int,
     val studentName: String,
