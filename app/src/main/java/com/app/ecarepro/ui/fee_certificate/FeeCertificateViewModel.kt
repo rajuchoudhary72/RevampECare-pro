@@ -67,8 +67,8 @@ class FeeCertificateViewModel @Inject constructor(
         runCatching {
             feeCertificateMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.getFeeCertificate(
-                "https://payment.agnelgreaternoida.org/api/certificate?senderid=AGNLGN"
-               // userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate?senderid="+userDataStore.getSchoolData()!!.schoolCode,
+                //"https://payment.agnelgreaternoida.org/api/certificate?senderid=AGNLGN"
+                 userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate?senderid="+userDataStore.getSchoolData()!!.schoolCode,
                 /*FeeReceiptRequest(
                 userDataStore.getSchoolData()!!.schoolCode,
                     userDataStore.getUserNameID().toString(),
@@ -88,13 +88,13 @@ class FeeCertificateViewModel @Inject constructor(
         runCatching {
             feeCertificateDownloadMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.getFeeCertificateDownload(
-                "https://payment.agnelgreaternoida.org/api/certificate",
-                //userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate" ,
+                //"https://payment.agnelgreaternoida.org/api/certificate",
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate" ,
                 PostDataFeeCertificate(
-                    //userDataStore.getUserNameID().toString(),
-                    //userDataStore.getSchoolData()!!.schoolCode,
-                    "PR1572",
-                    "AGNLGN",
+                     userDataStore.getUserNameID().toString(),
+                     userDataStore.getSchoolData()!!.schoolCode,
+                    //"PR1572",
+                    //"AGNLGN",
                     sessionId,
                     sessionName,
 
