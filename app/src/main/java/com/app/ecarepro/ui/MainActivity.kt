@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
 
-
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
