@@ -59,6 +59,14 @@ class StudentProfileAttendanceFragment(
         super.onViewCreated(view, savedInstanceState)
 
         setupUi(attendanceDTL)
+        if (academicYears.isNotEmpty()) {
+            for (i in academicYears ) {
+                if (i.isCur) {
+                    binding.ctvSelectYear.text = i.session
+                    break
+                }
+            }
+        }
 
 
     }
