@@ -108,6 +108,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                                     layoutManager = LinearLayoutManager(activity)
                                     adapter = noticeAdapter
                                 }
+                                binding.toolbar.title= "All Notices" + "( " + it.data.totalNotice + "/" + it.data.unreadNotice + ")"
                             }else{
                                 binding.recyclerNotice.isVisible=false
                                 binding.tvNoData.isVisible=true

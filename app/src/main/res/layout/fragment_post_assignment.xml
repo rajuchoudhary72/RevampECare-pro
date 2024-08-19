@@ -39,6 +39,8 @@
 
             >
 
+
+
             <LinearLayout
                 android:id="@+id/llMain"
                 android:layout_width="match_parent"
@@ -46,6 +48,39 @@
                 android:orientation="vertical"
 
                 >
+
+
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup_wisesubmission"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginVertical="8dp"
+                        android:layout_gravity="center"
+                        android:checkedButton="@id/rbClassWise"
+                        >
+
+                        <RadioButton
+                            android:id="@+id/rbClassWise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/class_wise"
+                            android:layout_marginEnd="@dimen/_15sdp"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rbStudentWise"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/student_wise"
+                            />
+
+
+                    </RadioGroup>
+
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -84,6 +119,22 @@
 
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvSelectstudent"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginVertical="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_line"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/lbl_select_Student"
+
+                    android:visibility="gone"
+                    app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
 
                 <LinearLayout
@@ -244,7 +295,18 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:text="@string/allow_student_for_multiple_submission"
 
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
+
+                <CheckBox
+                    android:id="@+id/cbLateSubmission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/allow_student_for_late_submission"
+
+                    android:textSize="16sp" />
 
                 <CheckBox
                     android:id="@+id/cbActive"

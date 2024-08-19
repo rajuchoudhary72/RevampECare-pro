@@ -31,6 +31,7 @@ import java.util.Locale
 @AndroidEntryPoint
 class AppointmentReportFragment : Fragment() {
 
+    private var showFilter: Boolean = false
     private lateinit var binding: FragmentAppointmentReportBinding
     private val appointmentViewModel: AppointmentViewModel by viewModels()
     private var all = true
@@ -99,6 +100,17 @@ class AppointmentReportFragment : Fragment() {
 
         }
 
+        binding.ivFilter.setOnClickListener {
+           if (showFilter){
+               binding.llToole.visibility=View.GONE
+               showFilter=true
+
+           }else{
+               binding.llToole.visibility=View.VISIBLE
+               showFilter=false
+           }
+
+        }
 
 
     }

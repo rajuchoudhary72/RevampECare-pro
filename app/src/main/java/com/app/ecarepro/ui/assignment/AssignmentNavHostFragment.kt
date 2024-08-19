@@ -6,14 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAssignmentNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.utils.Constant
+import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -84,13 +87,20 @@ class AssignmentNavHostFragment : Fragment() {
 
                                 TabLayoutMediator(
                                     binding.tabLayout,
-                                    binding.viewPager
+                                    binding.viewPager,
                                 ) { tab, position ->
 
                                         tab.text = it.data.subjectAssignments[position].subject
+                                      val badgeDrawable : BadgeDrawable = tab.orCreateBadge
+
+                                  //  badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
+                                    badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
+
 
 
                                 }.attach()
+
+
 
 
                             }

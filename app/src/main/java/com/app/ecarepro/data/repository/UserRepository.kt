@@ -90,11 +90,13 @@ import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
+import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
+import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.Staff
@@ -344,25 +346,26 @@ interface UserRepository {
     suspend fun staffSubjects( classSTD: Int ): NetworkMySubjects
 
     suspend fun createAssignment(
-          asgDate: String,
-          asgID: Int,
-          attachment: String,
-          fileExt: String,
-          fileURL: String,
-          classID: Int,
-          classIDs: String,
-          `data`: String,
-          `file`: String,
-          id: String,
-          isActive: Boolean,
-          isFileRemoved: Boolean,
-          multipleSubmission: Boolean,
+        asgDate: String,
+        asgID: Int,
 
-          subjectID: Int,
-          submitDate: String,
-          title: String
+        classID: Int,
+        classIDs: String,
+        `data`: String,
+        `file`: String,
+        id: String,
+        isActive: Boolean,
+        isFileRemoved: Boolean,
+        multipleSubmission: Boolean,
 
-        ): CommonResponse
+        subjectID: Int,
+        submitDate: String,
+        title: String,
+        lateSubmission : Boolean,
+        attachments  : List<Attachment>,
+        classID_StID  : List<ClassID_StID>,
+        stIDs : String
+    ): CommonResponse
 
     suspend fun viewAssignment(
           iD: String,

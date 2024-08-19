@@ -6,16 +6,27 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.Editable
+import android.text.Html
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextWatcher
+import android.text.style.CharacterStyle
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.util.Log
+import android.view.ActionMode
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -43,7 +54,6 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.app.ecarepro.utils.FileUtils
-import com.app.ecarepro.utils.getFile
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -65,6 +75,8 @@ class ComposeFragment : Fragment() {
 
     private var _binding: FragmentComposeBinding? = null
     private val binding get() = _binding!!
+    private var lvalue = "null"
+    private var isFormatd = false
 
     private val composeViewModel: ComposeViewModel by viewModels()
 
@@ -147,6 +159,189 @@ class ComposeFragment : Fragment() {
                 handleUiState(uiState)
             }
         }
+
+        setUpFontStyle()
+    }
+
+    private fun setUpFontStyle() {
+
+
+        binding.message.customSelectionActionModeCallback = StyleCallback()
+
+        binding.message.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                //                if (et_reply.getText().toString().trim().length() > 0) {
+//                    if (iv_post_reply2.getVisibility() == GONE) {
+//                        iv_post_reply2.setVisibility(VISIBLE);
+//                    }
+//                    if (iv_post_reply.getVisibility() == VISIBLE) {
+//                        iv_post_reply.setVisibility(GONE);
+//                    }
+//                } else {
+//                    if (iv_post_reply2.getVisibility() == VISIBLE) {
+//                        iv_post_reply2.setVisibility(GONE);
+//                    }
+//                    if (iv_post_reply.getVisibility() == GONE) {
+//                        iv_post_reply.setVisibility(VISIBLE);
+//                    }
+//                }
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                val ssb: Spannable = SpannableStringBuilder(binding.message.text)
+
+                if (lvalue != binding.message.text.toString()) {
+                    try {
+                        val spans: Array<out StyleSpan>? = ssb.getSpans(  0, ssb.length, StyleSpan::class.java  )
+                        for (styleSpan in spans!!) ssb.removeSpan(styleSpan)
+
+
+                        val spans2: Array<out UnderlineSpan>? = ssb.getSpans(
+                            0, ssb.length,
+                            UnderlineSpan::class.java
+                        )
+                        for (styleSpan in spans2!!) ssb.removeSpan(styleSpan)
+
+                        val spans3: Array<out ForegroundColorSpan>? = ssb.getSpans(
+                            0, ssb.length,
+                            ForegroundColorSpan::class.java
+                        )
+                        for (styleSpan in spans3!!) ssb.removeSpan(styleSpan)
+
+
+                        var cs: CharacterStyle
+                        var cs1: CharacterStyle
+                        var cs2: CharacterStyle
+
+                        val sentence: String = binding.message.text.toString()
+                        val boldStartIndexes: List<Int> =
+                             boldFindStartIndexes(
+                                sentence
+                            )
+                        val boldEndIndexes: List<Int> =
+                             boldFindEndStarIndexes(
+                                sentence
+                            )
+
+                        val italicStartIndexes: List<Int> =
+                             italicFindStartIndexes(
+                                sentence
+                            )
+                        val italicEndIndexes: List<Int> =
+                             italicFindEndStarIndexes(
+                                sentence
+                            )
+
+                        val strikethroughStartIndexes: List<Int> =
+                             strikethroughFindStartIndexes(
+                                sentence
+                            )
+                        val strikethroughEndIndexes: List<Int> =
+                             strikethroughFindEndStarIndexes(
+                                sentence
+                            )
+
+
+                        /* List<Integer> allStartIndexes = AllStartIndexes(sentence);
+                    List<Integer> allEndIndexes = AllEndIndexes(sentence);*/
+                        Log.v("Okkkkk", "Word Start Indexes BOLD : $boldStartIndexes")
+                        Log.v("Okkkkk", "Word End Indexes BOLD : $boldEndIndexes")
+
+                        Log.v("Okkkkk", "Word Start Indexes Italic : $italicStartIndexes")
+                        Log.v("Okkkkk", "Word End Indexes Italic : $italicEndIndexes")
+
+                        Log.v(
+                            "Okkkkk",
+                            "Word Start Indexes strikethrough : $strikethroughStartIndexes"
+                        )
+                        Log.v(
+                            "Okkkkk",
+                            "Word End Indexes strikethrough : $strikethroughEndIndexes"
+                        )
+
+                        /*Log.v("Okkkkk", "Word Start Indexes All : " + allStartIndexes);
+                    Log.v("Okkkkk", "Word End Indexes All : " + allEndIndexes);*/
+                        isFormatd = false
+
+
+                        var boldstart = 0
+                        var boldend = 0
+                        if (boldStartIndexes.size >= 1 && boldEndIndexes.size >= 1) {
+                            for (i in boldStartIndexes.indices) {
+                                boldstart = boldStartIndexes[i]
+                                for (j in i until boldEndIndexes.size) {
+                                    boldend = boldEndIndexes[j]
+                                    cs = StyleSpan(Typeface.BOLD)
+                                    cs1 =
+                                        ForegroundColorSpan(resources.getColor(R.color.light_text))
+                                    cs2 =
+                                        ForegroundColorSpan(resources.getColor(R.color.light_text))
+                                    ssb.setSpan(cs, boldstart, boldend, 1)
+                                    ssb.setSpan(cs1, boldstart, boldstart + 1, 1)
+                                    ssb.setSpan(cs2, boldend, boldend + 1, 1)
+                                    isFormatd = true
+                                    lvalue = binding.message.text.toString()
+                                    break
+                                }
+                            }
+                        }
+
+                        var italicstart = 0
+                        var italicdend = 0
+                        if (italicStartIndexes.size >= 1 && italicEndIndexes.size >= 1) {
+                            for (i in italicStartIndexes.indices) {
+                                italicstart = italicStartIndexes[i]
+                                for (j in i until italicEndIndexes.size) {
+                                    italicdend = italicEndIndexes[j]
+                                    cs = StyleSpan(Typeface.ITALIC)
+                                    cs1 =
+                                        ForegroundColorSpan(resources.getColor(R.color.light_text))
+                                    cs2 =
+                                        ForegroundColorSpan(resources.getColor(R.color.light_text))
+                                    ssb.setSpan(cs, italicstart, italicdend, 1)
+                                    ssb.setSpan(cs1, italicstart, italicstart + 1, 1)
+                                    ssb.setSpan(cs2, italicdend, italicdend + 1, 1)
+                                    isFormatd = true
+                                    lvalue = binding.message.text.toString()
+                                    break
+                                }
+                            }
+                        }
+
+                        var strikethroughstart = 0
+                        var strikethroughend = 0
+                        if (strikethroughStartIndexes.size >= 1 && strikethroughEndIndexes.size >= 1) {
+                            for (i in strikethroughStartIndexes.indices) {
+                                strikethroughstart = strikethroughStartIndexes[i]
+                                for (j in i until strikethroughEndIndexes.size) {
+                                    strikethroughend = strikethroughEndIndexes[j]
+                                    cs = UnderlineSpan()
+                                    cs1 =
+                                        ForegroundColorSpan(resources.getColor(R.color.light_text))
+                                    cs2 =
+                                        ForegroundColorSpan(resources.getColor(R.color.light_text))
+                                    ssb.setSpan(cs, strikethroughstart, strikethroughend, 1)
+                                    ssb.setSpan(cs1, strikethroughstart, strikethroughstart + 1, 1)
+                                    ssb.setSpan(cs2, strikethroughend, strikethroughend + 1, 1)
+                                    isFormatd = true
+                                    lvalue = binding.message.text.toString()
+                                    break
+                                }
+                            }
+                        }
+                        lvalue = binding.message.text.toString()
+                        val pos: Int = binding.message.selectionEnd
+                        binding.message.setText(ssb)
+                        binding.message.setSelection(pos)
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        })
+
     }
 
     private fun handleUiState(uiState: ComposeUiState) {
@@ -257,7 +452,7 @@ class ComposeFragment : Fragment() {
 
             composeViewModel.sendMessage { isSuccess, message ->
                 (requireActivity() as MainActivity).showLoader(false)
-                mainActivity().showMessage(message ?: "")
+                mainActivity().showMessage(message)
                 if (isSuccess) {
                     findNavController().popBackStack()
                 }
@@ -401,7 +596,7 @@ class ComposeFragment : Fragment() {
         intent.type = "audio/*"
         intent.action = Intent.ACTION_GET_CONTENT
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pdfLauncher.launch(intent)
     }
 
@@ -410,7 +605,7 @@ class ComposeFragment : Fragment() {
         intent.type = "application/pdf"
         intent.action = Intent.ACTION_GET_CONTENT
         intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         pdfLauncher.launch(intent)
     }
 
@@ -575,6 +770,277 @@ class ComposeFragment : Fragment() {
         private const val REQUEST_CAMERA_PERMISSION = 1001
         private const val REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 1002
     }
+
+    inner class StyleCallback : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+             val inflater = mode.menuInflater
+            inflater.inflate(R.menu.custom_font, menu)
+            menu.removeItem(android.R.id.selectAll)
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            return false
+        }
+
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+
+            var cs: CharacterStyle
+            val start: Int = binding.message.selectionStart
+            val end: Int = binding.message.selectionEnd
+            val ssb: Spannable = SpannableStringBuilder(binding.message.text)
+            val star = "*"
+            val underScore = "_"
+            val stricketStart = "~"
+            val stricketEnd = "~"
+            val value: String = binding.message.text.toString().substring(start, end)
+
+            when (item.itemId) {
+                R.id.bold -> {
+                    //et_reply.setText(Html.fromHtml(sourceString));
+                    // et_reply.getText().insert(et_reply.getSelectionStart(), Html.fromHtml(sourceString));
+                    /*et_reply.getText().replace(Math.min(start, end), Math.max(start, end),
+                            Html.fromHtml(sourceString), 0, et_reply.length()+1);*/
+                    //int startw =et_reply.getSelectionStart();//this is to get the the cursor position
+                    val sourceString = "$star<b>$value</b>$star"
+                    binding.message.text.replace(start, end, Html.fromHtml(sourceString))
+
+                    return true
+                }
+
+                R.id.italic -> {
+                    /*cs = new  StyleSpan(Typeface.ITALIC);
+                    ssb.setSpan(cs, start, end, 1);
+                    et_reply.setText(ssb);*/
+                    val italicString = "$underScore<i>$value</i>$underScore"
+                    binding.message.text.replace(start, end, Html.fromHtml(italicString))
+                    return true
+                }
+
+                R.id.underline -> {
+                    /* cs = new UnderlineSpan();
+                    ssb.setSpan(cs, start, end, 1);
+                    et_reply.setText(ssb);*/
+                    val stricktString = "$stricketStart<u>$value</u>$stricketEnd"
+                    binding.message.text.replace(start, end, Html.fromHtml(stricktString))
+                    return true
+                }
+            }
+            return false
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode) {
+        }
+    }
+
+
+      fun boldFindStartIndexes(sentence: String): List<Int> {
+        val indexes: MutableList<Int> = java.util.ArrayList()
+        val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        var startIndex = 0
+        var firstTime = true
+        for (word in words) {
+            if (word.length >= 2) {
+                val start = word[0].toString()
+                if (start == "*") {
+                    if (firstTime) {
+                        startIndex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        startIndex = sentence.indexOf(word, startIndex + 1)
+                    }
+                    indexes.add(startIndex)
+                }
+            }
+        }
+
+        return indexes
+    }
+
+    fun boldFindEndStarIndexes(sentence: String): List<Int> {
+        val indexes: MutableList<Int> = java.util.ArrayList()
+        val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        var firstindex = 0
+        var firstTime = true
+        for (word in words) {
+            if (word.length >= 2) {
+                if (word.endsWith("*")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 1
+                    indexes.add(endIndex)
+                } else if (word.endsWith("*,")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 2
+                    indexes.add(endIndex)
+                } else if (word.endsWith("*.")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 2
+                    indexes.add(endIndex)
+                }
+            }
+        }
+
+        return indexes
+    }
+
+    fun italicFindStartIndexes(sentence: String): List<Int> {
+        val indexes: MutableList<Int> = java.util.ArrayList()
+        val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        var startIndex = 0
+        var firstTime = true
+        for (word in words) {
+            if (word.length >= 2) {
+                val start = word[0].toString()
+                if (start == "_") {
+                    if (firstTime) {
+                        startIndex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        startIndex = sentence.indexOf(word, startIndex + 1)
+                    }
+                    indexes.add(startIndex)
+                }
+            }
+        }
+
+        return indexes
+    }
+
+    fun italicFindEndStarIndexes(sentence: String): List<Int> {
+        val indexes: MutableList<Int> = java.util.ArrayList()
+        val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        var firstindex = 0
+        var firstTime = true
+        for (word in words) {
+            if (word.length >= 2) {
+                if (word.endsWith("_")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 1
+                    indexes.add(endIndex)
+                } else if (word.endsWith("_,")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 2
+                    indexes.add(endIndex)
+                } else if (word.endsWith("_.")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 2
+                    indexes.add(endIndex)
+                }
+            }
+        }
+
+        return indexes
+    }
+
+    fun strikethroughFindEndStarIndexes(sentence: String): List<Int> {
+        val indexes: MutableList<Int> = java.util.ArrayList()
+        val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        var firstindex = 0
+        var firstTime = true
+        for (word in words) {
+            if (word.length >= 2) {
+                if (word.endsWith("~")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 1
+                    indexes.add(endIndex)
+                } else if (word.endsWith("~,")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 2
+                    indexes.add(endIndex)
+                } else if (word.endsWith("~.")) {
+                    if (firstTime) {
+                        firstindex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        firstindex = sentence.indexOf(word, firstindex + 1)
+                    }
+                    val worlem = word.length
+                    val endIndex = firstindex + worlem - 2
+                    indexes.add(endIndex)
+                }
+            }
+        }
+
+        return indexes
+    }
+
+    fun strikethroughFindStartIndexes(sentence: String): List<Int> {
+        val indexes: MutableList<Int> = java.util.ArrayList()
+        val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+        var startIndex = 0
+        var firstTime = true
+        for (word in words) {
+            if (word.length >= 2) {
+                val start = word[0].toString()
+                if (start == "~") {
+                    if (firstTime) {
+                        startIndex = sentence.indexOf(word)
+                        firstTime = false
+                    } else {
+                        startIndex = sentence.indexOf(word, startIndex + 1)
+                    }
+                    indexes.add(startIndex)
+                }
+            }
+        }
+
+        return indexes
+    }
+
 }
 
 enum class AttachmentType {

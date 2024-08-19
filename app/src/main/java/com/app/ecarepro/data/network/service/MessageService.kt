@@ -11,6 +11,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkConversationReport
+import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
@@ -27,7 +28,9 @@ import retrofit2.http.Url
 
 interface MessageService {
     @GET("Message/Setting")
-    suspend fun getMessageSettings(): MessageSettings
+    suspend fun getMessageSettings(
+        
+    ): MessageSettings
 
     @GET("Message/Inbox")
     suspend fun getInboxMessages(@Query("pg") pg: Int): InboxMessageDto
@@ -113,4 +116,12 @@ interface MessageService {
     suspend fun getConversationMsgDTL(
         @Query("MsgID") id: String
     ): ConversationDetailsDto
+
+    @GET("SMS/StudentParent_Comms")
+    suspend fun studentParentComms(
+        @Query("RecipientType") recipientType: Int,
+        @Query("ClassIDs") classIDs: String,
+        @Query("ScholarType") scholarType: Int,
+        @Query("byRollNo") byRollNo: Boolean,
+    ): NetworkStudentParentComms
 }

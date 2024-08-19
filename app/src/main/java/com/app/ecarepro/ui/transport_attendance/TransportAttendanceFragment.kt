@@ -7,9 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -21,12 +18,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,10 +45,10 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuProvider  {
+class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
 
 
-    private lateinit var studentListToMarkAtt: List<StuLst>
+     private lateinit var studentListToMarkAtt: List<StuLst>
     private lateinit var stoppersSelectData: StopLST
     private var routeSelected: Boolean = false
     private var stoppersSelected: Boolean = false
@@ -81,8 +75,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         if(activity is AppCompatActivity){
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         }
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
          return binding.root
     }
 
@@ -94,6 +87,12 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
 
 
         binding.apply {
+
+
+            binding.tvSave.setOnClickListener {
+                popUpDetailsMarkAttendance()
+            }
+
             tvSelectRoute.setOnClickListener {
                 if (routeLSTList.isNotEmpty()){
                     popUpRouter()
@@ -198,20 +197,28 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Log.d("main", "Error$it")
+                        binding.tvSave.isVisible=false
+                        binding.recyclerStudentAttMark.visibility=View.GONE
+                        binding.tvNoData.visibility=View.VISIBLE
                     }
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
 
-                            if (it.data.stuLst.isNotEmpty()){
+                            if (it.data.stuLst != null  &&  it.data.stuLst.isNotEmpty()   ){
 
                                 binding.recyclerStudentAttMark.isVisible=true
                                 binding.tvNoData.isVisible=false
 
+                                binding.tvSave.isVisible= it.data.stuLst.isNotEmpty()
+
                                 val studentListToMarkAttAdapter =  StudentListToMarkAttAdapter(
                                     it.data.stuLst  ,
                                     tripType,
-                                    this@TransportAttendanceFragment)
+                                    this@TransportAttendanceFragment,
+                                    it.data.freezDrop,
+                                    it.data.freezPickup,
+                                )
 
                                 binding.recyclerStudentAttMark.apply {
                                     setHasFixedSize(true)
@@ -222,10 +229,15 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
                                 studentListToMarkAtt=it.data.stuLst
 
                             }else{
+                                binding.tvSave.isVisible=false
                                 binding.recyclerStudentAttMark.visibility=View.GONE
                                 binding.tvNoData.visibility=View.VISIBLE
                             }
 
+                        }else{
+                            binding.tvSave.isVisible=false
+                            binding.recyclerStudentAttMark.visibility=View.GONE
+                            binding.tvNoData.visibility=View.VISIBLE
                         }
                     }
                 }
@@ -313,13 +325,15 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
         val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
         val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
-        llSelectAll.isVisible=true
+
+        llSelectAll.isVisible=tripType== Constant.UP_TRIP || tripType==Constant.DOWN_TRIP
         tvHeading.text=getString(R.string.select_stoppae)
         builder.setView(view)
 
         val stoppersPopUpListAdapter= StoppersPopUpListAdapter(stopLSTList,tripType,selectAll, object : ItemListener<StopLST> {
             override fun onItemClick(t: StopLST, pos: Int, boolean: Boolean) {
-                stoppersSelectData = t
+                stoppersSelected=true
+                stoppersSelectData=t
             }  })
 
         rvYears.apply {
@@ -330,6 +344,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
 
         llSelectAll.setOnClickListener {
             selectAll = !selectAll
+            stoppersSelected=selectAll
             for (i in stopLSTList) {
                  i .checked=selectAll
             }
@@ -338,26 +353,29 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         }
 
         relOk.setOnClickListener {
-            val ids = StringBuilder()
-            val name = StringBuilder()
-             stoppersSelected=true
-            if (tripType== Constant.UP_TRIP || tripType==Constant.DOWN_TRIP) {
+             if (stoppersSelected) {
+                 val ids = StringBuilder()
+                 val name = StringBuilder()
 
-                for (stopLST in stopLSTList) {
-                    if (stopLST.checked) {
-                        if (ids.toString().isEmpty()) {
-                            ids.append(stopLST.stopID)
-                            name.append(stopLST.stopName)
-                        } else {
-                            ids.append(",").append(stopLST.stopID)
-                            name.append(",").append(stopLST.stopName)
-                        }
-                    }
-                }
-            }
-            binding.tvSelectStoppage.text= name
-            getStudentToMarkTransAttendance(ids)
-            builder.dismiss()
+                 if (tripType== Constant.UP_TRIP || tripType==Constant.DOWN_TRIP) {
+
+                     for (stopLST in stopLSTList) {
+                         if (stopLST.checked) {
+                             if (ids.toString().isEmpty()) {
+                                 ids.append(stopLST.stopID)
+                                 name.append(stopLST.stopName)
+                             } else {
+                                 ids.append(",").append(stopLST.stopID)
+                                 name.append(",").append(stopLST.stopName)
+                             }
+                         }
+                     }
+                 }
+                 binding.tvSelectStoppage.text= name
+                 getStudentToMarkTransAttendance(ids)
+                 builder.dismiss()
+             }
+
         }
 
 
@@ -372,19 +390,6 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
 
 
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_save, menu)
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.action_save -> {
-              popUpDetailsMarkAttendance()
-                true
-            }
-            else -> false
-        }
-    }
 
     override fun onItemClick(t: StuLst, pos: Int, action: Int) {
         if (action==Constant.DROP_CONFORM){
@@ -490,7 +495,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>, MenuP
         transportAttendanceViewModel.postTransAttendance(
             Constant.currentDate().toString(),
             routerSelectData.routeID,
-            stoppersSelectData.stopID,
+            0,
             requestList,
             tripType
         ).invokeOnCompletion {

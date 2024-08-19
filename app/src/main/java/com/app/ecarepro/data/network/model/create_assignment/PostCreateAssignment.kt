@@ -1,11 +1,12 @@
 package com.app.ecarepro.data.network.model.create_assignment
 
 import com.app.ecarepro.data.network.model.post_question.Attachment
+import com.app.ecarepro.model.ClassID_StID
 
 data class PostCreateAssignment(
     val asgDate: String,
     val asgID: Int,
-    val attachment: Attachment,
+
     val classID: Int,
     val classIDs: String,
     val data: String,
@@ -17,5 +18,11 @@ data class PostCreateAssignment(
 
     val subjectID: Int,
     val submitDate: String,
-    val title: String
+    val title: String,
+    val lateSubmission : Boolean,
+    val  attachments  : List<Attachment>,
+    val classID_StID  : List<ClassID_StID>,
+    val stIDs : String
+
+
 )
