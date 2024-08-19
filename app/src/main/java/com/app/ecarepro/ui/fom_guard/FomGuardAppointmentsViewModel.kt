@@ -22,17 +22,16 @@ class FomGuardAppointmentsViewModel @Inject constructor(
     ) : ViewModel() {
 
 
-
-    var feePaymentURL : String = ""
-    lateinit var schoolDetails : NetworkSchool
-    lateinit var userDetails : NetworkUserDetailsDto
+    var feePaymentURL: String = ""
+    lateinit var schoolDetails: NetworkSchool
+    lateinit var userDetails: NetworkUserDetailsDto
 
     init {
 
 
         viewModelScope.launch {
             schoolDetails = userDataStore.getSchoolData()!!
-         }
+        }
         viewModelScope.launch {
             userDetails = userDataStore.getUser()!!
         }
@@ -42,26 +41,33 @@ class FomGuardAppointmentsViewModel @Inject constructor(
         }
 
 
-
     }
 
 
-    private val fomGuardAppointmentsMutableStateFlow: MutableStateFlow<NetworkResult<FomGuardAppointments>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val fomGuardAppointmentsStateFlow: StateFlow<NetworkResult<FomGuardAppointments>> = fomGuardAppointmentsMutableStateFlow
+    private val fomGuardAppointmentsMutableStateFlow: MutableStateFlow<NetworkResult<FomGuardAppointments>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val fomGuardAppointmentsStateFlow: StateFlow<NetworkResult<FomGuardAppointments>> =
+        fomGuardAppointmentsMutableStateFlow
 
-    private val updateappointmentcheckoutMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val updateappointmentcheckoutStateFlow: StateFlow<NetworkResult<CommonResponse>> = updateappointmentcheckoutMutableStateFlow
+    private val updateappointmentcheckoutMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val updateappointmentcheckoutStateFlow: StateFlow<NetworkResult<CommonResponse>> =
+        updateappointmentcheckoutMutableStateFlow
 
 
-
-    fun getFomGuardAppointments(date: String?) =viewModelScope.launch {
+    fun getFomGuardAppointments(date: String?) = viewModelScope.launch {
         runCatching {
             fomGuardAppointmentsMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.getFomGuardAppointments(
-                  userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate?senderid="+userDataStore.getSchoolData()!!.schoolCode,
-                 )
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace(
+                    "mlogin.aspx",
+                    ""
+                ) + "api/certificate?senderid=" + userDataStore.getSchoolData()!!.schoolCode,
+            )
         }.onSuccess {
             fomGuardAppointmentsMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -70,11 +76,14 @@ class FomGuardAppointmentsViewModel @Inject constructor(
 
     }
 
-    fun updateappointmentcheckout(id: String?) =viewModelScope.launch {
+    fun updateappointmentcheckout(id: String?) = viewModelScope.launch {
         runCatching {
             updateappointmentcheckoutMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.updateappointmentcheckout(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate?senderid="+userDataStore.getSchoolData()!!.schoolCode,
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace(
+                    "mlogin.aspx",
+                    ""
+                ) + "api/certificate?senderid=" + userDataStore.getSchoolData()!!.schoolCode,
             )
         }.onSuccess {
             updateappointmentcheckoutMutableStateFlow.value = NetworkResult.Success(it)
