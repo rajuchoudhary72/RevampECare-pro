@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
 
-
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
@@ -538,24 +537,27 @@ class MainActivity : AppCompatActivity() {
 
 
             27 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        lifecycleScope.launch {
-                            userDataStore.getSchoolData()?.let {
-                                it.marksEntryURL?.let { url ->
-                                    webViewCall(
-                                        url,
-                                        getString(R.string.marks_entry_heading)
-                                    )
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                                lifecycleScope.launch {
+                                    userDataStore.getSchoolData()?.let {
+                                        it.marksEntryURL?.let { url ->
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.marks_entry_heading)
+                                            )
+                                        }
+                                    }
                                 }
+                            } else {
+                                navController.navigate(R.id.lessonPlanListFragment)
                             }
+                        } catch (e: Exception) {
                         }
-                    } else {
-                        navController.navigate(R.id.lessonPlanListFragment)
                     }
-                } catch (e: Exception) {
                 }
-
 
             }
 
@@ -1033,6 +1035,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
