@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.ui.fom_guard.model.FomGuardAppointments
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -62,12 +63,8 @@ class FomGuardAppointmentsViewModel @Inject constructor(
     fun getFomGuardAppointments(date: String?) = viewModelScope.launch {
         runCatching {
             fomGuardAppointmentsMutableStateFlow.value = NetworkResult.Loading()
-            fomApiRepository.getFomGuardAppointments(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace(
-                    "mlogin.aspx",
-                    ""
-                ) + "api/certificate?senderid=" + userDataStore.getSchoolData()!!.schoolCode,
-            )
+            fomApiRepository.getFomGuardAppointments( Constant.APPOINTMENT_BASEURL+"getappointvisitorin/"+userDataStore.getSchoolData()!!.schoolCode+"/"+date+"" )
+
         }.onSuccess {
             fomGuardAppointmentsMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -80,10 +77,7 @@ class FomGuardAppointmentsViewModel @Inject constructor(
         runCatching {
             updateappointmentcheckoutMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.updateappointmentcheckout(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace(
-                    "mlogin.aspx",
-                    ""
-                ) + "api/certificate?senderid=" + userDataStore.getSchoolData()!!.schoolCode,
+                Constant.APPOINTMENT_BASEURL+"updateappointmentcheckout/"+userDataStore.getSchoolData()!!.schoolCode+"/"+id+""
             )
         }.onSuccess {
             updateappointmentcheckoutMutableStateFlow.value = NetworkResult.Success(it)

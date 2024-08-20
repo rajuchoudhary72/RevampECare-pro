@@ -41,12 +41,14 @@ class FormGuardAppointmentListAdapter(
 
             appointmentData=data
 
-            btnCheckOut.isVisible = data.checkInTime.isNotEmpty()
+            btnCheckOut.isVisible = data.checkInTime.isEmpty()
 
-            Picasso.get().
-            load(data.visitorPhoto)
-                .placeholder(R.drawable.default_profile)
-                .  into(userImg)
+           if(data.visitorPhoto.isNullOrEmpty().not()){
+               Picasso.get().
+               load(data.visitorPhoto)
+                   .placeholder(R.drawable.default_profile)
+                   .  into(userImg)
+           }
 
 
 

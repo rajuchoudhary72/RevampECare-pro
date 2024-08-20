@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentFomGuardBinding
 import com.app.ecarepro.ui.MainActivity
@@ -31,22 +32,30 @@ class FomGuardFragment : Fragment() , ItemListener<Data> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding=FragmentFomGuardBinding.inflate(inflater,container,false)
-        return binding.root
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title="Guard Appointments"
-        binding.startDate.setText(Constant.currentDate())
+
+        binding.cvCheckIn.setOnClickListener {
+            findNavController().navigate(R.id.FOMGuardVerificationCodeFragment)
+        }
+        binding.cvWalkIn.setOnClickListener {
+            findNavController().navigate(R.id.verifyPhoneFragment)
+        }
+
+
+        binding.startDate.setText( Constant.currentDate() )
         binding.startDate.setOnClickListener {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.startDate.setText(date)
+                    binding.startDate.setText(Constant.dateToShow(date.toString()))
                     getFomGuardAppointments(date)
                 }
 
@@ -75,7 +84,7 @@ class FomGuardFragment : Fragment() , ItemListener<Data> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
 
-                            if (it.data.data!=null ) {
+                            if (!it.data.data.isNullOrEmpty() ) {
 
                                 val assignmentListAdapter =
                                     FormGuardAppointmentListAdapter(it.data.data,
@@ -88,12 +97,12 @@ class FomGuardFragment : Fragment() , ItemListener<Data> {
                                     adapter = assignmentListAdapter
                                 }
                                 binding.rvAppointment.isVisible=true
-                              //  binding.tvNoData.isVisible=false
+                                binding.tvNoData.isVisible=false
 
 
                             }else{
                                 binding.rvAppointment.isVisible=false
-
+                                binding.tvNoData.isVisible=true
                             }
 
                         }

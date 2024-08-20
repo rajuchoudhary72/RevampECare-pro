@@ -12,33 +12,59 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.app.ecarepro.R
+import com.app.ecarepro.databinding.FragmentPrintOutAppointenentBinding
+import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
+import com.app.ecarepro.ui.fom_guard.verification_code.FomGuardVerfyCodeViewModel
+import com.app.ecarepro.utils.Constant
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-
+ @AndroidEntryPoint
 class PrintOutAppointenentFragment : Fragment() {
+
+    private val viewModel: FomGuardVerfyCodeViewModel by viewModels()
+     private lateinit var binding: FragmentPrintOutAppointenentBinding
+     private var appointmentData: Appdetails? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-         return inflater.inflate(R.layout.fragment_print_out_appointenent, container, false)
+        binding= FragmentPrintOutAppointenentBinding.inflate(inflater, container, false)
+        try {
+            appointmentData = requireArguments().getParcelable<Appdetails>("appointmentData")
+        } catch (_: Exception) {
+        }
+         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bitmap = getBitmapFromView(view)
-        val uri = saveImage(bitmap)
-        shareImageUri(uri!!)
+        /*viewModel.appointmentData.observe(viewLifecycleOwner, Observer {
+            binding.appointmentData = it
+        })*/
+
+        binding.appointmentData = appointmentData
+
+        binding.btnContinue.setOnClickListener {
+            val bitmap = getBitmapFromView(binding.cvAppointmentDetails)
+            val uri = saveImage(bitmap)
+            shareImageUri(uri!!)
+        }
+
+
 
 
 
     }
 
-    fun getBitmapFromView(view: View): Bitmap {
+    private fun getBitmapFromView(view: View): Bitmap {
          val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
          val canvas = Canvas(returnedBitmap)
          val bgDrawable = view.background
@@ -61,7 +87,7 @@ class PrintOutAppointenentFragment : Fragment() {
             image.compress(Bitmap.CompressFormat.PNG, 90, stream)
             stream.flush()
             stream.close()
-            uri = FileProvider.getUriForFile(requireContext(), "com.mydomain.fileprovider", file)
+            uri = FileProvider.getUriForFile(requireContext(), "com.franciscan.ecare_pro.myFileProvider", file)
         } catch (e: IOException) {
             //Log.d(TAG, "IOException while trying to write file for sharing: " + e.message)
         }
