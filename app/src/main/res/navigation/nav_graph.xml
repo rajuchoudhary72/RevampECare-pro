@@ -931,4 +931,28 @@
         android:id="@+id/editProfileFragment"
         android:name="com.app.ecarepro.ui.edit_profile.EditProfileFragment"
         android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/printOutAppointenentFragment"
+        android:name="com.app.ecarepro.ui.fom_guard.PrintOutAppointenentFragment"
+        android:label="fragment_print_out_appointenent"
+        tools:layout="@layout/fragment_print_out_appointenent" />
+    <fragment
+        android:id="@+id/FOMGuardVerificationCodeFragment"
+        android:name="com.app.ecarepro.ui.fom_guard.verification_code.FOMGuardVerificationCodeFragment"
+        android:label="FOMGuardVerificationCodeFragment" >
+        <action
+            android:id="@+id/action_FOMGuardVerificationCodeFragment_to_printOutAppointenentFragment"
+            app:destination="@id/printOutAppointenentFragment"
+             app:popUpTo="@id/FOMGuardVerificationCodeFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/verifyPhoneFragment"
+        android:name="com.app.ecarepro.ui.fom_guard.verifying_phone.VerifyPhoneFragment"
+        android:label="VerifyPhoneFragment" />
+    <fragment
+        android:id="@+id/fomGuardFragment"
+        android:name="com.app.ecarepro.ui.fom_guard.FomGuardFragment"
+        android:label="FomGuardFragment" />
 </navigation>

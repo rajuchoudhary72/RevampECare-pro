@@ -70,7 +70,7 @@
             android:textAllCaps="true"
             android:textColor="?attr/colorPrimary"
             android:textSize="20sp"
-            app:OtpItemCount="4"
+            app:OtpItemCount="3"
             app:OtpItemSpacing="6dp"
             app:OtpViewType="none"
             app:layout_constraintEnd_toEndOf="parent"

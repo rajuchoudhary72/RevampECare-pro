@@ -1,4 +1,4 @@
-package com.app.ecarepro.ui.fom_guard.verification_code
+package com.app.ecarepro.ui.fom_guard.verifying_phone
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.repository.FomApiRepository
+import com.app.ecarepro.ui.fom_guard.model.verifiy_number.VerifyPhone
 import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
 import com.app.ecarepro.ui.fom_guard.model.verify_code.NetworkVerifyCode
 import com.app.ecarepro.utils.Constant
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FomGuardVerfyCodeViewModel @Inject constructor(
+class VerfyPhoneViewModel @Inject constructor(
     private val fomApiRepository: FomApiRepository,
     private val userDataStore: UserDataStore,
     ) : ViewModel() {
@@ -48,24 +49,24 @@ class FomGuardVerfyCodeViewModel @Inject constructor(
     }
 
 
-    private val updateappointmentCheckInTimeMutableStateFlow: MutableStateFlow<NetworkResult<NetworkVerifyCode>> = MutableStateFlow(
+    private val  userdetailsfrommobileMutableStateFlow: MutableStateFlow<NetworkResult<VerifyPhone>> = MutableStateFlow(
         NetworkResult.Loading())
-    val updateappointmentCheckInTimeStateFlow: StateFlow<NetworkResult<NetworkVerifyCode>> = updateappointmentCheckInTimeMutableStateFlow
+    val  userdetailsfrommobiletateFlow: StateFlow<NetworkResult<VerifyPhone>> = userdetailsfrommobileMutableStateFlow
 
 
 
 
 
-    fun updateappointmentCheckInTime(code: String?) =viewModelScope.launch {
+    fun getuserdetailsfrommobile(number: String?) =viewModelScope.launch {
         runCatching {
-            updateappointmentCheckInTimeMutableStateFlow.value = NetworkResult.Loading()
-            fomApiRepository.updateappointmentCheckInTime(
-                Constant.APPOINTMENT_BASEURL+"updateappointmentCheckInTime/"+userDataStore.getSchoolData()!!.schoolCode+"/"+code+""
+            userdetailsfrommobileMutableStateFlow.value = NetworkResult.Loading()
+            fomApiRepository.getuserdetailsfrommobile(
+                Constant.APPOINTMENT_BASEURL+"getuserdetailsfrommobile/"+userDataStore.getSchoolData()!!.schoolCode+"/"+number+""
             )
         }.onSuccess {
-            updateappointmentCheckInTimeMutableStateFlow.value = NetworkResult.Success(it)
+            userdetailsfrommobileMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            updateappointmentCheckInTimeMutableStateFlow.value = NetworkResult.Error(it.message)
+            userdetailsfrommobileMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }

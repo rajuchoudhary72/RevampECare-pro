@@ -522,7 +522,7 @@ class MainActivity : AppCompatActivity() {
             18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
             19 -> navController.navigate(R.id.leaveHistoryFragment)
             20 -> navController.navigate(R.id.questionnaireListFragment)
-            21 -> navController.navigate(R.id.thoughtsListFragment)
+            21 -> navController.navigate(R.id.fomGuardFragment)
             22 -> navController.navigate(R.id.appointmentReportFragment)
             24 -> {
                 if (systemViewModel.UType == Constant.STUDENT_TYPE) {

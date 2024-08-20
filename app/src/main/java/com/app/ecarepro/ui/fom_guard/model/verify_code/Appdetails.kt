@@ -1,5 +1,9 @@
 package com.app.ecarepro.ui.fom_guard.model.verify_code
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Appdetails(
     val address: String,
     val appointmentDuration: String,
@@ -29,4 +33,4 @@ data class Appdetails(
     val visitingTime: String,
     val visitorPhoto: String,
     val visitorType: String
-)
+) : Parcelable
