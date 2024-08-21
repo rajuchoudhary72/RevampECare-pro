@@ -3,6 +3,7 @@ package com.app.ecarepro.data.repository
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.Form
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkActivityCalender
@@ -12,9 +13,6 @@ import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
 import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppointments
-import com.app.ecarepro.ui.survey.SurveyListResponse
-import com.app.ecarepro.model.Student
-
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
 import com.app.ecarepro.data.network.model.NetworkAssignRollNo
@@ -98,8 +96,9 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubj
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.Staff
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentTeacherResponse
- import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
+import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
 import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
@@ -108,11 +107,10 @@ import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
 import com.app.ecarepro.ui.studentId.StudentCardResponse
 import com.app.ecarepro.ui.studentId.StudentIDRequest
-import kotlinx.coroutines.flow.Flow
+import com.app.ecarepro.ui.survey.SurveyListResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import retrofit2.http.Body
-import retrofit2.http.Query
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
@@ -136,6 +134,7 @@ interface UserRepository {
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
     ): Flow<Result<CommonResponse>>
+
     suspend fun getStudents(): Flow<Result<List<Student>>>
     suspend fun getStaffs(): Flow<Result<List<Staff>>>
 
@@ -143,20 +142,22 @@ interface UserRepository {
         password: String,
         confirmPassword: String
     ): Flow<Result<CommonResponse>>
+
     suspend fun getClassSyllabus(): NetworkClassSyllabus
     suspend fun getActivityCalender(): NetworkActivityCalender
 
     suspend fun getLibraryDTL(): NetworkLibraryDTL
-     suspend fun getBookDetails(bookID: Int, id: Int): NetworkBookDetails
+    suspend fun getBookDetails(bookID: Int, id: Int): NetworkBookDetails
     suspend fun getLibrarySearch(query: String, pg: Int): NetworkBookDetails
 
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 
     suspend fun staffMyClass(
-         subID: Int,
-         onlyClass: Boolean
+        subID: Int,
+        onlyClass: Boolean
     ): NetworkMyClass
+
     suspend fun getPayslip(): NetworkPaySlip
 
     suspend fun getThoughts(
@@ -201,7 +202,7 @@ interface UserRepository {
     ): NetworkEditProfile
 
     suspend fun updateParentProfile(
-         request: com.app.ecarepro.ui.edit_profile.model.Profile
+        request: com.app.ecarepro.ui.edit_profile.model.Profile
     ): CommonResponse
 
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
@@ -249,7 +250,7 @@ interface UserRepository {
         StID: Int
     ): NetworkInfractionInstance
 
-    suspend fun addInfraction( stID: Int  ): NetworkAddInfraction
+    suspend fun addInfraction(stID: Int): NetworkAddInfraction
 
     suspend fun getAppreciations(
         stID: Int
@@ -261,24 +262,24 @@ interface UserRepository {
 
 
     suspend fun saveInfraction(
-        action:Int,
-        stID:Int,
-        infrSubTypeID:Int,
-        consID:Int,
-        instance:Int,
-        infractionOn:String,
-        correctiveAction:String,
+        action: Int,
+        stID: Int,
+        infrSubTypeID: Int,
+        consID: Int,
+        instance: Int,
+        infractionOn: String,
+        correctiveAction: String,
 
-    ): CommonResponse
+        ): CommonResponse
 
 
     suspend fun getStudentList(
-       scholarType: Int,
-         showAll: Boolean
+        scholarType: Int,
+        showAll: Boolean
     ): NetworkStudentList
 
     suspend fun getStudentMedicalCard(
-       stID: String
+        stID: String
     ): StudentMedicalCardResponse
 
     suspend fun getStudentTeachers(
@@ -286,36 +287,37 @@ interface UserRepository {
 
     suspend fun getClassmates(
     ): ClassMateResponse
- suspend fun uploadPhoto(
-       request: StudentIDRequest
+
+    suspend fun uploadPhoto(
+        request: StudentIDRequest
     ): CommonResponse
 
 
     suspend fun getStudentIDCard(): StudentCardResponse
 
-    suspend fun addAppreciation( stID: Int  ): NetworkAddAppreciation
+    suspend fun addAppreciation(stID: Int): NetworkAddAppreciation
 
     suspend fun subAppreciationTypes(
-          aprID: Int
+        aprID: Int
     ): NetworkSubAppreciationTypes
 
     suspend fun appreciationInstance(
-         aprSubID: Int,
+        aprSubID: Int,
         stID: Int,
     ): NetworkAppreciationInstance
 
     suspend fun saveAppreciation(
-        action:Int,
-        stID:Int,
-        aprSubID:Int,
-        rwdID:Int,
-        instance:Int,
-        appreciationOn:String,
-        remark:String,
+        action: Int,
+        stID: Int,
+        aprSubID: Int,
+        rwdID: Int,
+        instance: Int,
+        appreciationOn: String,
+        remark: String,
 
         ): CommonResponse
 
-    suspend fun assignment( ): NetworkAssignments
+    suspend fun assignment(): NetworkAssignments
 
     suspend fun submitAssignment(
         id: String,
@@ -335,47 +337,47 @@ interface UserRepository {
 
     suspend fun mySubjects(classID: Int): NetworkMySubjects
 
-    suspend fun staffSubjects( classSTD: Int ): NetworkMySubjects
+    suspend fun staffSubjects(classSTD: Int): NetworkMySubjects
 
     suspend fun createAssignment(
-          asgDate: String,
-          asgID: Int,
-          attachment: String,
-          fileExt: String,
-          fileURL: String,
-          classID: Int,
-          classIDs: String,
-          `data`: String,
-          `file`: String,
-          id: String,
-          isActive: Boolean,
-          isFileRemoved: Boolean,
-          multipleSubmission: Boolean,
+        asgDate: String,
+        asgID: Int,
+        attachment: String,
+        fileExt: String,
+        fileURL: String,
+        classID: Int,
+        classIDs: String,
+        `data`: String,
+        `file`: String,
+        id: String,
+        isActive: Boolean,
+        isFileRemoved: Boolean,
+        multipleSubmission: Boolean,
 
-          subjectID: Int,
-          submitDate: String,
-          title: String
+        subjectID: Int,
+        submitDate: String,
+        title: String
 
-        ): CommonResponse
+    ): CommonResponse
 
     suspend fun viewAssignment(
-          iD: String,
+        iD: String,
     ): NetworkViewAssignment
 
     suspend fun assignmnetSubmissionRPT(
-          iD: String,
-          notSubmitted: Boolean,
+        iD: String,
+        notSubmitted: Boolean,
     ): NetworkSubmitAssignReport
 
     suspend fun offlineSubmited(
-         iD: String,
-          stID: Int,
-         submissitedOn: String,
+        iD: String,
+        stID: Int,
+        submissitedOn: String,
     ): CommonResponse
 
     suspend fun staffAttendance(
-          month: Int,
-          year: Int,
+        month: Int,
+        year: Int,
     ): NetworkStaffAttendence
 
     suspend fun statistical(
@@ -385,20 +387,22 @@ interface UserRepository {
     ): AppUserReportResponse
 
     suspend fun appUserReportWevResponse(
-        userType:String
+        userType: String
     ): AppUserWebResponse
 
     suspend fun getStaffAttendance(
         staffType: String? = null,
         date: String,
     ): Flow<Result<List<StaffAttendanceDetails>>>
+
     suspend fun getAttendance(
         from: String,
         till: String,
-         yrID: String,
+        yrID: String,
     ): AttendanceResponse
+
     suspend fun teachersTimetable(
-         id: String
+        id: String
     ): NetworkTeachersTimetable
 
     suspend fun classTimetable(
@@ -406,18 +410,20 @@ interface UserRepository {
     ): NetworkTeachersTimetable
 
     suspend fun birthday(
-          userType: Int,
-         rptType: Int,
-         monthNo: Int,
-          date: String,
+        userType: Int,
+        rptType: Int,
+        monthNo: Int,
+        date: String,
     ): NetworkBirthday
-    suspend fun excellenceAward (): ExcellenceAwardResponse
+
+    suspend fun excellenceAward(): ExcellenceAwardResponse
 
     fun getUserDashboard(): Flow<Result<UserDashboardDto>>
-    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id: String, orderBy: String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(): Flow<Result<String>>
-    fun saveUserUndertaking(id:String): Flow<Result<String>>
+    fun saveUserUndertaking(id: String): Flow<Result<String>>
+    fun getFormData(schoolCode: String, id: String): Flow<Result<List<Form>>>
 
 
     suspend fun reportCardDTL(
@@ -573,13 +579,13 @@ interface UserRepository {
     ): CommonResponse
 
     suspend fun studentToDrop(
-        routeID : Int,
+        routeID: Int,
         stopID: Int,
         attDate: String,
     ): NetworkStudentToMarkTransAttendane
 
     suspend fun transAttendanceReport(
-        routeID : Int,
+        routeID: Int,
         stopIDs: String,
         attDate: String,
     ): NetworkTransAttendanceReport
@@ -593,50 +599,51 @@ interface UserRepository {
         orderby: Int
     ): NetworkAssignRollNo
 
-    suspend fun getClassTeacherOf(  ): NetworkClassTeacherOf
+    suspend fun getClassTeacherOf(): NetworkClassTeacherOf
 
     suspend fun assignRollNumber(
         request: List<AssignRollNoBodyItem>
     ): CommonResponse
 
     suspend fun dropToStudent(
-        stID : Int,
+        stID: Int,
         attDate: String,
         hasDropped: Boolean,
     ): NetworkStudentToMarkTransAttendane
 
     suspend fun getAppMsgUses(
-        fromDate : String,
+        fromDate: String,
         toDate: String,
         iD: String,
     ): NetworkSmsMsgReport
 
     suspend fun getSMSUses(
-        fromDate : String,
+        fromDate: String,
         toDate: String,
         iD: String,
     ): NetworkSmsMsgReport
 
     suspend fun getSMSConsumption(
-        fromDate : String,
+        fromDate: String,
         toDate: String
     ): NetworkSMSConsumption
 
-    suspend fun getSMSBalnceInfo(  ): NetworkSMSBalnceInfo
+    suspend fun getSMSBalnceInfo(): NetworkSMSBalnceInfo
 
     suspend fun getRechargeLog(
-        fromDate : String,
+        fromDate: String,
         toDate: String
     ): NetworkRechargeLog
 
     suspend fun getGenerateToken(
-        device : Int
+        device: Int
     ): NetworkGenerateTokenFeePay
 
 
     suspend fun surveyList(
         pg: Int, isReport: Boolean
     ): SurveyListResponse
+
     suspend fun surveyQuestions(
         id: String
     ): SurveyQuestionsResponse
@@ -644,102 +651,103 @@ interface UserRepository {
     suspend fun submitSurveyQuestions(
         request: SurveyQuestionsSubmitRequest
     ): CommonResponse
+
     suspend fun getQuestionPaper(
-         classID: Int,
-          yrID: Int
+        classID: Int,
+        yrID: Int
     ): NetworkQuestionPaper
 
-    suspend fun getPhotoAlbumTypes( ): NetworkAlbumType
+    suspend fun getPhotoAlbumTypes(): NetworkAlbumType
 
     suspend fun getPhotoAlbums(
-         typeID: Int,
-          pg: Int,
+        typeID: Int,
+        pg: Int,
     ): NetworkPhotoAlbum
 
 
     suspend fun getPhotoAlbumDTL(
-          iD: String,
-          pg: Int,
+        iD: String,
+        pg: Int,
     ): NetworkAlbumPhotoDetails
 
-     suspend fun getVideoAlbums(
-          pg: Int,
+    suspend fun getVideoAlbums(
+        pg: Int,
     ): NetworkVideoAlbum
 
     suspend fun getVideoAlbumDTL(
-          id: String,
-          pg: Int,
+        id: String,
+        pg: Int,
     ): NetworkVideoAlbumDTL
 
 
     suspend fun getFavorites(
-          pg: Int,
+        pg: Int,
     ): NetworkFavorites
 
     suspend fun manageFavorites(
-          id: String,
-         galleryType: Int,
-          action: String
+        id: String,
+        galleryType: Int,
+        action: String
     ): CommonResponse
 
     suspend fun manageLikes(
         id: String,
-         galleryType: Int,
-         like: Boolean
+        galleryType: Int,
+        like: Boolean
     ): CommonResponse
 
     suspend fun getMediaGallery(
-          pg: Int,
-          queryType: Int,
-         year: Int,
-          date: String,
-         query: String
+        pg: Int,
+        queryType: Int,
+        year: Int,
+        date: String,
+        query: String
     ): NetworkMediaGallery
 
-    suspend fun getMyQuestionBank(  ): NetworkQuestionBank
+    suspend fun getMyQuestionBank(): NetworkQuestionBank
 
-    suspend fun  getQuestionBankCreate(  ): NetworkQuestionBankCreate
+    suspend fun getQuestionBankCreate(): NetworkQuestionBankCreate
 
     suspend fun getQuestionBankSubject(
-         classID: Int
+        classID: Int
     ): NetworkQuestionBankSubject
 
     suspend fun getQuestionBankChapters(
-         classID: Int,
-         subID: Int
+        classID: Int,
+        subID: Int
     ): NetworkQuestionBankChapters
 
     suspend fun submitPostQuestion(
-          model: NetworkPostQuestionBank
+        model: NetworkPostQuestionBank
     ): CommonResponse
 
     suspend fun getDeleteQuestion(
-          id: String
+        id: String
     ): CommonResponse
 
     suspend fun getEBook(
-         query: String,
-          mode: Int
+        query: String,
+        mode: Int
     ): NetworkEBook
 
     suspend fun getEBookDetails(
-         accessionNo: String
+        accessionNo: String
     ): CommonResponse
 
-    suspend fun getTeacherSyllabuses( ): NetworkTeacherSyllabus
+    suspend fun getTeacherSyllabuses(): NetworkTeacherSyllabus
 
     suspend fun saveSyllabus(
-          request: PostSyllabus,
+        request: PostSyllabus,
     ): CommonResponse
 
     suspend fun deleteSyllabus(
-         ID: String
+        ID: String
     ): CommonResponse
 
-    suspend fun getVehicleNumber(  ): NetworkVehicleNumber
+    suspend fun getVehicleNumber(): NetworkVehicleNumber
 
     suspend fun busLocation(
-          vehicleNumber: String
+        vehicleNumber: String
     ): NetworkBusLocation
 
 }

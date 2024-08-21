@@ -6,12 +6,21 @@
     <data>
 
         <variable
-            name="filedName"
+            name="filedName1"
             type="java.lang.String" />
 
         <variable
-            name="hintText"
+            name="filedName2"
             type="java.lang.String" />
+
+        <variable
+            name="isPhotoCapture1Mandatory"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="isPhotoCapture2Mandatory"
+            type="java.lang.Boolean" />
+
 
     </data>
 
@@ -26,7 +35,7 @@
             android:drawablePadding="5dp"
             android:fontFamily="@font/calibri_regular"
             android:gravity="center_vertical"
-            android:text="@{filedName}"
+            android:text="@{filedName1}"
             app:drawableStartCompat="@drawable/avd_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +48,7 @@
             android:drawablePadding="5dp"
             android:fontFamily="@font/calibri_regular"
             android:gravity="center_vertical"
-            android:text="@{filedName}"
+            android:text="@{filedName2}"
             app:drawableStartCompat="@drawable/avd_profile"
             app:layout_constraintStart_toStartOf="@id/selector2"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,13 +56,16 @@
 
 
         <ImageView
+            isVisible="@{isPhotoCapture1Mandatory}"
             android:layout_width="10dp"
             android:layout_height="@dimen/_10sdp"
             android:src="@drawable/asterick"
             app:layout_constraintStart_toEndOf="@id/filedNameDate"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/red" />
+
         <ImageView
+            isVisible="@{isPhotoCapture2Mandatory}"
             android:layout_width="10dp"
             android:layout_height="@dimen/_10sdp"
             android:src="@drawable/asterick"
@@ -66,6 +78,8 @@
             android:id="@+id/selector1"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/appointment_selector"
             android:fontFamily="@font/ubuntu_bold"
             android:gravity="center"
@@ -76,7 +90,6 @@
             app:iconGravity="textTop"
             app:iconSize="44dp"
             app:iconTint="@color/green"
-            android:layout_marginEnd="@dimen/_10sdp"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toStartOf="@+id/selector2"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +99,7 @@
             android:id="@+id/selector2"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:background="@drawable/appointment_selector"
             android:fontFamily="@font/ubuntu_bold"
             android:gravity="center"

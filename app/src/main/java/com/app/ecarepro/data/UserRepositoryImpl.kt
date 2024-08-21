@@ -131,12 +131,14 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.Form
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 
 class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
@@ -1030,6 +1032,21 @@ class UserRepositoryImpl @Inject constructor(
                     emit(Result.success(response.message?:"Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getFormData(schoolCode: String, id: String): Flow<Result<List<Form>>> {
+        return flow {
+            try {
+                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/DEMOIN%20/3")
+                if (response.status == true) {
+                    emit(Result.success(response.data?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))

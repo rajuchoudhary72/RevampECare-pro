@@ -6,12 +6,24 @@
     <data>
 
         <variable
+            name="isMandatory"
+            type="java.lang.Boolean" />
+
+        <variable
             name="filedName"
             type="java.lang.String" />
 
         <variable
             name="hintText"
             type="java.lang.String" />
+
+        <variable
+            name="text"
+            type="java.lang.String" />
+
+        <variable
+            name="textWatcher"
+            type="android.text.TextWatcher" />
 
     </data>
 
@@ -33,6 +45,7 @@
         <ImageView
             android:layout_width="10dp"
             android:layout_height="@dimen/_10sdp"
+            isVisible="@{isMandatory}"
             android:src="@drawable/asterick"
             app:layout_constraintStart_toEndOf="@id/filedName"
             app:layout_constraintTop_toTopOf="parent"
@@ -52,6 +65,8 @@
             <AutoCompleteTextView
                 android:id="@+id/textUserName"
                 android:layout_width="match_parent"
+                inputText="@{text}"
+                textWatcher="@{textWatcher}"
                 android:layout_height="wrap_content"
                 android:inputType="none" />
 

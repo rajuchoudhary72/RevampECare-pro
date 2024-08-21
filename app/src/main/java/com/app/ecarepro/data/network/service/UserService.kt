@@ -123,9 +123,11 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.AppointmentFormData
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
+import retrofit2.http.Url
 
 interface UserService {
     @GET("User/Verify")
@@ -906,12 +908,8 @@ interface UserService {
         @Query("VehicleNumber") vehicleNumber: String
     ): NetworkBusLocation
 
-
-
-
-
-
-
-
-
+    @GET
+    suspend fun getFormData(
+        @Url url:String
+    ): AppointmentFormData
 }
