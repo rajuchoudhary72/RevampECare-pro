@@ -42,6 +42,7 @@ class SystemViewModel @Inject constructor(
 
     ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
+      val _showPrompt = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
@@ -108,6 +109,10 @@ class SystemViewModel @Inject constructor(
 
     fun openDrawer(open: Boolean) {
         _openNavigationDrawer.postValue(open)
+    }
+
+    fun startShowPrompt(open: Boolean) {
+        _showPrompt.postValue(open)
     }
 
     fun navigateBack(back: Boolean) {

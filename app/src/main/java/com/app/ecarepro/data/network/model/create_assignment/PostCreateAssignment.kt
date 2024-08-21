@@ -22,7 +22,7 @@ data class PostCreateAssignment(
     val lateSubmission : Boolean,
     val  attachments  : List<Attachment>,
     val classID_StID  : List<ClassID_StID>,
-    val stIDs : String
+    val stIDs : String?
 
 
 )

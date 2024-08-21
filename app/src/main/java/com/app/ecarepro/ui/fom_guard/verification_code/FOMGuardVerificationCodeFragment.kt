@@ -61,10 +61,14 @@ class FOMGuardVerificationCodeFragment : Fragment() {
                             if (it.data != null) {
                                 if (it.data.data.status) {
                                     viewModel.setAppointmentData(it.data.data.appdetails)
-                                    viewModel.setAppointmentData(it.data.data.appdetails)
-                                    findNavController().navigate(
+                                     findNavController().navigate(
                                         R.id.action_FOMGuardVerificationCodeFragment_to_printOutAppointenentFragment,
+                                         Bundle().apply {
+                                            putParcelable("appointmentData",it.data.data.appdetails)
+                                         }
+
                                     )
+
 
                                 }else{
                                     binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))

@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -59,6 +60,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
@@ -955,6 +957,14 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.settingsFragment)
         }
 
+        systemViewModel._showPrompt.observe(this) { open ->
+             if (open) {
+                 SearchPrompt()
+             }
+        }
+
+
+
 
         val menuItems = arrayOf(
             CbnMenuItem(
@@ -1073,6 +1083,56 @@ class MainActivity : AppCompatActivity() {
             Snackbar.LENGTH_SHORT
         ).show()
     }
+
+    private fun SearchPrompt() {
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(binding.appBarMain.contentMain.searchBar)
+            .setPrimaryText("Global Search")
+            .setSecondaryText(" Click here to search Globally in Modules/Students/Staff ")
+            .setBackgroundColour( getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                {
+                    settingPrompt()
+                }
+            }
+            .show()
+    }
+
+    private fun settingPrompt() {
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(binding.appBarMain.contentMain.ivSetting)
+            .setPrimaryText("Setting")
+            .setSecondaryText("Click here to access quick settings ")
+            .setBackgroundColour( getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                {
+                    menuPrompt()
+                }
+            }
+            .show()
+    }
+
+    private fun menuPrompt() {
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(R.id.menu )
+            .setPrimaryText("Menu")
+            .setSecondaryText("Click here to access Menu Bar")
+            .setBackgroundColour( getColor(R.color.brand_color))
+            .setFocalColour(getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                {    val sharedPreference =   getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT, Context.MODE_PRIVATE)
+
+                    val editor = sharedPreference.edit()
+                    editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
+                    editor.apply()
+                }
+            }
+            .show()
+    }
+
 }
 
 fun Fragment.mainActivity(): MainActivity {

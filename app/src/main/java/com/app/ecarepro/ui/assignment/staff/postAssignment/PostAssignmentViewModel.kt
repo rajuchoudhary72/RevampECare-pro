@@ -5,13 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
-import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.repository.MessageRepository
-import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.ClassID_StID
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -93,8 +91,8 @@ class PostAssignmentViewModel @Inject constructor(
 
         classID: Int,
         classIDs: String,
-        `data`: String,
-        `file`: String,
+        data: String,
+        file: String,
         id: String,
         isActive: Boolean,
         isFileRemoved: Boolean,
@@ -103,10 +101,10 @@ class PostAssignmentViewModel @Inject constructor(
         subjectID: Int,
         submitDate: String,
         title: String,
-        lateSubmission : Boolean,
-        attachments  : List<Attachment>,
-        classID_StID  : List<ClassID_StID>,
-        stIDs : String
+        lateSubmission: Boolean,
+        attachments: List<Attachment>,
+        classID_StID: List<ClassID_StID>,
+        stIDs: String?
 
 
     )=viewModelScope.launch {

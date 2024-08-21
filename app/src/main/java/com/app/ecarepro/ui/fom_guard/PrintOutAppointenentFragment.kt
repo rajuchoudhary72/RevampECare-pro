@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.fom_guard
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -14,6 +15,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.print.PrintHelper
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentPrintOutAppointenentBinding
 import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
@@ -53,9 +55,13 @@ class PrintOutAppointenentFragment : Fragment() {
         binding.appointmentData = appointmentData
 
         binding.btnContinue.setOnClickListener {
-            val bitmap = getBitmapFromView(binding.cvAppointmentDetails)
+            /*val bitmap = getBitmapFromView(binding.cvAppointmentDetails)
             val uri = saveImage(bitmap)
-            shareImageUri(uri!!)
+            shareImageUri(uri!!)*/
+
+            val viewToPrint: View = binding.cvAppointmentDetails
+            printLayout(requireContext(), viewToPrint)
+
         }
 
 
@@ -64,7 +70,23 @@ class PrintOutAppointenentFragment : Fragment() {
 
     }
 
-    private fun getBitmapFromView(view: View): Bitmap {
+     private fun getBitmapFromView(view: View): Bitmap {
+         val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+         val canvas = Canvas(bitmap)
+         view.draw(canvas)
+         return bitmap
+     }
+
+     private fun printLayout(context: Context, view: View) {
+         val bitmap = getBitmapFromView(view)
+
+         val printHelper = PrintHelper(context)
+         printHelper.scaleMode = PrintHelper.SCALE_MODE_FIT
+         printHelper.printBitmap("Layout Print", bitmap)
+
+     }
+
+    /*private fun getBitmapFromView(view: View): Bitmap {
          val returnedBitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
          val canvas = Canvas(returnedBitmap)
          val bgDrawable = view.background
@@ -100,6 +122,6 @@ class PrintOutAppointenentFragment : Fragment() {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.setType("image/png")
         startActivity(intent)
-    }
+    }*/
 
 }
