@@ -158,5 +158,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging:24.0.0")
     implementation("androidx.browser:browser:1.2.0")
     implementation("com.google.firebase:firebase-bom:33.1.2")
+    implementation("com.android.support:print:28.0.0")
+    implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
 
 }

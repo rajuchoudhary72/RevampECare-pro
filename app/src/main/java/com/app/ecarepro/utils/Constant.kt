@@ -85,7 +85,8 @@ class Constant {
         const val FRA_STU_LEAVE = "FragmentStudentLeave"
         const val DATE = "DATE"
 
-
+        const val SHARED_PREF_NAME_PROMPT = "SHARED_PREF_NAME_PROMPT"
+        const val SHARED_PREF_SHOW_PROMPT = "SHARED_PREF_SHOW_PROMPT"
 
         const val CIRCULAR_ID = "CircularID"
         const val ASSIGNMENT_ID = "AssiID"

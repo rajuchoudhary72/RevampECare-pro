@@ -21,6 +21,6 @@ data class NetworkViewAssignment(
     val hasAttachment: Boolean,
     val asgFile: String,
     val title: String,
-    val stIDs: String,
+    val stIDs: String?,
 
-)
+    )
