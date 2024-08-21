@@ -1123,11 +1123,15 @@ class MainActivity : AppCompatActivity() {
             .setFocalColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {    val sharedPreference =   getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT, Context.MODE_PRIVATE)
+                {
 
-                    val editor = sharedPreference.edit()
-                    editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
-                    editor.apply()
+                     try {
+                         val sharedPreference =   getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT, Context.MODE_PRIVATE)
+
+                         val editor = sharedPreference.edit()
+                         editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
+                         editor.apply()
+                     }catch (e: Exception){}
                 }
             }
             .show()
