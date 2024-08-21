@@ -90,7 +90,10 @@ class AppointmentFragment : Fragment() {
 
                     is AppointmentUiState.Success -> {
 
-                        uiState.formData.forEach { form ->
+                        uiState
+                            .formData
+                            .filterNot { it.columnName == "IdproofImage" }
+                            .forEach { form ->
                             if (isDropDown(form.columnName)) {
                                 textFiledDropdown {
                                     id(form.columnName)
@@ -109,6 +112,12 @@ class AppointmentFragment : Fragment() {
                                     isPhotoCapture1Mandatory(idProof?.isrequired)
                                     filedName2(photo?.columnDisplayName)
                                     isPhotoCapture2Mandatory(photo?.isrequired)
+                                    clickListener1{ _ ->
+                                        // id proof picker
+                                    }
+                                    clickListener2{ _ ->
+                                        // photo picker
+                                    }
                                 }
                             } else {
                                 textFiled {

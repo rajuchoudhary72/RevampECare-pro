@@ -1039,10 +1039,10 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getFormData(schoolCode: String, id: String): Flow<Result<List<Form>>> {
+    override fun getFormData(): Flow<Result<List<Form>>> {
         return flow {
             try {
-                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/DEMOIN%20/3")
+                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/${userDataStore.getSchoolData()?.schoolCode}/3")
                 if (response.status == true) {
                     emit(Result.success(response.data?: emptyList()))
                 } else {

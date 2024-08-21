@@ -423,7 +423,7 @@ interface UserRepository {
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(): Flow<Result<String>>
     fun saveUserUndertaking(id: String): Flow<Result<String>>
-    fun getFormData(schoolCode: String, id: String): Flow<Result<List<Form>>>
+    fun getFormData(): Flow<Result<List<Form>>>
 
 
     suspend fun reportCardDTL(

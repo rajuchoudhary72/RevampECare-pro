@@ -21,6 +21,15 @@
             name="isPhotoCapture2Mandatory"
             type="java.lang.Boolean" />
 
+        <variable
+            name="clickListener1"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="clickListener2"
+            type="android.view.View.OnClickListener" />
+
+
 
     </data>
 
@@ -76,6 +85,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/selector1"
+            android:onClick="@{clickListener1}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_4sdp"
@@ -103,6 +113,7 @@
             android:background="@drawable/appointment_selector"
             android:fontFamily="@font/ubuntu_bold"
             android:gravity="center"
+            android:onClick="@{clickListener2}"
             android:text="Capture Image"
             android:textColor="@color/green"
             android:textSize="16sp"

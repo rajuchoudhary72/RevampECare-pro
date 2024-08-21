@@ -23,7 +23,7 @@ class AppointmentViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            userRepository.getFormData("", "")
+            userRepository.getFormData()
                 .map { result ->
                     if (result.isSuccess) {
                         result.getOrNull().let { response ->
