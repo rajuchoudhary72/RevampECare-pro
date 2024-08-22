@@ -527,6 +527,14 @@ class HomeFragment : Fragment() {
                     if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
                     {
                         cardPrompt()
+
+                        try {
+
+                            val editor = sharedPreference.edit()
+                            editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
+                            editor.apply()
+                        }catch (e: Exception){}
+
                     }
                 }
                 .show()
