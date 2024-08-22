@@ -1126,9 +1126,7 @@ class MainActivity : AppCompatActivity() {
             .setFocalColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
-
-                     try {
+                { try {
                          val sharedPreference =   getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT, Context.MODE_PRIVATE)
 
                          val editor = sharedPreference.edit()
