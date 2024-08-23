@@ -28,7 +28,7 @@ class ECateProApp : Application() {
        // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         FirebaseApp.initializeApp(this)
-        registerToken()
+       // registerToken()
     }
 
     private fun registerToken() {
