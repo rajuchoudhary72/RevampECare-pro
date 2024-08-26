@@ -16,6 +16,7 @@ import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.textFiled
 import com.app.ecarepro.textFiledDropdown
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.ItemSelectListener
 import com.app.ecarepro.utils.makeTextWatcher
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,9 +65,18 @@ class AppointmentFragment : Fragment() {
 
     private fun setObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collectLatest { uiState ->
-                buildModel(uiState)
+            launch {
+                viewModel.loadingState.collectLatest { loadingState ->
+                    mainActivity().showLoader(loadingState.isLoading())
+                }
             }
+
+            launch {
+                viewModel.uiState.collectLatest { uiState ->
+                    buildModel(uiState)
+                }
+            }
+
         }
 
     }
@@ -94,44 +104,109 @@ class AppointmentFragment : Fragment() {
                             .formData
                             .filterNot { it.columnName == "IdproofImage" }
                             .forEach { form ->
-                            if (isDropDown(form.columnName)) {
-                                textFiledDropdown {
-                                    id(form.columnName)
-                                    filedName(form.columnName)
-                                    hintText(form.columnDisplayName)
-                                    isMandatory(form.isrequired)
-                                }
-                            } else if (form.columnName == "IdproofImage" || form.columnName == "Photo") {
-                                val idProof =
-                                    uiState.formData.firstOrNull { it.columnName == "IdproofImage" }
-                                val photo =
-                                    uiState.formData.firstOrNull { it.columnName == "Photo" }
-                                appointmentPhotoPicker {
-                                    id("photoPicker")
-                                    filedName1(idProof?.columnDisplayName)
-                                    isPhotoCapture1Mandatory(idProof?.isrequired)
-                                    filedName2(photo?.columnDisplayName)
-                                    isPhotoCapture2Mandatory(photo?.isrequired)
-                                    clickListener1{ _ ->
-                                        // id proof picker
+                                if (isDropDown(form.columnName)) {
+                                    if (form.columnName == "Purpose") {
+                                        textFiledDropdown {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            text(form.value)
+                                            items(uiState.purpose.map { it.purposeName })
+                                            isMandatory(form.isrequired)
+                                            itemSelectListener(object : ItemSelectListener {
+                                                override fun onItemSelect(item: String) {
+                                                    viewModel.updateValue(form.columnName, item)
+                                                }
+                                            })
+                                        }
+                                    } else if (form.columnName == "Department") {
+                                        textFiledDropdown {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            text(form.value)
+                                            items(uiState.departments.map { it.departmentName })
+                                            isMandatory(form.isrequired)
+                                            itemSelectListener(object : ItemSelectListener {
+                                                override fun onItemSelect(item: String) {
+                                                    viewModel.updateValue(form.columnName, item)
+                                                }
+                                            })
+                                        }
+                                    } else if (form.columnName == "Designation") {
+                                        textFiledDropdown {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            text(form.value)
+                                            items(uiState.designation.map { it.designationName })
+                                            isMandatory(form.isrequired)
+                                            itemSelectListener(object : ItemSelectListener {
+                                                override fun onItemSelect(item: String) {
+                                                    viewModel.updateValue(form.columnName, item)
+                                                }
+                                            })
+                                        }
+                                    } else if (form.columnName == "Employee") {
+                                        textFiledDropdown {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            text(form.value)
+                                            items(uiState.employees.map { it.employeeName })
+                                            isMandatory(form.isrequired)
+                                            itemSelectListener(object : ItemSelectListener {
+                                                override fun onItemSelect(item: String) {
+                                                    viewModel.updateValue(form.columnName, item)
+                                                }
+                                            })
+                                        }
+                                    } else {
+                                        textFiledDropdown {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            isMandatory(form.isrequired)
+                                            text(form.value)
+                                            itemSelectListener(object : ItemSelectListener {
+                                                override fun onItemSelect(item: String) {
+                                                    viewModel.updateValue(form.columnName, item)
+                                                }
+                                            })
+                                        }
                                     }
-                                    clickListener2{ _ ->
-                                        // photo picker
+
+                                } else if (form.columnName == "IdproofImage" || form.columnName == "Photo") {
+                                    val idProof =
+                                        uiState.formData.firstOrNull { it.columnName == "IdproofImage" }
+                                    val photo =
+                                        uiState.formData.firstOrNull { it.columnName == "Photo" }
+                                    appointmentPhotoPicker {
+                                        id("photoPicker")
+                                        filedName1(idProof?.columnDisplayName)
+                                        isPhotoCapture1Mandatory(idProof?.isrequired)
+                                        filedName2(photo?.columnDisplayName)
+                                        isPhotoCapture2Mandatory(photo?.isrequired)
+                                        clickListener1 { _ ->
+                                            // id proof picker
+                                        }
+                                        clickListener2 { _ ->
+                                            // photo picker
+                                        }
                                     }
-                                }
-                            } else {
-                                textFiled {
-                                    id(form.columnName)
-                                    filedName(form.columnName)
-                                    hintText(form.columnDisplayName)
-                                    isMandatory(form.isrequired)
-                                    text(form.value)
-                                    textWatcher(makeTextWatcher {
-                                        viewModel.updateValue(form.columnName, it.toString())
-                                    })
+                                } else {
+                                    textFiled {
+                                        id(form.columnName)
+                                        filedName(form.columnName)
+                                        hintText(form.columnDisplayName)
+                                        isMandatory(form.isrequired)
+                                        text(form.value)
+                                        textWatcher(makeTextWatcher {
+                                            viewModel.updateValue(form.columnName, it.toString())
+                                        })
+                                    }
                                 }
                             }
-                        }
 
                         button {
                             id("button")
@@ -145,7 +220,8 @@ class AppointmentFragment : Fragment() {
     }
 
     private fun isDropDown(columnName: String?): Boolean {
-        val dropDownColumns = mutableListOf("Purpose", "Department", "Employee", "Guest IdType")
+        val dropDownColumns =
+            mutableListOf("Purpose", "Department", "Designation", "Employee", "Guest IdType")
         return dropDownColumns.contains(columnName)
     }
 

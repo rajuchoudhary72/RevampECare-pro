@@ -3,6 +3,9 @@ package com.app.ecarepro.data.repository
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.Department
+import com.app.ecarepro.data.network.model.Designation
+import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Form
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
@@ -81,6 +84,7 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.Purpose
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
@@ -423,7 +427,18 @@ interface UserRepository {
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(): Flow<Result<String>>
     fun saveUserUndertaking(id: String): Flow<Result<String>>
+
     fun getFormData(): Flow<Result<List<Form>>>
+
+    fun getFormDataPurpose(): Flow<Result<List<Purpose>>>
+
+    fun getFormDataDepartment(): Flow<Result<List<Department>>>
+
+    fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>>
+
+    fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
+
+
 
 
     suspend fun reportCardDTL(

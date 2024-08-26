@@ -6,6 +6,7 @@ import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.staff.StaffAttendanceUiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -183,6 +184,8 @@ sealed interface LoadingState {
     object Loading : LoadingState
     object Success : LoadingState
     data class Error(val error: Throwable) : LoadingState
+
+    fun isLoading() = this == Loading
 }
 
 

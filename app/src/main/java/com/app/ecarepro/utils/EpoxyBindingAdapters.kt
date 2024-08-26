@@ -2,10 +2,11 @@ package com.app.ecarepro.utils
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import android.widget.AutoCompleteTextView
 import com.app.ecarepro.R
 
 @BindingAdapter("inputText")
@@ -16,6 +17,20 @@ fun AutoCompleteTextView.setInputText(text: CharSequence?) {
         setSelection(this.length())
     }
 }
+
+@BindingAdapter("sampleItems", "itemSelectListener", requireAll = false)
+fun AutoCompleteTextView.setSampleItems(items: List<String>?, itemSelectListener:ItemSelectListener?) {
+    if (items.isNullOrEmpty()) return
+    val adapter = ArrayAdapter(context, R.layout.list_item, items)
+    setAdapter(adapter)
+
+    setOnItemClickListener { adapterView, view, i, l ->
+        itemSelectListener?.onItemSelect(items[i])
+    }
+}
+
+
+
 
 private fun setText(textView: AutoCompleteTextView, text: CharSequence?): Boolean {
     if (!isTextDifferent(text, textView.text)) {
@@ -103,3 +118,7 @@ inline fun makeTextWatcher(crossinline block: (CharSequence) -> Unit): TextWatch
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
         }
     }
+
+interface ItemSelectListener{
+    fun onItemSelect(item:String)
+}

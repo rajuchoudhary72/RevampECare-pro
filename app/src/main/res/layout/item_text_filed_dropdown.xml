@@ -25,6 +25,16 @@
             name="textWatcher"
             type="android.text.TextWatcher" />
 
+        <import type="java.util.List" />
+
+        <variable
+            name="items"
+            type="List&lt;String>" />
+
+        <variable
+            name="itemSelectListener"
+            type="com.app.ecarepro.utils.ItemSelectListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,6 +48,8 @@
             android:drawableStart="@drawable/avd_profile"
             android:drawablePadding="5dp"
             android:fontFamily="@font/calibri_regular"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_vertical"
             android:text="@{filedName}"
             tools:text="User Name" />
@@ -68,6 +80,8 @@
                 inputText="@{text}"
                 textWatcher="@{textWatcher}"
                 android:layout_height="wrap_content"
+                itemSelectListener="@{itemSelectListener}"
+                sampleItems="@{items}"
                 android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
