@@ -59,7 +59,7 @@
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Vanjhali Waja | Angrej | Amrinder Gill | Full Music Video | Releasing on 31st July 2015" />
+            tools:text="Vanjhal" />
 
         <com.google.android.material.imageview.ShapeableImageView
             app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent"

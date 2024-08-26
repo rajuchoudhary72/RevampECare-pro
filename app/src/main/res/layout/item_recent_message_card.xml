@@ -103,7 +103,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@id/sub_title"
-                tools:text="Principal" />
+                tools:text="Principald" />
 
             <TextView
                 android:id="@+id/date"
@@ -118,7 +118,7 @@
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@+id/lastMessage"
-                tools:text="23 May 2034 " />
+                tools:text="23 May 2034" />
 
             <TextView
                 android:id="@+id/time"
