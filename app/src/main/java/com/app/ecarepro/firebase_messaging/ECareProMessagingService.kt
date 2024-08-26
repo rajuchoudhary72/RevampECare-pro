@@ -36,6 +36,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
+
         // Handle FCM messages here.
         // Handle message
         Log.d("FCM", "From: ${remoteMessage.from}")
@@ -59,7 +60,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
             val title = ""
             val body = ""
         }
-        super.onMessageReceived(remoteMessage)
+
     }
 
     private fun sendNotification(messageBody: String?) {
@@ -102,10 +103,9 @@ class ECareProMessagingService : FirebaseMessagingService() {
         notificationManager.notify(100, notificationBuilder.build())
     }
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Log.d("FCM Token", "Refreshed token: $token")
+     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+     override fun onNewToken(token: String) {
+         Log.d("FCM Token", "Refreshed token: $token")
         // Send token to your server or save it locally
         registerToken(token)
 
