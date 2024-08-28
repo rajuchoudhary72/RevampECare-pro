@@ -7,8 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.provider.Settings.Secure
-import android.telephony.TelephonyManager
+import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -24,21 +23,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class ECareProMessagingService : FirebaseMessagingService() {
-
+class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var appRepository: AppRepository
-
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-
-
-        // Handle FCM messages here.
-        // Handle message
         Log.d("FCM", "From: ${remoteMessage.from}")
         Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
         remoteMessage.data.isNotEmpty().let {
@@ -47,7 +38,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
         remoteMessage.notification?.let {
             Log.d("FCM", "Message Notification Body: ${it.body}")
-            sendNotification(it.body)
+            sendNotification(it.body,it.title)
         }
         Firebase.messaging.token
         if (null != remoteMessage) {
@@ -60,10 +51,8 @@ class ECareProMessagingService : FirebaseMessagingService() {
             val title = ""
             val body = ""
         }
-
     }
-
-    private fun sendNotification(messageBody: String?) {
+    private fun sendNotification(messageBody: String?, title: String?) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         //End
@@ -79,7 +68,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
         val channelId = "99999"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Test")
+            .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
@@ -102,15 +91,13 @@ class ECareProMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(100, notificationBuilder.build())
     }
-
-     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-     override fun onNewToken(token: String) {
-         Log.d("FCM Token", "Refreshed token: $token")
+    override fun onNewToken(token: String) {
+        // Handle new or refreshed FCM registration token
+        Log.d(TAG, "Refreshed token: $token")
         // Send token to your server or save it locally
         registerToken(token)
-
+        // You may want to send this token to your server for further use
     }
-
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun registerToken(token: String) {
         GlobalScope.launch {
@@ -126,7 +113,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
                         deviceType = 1,
                         imeI1 = macAddress,
                         imeI2 = macAddress,
-                        deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
+                        deviceID = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
                     )
                 )
                 .collectLatest {
@@ -134,22 +121,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
                 }
         }
     }
-
-    override fun onDeletedMessages() {
-        super.onDeletedMessages()
-        Log.d(TAG, "Device not registered")
-    }
-
-    override fun onMessageSent(msgId: String) {
-        super.onMessageSent(msgId)
-        Log.d(TAG, "msg send : $msgId")
-    }
-
-    override fun onSendError(msgId: String, exception: Exception) {
-        super.onSendError(msgId, exception)
-        Log.d(TAG, "Network error: $exception")
-    }
     companion object {
-        private const val TAG = "MyFirebaseMessagingService"
+        private const val TAG = "MyFirebaseMsgService"
     }
 }

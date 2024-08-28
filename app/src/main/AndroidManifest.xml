@@ -35,6 +35,14 @@
         tools:node="replace"
          tools:targetApi="31">
 
+        <service
+            android:name=".firebase_messaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDq6yT23T7qHcODFmC3LfnbhXgFI8Z8vDY" />
@@ -57,14 +65,14 @@
         <activity
             android:name="com.lassi.presentation.videopreview.VideoPreviewActivity"
             android:exported="false" />
-        <service
-            android:name=".firebase_messaging.ECareProMessagingService"
-            android:exported="false">
+         <receiver
+            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
-        </service>
+        </receiver>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="default_channel_id" />

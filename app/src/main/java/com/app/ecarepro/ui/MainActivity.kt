@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
 
-
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
@@ -589,8 +588,16 @@ class MainActivity : AppCompatActivity() {
             18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
             19 -> navController.navigate(R.id.leaveHistoryFragment)
             20 -> navController.navigate(R.id.questionnaireListFragment)
-            21 -> navController.navigate(R.id.fomGuardFragment)
-            22 -> navController.navigate(R.id.appointmentReportFragment)
+            21 -> navController.navigate(R.id.thoughtsListFragment)
+
+            22 -> {
+                if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                    navController.navigate(R.id.appointmentReportFragment)
+                } else {
+                    navController.navigate(R.id.appointmentFragment)
+                }
+
+            }
             24 -> {
                 if (systemViewModel.UType == Constant.STUDENT_TYPE) {
                     navController.navigate(R.id.infractionSelectFragment)
@@ -605,24 +612,27 @@ class MainActivity : AppCompatActivity() {
 
 
             27 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        lifecycleScope.launch {
-                            userDataStore.getSchoolData()?.let {
-                                it.marksEntryURL?.let { url ->
-                                    webViewCall(
-                                        url,
-                                        getString(R.string.marks_entry_heading)
-                                    )
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                                lifecycleScope.launch {
+                                    userDataStore.getSchoolData()?.let {
+                                        it.marksEntryURL?.let { url ->
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.marks_entry_heading)
+                                            )
+                                        }
+                                    }
                                 }
+                            } else {
+                                navController.navigate(R.id.lessonPlanListFragment)
                             }
+                        } catch (e: Exception) {
                         }
-                    } else {
-                        navController.navigate(R.id.lessonPlanListFragment)
                     }
-                } catch (e: Exception) {
                 }
-
 
             }
 
@@ -674,6 +684,7 @@ class MainActivity : AppCompatActivity() {
             32 -> navController.navigate(R.id.studentIDFragment)
             33 -> navController.navigate(R.id.surveyListFragment)
             35 -> navController.navigate(R.id.busLocationFragment)
+            39 -> navController.navigate(R.id.fomGuardFragment)
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -727,10 +738,6 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(R.id.studentListFragment2, Bundle().apply {
                             putString(Constant.TO, Constant.PROFILE_FRA_STU)
                         })
-                    }
-
-                    2 -> {
-                        navController.navigate(R.id.studentAttendanceReportFragment)
                     }
 
                     3 -> {
@@ -938,6 +945,20 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+
+
+                    2 -> {
+                        when (childChildMenuId) {
+                            7 -> {
+                                navController.navigate(R.id.studentAttendanceReportFragment)
+                            }
+
+                            8 -> {
+                                navController.navigate(R.id.selectMarkAttendanceFragment)
+                            }
+
+                        }
+                    }
                 }
             }
 
@@ -1108,6 +1129,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
