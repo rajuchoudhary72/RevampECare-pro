@@ -62,7 +62,7 @@ class SystemViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                UType = userDataStore.getUserType()!!
+                UType = userDataStore.getUserType()?:1
             } catch (e: NullPointerException) {
                 e.toString()
             }

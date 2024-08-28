@@ -14,6 +14,7 @@ import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import com.app.ecarepro.model.Student
+import com.app.ecarepro.data.network.model.Form
 
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -35,6 +36,11 @@ import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkInfractionInstance
 import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkInfractions
+import com.app.ecarepro.data.network.model.Department
+import com.app.ecarepro.data.network.model.Designation
+import com.app.ecarepro.data.network.model.Employee
+import com.app.ecarepro.data.network.model.Purpose
+
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
 import com.app.ecarepro.data.network.model.NetworkLeaveReport
 import com.app.ecarepro.data.network.model.NetworkLeaveSetting
@@ -152,7 +158,14 @@ interface UserRepository {
     suspend fun getLibraryDTL(): NetworkLibraryDTL
      suspend fun getBookDetails(bookID: Int, id: Int): NetworkBookDetails
     suspend fun getLibrarySearch(query: String, pg: Int): NetworkBookDetails
+    fun getFormData(): Flow<Result<List<Form>>>
+    fun getFormDataPurpose(): Flow<Result<List<Purpose>>>
 
+    fun getFormDataDepartment(): Flow<Result<List<Department>>>
+
+    fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>>
+
+    fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 

@@ -11,6 +11,12 @@ import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import retrofit2.http.Url
+import com.app.ecarepro.data.network.model.AppointmentFormData
+import com.app.ecarepro.data.network.model.FormDataDepartmentResponseDto
+import com.app.ecarepro.data.network.model.FormDataDesignationResponseDto
+import com.app.ecarepro.data.network.model.FormDataEmployeeResponseDto
+import com.app.ecarepro.data.network.model.FormDataPurposeResponseDto
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
@@ -917,13 +923,27 @@ interface UserService {
     suspend fun busLocation(
         @Query("VehicleNumber") vehicleNumber: String
     ): NetworkBusLocation
+    @GET
+    suspend fun getFormData(
+        @Url url:String
+    ): AppointmentFormData
+    @GET
+    suspend fun getFormDataPurpose(
+        @Url url:String
+    ): FormDataPurposeResponseDto
 
+    @GET
+    suspend fun getFormDataDepartments(
+        @Url url:String
+    ): FormDataDepartmentResponseDto
 
+    @GET
+    suspend fun getFormDataDesignationWithDepartment(
+        @Url url:String
+    ): FormDataDesignationResponseDto
 
-
-
-
-
-
-
+    @GET
+    suspend fun getFormDataEmployee(
+        @Url url:String
+    ): FormDataEmployeeResponseDto
 }

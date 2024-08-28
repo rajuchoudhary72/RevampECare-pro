@@ -932,6 +932,10 @@
         android:name="com.app.ecarepro.ui.edit_profile.EditProfileFragment"
         android:label="EditProfileFragment" />
     <fragment
+        android:id="@+id/appointmentFragment"
+        android:name="com.app.ecarepro.ui.appointment.v2.AppointmentFragment"
+        android:label="AppointmentFragment" />
+    <fragment
         android:id="@+id/printOutAppointenentFragment"
         android:name="com.app.ecarepro.ui.fom_guard.PrintOutAppointenentFragment"
         android:label="fragment_print_out_appointenent"
