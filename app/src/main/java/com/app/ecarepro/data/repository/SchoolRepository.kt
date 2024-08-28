@@ -26,6 +26,7 @@ import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.model.NetworkAppVersion
 
 interface SchoolRepository {
     suspend fun fetchWalkThroughData()
@@ -55,4 +56,5 @@ interface SchoolRepository {
     suspend fun getMedicalCard(): MedicalCardResponse
     suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse
     fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>
+    suspend fun checkAppVersion( ): NetworkAppVersion
 }

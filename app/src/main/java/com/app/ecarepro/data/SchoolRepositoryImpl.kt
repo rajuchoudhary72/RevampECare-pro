@@ -23,6 +23,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.model.NetworkAppVersion
 
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
@@ -267,5 +268,9 @@ class SchoolRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun checkAppVersion(): NetworkAppVersion {
+        return schoolService.checkAppVersion()
     }
 }

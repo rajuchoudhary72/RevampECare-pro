@@ -135,7 +135,6 @@ import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
-import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
@@ -521,8 +520,8 @@ class UserRepositoryImpl @Inject constructor(
 
         classID: Int,
         classIDs: String,
-        `data`: String,
-        `file`: String,
+        data: String,
+        file: String,
         id: String,
         isActive: Boolean,
         isFileRemoved: Boolean,
@@ -531,10 +530,10 @@ class UserRepositoryImpl @Inject constructor(
         subjectID: Int,
         submitDate: String,
         title: String,
-        lateSubmission : Boolean,
-        attachments  : List<Attachment>,
-        classID_StID  : List<ClassID_StID>,
-        stIDs : String?
+        lateSubmission: Boolean,
+        attachments: com.app.ecarepro.data.network.model.Attachment?,
+        classID_StID: List<ClassID_StID>,
+        stIDs: String?
     ): CommonResponse {
         return userService.createAssignment(PostCreateAssignment( asgDate, asgID,  classID, classIDs, data, file, id, isActive, isFileRemoved,
             multipleSubmission, subjectID, submitDate, title,lateSubmission,attachments,classID_StID,stIDs))

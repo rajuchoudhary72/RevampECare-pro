@@ -659,4 +659,5 @@
     <string name="select_leave_type">Select leave type</string>
     <string name="assessments_are_currently_unavailable_for_you">Assessments are currently unavailable for you!</string>
     <string name="InboxList">"P/o" %1$s ", " %2$s </string>
+    <string name="upgrade_now">Upgrade now</string>
 </resources>
