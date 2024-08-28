@@ -156,7 +156,7 @@
     <string name="enter_thoughts">Enter Thoughts</string>
     <string name="enter_auther">Enter Author</string>
     <string name="book_details">Book Details</string>
-    <string name="no_data_found">No data found</string>
+    <string name="no_data_found">No Record found</string>
     <string name="clear_filter">Clear Filter</string>
     <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
     <string name="only_app_message">Only App Message</string>

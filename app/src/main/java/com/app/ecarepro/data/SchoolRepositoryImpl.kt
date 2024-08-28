@@ -66,7 +66,7 @@ class SchoolRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response = schoolService.validateSchoolCode(schoolCode)
-                if (response.isStudentLoginBlocked == false)
+               // if (response.isStudentLoginBlocked == false)
                     userDataStore.saveSchoolData(response)
                 emit(response)
             } catch (e: Exception) {

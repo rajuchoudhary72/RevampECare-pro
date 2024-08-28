@@ -24,6 +24,9 @@
         <variable
             name="textWatcher"
             type="android.text.TextWatcher" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
 
     </data>
 
@@ -35,11 +38,13 @@
             android:id="@+id/filedName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/avd_profile"
             android:drawablePadding="5dp"
             android:fontFamily="@font/calibri_regular"
             android:gravity="center_vertical"
             android:text="@{filedName}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:drawableStartCompat="@drawable/avd_profile"
             tools:text="User Name" />
 
         <ImageView
@@ -49,7 +54,8 @@
             android:layout_height="@dimen/_10sdp"
             android:src="@drawable/asterick"
             app:layout_constraintStart_toEndOf="@id/filedName"
-            app:tint="@color/red" />
+            app:tint="@color/red"
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayoutUserName"
@@ -65,6 +71,7 @@
                 android:id="@+id/textUserName"
                 inputText="@{text}"
                 textWatcher="@{textWatcher}"
+                clickListener="@{clickListener}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

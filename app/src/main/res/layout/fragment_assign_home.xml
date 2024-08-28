@@ -19,6 +19,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="@string/assign_house"
         app:titleCentered="true"
+
         app:titleTextAppearance="?attr/titleTextAppearance"
         app:titleTextColor="@color/white" />
 

@@ -14,6 +14,14 @@
             type="java.lang.String" />
 
         <variable
+            name="image1"
+            type="java.lang.String" />
+
+        <variable
+            name="image2"
+            type="java.lang.String" />
+
+        <variable
             name="isPhotoCapture1Mandatory"
             type="java.lang.Boolean" />
 
@@ -28,7 +36,6 @@
         <variable
             name="clickListener2"
             type="android.view.View.OnClickListener" />
-
 
 
     </data>
@@ -85,7 +92,6 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/selector1"
-            android:onClick="@{clickListener1}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_4sdp"
@@ -93,6 +99,7 @@
             android:background="@drawable/appointment_selector"
             android:fontFamily="@font/ubuntu_bold"
             android:gravity="center"
+            android:onClick="@{clickListener1}"
             android:text="Capture Image"
             android:textColor="@color/green"
             android:textSize="16sp"
@@ -104,6 +111,22 @@
             app:layout_constraintEnd_toStartOf="@+id/selector2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/filedNameDate" />
+
+        <ImageView
+            imageUrl="@{image1}"
+            android:layout_margin="2dp"
+            isVisible="@{image1!=null}"
+            android:onClick="@{clickListener1}"
+            android:layout_width="0dp"
+            android:scaleType="centerCrop"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/selector1"
+            app:layout_constraintEnd_toEndOf="@+id/selector1"
+            app:layout_constraintStart_toStartOf="@+id/selector1"
+            app:layout_constraintTop_toTopOf="@+id/selector1" />
+
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/selector2"
@@ -125,6 +148,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/selector1"
             app:layout_constraintTop_toBottomOf="@id/filedNameDate" />
+
+        <ImageView
+            imageUrl="@{image2}"
+            android:background="@color/white"
+            android:layout_margin="2dp"
+            isVisible="@{image2!=null}"
+            android:onClick="@{clickListener2}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@+id/selector2"
+            app:layout_constraintEnd_toEndOf="@+id/selector2"
+            app:layout_constraintStart_toStartOf="@+id/selector2"
+            app:layout_constraintTop_toTopOf="@+id/selector2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
