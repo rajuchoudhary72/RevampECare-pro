@@ -1,13 +1,36 @@
 package com.app.ecarepro.ui
 
+import android.Manifest
+import android.app.Dialog
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.view.Window
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -16,40 +39,36 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import android.graphics.Rect
-import android.net.Uri
-import android.util.Log
-import android.view.MotionEvent
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.os.bundleOf
-
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
+import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
+import com.app.ecarepro.menuCard
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
-import com.google.android.material.snackbar.Snackbar
-import com.app.ecarepro.data.datastore.UserDataStore
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import java.io.IOException
+import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 
 
@@ -59,7 +78,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
-
 
     private val systemViewModel: SystemViewModel by viewModels()
 
@@ -83,10 +101,61 @@ class MainActivity : AppCompatActivity() {
         R.id.messageFragment,
     )
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    fun enableNotificationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                Log.e("TestFCM", "onCreate: PERMISSION GRANTED")
+
+            }
+
+            shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+
+                Snackbar.make(
+                    binding.appBarMain.contentMain.bottomNavigationView,
+                    "Please Enable Notification Permission",
+                    Snackbar.LENGTH_LONG
+                ).setAction("Settings") {
+                    // Responds to click on the action
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    val uri: Uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                }.show()
+            }
+
+            else -> {
+                // The registered ActivityResultCallback gets the result of this request
+                requestPermissionLauncher.launch(
+                    Manifest.permission.POST_NOTIFICATIONS
+                )
+            }
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+        } else {
+            // Explain to the user that the feature is unavailable because the
+            // features requires a permission that the user has denied. At the
+            // same time, respect the user's decision. Don't link to system
+            // settings in an effort to convince the user to change their
+            // decision.
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
+            enableNotificationPermission()
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -117,6 +186,8 @@ class MainActivity : AppCompatActivity() {
         setUpMoreOptions()
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
+        /* checking  for update version  */
+        //  checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -126,26 +197,35 @@ class MainActivity : AppCompatActivity() {
             }
         }
         lifecycleScope.launch {
-            systemViewModel.bottomNavPosition.collectLatest { v->
-                when (v){
-                    0 ->{
-                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.menu).setChecked(true)
+            systemViewModel.bottomNavPosition.collectLatest { v ->
+                when (v) {
+                    0 -> {
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.menu)
+                            .setChecked(true)
 
                     }
-                    1 ->{
-                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.profile).setChecked(true)
+
+                    1 -> {
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.profile)
+                            .setChecked(true)
 
                     }
-                    2 ->{
-                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home).setChecked(true)
+
+                    2 -> {
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home)
+                            .setChecked(true)
 
                     }
-                    3 ->{
-                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.notification).setChecked(true)
+
+                    3 -> {
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.notification)
+                            .setChecked(true)
 
                     }
-                    4 ->{
-                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.message).setChecked(true)
+
+                    4 -> {
+                        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.message)
+                            .setChecked(true)
 
                     }
 
@@ -153,6 +233,89 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token = task.result
+
+                // Log and toast
+                Log.d("FCM Token", token)
+                systemViewModel.registerDeviceToken(token)
+            })
+            .addOnFailureListener { e ->
+                if (e is IOException) {
+                    Log.e("FCM Token", "Network error", e)
+                } else if (e is ExecutionException) {
+                    Log.e("FCM Token", "Execution error", e)
+                } else {
+                    Log.e("FCM Token", "Unknown error", e)
+                }
+            }
+
+
+    }
+
+    private fun checkAppVersion() {
+        lifecycleScope.launch {
+            systemViewModel.appVersionStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+
+                    is NetworkResult.Success -> {
+                        showLoader(false)
+                        if (it.data != null) {
+
+                            var versionCode = 0
+                            var versionName = ""
+                            try {
+                                val pInfo: PackageInfo = packageManager
+                                    .getPackageInfo(packageName, 0)
+                                versionName = pInfo.versionName
+                                versionCode = pInfo.versionCode
+                            } catch (e: PackageManager.NameNotFoundException) {
+                                e.printStackTrace()
+                            }
+                            Log.v("okhttp", "versionCode $versionCode")
+                            Log.v("okhttp", "versionName $versionName")
+                            if (versionCode < it.data.android.versionCode) {
+                                if (versionName == it.data.android.criticalVersion.trim()
+                                ) // force update
+                                    UpdateAppVersionDialog(
+                                        1,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                else  // normal update
+                                    UpdateAppVersionDialog(
+                                        0,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                            }
+                        }
+
+                    }
+
+                    else -> {}
+                }
+
+
+            }
+        }
+        systemViewModel.checkAppVersion()
     }
 
 
@@ -281,7 +444,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideMoreItemMenu() {
         binding.appBarMain.contentMain.moreItemContainer.slideVisibility(false)
-         //  listenMenuItemClickEvent = false
+        //  listenMenuItemClickEvent = false
     }
 
     private fun buildDrawerModels(menu: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -346,28 +509,34 @@ class MainActivity : AppCompatActivity() {
     fun getFragmentId(menuID: Int) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
-             systemViewModel.UType = userDataStore.getUserType()!!
+                systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
         when (menuID) {
             3 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_ASSI)
-                                })
-                        } else {
-                            navController.navigate(R.id.staffAssignmentsListFragment)
-                        }
 
-                    } else {
-                        navController.navigate(R.id.assignmentNavHostFragment)
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                                    navController.navigate(
+                                        R.id.classAndTeacherListFragment,
+                                        Bundle().apply {
+                                            putString(Constant.TO, Constant.FRA_ASSI)
+                                        })
+                                } else {
+                                    navController.navigate(R.id.staffAssignmentsListFragment)
+                                }
+
+                            } else {
+                                navController.navigate(R.id.assignmentNavHostFragment)
+                            }
+                        } catch (e: Exception) {
+                        }
                     }
-                } catch (e: Exception) {
                 }
+
 
             }
 
@@ -425,7 +594,16 @@ class MainActivity : AppCompatActivity() {
             19 -> navController.navigate(R.id.leaveHistoryFragment)
             20 -> navController.navigate(R.id.questionnaireListFragment)
             21 -> navController.navigate(R.id.thoughtsListFragment)
-            22 -> navController.navigate(R.id.appointmentReportFragment)
+
+            22 -> {
+                if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                    navController.navigate(R.id.appointmentReportFragment)
+                } else {
+                    navController.navigate(R.id.appointmentFragment)
+                }
+
+            }
+
             24 -> {
                 if (systemViewModel.UType == Constant.STUDENT_TYPE) {
                     navController.navigate(R.id.infractionSelectFragment)
@@ -440,33 +618,37 @@ class MainActivity : AppCompatActivity() {
 
 
             27 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                            lifecycleScope.launch {
-                                userDataStore.getSchoolData()?.let {
-                                    it.marksEntryURL?.let { url ->
-                                        webViewCall(
-                                            url,
-                                            getString(R.string.marks_entry_heading)
-                                        )
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                                lifecycleScope.launch {
+                                    userDataStore.getSchoolData()?.let {
+                                        it.marksEntryURL?.let { url ->
+                                            webViewCall(
+                                                url,
+                                                getString(R.string.marks_entry_heading)
+                                            )
+                                        }
                                     }
                                 }
+                            } else {
+                                navController.navigate(R.id.lessonPlanListFragment)
                             }
-                    } else {
-                        navController.navigate(R.id.lessonPlanListFragment)
+                        } catch (e: Exception) {
+                        }
                     }
-                } catch (e: Exception) {
                 }
 
             }
 
-            14-> {
+            14 -> {
                 try {
                     lifecycleScope.launch {
                         userDataStore.getSchoolData()?.let {
-                            if (it.assessmentMarksURL==null){
+                            if (it.assessmentMarksURL == null) {
                                 showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
-                            }else{
+                            } else {
                                 it.assessmentMarksURL?.let { url ->
                                     webViewCall(
                                         url,
@@ -480,13 +662,14 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-            37-> {
+
+            37 -> {
                 try {
                     lifecycleScope.launch {
                         userDataStore.getSchoolData()?.let {
-                            if (it.webSite==null){
+                            if (it.webSite == null) {
                                 showMessage("Website are currently unavailable for you!")
-                            }else{
+                            } else {
                                 it.webSite?.let { url ->
                                     webViewCall(
                                         url,
@@ -507,6 +690,7 @@ class MainActivity : AppCompatActivity() {
             32 -> navController.navigate(R.id.studentIDFragment)
             33 -> navController.navigate(R.id.surveyListFragment)
             35 -> navController.navigate(R.id.busLocationFragment)
+            39 -> navController.navigate(R.id.fomGuardFragment)
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -523,30 +707,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        val tabIntent =  CustomTabsIntent.Builder()
+        val tabIntent = CustomTabsIntent.Builder()
             .setToolbarColor(getColor(R.color.green)).build()
         if (title.contains("Mark")) {
             systemViewModel.getTokenKey { token ->
                 if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
                 } else {
-                  /*  val bundle = Bundle()
-                    bundle.putString("title", title)
-                    bundle.putString("url", "$url?token=$token")
-                    Log.d("WebURL",  "$url?token=$token")
-                    navController.navigate(R.id.webViewFragment, bundle)*/
-                    Log.d("WebURL",  "$url?token=$token")
+                    /*  val bundle = Bundle()
+                      bundle.putString("title", title)
+                      bundle.putString("url", "$url?token=$token")
+                      Log.d("WebURL",  "$url?token=$token")
+                      navController.navigate(R.id.webViewFragment, bundle)*/
+                    Log.d("WebURL", "$url?token=$token")
                     openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
                 }
             }
 
         } else {
-          /*  val bundle = Bundle()
-            bundle.putString("title", title)
-            bundle.putString("url", url)
-            Log.d("WebURL",  url)
-            navController.navigate(R.id.webViewFragment, bundle)*/
-            Log.d("WebURL",  url)
+            /*  val bundle = Bundle()
+              bundle.putString("title", title)
+              bundle.putString("url", url)
+              Log.d("WebURL",  url)
+              navController.navigate(R.id.webViewFragment, bundle)*/
+            Log.d("WebURL", url)
             openCustomTab(tabIntent, Uri.parse(url))
         }
     }
@@ -560,10 +744,6 @@ class MainActivity : AppCompatActivity() {
                         navController.navigate(R.id.studentListFragment2, Bundle().apply {
                             putString(Constant.TO, Constant.PROFILE_FRA_STU)
                         })
-                    }
-
-                    2 -> {
-                        navController.navigate(R.id.studentAttendanceReportFragment)
                     }
 
                     3 -> {
@@ -593,6 +773,7 @@ class MainActivity : AppCompatActivity() {
                             putString(Constant.TO, Constant.FRA_STAFF_LEAVE)
                         })
                     }
+
                     62 -> {
                         navController.navigate(R.id.staffAttendanceFragment)
                     }
@@ -684,24 +865,30 @@ class MainActivity : AppCompatActivity() {
             }
 
             24 -> {
-                when (childMenuId) {
-                    21 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.appreciationSelectionFragment)
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        when (childMenuId) {
 
-                    } else {
-                        navController.navigate(R.id.appreciationListFragment)
+                            21 -> if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.appreciationSelectionFragment)
 
+                            } else {
+                                navController.navigate(R.id.appreciationListFragment)
+
+                            }
+
+                            22 -> if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.infractionSelectFragment)
+
+                            } else {
+                                navController.navigate(R.id.infractionListFragment)
+
+                            }
+
+                        }
                     }
-
-                    22 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.infractionSelectFragment)
-
-                    } else {
-                        navController.navigate(R.id.infractionListFragment)
-
-                    }
-
                 }
+
             }
 
             29 -> {
@@ -762,6 +949,20 @@ class MainActivity : AppCompatActivity() {
                             3 -> {
                                 navController.navigate(R.id.assignHomeFragment)
                             }
+                        }
+                    }
+
+
+                    2 -> {
+                        when (childChildMenuId) {
+                            7 -> {
+                                navController.navigate(R.id.studentAttendanceReportFragment)
+                            }
+
+                            8 -> {
+                                navController.navigate(R.id.selectMarkAttendanceFragment)
+                            }
+
                         }
                     }
                 }
@@ -848,6 +1049,12 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.settingsFragment)
         }
 
+        systemViewModel._showPrompt.observe(this) { open ->
+            if (open) {
+                SearchPrompt()
+            }
+        }
+
 
         val menuItems = arrayOf(
             CbnMenuItem(
@@ -876,10 +1083,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.messageFragment
             )
         )
-     //   binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
-         binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
+        //   binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
+        binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
-        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home).setChecked(true);
+        binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home)
+            .setChecked(true);
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
@@ -887,39 +1095,44 @@ class MainActivity : AppCompatActivity() {
                     systemViewModel.openDrawer(true)
                     true
                 }
+
                 R.id.profile -> {
                     navController.navigate(R.id.profileFragment)
                     true
                 }
+
                 R.id.home -> {
-                   // loadFragment(SettingFragment())
+                    // loadFragment(SettingFragment())
                     navController.navigate(R.id.homeFragment)
                     true
                 }
+
                 R.id.notification -> {
                     navController.navigate(R.id.notificationFragment)
                     true
                 }
+
                 R.id.message -> {
                     navController.navigate(R.id.messageFragment)
                     true
                 }
 
-                else -> {false}
+                else -> {
+                    false
+                }
             }
         }
 
-         lifecycleScope.launch {
-             systemViewModel.showDashboardValue.collectLatest { v->
-                 if (v){
-                     navController.navigate(R.id.action_homeFragment_to_homeViewPagerFragment)
-                 }
-             }
+        lifecycleScope.launch {
+            systemViewModel.showDashboardValue.collectLatest { v ->
+                if (v) {
+                    navController.navigate(R.id.action_homeFragment_to_homeViewPagerFragment)
+                }
+            }
 
-         }
+        }
 
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -960,6 +1173,129 @@ class MainActivity : AppCompatActivity() {
             Snackbar.LENGTH_SHORT
         ).show()
     }
+
+    private fun SearchPrompt() {
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(binding.appBarMain.contentMain.searchBar)
+            .setPrimaryText("Global Search")
+            .setSecondaryText(" Click here to search Globally in Modules/Students/Staff ")
+            .setBackgroundColour(getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                    settingPrompt()
+                }
+            }
+            .show()
+    }
+
+    private fun settingPrompt() {
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(binding.appBarMain.contentMain.ivSetting)
+            .setPrimaryText("Setting")
+            .setSecondaryText("Click here to access quick settings ")
+            .setBackgroundColour(getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                    menuPrompt()
+                }
+            }
+            .show()
+    }
+
+    private fun menuPrompt() {
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(R.id.menu)
+            .setPrimaryText("Menu")
+            .setSecondaryText("Click here to access Menu Bar")
+            .setBackgroundColour(getColor(R.color.brand_color))
+            .setFocalColour(getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                    try {
+                        val sharedPreference = getSharedPreferences(
+                            Constant.SHARED_PREF_NAME_PROMPT,
+                            Context.MODE_PRIVATE
+                        )
+
+                        val editor = sharedPreference.edit()
+                        editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
+                        editor.apply()
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+            .show()
+    }
+
+    private fun UpdateAppVersionDialog(dialog_value: Int, title: String, message: String) {
+        val tv_title: TextView
+        val tv_description: TextView
+        val rel_critical_update_update: RelativeLayout
+        val rel_normal_update_update: RelativeLayout
+        val rel_normal_update_cancel: RelativeLayout
+        val ll_critical_update: LinearLayout
+        val ll_normal_update: LinearLayout
+        val dialog = Dialog(this@MainActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        dialog.window!!.attributes.windowAnimations = R.style.Animations
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_app_version_update)
+        tv_title = dialog.findViewById(R.id.tv_title)
+        tv_description = dialog.findViewById(R.id.tv_description)
+        rel_critical_update_update = dialog.findViewById(R.id.rel_critical_update_update)
+        ll_critical_update = dialog.findViewById(R.id.ll_critical_update)
+        rel_normal_update_update = dialog.findViewById(R.id.rel_normal_update_update)
+        rel_normal_update_cancel = dialog.findViewById(R.id.rel_normal_update_cancel)
+        ll_normal_update = dialog.findViewById(R.id.ll_normal_update)
+        tv_title.text = title
+        tv_description.text = message
+        if (dialog_value == 1) ll_critical_update.visibility = View.VISIBLE
+        else ll_normal_update.visibility = View.VISIBLE
+        rel_normal_update_cancel.setOnClickListener { dialog.dismiss() }
+        rel_normal_update_update.setOnClickListener {
+            try {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
+                    )
+                )
+            } catch (anfe: ActivityNotFoundException) {
+                viewInBrowser(
+                    this@MainActivity,
+                    "https://play.google.com/store/apps/details?id=$packageName"
+                )
+            }
+        }
+        rel_critical_update_update.setOnClickListener {
+            try {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
+                    )
+                )
+            } catch (anfe: ActivityNotFoundException) {
+                viewInBrowser(
+                    this@MainActivity,
+                    "https://play.google.com/store/apps/details?id=$packageName"
+                )
+            }
+        }
+        dialog.show()
+    }
+
+    private fun viewInBrowser(context: Context, url: String?) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        if (null != intent.resolveActivity(context.packageManager)) {
+            context.startActivity(intent)
+        }
+    }
+
 }
 
 fun Fragment.mainActivity(): MainActivity {

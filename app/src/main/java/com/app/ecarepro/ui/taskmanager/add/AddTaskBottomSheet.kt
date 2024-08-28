@@ -27,6 +27,7 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.FileAccess
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -299,6 +300,24 @@ fun Fragment.selectDate(title: String, onDateSelection: (String) -> Unit) {
     datePicker.show(childFragmentManager, "tag");
 }
 
+fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
+
+    val constraintsBuilder =
+        CalendarConstraints.Builder()
+            .setValidator(DateValidatorPointBackward.now())
+
+    val datePicker =
+        MaterialDatePicker.Builder.datePicker()
+            .setTitleText(title)
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+
+    datePicker.addOnPositiveButtonClickListener { selectedTime: Long ->
+        onDateSelection(convertMillisToDateString(selectedTime))
+    }
+    datePicker.show(childFragmentManager, "tag");
+}
 private fun convertMillisToDateString(millis: Long): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val calendar = Calendar.getInstance()

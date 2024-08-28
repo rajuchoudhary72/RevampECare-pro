@@ -12,6 +12,9 @@ import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
 import com.app.ecarepro.model.FeeCertificateList
+import com.app.ecarepro.ui.fom_guard.model.FomGuardAppointments
+import com.app.ecarepro.ui.fom_guard.model.verifiy_number.VerifyPhone
+import com.app.ecarepro.ui.fom_guard.model.verify_code.NetworkVerifyCode
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -61,7 +64,25 @@ interface FomApiService {
     ): NetworkFeeCerDownload
 
 
+    @GET
+    suspend fun getFomGuardAppointments(
+        @Url url: String
+    ): FomGuardAppointments
 
+    @POST
+    suspend fun updateappointmentcheckout (
+        @Url url: String
+    ): CommonResponse
+
+    @POST
+    suspend fun updateappointmentCheckInTime (
+        @Url url: String
+    ): NetworkVerifyCode
+
+    @POST
+    suspend fun getuserdetailsfrommobile (
+        @Url url: String
+    ): VerifyPhone
 
 
 }

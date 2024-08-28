@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkConversationReport
+import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SentMessageDto
@@ -15,6 +16,7 @@ import com.app.ecarepro.data.network.model.StaffContactsDto
 import com.app.ecarepro.data.network.model.StaffType
 import com.app.ecarepro.ui.message.chat.MessageType
 import kotlinx.coroutines.flow.Flow
+import retrofit2.http.Query
 
 interface MessageRepository {
     fun getMessageSettings(): Flow<Result<MessageSettings>>
@@ -63,5 +65,12 @@ interface MessageRepository {
         fromDate: String? = null,
         tillDate: String? = null,
     ): NetworkConversationReport
+
+    suspend fun studentParentComms(
+          recipientType: Int,
+          classIDs: String,
+         scholarType: Int,
+          byRollNo: Boolean,
+    ): NetworkStudentParentComms
 
 }

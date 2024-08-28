@@ -14,6 +14,9 @@ import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
 import com.app.ecarepro.model.FeeCertificateList
+import com.app.ecarepro.ui.fom_guard.model.FomGuardAppointments
+import com.app.ecarepro.ui.fom_guard.model.verifiy_number.VerifyPhone
+import com.app.ecarepro.ui.fom_guard.model.verify_code.NetworkVerifyCode
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
@@ -64,6 +67,24 @@ class FomApiRepositoryImpl @Inject constructor(
         request: PostDataFeeCertificate
     ): NetworkFeeCerDownload {
         return fomApiService.getFeeCertificateDownload(url, request)
+    }
+
+    override suspend fun getFomGuardAppointments(url: String): FomGuardAppointments {
+        return fomApiService.getFomGuardAppointments(url)
+    }
+
+    override suspend fun updateappointmentcheckout(url: String): CommonResponse {
+        return fomApiService.updateappointmentcheckout(url)
+    }
+
+    override suspend fun updateappointmentCheckInTime(url: String): NetworkVerifyCode {
+
+        return fomApiService.updateappointmentCheckInTime(url)
+
+    }
+
+    override suspend fun getuserdetailsfrommobile(url: String): VerifyPhone {
+        return fomApiService.getuserdetailsfrommobile(url)
     }
 
 

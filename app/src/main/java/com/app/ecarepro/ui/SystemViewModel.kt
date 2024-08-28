@@ -13,18 +13,23 @@ import com.app.ecarepro.data.repository.SchoolRepository
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -38,21 +43,27 @@ class SystemViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
-    private val schoolRepository: SchoolRepository
+    private val schoolRepository: SchoolRepository,
 
-) : ViewModel() {
+    ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
+      val _showPrompt = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack
+
+    private val appVersionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppVersion>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val appVersionStateFlow: StateFlow<NetworkResult<NetworkAppVersion>> = appVersionMutableStateFlow
+
 
     val refresh = MutableSharedFlow<Boolean>()
     val showDashboardValue = MutableSharedFlow<Boolean>()
     val bottomNavPosition = MutableSharedFlow<Int>()
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
-      var UType: Int = -1
+    var UType: Int = -1
 
     init {
         viewModelScope.launch {
@@ -60,12 +71,25 @@ class SystemViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-
+            try {
                 UType = userDataStore.getUserType()?:1
-
+            } catch (e: NullPointerException) {
+                e.toString()
+            }
         }
     }
 
+    fun checkAppVersion( )=viewModelScope.launch {
+        runCatching {
+            appVersionMutableStateFlow.value = NetworkResult.Loading()
+            schoolRepository.checkAppVersion( )
+        }.onSuccess {
+            appVersionMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
 
     val uiState =
         refresh.flatMapLatest {
@@ -108,6 +132,10 @@ class SystemViewModel @Inject constructor(
         _openNavigationDrawer.postValue(open)
     }
 
+    fun startShowPrompt(open: Boolean) {
+        _showPrompt.postValue(open)
+    }
+
     fun navigateBack(back: Boolean) {
         viewModelScope.launch {
             _navigateBack.emit(back)
@@ -137,14 +165,14 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun showDashboard(v  : Boolean) {
+    fun showDashboard(v: Boolean) {
         viewModelScope.launch {
             showDashboardValue.emit(v)
         }
     }
 
 
-    fun bottomNavPositionSet(v  : Int) {
+    fun bottomNavPositionSet(v: Int) {
         viewModelScope.launch {
             bottomNavPosition.emit(v)
         }
@@ -187,7 +215,7 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun fetchSettings(){
+    fun fetchSettings() {
         viewModelScope.launch {
             schoolRepository.getGeneralSettings().collectLatest {
                 it.onSuccess {

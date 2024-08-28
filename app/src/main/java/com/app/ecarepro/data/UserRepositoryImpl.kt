@@ -11,6 +11,11 @@ import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import com.app.ecarepro.data.network.model.Department
+import com.app.ecarepro.data.network.model.Designation
+import com.app.ecarepro.data.network.model.Employee
+import com.app.ecarepro.data.network.model.Purpose
+
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
@@ -29,6 +34,9 @@ import com.app.ecarepro.data.network.model.NetworkMarkAttendance
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkPaySlip
 import com.app.ecarepro.data.network.model.NetworkQuestionPaper
+import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import com.app.ecarepro.data.network.model.Form
+
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
@@ -131,17 +139,13 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
-import com.app.ecarepro.data.network.model.Department
-import com.app.ecarepro.data.network.model.Designation
-import com.app.ecarepro.data.network.model.Employee
-import com.app.ecarepro.data.network.model.Form
 import com.app.ecarepro.data.network.model.NetworkEditProfile
-import com.app.ecarepro.data.network.model.Purpose
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
-import com.app.ecarepro.ui.attendance_section.Attendance
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.model.ClassID_StID
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 
 class UserRepositoryImpl @Inject constructor(
@@ -397,6 +401,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getInfractions(stID)
     }
 
+    override suspend fun disciplineLogDeleteLog(id: String, type: Int): CommonResponse {
+        return userService.disciplineLogDeleteLog(id, type)
+    }
+
     override suspend fun saveInfraction(
         action: Int,
         stID: Int,
@@ -516,25 +524,28 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createAssignment(
-          asgDate: String,
-          asgID: Int,
-          attachment: String,
-          fileExt: String,
-          fileURL: String,
-          classID: Int,
-          classIDs: String,
-          `data`: String,
-          `file`: String,
-          id: String,
-          isActive: Boolean,
-          isFileRemoved: Boolean,
-          multipleSubmission: Boolean,
+        asgDate: String,
+        asgID: Int,
 
-          subjectID: Int,
-          submitDate: String,
-          title: String
+        classID: Int,
+        classIDs: String,
+        data: String,
+        file: String,
+        id: String,
+        isActive: Boolean,
+        isFileRemoved: Boolean,
+        multipleSubmission: Boolean,
+
+        subjectID: Int,
+        submitDate: String,
+        title: String,
+        lateSubmission: Boolean,
+        attachments: com.app.ecarepro.data.network.model.Attachment?,
+        classID_StID: List<ClassID_StID>,
+        stIDs: String?
     ): CommonResponse {
-        return userService.createAssignment(PostCreateAssignment( asgDate, asgID, Attachment(attachment, fileExt, fileURL), classID, classIDs, data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title))
+        return userService.createAssignment(PostCreateAssignment( asgDate, asgID,  classID, classIDs, data, file, id, isActive, isFileRemoved,
+            multipleSubmission, subjectID, submitDate, title,lateSubmission,attachments,classID_StID,stIDs))
 
     }
 
@@ -913,7 +924,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getUserProfileEdit(edit)
     }
 
-    override suspend fun updateParentProfile(request: com.app.ecarepro.ui.edit_profile.model.Profile): CommonResponse {
+    override suspend fun updateParentProfile(request: UpdateProfileModel): CommonResponse {
         return userService.updateParentProfile(request)
     }
 
@@ -1043,88 +1054,6 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getFormData(): Flow<Result<List<Form>>> {
-        return flow {
-            try {
-                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/${userDataStore.getSchoolData()?.schoolCode}/3")
-                if (response.status == true) {
-                    emit(Result.success(response.data?: emptyList()))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
-    /*
-    1)getpurposes  drop down  :- https://fomapi.franciscanecare.com/api/Master/getpurposes/DEMOIN
-2) getalldepartments :-  https://fomapi.franciscanecare.com/api/Master/getdepartments/DEMOIN
-3) getdesignationWithDepartment :- https://fomapi.franciscanecare.com/api/Master/getdesignationWithDepartment/DEMOIN/1
-4)getemployees :- https://fomapi.franciscanecare.com/api/Master/getemployees/DEMOIN/1/1
-     */
-
-    override fun getFormDataPurpose(): Flow<Result<List<Purpose>>> {
-        return flow {
-            try {
-                val response = userService.getFormDataPurpose("https://fomapi.franciscanecare.com/api/Master/getpurposes/${userDataStore.getSchoolData()?.schoolCode}")
-                if (response.status == true) {
-                    emit(Result.success(response.data?: emptyList()))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
-    override fun getFormDataDepartment(): Flow<Result<List<Department>>> {
-        return flow {
-            try {
-                val response = userService.getFormDataDepartments("https://fomapi.franciscanecare.com/api/Master/getdepartments/${userDataStore.getSchoolData()?.schoolCode}")
-                if (response.status == true) {
-                    emit(Result.success(response.data?: emptyList()))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
-    override fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>> {
-        return flow {
-            try {
-                val response = userService.getFormDataDesignationWithDepartment("https://fomapi.franciscanecare.com/api/Master/getdesignationWithDepartment/${userDataStore.getSchoolData()?.schoolCode}/$departmentId")
-                if (response.status == true) {
-                    emit(Result.success(response.data?: emptyList()))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
-    override fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>> {
-        return flow {
-            try {
-                val response = userService.getFormDataEmployee("https://fomapi.franciscanecare.com/api/Master/getemployees/${userDataStore.getSchoolData()?.schoolCode}/$departmentId/$designation")
-                if (response.status == true) {
-                    emit(Result.success(response.data?: emptyList()))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
     override suspend fun getQuestionPaper(classID: Int, yrID: Int): NetworkQuestionPaper {
         return userService.getQuestionPaper(classID, yrID)
     }
@@ -1238,10 +1167,83 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun surveyQuestions(id: String): SurveyQuestionsResponse {
         return userService.surveyQuestions(id)
     }
-
-
-
     override suspend fun submitSurveyQuestions(model: SurveyQuestionsSubmitRequest): CommonResponse {
         return userService.submitSurveyQuestions(model)
+    }
+
+
+    override fun getFormData(): Flow<Result<List<Form>>> {
+        return flow {
+            try {
+                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/${userDataStore.getSchoolData()?.schoolCode}/3")
+                if (response.status == true) {
+                    emit(Result.success(response.data?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getFormDataPurpose(): Flow<Result<List<Purpose>>> {
+        return flow {
+            try {
+                val response = userService.getFormDataPurpose("https://fomapi.franciscanecare.com/api/Master/getpurposes/${userDataStore.getSchoolData()?.schoolCode}")
+                if (response.status == true) {
+                    emit(Result.success(response.data?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getFormDataDepartment(): Flow<Result<List<Department>>> {
+        return flow {
+            try {
+                val response = userService.getFormDataDepartments("https://fomapi.franciscanecare.com/api/Master/getdepartments/${userDataStore.getSchoolData()?.schoolCode}")
+                if (response.status == true) {
+                    emit(Result.success(response.data?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>> {
+        return flow {
+            try {
+                val response = userService.getFormDataDesignationWithDepartment("https://fomapi.franciscanecare.com/api/Master/getdesignationWithDepartment/${userDataStore.getSchoolData()?.schoolCode}/$departmentId")
+                if (response.status == true) {
+                    emit(Result.success(response.data?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>> {
+        return flow {
+            try {
+                val response = userService.getFormDataEmployee("https://fomapi.franciscanecare.com/api/Master/getemployees/${userDataStore.getSchoolData()?.schoolCode}/$departmentId/$designation")
+                if (response.status == true) {
+                    emit(Result.success(response.data?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
     }
 }

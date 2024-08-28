@@ -7,11 +7,15 @@
         <variable
             name="studentData"
             type="com.app.ecarepro.model.Profile" />
+        <variable
+            name="siblingDetails"
+            type="com.app.ecarepro.model.SiblingDetails" />
     </data>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".ui.studentProfile.StudentProfileDetailsFragment">
 
         <LinearLayout
@@ -19,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_25sdp"
             android:orientation="vertical">
 
 
@@ -950,73 +955,258 @@
                     android:textSize="@dimen/_12sdp" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@color/grey_light"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="center"
-                android:padding="@dimen/_7sdp"
-                android:text="@string/other_details"
-                android:textAllCaps="true"
-                android:textColor="@color/grey_60"
-                android:textSize="@dimen/_14sdp" />
+              <LinearLayout
+                  android:id="@+id/ll_sibling_details"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+
+                  <TextView
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_10sdp"
+                      android:background="@color/grey_light"
+                      android:fontFamily="@font/ubuntu_medium"
+                      android:gravity="center"
+                      android:padding="@dimen/_7sdp"
+                      android:text="Siblings Details"
+                      android:textAllCaps="true"
+                      android:textColor="@color/grey_60"
+                      android:textSize="@dimen/_14sdp" />
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_15sdp"
+                      android:layout_gravity="center"
+                      android:gravity="center"
+                      android:orientation="horizontal">
+                      <com.google.android.material.imageview.ShapeableImageView
+                          android:layout_width="@dimen/_60sdp"
+                          android:layout_height="@dimen/_60sdp"
+                          android:layout_gravity="center"
+                          app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                          app:strokeColor="?attr/colorOutlineVariant"
+                          app:strokeWidth="1dp"
+                          imageUrl="@{siblingDetails.photo}"
+                          placeholder="@{@drawable/default_profile}" />
+                  </LinearLayout>
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_15sdp"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+
+                          android:text="@string/name"
+                          android:textColor="@color/grey_40"
+                          android:textSize="@dimen/_12sdp" />
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+
+                          android:text="@string/date_of_birth"
+                          android:textColor="@color/grey_40"
+                          android:textSize="@dimen/_12sdp" />
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+                          android:text="@{siblingDetails.name}"
+                          android:textColor="@color/grey_60"
+                          android:textSize="@dimen/_12sdp" />
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+                          android:text="@{siblingDetails.dob}"
+                          android:textColor="@color/grey_60"
+                          android:textSize="@dimen/_12sdp" />
+                  </LinearLayout>
+
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_15sdp"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+
+                          android:text="@string/admissio_n_no"
+                          android:textColor="@color/grey_40"
+                          android:textSize="@dimen/_12sdp" />
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+
+                          android:text="@string/classes"
+                          android:textColor="@color/grey_40"
+                          android:textSize="@dimen/_12sdp" />
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+                          android:text="@{siblingDetails.admissionNumber}"
+                          android:textColor="@color/grey_60"
+                          android:textSize="@dimen/_12sdp" />
+
+                      <TextView
+                          android:id="@+id/tv_classes"
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:autoLink="phone"
+                          android:fontFamily="@font/ubuntu_medium"
+                          android:textColor="@color/grey_60"
+                          android:textSize="@dimen/_12sdp" />
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginTop="@dimen/_15sdp"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+
+                          android:text="@string/roll_no"
+                          android:textColor="@color/grey_40"
+                          android:textSize="@dimen/_12sdp" />
+
+
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+
+                      <TextView
+                          android:layout_width="0dp"
+                          android:layout_height="wrap_content"
+                          android:layout_weight="1"
+                          android:fontFamily="@font/ubuntu_medium"
+                          android:text="@{studentData.rollNo}"
+                          android:textColor="@color/grey_60"
+                          android:textSize="@dimen/_12sdp" />
+
+                  </LinearLayout>
+
+              </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:orientation="horizontal">
-
+                android:orientation="vertical"
+                android:layout_marginBottom="@dimen/_90sdp"
+                >
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/grey_light"
                     android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="@dimen/_7sdp"
+                    android:text="@string/other_details"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey_60"
+                    android:textSize="@dimen/_14sdp" />
 
-                    android:text="@string/contact_person"
-                    android:textColor="@color/grey_40"
-                    android:textSize="@dimen/_12sdp" />
-
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/ubuntu_medium"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:orientation="horizontal">
 
-                    android:text="@string/contact_no"
-                    android:textColor="@color/grey_40"
-                    android:textSize="@dimen/_12sdp" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ubuntu_medium"
+
+                        android:text="@string/contact_person"
+                        android:textColor="@color/grey_40"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ubuntu_medium"
+
+                        android:text="@string/contact_no"
+                        android:textColor="@color/grey_40"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_60sdp"
+                    android:paddingBottom="@dimen/_30sdp">
+
+                    <TextView
+                        android:id="@+id/tvContactPersonName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:text="@{studentData.contactPerson}"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/tvContactPersonNo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:autoLink="phone"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:text="@{studentData.contactMobile}"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/_30sdp">
-
-                <TextView
-                    android:id="@+id/tvContactPersonName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.contactPerson}"
-                    android:textColor="@color/grey_60"
-                    android:textSize="@dimen/_12sdp" />
-
-                <TextView
-                    android:id="@+id/tvContactPersonNo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:autoLink="phone"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.contactMobile}"
-                    android:textColor="@color/grey_60"
-                    android:textSize="@dimen/_12sdp" />
-            </LinearLayout>
         </LinearLayout>
 
 

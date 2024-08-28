@@ -20,7 +20,21 @@
         app:title="Attendance"
         app:titleCentered="true"
         app:titleTextAppearance="?attr/titleTextAppearance"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white"  >
+         <Button
+            android:id="@+id/tv_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_5sdp"
+              android:fontFamily="@font/ubuntu_medium"
+             android:layout_gravity="end"
+             android:textColor="@color/white"
+            android:text="@string/save"
+            android:visibility="gone"
+             style="@style/Widget.MaterialComponents.Button.TextButton"
+             />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

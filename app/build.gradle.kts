@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.hilt)
     alias(libs.plugins.firebaseCrashlytics)
-    alias(libs.plugins.googleServices)
+    id("com.google.gms.google-services")
     alias(libs.plugins.safeArgs)
     kotlin("kapt")
     alias(libs.plugins.kotlinParcelize)
@@ -16,7 +16,7 @@ kapt {
 
 android {
     signingConfigs {
-        create("beta") {
+        create("prod") {
             storeFile = file("eCareBeta.jks")
             storePassword = "eCarePro"
             keyAlias = "ecareProAndroidBeta"
@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 14
-        versionName = "1.1.12"
+        versionCode = 16
+        versionName = "1.1.14"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -68,9 +68,9 @@ android {
         }
         create("beta") {
             dimension = "build"
-            applicationIdSuffix = ".beta"
+           // applicationIdSuffix = ".beta"
             resValue("string", "app_name", "e-Care")
-            signingConfig = signingConfigs.getByName("beta")
+           // signingConfig = signingConfigs.getByName("beta")
         }
     }
 
@@ -91,6 +91,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
+    implementation(libs.firebase.messaging)
+    implementation(libs.com.google.firebase.firebase.crashlytics)
     kapt(libs.hilt.android.compiler)
 
     /* Database */
@@ -153,7 +155,11 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.github.fornewid:neumorphism:0.3.2")
-
-    implementation("androidx.browser:browser:1.2.0")
+     implementation("androidx.browser:browser:1.2.0")
+     implementation("com.android.support:print:28.0.0")
+    implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation  ( "com.google.firebase:firebase-messaging")
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
 
 }

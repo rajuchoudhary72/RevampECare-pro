@@ -15,5 +15,7 @@ data class RecentInfraction(
     val staffName: String,
     val stffPhoto: String,
     val studentName: Any,
+    val canDelete: Boolean,
+    val id: String,
     val subInfraction: String
 )

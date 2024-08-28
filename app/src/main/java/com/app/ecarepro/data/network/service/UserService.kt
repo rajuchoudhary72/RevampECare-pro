@@ -11,6 +11,12 @@ import com.app.ecarepro.data.network.model.NetworkAddAppreciation
 import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
+import retrofit2.http.Url
+import com.app.ecarepro.data.network.model.AppointmentFormData
+import com.app.ecarepro.data.network.model.FormDataDepartmentResponseDto
+import com.app.ecarepro.data.network.model.FormDataDesignationResponseDto
+import com.app.ecarepro.data.network.model.FormDataEmployeeResponseDto
+import com.app.ecarepro.data.network.model.FormDataPurposeResponseDto
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
@@ -123,15 +129,10 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
-import com.app.ecarepro.data.network.model.AppointmentFormData
-import com.app.ecarepro.data.network.model.FormDataDepartmentResponseDto
-import com.app.ecarepro.data.network.model.FormDataDesignationResponseDto
-import com.app.ecarepro.data.network.model.FormDataEmployeeResponseDto
-import com.app.ecarepro.data.network.model.FormDataPurposeResponseDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
-import retrofit2.http.Url
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 
 interface UserService {
     @GET("User/Verify")
@@ -323,6 +324,12 @@ interface UserService {
         @Query("StID") stID: Int
     ): NetworkInfractions
 
+    @GET("DisciplineLog/DeleteLog")
+    suspend fun disciplineLogDeleteLog(
+        @Query("ID") id: String,
+        @Query("type") type: Int
+    ): CommonResponse
+
 
     @POST("DisciplineLog/SaveInfraction")
     suspend fun saveInfraction(
@@ -403,7 +410,7 @@ interface UserService {
         @Query("ClassSTD") classSTD: Int
     ): NetworkMySubjects
 
-    @POST("Academic/CreateAssignment")
+    @POST("Academic/PostAssignment")
     suspend fun createAssignment(
         @Body request: PostCreateAssignment,
     ): CommonResponse
@@ -535,7 +542,12 @@ interface UserService {
     @GET("Staff/CreateLessonPlan")
     suspend fun createLessonPlan(): NetworkCreateLesson
 
-    @GET("Report/StudentProfile")
+   /* @GET("Report/StudentProfile")
+    suspend fun getStudentProfile(
+        @Query("StID") sId: Int
+    ): NetworkStudentProfile*/
+
+    @GET("Student/Profile")
     suspend fun getStudentProfile(
         @Query("StID") sId: Int
     ): NetworkStudentProfile
@@ -601,7 +613,7 @@ interface UserService {
 
     @POST("User/UpdateParentProfile")
     suspend fun updateParentProfile(
-        @Body request: Profile
+        @Body request: UpdateProfileModel
     ): CommonResponse
 
     @POST("User/UploadProfileIMG")
@@ -911,12 +923,10 @@ interface UserService {
     suspend fun busLocation(
         @Query("VehicleNumber") vehicleNumber: String
     ): NetworkBusLocation
-
     @GET
     suspend fun getFormData(
         @Url url:String
     ): AppointmentFormData
-
     @GET
     suspend fun getFormDataPurpose(
         @Url url:String

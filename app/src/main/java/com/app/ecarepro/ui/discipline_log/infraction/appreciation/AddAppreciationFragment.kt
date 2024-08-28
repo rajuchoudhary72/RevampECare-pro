@@ -27,6 +27,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.AppreciationCatPopUpListAdapter
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.AppreciationConsPopUpListAdapter
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.SubAppreciationPopUpListAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -325,15 +326,19 @@ class AddAppreciationFragment : Fragment() {
         var isValidate= true
         if (!apprecTypeSelected){
             isValidate=false
-        }
+            mainActivity().showMessage(getString( R.string.select_apprec_category))
+        }else
         if (!SubApprecTypeSelected){
             isValidate=false
-        }
+            mainActivity().showMessage(getString( R.string.select_apprec_subcategory))
+        }else
         if (!apprecRewardSelected){
             isValidate=false
-        }
+            mainActivity().showMessage(getString( R.string.select_reward))
+        }else
         if (binding.etRemark .text.toString().isEmpty()){
             isValidate=false
+            mainActivity().showMessage(getString( R.string.enter_remark))
         }
 
         if (isValidate){
@@ -344,23 +349,27 @@ class AddAppreciationFragment : Fragment() {
                 appreciationReward.rwdID,
                 binding.tvInstance.text.toString().toInt(),
                 Constant.currentDate(),
-                binding.etRemark.text.toString())  }
+                binding.etRemark.text.toString())
 
-        lifecycleScope.launch {
-            addAppreciationViewModel.saveAppreciationStateFlow.collectLatest {
-                when (it) {
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-
-                    findNavController().popBackStack()
-                }
+            lifecycleScope.launch {
+                addAppreciationViewModel.saveAppreciationStateFlow.collectLatest {
+                    when (it) {
+                        is NetworkResult.Loading -> {
+                            (requireActivity() as MainActivity).showLoader(true)
+                        } is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    } is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        mainActivity().showMessage(getString( R.string.submit_successfully))
+                        findNavController().popBackStack()
+                    }
+                    }
                 }
             }
+
         }
+
+
 
 
 

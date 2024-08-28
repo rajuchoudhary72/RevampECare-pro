@@ -1,15 +1,15 @@
 package com.app.ecarepro.ui.home
 
+import android.content.Context
+import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -18,7 +18,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
@@ -36,8 +35,10 @@ import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.DecorationLookup
@@ -47,6 +48,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -57,6 +59,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+
+
 
     private val mViewModel: HomeViewModel by viewModels()
 
@@ -75,10 +80,15 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
+
+
+
+
     }
 
     private fun setUpViews() {
        // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
+     //   binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
@@ -129,6 +139,7 @@ class HomeFragment : Fragment() {
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
                                 txtUserName.text = user.name
+                                profilePrompt()
                             }
                         }
                     }
@@ -456,4 +467,82 @@ class HomeFragment : Fragment() {
         systemViewModel.fetchSettings()
 
     }
+
+    private fun dashboardPrompt( ) {
+        MaterialTapTargetPrompt.Builder(requireActivity())
+            .setTarget(R.id.ll_dashboard_link)
+            .setPrimaryText("Dashboard")
+            .setBackgroundColour(requireContext().getColor(R.color.brand_color))
+            .setSecondaryText("Click here to access Dashboards")
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                {
+                    addMorePrompt()
+                }
+            }
+            .show()
+    }
+
+    private fun addMorePrompt( ) {
+        MaterialTapTargetPrompt.Builder(requireActivity())
+            .setTarget(R.id.ll_add_more)
+            .setPrimaryText("Favourites")
+            .setBackgroundColour(requireContext().getColor(R.color.brand_color))
+            .setSecondaryText("Click here to add your Favourite menus ")
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                {
+                    systemViewModel.startShowPrompt(true)
+                }
+            }
+            .show()
+    }
+
+    private fun cardPrompt( ) {
+        MaterialTapTargetPrompt.Builder(requireActivity())
+            .setTarget(R.id.cv_dashboard_card)
+            .setPrimaryText(" Information Cards")
+            .setSecondaryText("Slide left to check out all the cards")
+            .setBackgroundColour(requireContext().getColor(R.color.brand_color))
+            .setPromptStateChangeListener { prompt, state ->
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                {
+                    dashboardPrompt()
+                }
+            }
+            .show()
+    }
+
+    private fun profilePrompt() {
+
+        val sharedPreference = requireActivity(). getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT,
+            Context.MODE_PRIVATE)
+
+        if (!sharedPreference.getBoolean(Constant.SHARED_PREF_SHOW_PROMPT, false)) {
+            MaterialTapTargetPrompt.Builder(requireActivity())
+                .setTarget(binding.imgUserAvatar)
+                .setPrimaryText("Profile")
+                .setSecondaryText("Click here to check out your profile and Transport Details")
+                .setBackgroundColour(requireContext().getColor(R.color.brand_color))
+                .setPromptStateChangeListener { prompt, state ->
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
+                    {
+                        cardPrompt()
+
+                        try {
+
+                            val editor = sharedPreference.edit()
+                            editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
+                            editor.apply()
+                        }catch (e: Exception){}
+
+                    }
+                }
+                .show()
+        }
+
+
+    }
+
+
 }

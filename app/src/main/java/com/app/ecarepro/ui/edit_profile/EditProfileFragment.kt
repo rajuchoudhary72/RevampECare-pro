@@ -17,7 +17,12 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentEditProfileBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.edit_profile.model.Profile
+import com.app.ecarepro.ui.edit_profile.model.update_profile.PreviousSchoolDTL
+import com.app.ecarepro.ui.edit_profile.model.update_profile.StudentProfile
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.taskmanager.add.selectDate
+import com.app.ecarepro.ui.taskmanager.add.selectDatePro
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,16 +30,16 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class EditProfileFragment : Fragment() {
 
-    private lateinit var modelEditProfile: Profile
+
     private lateinit var binding: FragmentEditProfileBinding
     private val viewModel: EditProfileViewModel by viewModels()
-    private var fatherDesignationID   = 0
-    private var fatherProfessionID    = 0
-    private var motherDesignationID   = 0
-    private var motherProfessionID    = 0
-    private var parentStausID         = 0
-    private var stuBloodGroupID       = 0
-    private var stuReligionID         = 0
+    private var fatherDesignationID = 0
+    private var fatherProfessionID = 0
+    private var motherDesignationID = 0
+    private var motherProfessionID = 0
+    private var parentStausID = 0
+    private var stuBloodGroupID = 0
+    private var stuReligionID = 0
 
 
     override fun onCreateView(
@@ -81,7 +86,15 @@ class EditProfileFragment : Fragment() {
         }
 
         viewModel.getUserProfileEdit(true)
+binding.cbSameAddress.setOnCheckedChangeListener {
+        _, isChecked ->
+    if (isChecked){
+        binding.textPAddress.text= binding.textAddress.text
+        binding.textPCity.text= binding.textCity.text
+        binding.textPState.text= binding.textState.text
 
+    }
+}
 
     }
 
@@ -89,21 +102,20 @@ class EditProfileFragment : Fragment() {
 
         binding.apply {
 
-             tvSave.isVisible=true
+            tvSave.isVisible = true
 
-            modelEditProfile = profile
 
-                fatherDesignationID        =profile.fatherDesignationID
-                fatherProfessionID    =profile.fatherProfessionID
-                motherDesignationID   =profile.motherDesignationID
-                motherProfessionID    =profile.motherProfessionID
-                parentStausID         =profile.parentStausID
-                stuBloodGroupID       =profile.stuBloodGroupID
-                stuReligionID         =profile.stuReligionID
+            fatherDesignationID = profile.fatherDesignationID
+            fatherProfessionID = profile.fatherProfessionID
+            motherDesignationID = profile.motherDesignationID
+            motherProfessionID = profile.motherProfessionID
+            parentStausID = profile.parentStausID
+            stuBloodGroupID = profile.stuBloodGroupID
+            stuReligionID = profile.stuReligionID
 
             textUserName.isEnabled = false
             textName.isEnabled = false
-             textStudentName.isEnabled = false
+            textStudentName.isEnabled = false
             textClass.isEnabled = false
             textDOB.isEnabled = false
             textAdmissionDate.isEnabled = false
@@ -112,12 +124,12 @@ class EditProfileFragment : Fragment() {
 
 
             textAnniversaryDate.setOnClickListener {
-                selectDate("Select start date") {
+                selectDatePro("Select Anniversary date") {
                     textAnniversaryDate.setText(it)
                 }
             }
             textAdmissionDate.setOnClickListener {
-                selectDate("Select start date") {
+                selectDatePro("Select Admission date") {
                     textAdmissionDate.setText(it)
                 }
             }
@@ -241,30 +253,28 @@ class EditProfileFragment : Fragment() {
             textMotherAadharNumber.setText(profile.studentProfile.motherAadhaarNumber)
 
 
+            val adapterRecord = UpdateRecordListAdapter(profile.profileUpdationRecord)
 
-            val adapterRecord =  UpdateRecordListAdapter(profile.profileUpdationRecord )
-
-            rvUpdateRecord .apply {
+            rvUpdateRecord.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(activity)
-                adapter =adapterRecord
+                adapter = adapterRecord
             }
 
         }
 
 
-
     }
 
-    fun updateProfile(){
-
+    fun updateProfile() {
         binding.apply {
-             modelEditProfile.studentProfile.aadhaarNumber = textAadhaar.text.toString()
-             modelEditProfile.studentProfile.parentStaus = parentStatus.text.toString()
-             modelEditProfile.studentProfile.admissionDate = textAdmissionDate.text.toString()
-             modelEditProfile.studentProfile.birthPlace = textUserPOB.text.toString()
-            modelEditProfile.studentProfile.bloodGroup = bloodGroup.text.toString()
-            modelEditProfile.studentProfile.religion = religion.text.toString()
+
+            /*
+
+            modelEditProfile.studentProfile.aadhaarNumber = textAadhaar.text.toString()
+
+            modelEditProfile.studentProfile.birthPlace = textUserPOB.text.toString()
+
             modelEditProfile.studentProfile.parentAnniversaryDate =
                 textAnniversaryDate.text.toString()
 
@@ -273,19 +283,17 @@ class EditProfileFragment : Fragment() {
             modelEditProfile.studentProfile.state = textState.text.toString()
             modelEditProfile.studentProfile.address = textAddress.text.toString()
 
-            modelEditProfile.studentProfile.permanentCity = textPCity .text.toString()
+            modelEditProfile.studentProfile.permanentCity = textPCity.text.toString()
             modelEditProfile.studentProfile.permanentState = textPState.text.toString()
             modelEditProfile.studentProfile.permanentAddress = textPAddress.text.toString()
 
             modelEditProfile.studentProfile.contactEmailID = textUserEmail.text.toString()
             modelEditProfile.studentProfile.contactMobile = textMobile.text.toString()
-            modelEditProfile.studentProfile.dob = textDOB.text.toString()
 
 
 
             modelEditProfile.studentProfile.permanentAddress = textPAddress.text.toString()
             modelEditProfile.studentProfile.permanentCity = textPCity.text.toString()
-            modelEditProfile.studentProfile.permanentState = textPState.text.toString()
 
             modelEditProfile.studentProfile.previousSchoolDTL.address =
                 textSchoolAddress.text.toString()
@@ -294,32 +302,27 @@ class EditProfileFragment : Fragment() {
                 textSchoolBoard.text.toString()
             modelEditProfile.studentProfile.previousSchoolDTL.schoolName =
                 textSchoolName.text.toString()
-            modelEditProfile.studentProfile.name = textName.text.toString()
-            modelEditProfile.studentProfile.fatherName = textFatherName.text.toString()
+
 
             modelEditProfile.studentProfile.fatherEmail_1 = textFatherEmail1.text.toString()
             modelEditProfile.studentProfile.fatherEmail_2 = textFatherEmail2.text.toString()
-            modelEditProfile.studentProfile.motherEmail_1 = textMotherEmail1 .text.toString()
-            modelEditProfile.studentProfile.motherEmail_2= textMotherEmail2.text.toString()
+            modelEditProfile.studentProfile.motherEmail_1 = textMotherEmail1.text.toString()
+            modelEditProfile.studentProfile.motherEmail_2 = textMotherEmail2.text.toString()
 
             modelEditProfile.studentProfile.fatherMob_1 = textFatherMobile1.text.toString()
             modelEditProfile.studentProfile.fatherMob_1 = textFatherMobile2.text.toString()
-            modelEditProfile.studentProfile.motherMob_1 = textMotherMobile1 .text.toString()
-            modelEditProfile.studentProfile.motherMob_1= textMotherMobile2.text.toString()
+            modelEditProfile.studentProfile.motherMob_1 = textMotherMobile2.text.toString()
 
-            modelEditProfile.studentProfile.motherResidentialAddress= textMotherResidentialAddress.text.toString()
-            modelEditProfile.studentProfile.motherOfficeAddress= textMotherOfficeAddress.text.toString()
-            modelEditProfile.studentProfile.fatherResidentialAddress= textFatherResidentialAddress.text.toString()
-            modelEditProfile.studentProfile.fatherOfficeAddress= textFatherOfficeAddress.text.toString()
-
-            modelEditProfile.studentProfile.motherName = textMotherName.text.toString()
-
-            modelEditProfile.username = textUserName.text.toString()
-
-            modelEditProfile.studentProfile.className = textClass.text.toString()
+            modelEditProfile.studentProfile.motherResidentialAddress =
+                textMotherResidentialAddress.text.toString()
+            modelEditProfile.studentProfile.motherOfficeAddress =
+                textMotherOfficeAddress.text.toString()
+            modelEditProfile.studentProfile.fatherResidentialAddress =
+                textFatherResidentialAddress.text.toString()
+            modelEditProfile.studentProfile.fatherOfficeAddress =
+                textFatherOfficeAddress.text.toString()
 
 
-            modelEditProfile.studentProfile.username = textUserName.text.toString()
 
             modelEditProfile.studentProfile.fatherDOB = textFatherDOB.text.toString()
             modelEditProfile.studentProfile.motherDOB = textMotherDOB.text.toString()
@@ -330,34 +333,96 @@ class EditProfileFragment : Fragment() {
             modelEditProfile.studentProfile.fatherAadhaarNumber =
                 textFatherAadharNumber.text.toString()
             modelEditProfile.studentProfile.motherAadhaarNumber =
-                textMotherAadharNumber.text.toString()
+                textMotherAadharNumber.text.toString()*/
 
-            modelEditProfile.studentProfile.fatherDesignationID = fatherDesignationID
+            /*modelEditProfile.fatherDesignationID = fatherDesignationID
 
-            modelEditProfile.studentProfile.fatherProfession = fatherProfession.text.toString()
-            modelEditProfile.studentProfile.fatherDesignation = fatherDesignation.text.toString()
-            modelEditProfile.studentProfile.motherDesignation = MotherDesignation.text.toString()
-            modelEditProfile.studentProfile.motherProfession = MotherProfession.text.toString()
+            modelEditProfile.fatherProfessionID=  fatherProfessionID
+            modelEditProfile.motherDesignationID=  motherDesignationID
+            modelEditProfile.motherProfessionID=  motherProfessionID
+            modelEditProfile.parentStausID=       parentStausID
+            modelEditProfile.stuBloodGroupID=     stuBloodGroupID
+            modelEditProfile.stuReligionID=       stuReligionID*/
 
+
+            val modelEditProfile = UpdateProfileModel(
+                fatherDesignationID,
+                fatherProfessionID,
+                motherDesignationID,
+                motherProfessionID,
+                parentStausID,
+                stuBloodGroupID,
+                stuReligionID,
+                StudentProfile(
+                    textAadhaar.text.toString(),
+                    textAddress.text.toString(),
+                    textUserPOB.text.toString(),
+                    textCity.text.toString(),
+                    textUserEmail.text.toString(),
+                    textMobile.text.toString(),
+                    textFatherAadharNumber.text.toString(),
+                    textFatherAnnualIncome.text.toString(),
+                    textFatherDOB.text.toString().ifEmpty { null },
+                    textFatherEmail1.text.toString(),
+                    textFatherEmail2.text.toString(),
+                    textFatherMobile1.text.toString(),
+                    textFatherMobile2.text.toString(),
+                    textFatherOfficeAddress.text.toString(),
+                    textFatherResidentialAddress.text.toString(),
+                    textMotherAadharNumber.text.toString(),
+                    textMotherAnnualIncome.text.toString(),
+                    textMotherDOB.text.toString().ifEmpty { null },
+                    textMotherEmail1.text.toString(),
+                    textMotherEmail2.text.toString(),
+                    textMotherMobile1.text.toString(),
+                    textMotherMobile2.text.toString(),
+                    textMotherOfficeAddress.text.toString(),
+                    textMotherResidentialAddress.text.toString(),
+                    textAnniversaryDate.text.toString().ifEmpty { null },
+                    textPAddress.text.toString(),
+                    textPCity.text.toString(),
+                    textPState.text.toString(),
+                    textState.text.toString(),
+                    PreviousSchoolDTL(
+                        textSchoolAddress.text.toString(),
+                        textSchoolBoard.text.toString(),
+                        textSchoolName.text.toString()
+                    )
+                )
+            )
+
+            viewModel.updateParentProfile(modelEditProfile)
 
         }
 
-        modelEditProfile.fatherDesignationID = fatherDesignationID
 
-       modelEditProfile.fatherDesignationID=  fatherDesignationID
-       modelEditProfile.fatherProfessionID=  fatherProfessionID
-       modelEditProfile.motherDesignationID=  motherDesignationID
-       modelEditProfile.motherProfessionID=  motherProfessionID
-       modelEditProfile.parentStausID=  parentStausID
-       modelEditProfile.stuBloodGroupID=  stuBloodGroupID
-       modelEditProfile.stuReligionID=  stuReligionID
+          lifecycleScope.launch {
+              viewModel.updateParentProfileStateFlow.collectLatest {
+                  when (it) {
+
+                      is NetworkResult.Loading -> {
+                          (requireActivity() as MainActivity).showLoader(true)
+                      }
+
+                      is NetworkResult.Error -> {
+                          (requireActivity() as MainActivity).showLoader(false)
+                          Log.d("main", "Error$it")
+                      }
+
+                      is NetworkResult.Success -> {
+                          (requireActivity() as MainActivity).showLoader(false)
+                          if (it.data != null) {
+                              it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
+                              viewModel.getUserProfileEdit(true)
+                          }
+                      }
 
 
+                      else -> {}
+                  }
+              }
+         }
 
-        viewModel.updateParentProfile(modelEditProfile).invokeOnCompletion {
-            Toast.makeText(requireContext(),"Submitted Successfully!!!", Toast.LENGTH_SHORT).show()
 
-            findNavController().popBackStack()
-        }
     }
 }

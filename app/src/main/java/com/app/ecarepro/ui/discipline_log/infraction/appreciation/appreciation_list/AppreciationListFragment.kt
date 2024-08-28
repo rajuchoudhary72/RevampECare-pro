@@ -15,16 +15,20 @@ import com.app.ecarepro.R
 
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAppreciationListBinding
+import com.app.ecarepro.model.RecentAppreciation
+import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.appreciation.adapter.AppreciationListAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class AppreciationListFragment : Fragment() {
+class AppreciationListFragment : Fragment(), ItemListener<RecentAppreciation> {
 
     private var studentID: Int = 0
     private lateinit var binding: FragmentAppreciationListBinding
@@ -128,5 +132,30 @@ class AppreciationListFragment : Fragment() {
         appreciationListViewModel.getAppreciations(studentID)
 
 
+    }
+
+    override fun onItemClick(t: RecentAppreciation, pos: Int, boolean: Boolean) {
+        appreciationListViewModel.disciplineLogDeleteLog(t.id,2)
+        lifecycleScope.launch {
+            appreciationListViewModel.deleteLogStateFlow.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+
+                    if (it.data!=null){
+                        it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
+                        appreciationListViewModel.getAppreciations(studentID)
+                    }
+
+                }
+                }
+            }
+        }
     }
 }

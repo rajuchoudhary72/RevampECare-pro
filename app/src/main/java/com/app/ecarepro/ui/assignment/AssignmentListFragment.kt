@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.assignment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.app.ecarepro.databinding.FragmentAssignmentListBinding
 import com.app.ecarepro.model.Assignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.TeacherAssignmentViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -89,9 +91,33 @@ class AssignmentListFragment(
                 /*this@AssignmentListFragment.findNavController() .navigate(R.id.action_assignmentListFragment_to_submitAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                 })*/
-                findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
-                     putParcelable(Constant.ASSIGNMENT_ID, t)
-                 })
+                if (t.isSubmissionOpened==true){
+                    findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+                        putParcelable(Constant.ASSIGNMENT_ID, t)
+                    })
+                }else{
+                    if (t.lateSubmission ){
+                        val builder = AlertDialog.Builder(requireContext())
+                        builder.setTitle("Are you sure ?")
+                        builder.setMessage("The submission deadline for this assignment has passed. You may still submit your assignment, but it will be marked as a late submission")
+
+                        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+                            findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+                                putParcelable(Constant.ASSIGNMENT_ID, t)
+                            })
+                        }
+
+                        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+
+                        }
+
+                        builder.show()
+                    }else{
+                        mainActivity().showMessage("The submission deadline for this assignment has passed. ")
+
+                    }
+                 }
+
             }
 
         }

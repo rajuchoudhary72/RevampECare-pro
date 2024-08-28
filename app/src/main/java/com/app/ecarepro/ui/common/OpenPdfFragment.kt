@@ -4,14 +4,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentOpenPdfBinding
 import com.app.ecarepro.ui.MainActivity
 
@@ -48,11 +47,22 @@ class OpenPdfFragment : Fragment() {
         openPdfBinding.wvPdf.settings .loadWithOverviewMode = true
         openPdfBinding.wvPdf.settings.javaScriptEnabled = true
         openPdfBinding.wvPdf.settings.supportZoom()
+
         openPdfBinding.wvPdf.settings.builtInZoomControls=true
 
         openPdfBinding.wvPdf.webViewClient= object  : WebViewClient(){
 
 
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
+                // check url
+                if (url.contains("google.com")) {
+                    // below line will open default app with url
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    // return true when url was handled somehow and doesn't need to be loaded
+                    return true
+                }
+                return false // not handled manually urls, open them in WebView
+            }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 (requireActivity() as MainActivity).showLoader(true)

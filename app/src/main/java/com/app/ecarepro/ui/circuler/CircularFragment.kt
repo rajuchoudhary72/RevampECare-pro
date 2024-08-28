@@ -115,6 +115,8 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                                         layoutManager = LinearLayoutManager(activity)
                                         adapter = circularAdapter
                                     }
+                                    fragmentCircularBinding.toolbar.title= "All Notices" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
+
                                 }else{
                                     fragmentCircularBinding.recyclerCircular.isVisible=false
                                     fragmentCircularBinding.tvNoData.isVisible=true

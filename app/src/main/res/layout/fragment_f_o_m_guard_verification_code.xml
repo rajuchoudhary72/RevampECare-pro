@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        tools:context=".ui.fom_guard.verification_code.FOMGuardVerificationCodeFragment">
+
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/md_theme_light_primary"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="Verification Code"
+
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_200sdp"
+            android:src="@drawable/ic_ver_code"
+            android:layout_margin="@dimen/_10sdp"
+            android:padding="@dimen/_25sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="Verification Code"
+            android:textSize="18sp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_regular"
+            android:text="We sent a verification code to your mobile number "
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_50sdp"
+            android:layout_gravity="center"
+            android:gravity="center" />
+
+        <com.mukeshsolanki.OtpView
+            android:id="@+id/text_institution_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_gravity="center"
+            android:includeFontPadding="false"
+            android:inputType="text"
+            android:itemBackground="@drawable/bg_outline_round_corner_green"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="20sp"
+            app:OtpItemCount="3"
+            app:OtpItemSpacing="6dp"
+            app:OtpViewType="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/_50sdp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/check_in"
+            android:enabled="false"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_find_school_college"
+            app:layout_constraintVertical_bias="0.0"
+            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
+
+
+    </LinearLayout>
+</layout>
