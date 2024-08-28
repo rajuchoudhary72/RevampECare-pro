@@ -1,16 +1,36 @@
 package com.app.ecarepro.ui
 
 import android.Manifest
+import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.Rect
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.view.Window
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,47 +39,33 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import android.graphics.Rect
-import android.net.Uri
-import android.os.Build
-import android.provider.Settings
-import android.util.Log
-import android.view.MotionEvent
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.ActivityMainBinding
+import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
+import com.app.ecarepro.menuCard
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
 import com.app.ecarepro.utils.slideVisibility
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.menuCard
-import com.google.android.material.snackbar.Snackbar
-import com.app.ecarepro.data.datastore.UserDataStore
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
@@ -179,6 +185,8 @@ class MainActivity : AppCompatActivity() {
 
         Picasso.setSingletonInstance(Picasso.Builder(this).build())
 
+        checkAppVersion()
+
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
                 if (it != null) {
@@ -247,6 +255,63 @@ class MainActivity : AppCompatActivity() {
                     Log.e("FCM Token", "Unknown error", e)
                 }
             }
+
+
+    }
+
+    private fun checkAppVersion() {
+        lifecycleScope.launch {
+            systemViewModel.appVersionStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        showLoader(true)
+                    }
+                    is NetworkResult.Error -> {
+                         showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+                    is NetworkResult.Success -> {
+                         showLoader(false)
+                        if (it.data != null) {
+
+                            var versionCode = 0
+                            var versionName = ""
+                            try {
+                                val pInfo: PackageInfo =  packageManager
+                                    .getPackageInfo(packageName, 0)
+                                versionName = pInfo.versionName
+                                versionCode = pInfo.versionCode
+                            } catch (e: PackageManager.NameNotFoundException) {
+                                e.printStackTrace()
+                            }
+                            Log.v("okhttp", "versionCode $versionCode")
+                            Log.v("okhttp", "versionName $versionName")
+                            if (versionCode < it.data.android.versionCode) {
+                                if (versionName == it.data.android.criticalVersion .trim()
+                                ) // force update
+                                    UpdateAppVersionDialog(
+                                        1,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                else  // normal update
+                                    UpdateAppVersionDialog(
+                                        0,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                            }
+                        }
+
+                    }
+
+                    else -> {}
+                }
+
+
+            }
+        }
+        systemViewModel.checkAppVersion()
     }
 
 
@@ -1133,6 +1198,75 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             .show()
+    }
+
+    private fun UpdateAppVersionDialog(dialog_value: Int, title: String, message: String) {
+        val tv_title: TextView
+        val tv_description: TextView
+        val rel_critical_update_update: RelativeLayout
+        val rel_normal_update_update: RelativeLayout
+        val rel_normal_update_cancel: RelativeLayout
+        val ll_critical_update: LinearLayout
+        val ll_normal_update: LinearLayout
+        val dialog = Dialog(this@MainActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        dialog.window!!.attributes.windowAnimations = R.style.Animations
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_app_version_update)
+        tv_title = dialog.findViewById(R.id.tv_title)
+        tv_description = dialog.findViewById(R.id.tv_description)
+        rel_critical_update_update = dialog.findViewById(R.id.rel_critical_update_update)
+        ll_critical_update = dialog.findViewById(R.id.ll_critical_update)
+        rel_normal_update_update = dialog.findViewById(R.id.rel_normal_update_update)
+        rel_normal_update_cancel = dialog.findViewById(R.id.rel_normal_update_cancel)
+        ll_normal_update = dialog.findViewById(R.id.ll_normal_update)
+        tv_title.text = title
+        tv_description.text = message
+        if (dialog_value == 1) ll_critical_update.visibility = View.VISIBLE
+        else ll_normal_update.visibility = View.VISIBLE
+        rel_normal_update_cancel.setOnClickListener { dialog.dismiss() }
+        rel_normal_update_update.setOnClickListener {
+            try {
+                 startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
+                    )
+                )
+            } catch (anfe: ActivityNotFoundException) {
+                 viewInBrowser(
+                    this@MainActivity,
+                     "https://play.google.com/store/apps/details?id=$packageName"
+                )
+            }
+        }
+        rel_critical_update_update.setOnClickListener {
+            try {
+                 startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
+                    )
+                )
+            } catch (anfe: ActivityNotFoundException) {
+                 viewInBrowser(
+                    this@MainActivity,
+                     "https://play.google.com/store/apps/details?id=$packageName"
+                )
+            }
+        }
+        dialog.show()
+    }
+
+    private fun viewInBrowser(context: Context, url: String?) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        if (null != intent.resolveActivity(context.packageManager)) {
+            context.startActivity(intent)
+        }
     }
 
 }

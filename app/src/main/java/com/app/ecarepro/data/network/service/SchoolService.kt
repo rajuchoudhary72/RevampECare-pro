@@ -17,6 +17,7 @@ import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.PromotionModel
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.GeneralSettingsDto
+import com.app.ecarepro.model.NetworkAppVersion
 
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
@@ -139,4 +140,9 @@ interface SchoolService {
         @Query("ID") id: String,
         @Query("Status") status: Int
     ): CommonResponse
+
+
+    @GET("School/AppVersion")
+    suspend fun checkAppVersion( ): NetworkAppVersion
+
 }

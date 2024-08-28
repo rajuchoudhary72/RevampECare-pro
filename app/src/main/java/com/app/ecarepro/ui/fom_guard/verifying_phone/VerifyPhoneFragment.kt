@@ -14,6 +14,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentVerifyPhoneBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -62,7 +63,9 @@ class VerifyPhoneFragment : Fragment() {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.data != null) {
                         if (it.data. status) {
-
+                            /*findNavController().navigate(R.id.appointmentFragment, Bundle().apply {
+                                putBoolean("toAppointment", true)
+                            })*/
                         }else{
 
                             mainActivity().showMessage(it.data.message)
