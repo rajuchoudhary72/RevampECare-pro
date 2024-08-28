@@ -13,18 +13,23 @@ import com.app.ecarepro.data.repository.SchoolRepository
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -48,6 +53,11 @@ class SystemViewModel @Inject constructor(
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack
 
+    private val appVersionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppVersion>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val appVersionStateFlow: StateFlow<NetworkResult<NetworkAppVersion>> = appVersionMutableStateFlow
+
+
     val refresh = MutableSharedFlow<Boolean>()
     val showDashboardValue = MutableSharedFlow<Boolean>()
     val bottomNavPosition = MutableSharedFlow<Int>()
@@ -69,6 +79,17 @@ class SystemViewModel @Inject constructor(
         }
     }
 
+    fun checkAppVersion( )=viewModelScope.launch {
+        runCatching {
+            appVersionMutableStateFlow.value = NetworkResult.Loading()
+            schoolRepository.checkAppVersion( )
+        }.onSuccess {
+            appVersionMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
 
     val uiState =
         refresh.flatMapLatest {

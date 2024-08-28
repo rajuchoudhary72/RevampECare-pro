@@ -1,9 +1,12 @@
 package com.app.ecarepro.ui.assignment.staff.postAssignment
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,10 +34,12 @@ import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.listener.ItemListener
+import com.lassi.data.media.MiMedia
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -64,6 +69,9 @@ class PostAssignmentFragment : Fragment() {
     var isEdit: Boolean = false
     private var assignmentId: String  = ""
     private var studentList = mutableListOf<Student>()
+    private var lastClickAttachmentType: AttachmentType? = null
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -129,7 +137,9 @@ class PostAssignmentFragment : Fragment() {
 
         binding.btnSubmit.setOnClickListener { uploadAssignment() }
 
-        binding.tvAddAttac.setOnClickListener { selectImageOptionDialog() }
+        binding.tvAddAttac.setOnClickListener {
+            lastClickAttachmentType = AttachmentType.PDF
+            launchPdfPicker() }
 
         binding.tvSelectstudent.setOnClickListener {
             if (studentList!=null){
@@ -142,7 +152,7 @@ class PostAssignmentFragment : Fragment() {
             imageString=""
             imageExt=""
 
-            attachmentsList.clear()
+            postAssignmentViewModel.removeAttachment()
 
         }
 
@@ -170,6 +180,52 @@ class PostAssignmentFragment : Fragment() {
 
 
     }
+
+    private fun launchPdfPicker() {
+        val intent = Intent()
+        intent.type = "application/pdf"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        pdfLauncher.launch(intent)
+    }
+
+
+    private val pdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let { data ->
+                    if (data.data != null) {
+                        val mImageUri: Uri = data.data!!
+                        binding.llFile.isVisible=true
+                        postAssignmentViewModel.setAttachments(
+                            listOf(
+                                MiMedia(
+                                    path = mImageUri.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            )
+                        )
+                    } else {
+                        if (data.clipData != null) {
+                            val count: Int = data.clipData!!.itemCount
+                            val files = mutableListOf<MiMedia>()
+                            for (i in 0 until count) {
+                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                                files.add(
+                                    MiMedia(
+                                        path = imageUri.toString(),
+                                        name = lastClickAttachmentType?.name
+                                    )
+                                )
+                            }
+                            binding.llFile.isVisible=true
+                            postAssignmentViewModel.setAttachments(files)
+                        }
+                    }
+                }
+            }
+        }
 
     private fun uploadAssignment() {
 

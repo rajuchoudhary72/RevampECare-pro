@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.LoginResponseDto
@@ -96,7 +97,6 @@ import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
-import com.app.ecarepro.data.network.model.post_question.Attachment
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
@@ -120,8 +120,6 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import retrofit2.http.Body
-import retrofit2.http.Query
 
 interface UserRepository {
 
@@ -364,8 +362,8 @@ interface UserRepository {
 
         classID: Int,
         classIDs: String,
-        `data`: String,
-        `file`: String,
+        data: String,
+        file: String,
         id: String,
         isActive: Boolean,
         isFileRemoved: Boolean,
@@ -374,10 +372,10 @@ interface UserRepository {
         subjectID: Int,
         submitDate: String,
         title: String,
-        lateSubmission : Boolean,
-        attachments  : List<Attachment>,
-        classID_StID  : List<ClassID_StID>,
-        stIDs : String?
+        lateSubmission: Boolean,
+        attachments: Attachment?,
+        classID_StID: List<ClassID_StID>,
+        stIDs: String?
     ): CommonResponse
 
     suspend fun viewAssignment(
