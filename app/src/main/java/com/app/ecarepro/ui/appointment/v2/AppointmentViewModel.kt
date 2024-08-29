@@ -1,5 +1,7 @@
 package com.app.ecarepro.ui.appointment.v2
 
+import android.text.TextUtils
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Department
@@ -96,15 +98,18 @@ class AppointmentViewModel @Inject constructor(
                 val designation =
                     uiState.designation.firstOrNull { it.designationName == designationName }
 
-                if(department!=null && designation != null ){
+                if (department != null && designation != null) {
                     loadingState.update { LoadingState.Loading }
                     updateValue("Employee", "")
                     userRepository
-                        .getFormDataEmployee(department.departmentID.toString(),designation.designationID.toString())
+                        .getFormDataEmployee(
+                            department.departmentID.toString(),
+                            designation.designationID.toString()
+                        )
                         .collectLatest { employees ->
                             loadingState.update { LoadingState.Success }
                             this@AppointmentViewModel.uiState.update {
-                                uiState.copy(employees = employees.getOrNull()?: emptyList())
+                                uiState.copy(employees = employees.getOrNull() ?: emptyList())
                             }
                         }
 
@@ -126,13 +131,37 @@ class AppointmentViewModel @Inject constructor(
                         .collectLatest { designations ->
                             loadingState.update { LoadingState.Success }
                             this@AppointmentViewModel.uiState.update {
-                                uiState.copy(designation = designations.getOrNull()?: emptyList())
+                                uiState.copy(designation = designations.getOrNull() ?: emptyList())
                             }
                         }
                 }
             }
 
         }
+    }
+
+    fun isValidEmail(target: CharSequence?): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+    }
+
+    fun isValid(): Boolean {
+        val isValid = true
+        (uiState.value as AppointmentUiState.Success).formData.forEach { form ->
+            if(form.isrequired == true){
+                if (form.value.isEmpty()) {
+                    return false
+                }
+
+                if(form.columnName?.contains("mobile", true) == true && form.value.length<10){
+                    return false
+                }
+
+                if(form.columnName?.contains("email", true) == true && isValidEmail(form.value).not()){
+                    return false
+                }
+            }
+        }
+        return isValid
     }
 }
 

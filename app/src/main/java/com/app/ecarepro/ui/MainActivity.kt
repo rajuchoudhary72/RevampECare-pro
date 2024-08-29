@@ -62,7 +62,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -185,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpMoreOptions()
 
-      //  Picasso.setSingletonInstance(Picasso.Builder(this).build())
+        //  Picasso.setSingletonInstance(Picasso.Builder(this).build())
         /* checking  for update version  */
         //  checkAppVersion()
 
@@ -259,6 +258,9 @@ class MainActivity : AppCompatActivity() {
             }
 
 
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
     }
 
     private fun checkAppVersion() {
@@ -714,24 +716,24 @@ class MainActivity : AppCompatActivity() {
                 if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
                 } else {
-                      val bundle = Bundle()
-                      bundle.putString("title", title)
-                      bundle.putString("url", "$url?token=$token")
-                      Log.d("WebURL",  "$url?token=$token")
-                      navController.navigate(R.id.webViewFragment, bundle)
+                    val bundle = Bundle()
+                    bundle.putString("title", title)
+                    bundle.putString("url", "$url?token=$token")
+                    Log.d("WebURL", "$url?token=$token")
+                    navController.navigate(R.id.webViewFragment, bundle)
                     /*Log.d("WebURL", "$url?token=$token")
                     openCustomTab(tabIntent, Uri.parse("$url?token=$token"))*/
                 }
             }
 
         } else {
-              val bundle = Bundle()
-              bundle.putString("title", title)
-              bundle.putString("url", url)
-              Log.d("WebURL",  url)
-              navController.navigate(R.id.webViewFragment, bundle)
-          /*  Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))*/
+            val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("url", url)
+            Log.d("WebURL", url)
+            navController.navigate(R.id.webViewFragment, bundle)
+            /*  Log.d("WebURL", url)
+              openCustomTab(tabIntent, Uri.parse(url))*/
         }
     }
 
@@ -1294,6 +1296,22 @@ class MainActivity : AppCompatActivity() {
         if (null != intent.resolveActivity(context.packageManager)) {
             context.startActivity(intent)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
+
+    }
+
+    private fun handleNotificationClick(data: Bundle) {
+        val menuId = data.getInt("MenuId")
+        val childMenuId = data.getInt("ChMenuID")
+
+        getFragmentId(menuId, childMenuId)
     }
 
 }
