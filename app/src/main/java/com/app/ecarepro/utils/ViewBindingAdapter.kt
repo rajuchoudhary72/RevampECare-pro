@@ -3,6 +3,7 @@ package com.app.ecarepro.utils
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.graphics.drawable.Drawable
+import android.text.Html
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +22,6 @@ import com.app.ecarepro.data.network.model.TransactionDetail
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
 import com.app.ecarepro.messageFilePreview
-import android.text.Html
 
 
 @BindingAdapter("isVisible")
@@ -132,4 +132,9 @@ interface FileClickListener {
 @BindingAdapter("htmlText")
 fun TextView.htmlText(html: String?) {
     text = Html.fromHtml(html)
+}
+
+@BindingAdapter("styledText")
+fun TextView.setStyledText(text: String?) {
+
 }
