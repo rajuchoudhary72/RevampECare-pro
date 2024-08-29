@@ -136,5 +136,5 @@ fun TextView.htmlText(html: String?) {
 
 @BindingAdapter("styledText")
 fun TextView.setStyledText(text: String?) {
-
+    this.text = text
 }
