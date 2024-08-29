@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpMoreOptions()
 
-        Picasso.setSingletonInstance(Picasso.Builder(this).build())
+      //  Picasso.setSingletonInstance(Picasso.Builder(this).build())
         /* checking  for update version  */
         //  checkAppVersion()
 
@@ -714,24 +714,24 @@ class MainActivity : AppCompatActivity() {
                 if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
                 } else {
-                    /*  val bundle = Bundle()
+                      val bundle = Bundle()
                       bundle.putString("title", title)
                       bundle.putString("url", "$url?token=$token")
                       Log.d("WebURL",  "$url?token=$token")
-                      navController.navigate(R.id.webViewFragment, bundle)*/
-                    Log.d("WebURL", "$url?token=$token")
-                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
+                      navController.navigate(R.id.webViewFragment, bundle)
+                    /*Log.d("WebURL", "$url?token=$token")
+                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))*/
                 }
             }
 
         } else {
-            /*  val bundle = Bundle()
+              val bundle = Bundle()
               bundle.putString("title", title)
               bundle.putString("url", url)
               Log.d("WebURL",  url)
-              navController.navigate(R.id.webViewFragment, bundle)*/
-            Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))
+              navController.navigate(R.id.webViewFragment, bundle)
+          /*  Log.d("WebURL", url)
+            openCustomTab(tabIntent, Uri.parse(url))*/
         }
     }
 

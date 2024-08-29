@@ -148,6 +148,7 @@ sealed interface AppointmentUiState {
         val departments: List<Department>,
         val designation: List<Designation> = emptyList(),
         val employees: List<Employee> = emptyList(),
+        val guestIdType: List<String> = listOf("Aadhar Card", "Pan Card", "Driving License"),
     ) : AppointmentUiState
 
     data class Error(

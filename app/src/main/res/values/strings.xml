@@ -156,7 +156,7 @@
     <string name="enter_thoughts">Enter Thoughts</string>
     <string name="enter_auther">Enter Author</string>
     <string name="book_details">Book Details</string>
-    <string name="no_data_found">No data found</string>
+    <string name="no_data_found">No Record found</string>
     <string name="clear_filter">Clear Filter</string>
     <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
     <string name="only_app_message">Only App Message</string>
@@ -520,7 +520,7 @@
     <string name="recharged_volume">Recharged Volume</string>
     <string name="previous_balance">Previous Balance</string>
     <string name="select_session">Session</string>
-
+    <string name="default_notification_channel_id">e-Care</string>
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>

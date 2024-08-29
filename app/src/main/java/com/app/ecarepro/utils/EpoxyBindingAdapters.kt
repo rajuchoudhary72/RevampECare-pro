@@ -1,13 +1,25 @@
 package com.app.ecarepro.utils
 
+import android.content.ContextWrapper
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.view.MotionEvent
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.BindingAdapter
+import androidx.fragment.app.FragmentActivity
 import com.app.ecarepro.R
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
 
 @BindingAdapter("inputText")
 fun AutoCompleteTextView.setInputText(text: CharSequence?) {
@@ -18,8 +30,25 @@ fun AutoCompleteTextView.setInputText(text: CharSequence?) {
     }
 }
 
+@BindingAdapter("clickListener")
+fun TextInputEditText.setClickListener(clickListener: View.OnClickListener?) {
+    if (clickListener != null) {
+        inputType = InputType.TYPE_NULL;
+        keyListener = null
+        setOnTouchListener { view, motionEvent ->
+            if (motionEvent.getAction() === MotionEvent.ACTION_UP) {
+                clickListener?.onClick(view)
+            }
+            false
+        }
+    }
+}
+
 @BindingAdapter("sampleItems", "itemSelectListener", requireAll = false)
-fun AutoCompleteTextView.setSampleItems(items: List<String>?, itemSelectListener:ItemSelectListener?) {
+fun AutoCompleteTextView.setSampleItems(
+    items: List<String>?,
+    itemSelectListener: ItemSelectListener?
+) {
     if (items.isNullOrEmpty()) return
     val adapter = ArrayAdapter(context, R.layout.list_item, items)
     setAdapter(adapter)
@@ -28,8 +57,6 @@ fun AutoCompleteTextView.setSampleItems(items: List<String>?, itemSelectListener
         itemSelectListener?.onItemSelect(items[i])
     }
 }
-
-
 
 
 private fun setText(textView: AutoCompleteTextView, text: CharSequence?): Boolean {
@@ -119,6 +146,60 @@ inline fun makeTextWatcher(crossinline block: (CharSequence) -> Unit): TextWatch
         }
     }
 
-interface ItemSelectListener{
-    fun onItemSelect(item:String)
+interface ItemSelectListener {
+    fun onItemSelect(item: String)
+}
+
+@BindingAdapter("datePicker")
+fun TextInputEditText.setDatePicker(isDatePicker: Boolean) {
+    //if(isDatePicker.not())return
+
+
+    val today = MaterialDatePicker.todayInUtcMilliseconds()
+    val datePicker =
+        MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select date")
+            .setSelection(today)
+            .build()
+
+    datePicker.addOnPositiveButtonClickListener { selection ->
+        val calendar = Calendar.getInstance(Locale.getDefault())
+        calendar.timeInMillis = selection
+        val formattedDate =
+            SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(calendar.time)
+        Toast.makeText(context, formattedDate, Toast.LENGTH_LONG).show()
+    }
+
+
+    val fragmentManager = when (context) {
+        is FragmentActivity -> (context as FragmentActivity).supportFragmentManager
+        is ContextWrapper -> {
+            val baseContext = (context as ContextWrapper).baseContext
+            if (baseContext is FragmentActivity) {
+                baseContext.supportFragmentManager
+            } else {
+                null
+            }
+        }
+
+        else -> null
+    }
+
+
+
+    setOnFocusChangeListener { view, b ->
+        if (b) {
+            fragmentManager?.let {
+                datePicker.show(it, "tag")
+            }
+        }
+    }
+
+}
+
+
+@BindingAdapter("timePicker")
+fun TextInputEditText.setTimePicker(isTimePicker: Boolean) {
+    if (isTimePicker.not()) return
+
 }
