@@ -2,7 +2,7 @@
     <string name="action_settings">Settings</string>
     <string name="app_name">e-Care</string>
     <!--School/College Code-->
-    <string name="help">Help</string>
+    <string name="help"><u>Help</u></string>
     <string name="please_enter_school_college_code">Please Enter School Code</string>
     <string name="find_your_school_college_code"><u>Find Your School Code</u></string>
     <string name="continue_">Continue</string>

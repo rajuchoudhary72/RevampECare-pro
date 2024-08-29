@@ -15,7 +15,6 @@ import android.text.style.CharacterStyle
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -27,10 +26,8 @@ import com.app.ecarepro.utils.Constant.Companion.italicFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
@@ -42,30 +39,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var appRepository: AppRepository
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d("FCM", "From: ${remoteMessage.from}")
-        Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
-        remoteMessage.data.isNotEmpty().let {
-            Log.d("FCM", "Message data payload: " + remoteMessage.data)
-        }
-
         remoteMessage.notification?.let {
             Log.d("FCM", "Message Notification Body: ${it.body}")
-            sendNotification(it.body,it.title)
-        }
-        Firebase.messaging.token
-        if (null != remoteMessage) {
-            //      var modelNotificationBody: ModelNotificationBody
-            val intent = Intent(
-                applicationContext,
-                MainActivity::class.java
-            )
-            var dataMap: Map<String?, String?>
-            val title = ""
-            val body = ""
+            sendNotification(it.body, it.title, remoteMessage.data)
         }
     }
-    private fun sendNotification(messageBody: String?, title: String?) {
+
+    private fun sendNotification(
+        messageBody: String?,
+        title: String?,
+        data: MutableMap<String, String>
+    ) {
         val intent = Intent(this, MainActivity::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            data.forEach { (key, value) ->
+                intent.putExtra(key, value)
+            }
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         //End
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -106,6 +96,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(100, notificationBuilder.build())
     }
+
     override fun onNewToken(token: String) {
         // Handle new or refreshed FCM registration token
         Log.d(TAG, "Refreshed token: $token")
@@ -113,6 +104,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         registerToken(token)
         // You may want to send this token to your server for further use
     }
+
     private fun registerToken(token: String) {
         GlobalScope.launch {
             val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
@@ -127,7 +119,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         deviceType = 1,
                         imeI1 = macAddress,
                         imeI2 = macAddress,
-                        deviceID = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                        deviceID = Settings.Secure.getString(
+                            contentResolver,
+                            Settings.Secure.ANDROID_ID
+                        )
                     )
                 )
                 .collectLatest {
@@ -135,6 +130,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 }
         }
     }
+
     companion object {
         private const val TAG = "MyFirebaseMsgService"
     }
@@ -146,8 +142,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val boldEndIndexes: List<Int>? = data?.let { boldFindEndStarIndexes(it) }
             val italicStartIndexes: List<Int>? = data?.let { italicFindStartIndexes(it) }
             val italicEndIndexes: List<Int>? = data?.let { italicFindEndStarIndexes(it) }
-            val strikethroughStartIndexes: List<Int>? = data?.let { strikethroughFindStartIndexes(it) }
-            val strikethroughEndIndexes: List<Int>? = data?.let { strikethroughFindEndStarIndexes(it) }
+            val strikethroughStartIndexes: List<Int>? =
+                data?.let { strikethroughFindStartIndexes(it) }
+            val strikethroughEndIndexes: List<Int>? =
+                data?.let { strikethroughFindEndStarIndexes(it) }
             var cs: CharacterStyle
             var deleteIndesx = 0
             var boldstart = 0
@@ -167,8 +165,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                                     ssb.delete(boldstart, boldstart + 1)
                                     ssb.delete(boldend - 1, boldend)
                                 } else {
-                                    ssb.setSpan(cs, boldstart - deleteIndesx, boldend - deleteIndesx, 1)
-                                    ssb.delete(boldstart - deleteIndesx, boldstart - deleteIndesx + 1)
+                                    ssb.setSpan(
+                                        cs,
+                                        boldstart - deleteIndesx,
+                                        boldend - deleteIndesx,
+                                        1
+                                    )
+                                    ssb.delete(
+                                        boldstart - deleteIndesx,
+                                        boldstart - deleteIndesx + 1
+                                    )
                                     ssb.delete(boldend - deleteIndesx - 1, boldend - deleteIndesx)
                                 }
                                 deleteIndesx = deleteIndesx + 2
@@ -243,7 +249,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         return ssb
     }
-
 
 
 }
