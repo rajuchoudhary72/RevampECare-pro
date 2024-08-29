@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpMoreOptions()
 
-        Picasso.setSingletonInstance(Picasso.Builder(this).build())
+      //  Picasso.setSingletonInstance(Picasso.Builder(this).build())
         /* checking  for update version  */
         //  checkAppVersion()
 
