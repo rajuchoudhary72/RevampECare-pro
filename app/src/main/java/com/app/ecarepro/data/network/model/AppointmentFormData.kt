@@ -27,5 +27,6 @@ data class Form(
     val mustInclude: Boolean?,
     @SerializedName("orderid")
     val orderid: Int?,
-    val value:String = "",
+    val value: String? = "",
+    val guestList: ArrayList<String>? = arrayListOf()
 )

@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.signin
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
@@ -21,8 +23,11 @@ import com.app.ecarepro.ui.mainActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.concurrent.ExecutionException
+import com.app.ecarepro.data.datastore.UserDataStore
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
@@ -34,7 +39,8 @@ class SignInFragment : Fragment() {
 
     private var userNameValid = false
     private val systemViewModel: SystemViewModel by activityViewModels()
-
+    @Inject
+    lateinit var userDataStore: UserDataStore
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -81,7 +87,11 @@ class SignInFragment : Fragment() {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
                             if (arguments?.containsKey("add_account") == true) {
-                                findNavController().popBackStack()
+                              //  findNavController().popBackStack()
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    userDataStore.setCurrentUserId(it.userID)
+                                    restartApp()
+                                }
                             } else {
                                 FirebaseMessaging.getInstance().token
                                     .addOnCompleteListener(OnCompleteListener { task ->
@@ -156,6 +166,12 @@ class SignInFragment : Fragment() {
 
     }
 
+    private fun restartApp() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

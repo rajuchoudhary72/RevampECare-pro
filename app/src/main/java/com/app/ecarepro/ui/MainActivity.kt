@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpMoreOptions()
 
-      //  Picasso.setSingletonInstance(Picasso.Builder(this).build())
+       Picasso.setSingletonInstance(Picasso.Builder(this).build())
         /* checking  for update version  */
         //  checkAppVersion()
 
@@ -257,10 +257,25 @@ class MainActivity : AppCompatActivity() {
                     Log.e("FCM Token", "Unknown error", e)
                 }
             }
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
 
+    }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
 
     }
 
+    private fun handleNotificationClick(data: Bundle) {
+        val menuId = data.getInt("MenuId")
+        val childMenuId = data.getInt("ChMenuID")
+        getFragmentId(menuId, childMenuId)
+    }
     private fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {

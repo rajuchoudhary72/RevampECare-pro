@@ -96,15 +96,18 @@ class AppointmentViewModel @Inject constructor(
                 val designation =
                     uiState.designation.firstOrNull { it.designationName == designationName }
 
-                if(department!=null && designation != null ){
+                if (department != null && designation != null) {
                     loadingState.update { LoadingState.Loading }
                     updateValue("Employee", "")
                     userRepository
-                        .getFormDataEmployee(department.departmentID.toString(),designation.designationID.toString())
+                        .getFormDataEmployee(
+                            department.departmentID.toString(),
+                            designation.designationID.toString()
+                        )
                         .collectLatest { employees ->
                             loadingState.update { LoadingState.Success }
                             this@AppointmentViewModel.uiState.update {
-                                uiState.copy(employees = employees.getOrNull()?: emptyList())
+                                uiState.copy(employees = employees.getOrNull() ?: emptyList())
                             }
                         }
 
@@ -126,13 +129,56 @@ class AppointmentViewModel @Inject constructor(
                         .collectLatest { designations ->
                             loadingState.update { LoadingState.Success }
                             this@AppointmentViewModel.uiState.update {
-                                uiState.copy(designation = designations.getOrNull()?: emptyList())
+                                uiState.copy(designation = designations.getOrNull() ?: emptyList())
                             }
                         }
                 }
             }
 
         }
+    }
+
+    fun addToGuestList(guest: String) {
+        val uiState = uiState.value
+        if (uiState is AppointmentUiState.Success) {
+            this.uiState.update {
+                uiState.copy(formData = uiState.formData.map { form ->
+                    if (form.columnName == "CoVisitorName") {
+                        val list: ArrayList<String> = if (form.guestList.isNullOrEmpty()) {
+                            arrayListOf(guest)
+                        } else {
+                            form.guestList.add(guest)
+                            form.guestList
+                        }
+                        form.copy(
+                            guestList = list
+                        )
+                    } else {
+                        form
+                    }
+                })
+            }
+        }
+
+    }
+
+    fun removeToGuestList(guest: String) {
+        val uiState = uiState.value
+        if (uiState is AppointmentUiState.Success) {
+            this.uiState.update {
+                uiState.copy(formData = uiState.formData.map { form ->
+                    if (form.columnName == "CoVisitorName") {
+                        val list = form.guestList?.filter { it != guest }
+                        form.copy(
+                            guestList = list as ArrayList
+                        )
+                    } else {
+                        form
+                    }
+                })
+            }
+        }
+
     }
 }
 

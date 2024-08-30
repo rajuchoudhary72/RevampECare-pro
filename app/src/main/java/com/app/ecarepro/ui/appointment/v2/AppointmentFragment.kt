@@ -211,6 +211,7 @@ class AppointmentFragment : Fragment() {
                                                 })
                                             }
                                         }
+
                                         "IdType" -> {
                                             textFiledDropdown {
                                                 id(form.columnName)
@@ -266,28 +267,41 @@ class AppointmentFragment : Fragment() {
                                         }
                                     }
                                 } else {
-                                    textFiled {
-                                        id(form.columnName)
-                                        filedName(form.columnName)
-                                        hintText(form.columnDisplayName)
-                                        isMandatory(form.isrequired)
-                                        text(form.value)
-                                        if (form.columnName == "VisitingDate") {
-                                            clickListener { _ ->
-                                                selectDate("Select Visiting Date") {
-                                                    viewModel.updateValue(form.columnName, it)
+                                    if (form.columnName == "CoVisitorName") {
+                                        AppointmentGuestsModel(
+                                            form = form,
+                                            addToGuestList = {viewModel.addToGuestList(it)},
+                                            removeToGuestList = {viewModel.removeToGuestList(it)},
+                                        )
+                                            .id(form.columnName)
+                                            .addTo(this)
+                                    } else {
+                                        textFiled {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            isMandatory(form.isrequired)
+                                            text(form.value)
+                                            if (form.columnName == "VisitingDate") {
+                                                clickListener { _ ->
+                                                    selectDate("Select Visiting Date") {
+                                                        viewModel.updateValue(form.columnName, it)
+                                                    }
+                                                }
+                                            } else if (form.columnName == "Appointmenttime") {
+                                                clickListener { _ ->
+                                                    pickTime("Select Appointment Time") {
+                                                        viewModel.updateValue(form.columnName, it)
+                                                    }
                                                 }
                                             }
-                                        } else if (form.columnName == "Appointmenttime") {
-                                            clickListener { _ ->
-                                                pickTime("Select Appointment Time") {
-                                                    viewModel.updateValue(form.columnName, it)
-                                                }
-                                            }
+                                            textWatcher(makeTextWatcher {
+                                                viewModel.updateValue(
+                                                    form.columnName,
+                                                    it.toString()
+                                                )
+                                            })
                                         }
-                                        textWatcher(makeTextWatcher {
-                                            viewModel.updateValue(form.columnName, it.toString())
-                                        })
                                     }
                                 }
                             }

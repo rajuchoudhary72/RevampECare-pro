@@ -3,33 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="isMandatory"
-            type="java.lang.Boolean" />
-
-        <variable
-            name="filedName"
-            type="java.lang.String" />
-
-        <variable
-            name="hintText"
-            type="java.lang.String" />
-
-        <variable
-            name="text"
-            type="java.lang.String" />
-
-        <variable
-            name="textWatcher"
-            type="android.text.TextWatcher" />
-        <variable
-            name="clickListener"
-            type="android.view.View.OnClickListener" />
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -41,42 +14,66 @@
             android:drawablePadding="5dp"
             android:fontFamily="@font/calibri_regular"
             android:gravity="center_vertical"
-            android:text="@{filedName}"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:drawableStartCompat="@drawable/avd_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="User Name" />
 
         <ImageView
-            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/imageView"
             android:layout_width="10dp"
-            isVisible="@{isMandatory}"
             android:layout_height="@dimen/_10sdp"
             android:src="@drawable/asterick"
             app:layout_constraintStart_toEndOf="@id/filedName"
+            app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/red"
             tools:ignore="ContentDescription" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutUserName"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@{hintText}"
+            app:layout_constraintTop_toBottomOf="@+id/filedName">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Raju"
+                app:closeIconEnabled="true" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutUserName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:hintTextColor="@color/grey_40"
-            app:layout_constraintTop_toBottomOf="@+id/filedName"
+            android:layout_marginEnd="@dimen/_8sdp"
+            app:layout_constraintEnd_toStartOf="@+id/btnAdd"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chipGroup"
             app:shapeAppearanceOverlay="?shapeAppearanceCornerSmall"
             tools:hint="@string/enter_user_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textUserName"
-                inputText="@{text}"
-                android:imeOptions="actionNext"
-                textWatcher="@{textWatcher}"
-                clickListener="@{clickListener}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:insetTop="0dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:insetBottom="0dp"
+            android:text="Add"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayoutUserName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textInputLayoutUserName"
+            app:shapeAppearanceOverlay="?shapeAppearanceCornerSmall" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

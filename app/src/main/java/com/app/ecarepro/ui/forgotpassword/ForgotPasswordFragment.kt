@@ -89,7 +89,7 @@ class ForgotPasswordFragment : Fragment() {
                     (requireActivity() as MainActivity).showLoader(false)
 
                     if (it.errorCode == 404) {
-                        mainActivity().showMessage("Number/Email is not found registered with us.")
+                        mainActivity().showMessage("$value is not found registered with us.")
                     } else {
                         mainActivity().showMessage(it.message ?: "")
                     }
