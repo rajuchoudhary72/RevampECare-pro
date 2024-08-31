@@ -439,6 +439,18 @@ class ProfileFragment : Fragment() {
             subTitle(profile.bloodGroup)
         }
         profileItem {
+            id(R.string.cbseid)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.cbseid))
+            subTitle(profile.cbseID)
+        }
+        profileItem {
+            id(R.string.club)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.club))
+            subTitle(profile.club)
+        }
+        profileItem {
             id(R.string.house_name)
             iconRes(R.drawable.outline_help_outline_24)
             title(getString(R.string.house_name))
