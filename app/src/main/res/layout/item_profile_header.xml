@@ -75,13 +75,13 @@
 
 
         <TextView
-            isVisible="@{bannerImageStatus != 1 || bannerImageStatus != 2}"
+            isVisible="@{bannerImageStatus == 1 || bannerImageStatus== 2}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/horizontal_margin"
             android:background="@drawable/rounded_bg_button"
             tools:backgroundTint="@color/darkYellow"
-            android:backgroundTint="@{profileImageStatus == 1 ? @color/darkYellow : @color/red}"
+            android:backgroundTint="@{bannerImageStatus == 1 ? @color/darkYellow : @color/red}"
             android:fontFamily="@font/calibri_regular"
             android:paddingHorizontal="@dimen/_8sdp"
             android:paddingVertical="@dimen/_4sdp"
@@ -111,7 +111,7 @@
 
         <TextView
             android:id="@+id/imgStatus"
-            isVisible="@{profileImageStatus != 1 || profileImageStatus != 2}"
+            isVisible="@{profileImageStatus == 1 || profileImageStatus== 2}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_4sdp"

@@ -61,7 +61,7 @@
                     android:id="@+id/sub_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{notification.body}"
+                    styledText="@{notification.body}"
                     tools:text="Lorem ipsum dolor sit amet..."
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:fontFamily="@font/calibri_regular"

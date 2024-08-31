@@ -215,7 +215,7 @@ class ProfileFragment : Fragment() {
                                 .setMessage("Are you sure to remove ${it.name}")
                                 .setPositiveButton("Yes") { _, _ ->
                                     profileViewModel.removeUser(it)
-                                }.setNegativeButton("Yes") { _, _ ->
+                                }.setNegativeButton("No") { _, _ ->
 
                                 }
                                 .show()
@@ -349,6 +349,18 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.pan_card_icon)
             title(getString(R.string.paNNumber))
             subTitle(profile.paNNumber)
+        }
+        profileItem {
+            id(R.string.cbseid)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.cbseid))
+            subTitle(profile.cbseID)
+        }
+        profileItem {
+            id(R.string.club)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.club))
+            subTitle(profile.club)
         }
         profileItem {
             id(R.string.bank_account_number)

@@ -2,7 +2,7 @@
     <string name="action_settings">Settings</string>
     <string name="app_name">e-Care</string>
     <!--School/College Code-->
-    <string name="help">Help</string>
+    <string name="help"><u>Help</u></string>
     <string name="please_enter_school_college_code">Please Enter School Code</string>
     <string name="find_your_school_college_code"><u>Find Your School Code</u></string>
     <string name="continue_">Continue</string>
@@ -156,7 +156,7 @@
     <string name="enter_thoughts">Enter Thoughts</string>
     <string name="enter_auther">Enter Author</string>
     <string name="book_details">Book Details</string>
-    <string name="no_data_found">No data found</string>
+    <string name="no_data_found">No Record found</string>
     <string name="clear_filter">Clear Filter</string>
     <string name="sms_app_message"><![CDATA[SMS & App Message]]></string>
     <string name="only_app_message">Only App Message</string>
@@ -437,6 +437,8 @@
     <string name="pAddress">Permanent Address</string>
     <string name="aadharCardNo">Aadhar Card Number</string>
     <string name="paNNumber">PAN Card Number</string>
+    <string name="cbseid">CBSE ID</string>
+    <string name="club">Club</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
@@ -520,7 +522,7 @@
     <string name="recharged_volume">Recharged Volume</string>
     <string name="previous_balance">Previous Balance</string>
     <string name="select_session">Session</string>
-
+    <string name="default_notification_channel_id">e-Care</string>
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
@@ -681,4 +683,5 @@
     <string name="child_regular_medication">Child Regular Medication</string>
     <string name="start_date">Start Date</string>
     <string name="approved_on">Approved On :</string>
+    <string name="lets_start_by_adding_your_favorite_menus_for_quick_access">Lets start by adding your favorite menus\nfor quick access</string>
 </resources>

@@ -67,6 +67,10 @@ data class Profile(
     val pAddress: String?,
     @SerializedName("paN_Number")
     val paNNumber: String?,
+    @SerializedName("cbseid")
+    val cbseID: String?,
+    @SerializedName("club")
+    val club: String?,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("qualification")

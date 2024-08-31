@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         R.id.notificationFragment,
         R.id.messageFragment,
     )
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun enableNotificationPermission() {
         when {
@@ -135,6 +136,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -147,6 +149,7 @@ class MainActivity : AppCompatActivity() {
             // decision.
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -182,9 +185,9 @@ class MainActivity : AppCompatActivity() {
 
         setUpMoreOptions()
 
-        Picasso.setSingletonInstance(Picasso.Builder(this).build())
-
-        checkAppVersion()
+       Picasso.setSingletonInstance(Picasso.Builder(this).build())
+        /* checking  for update version  */
+        //  checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -254,10 +257,25 @@ class MainActivity : AppCompatActivity() {
                     Log.e("FCM Token", "Unknown error", e)
                 }
             }
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
 
+    }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
 
     }
 
+    private fun handleNotificationClick(data: Bundle) {
+        val menuId = data.getInt("MenuId")
+        val childMenuId = data.getInt("ChMenuID")
+        getFragmentId(menuId, childMenuId)
+    }
     private fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {
@@ -265,18 +283,20 @@ class MainActivity : AppCompatActivity() {
                     is NetworkResult.Loading -> {
                         showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
-                         showLoader(false)
+                        showLoader(false)
                         Log.d("main", "Error" + it)
                     }
+
                     is NetworkResult.Success -> {
-                         showLoader(false)
+                        showLoader(false)
                         if (it.data != null) {
 
                             var versionCode = 0
                             var versionName = ""
                             try {
-                                val pInfo: PackageInfo =  packageManager
+                                val pInfo: PackageInfo = packageManager
                                     .getPackageInfo(packageName, 0)
                                 versionName = pInfo.versionName
                                 versionCode = pInfo.versionCode
@@ -286,7 +306,7 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
                             if (versionCode < it.data.android.versionCode) {
-                                if (versionName == it.data.android.criticalVersion .trim()
+                                if (versionName == it.data.android.criticalVersion.trim()
                                 ) // force update
                                     UpdateAppVersionDialog(
                                         1,
@@ -536,55 +556,34 @@ class MainActivity : AppCompatActivity() {
             }
 
             4 -> {
-
-                lifecycleScope.launch {
-                    userDataStore.getUser()?.run {
-                        try {
-                            if (userType == Constant.STAFF_TYPE) {
-                                userDataStore.getUser()?.run {
-                                    if (roleName == "Principal" || roleName == "Management") {
-                                        navController.navigate(
-                                            R.id.classAndTeacherListFragment,
-                                            Bundle().apply {
-                                                putString(Constant.TO, Constant.FRA_TIMETABLE)
-                                            })
-                                    } else {
-                                        navController.navigate(R.id.timeTableNavHostFragment)
-                                    }
-                                }
-
-
-                            } else {
-                                navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
-                                    putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
+                try {
+                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                            navController.navigate(
+                                R.id.classAndTeacherListFragment,
+                                Bundle().apply {
+                                    putString(Constant.TO, Constant.FRA_TIMETABLE)
                                 })
-                            }
-                        } catch (e: Exception) {
+                        } else {
+                            navController.navigate(R.id.timeTableNavHostFragment)
                         }
-                    }
-                }
 
+                    } else {
+                        navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                            putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
+                        })
+                    }
+                } catch (e: Exception) {
+
+                }
 
 
             }
 
-            5 ->  {
-
-                lifecycleScope.launch {
-                    userDataStore.getUser()?.run {
-                        try {
-                            if (userType   == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.teacherSyllabusFragment)
-                            } else {
-                                navController.navigate(R.id.classSyllabus)
-                            }
-
-                        } catch (e: Exception) {
-                        }
-                    }
-                }
-
-
+            5 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                navController.navigate(R.id.teacherSyllabusFragment)
+            } else {
+                navController.navigate(R.id.classSyllabus)
             }
 
 
@@ -612,20 +611,13 @@ class MainActivity : AppCompatActivity() {
             21 -> navController.navigate(R.id.thoughtsListFragment)
 
             22 -> {
-                lifecycleScope.launch {
-                    userDataStore.getUser()?.run {
-                        try {
-                            if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.appointmentReportFragment)
-                            } else {
-                                navController.navigate(R.id.appointmentFragment)
-                            }
+                if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                    navController.navigate(R.id.appointmentReportFragment)
+                } else {
+                    navController.navigate(R.id.appointmentFragment)
+                }
 
-
-                        } catch (e: Exception) {
-                        }
-                    }
-                }  }
+            }
 
             24 -> {
                 if (systemViewModel.UType == Constant.STUDENT_TYPE) {
@@ -737,24 +729,24 @@ class MainActivity : AppCompatActivity() {
                 if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
                 } else {
-                    /*  val bundle = Bundle()
+                      val bundle = Bundle()
                       bundle.putString("title", title)
                       bundle.putString("url", "$url?token=$token")
                       Log.d("WebURL",  "$url?token=$token")
-                      navController.navigate(R.id.webViewFragment, bundle)*/
-                    Log.d("WebURL", "$url?token=$token")
-                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
+                      navController.navigate(R.id.webViewFragment, bundle)
+                    /*Log.d("WebURL", "$url?token=$token")
+                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))*/
                 }
             }
 
         } else {
-            /*  val bundle = Bundle()
+              val bundle = Bundle()
               bundle.putString("title", title)
               bundle.putString("url", url)
               Log.d("WebURL",  url)
-              navController.navigate(R.id.webViewFragment, bundle)*/
-            Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))
+              navController.navigate(R.id.webViewFragment, bundle)
+          /*  Log.d("WebURL", url)
+            openCustomTab(tabIntent, Uri.parse(url))*/
         }
     }
 
@@ -820,23 +812,17 @@ class MainActivity : AppCompatActivity() {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
                     })
 
-                    12 -> {
-                        lifecycleScope.launch {
-                            userDataStore.getUser()?.run {
-                                if (userType == Constant.STAFF_TYPE) {
-                                    navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
-                                        putString(Constant.USER_TYPE, Constant.USER_STAFF)
-                                    })
-                                } else {
-                                    navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
-                                        putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
-                                    })
+                    12 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                            putString(Constant.USER_TYPE, Constant.USER_STAFF)
+                        })
+                    } else {
+                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                            putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
+                        })
 
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -1079,12 +1065,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         systemViewModel._showPrompt.observe(this) { open ->
-             if (open) {
-                 SearchPrompt()
-             }
+            if (open) {
+                SearchPrompt()
+            }
         }
-
-
 
 
         val menuItems = arrayOf(
@@ -1166,7 +1150,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -1211,10 +1194,9 @@ class MainActivity : AppCompatActivity() {
             .setTarget(binding.appBarMain.contentMain.searchBar)
             .setPrimaryText("Global Search")
             .setSecondaryText(" Click here to search Globally in Modules/Students/Staff ")
-            .setBackgroundColour( getColor(R.color.brand_color))
+            .setBackgroundColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     settingPrompt()
                 }
             }
@@ -1226,10 +1208,9 @@ class MainActivity : AppCompatActivity() {
             .setTarget(binding.appBarMain.contentMain.ivSetting)
             .setPrimaryText("Setting")
             .setSecondaryText("Click here to access quick settings ")
-            .setBackgroundColour( getColor(R.color.brand_color))
+            .setBackgroundColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     menuPrompt()
                 }
             }
@@ -1238,20 +1219,24 @@ class MainActivity : AppCompatActivity() {
 
     private fun menuPrompt() {
         MaterialTapTargetPrompt.Builder(this@MainActivity)
-            .setTarget(R.id.menu )
+            .setTarget(R.id.menu)
             .setPrimaryText("Menu")
             .setSecondaryText("Click here to access Menu Bar")
-            .setBackgroundColour( getColor(R.color.brand_color))
+            .setBackgroundColour(getColor(R.color.brand_color))
             .setFocalColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                { try {
-                         val sharedPreference =   getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT, Context.MODE_PRIVATE)
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
+                    try {
+                        val sharedPreference = getSharedPreferences(
+                            Constant.SHARED_PREF_NAME_PROMPT,
+                            Context.MODE_PRIVATE
+                        )
 
-                         val editor = sharedPreference.edit()
-                         editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
-                         editor.apply()
-                     }catch (e: Exception){}
+                        val editor = sharedPreference.edit()
+                        editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
+                        editor.apply()
+                    } catch (e: Exception) {
+                    }
                 }
             }
             .show()
@@ -1288,31 +1273,31 @@ class MainActivity : AppCompatActivity() {
         rel_normal_update_cancel.setOnClickListener { dialog.dismiss() }
         rel_normal_update_update.setOnClickListener {
             try {
-                 startActivity(
+                startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("market://details?id=$packageName")
                     )
                 )
             } catch (anfe: ActivityNotFoundException) {
-                 viewInBrowser(
+                viewInBrowser(
                     this@MainActivity,
-                     "https://play.google.com/store/apps/details?id=$packageName"
+                    "https://play.google.com/store/apps/details?id=$packageName"
                 )
             }
         }
         rel_critical_update_update.setOnClickListener {
             try {
-                 startActivity(
+                startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("market://details?id=$packageName")
                     )
                 )
             } catch (anfe: ActivityNotFoundException) {
-                 viewInBrowser(
+                viewInBrowser(
                     this@MainActivity,
-                     "https://play.google.com/store/apps/details?id=$packageName"
+                    "https://play.google.com/store/apps/details?id=$packageName"
                 )
             }
         }

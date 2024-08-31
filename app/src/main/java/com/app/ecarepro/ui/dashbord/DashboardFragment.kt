@@ -117,7 +117,7 @@ class DashboardFragment : Fragment() {
             if (data.showBDayCards == true)
                 buildTeachersBirthdayCarouselModel(data.birthDayCards)
 
-            buildFeedsModel(feeds)
+         //   buildFeedsModel(feeds)
 
             if (data.showTimetable == true)
                 timeTableCarouselModel(data.timetable)
