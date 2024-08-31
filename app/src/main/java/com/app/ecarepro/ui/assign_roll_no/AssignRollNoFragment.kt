@@ -76,7 +76,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.view_drop_down_menu, nameFilter)
+        val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1 , nameFilter)
         binding.autoCompleteFilter.setAdapter(arrayAdapter)
 
         binding.autoCompleteFilter.setText("Name", false)
@@ -164,8 +164,8 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
 
                                 val arrayAdapter = ArrayAdapter(
                                     requireContext(),
-                                    R.layout.view_drop_down_menu,
-                                    mMyClassDataString
+                                    android.R.layout.simple_list_item_1,
+                                            mMyClassDataString
                                 )
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
                             }

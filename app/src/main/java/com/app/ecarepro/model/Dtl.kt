@@ -10,6 +10,9 @@ data class Dtl(
     val forwardedBy: Int,
     val forwardedByName: Any,
     val fromDate: String,
+    val studentName: String,
+    val studentPhoto: String,
+
     val halfdayDTL: Any,
     val leaveAbbr: String,
     val leaveType: String,

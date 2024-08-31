@@ -17,13 +17,9 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentNoticeListBinding
-import com.app.ecarepro.epoxy_controler.NoticeEpoxyController
 import com.app.ecarepro.model.Notice
-import com.app.ecarepro.model.Thoughts
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.thought.ThoughtsAdapter
 import com.app.ecarepro.utils.Constant
-import com.app.ecarepro.utils.ResponseState
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -73,6 +69,10 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
             if (userType==Constant.USER_STAFF){
                 binding.autoInputClassInputLayout.isVisible=true
             }
+            getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
+        }else{
+            fetchNotices(Constant.PAGE_INDEX, 0,noticeType==Constant.NOTICE_CLASS)
+
         }
 
         lifecycleScope.launch {
@@ -101,7 +101,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                                 binding.recyclerNotice.isVisible=true
                                 binding.tvNoData.isVisible=false
 
-                                val noticeAdapter = NoticeListAdapter(it.data.noticeList , this@NoticeListFragment)
+                                val noticeAdapter = NoticeListAdapter(it.data.noticeList , this@NoticeListFragment,noticeType)
 
                                 binding.recyclerNotice.apply {
                                     setHasFixedSize(true)
@@ -138,14 +138,19 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
                             if (it.data.myClasses!=null) {
+
                                 mMyClass=it.data.myClasses
 
                                 mMyClass.forEach { data ->
                                     mMyClassDataString.add(data.className.toString())
                                 }
 
-                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,mMyClassDataString)
+                                val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,mMyClassDataString)
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
+                                 if (!mMyClass.isNullOrEmpty()){
+                                     mMyClass[0].classID?.let { idClass -> fetchNotices(Constant.PAGE_INDEX, idClass,noticeType==Constant.NOTICE_CLASS) }
+                                     binding.autoCompleteClass.setText(mMyClass[0].className,false)
+                                 }
                             }
                         }
 
@@ -162,7 +167,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                 R.id.btn_noti -> {
 
                     binding.autoInputClassInputLayout.visibility = View.GONE
-                    fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID,noticeType==Constant.NOTICE_CLASS)
+                    fetchNotices(Constant.PAGE_INDEX, 0,noticeType==Constant.NOTICE_CLASS)
                 }
 
                 else -> {
@@ -178,19 +183,25 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
         binding.autoCompleteClass.onItemClickListener=
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                mMyClass[pos].classID?.let { fetchNotices(0, it,noticeType==Constant.NOTICE_CLASS) }
+                mMyClass[pos].classID?.let { fetchNotices(Constant.PAGE_INDEX, it,noticeType==Constant.NOTICE_CLASS) }
 
             }
 
-        fetchNotices(Constant.PAGE_INDEX, Constant.DEFAULT_ID,noticeType==Constant.NOTICE_CLASS)
-        getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
+
 
     }
 
 
     private fun fetchNotices(pg: Int, classID: Int, isClassNotice: Boolean) {
+        if (noticeType==Constant.NOTICE_CLASS){
+            mMyClass[0].classID?.let {
+                noticeViewModel.getNotice(pg, classID,isClassNotice)
+            }
 
-        noticeViewModel.getNotice(pg, classID,isClassNotice)
+        }else{
+            noticeViewModel.getNotice(pg, 0,isClassNotice)
+        }
+
     }
 
     private fun getMyClass(subID: Int, iD: Int  ) {

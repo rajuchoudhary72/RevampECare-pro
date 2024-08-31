@@ -130,12 +130,17 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                             binding.recyclerLeaveReport.isVisible = true
                             binding.tvNoData.isVisible = false
 
-
-                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction)
+                            if (pageIndex==1){
+                                leaveReportAdapter.clearData()
+                            }
+                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction,applType)
 
                         }else{
-                            binding.recyclerLeaveReport.isVisible = false
-                            binding.tvNoData.isVisible = true
+                            if (pageIndex==1){
+                                binding.recyclerLeaveReport.isVisible = false
+                                binding.tvNoData.isVisible = true
+                            }
+
                         }
 
 

@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkStudentListToMarkAtt
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.databinding.FragmentStuMarkAttendenceBinding
 import com.app.ecarepro.model.ClassesForClsTeach
@@ -47,6 +48,7 @@ import kotlinx.coroutines.launch
 class StuMarkAttendanceFragment : Fragment(),  MenuProvider, ItemListener<StudentAtt> {
 
 
+    private lateinit var studentListWithData: NetworkStudentListToMarkAtt
     private var from: String=""
     private var isLateEnable: Boolean = false
     private lateinit var studentList: MutableList<StudentListMarkAtt>
@@ -99,6 +101,8 @@ class StuMarkAttendanceFragment : Fragment(),  MenuProvider, ItemListener<Studen
                     classID=classesForSubTeaches[pos].classID
                     getSubjectList(classID)
                 }else{
+                    subID=0
+                    binding.autoCompleteSub.setText("Select Subject ",false)
                     classID=classesForClsTeaches[pos].classID
                     getStudentListToMarkAtt(classID,subID)
                 }
@@ -142,6 +146,9 @@ class StuMarkAttendanceFragment : Fragment(),  MenuProvider, ItemListener<Studen
 
                             studentList= it.data.studentList.toMutableList()
                             isLateEnable=it.data.isLateEnable
+                            studentListWithData=it.data
+
+
                             val studentListMarkAttAdapter = StudentListMarkAttAdapter(
                                 it.data.studentList.toMutableList(),
                                 it.data.isLateEnable,
@@ -221,7 +228,7 @@ class StuMarkAttendanceFragment : Fragment(),  MenuProvider, ItemListener<Studen
                                     }
                                     val arrayAdapter = ArrayAdapter(
                                         requireContext(),
-                                        R.layout.view_drop_down_menu,
+                                        android.R.layout.simple_list_item_1,
                                         classesDataString
                                     )
                                     binding.autoCompleteClass.setAdapter(arrayAdapter)
@@ -238,7 +245,7 @@ class StuMarkAttendanceFragment : Fragment(),  MenuProvider, ItemListener<Studen
                                     }
                                     val arrayAdapter = ArrayAdapter(
                                         requireContext(),
-                                        R.layout.view_drop_down_menu,
+                                        android.R.layout.simple_list_item_1,
                                         classesDataString
                                     )
                                     binding.autoCompleteClass.setAdapter(arrayAdapter)
