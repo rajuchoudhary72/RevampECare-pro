@@ -129,10 +129,13 @@ class PostAssignmentFragment : Fragment() {
 
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
         binding.tvSelectClass.setOnClickListener {
-            if (classesList!=null){
-                popUpSelectClass()
-            }
-
+             if (isSubjectSelected){
+                 if (classesList!=null){
+                     popUpSelectClass()
+                 }
+             }else{
+                 mainActivity().showMessage("Select Subject")
+             }
         }
 
         binding.btnSubmit.setOnClickListener { uploadAssignment() }
@@ -347,13 +350,16 @@ class PostAssignmentFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            if (isSubjectSelected){
-                binding.tvSelectSubject.text= subjectData .subjectName
 
-                getMyClasses(subjectData.subID)
-                builder.dismiss()
+                 try {
+                     isSubjectSelected = true
+                     binding.tvSelectSubject.text= subjectData .subjectName
 
-            }
+                     getMyClasses(subjectData.subID)
+                     builder.dismiss()
+                 }catch (e:Exception){  }
+
+
 
         }
 
@@ -361,7 +367,7 @@ class PostAssignmentFragment : Fragment() {
             override fun onItemClick(t: MySubject, pos: Int, boolean: Boolean) {
 
                 subjectData=t
-                isSubjectSelected = true
+
             }
 
         })

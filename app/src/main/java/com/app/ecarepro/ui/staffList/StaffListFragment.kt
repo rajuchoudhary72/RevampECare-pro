@@ -92,11 +92,8 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
                         binding.rvStaffList.isVisible = true
 
                         if (it.data!=null){
-
+                            teacherList = it.data.staffs
                             setupRecycleViewStudentList(it.data.staffs)
-
-
-
                         }
 
                     }
@@ -126,8 +123,7 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
     private fun setupRecycleViewStudentList(staffs: List<Staff>) {
         if ( staffs != null) {
 
-
-            if ( staffs.isNotEmpty()) {
+         if ( staffs.isNotEmpty()) {
                 binding.rvStaffList.isVisible = true
                 binding.tvNoData.isVisible = false
 

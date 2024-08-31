@@ -76,11 +76,13 @@ class ClassAndTeacherListFragment : Fragment() {
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
 
-                                fragmentList.add( TeacherTimeTableFragment( it.data.teachers,toFragment))
-                                if (toFragment!=Constant.FRA_LESSON_PLAN){
-                                     fragmentList.add( ClassTimeTableFragment( it.data.classes,toFragment))
+                                try {
+                                    fragmentList.add( TeacherTimeTableFragment( it.data.teachers,toFragment))
+                                    if (toFragment!=Constant.FRA_LESSON_PLAN){
+                                        fragmentList.add( ClassTimeTableFragment( it.data.classes,toFragment))
 
-                                }
+                                    }
+                                }catch (e:Exception){ }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,

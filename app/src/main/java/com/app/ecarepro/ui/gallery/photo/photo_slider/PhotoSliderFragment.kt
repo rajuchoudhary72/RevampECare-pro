@@ -16,6 +16,7 @@ import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.imageUrl
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -58,12 +59,20 @@ class PhotoSliderFragment : Fragment() {
         binding.btnClose.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.photoView.imageUrl(url)
-        binding.tvNumberLike.text=likes.toString()
+
+
+         binding.tvNumberLike.text=likes.toString()
         totalLikes=likes
 
         if (galleryType==Constant.GALLERY_TYPE_VIDEO ){
             binding.ivVideoPlay.isVisible=true
+            Picasso.get().load(url)
+                .placeholder(R.drawable.default_profile)
+                .into(binding.photoView)
+        }else{
+            Picasso.get().load(fullUrl)
+                .placeholder(R.drawable.default_profile)
+                .into(binding.photoView)
         }
 
         binding.ivVideoPlay.setOnClickListener {

@@ -661,4 +661,24 @@
     <string name="assessments_are_currently_unavailable_for_you">Assessments are currently unavailable for you!</string>
     <string name="InboxList">"P/o" %1$s ", " %2$s </string>
     <string name="upgrade_now">Upgrade now</string>
+    <string name="bcg">BCG</string>
+    <string name="diphtheria">Diphtheria</string>
+    <string name="dpt_booster">DPT Booster</string>
+    <string name="whooping_cough">Whooping Cough</string>
+    <string name="tetanus">Tetanus</string>
+    <string name="measles">Measles</string>
+    <string name="mmr">MMR</string>
+    <string name="chicken_pox">Chicken Pox</string>
+    <string name="hepatitis_a">Hepatitis A</string>
+    <string name="hepatitis_b">Hepatitis B</string>
+    <string name="typhoid">Typhoid</string>
+    <string name="covid_dose_1">Covid Dose 1</string>
+    <string name="covid_dose_2">Covid Dose 2</string>
+    <string name="covid_booster_dose">Covid Booster Dose</string>
+    <string name="allergies">Allergies</string>
+    <string name="surgery_undergone_in_the_past">Surgery Undergone In The Past</string>
+    <string name="specific_past_disease">Specific Past Disease</string>
+    <string name="child_regular_medication">Child Regular Medication</string>
+    <string name="start_date">Start Date</string>
+    <string name="approved_on">Approved On :</string>
 </resources>

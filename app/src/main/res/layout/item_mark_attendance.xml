@@ -25,8 +25,7 @@
                 app:strokeColor="?attr/colorOutlineVariant"
                 app:strokeWidth="1dp"
 
-                placeholder="@{@drawable/default_profile}"
-                />
+                 />
 
 
             <LinearLayout

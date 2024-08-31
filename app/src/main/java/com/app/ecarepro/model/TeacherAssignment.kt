@@ -8,6 +8,7 @@ data class TeacherAssignment(
     val hasAttachment: Boolean,
     val id: String,
     val isActive: Boolean,
+    val isLateSubmitted: Boolean,
     val subject: String,
     val submitDate: String,
     val title: String,

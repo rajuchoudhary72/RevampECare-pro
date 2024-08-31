@@ -536,34 +536,55 @@ class MainActivity : AppCompatActivity() {
             }
 
             4 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_TIMETABLE)
+
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                userDataStore.getUser()?.run {
+                                    if (roleName == "Principal" || roleName == "Management") {
+                                        navController.navigate(
+                                            R.id.classAndTeacherListFragment,
+                                            Bundle().apply {
+                                                putString(Constant.TO, Constant.FRA_TIMETABLE)
+                                            })
+                                    } else {
+                                        navController.navigate(R.id.timeTableNavHostFragment)
+                                    }
+                                }
+
+
+                            } else {
+                                navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                                    putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
                                 })
-                        } else {
-                            navController.navigate(R.id.timeTableNavHostFragment)
+                            }
+                        } catch (e: Exception) {
                         }
-
-                    } else {
-                        navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
-                            putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
-                        })
                     }
-                } catch (e: Exception) {
-
                 }
+
 
 
             }
 
-            5 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                navController.navigate(R.id.teacherSyllabusFragment)
-            } else {
-                navController.navigate(R.id.classSyllabus)
+            5 ->  {
+
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType   == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.teacherSyllabusFragment)
+                            } else {
+                                navController.navigate(R.id.classSyllabus)
+                            }
+
+                        } catch (e: Exception) {
+                        }
+                    }
+                }
+
+
             }
 
 
@@ -591,13 +612,21 @@ class MainActivity : AppCompatActivity() {
             21 -> navController.navigate(R.id.thoughtsListFragment)
 
             22 -> {
-                if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                    navController.navigate(R.id.appointmentReportFragment)
-                } else {
-                    navController.navigate(R.id.appointmentFragment)
-                }
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.appointmentReportFragment)
+                            } else {
+                                navController.navigate(R.id.appointmentFragment)
+                            }
 
-            }
+
+                        } catch (e: Exception) {
+                        }
+                    }
+                }  }
+
             24 -> {
                 if (systemViewModel.UType == Constant.STUDENT_TYPE) {
                     navController.navigate(R.id.infractionSelectFragment)
@@ -791,17 +820,23 @@ class MainActivity : AppCompatActivity() {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
                     })
 
-                    12 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
-                            putString(Constant.USER_TYPE, Constant.USER_STAFF)
-                        })
-                    } else {
-                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
-                            putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
-                        })
+                    12 -> {
+                        lifecycleScope.launch {
+                            userDataStore.getUser()?.run {
+                                if (userType == Constant.STAFF_TYPE) {
+                                    navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                                        putString(Constant.USER_TYPE, Constant.USER_STAFF)
+                                    })
+                                } else {
+                                    navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                                        putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
+                                    })
 
+                                }
+                            }
+                        }
                     }
                 }
             }

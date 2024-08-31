@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
+    private var isLateSubmitted: Boolean=false
     private var lateSubmit: Boolean=true
     private var viewAssignmentData: NetworkViewAssignment? = null
     private var submitList: Boolean=true
@@ -51,7 +52,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     ): View  {
 
         binding=FragmentViewAssignmentBinding.inflate(inflater,container,false)
-        assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
+         try {
+             assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
+             isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
+         }catch (_:Exception){}
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
          return binding.root
     }
@@ -59,6 +63,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnLateSubmit.isVisible=isLateSubmitted
 
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
