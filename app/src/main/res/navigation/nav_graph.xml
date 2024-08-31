@@ -524,7 +524,11 @@
     <fragment
         android:id="@+id/selectMarkAttendanceFragment"
         android:name="com.app.ecarepro.ui.markAttendence.SelectMarkAttendanceFragment"
-        android:label="SelectMarkAttendanceFragment" >
+        android:label="SelectMarkAttendanceFragment"
+        android:theme="@style/Theme.Transparent"
+        android:windowSoftInputMode="stateHidden|adjustResize"
+
+        >
         <action
             android:id="@+id/action_selectMarkAttendanceFragment_to_stuMarkAttendanceFragment"
             app:destination="@id/stuMarkAttendanceFragment" />
@@ -931,6 +935,10 @@
         android:id="@+id/editProfileFragment"
         android:name="com.app.ecarepro.ui.edit_profile.EditProfileFragment"
         android:label="EditProfileFragment" />
+    <fragment
+        android:id="@+id/appointmentFragment"
+        android:name="com.app.ecarepro.ui.appointment.v2.AppointmentFragment"
+        android:label="AppointmentFragment" />
     <fragment
         android:id="@+id/printOutAppointenentFragment"
         android:name="com.app.ecarepro.ui.fom_guard.PrintOutAppointenentFragment"

@@ -35,7 +35,7 @@ class ClassAttendanceFragment : Fragment()  {
     private var date: String  =  ""
     private lateinit var binding :  FragmentClassAttendanceBinding
     private val classAttViewModel : ClassAttViewModel by viewModels()
-    private lateinit var mMyClass: List<MyClasseItem>
+    private   var mMyClass= mutableListOf<MyClasseItem>()
      private   var mMyClassDataString:   ArrayList<String> =  ArrayList( )
 
     override fun onCreateView(
@@ -54,14 +54,14 @@ class ClassAttendanceFragment : Fragment()  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvDate.text= date
+        binding.startDate.setText(date)
         binding.autoCompleteClass.setText(className,false)
 
-        binding.tvDate.setOnClickListener {
+        binding.startDate.setOnClickListener {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvDate.text = Constant.dateToShow(date.toString())
-                    classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
+                    binding.startDate.setText(Constant.dateToShow(date.toString()))
+                    classAttViewModel.getClassAttendance(classId.toString(),binding.startDate.text.toString())
                 }
 
             }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
@@ -73,11 +73,15 @@ class ClassAttendanceFragment : Fragment()  {
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
                 classId= mMyClass[pos].id!!
-                classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
+                classAttViewModel.getClassAttendance(classId.toString(),binding.startDate.text.toString())
 
             }
 
         lifecycleScope.launch {
+
+            mMyClass.clear()
+            mMyClassDataString.clear()
+
             classAttViewModel._myClassStateFlow.collectLatest {
 
                 when (it) {
@@ -92,11 +96,13 @@ class ClassAttendanceFragment : Fragment()  {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
                             if (it.data.myClasses!=null) {
-                                mMyClass=it.data.myClasses
+                                mMyClass= it.data.myClasses as MutableList<MyClasseItem>
                                 mMyClass.forEach { data ->
                                     mMyClassDataString.add(data.className.toString())
                                 }
-                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,mMyClassDataString)
+                                val arrayAdapter= ArrayAdapter(requireContext(),
+                                    android.R.layout.simple_list_item_1 ,
+                                    mMyClassDataString)
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
                             }
                         }
@@ -170,7 +176,7 @@ class ClassAttendanceFragment : Fragment()  {
                         }
                     }  } } }
 
-        classAttViewModel.getClassAttendance(classId.toString(),binding.tvDate.text.toString())
+        classAttViewModel.getClassAttendance(classId.toString(),binding.startDate.text.toString())
     }
 
     private fun getFilterList(attReport: List<AttReport>, status: Int ): List<AttReport> {

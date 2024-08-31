@@ -40,10 +40,10 @@ class StudentListMarkAttAdapter(
         val data = studentListArrayList[position]
 
 
-        Picasso.get()
-            .load(data.photo)
+        Picasso.get().
+        load(data.photo)
             .placeholder(R.drawable.default_profile)
-            .networkPolicy(NetworkPolicy.OFFLINE).into(binding!!.userImg)
+            .  into(binding!!.userImg)
 
 
 

@@ -120,6 +120,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
             1 -> {
                 findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
+                    putBoolean(Constant.IS_LATE_SUBMITTED, t.isLateSubmitted)
                 })
             }
             2 -> {

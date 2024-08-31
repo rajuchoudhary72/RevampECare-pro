@@ -183,6 +183,8 @@ sealed interface LoadingState {
     object Loading : LoadingState
     object Success : LoadingState
     data class Error(val error: Throwable) : LoadingState
+
+    fun isLoading() = this == Loading
 }
 
 

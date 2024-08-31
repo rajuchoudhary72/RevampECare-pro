@@ -10,5 +10,6 @@
     <item name="today_tasks" type="id" />
     <item name="upcoming_tasks" type="id" />
     <item name="closed_tasks" type="id" />
+    <item name="text_watchers" type="id" />
 
 </resources>

@@ -52,6 +52,17 @@ class BirthdayFragment : Fragment() {
             userType = requireArguments().getInt("uType")
             monthSelected = requireArguments().getString("monthSelected").toString().toInt()
             dateSelected = requireArguments().getString("dateSelected").toString()
+            if (userType == Constant.STAFF_TYPE) {
+                binding.toggleButtonTypeUser.check(R.id.btn_class_staff)
+            } else {
+                binding.toggleButtonTypeUser.check(R.id.btn_student)
+            }
+            if (rptType == 2) {
+                binding.tvDate.text = "Date"
+            }else{
+                binding.tvDate.text = Constant.currentDate()
+            }
+
         } catch (e: Exception) {
         }
 
@@ -80,6 +91,17 @@ class BirthdayFragment : Fragment() {
                             rptType,
                             monthSelected,
                             binding.tvDate.text.toString()
+                    )
+
+
+                }
+                R.id.btn_parent -> {
+                    userType = Constant.PARENT_TYPE
+                    birthdayViewModel.birthday(
+                        userType,
+                        rptType,
+                        monthSelected,
+                        binding.tvDate.text.toString()
                     )
 
 
@@ -120,6 +142,7 @@ class BirthdayFragment : Fragment() {
                 AdapterView.OnItemClickListener { parent, view, pos, id ->
                     monthSelected = monthModelArrayList[pos].monthID
                     rptType = 2
+                    binding.tvDate.text = "Date"
                     birthdayViewModel.birthday(
                             userType,
                             rptType,
@@ -258,7 +281,7 @@ class BirthdayFragment : Fragment() {
 
         val arrayAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.view_drop_down_menu,
+                android.R.layout.simple_list_item_1,
                 monthDataString
         )
         binding.autoCompleteMonth.setAdapter(arrayAdapter)

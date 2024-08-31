@@ -94,7 +94,7 @@ class AssignmentNavHostFragment : Fragment() {
                                       val badgeDrawable : BadgeDrawable = tab.orCreateBadge
 
                                   //  badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
-                                    badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
+                                     badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
 
 
 

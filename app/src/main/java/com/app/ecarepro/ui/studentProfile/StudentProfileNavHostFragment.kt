@@ -14,6 +14,9 @@ import com.app.ecarepro.databinding.FragmentStudentProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerformanceNavHostFragment
+import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciationFragment
+import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
+import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,16 +78,76 @@ class StudentProfileNavHostFragment : Fragment() {
 
                             binding.userData = it.data.profile
 
-                            val fragmentList: ArrayList<Fragment> = ArrayList();
+                            val fragmentList: ArrayList<Fragment> = ArrayList()
+                            val fragmentName= mutableListOf<String>()
 
 
-                            fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
-                            fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID))
-                            fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery,it.data.academicYears,studentID))
-                            fragmentList.add(StudentProfileLibraryTransFragment(it.data.library))
-                            fragmentList.add(StudentProfileMedicineIssuedFragment(it.data.medicineIssued))
-                            fragmentList.add(StudentProfileTransportDetailsFragment(it.data.transDetails))
-                            fragmentList.add(AcademicPerformanceNavHostFragment(it.data.academicYears,studentID ))
+                                for (i in it.data.sectionControl.sections ){
+                                    when(i.name){
+                                        "PersonalDetails" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
+                                                fragmentName.add("Personal Details")
+                                            }
+                                        }
+                                        "Attendance" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID))
+                                                fragmentName.add("Attendance")
+                                            }
+                                        }
+                                        "PersonalDetails" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
+                                                fragmentName.add("Personal Details")
+                                            }
+                                        }
+                                        "FeeDetails" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery,it.data.academicYears,studentID))
+                                                fragmentName.add("Fee Details")
+                                            }
+                                        }
+                                        "Infirmary" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileMedicineIssuedFragment(it.data.medicineIssued))
+                                                fragmentName.add("Infirmary")
+                                            }
+                                        }
+                                        "Library" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileLibraryTransFragment(it.data.library))
+                                                fragmentName.add("Library")
+                                            }
+                                        }
+                                        "Transport" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileTransportDetailsFragment(it.data.transDetails))
+                                                fragmentName.add("Transport Details")
+                                            }
+                                        }
+                                        "Infraction" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileInfractionFragment(it.data.recentInfractions))
+                                                fragmentName.add("Infraction Details")
+                                            }
+                                        }
+                                        "Appreciation" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StudentProfileAppreciationFragment(it.data.recentAppreciations))
+                                                fragmentName.add("Appreciation Details")
+                                            }
+                                        }
+                                        "MedicalCard" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(MedicalCardFragment(it.data.medicalCard))
+                                                fragmentName.add("Medical Card")
+                                            }
+                                        }
+                                    }
+                                }
+
+
 
 
                             val viewPagerAdapter = ViewPagerAdapter(
@@ -99,40 +162,14 @@ class StudentProfileNavHostFragment : Fragment() {
                                 binding.viewPager
                             ) { tab, position ->
 
-                                when (position) {
-                                    0 -> {
-                                        tab.text = "Personal Profile"
-                                    }
+                                tab.text = fragmentName[position]
 
-                                    1 -> {
-                                        tab.text = "Attendance"
-                                    }
 
-                                    2 -> {
-                                        tab.text = "Fee Details"
-                                    }
-
-                                    3 -> {
-                                        tab.text = "Library Transaction Details"
-                                    }
-
-                                    4 -> {
-                                        tab.text = "Infirmary Visit"
-                                    }
-                                    5 -> {
-                                        tab.text = "Transport Details"
-                                    }
-                                    6 -> {
-                                        tab.text = "Academic Performance"
-                                    }
-
-                                }
-                            }.attach()
-                        }
+                        }.attach()
 
                     }
                 }
-            }
+            }}
         }
         studentProfileNavHostViewModel.getStudentProfile(sId)
     }

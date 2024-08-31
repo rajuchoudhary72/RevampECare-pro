@@ -91,11 +91,13 @@ class InstitutionCodeFragment : Fragment() {
             institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
                 (requireActivity() as MainActivity).showLoader(false)
                 if (it?.errorCode == 0) {
-                    if(it.isStudentLoginBlocked == true){
+                   /* if(it.isStudentLoginBlocked == true){
                         mainActivity().showMessage("you are block by admin by this school so please co-coordinate to this school admin!")
                     }else{
                         navigateToSignFragment(it.schoolCode)
-                    }
+                    }*/
+
+                    navigateToSignFragment(it.schoolCode)
                 } else {
                     binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
                     mainActivity().showMessage("Please enter a valid school code.")
