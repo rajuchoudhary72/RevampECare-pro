@@ -529,12 +529,11 @@ class MainActivity : AppCompatActivity() {
         }
         when (menuID) {
             3 -> {
-
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                                if (roleName == "Principal" || roleName == "Management") {
                                     navController.navigate(
                                         R.id.classAndTeacherListFragment,
                                         Bundle().apply {
@@ -589,7 +588,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             5 ->  {
-
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
@@ -613,18 +611,23 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
+         /*   15 -> navController.navigate(R.id.questionnaireListFragment)*/
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.attendanceFragment)
-                    } else {
-                        navController.navigate(R.id.showAttendanceFragment)
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                            try {
+                                if (userType == Constant.STAFF_TYPE) {
+                                    navController.navigate(R.id.attendanceFragment)
+                                } else {
+                                    navController.navigate(R.id.showAttendanceFragment)
+                                }
+                            } catch (_: Exception) {
+                            }
+                        }
                     }
-                } catch (_: Exception) {
                 }
-            }
 
             18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
             19 -> navController.navigate(R.id.leaveHistoryFragment)
@@ -664,7 +667,7 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
-                            if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                            if (userType == Constant.STAFF_TYPE) {
                                 lifecycleScope.launch {
                                     userDataStore.getSchoolData()?.let {
                                         it.marksEntryURL?.let { url ->
@@ -780,6 +783,11 @@ class MainActivity : AppCompatActivity() {
 
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {
+        lifecycleScope.launch {
+            userDataStore.getUser()?.let {
+                systemViewModel.UType = userDataStore.getUserType()!!
+            }
+        }
         when (menuID) {
             1 -> {
                 when (childMenuId) {
@@ -865,22 +873,26 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
                     14 -> navController.navigate(R.id.birthdayFragment)
-                    15 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_LESSON_PLAN)
-                                })
-                        } else {
-                            navController.navigate(R.id.lessonPlanListFragment)
 
+                    15 -> {
+                        lifecycleScope.launch {
+                            userDataStore.getUser()?.run {
+                                if (userType == Constant.STAFF_TYPE) {
+                                    if (roleName== "Principal" || roleName == "Management") {
+                                        navController.navigate(
+                                            R.id.classAndTeacherListFragment,
+                                            Bundle().apply {
+                                                putString(Constant.TO, Constant.FRA_LESSON_PLAN)
+                                            })
+                                    } else {
+                                        navController.navigate(R.id.lessonPlanListFragment)
+                                    }
+                                }
+                            }
                         }
-
                     }
-
                     16 -> navController.navigate(R.id.questionPaperFragment)
-                    //   42 -> navController.navigate(R.id.smsMsgReportFragment)
+                       40 -> navController.navigate(R.id.conversationReportFragment)
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                     47 -> navController.navigate(R.id.surveyListFragment)
@@ -917,7 +929,6 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         when (childMenuId) {
-
                             21 -> if (userType == Constant.STAFF_TYPE) {
                                 navController.navigate(R.id.appreciationSelectionFragment)
 

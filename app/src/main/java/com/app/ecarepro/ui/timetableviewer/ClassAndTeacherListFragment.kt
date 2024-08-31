@@ -107,12 +107,6 @@ class ClassAndTeacherListFragment : Fragment() {
 
                                     }
 
-
-
-
-
-
-
                                 }.attach()
 
 
