@@ -438,7 +438,10 @@ class SelectRecipientPagerFragment : Fragment() {
                     contact.name.contains(
                         searchQuery?.toLowerCase() ?: "",
                         true
-                    )
+                    ) || contact.childName?.contains(
+                        searchQuery?.toLowerCase() ?: "",
+                        true
+                    )?:false
                 }
                 ?.forEach { contact ->
                     selectableRecipient {

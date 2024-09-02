@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.runBlocking
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
@@ -135,11 +136,17 @@ class SignInFragment : Fragment() {
                 mViewModel.verifyUser(binding.textUserName.text.toString()) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        userNameValid = true
-                        binding.textInputLayoutPassword.isVisible = true
-                        binding.textInputLayoutUserName.isEnabled = false
-                        binding.textUserName.isEnabled = false
-                        binding.textUserName.isClickable = false
+                        if(runBlocking {
+                                mViewModel.isUserAlreadyLogin(it.name)
+                            }){
+                            mainActivity().showMessage("User already login!")
+                        }else{
+                            userNameValid = true
+                            binding.textInputLayoutPassword.isVisible = true
+                            binding.textInputLayoutUserName.isEnabled = false
+                            binding.textUserName.isEnabled = false
+                            binding.textUserName.isClickable = false
+                        }
                     }else{
                         mainActivity().showMessage("Invalid username")
                     }

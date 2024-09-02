@@ -19,6 +19,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.update
+import kotlin.math.truncate
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -26,35 +31,40 @@ class ProfileViewModel @Inject constructor(
     userDataStore: UserDataStore,
     private val userDatabase: UserDatabase
 ) : ViewModel() {
+    val refresh = MutableStateFlow(true)
 
     var userType: Int = 0
 
-    val uiState = combine(
-        flow = userDataStore.getUsersFlow(),
-        flow2 = userRepository.getUserProfile(),
-        flow3 = userDataStore.getCurrentUserIdAsFlow()
-    ) { users, profile, userId ->
-        Triple(users, profile, userId)
-    }.map { (users, profile, userId) ->
-        if (profile.isSuccess) {
-            ProfileUiState.Success(
-                profile = profile.getOrNull()!!,
-                users = users,
-                currentUserId = userId!!
-            )
-        } else {
-            ProfileUiState.Error(
-                profile.exceptionOrNull() ?: IllegalArgumentException(
-                    UNKNOWN_ERROR_MESSAGE
-                )
-            )
+    val uiState =
+        refresh.flatMapLatest {
+            combine(
+                flow = userDataStore.getUsersFlow(),
+                flow2 = userRepository.getUserProfile(),
+                flow3 = userDataStore.getCurrentUserIdAsFlow()
+            ) { users, profile, userId ->
+                Triple(users, profile, userId)
+            }
         }
-    }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = ProfileUiState.Loading,
-            started = SharingStarted.WhileSubscribed(300)
-        )
+            .map { (users, profile, userId) ->
+                if (profile.isSuccess) {
+                    ProfileUiState.Success(
+                        profile = profile.getOrNull()!!,
+                        users = users,
+                        currentUserId = userId!!
+                    )
+                } else {
+                    ProfileUiState.Error(
+                        profile.exceptionOrNull() ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
+                    )
+                }
+            }
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = ProfileUiState.Loading,
+                started = SharingStarted.WhileSubscribed(300)
+            )
 
     init {
         viewModelScope.launch {
@@ -113,8 +123,7 @@ class ProfileViewModel @Inject constructor(
 
     fun removeUser(user: NetworkUserDetailsDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            userDatabase.deleteUser(user.asUserEntity())
-        }
+            userDatabase.deleteUser(user.userId)        }
     }
 }
 

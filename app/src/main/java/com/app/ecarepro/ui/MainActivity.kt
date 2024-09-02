@@ -184,8 +184,12 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+        try {
+            Picasso.setSingletonInstance(Picasso.Builder(this).build())
+        } catch (e: RuntimeException) {
+            e.toString()
+        }
 
-       Picasso.setSingletonInstance(Picasso.Builder(this).build())
         /* checking  for update version  */
         //  checkAppVersion()
 
@@ -262,6 +266,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -272,10 +277,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNotificationClick(data: Bundle) {
-        val menuId = data.getInt("MenuId")
-        val childMenuId = data.getInt("ChMenuID")
-        getFragmentId(menuId, childMenuId)
+        val menuId = data.getString("MenuId")?.toInt()
+        val childMenuId = data.getString("ChMenuID")?.toInt()
+        if (menuId != null) {
+            if (childMenuId != null) {
+                getFragmentId(menuId, childMenuId)
+            }
+        }
     }
+
     private fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {
@@ -574,9 +584,14 @@ class MainActivity : AppCompatActivity() {
 
 
                             } else {
-                                navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
-                                    putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
-                                })
+                                navController.navigate(
+                                    R.id.timeTableNavHostFragment,
+                                    Bundle().apply {
+                                        putString(
+                                            Constant.TIME_TABLE_TYPE,
+                                            Constant.CLASS_TIME_TABLE
+                                        )
+                                    })
                             }
                         } catch (e: Exception) {
                         }
@@ -584,14 +599,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
 
-
             }
 
-            5 ->  {
+            5 -> {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
-                            if (userType   == Constant.STAFF_TYPE) {
+                            if (userType == Constant.STAFF_TYPE) {
                                 navController.navigate(R.id.teacherSyllabusFragment)
                             } else {
                                 navController.navigate(R.id.classSyllabus)
@@ -611,23 +625,23 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
-         /*   15 -> navController.navigate(R.id.questionnaireListFragment)*/
+            /*   15 -> navController.navigate(R.id.questionnaireListFragment)*/
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
-                            try {
-                                if (userType == Constant.STAFF_TYPE) {
-                                    navController.navigate(R.id.attendanceFragment)
-                                } else {
-                                    navController.navigate(R.id.showAttendanceFragment)
-                                }
-                            } catch (_: Exception) {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.attendanceFragment)
+                            } else {
+                                navController.navigate(R.id.showAttendanceFragment)
                             }
+                        } catch (_: Exception) {
                         }
                     }
                 }
+            }
 
             18 -> navController.navigate(R.id.reportCardDetailsNavHostFragment)
             19 -> navController.navigate(R.id.leaveHistoryFragment)
@@ -648,7 +662,8 @@ class MainActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                         }
                     }
-                }  }
+                }
+            }
 
             24 -> {
                 if (systemViewModel.UType == Constant.STUDENT_TYPE) {
@@ -760,24 +775,24 @@ class MainActivity : AppCompatActivity() {
                 if (token.isNullOrEmpty()) {
                     showMessage("Something went wrong")
                 } else {
-                      val bundle = Bundle()
-                      bundle.putString("title", title)
-                      bundle.putString("url", "$url?token=$token")
-                      Log.d("WebURL",  "$url?token=$token")
-                      navController.navigate(R.id.webViewFragment, bundle)
+                    val bundle = Bundle()
+                    bundle.putString("title", title)
+                    bundle.putString("url", "$url?token=$token")
+                    Log.d("WebURL", "$url?token=$token")
+                    navController.navigate(R.id.webViewFragment, bundle)
                     /*Log.d("WebURL", "$url?token=$token")
                     openCustomTab(tabIntent, Uri.parse("$url?token=$token"))*/
                 }
             }
 
         } else {
-              val bundle = Bundle()
-              bundle.putString("title", title)
-              bundle.putString("url", url)
-              Log.d("WebURL",  url)
-              navController.navigate(R.id.webViewFragment, bundle)
-          /*  Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))*/
+            val bundle = Bundle()
+            bundle.putString("title", title)
+            bundle.putString("url", url)
+            Log.d("WebURL", url)
+            navController.navigate(R.id.webViewFragment, bundle)
+            /*  Log.d("WebURL", url)
+              openCustomTab(tabIntent, Uri.parse(url))*/
         }
     }
 
@@ -878,7 +893,7 @@ class MainActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
-                                    if (roleName== "Principal" || roleName == "Management") {
+                                    if (roleName == "Principal" || roleName == "Management") {
                                         navController.navigate(
                                             R.id.classAndTeacherListFragment,
                                             Bundle().apply {
@@ -891,8 +906,9 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+
                     16 -> navController.navigate(R.id.questionPaperFragment)
-                       40 -> navController.navigate(R.id.conversationReportFragment)
+                    40 -> navController.navigate(R.id.conversationReportFragment)
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                     47 -> navController.navigate(R.id.surveyListFragment)

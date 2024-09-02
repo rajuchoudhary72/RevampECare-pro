@@ -45,11 +45,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
         remoteMessage.data.isNotEmpty().let {
             Log.d("FCM", "Message data payload: " + remoteMessage.data)
+            sendNotification(remoteMessage.notification?.body, remoteMessage.notification?.title, remoteMessage.data)
         }
 
         remoteMessage.notification?.let {
             Log.d("FCM", "Message Notification Body: ${it.body}")
-            sendNotification(it.body, it.title, remoteMessage.data)
+            //sendNotification(it.body, it.title, remoteMessage.data)
         }
         Firebase.messaging.token
         if (null != remoteMessage) {
