@@ -15,7 +15,6 @@ import android.text.style.CharacterStyle
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -46,11 +45,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
         remoteMessage.data.isNotEmpty().let {
             Log.d("FCM", "Message data payload: " + remoteMessage.data)
+            sendNotification(remoteMessage.notification?.body, remoteMessage.notification?.title, remoteMessage.data)
         }
 
         remoteMessage.notification?.let {
             Log.d("FCM", "Message Notification Body: ${it.body}")
-            sendNotification(it.body,it.title)
+            //sendNotification(it.body, it.title, remoteMessage.data)
         }
         Firebase.messaging.token
         if (null != remoteMessage) {
@@ -64,8 +64,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val body = ""
         }
     }
-    private fun sendNotification(messageBody: String?, title: String?) {
+
+    private fun sendNotification(
+        messageBody: String?,
+        title: String?,
+        data: MutableMap<String, String>
+    ) {
         val intent = Intent(this, MainActivity::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            data.forEach { (key, value) ->
+                intent.putExtra(key, value)
+            }
+        }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         //End
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

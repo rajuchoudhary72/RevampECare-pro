@@ -8,7 +8,8 @@ import com.app.ecarepro.data.database.model.SchoolEntity
 import com.app.ecarepro.data.database.model.UserEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 class UserDatabaseImpl @Inject constructor(
     private val userDao: UserDao,
     private val schoolDao: SchoolDao
@@ -17,18 +18,23 @@ class UserDatabaseImpl @Inject constructor(
         userDao.insertUser(user)
     }
 
-    override suspend fun getUser(userId: Int): UserEntity {
-        return userDao.getUser(userId)
+    override suspend fun getUser(userId: Int): UserEntity? {
+        val users = getUsersFlow().first()
+        return users.firstOrNull { it.userId == userId } ?: users.firstOrNull()
     }
 
-    override fun getUserFlow(userId: Int): Flow<UserEntity> {
-        return userDao.getUserFlow(userId)
+    override fun getUserFlow(userId: Int): Flow<UserEntity?> {
+        return getUsersFlow().map { users ->
+            users.firstOrNull { it.userId == userId } ?: users.firstOrNull()
+        }
     }
 
     override fun getUsersFlow(): Flow<List<UserEntity>> {
         return userDao.getUsersFlow()
     }
-
+    override suspend fun deleteUser(userId: Int) {
+        return userDao.deleteUser(userId)
+    }
     override suspend fun deleteUser(userEntity: UserEntity) {
         return userDao.deleteUser(userEntity)
     }
