@@ -349,13 +349,13 @@ class UserRepositoryImpl @Inject constructor(
         duration: Double,
         halfdayDTL: List<HalfdayDTL>,
         reason: String,
-        attachment: String,
-        fileExt: String
-    ): CommonResponse {
+        fileAttachment: FileAttachment?,
+
+        ): CommonResponse {
         return userService.leaveApply(
             LeaveRequestData(
                 duration,
-                FileAttachment(attachment, fileExt, ""),
+                fileAttachment,
                 fromDate,
                 halfdayDTL,
                 leaveID,

@@ -95,6 +95,7 @@ import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
+import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
@@ -245,9 +246,9 @@ interface UserRepository {
         duration: Double,
         halfdayDTL: List<HalfdayDTL>,
         reason: String,
-        attachment: String,
-        fileExt: String
-    ): CommonResponse
+        fileAttachment: FileAttachment?,
+
+        ): CommonResponse
 
     suspend fun leaveSetting(): NetworkLeaveSetting
 

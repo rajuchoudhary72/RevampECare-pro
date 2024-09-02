@@ -522,6 +522,8 @@
     <string name="recharged_volume">Recharged Volume</string>
     <string name="previous_balance">Previous Balance</string>
     <string name="select_session">Session</string>
+    <string name="select_session_one">Session First</string>
+    <string name="select_session_two">Session Second </string>
     <string name="default_notification_channel_id">e-Care</string>
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
@@ -684,4 +686,9 @@
     <string name="start_date">Start Date</string>
     <string name="approved_on">Approved On :</string>
     <string name="lets_start_by_adding_your_favorite_menus_for_quick_access">Lets start by adding your favorite menus\nfor quick access</string>
+    <string name="term_and_conditions"><u>Terms and Conditions</u></string>
+    <string name="important_notes_leave"><u>Important Notes</u></string>
+    <string name="rules_for_leave"><u>Rules for Leave</u></string>
+    <string name="lbl_agree">Agree</string>
+
 </resources>

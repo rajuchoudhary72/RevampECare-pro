@@ -61,7 +61,7 @@ class PhotoSliderFragment : Fragment() {
         }
 
 
-         binding.tvNumberLike.text=likes.toString()
+         binding.tvNumberLike.text = "$likes Likes "
         totalLikes=likes
 
         if (galleryType==Constant.GALLERY_TYPE_VIDEO ){
@@ -112,14 +112,14 @@ class PhotoSliderFragment : Fragment() {
         binding.llLike.setOnClickListener {
             isLike = if (isLike){
                 totalLikes -= 1
-                binding.tvNumberLike.text=totalLikes.toString()
+                binding.tvNumberLike.text="$totalLikes Likes "
                 binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
                 photoSliderViewModel.manageLikes(Id,galleryType,false )
                 false
             }else{
 
                 totalLikes += 1
-                binding.tvNumberLike.text=totalLikes.toString()
+                binding.tvNumberLike.text="$totalLikes Likes "
                 binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
                 photoSliderViewModel.manageLikes(Id,galleryType,true )
                 true

@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
@@ -52,6 +53,12 @@ class SignInViewModel @Inject constructor(
                 )
             )
         }
+    }
+    suspend fun isUserAlreadyLogin(photo: String?):Boolean {
+        val user = userDataStore.getUsersFlow().map { users ->
+            users.firstOrNull { it.name == photo }
+        }.first()
+        return user != null
     }
 
     fun login(username: String, password: String, onResponse: (LoginResponseDto) -> Unit) {

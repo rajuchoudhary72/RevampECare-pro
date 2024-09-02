@@ -16,12 +16,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.Calendar
 
 @AndroidEntryPoint
 class CalenderActivityNavHost : Fragment() {
 
     private lateinit var binding: FragmentCalenderActivityNavHostBinding
     private val activityCalenderViewModel: ActivityCalenderViewModel by viewModels()
+    val monthCountList = listOf(4,5,6,7,8,9,10,11,12,1,2,3)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -166,6 +169,25 @@ class CalenderActivityNavHost : Fragment() {
                                         }
                                     }
                                 }.attach()
+
+                                try {
+
+
+                                    val calendar = Calendar.getInstance()
+                                    val currentMonth = calendar.get(Calendar.MONTH)
+
+                                    var i =1
+                                    for (a in monthCountList) {
+                                        if (currentMonth == a ) {
+                                            val tabToSelect = binding.tabLayout.getTabAt(i)
+                                            tabToSelect?.select()
+                                            break
+                                        }
+                                        i += 1
+                                    }
+
+
+                                }catch (e:Exception){}
 
 
                             }
