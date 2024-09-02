@@ -21,6 +21,9 @@ class InfractionSelectFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
        binding=FragmentInfrectionSelectBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 

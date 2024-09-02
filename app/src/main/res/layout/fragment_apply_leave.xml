@@ -320,6 +320,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="@string/terms_and_conditions"
+                android:textColor="@color/grey_60"
                 app:fontFamily="@font/ubuntu_medium" />
         </LinearLayout>
 

@@ -2,35 +2,40 @@ package com.app.ecarepro.ui.leave.staff
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.app.Dialog
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
-import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.databinding.FragmentStaffApplyLeaveBinding
 import com.app.ecarepro.model.LeaveTerms
-import com.app.ecarepro.model.LeaveTypes
+import com.app.ecarepro.model.TermCondition
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.leave.leave_setting.LeaveSettingDetailsAdapter
 import com.app.ecarepro.ui.leave.leave_setting.LeaveSettingViewModel
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.Constant.Companion.toSystemDate
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +49,7 @@ class StaffApplyLeaveFragment : Fragment() {
 
 
     private lateinit var leaveTerm: LeaveTerms
+    private lateinit var termCondition: TermCondition
     private var isSessionFromSelected: Boolean=false
     private var isSessionToSelected: Boolean=false
     private var days: Double = 1.0
@@ -194,15 +200,13 @@ class StaffApplyLeaveFragment : Fragment() {
 
                 leaveApplyLeaveViewModel.leaveApply(
                     leaveID,
-                    binding.tvStartDate.text.toString(),
-                    binding.tvEndDate.text.toString(),
+                    toSystemDate(binding.tvStartDate.text.toString()),
+                    toSystemDate(binding.tvEndDate.text.toString()),
                     days ,
                     halfdayDTL,
                     binding.textFiledReason.text.toString(),
-                    imageString,
-                    imageExt
-
-                )
+                    if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
+                 )
 
                 lifecycleScope.launch {
                     leaveApplyLeaveViewModel.leaveApplyStateFlow.collectLatest {
@@ -246,8 +250,47 @@ class StaffApplyLeaveFragment : Fragment() {
 
         getTermDetails()
 
+        binding.tvTc.setOnClickListener {
+            i_agree_dialog()
+        }
 
 
+
+    }
+
+
+    private fun i_agree_dialog() {
+        val tv_tc: TextView
+        val tv_rfl: TextView
+        val tv_imp_notes: TextView
+        val btn_agree: Button
+        val iv_cancel: ImageView
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.attributes.windowAnimations = R.style.Animations
+        dialog.setContentView(R.layout.dialog_leave_term_conditions)
+        iv_cancel = dialog.findViewById<ImageView>(R.id.iv_cancel)
+        tv_tc = dialog.findViewById(R.id.tv_tc)
+        tv_rfl = dialog.findViewById<TextView>(R.id.tv_rfl)
+        tv_imp_notes = dialog.findViewById<TextView>(R.id.tv_imp_notes)
+        tv_tc.text = if (TextUtils.isEmpty(
+                termCondition.tc
+            )
+        ) "" else termCondition.tc
+        tv_rfl.text = if (TextUtils.isEmpty(
+                termCondition.rules
+            )
+        ) "" else termCondition.rules
+        tv_imp_notes.text = if (TextUtils.isEmpty(
+                termCondition.notes
+            )
+        ) "" else termCondition.notes
+        btn_agree = dialog.findViewById<Button>(R.id.btn_agree)
+        btn_agree.visibility = View.GONE
+        btn_agree.setOnClickListener { }
+        iv_cancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     fun getTermDetails() {
@@ -270,7 +313,7 @@ class StaffApplyLeaveFragment : Fragment() {
                         
                         if (it.data !=null) {
                             leaveTerm=it.data.leaveTerms
-
+                            termCondition=it.data.termCondition
 
                         }
 

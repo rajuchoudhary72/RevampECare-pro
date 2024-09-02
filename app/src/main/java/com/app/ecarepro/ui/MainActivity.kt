@@ -613,6 +613,8 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
+            15 -> navController.navigate(R.id.questionPaperFragment)
+
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
@@ -879,7 +881,7 @@ class MainActivity : AppCompatActivity() {
 
                     }
 
-                    16 -> navController.navigate(R.id.questionPaperFragment)
+                     16 -> navController.navigate(R.id.questionPaperFragment)
                     //   42 -> navController.navigate(R.id.smsMsgReportFragment)
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)

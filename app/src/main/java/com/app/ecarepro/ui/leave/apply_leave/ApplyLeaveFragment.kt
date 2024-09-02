@@ -2,14 +2,22 @@ package com.app.ecarepro.ui.leave.apply_leave
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -19,11 +27,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.databinding.FragmentApplyLeaveBinding
 import com.app.ecarepro.model.Holiday
 import com.app.ecarepro.model.LeaveTerms
 import com.app.ecarepro.model.LeaveTypes
+import com.app.ecarepro.model.TermCondition
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
@@ -38,6 +48,7 @@ import java.util.concurrent.TimeUnit
 @AndroidEntryPoint
 class ApplyLeaveFragment : Fragment() {
 
+    private lateinit var termCondition: TermCondition
     private lateinit var leaveTerm: LeaveTerms
     private var selectedLeaveTypeID: Int = 0
     private var leaveTypesDataString: ArrayList<String> = ArrayList()
@@ -145,6 +156,7 @@ class ApplyLeaveFragment : Fragment() {
 
                             holidayList = it.data.holidayList.holiday as MutableList<Holiday>
                             leaveTerm=it.data.leaveTerms
+                            termCondition=it.data.termCondition
 
                              if (it.data.leaveTypes!=null){
                                  leaveTypeList = it.data.leaveTypes
@@ -209,8 +221,7 @@ class ApplyLeaveFragment : Fragment() {
                         binding.tvNumberDays.text.toString().toDouble(),
                         halfdayDTL,
                         binding.textFiledReason.text.toString(),
-                        imageString,
-                        imageExt
+                        if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
 
                     )
                 }
@@ -287,6 +298,11 @@ class ApplyLeaveFragment : Fragment() {
 
              leaveApplyLeaveViewModel.leaveHistory()
      */
+
+
+        binding.tvTc.setOnClickListener {
+            i_agree_dialog()
+        }
         }
 
 
@@ -384,6 +400,40 @@ class ApplyLeaveFragment : Fragment() {
             return validate
         }
 
+
+    private fun i_agree_dialog() {
+        val tv_tc: TextView
+        val tv_rfl: TextView
+        val tv_imp_notes: TextView
+        val btn_agree: Button
+        val iv_cancel: ImageView
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window!!.attributes.windowAnimations = R.style.Animations
+        dialog.setContentView(R.layout.dialog_leave_term_conditions)
+        iv_cancel = dialog.findViewById<ImageView>(R.id.iv_cancel)
+        tv_tc = dialog.findViewById(R.id.tv_tc)
+        tv_rfl = dialog.findViewById<TextView>(R.id.tv_rfl)
+        tv_imp_notes = dialog.findViewById<TextView>(R.id.tv_imp_notes)
+        tv_tc.text = if (TextUtils.isEmpty(
+                termCondition.tc
+            )
+        ) "" else termCondition.tc
+        tv_rfl.text = if (TextUtils.isEmpty(
+                termCondition.rules
+            )
+        ) "" else termCondition.rules
+        tv_imp_notes.text = if (TextUtils.isEmpty(
+                termCondition.notes
+            )
+        ) "" else termCondition.notes
+        btn_agree = dialog.findViewById<Button>(R.id.btn_agree)
+        btn_agree.visibility = View.GONE
+        btn_agree.setOnClickListener { }
+        iv_cancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+    }
 
 
 

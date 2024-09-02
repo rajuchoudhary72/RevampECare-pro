@@ -109,7 +109,9 @@
                                  android:paddingTop="@dimen/_10sdp"
                                  android:paddingEnd="@dimen/_10sdp"
                                  android:textColor="@color/grey_60"
-                                 android:textSize="@dimen/_14sdp" />
+                                 android:textSize="@dimen/_14sdp"
+
+                                 />
 
                              <TextView
                                  android:id="@+id/tv_more"

@@ -106,8 +106,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                     fromHtml(it.data.description)
                                 }
 
-                                binding.tvDes.text = it.data.description
-                                binding.tvDatePhoto.text =
+                                 binding.tvDatePhoto.text =
                                     it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
 
                                 if (binding.tvDes.getLineCount() >= 4) {
@@ -179,10 +178,11 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     override fun onItemClick(t: Photo, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.action_photoAlbumDTLFragment_to_photoSliderFragment ,
+        findNavController().navigate(R.id.photoSliderFragment ,
             Bundle().apply {
                 putString(Constant.ID, t.id)
                 putString(Constant.URL_ARGUMENT, t.photoPath)
+                putString(Constant.FULL_URL_ARGUMENT, t.photoPath)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
                 putBoolean("isLiked", t.isLike)
                 putBoolean("isFav", t.isFavourite)

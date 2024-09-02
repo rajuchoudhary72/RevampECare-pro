@@ -58,6 +58,7 @@
                  android:textColor="@color/white"
                 android:textSize="20sp"
                 android:text="@string/day_s_1"
+                android:visibility="gone"
                 android:layout_alignParentEnd="true"
                 app:fontFamily="@font/ubuntu_medium" />
 
@@ -156,8 +157,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="@string/select_session"
-                    tools:ignore="LabelFor" />
+                    android:hint="@string/select_session"
+                     tools:ignore="LabelFor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,8 +178,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
-                    android:text="@string/select_session"
-                    tools:ignore="LabelFor" />
+                    android:hint="@string/select_session"
+                     tools:ignore="LabelFor" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -292,6 +293,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="@string/terms_and_conditions"
+                android:textColor="@color/grey_60"
                 app:fontFamily="@font/ubuntu_medium" />
         </LinearLayout>
 

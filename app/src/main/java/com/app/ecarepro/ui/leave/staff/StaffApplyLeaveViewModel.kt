@@ -3,9 +3,8 @@ package com.app.ecarepro.ui.leave.staff
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
-import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
-import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,17 +26,18 @@ class StaffApplyLeaveViewModel @Inject constructor(
 
 
 
-    fun leaveApply(leaveID: Int,
-                   fromDate: String,
-                   tillDate:String,
-                   duration:Double,
-                   halfdayDTL: List<HalfdayDTL>,
-                   reason:String,
-                   attachment:String,
-                   fileExt:String )=viewModelScope.launch {
+    fun leaveApply(
+        leaveID: Int,
+        fromDate: String,
+        tillDate:String,
+        duration:Double,
+        halfdayDTL: List<HalfdayDTL>,
+        reason:String,
+        fileAttachment: FileAttachment?
+    )=viewModelScope.launch {
         runCatching {
             leaveApplyMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveApply(leaveID, fromDate, tillDate, duration, halfdayDTL, reason, attachment, fileExt )
+            userRepository.leaveApply(leaveID, fromDate, tillDate, duration, halfdayDTL, reason, fileAttachment )
         }.onSuccess {
             leaveApplyMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
