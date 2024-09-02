@@ -2,6 +2,7 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.ClassContact
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.ConversationDetailsDto
 import com.app.ecarepro.data.network.model.GenerateTokenRequestDto
 import com.app.ecarepro.data.network.model.InboxMessageDto
@@ -11,6 +12,7 @@ import com.app.ecarepro.data.network.model.NetworkConversationReport
 import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SendSpecificMsg.PostDataSendSpecificMsg
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffContactsDto
@@ -264,6 +266,23 @@ class MessageRepositoryImpl @Inject constructor(
     ): NetworkStudentParentComms {
         return messageService.studentParentComms(recipientType, classIDs, scholarType, byRollNo)
     }
+
+    override suspend fun sendSpecificMsg(request: PostDataSendSpecificMsg):  Flow<Result<String>> {
+
+        return flow {
+            try {
+                val response = messageService.sendSpecificMsg(request)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+
+     }
 
 }
 

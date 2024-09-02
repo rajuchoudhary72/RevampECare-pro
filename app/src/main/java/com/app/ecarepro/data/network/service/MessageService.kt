@@ -15,6 +15,7 @@ import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SendSpecificMsg.PostDataSendSpecificMsg
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.network.model.SmsTemplatesDto
 import com.app.ecarepro.data.network.model.StaffContactsDto
@@ -103,6 +104,11 @@ interface MessageService {
     @POST("Message/SendMessage")
     suspend fun sendMessage(
         @Body request: SendMessageRequest
+    ): CommonResponse
+
+    @POST("Message/SendSpecificMsg")
+    suspend fun sendSpecificMsg(
+        @Body request: PostDataSendSpecificMsg
     ): CommonResponse
 
     @GET("Message/Conversation")

@@ -690,5 +690,12 @@
     <string name="important_notes_leave"><u>Important Notes</u></string>
     <string name="rules_for_leave"><u>Rules for Leave</u></string>
     <string name="lbl_agree">Agree</string>
+    <string name="attendance__alert">Attendance of class (%s) has been marked.</string>
+    <string name="attendance_locked_alert_for_subject">Attendance of subject (%s) has been locked. For any change please contact school/college admin.</string>
+    <string name="lbl_saved_successfully">Saved Successfully</string>
+    <string name="attendance_locked_alert">Attendance of class (%s) has been locked. For any change please contact school/college admin.</string>
+
+    <string name="lbl_do_you_also_want_to_send_absentee_notification_sms_push_notification">Do you also want to send the notification ?</string>
+    <string name="lbl_attention">Attention</string>
 
 </resources>

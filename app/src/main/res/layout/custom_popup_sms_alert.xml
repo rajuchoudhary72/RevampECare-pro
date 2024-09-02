@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/_10sdp"
+    android:layout_marginRight="@dimen/_10sdp"
+    android:background="@color/white"
+    android:minWidth="@dimen/_300sdp"
+    android:orientation="vertical"
+     >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@color/brand_color">
+
+        <TextView
+            android:id="@+id/tv_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/lbl_alert"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_18sdp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_200sdp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/ll_alert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:srcCompat="@drawable/ic_save_successfully" />
+
+            <TextView
+                android:id="@+id/tv_main_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/lbl_saved_successfully"
+                android:textColor="@color/module"
+                android:textSize="@dimen/_18sdp" />
+
+            <TextView
+                android:id="@+id/tv_sub_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_19sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:text="@string/lbl_do_you_also_want_to_send_absentee_notification_sms_push_notification"
+                android:textColor="@color/module"
+                android:textSize="@dimen/_13sdp" />
+            <RadioGroup
+                android:id="@+id/rgSmsApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:visibility="visible">
+                <RadioButton
+                    android:id="@+id/rb1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_3sdp"
+                    android:padding="@dimen/_4sdp"
+                    android:text="SMS and App Message"
+                    android:textSize="@dimen/_14sdp" />
+                <RadioButton
+                    android:id="@+id/rb2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:padding="@dimen/_4sdp"
+                    android:text="Only App Message"
+                    android:textSize="@dimen/_14sdp"
+                    android:fontFamily="@font/ubuntu_medium" />
+            </RadioGroup>
+            <TextView
+                android:id="@+id/tv_sub_text_new"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:padding="@dimen/_4sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="Only App Push Notification"
+                android:textSize="@dimen/_14sdp"
+                android:textColor="@color/module" />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_yes_no"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@color/grey_light"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:id="@+id/rel_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.9"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingLeft="@dimen/_20sdp"
+                android:paddingStart="@dimen/_20sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:text="@string/lbl_no"
+                android:textAllCaps="true"
+                android:textColor="@color/module"
+                android:textSize="@dimen/_17sdp"
+                tools:ignore="RtlSymmetry" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.005"
+            android:background="@color/white"
+            android:gravity="center">
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rel_ok"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.9"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:paddingBottom="@dimen/_5sdp"
+                android:paddingLeft="@dimen/_20sdp"
+                android:paddingStart="@dimen/_20sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:text="@string/lbl_yes"
+                android:textAllCaps="true"
+                android:textColor="@color/red"
+                android:textSize="@dimen/_17sdp"
+                tools:ignore="RtlSymmetry" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_done"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@color/grey_light"
+        android:baselineAligned="false"
+        android:fontFamily="@font/ubuntu_medium"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:text="@string/ok"
+        android:textColor="@color/module"
+        android:textSize="@dimen/_17sdp"
+        android:visibility="gone" />
+
+
+</LinearLayout>
