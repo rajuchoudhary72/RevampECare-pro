@@ -70,7 +70,6 @@ class StaffApplyLeaveFragment : Fragment() {
     var timestampOneDay = "86400000".toLong()
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,14 +83,15 @@ class StaffApplyLeaveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val leaveID=  requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
-        val leaveType=  requireArguments().getString(Constant.NAME)
+        val leaveID = requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
+        val leaveType = requireArguments().getString(Constant.NAME)
 
-        binding.tvLeaveType.text=leaveType
-        binding.tvStartDate.text=Constant.currentDate()
-        binding.tvEndDate.text=Constant.currentDate()
+        binding.tvLeaveType.text = leaveType
+        binding.tvStartDate.text = Constant.currentDate()
+        binding.tvEndDate.text = Constant.currentDate()
 
-        val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, sessionList)
+        val arrayAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, sessionList)
         binding.autoCompleteSessionTo.setAdapter(arrayAdapter)
         binding.autoCompleteSessionFrom.setAdapter(arrayAdapter)
 
@@ -99,14 +99,14 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.llStartDate.setOnClickListener {
 
             val currentTimestamp = System.currentTimeMillis()
-            timestampforward=currentTimestamp+leaveTerm.forwardDays * timestampOneDay
-            timestampBack=currentTimestamp-leaveTerm.backwardDays * timestampOneDay
+            timestampforward = currentTimestamp + leaveTerm.forwardDays * timestampOneDay
+            timestampBack = currentTimestamp - leaveTerm.backwardDays * timestampOneDay
 
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
                 }
-            },timestampBack,timestampforward)
+            }, timestampBack, timestampforward)
         }
 
 
@@ -114,8 +114,9 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
 
-                val timestampforward=Constant.getLongTimeDate(binding.tvStartDate.text.toString())+timestampOneDay*leaveTerm.daysLimit
-                val timestampBack=Constant.getLongTimeDate(binding.tvStartDate.text.toString())
+                val timestampforward =
+                    Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
+                val timestampBack = Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
                     false,
@@ -125,15 +126,16 @@ class StaffApplyLeaveFragment : Fragment() {
 
                             val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
                                     Constant.getLongTimeDate(binding.tvStartDate.text.toString())
-                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble()+1
+                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble() + 1
 
                             binding.tvDuration.text = buildString {
-                                append(days )
+                                append(days)
                                 append(" ")
                                 append(getString(R.string.day_s))
                             }
                         }
-                    },timestampBack,timestampforward)
+                    }, timestampBack, timestampforward
+                )
 
 
             } else
@@ -162,37 +164,45 @@ class StaffApplyLeaveFragment : Fragment() {
 
             if (validateData()) {
 
-                if (sessionFromPos==0 && sessionToPos==1){
+                if (sessionFromPos == 0 && sessionToPos == 1) {
                     halfdayDTL.clear()
                 } else
-                    if (sessionFromPos==0 && sessionToPos==0){
-                        halfdayDTL.add(HalfdayDTL(
-                             Constant.toSystemDate(binding.tvEndDate.text.toString()),
-                            1
-                        ))
-                        days -= 0.5
-                    }else
-                        if (sessionFromPos==1 && sessionToPos==0){
-                            halfdayDTL.add(HalfdayDTL(
-                                Constant.toSystemDate(binding.tvStartDate.text.toString()),
-                                2
-                            ))
-                            halfdayDTL.add(HalfdayDTL(
+                    if (sessionFromPos == 0 && sessionToPos == 0) {
+                        halfdayDTL.add(
+                            HalfdayDTL(
                                 Constant.toSystemDate(binding.tvEndDate.text.toString()),
                                 1
-                            ))
-                            days -= 1
-                        }else
-                            if (sessionFromPos==1 && sessionToPos==1){
-                                halfdayDTL.add(HalfdayDTL(
+                            )
+                        )
+                        days -= 0.5
+                    } else
+                        if (sessionFromPos == 1 && sessionToPos == 0) {
+                            halfdayDTL.add(
+                                HalfdayDTL(
                                     Constant.toSystemDate(binding.tvStartDate.text.toString()),
                                     2
-                                ))
+                                )
+                            )
+                            halfdayDTL.add(
+                                HalfdayDTL(
+                                    Constant.toSystemDate(binding.tvEndDate.text.toString()),
+                                    1
+                                )
+                            )
+                            days -= 1
+                        } else
+                            if (sessionFromPos == 1 && sessionToPos == 1) {
+                                halfdayDTL.add(
+                                    HalfdayDTL(
+                                        Constant.toSystemDate(binding.tvStartDate.text.toString()),
+                                        2
+                                    )
+                                )
                                 days -= 0.5
                             }
 
                 binding.tvDuration.text = buildString {
-                    append(days )
+                    append(days)
                     append(" ")
                     append(getString(R.string.day_s))
                 }
@@ -202,11 +212,15 @@ class StaffApplyLeaveFragment : Fragment() {
                     leaveID,
                     toSystemDate(binding.tvStartDate.text.toString()),
                     toSystemDate(binding.tvEndDate.text.toString()),
-                    days ,
+                    days,
                     halfdayDTL,
                     binding.textFiledReason.text.toString(),
-                    if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
-                 )
+                    if (imageString.isNotEmpty()) FileAttachment(
+                        imageString,
+                        imageExt,
+                        ""
+                    ) else null
+                )
 
                 lifecycleScope.launch {
                     leaveApplyLeaveViewModel.leaveApplyStateFlow.collectLatest {
