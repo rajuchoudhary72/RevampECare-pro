@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
@@ -136,11 +137,17 @@ class SignInFragment : Fragment() {
                 mViewModel.verifyUser(binding.textUserName.text.toString()) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        userNameValid = true
-                        binding.textInputLayoutPassword.isVisible = true
-                        binding.textInputLayoutUserName.isEnabled = false
-                        binding.textUserName.isEnabled = false
-                        binding.textUserName.isClickable = false
+                        if(runBlocking {
+                                mViewModel.isUserAlreadyLogin(it.photo)
+                            }){
+                            mainActivity().showMessage("User already login!")
+                        }else{
+                            userNameValid = true
+                            binding.textInputLayoutPassword.isVisible = true
+                            binding.textInputLayoutUserName.isEnabled = false
+                            binding.textUserName.isEnabled = false
+                            binding.textUserName.isClickable = false
+                        }
                     }else{
                         mainActivity().showMessage("Invalid username")
                     }

@@ -7,18 +7,22 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
-import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.truncate
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -27,34 +31,40 @@ class ProfileViewModel @Inject constructor(
     private val userDatabase: UserDatabase
 ) : ViewModel() {
 
+    val refresh = MutableStateFlow(true)
+
     var userType: Int = 0
 
-    val uiState = combine(
-        flow = userDataStore.getUsersFlow(),
-        flow2 = userRepository.getUserProfile(),
-        flow3 = userDataStore.getCurrentUserIdAsFlow()
-    ) { users, profile, userId ->
-        Triple(users, profile, userId)
-    }.map { (users, profile, userId) ->
-        if (profile.isSuccess) {
-            ProfileUiState.Success(
-                profile = profile.getOrNull()!!,
-                users = users,
-                currentUserId = userId!!
-            )
-        } else {
-            ProfileUiState.Error(
-                profile.exceptionOrNull() ?: IllegalArgumentException(
-                    UNKNOWN_ERROR_MESSAGE
-                )
-            )
+    val uiState =
+        refresh.flatMapLatest {
+            combine(
+                flow = userDataStore.getUsersFlow(),
+                flow2 = userRepository.getUserProfile(),
+                flow3 = userDataStore.getCurrentUserIdAsFlow()
+            ) { users, profile, userId ->
+                Triple(users, profile, userId)
+            }
         }
-    }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = ProfileUiState.Loading,
-            started = SharingStarted.WhileSubscribed(300)
-        )
+            .map { (users, profile, userId) ->
+                if (profile.isSuccess) {
+                    ProfileUiState.Success(
+                        profile = profile.getOrNull()!!,
+                        users = users,
+                        currentUserId = userId!!
+                    )
+                } else {
+                    ProfileUiState.Error(
+                        profile.exceptionOrNull() ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
+                    )
+                }
+            }
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = ProfileUiState.Loading,
+                started = SharingStarted.WhileSubscribed(300)
+            )
 
     init {
         viewModelScope.launch {
@@ -113,7 +123,7 @@ class ProfileViewModel @Inject constructor(
 
     fun removeUser(user: NetworkUserDetailsDto) {
         viewModelScope.launch(Dispatchers.IO) {
-            userDatabase.deleteUser(user.asUserEntity())
+            userDatabase.deleteUser(user.userId)
         }
     }
 }

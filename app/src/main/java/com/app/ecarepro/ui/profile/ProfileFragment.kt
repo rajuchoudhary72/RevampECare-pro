@@ -215,6 +215,7 @@ class ProfileFragment : Fragment() {
                                 .setMessage("Are you sure to remove ${it.name}")
                                 .setPositiveButton("Yes") { _, _ ->
                                     profileViewModel.removeUser(it)
+                                    restartApp()
                                 }.setNegativeButton("Yes") { _, _ ->
 
                                 }

@@ -11,10 +11,11 @@ import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
@@ -66,5 +67,12 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-
+    suspend fun isUserAlreadyLogin(photo: String?):Boolean {
+        val user = userDataStore.getUsersFlow().map { users ->
+            users.firstOrNull { it.photo == photo }
+        }.first()
+        return user != null
+    }
 }
+
+
