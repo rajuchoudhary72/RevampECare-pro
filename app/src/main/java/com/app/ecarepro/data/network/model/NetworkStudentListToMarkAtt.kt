@@ -13,7 +13,7 @@ data class NetworkStudentListToMarkAtt(
     val message: String,
     val msgAlertEnable: Boolean,
     val pendingLeave: Int,
-    val smS_Temp: Any,
+    val smS_Temp: String,
     val smsAlertEnable: Boolean,
     val smsType: Int,
     val status: String,
