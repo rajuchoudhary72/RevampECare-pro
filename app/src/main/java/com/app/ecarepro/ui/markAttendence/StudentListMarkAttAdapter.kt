@@ -220,7 +220,7 @@ class StudentListMarkAttAdapter(
                 data.isLate=0
                 studentListArrayList[ absoluteAdapterPosition] = data
 
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,1),absoluteAdapterPosition,false)
+               // stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,1),absoluteAdapterPosition,false)
 
             }
 
@@ -254,7 +254,7 @@ class StudentListMarkAttAdapter(
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
 
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,2),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,2),absoluteAdapterPosition,false)
             }
 
             3 -> {
@@ -285,7 +285,7 @@ class StudentListMarkAttAdapter(
                 data.status=3
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,3),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,3),absoluteAdapterPosition,false)
             }
 
             4 -> {
@@ -316,7 +316,7 @@ class StudentListMarkAttAdapter(
                 data.status=1
                 data.isLate=1
                 studentListArrayList[absoluteAdapterPosition] = data
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(1,data .stID,1),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(1,data .stID,1),absoluteAdapterPosition,false)
             }
 
             5 -> {
@@ -346,7 +346,7 @@ class StudentListMarkAttAdapter(
                 data.status=4
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,4),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,4),absoluteAdapterPosition,false)
             }
         }
     }

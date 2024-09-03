@@ -252,10 +252,7 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.autoCompleteSessionFrom.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 isSessionFromSelected=true
-                sessionFromPos=position
-
- 
-              }
+                sessionFromPos=position }
         binding.autoCompleteSessionTo.onItemClickListener =
             AdapterView.OnItemClickListener { _, _, position, _ ->
                 isSessionToSelected=true
