@@ -28,6 +28,8 @@ data class UserDashboardDto(
     val showAttendanceSummery: Boolean?,
     @SerializedName("showCollectionModeWise")
     val showCollectionModeWise: Boolean?,
+    @SerializedName("showTeacherWorkLoad")
+    val showTeacherWorkLoad: Boolean?,
     @SerializedName("showQuestionnaire")
     val showQuestionnaire: Boolean?,
     @SerializedName("showBDayCards")
@@ -72,6 +74,8 @@ data class UserDashboardDto(
     val bankBalance: List<BankBalance>?,
     @SerializedName("stuStatusWiseStatistics")
     val stuStatusWiseStatistics: List<StatusWiseStatistics>?,
+    @SerializedName("teacherWorkLoad")
+    val teacherWorkLoad: List<Workload>?,
     @SerializedName("admissionModeComparison")
     val admissionModeComparison: List<DataValue>?,
     @SerializedName("stuCategoryWiseStatistics")
@@ -129,6 +133,18 @@ data class BirthDayCard(
 ) {
     fun getIconUrl() = BASE_URL_COM + icon
 }
+
+
+data class Workload(
+    @SerializedName("id")
+    val id: String?,
+    @SerializedName("periodCount")
+    val periodCount: Int?,
+    @SerializedName("photo")
+    val photo: String?,
+    @SerializedName("teacherName")
+    val teacherName: String?
+)
 
 data class Card(
     @SerializedName("color")
@@ -213,17 +229,17 @@ data class TransactionDetail(
 
 data class FeeCollection(
     @SerializedName("concession")
-    val concession: Double?,
+    val concession: String?,
     @SerializedName("due")
-    val due: Double?,
+    val due: String?,
     @SerializedName("estimate")
-    val estimate: Double?,
+    val estimate: String?,
     @SerializedName("feeTypes")
     val feeTypes: List<FeeType>?,
     @SerializedName("installmentCollections")
     val installmentCollections: List<InstallmentCollection>?,
     @SerializedName("received")
-    val received: Double?
+    val received: String?
 )
 
 data class FeeType(

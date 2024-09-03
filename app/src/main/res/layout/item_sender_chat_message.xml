@@ -10,6 +10,10 @@
             type="java.lang.String" />
 
         <variable
+            name="messageType"
+            type="java.lang.String" />
+
+        <variable
             name="image"
             type="java.lang.String" />
 
@@ -68,6 +72,7 @@
             isVisible="@{image!=null}"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            placeholder="@{messageType == 1 ? @drawable/img_placeholder : @drawable/img_placeholder}"
             android:layout_marginHorizontal="16dp"
             android:onClick="@{v -> onClickPhoto.onClick(image)}"
             android:scaleType="centerCrop"

@@ -68,13 +68,13 @@ class AppointmentViewModel @Inject constructor(
     }
 
 
-    fun updateValue(columnName: String?, toString: String) {
+    fun updateValue(columnName: String?, toString: String, base64Image: String = "") {
         val uiState = uiState.value
         if (uiState is AppointmentUiState.Success) {
             this.uiState.update {
                 uiState.copy(formData = uiState.formData.map { form ->
                     if (form.columnName == columnName) {
-                        form.copy(value = toString)
+                        form.copy(value = toString, base64Image = base64Image)
                     } else {
                         form
                     }
@@ -140,23 +140,88 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-    fun isValidEmail(target: CharSequence?): Boolean {
+    fun submitForm(func:(Boolean, String) -> Unit){
+        viewModelScope.launch {
+            if(isValid().not()){
+                func(false, "Please fill all required fields")
+                return@launch
+            }
+            val uiState = uiState.value
+            if (uiState is AppointmentUiState.Success) {
+                loadingState.update { LoadingState.Loading }
+                val data = mutableMapOf<String, String>()
+
+                data["VisitorType"] = "2"
+                data["captureImg"] = "null"
+                data["VisitorPhoto"] = "null"
+                data["userfrom"] = "3"
+
+                uiState.formData.forEach { form: Form ->
+                    when (form.columnName) {
+                        "Photo" -> {
+                            data["photo"] = form.base64Image
+                        }
+                        "IdproofImage" -> {
+                            data["VisitorPhotoInbyte"] = form.base64Image
+                        }
+                        "IdType" -> {
+                            data["VisitorPhotoInbyte"] = if(form.value == "Aadhar Card") "2" else if("Pan Card" == form.value) "3" else "1"
+                        }
+                        "Purpose" -> {
+                            uiState.purpose.firstOrNull { it.purposeName == form.value }?.let {
+                                data[form.columnName] = it.purposeID.toString()
+                            }
+                        }
+                        "Department" -> {
+                            uiState.departments.firstOrNull { it.departmentName == form.value }?.let {
+                                data[form.columnName] = it.departmentID.toString()
+                            }
+                        }
+                        "Designation" -> {
+                            uiState.designation.firstOrNull { it.designationName == form.value }?.let {
+                                data[form.columnName] = it.designationID.toString()
+                            }
+                        }
+                        "Employee" -> {
+                            uiState.employees.firstOrNull { it.employeeName == form.value }?.let {
+                                data[form.columnName] = it.employeeID.toString()
+                            }
+                        }
+                        else -> {
+                            data[form.columnName] = form.value?:""
+                        }
+                    }
+                }
+
+                userRepository.submitForm(data).collectLatest {
+                    loadingState.update { LoadingState.Success }
+                    func(it.isSuccess, it.getOrNull() ?: "")
+                }
+            }
+        }
+    }
+
+    private fun isValidEmail(target: CharSequence?): Boolean {
         return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
     }
 
-    fun isValid(): Boolean {
+    private fun isValid(): Boolean {
         val isValid = true
         (uiState.value as AppointmentUiState.Success).formData.forEach { form ->
             if(form.isrequired == true){
-                if (form.value.isEmpty()) {
+                if (form.value.isNullOrEmpty()) {
                     return false
                 }
 
-                if(form.columnName?.contains("mobile", true) == true && form.value.length<10){
+                if(form.columnName.contains("mobile", true) && form.value.length<10){
                     return false
                 }
 
-                if(form.columnName?.contains("email", true) == true && isValidEmail(form.value).not()){
+                if(form.columnName.contains(
+                        "email",
+                        true
+                    ) && isValidEmail(form.value).not()
+                ){
                     return false
                 }
             }

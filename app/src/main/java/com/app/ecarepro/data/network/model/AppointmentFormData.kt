@@ -20,12 +20,13 @@ data class Form(
     @SerializedName("columnID")
     val columnID: Int?,
     @SerializedName("columnName")
-    val columnName: String?,
+    val columnName: String,
     @SerializedName("isrequired")
     val isrequired: Boolean?,
     @SerializedName("mustInclude")
     val mustInclude: Boolean?,
     @SerializedName("orderid")
     val orderid: Int?,
-    val value:String = "",
+    val value:String? = null,
+    val base64Image:String = "",
 )

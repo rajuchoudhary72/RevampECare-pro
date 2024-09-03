@@ -52,8 +52,9 @@ class AppointmentFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result?.data != null) {
                     val bitmap = result.data?.extras?.get("data") as Bitmap
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                     createFileFromBitmapInCache(bitmap, "$photoColumName.png")?.let { file ->
-                        viewModel.updateValue(photoColumName, file.absolutePath)
+                        viewModel.updateValue(photoColumName, file.absolutePath, imageString)
                     }
 
                 }
@@ -68,8 +69,10 @@ class AppointmentFragment : Fragment() {
                 val data = it.data
                 val imgUri = data?.data
                 val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
+                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
                 createFileFromBitmapInCache(bitmap, "$photoColumName.png")?.let { file ->
-                    viewModel.updateValue(photoColumName, file.absolutePath)
+                    viewModel.updateValue(photoColumName, file.absolutePath, imageString)
                 }
             }
         }
@@ -294,6 +297,14 @@ class AppointmentFragment : Fragment() {
 
                         button {
                             id("button")
+                            clickListener { _ ->
+                                viewModel.submitForm { isSuccess, message ->
+                                    mainActivity().showMessage(message)
+                                    if(isSuccess){
+                                        findNavController().popBackStack()
+                                    }
+                                }
+                            }
                         }
                     }
 

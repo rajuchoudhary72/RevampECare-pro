@@ -133,6 +133,7 @@ import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import okhttp3.RequestBody
 
 interface UserService {
     @GET("User/Verify")
@@ -946,4 +947,10 @@ interface UserService {
     suspend fun getFormDataEmployee(
         @Url url:String
     ): FormDataEmployeeResponseDto
+
+    @POST
+    suspend fun submitForm(
+        @Url url:String,
+        @Body requestBody: RequestBody
+    ): CommonResponse
 }

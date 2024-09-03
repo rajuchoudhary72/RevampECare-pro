@@ -129,6 +129,10 @@ fun TextView.autoLink(textValue: String) {
 fun TextView.rupeeText(rupee: Double?) {
     text = "₹$rupee"
 }
+@BindingAdapter("rupeeText")
+fun TextView.rupeeText(rupee: String?) {
+    text = "₹$rupee"
+}
 
 interface FileClickListener {
     fun onClick(file: String)

@@ -56,10 +56,9 @@
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/barChart"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="110dp"
-
-                 app:layout_constraintTop_toBottomOf="@+id/title"
-                 />
+                app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidelineCenter"
@@ -70,10 +69,11 @@
 
 
             <ImageView
+                android:layout_marginTop="@dimen/_15sdp"
                 android:id="@+id/img_estimated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_estimated"
+                android:src="@drawable/ic_circle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/barChart"
                 tools:ignore="ContentDescription" />
@@ -108,7 +108,8 @@
                 android:id="@+id/img_received"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/cash"
+                android:src="@drawable/ic_circle"
+                app:tint="@color/category2"
                 app:layout_constraintBottom_toBottomOf="@+id/img_estimated"
                 app:layout_constraintStart_toEndOf="@id/guidelineCenter"
                 app:layout_constraintTop_toTopOf="@+id/img_estimated"
@@ -145,7 +146,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:src="@drawable/concession"
+                android:src="@drawable/ic_circle"
+                app:tint="@color/category3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_estimated"
                 tools:ignore="ContentDescription" />
@@ -180,7 +182,8 @@
                 android:id="@+id/img_due"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/due"
+                android:src="@drawable/ic_circle"
+                app:tint="@color/red"
                 app:layout_constraintBottom_toBottomOf="@+id/img_concession"
                 app:layout_constraintStart_toEndOf="@id/guidelineCenter"
                 app:layout_constraintTop_toTopOf="@+id/img_concession"
@@ -413,7 +416,7 @@
                 android:visibility="visible"
                 isVisible="@{!isExpanded}"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="barChart,guidelineCenter,img_estimated,text_estimated,text_estimated_amount,img_received,text_received,text_received_amount,img_concession,text_concession,text_concession_amount,img_due,text_due,text_due_amount," />
+                app:constraint_referenced_ids="guidelineCenter,img_estimated,text_estimated,text_estimated_amount,img_received,text_received,text_received_amount,img_concession,text_concession,text_concession_amount,img_due,text_due,text_due_amount," />
 
 
             <androidx.constraintlayout.widget.Group
