@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +30,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
@@ -78,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
-
+    private lateinit var IMEINumber: String
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
@@ -237,6 +239,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        // Check for permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_STATE), 1)
+        } else {
+            // Permission is already granted, get the IMEI
+            getIMEINumber()
+        }
 
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -266,7 +277,36 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+    // Handle the permission request response
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getIMEINumber()
+            }
+        }
+    }
 
+    private fun getIMEINumber() {
+        val telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+
+        val imei: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // On Android 10 and above, getting IMEI directly is restricted
+            "Access Restricted"
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            telephonyManager.imei // For Android 8.0 and above
+        } else {
+            @Suppress("DEPRECATION")
+            telephonyManager.deviceId // Deprecated in Android O and above
+        }
+
+        imei?.let {
+            // Do something with the IMEI number
+            println("IMEI Number: $imei")
+
+
+        }
+    }
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -386,7 +426,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.itemDrawerFooter.appVersion = "App Version 1.0.0"
+        binding.itemDrawerFooter.appVersion = "App Version: 2.1.62"
         binding.itemDrawerFooter.setClickListener {
             logout()
         }

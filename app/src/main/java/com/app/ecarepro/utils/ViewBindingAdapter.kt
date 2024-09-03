@@ -50,6 +50,29 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(placeholder)
             error(placeholder)
         } else {
+            if (url?.substring(url.lastIndexOf("."))==".pdf"){
+                placeholder(R.drawable.pdf)
+            }else{
+                placeholder(R.drawable.img_placeholder)
+                error(R.drawable.img_placeholder)
+            }
+
+        }
+    }
+}
+
+
+
+@BindingAdapter("imageUrl", "placeholder", requireAll = false)
+fun ImageView.imageUrlChat(url: String?, placeholder: Drawable? = null) {
+    load(url) {
+        if (url?.contains("svg") == true)
+            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+        crossfade(true)
+        if (placeholder != null) {
+            placeholder(placeholder)
+            error(placeholder)
+        } else {
             placeholder(R.drawable.img_placeholder)
             error(R.drawable.img_placeholder)
         }
@@ -129,7 +152,10 @@ fun TextView.autoLink(textValue: String) {
 fun TextView.rupeeText(rupee: Double?) {
     text = "₹$rupee"
 }
-
+@BindingAdapter("rupeeText")
+fun TextView.rupeeText(rupee: String?) {
+    text = "₹$rupee"
+}
 interface FileClickListener {
     fun onClick(file: String)
 }

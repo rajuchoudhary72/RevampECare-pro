@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="workload"
+            type="com.app.ecarepro.data.network.model.Workload" />
 
     </data>
 
@@ -23,7 +27,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_message_user"
+                imageUrl="@{workload.photo}"
+                tools:src="@drawable/img_message_user"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle" />
@@ -35,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/calibri_light"
-                android:text="Raju"
+                tools:text="Raju"
+                android:text="@{workload.teacherName}"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/calibri_bold"
-                android:text="6 Classes"
+                tools:text="6 Classes"
+                android:text='@{workload.periodCount + " Classes"}'
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="@id/teacher_name"
@@ -56,11 +63,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_arrow_right"
                 android:layout_marginEnd="15dp"
                 android:drawablePadding="8dp"
                 android:text="Timetable"
                 android:textColor="@color/brand_color"
+                app:drawableEndCompat="@drawable/ic_arrow_right"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:fontFamily="@font/calibri_light"
                 app:layout_constraintTop_toBottomOf="@id/classes" />

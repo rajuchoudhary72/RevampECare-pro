@@ -165,6 +165,7 @@ interface UserRepository {
     fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>>
 
     fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
+    fun submitForm(formData:Map<String,String>): Flow<Result<String>>
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 

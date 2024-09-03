@@ -16,7 +16,7 @@ class AppointmentGuestsModel(private val form: Form, val addToGuestList:(String)
         textInputLayoutUserName.isHintEnabled = true
         imageView.isVisible = form.isrequired == true
         chipGroup.removeAllViews()
-        form.guestList?.forEach {name ->
+        /*form.guestList?.forEach {name ->
             val chip = Chip(root.context)
             chip.text = name
             chip.isCloseIconVisible = true
@@ -24,7 +24,7 @@ class AppointmentGuestsModel(private val form: Form, val addToGuestList:(String)
                 removeToGuestList(name)
             }
             chipGroup.addView(chip)
-        }
+        }*/
 
         textUserName.doAfterTextChanged {
             btnAdd.isEnabled = (it?.length ?: 0) > 0

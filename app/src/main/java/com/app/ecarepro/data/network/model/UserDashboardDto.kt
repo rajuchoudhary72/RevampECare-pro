@@ -28,6 +28,8 @@ data class UserDashboardDto(
     val showAttendanceSummery: Boolean?,
     @SerializedName("showCollectionModeWise")
     val showCollectionModeWise: Boolean?,
+    @SerializedName("showTeacherWorkLoad")
+    val showTeacherWorkLoad: Boolean?,
     @SerializedName("showQuestionnaire")
     val showQuestionnaire: Boolean?,
     @SerializedName("showBDayCards")
@@ -54,6 +56,8 @@ data class UserDashboardDto(
     val showAdmissionModeComparison: Boolean?,
     @SerializedName("showStuCategoryStatistics")
     val showStuCategoryStatistics: Boolean?,
+    @SerializedName("showStuReligionWiseStatistics")
+    val showStuReligionWiseStatistics: Boolean?,
     @SerializedName("showLibraryDTL")
     val showLibraryDTL: Boolean?,
     @SerializedName("status")
@@ -74,8 +78,15 @@ data class UserDashboardDto(
     val stuStatusWiseStatistics: List<StatusWiseStatistics>?,
     @SerializedName("admissionModeComparison")
     val admissionModeComparison: List<DataValue>?,
+    @SerializedName("teacherWorkLoad")
+    val teacherWorkLoad: List<Workload>?,
+    @SerializedName("stuReligionWiseStatistics")
+    val stuReligionWiseStatistics: List<DataValue>?,
+
     @SerializedName("stuCategoryWiseStatistics")
     val stuCategoryWiseStatistics: List<DataValue>?,
+
+
     @SerializedName("questionnaire")
     val questionnaire: List<Questionnaire>?,
     @SerializedName("libraryDTL")
@@ -85,7 +96,16 @@ data class UserDashboardDto(
     @SerializedName("admissionComparison")
     val admissionComparison: AdmissionComparison?,
 )
-
+data class Workload(
+    @SerializedName("id")
+    val id: String?,
+    @SerializedName("periodCount")
+    val periodCount: Int?,
+    @SerializedName("photo")
+    val photo: String?,
+    @SerializedName("teacherName")
+    val teacherName: String?
+)
 data class AttendanceSummary(
     @SerializedName("classSummary")
     val classSummary: List<ClassSummary>?,
@@ -213,17 +233,17 @@ data class TransactionDetail(
 
 data class FeeCollection(
     @SerializedName("concession")
-    val concession: Double?,
+    val concession: String?,
     @SerializedName("due")
-    val due: Double?,
+    val due: String?,
     @SerializedName("estimate")
-    val estimate: Double?,
+    val estimate: String?,
     @SerializedName("feeTypes")
     val feeTypes: List<FeeType>?,
     @SerializedName("installmentCollections")
     val installmentCollections: List<InstallmentCollection>?,
     @SerializedName("received")
-    val received: Double?
+    val received: String?
 )
 
 data class FeeType(
