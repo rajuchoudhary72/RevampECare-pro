@@ -89,9 +89,9 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
        // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
-    //  binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
       binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-        binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
+      //  binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
