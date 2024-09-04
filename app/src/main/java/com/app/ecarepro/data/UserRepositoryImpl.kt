@@ -302,6 +302,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.deleteAnswer(ansID)
     }
 
+    override suspend fun deleteQID(QID: Int): CommonResponse {
+        return userService.deleteQID(QID)
+    }
+
     override suspend fun addQuestion(
         question: String,
         attachment: String,

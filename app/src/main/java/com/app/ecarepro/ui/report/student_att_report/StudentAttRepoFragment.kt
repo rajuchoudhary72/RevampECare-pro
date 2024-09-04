@@ -130,8 +130,8 @@ class StudentAttRepoFragment : Fragment() {
 
         }
 
-        studentAttRepoViewModel.getStudentAttendance( binding.tvStartDate.text.toString(),
-            binding.tvEndDate.text.toString(),"0",id)
+        studentAttRepoViewModel.getStudentAttendance( Constant.toSystemDate(binding.tvStartDate.text.toString()),
+            Constant.toSystemDate( binding.tvEndDate.text.toString()),"0",id)
 
 
     }

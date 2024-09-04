@@ -675,7 +675,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             25 -> navController.navigate(R.id.excellenceAwardFragment)
-            26 -> navController.navigate(R.id.selectMarkAttendanceFragment)
+            26 -> navController.navigate(R.id.stuMarkAttendanceFragment)
 
 
             27 -> {
@@ -1036,7 +1036,7 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             8 -> {
-                                navController.navigate(R.id.selectMarkAttendanceFragment)
+                                navController.navigate(R.id.stuMarkAttendanceFragment)
                             }
 
                         }

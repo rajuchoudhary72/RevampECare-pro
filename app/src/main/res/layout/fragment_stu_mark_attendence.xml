@@ -73,6 +73,37 @@
                         app:layout_collapseMode="parallax"
                         app:layout_scrollFlags="scroll|enterAlways">
 
+                        <RadioGroup
+                            android:id="@+id/radioGroup_wisesubmission"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="8dp"
+                            android:layout_gravity="center"
+                            android:checkedButton="@id/rbClassWise"
+                            >
+
+                            <RadioButton
+                                android:id="@+id/rbClassWise"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/class_attendance"
+                                android:layout_marginEnd="@dimen/_15sdp"
+
+                                />
+
+                            <RadioButton
+                                android:id="@+id/rbStudentWise"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subject_attendance"
+                                />
+
+
+                        </RadioGroup>
+
+
 
                         <LinearLayout
                             android:layout_width="match_parent"

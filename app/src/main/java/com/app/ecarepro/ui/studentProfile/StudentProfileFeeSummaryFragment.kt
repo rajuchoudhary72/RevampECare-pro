@@ -196,7 +196,7 @@ class StudentProfileFeeSummaryFragment(
 
         with(binding) {
 
-
+            binding.pieChartView. isClearBackgroundColor = true
             ctvSelectYear.setOnClickListener {
                 popUpSelectAcademicYears()
             }

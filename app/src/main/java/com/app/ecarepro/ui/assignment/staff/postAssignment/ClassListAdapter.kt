@@ -7,18 +7,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
-import com.app.ecarepro.model.AcademicYear
-import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.utils.listener.ItemListener
 
-class ClassListAdapter(private var academicYearList: List<MyClasseItem>,
-                       private val selectAll: Boolean,
-                       private var itemListener: ItemListener<MyClasseItem>
+class ClassListAdapter(
+    private var academicYearList: List<MyClasseItem>,
+    private val selectAll: Boolean,
+    private val multiSelect: Boolean,
+
+    private var itemListener: ItemListener<MyClasseItem>
 ) :
     RecyclerView.Adapter<ClassListAdapter.PopUpListViewHolder>() {
 
@@ -36,7 +36,7 @@ class ClassListAdapter(private var academicYearList: List<MyClasseItem>,
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
         holder.itemName.text=academicYearList[holder.bindingAdapterPosition].className
-        holder.checkImage.isVisible=true
+        holder.checkImage.isVisible=multiSelect
         holder.checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
 
         holder.llMain.setOnClickListener {

@@ -5,13 +5,16 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.create_syllabus.BrowsedFile
 import com.app.ecarepro.databinding.FragmentAddSyllabusBinding
 import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.ui.MainActivity
@@ -27,16 +31,20 @@ import com.app.ecarepro.ui.assignment.staff.postAssignment.ClassListAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.getFile
 import com.app.ecarepro.utils.listener.ItemListener
-import com.lassi.data.media.MiMedia
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
 
 
 @AndroidEntryPoint
 class AddSyllabusFragment : Fragment() {
 
+    private   var pdfString: String=""
     private lateinit var binding: FragmentAddSyllabusBinding
     private val addSyllabusViewModel: AddSyllabusViewModel by viewModels()
     private var classesList = mutableListOf<MyClasseItem>()
@@ -46,7 +54,14 @@ class AddSyllabusFragment : Fragment() {
     private var isClassSelected: Boolean = false
     private var isSubjectSelected: Boolean = false
     private var lastClickAttachmentType: AttachmentType? = null
-    private val id= ""
+    private var edit= false
+    private var id= ""
+    private var classID= 0
+    private var classSTD= ""
+    private var subID= 0
+    private var subject= ""
+    private var title= ""
+    private var fileName= ""
 
 
     override fun onCreateView(
@@ -55,6 +70,17 @@ class AddSyllabusFragment : Fragment() {
     ): View? {
         binding = FragmentAddSyllabusBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            edit=  requireArguments().getBoolean("edit", false)
+            id=  requireArguments().getString(Constant.ID,"")
+            classID=  requireArguments().getInt("classID",0)
+            classSTD=  requireArguments().getString("classSTD","")
+            subID=  requireArguments().getInt("subID",0)
+            subject=  requireArguments().getString("subject","")
+            title=  requireArguments().getString("title","")
+            fileName=  requireArguments().getString("fileName","")
+
+        }catch (e:Exception){ }
 
         return binding.root
     }
@@ -62,6 +88,21 @@ class AddSyllabusFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (edit){
+            binding.etDescription.setText(title)
+            binding.tvSelectClass.text=classSTD
+            binding.tvSelectSubject.text=subject
+
+            isSubjectSelected=true
+            isClassSelected=true
+        }
+
+        binding.llFile.setOnClickListener {
+            binding.llFile.isVisible=false
+            pdfString=""
+
+
+        }
 
         getMyClasses()
 
@@ -69,11 +110,13 @@ class AddSyllabusFragment : Fragment() {
             popUpSelectClass()
         }
         binding.tvSelectSubject.setOnClickListener {
-            popUpSelectSubject()
+             if (isClassSelected){
+                 popUpSelectSubject()
+             }
         }
 
         binding.tvAddAttac.setOnClickListener {
-            launchPdfPicker()
+            pickPdf()
         }
 
         binding.btnSubmit.setOnClickListener {
@@ -92,8 +135,11 @@ class AddSyllabusFragment : Fragment() {
             }
 
             if (isValidated){
-                addSyllabusViewModel.saveSyllabus(classData.classID!!,id,subjectData.subID,binding.etDescription.text.toString()).invokeOnCompletion {
+                addSyllabusViewModel.saveSyllabus(classID,id,subID,binding.etDescription.text.toString(),
+                     if (pdfString.isNotEmpty()) BrowsedFile(pdfString,"pdf") else null
+                ).invokeOnCompletion {
                     mainActivity().showMessage("Submitted Successfully!!!")
+                    findNavController().popBackStack()
                 }
 
             }
@@ -181,10 +227,11 @@ class AddSyllabusFragment : Fragment() {
             }
 
         }
-        val subjectListAdapter = ClassListAdapter(classesList,false, object : ItemListener<MyClasseItem> {
+        val subjectListAdapter = ClassListAdapter(classesList,false, false, object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
                 classData = t
+                classID= classData.classID!!
                 isClassSelected = true
             }
 
@@ -227,6 +274,7 @@ class AddSyllabusFragment : Fragment() {
             override fun onItemClick(t: MySubject, pos: Int, boolean: Boolean) {
 
                 subjectData = t
+                subID= subjectData.subID!!
                 isSubjectSelected = true
             }
 
@@ -246,48 +294,58 @@ class AddSyllabusFragment : Fragment() {
     }
 
 
-    private fun launchPdfPicker() {
-        val intent = Intent()
-        intent.type = "application/pdf"
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        pdfLauncher.launch(intent)
+
+
+    fun pickPdf() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "application/pdf"
+            addCategory(Intent.CATEGORY_OPENABLE)
+        }
+        pdfPickerLauncher.launch(intent)
     }
 
 
-    private val pdfLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { data ->
-                    if (data.data != null) {
-                        val mImageUri: Uri = data.data!!
-                        addSyllabusViewModel.setAttachments(
-                            listOf(
-                                MiMedia(
-                                    path = mImageUri.toString(),
-                                    name = lastClickAttachmentType?.name
-                                )
-                            )
-                        )
-                    } else {
-                        if (data.clipData != null) {
-                            val count: Int = data.clipData!!.itemCount
-                            val files = mutableListOf<MiMedia>()
-                            for (i in 0 until count) {
-                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
-                                files.add(
-                                    MiMedia(
-                                        path = imageUri.toString(),
-                                        name = lastClickAttachmentType?.name
-                                    )
-                                )
-                            }
-                            addSyllabusViewModel.setAttachments(files)
-                        }
-                    }
-                }
-            }
+
+    private val pdfPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri: Uri? = result.data?.data
+            uri?.let { pdfUri ->
+                val file = requireContext().getFile(pdfUri)
+                pdfString = getBase64StringFromUri(file!!.toUri()).toString()
+                binding.llFile.isVisible=true
+
+             }
+        }
+    }
+
+    private fun getBase64StringFromUri(uri: Uri): String? {
+        val imageStream: InputStream
+        return try {
+            imageStream = requireNotNull(requireContext().contentResolver.openInputStream(uri))
+            val bytes: ByteArray = readBytes(
+                imageStream
+            )
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun readBytes(inputStream: InputStream): ByteArray {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+
+        var len: Int
+        while ((inputStream.read(buffer).also { len = it }) != -1) {
+            byteBuffer.write(buffer, 0, len)
         }
 
-}
+        return byteBuffer.toByteArray()
+    }
+
+    }
+
+

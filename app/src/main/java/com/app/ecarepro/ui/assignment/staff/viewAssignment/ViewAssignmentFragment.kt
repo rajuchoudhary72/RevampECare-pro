@@ -39,12 +39,11 @@ import kotlinx.coroutines.launch
 class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
     private var isLateSubmitted: Boolean=false
-    private var lateSubmit: Boolean=true
-    private var viewAssignmentData: NetworkViewAssignment? = null
-    private var submitList: Boolean=true
-    private var assignmentId: String  = ""
+     private var viewAssignmentData: NetworkViewAssignment? = null
+     private var assignmentId: String  = ""
     private lateinit var binding : FragmentViewAssignmentBinding
     private val viewAssignmentViewModel : ViewAssignmentViewModel by viewModels()
+    private var submitType =1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,21 +68,18 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_submit -> {
 
-                    lateSubmit=true
-                    submitList=true
+                    submitType=1
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false) 
 
                 }
                 R.id.btn_late_submit -> {
-
-                    submitList=true
-                    lateSubmit=true
+                    submitType=3
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
 
                 }
 
                 else -> {
-                    submitList=false
+                    submitType=2
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,true)
                 }
             }
@@ -123,10 +119,72 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 } is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
 
+                    when(submitType){
+                        1 -> {
+                            if (it.data!=null){
+                                if (it.data.studentList!=null){
+
+                                    binding.rvSubmitList.isVisible=true
+
+                                    val noticeAdapter = SubmitAssignListAdapter(it.data.studentList ,
+                                        this@ViewAssignmentFragment)
+
+                                    binding.rvSubmitList.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = noticeAdapter
+                                    }
 
 
-                    if (submitList){
-                        if (lateSubmit){
+
+                                }else{
+                                    binding.rvSubmitList.isVisible=false
+                                }
+                            }
+
+                            binding.tvDetailsAssi.text= buildString {
+                                append("Submitted (")
+                                append(it.data!!.submittedBy)
+                                append("/")
+                                append(it.data.totalStudent)
+                                append("): Offline (")
+                                append(it.data.offlineSubmitted)
+                                append("): Online (")
+                                append(it.data.submittedBy-it.data.offlineSubmitted )
+                                append(")")
+
+                            }
+                        }
+                        2 -> {
+                            if (it.data!=null){
+                                if (it.data.studentList!=null){
+
+                                    binding.rvSubmitList.isVisible=true
+
+                                    val noticeAdapter = NotSubmitAssignListAdapter(it.data.studentList ,
+                                        this@ViewAssignmentFragment)
+
+                                    binding.rvSubmitList.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = noticeAdapter
+                                    }
+                                }else{
+                                    binding.rvSubmitList.isVisible=false
+                                }
+                            }
+
+                            binding.tvDetailsAssi.text= buildString {
+                                append("Not Submitted (")
+                                append(it.data!!.totalStudent-it.data.submittedBy)
+                                append("/")
+                                append(it.data.totalStudent)
+                                append(") ")
+
+
+                            }
+                        }
+                        3 -> {
                             if (it.data!=null){
                                 if (it.data.studentList!=null){
 
@@ -165,75 +223,8 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                                 append(")")
 
                             }
-                        }else{
-                            if (it.data!=null){
-                                if (it.data.studentList!=null){
-
-                                    binding.rvSubmitList.isVisible=true
-
-                                    val noticeAdapter = SubmitAssignListAdapter(it.data.studentList ,
-                                        this@ViewAssignmentFragment)
-
-                                    binding.rvSubmitList.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = noticeAdapter
-                                    }
-
-
-
-                                }else{
-                                    binding.rvSubmitList.isVisible=false
-                                }
-                            }
-
-                            binding.tvDetailsAssi.text= buildString {
-                                append("Submitted (")
-                                append(it.data!!.submittedBy)
-                                append("/")
-                                append(it.data.totalStudent)
-                                append("): Offline (")
-                                append(it.data.offlineSubmitted)
-                                append("): Online (")
-                                append(it.data.submittedBy-it.data.offlineSubmitted )
-                                append(")")
-
-                            }
                         }
-
-
-                    }else{
-
-                        if (it.data!=null){
-                            if (it.data.studentList!=null){
-
-                                binding.rvSubmitList.isVisible=true
-
-                                val noticeAdapter = NotSubmitAssignListAdapter(it.data.studentList ,
-                                    this@ViewAssignmentFragment)
-
-                                binding.rvSubmitList.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = noticeAdapter
-                                }
-                            }else{
-                                binding.rvSubmitList.isVisible=false
-                            }
-                        }
-
-                        binding.tvDetailsAssi.text= buildString {
-                            append("Not Submitted (")
-                            append(it.data!!.totalStudent-it.data.submittedBy)
-                            append("/")
-                            append(it.data.totalStudent)
-                            append(") ")
-
-
-                        }
-
                     }
-
 
 
                 }  }

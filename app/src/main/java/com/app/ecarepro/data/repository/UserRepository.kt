@@ -121,6 +121,7 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.Query
 
 interface UserRepository {
 
@@ -203,6 +204,7 @@ interface UserRepository {
     suspend fun postAnswer(qid: String, answer: String): CommonResponse
 
     suspend fun deleteAnswer(ansID: Int): CommonResponse
+    suspend fun deleteQID(  QID: Int ): CommonResponse
     suspend fun addQuestion(
         question: String,
         attachment: String,

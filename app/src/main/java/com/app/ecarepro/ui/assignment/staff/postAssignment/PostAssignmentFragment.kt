@@ -429,7 +429,7 @@ class PostAssignmentFragment : Fragment() {
 
         }
 
-         val subjectListAdapter= ClassListAdapter(classesList, selectAll,  object : ItemListener<MyClasseItem> {
+         val subjectListAdapter= ClassListAdapter(classesList, selectAll, true, object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
                  isClassSelected = true

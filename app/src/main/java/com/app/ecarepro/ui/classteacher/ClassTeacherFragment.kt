@@ -48,7 +48,7 @@ class ClassTeacherFragment : Fragment() {
             classTeacherViewModel.searchQuery.collectLatest {
 
                 if (it.isNotEmpty() && teacherList!=null){
-                    teacherListFilter = teacherList!!.filter { s -> s .name.lowercase().contains(it.lowercase())   }
+                    teacherListFilter = teacherList!!.filter { s -> s .name.lowercase().contains(it.lowercase()) ||s .`class`.lowercase().contains(it.lowercase())   }
                     setupRecycleViewStudentList(teacherListFilter)
                 }else{
                     teacherList?.let { it1 -> setupRecycleViewStudentList(it1) }
@@ -78,7 +78,7 @@ class ClassTeacherFragment : Fragment() {
                         binding.rvClassTeacher.isVisible = true
 
                         if (it.data!=null){
-
+                            teacherList = it.data.teachers
                             setupRecycleViewStudentList(it.data.teachers)
 
 
@@ -107,7 +107,6 @@ class ClassTeacherFragment : Fragment() {
             binding.rvClassTeacher.isVisible=true
             binding.tvNoData.isVisible=false
 
-            teacherList=  teachers
 
             val teachesAdapter = ClassTeachesAdapter(
                 teachers,

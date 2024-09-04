@@ -114,8 +114,7 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
 
-                val timestampforward =
-                    Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
+                val timestampforward = Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
                 val timestampBack = Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
@@ -236,9 +235,16 @@ class StaffApplyLeaveFragment : Fragment() {
                             }
 
                             is NetworkResult.Success -> {
-                                mainActivity().showMessage(it.message.toString())
                                 (requireActivity() as MainActivity).showLoader(false)
-                                findNavController().popBackStack()
+                                if (it.data!!.errorCode==0){
+                                    mainActivity().showMessage(it.data.message.toString())
+                                    findNavController().popBackStack()
+                                }else{
+                                    mainActivity().showMessage(it.data.message.toString())
+                                }
+
+
+
 
                             }
                         }
