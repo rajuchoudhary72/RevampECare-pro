@@ -28,5 +28,5 @@ data class Form(
     @SerializedName("orderid")
     val orderid: Int?,
     val value:String? = null,
-    val base64Image:String = "",
+    val base64Image:String? = "",
 )

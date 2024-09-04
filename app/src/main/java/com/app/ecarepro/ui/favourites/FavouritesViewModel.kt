@@ -29,7 +29,7 @@ class FavouritesViewModel @Inject constructor(
                 .getFavourites()
                 .collectLatest { result ->
                     if (result.isSuccess) {
-                        uiState.value = FavouritesUiState.Success(result.getOrNull()?.sortedBy { it.isSelected } ?: emptyList())
+                        uiState.value = FavouritesUiState.Success(result.getOrNull()?.sortedBy { it.isSelected == false } ?: emptyList())
                     } else {
                         uiState.value = FavouritesUiState.Error(result.exceptionOrNull()!!)
                     }

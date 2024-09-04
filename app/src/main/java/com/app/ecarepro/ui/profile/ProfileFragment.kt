@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -236,6 +237,7 @@ class ProfileFragment : Fragment() {
 
                 profileLogout {
                     id(131)
+                    version("v ${BuildConfig.VERSION_NAME}")
                     clickListener { _ ->
                         (requireActivity() as MainActivity).logout()
                     }

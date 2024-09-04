@@ -97,6 +97,7 @@ import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserLoginRequestDto
+import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.PostCreateAssignment
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
@@ -1283,6 +1284,22 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getVisitorDetails(): Flow<Result<VisitorDetails>> {
+        return flow {
+            try {
+                val response =
+                    userService.getVisitorDetails("https://fomapi.franciscanecare.com/api/Appointment/getuserdetailsfrommobile/${userDataStore.getSchoolData()?.schoolCode}/${userDataStore.getUser()?.mobileNumber}")
+                if (response.status == true) {
+                    emit(Result.success(response.data!!))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
     override fun getFormDataDepartment(): Flow<Result<List<Department>>> {
         return flow {
             try {
@@ -1349,8 +1366,13 @@ class UserRepositoryImpl @Inject constructor(
                     url = "https://fomapi.franciscanecare.com/api/Appointment/saveappointmentmob/${userDataStore.getSchoolData()?.schoolCode}",
                     requestBody = builder.build()
                 )
-                if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: "Success"))
+                if (response.status == true) {
+                    emit(
+                        Result.success(
+                            response.data?.message ?: response.message
+                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
+                        )
+                    )
                 } else {
                     emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
                 }

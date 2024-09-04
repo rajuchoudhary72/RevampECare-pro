@@ -36,10 +36,23 @@ class AppointmentViewModel @Inject constructor(
                 flow = userRepository.getFormData(),
                 flow2 = userRepository.getFormDataPurpose(),
                 flow3 = userRepository.getFormDataDepartment(),
-            ) { formData, purpose, departments -> Triple(formData, purpose, departments) }
+                flow4 = userRepository.getVisitorDetails()
+            ) { formData, purpose, departments, visitorDetails ->
+                Pair(
+                    Triple(
+                        formData,
+                        purpose,
+                        departments
+                    ), visitorDetails
+                )
+            }
+                .map { response ->
+                    val formData = response.first.first
+                    val purpose = response.first.second
+                    val departments = response.first.third
+                    val visitorDetails = response.second
 
-                .map { (formData, purpose, departments) ->
-                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess) {
+                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess && visitorDetails.isSuccess) {
                         val formDataResult = formData.getOrNull()
                         val purposeResult = purpose.getOrNull()
                         val departmentResult = departments.getOrNull()
@@ -48,7 +61,28 @@ class AppointmentViewModel @Inject constructor(
                                 AppointmentUiState.NoDataFound
                             } else {
                                 AppointmentUiState.Success(
-                                    formData = response,
+                                    formData = response.map { form ->
+                                        when (form.columnName) {
+                                            "Name" -> {
+                                                form.copy(value = visitorDetails.getOrNull()?.name)
+                                            }
+                                            "Mobile" -> {
+                                                form.copy(value = visitorDetails.getOrNull()?.mobile)
+                                            }
+                                            "Email" -> {
+                                                form.copy(value = visitorDetails.getOrNull()?.email)
+                                            }
+                                            "Address" -> {
+                                                form.copy(value = visitorDetails.getOrNull()?.address)
+                                            }
+                                            "Company" -> {
+                                                form.copy(value = visitorDetails.getOrNull()?.company)
+                                            }
+                                            else -> {
+                                                form
+                                            }
+                                        }
+                                    },
                                     purpose = purposeResult ?: emptyList(),
                                     departments = departmentResult ?: emptyList(),
                                 )
@@ -140,9 +174,9 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-    fun submitForm(func:(Boolean, String) -> Unit){
+    fun submitForm(func: (Boolean, String) -> Unit) {
         viewModelScope.launch {
-            if(isValid().not()){
+            if (isValid().not()) {
                 func(false, "Please fill all required fields")
                 return@launch
             }
@@ -159,43 +193,57 @@ class AppointmentViewModel @Inject constructor(
                 uiState.formData.forEach { form: Form ->
                     when (form.columnName) {
                         "Photo" -> {
-                            data["photo"] = form.base64Image
+                            data["photo"] = form.base64Image?:""
                         }
+
                         "IdproofImage" -> {
-                            data["VisitorPhotoInbyte"] = form.base64Image
+                            data["VisitorPhotoInbyte"] = form.base64Image?:""
                         }
+
                         "IdType" -> {
-                            data["VisitorPhotoInbyte"] = if(form.value == "Aadhar Card") "2" else if("Pan Card" == form.value) "3" else "1"
+                            data["VisitorPhotoInbyte"] =
+                                if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
                         }
+
                         "Purpose" -> {
                             uiState.purpose.firstOrNull { it.purposeName == form.value }?.let {
                                 data[form.columnName] = it.purposeID.toString()
                             }
                         }
+
                         "Department" -> {
-                            uiState.departments.firstOrNull { it.departmentName == form.value }?.let {
-                                data[form.columnName] = it.departmentID.toString()
-                            }
+                            uiState.departments.firstOrNull { it.departmentName == form.value }
+                                ?.let {
+                                    data[form.columnName] = it.departmentID.toString()
+                                }
                         }
+
                         "Designation" -> {
-                            uiState.designation.firstOrNull { it.designationName == form.value }?.let {
-                                data[form.columnName] = it.designationID.toString()
-                            }
+                            uiState.designation.firstOrNull { it.designationName == form.value }
+                                ?.let {
+                                    data[form.columnName] = it.designationID.toString()
+                                }
                         }
+
                         "Employee" -> {
                             uiState.employees.firstOrNull { it.employeeName == form.value }?.let {
                                 data[form.columnName] = it.employeeID.toString()
                             }
                         }
+
                         else -> {
-                            data[form.columnName] = form.value?:""
+                            data[form.columnName] = form.value ?: ""
                         }
                     }
                 }
 
                 userRepository.submitForm(data).collectLatest {
                     loadingState.update { LoadingState.Success }
-                    func(it.isSuccess, it.getOrNull() ?: "")
+                    func(
+                        it.isSuccess,
+                        it.getOrNull()
+                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
+                    )
                 }
             }
         }
@@ -208,20 +256,20 @@ class AppointmentViewModel @Inject constructor(
     private fun isValid(): Boolean {
         val isValid = true
         (uiState.value as AppointmentUiState.Success).formData.forEach { form ->
-            if(form.isrequired == true){
+            if (form.isrequired == true) {
                 if (form.value.isNullOrEmpty()) {
                     return false
                 }
 
-                if(form.columnName.contains("mobile", true) && form.value.length<10){
+                if (form.columnName.contains("mobile", true) && form.value.length < 10) {
                     return false
                 }
 
-                if(form.columnName.contains(
+                if (form.columnName.contains(
                         "email",
                         true
                     ) && isValidEmail(form.value).not()
-                ){
+                ) {
                     return false
                 }
             }

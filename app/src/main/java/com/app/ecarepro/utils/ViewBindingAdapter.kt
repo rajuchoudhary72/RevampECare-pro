@@ -4,7 +4,13 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.style.CharacterStyle
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
 import android.text.util.Linkify
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -22,12 +28,6 @@ import com.app.ecarepro.data.network.model.TransactionDetail
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
 import com.app.ecarepro.messageFilePreview
-import android.text.Html
-import android.text.SpannableStringBuilder
-import android.text.style.CharacterStyle
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
-import android.util.Log
 
 
 @BindingAdapter("isVisible")
@@ -50,10 +50,26 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(placeholder)
             error(placeholder)
         } else {
-            placeholder(R.drawable.img_placeholder)
-            error(R.drawable.img_placeholder)
+            placeholder(getImagePlaceholder(url))
+            error(getImagePlaceholder(url))
         }
     }
+}
+
+fun getImagePlaceholder(url: String?): Int {
+    return if (url?.contains("pdf") == true) {
+        R.drawable.ic_pdf_placeholder
+    } else if (isAudioUrl(url)) {
+        R.drawable.audio_file
+    } else {
+        R.drawable.img_placeholder
+    }
+}
+
+fun isAudioUrl(url: String?): Boolean {
+    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac")
+    val extension = url?.substringAfterLast(".", "")?.lowercase()
+    return audioExtensions.contains(extension)
 }
 
 @BindingAdapter("imageRes")
@@ -129,6 +145,7 @@ fun TextView.autoLink(textValue: String) {
 fun TextView.rupeeText(rupee: Double?) {
     text = "₹$rupee"
 }
+
 @BindingAdapter("rupeeText")
 fun TextView.rupeeText(rupee: String?) {
     text = "₹$rupee"
@@ -167,7 +184,7 @@ fun TextView.setStyledText(text: String?) {
             var boldstart = 0
             var boldend = 0
             var deleteIndesx = 0
-            if (boldStartIndexes?.size!! >= 1 && boldEndIndexes?.size !!>= 1) {
+            if (boldStartIndexes?.size!! >= 1 && boldEndIndexes?.size!! >= 1) {
                 for (i in boldStartIndexes.indices) {
                     boldstart = boldStartIndexes[i]
                     for (j in i until boldEndIndexes.size) {
@@ -185,7 +202,7 @@ fun TextView.setStyledText(text: String?) {
 
             var dboldstart = 0
             var dboldend = 0
-            if (boldStartIndexes.size >= 1 && boldEndIndexes?.size !!>= 1) {
+            if (boldStartIndexes.size >= 1 && boldEndIndexes?.size!! >= 1) {
                 for (i in boldStartIndexes.indices) {
                     dboldstart = boldStartIndexes[i]
                     for (j in i until boldEndIndexes.size) {
@@ -287,7 +304,7 @@ fun TextView.setStyledText(text: String?) {
                 }
             }
 
-         //   binding.tvSubject.setText(ssbbbitalicstrikethrough)
+            //   binding.tvSubject.setText(ssbbbitalicstrikethrough)
             this.text = ssbbbitalicstrikethrough
             val ssbbbitalicstrikethroughDelete =
                 SpannableStringBuilder(text)
@@ -315,7 +332,7 @@ fun TextView.setStyledText(text: String?) {
                 }
             }
             this.text = ssbbbitalicstrikethroughDelete
-         //   binding.tvSubject.setText(ssbbbitalicstrikethroughDelete)
+            //   binding.tvSubject.setText(ssbbbitalicstrikethroughDelete)
         } catch (ignored: Exception) {
         }
     }

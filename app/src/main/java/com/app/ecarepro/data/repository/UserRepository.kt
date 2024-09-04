@@ -93,6 +93,7 @@ import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
@@ -158,6 +159,8 @@ interface UserRepository {
     suspend fun getLibrarySearch(query: String, pg: Int): NetworkBookDetails
     fun getFormData(): Flow<Result<List<Form>>>
     fun getFormDataPurpose(): Flow<Result<List<Purpose>>>
+
+    fun getVisitorDetails(): Flow<Result<VisitorDetails>>
 
     fun getFormDataDepartment(): Flow<Result<List<Department>>>
 

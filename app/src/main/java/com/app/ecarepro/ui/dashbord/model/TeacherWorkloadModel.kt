@@ -9,7 +9,7 @@ import com.app.ecarepro.photoView
 import com.app.ecarepro.teacherClassOverloadCard
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 
-class TeacherWorkloadModel(val workload: List<Workload>) :
+class TeacherWorkloadModel(val workload: List<Workload>, val onClick:(Workload) -> Unit) :
     ViewBindingKotlinModel<ItemTeacherWorkloadCardBinding>(R.layout.item_teacher_workload_card) {
     override fun ItemTeacherWorkloadCardBinding.bind() {
         carousel.numViewsToShowOnScreen = 1.6f
@@ -19,6 +19,9 @@ class TeacherWorkloadModel(val workload: List<Workload>) :
                 teacherClassOverloadCard {
                     id(it.id)
                     workload(it)
+                    clickListener { _ ->
+                        onClick(it)
+                    }
                 }
             }
         }

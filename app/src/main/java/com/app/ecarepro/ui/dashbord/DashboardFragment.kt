@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -149,9 +150,17 @@ class DashboardFragment : Fragment() {
     }
 
     private fun EpoxyController.buildTeachersWorkLoad(teacherWorkLoad: List<Workload>?) {
-        if(teacherWorkLoad.isNullOrEmpty()) return
+        if (teacherWorkLoad.isNullOrEmpty()) return
 
-        TeacherWorkloadModel(teacherWorkLoad)
+        TeacherWorkloadModel(
+            workload = teacherWorkLoad,
+            onClick = { workload ->
+                findNavController().navigate(
+                    R.id.timeTableNavHostFragment,
+                    bundleOf("ID" to workload.id)
+                )
+            }
+        )
             .id("workload")
             .addTo(this)
 
