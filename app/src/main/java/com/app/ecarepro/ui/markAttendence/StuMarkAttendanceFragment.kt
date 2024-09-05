@@ -48,7 +48,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var mIsCurrentDate: Boolean=true
     private lateinit var studentListWithData: NetworkStudentListToMarkAtt
     private lateinit var markAttModel: NetworkStudentListToMarkAtt
-    private var from: String=""
+    private var from: String= ""
     private var isLateEnable: Boolean = false
      private var studentListArrayList= mutableListOf<StudentListMarkAtt>()
     private var uploadStudentList= mutableListOf<StudentAtt>()
@@ -81,7 +81,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             lifecycleOwner = viewLifecycleOwner
         }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        from= requireArguments().getString(Constant.TO).toString()
+
         binding.toolbar.title=from
 
 
@@ -90,8 +90,34 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        from=  getString(R.string.class_attendance)
+        binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rbClassWise -> {
+                    classID=0
+                    subID=0
+                    binding.recyclerNotice.isVisible = false
+                    binding.btnSave.isVisible=false
+                    binding.autoCompleteSub.setText("Select Subject ",false)
+                    binding.autoCompleteClass.setText("Select Class ",false)
+                    from=getString(R.string.class_attendance)
+                    getClassList()
+                }
+                R.id.rbStudentWise -> {
+                    classID=0
+                    subID=0
+                    binding.recyclerNotice.isVisible = false
+                    binding.btnSave.isVisible=false
+                    binding.autoCompleteSub.setText("Select Subject ",false)
+                    binding.autoCompleteClass.setText("Select Class ",false)
+                    from=getString(R.string.subject_attendance)
+                    getClassList()
+                }
+            }
+            binding.autoInputSubInputLayout.isVisible=from==getString(R.string.subject_attendance)
+        }
 
-         binding.autoInputSubInputLayout.isVisible=from==getString(R.string.subject_attendance)
+
 
         binding.btnSave.setOnClickListener {
             popUpDetailsMarkAttendance()
@@ -246,6 +272,15 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                          if (it.data != null) {
+
+                             binding.rbClassWise.isVisible=it.data.classAttendance
+                             binding.rbStudentWise.isVisible=it.data.subjectAttendance
+
+                             if (!it.data.classAttendance ){
+                                 binding.rbStudentWise.isChecked=true
+                                 from=getString(R.string.subject_attendance)
+                             }
+
                             if (from==getString(R.string.subject_attendance)){
                                 if (it.data.classesForSubTeach != null) {
                                     classesForSubTeaches = it.data.classesForSubTeach

@@ -16,7 +16,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
     RecyclerView.Adapter<LeaveReportAdapter.LeaveHistoryViewHolder>() {
 
         private lateinit var binding:   LeaveReportListItemBinding
-        private var canTalkeAction = false
+        private var canTalkeAction = true
         private var applType: Int=0
 
 
@@ -54,6 +54,12 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
             llApplicant.isVisible = data.status != "Pending"
 
+            llApproveRej.isVisible=data.status=="Pending"
+
+           // llApproveRej.isVisible=canTalkeAction
+
+
+
             tvApprove.setOnClickListener {
                 leaveReportFragment.onItemClick(data,1,false)
             }
@@ -64,9 +70,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 leaveReportFragment.onItemClick(data,0,false)
             }
 
-            if (canTalkeAction){
-                llApproveRej.isVisible=data.status=="Pending"
-            }
+
 
             if (applType==3){
                 tvApplicant.isVisible=false

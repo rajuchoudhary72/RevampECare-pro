@@ -19,6 +19,7 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
     RecyclerView.Adapter<QuestionnaireAdapter.QuestionnaireViewHolder>() {
 
         private lateinit var bindingm:   QuestionnaireListItemBinding
+        private var myQues = false
 
 
 
@@ -102,6 +103,7 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
                 questionnaireListFragment.onItemClick(data,2,true)
             }  }
 
+        holder.rel_dot.isVisible=myQues
         holder.rel_dot.setOnClickListener {
             questionnaireListFragment.onItemClick(data,3,true)
             }
@@ -165,8 +167,9 @@ class QuestionnaireAdapter(private var questionsList: ArrayList<Question>,
 
     }
 
-    fun setData(questionList : List<Question>){
+    fun setData(questionList: List<Question>, myQues: Boolean){
          this.questionsList.addAll(questionList)
+        this.myQues=myQues
         notifyDataSetChanged()
     }
     fun clearData( ){

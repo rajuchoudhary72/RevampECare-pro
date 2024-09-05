@@ -107,7 +107,7 @@ class AttendanceFragment : Fragment() {
 
                                 val arrayAdapter = ArrayAdapter(
                                     requireContext(),
-                                    R.layout.view_drop_down_menu,
+                                    android.R.layout.simple_list_item_1,
                                     monthDataString
                                 )
                                 binding.autoCompleteYear.setAdapter(arrayAdapter)
@@ -125,7 +125,7 @@ class AttendanceFragment : Fragment() {
 
                                 val arrayAdapter = ArrayAdapter(
                                     requireContext(),
-                                    R.layout.view_drop_down_menu,
+                                    android.R.layout.simple_list_item_1,
                                     monthDataString
                                 )
                                 binding.autoCompleteMonth.setAdapter(arrayAdapter)

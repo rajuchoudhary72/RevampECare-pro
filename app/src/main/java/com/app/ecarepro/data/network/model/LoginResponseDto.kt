@@ -26,7 +26,9 @@ data class LoginResponseDto(
     @SerializedName("mobileNumer")
     val mobileNumer: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("classID")
+    val classID: Int?
 )
 
 fun LoginResponseDto.asUserEntity(): UserEntity {

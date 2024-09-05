@@ -1,7 +1,7 @@
 package com.app.ecarepro.model
 
 data class RequiredField(
-    val canOpenForStudent: Boolean,
+    val canOpenForStudent: Int,
     val isAttachmentRequired: Boolean,
     val isAuditoryRequired: Boolean,
     val isClosureRequired: Boolean,

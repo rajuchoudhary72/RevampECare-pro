@@ -198,6 +198,7 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)
+
                 userDataStore.saveRoleName(it.roleName ?: "")
                 userDataStore.saveUserNameID(userName ?: "")
             }
@@ -305,6 +306,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.deleteAnswer(ansID)
     }
 
+    override suspend fun deleteQID(QID: Int): CommonResponse {
+        return userService.deleteQID(QID)
+    }
+
     override suspend fun addQuestion(
         question: String,
         attachment: String,
@@ -350,7 +355,7 @@ class UserRepositoryImpl @Inject constructor(
         fromDate: String,
         tillDate: String,
         duration: Double,
-        halfdayDTL: List<HalfdayDTL>,
+        halfdayDTL: List<HalfdayDTL>?,
         reason: String,
         fileAttachment: FileAttachment?,
 

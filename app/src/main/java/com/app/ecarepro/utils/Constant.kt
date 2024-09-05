@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.TimeZone
 
 class Constant {
     companion object {
@@ -167,6 +166,89 @@ class Constant {
         }
 
 
+
+
+        fun getDateDiff(dateString1: String?, dateString2: String?): Double {
+            var diff = 0.0
+            val df1: DateFormat = SimpleDateFormat("dd MMM yyyy" )
+            var date1: Date? = null
+            var date2: Date? = null
+            try {
+                date1 = df1.parse(dateString1)
+                date2 = df1.parse(dateString2)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            val cal1 = Calendar.getInstance()
+            cal1.time = date1
+            val cal2 = Calendar.getInstance()
+            cal2.time = date2
+            while (!cal1.after(cal2)) {
+                val dayOfWeek = cal1[Calendar.DAY_OF_WEEK]
+                if (dayOfWeek == Calendar.SUNDAY) {
+                    cal1.add(Calendar.DATE, 1)
+                } else {
+                    diff++
+                    cal1.add(Calendar.DATE, 1)
+                }
+            }
+            return diff
+        }
+
+
+        fun isDateInBetweenIncludingEndPoints(
+            start_date: String?,
+            end_date: String?,
+            holiDay: String?
+        ): Boolean {
+            var result = false
+
+            try {
+                val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val start = sdf.parse(start_date)
+                val end = sdf.parse(end_date)
+                val holiday = sdf.parse(holiDay)
+                checkNotNull(start)
+                checkNotNull(end)
+                checkNotNull(holiday)
+
+                if (holiday.before(end) && holiday.after(start)) {
+                    result = true
+                } else if (holiday == end || holiday == start) {
+                    result = true
+                }
+
+                return result
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+
+            return false
+        }
+        fun holidayLastDateGreaterSelectLastDate(
+            holiday_date: String?,
+            selected_day: String?
+        ): Boolean {
+            var result = false
+
+            try {
+                val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val holi_day = sdf.parse(holiday_date)
+                val sele_day = sdf.parse(selected_day)
+                checkNotNull(holi_day)
+                checkNotNull(sele_day)
+
+                if (holi_day.after(sele_day)) {
+                    result = true
+                }
+
+                return result
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+
+            return false
+        }
 
         fun currentDate():String{
             val c: Date = Calendar.getInstance().time

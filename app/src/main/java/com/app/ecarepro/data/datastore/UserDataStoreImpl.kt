@@ -203,6 +203,8 @@ class UserDataStoreImpl @Inject constructor(
         }
     }
 
+
+
     override suspend fun saveRoleName(roleName: String) {
         context.dataStore.edit { preferences ->
             preferences[roleNameKey] = roleName
@@ -226,6 +228,8 @@ class UserDataStoreImpl @Inject constructor(
             preferences[userTypeKey]
         }.first()
     }
+
+
 
     override suspend fun getRoleName(): String? {
         return context.dataStore.data.map { preferences ->
@@ -287,6 +291,7 @@ class UserDataStoreImpl @Inject constructor(
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
+        private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }

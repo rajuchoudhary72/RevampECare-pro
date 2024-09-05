@@ -118,7 +118,14 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
             }
             3 -> {
                 findNavController().navigate(R.id.addSyllabusFragment,Bundle( ).apply {
+                    putBoolean("edit", true)
                     putString(Constant.ID, t.id)
+                    putInt("classID", t.classID)
+                    putString("classSTD", t.classSTD)
+                    putInt("subID", t.subID)
+                    putString("subject", t.subject)
+                    putString("title", t.title)
+                    putString("fileName", t.fileName)
                 })
             }
             4 -> {
