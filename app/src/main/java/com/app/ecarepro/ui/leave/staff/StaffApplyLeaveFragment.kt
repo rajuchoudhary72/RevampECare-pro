@@ -164,15 +164,7 @@ class StaffApplyLeaveFragment : Fragment() {
             binding.imageViewCancel.isVisible = false
             binding.attachmentImage.isVisible = false
         }
-
-
-
-
-
-
-
-
-        binding.btnSubmit.setOnClickListener {
+           binding.btnSubmit.setOnClickListener {
             val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             if (selectedLeaveTypeData.applyBeforeHours <currentHour) {
             if (validateData()) {
