@@ -138,7 +138,7 @@ class SignInFragment : Fragment() {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
                         if(runBlocking {
-                                mViewModel.isUserAlreadyLogin(it.photo)
+                                mViewModel.isUserAlreadyLogin(it.userId)
                             }){
                             mainActivity().showMessage("User already login!")
                         }else{

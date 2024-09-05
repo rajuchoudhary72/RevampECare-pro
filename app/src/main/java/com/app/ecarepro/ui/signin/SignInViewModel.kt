@@ -67,9 +67,9 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    suspend fun isUserAlreadyLogin(photo: String?):Boolean {
+    suspend fun isUserAlreadyLogin(photo: Int?):Boolean {
         val user = userDataStore.getUsersFlow().map { users ->
-            users.firstOrNull { it.photo == photo }
+            users.firstOrNull { it.userId == photo }
         }.first()
         return user != null
     }

@@ -33,6 +33,13 @@ android {
         versionCode = 16
         versionName = "1.1.14"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //add this in the build.gradle.kts(app) file
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] =
+                    "$projectDir/schemas"
+            }
+        }
     }
 
     buildTypes {

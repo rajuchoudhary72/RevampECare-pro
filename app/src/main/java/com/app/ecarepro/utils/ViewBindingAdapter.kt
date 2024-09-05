@@ -67,7 +67,7 @@ fun getImagePlaceholder(url: String?): Int {
 }
 
 fun isAudioUrl(url: String?): Boolean {
-    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac")
+    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
     val extension = url?.substringAfterLast(".", "")?.lowercase()
     return audioExtensions.contains(extension)
 }
