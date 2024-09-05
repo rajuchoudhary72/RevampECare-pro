@@ -43,6 +43,8 @@ interface UserDataStore {
     suspend fun saveUserType(userType: Int)
 
     suspend fun getUserType(): Int?
+
+
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
     suspend fun getAuthToken(): String?

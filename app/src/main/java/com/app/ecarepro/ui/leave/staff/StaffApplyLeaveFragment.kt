@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,25 +30,32 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.databinding.FragmentStaffApplyLeaveBinding
+import com.app.ecarepro.model.HolidayList
+import com.app.ecarepro.model.LeaveDetail
 import com.app.ecarepro.model.LeaveTerms
 import com.app.ecarepro.model.TermCondition
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.leave.leave_setting.LeaveSettingViewModel
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.Constant.Companion.holidayLastDateGreaterSelectLastDate
+import com.app.ecarepro.utils.Constant.Companion.isDateInBetweenIncludingEndPoints
 import com.app.ecarepro.utils.Constant.Companion.toSystemDate
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
+import java.util.Calendar
 
 
 @AndroidEntryPoint
 class StaffApplyLeaveFragment : Fragment() {
 
 
+    private lateinit var holidayList: HolidayList
+    private lateinit var selectedLeaveTypeData: LeaveDetail
+    private var leaveID: Int=0
     private lateinit var leaveTerm: LeaveTerms
     private lateinit var termCondition: TermCondition
     private var isSessionFromSelected: Boolean=false
@@ -83,7 +91,7 @@ class StaffApplyLeaveFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val leaveID = requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
+          leaveID = requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
         val leaveType = requireArguments().getString(Constant.NAME)
 
         binding.tvLeaveType.text = leaveType
@@ -114,8 +122,7 @@ class StaffApplyLeaveFragment : Fragment() {
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
 
-                val timestampforward =
-                    Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
+                val timestampforward = Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
                 val timestampBack = Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
@@ -124,9 +131,14 @@ class StaffApplyLeaveFragment : Fragment() {
                         override fun onSelect(date: String?, isCurrentDate: Boolean) {
                             binding.tvEndDate.text = Constant.dateToShow(date.toString())
 
-                            val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
-                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
-                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble() + 1
+//                            val diff = Constant.getLongTimeDate(binding.tvEndDate.text.toString()) -
+//                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
+//                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble() + 1
+
+                            days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                            if (selectedLeaveTypeData.sandwichEnable){
+                                days =  calculateDaysAfterHolidays(days)
+                            }
 
                             binding.tvDuration.text = buildString {
                                 append(days)
@@ -152,16 +164,9 @@ class StaffApplyLeaveFragment : Fragment() {
             binding.imageViewCancel.isVisible = false
             binding.attachmentImage.isVisible = false
         }
-
-
-
-
-
-
-
-
-        binding.btnSubmit.setOnClickListener {
-
+           binding.btnSubmit.setOnClickListener {
+            val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            if (selectedLeaveTypeData.applyBeforeHours <currentHour) {
             if (validateData()) {
 
                 if (sessionFromPos == 0 && sessionToPos == 1) {
@@ -206,46 +211,13 @@ class StaffApplyLeaveFragment : Fragment() {
                     append(" ")
                     append(getString(R.string.day_s))
                 }
+                leaveApplicationDialog()
 
 
-                leaveApplyLeaveViewModel.leaveApply(
-                    leaveID,
-                    toSystemDate(binding.tvStartDate.text.toString()),
-                    toSystemDate(binding.tvEndDate.text.toString()),
-                    days,
-                    halfdayDTL,
-                    binding.textFiledReason.text.toString(),
-                    if (imageString.isNotEmpty()) FileAttachment(
-                        imageString,
-                        imageExt,
-                        ""
-                    ) else null
-                )
-
-                lifecycleScope.launch {
-                    leaveApplyLeaveViewModel.leaveApplyStateFlow.collectLatest {
-                        when (it) {
-
-                            is NetworkResult.Loading -> {
-                                (requireActivity() as MainActivity).showLoader(true)
-                            }
-
-                            is NetworkResult.Error -> {
-                                (requireActivity() as MainActivity).showLoader(false)
-                                Log.d("main", "Error$it")
-                            }
-
-                            is NetworkResult.Success -> {
-                                mainActivity().showMessage(it.message.toString())
-                                (requireActivity() as MainActivity).showLoader(false)
-                                findNavController().popBackStack()
-
-                            }
-                        }
-                    }
-                }
             }
-
+            }else{
+                mainActivity().showMessage("Sorry, your leave is not as per the leave policy")
+            }
         }
 
 
@@ -325,6 +297,14 @@ class StaffApplyLeaveFragment : Fragment() {
                         if (it.data !=null) {
                             leaveTerm=it.data.leaveTerms
                             termCondition=it.data.termCondition
+
+                            holidayList=it.data.holidayList
+
+                            for (i in it.data.leaveDetails ){
+                                if (i.leaveID==leaveID){
+                                    selectedLeaveTypeData=i
+                                }
+                            }
 
                         }
 
@@ -414,11 +394,14 @@ class StaffApplyLeaveFragment : Fragment() {
             mainActivity().showMessage("Please Check Term and Condition")
 
         }
-        /*if (imageString==""){
-            validate = false
 
-            mainActivity().showMessage("Attachment is mandatory")
-        }*/
+         if (selectedLeaveTypeData.attachmentMandatory){
+             if (imageString==""){
+                 validate = false
+
+                 mainActivity().showMessage("Attachment is mandatory")
+             }
+         }
         if (!isSessionFromSelected){
             validate = false
             mainActivity().showMessage("Select From session ")
@@ -429,6 +412,117 @@ class StaffApplyLeaveFragment : Fragment() {
         }
 
         return validate
+    }
+    private fun calculateDaysAfterHolidays(days: Double):Double{
+        var holiday = 0
+        var leaveDayCountTemp: Double = days
+
+        for (modelHoliday in holidayList.holiday) {
+            if (isDateInBetweenIncludingEndPoints(
+                    binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString(),
+                    modelHoliday.fromDate
+                )
+            ) {
+                if (modelHoliday.tillDate == "0001-01-01T00:00:00") {
+                    holiday += 1
+                } else {
+                    if (holidayLastDateGreaterSelectLastDate(
+                            modelHoliday.tillDate,
+                            binding.tvEndDate.text.toString()
+                        )
+                    ) {
+                        val noOfHolidaysInBetween: Double =
+                            Constant.getDateDiff(modelHoliday.fromDate, binding.tvEndDate.text.toString())
+                        val `val` = noOfHolidaysInBetween.toInt()
+                        holiday += `val`
+                    } else {
+                        val noOfHolidays: Double = Constant.getDateDiff(
+                            modelHoliday.fromDate,
+                            modelHoliday.tillDate
+                        )
+                        val `val` = noOfHolidays.toInt()
+                        holiday += `val`
+                    }
+                }
+            }
+        }
+        return    leaveDayCountTemp - holiday
+
+    }
+
+
+    private fun leaveApplicationDialog() {
+
+        val tv_cancel: TextView
+        val tv_submit: TextView
+        val tv_start_date: TextView
+        val tv_end_date: TextView
+        val tv_ttl_leaves: TextView
+        val tv_reason: TextView
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        dialog.window!!.attributes.windowAnimations = R.style.Animations
+        dialog.setContentView(R.layout.dialog_leave_application_confm)
+        tv_start_date = dialog.findViewById(R.id.tv_start_date)
+        tv_start_date.text = binding.tvStartDate.text.toString()
+        tv_end_date = dialog.findViewById(R.id.tv_end_date)
+        tv_end_date.text = binding.tvEndDate.text.toString()
+        tv_ttl_leaves = dialog.findViewById(R.id.tv_ttl_leaves)
+        tv_ttl_leaves.text = "Total Leave(s): $days"
+        tv_reason = dialog.findViewById(R.id.tv_reason)
+        tv_reason.text = "Reason: " +  binding.textFiledReason.text.toString()
+        tv_submit = dialog.findViewById<TextView>(R.id.tv_submit)
+        tv_cancel = dialog.findViewById(R.id.tv_cancel)
+         tv_submit.setOnClickListener {
+             leaveApplyLeaveViewModel.leaveApply(
+                 leaveID,
+                 toSystemDate(binding.tvStartDate.text.toString()),
+                 toSystemDate(binding.tvEndDate.text.toString()),
+                 days,
+                 halfdayDTL,
+                 binding.textFiledReason.text.toString(),
+                 if (imageString.isNotEmpty()) FileAttachment(
+                     imageString,
+                     imageExt,
+                     ""
+                 ) else null
+             )
+
+             lifecycleScope.launch {
+                 leaveApplyLeaveViewModel.leaveApplyStateFlow.collectLatest {
+                     when (it) {
+
+                         is NetworkResult.Loading -> {
+                             (requireActivity() as MainActivity).showLoader(true)
+                         }
+
+                         is NetworkResult.Error -> {
+                             (requireActivity() as MainActivity).showLoader(false)
+                             Log.d("main", "Error$it")
+                         }
+
+                         is NetworkResult.Success -> {
+                             (requireActivity() as MainActivity).showLoader(false)
+                             if (it.data!!.errorCode==0){
+                                 mainActivity().showMessage(it.data.message.toString())
+                                 findNavController().popBackStack()
+                             }else{
+                                 mainActivity().showMessage(it.data.message.toString())
+                             }
+
+
+
+
+                         }
+                     }
+                 }
+             }
+        }
+        tv_cancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
 

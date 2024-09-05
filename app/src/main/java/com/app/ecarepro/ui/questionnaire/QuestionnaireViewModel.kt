@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.questionnaire
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkQuestionnaire
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
@@ -20,6 +21,11 @@ class QuestionnaireViewModel @Inject constructor(
         NetworkResult.Loading())
     val _questionnaireStateFlow: StateFlow<NetworkResult<NetworkQuestionnaire>> = questionnaireStateFlow
 
+    private val deleteAnswerMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val deleteAnswerStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAnswerMutableStateFlow
+
+
     fun getQuestionnaireList( pg: Int, myque: Boolean )=viewModelScope.launch {
         runCatching {
             questionnaireStateFlow.value = NetworkResult.Loading( )
@@ -37,6 +43,18 @@ class QuestionnaireViewModel @Inject constructor(
         }.onSuccess {
          }.onFailure {
          }
+    }
+
+    fun deleteAnswer(ansID: Int )=viewModelScope.launch {
+        runCatching {
+            deleteAnswerMutableStateFlow.value= NetworkResult.Loading( )
+
+            userRepository.deleteQID(ansID)
+        }.onSuccess {
+            deleteAnswerMutableStateFlow.value= NetworkResult.Success(it)
+        }.onFailure {
+            deleteAnswerMutableStateFlow.value= NetworkResult.Error(it.message)
+        }
     }
 
 

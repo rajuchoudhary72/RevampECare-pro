@@ -55,7 +55,7 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
             staffListViewModel.searchQuery.collectLatest {
 
                 if (it.isNotEmpty() && teacherList!=null){
-                    teacherListFilter = teacherList!!.filter { s -> s .name.lowercase().contains(it.lowercase())   }
+                    teacherListFilter = teacherList!!.filter { s ->   s .name.lowercase().contains(it.lowercase()) || s .mobile.lowercase().contains(it.lowercase()) || s .designation.lowercase().contains(it.lowercase()) || s .mobile.lowercase().contains(it.lowercase())  }
                     setupRecycleViewStudentList(teacherListFilter)
                 }else{
                     teacherList?.let { it1 -> setupRecycleViewStudentList(it1) }

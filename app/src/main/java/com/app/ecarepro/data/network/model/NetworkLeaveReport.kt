@@ -7,5 +7,5 @@ data class NetworkLeaveReport(
     val errorCode: Int,
     val message: String,
     val status: String,
-    val canTalkeAction: Boolean
+    val canTalkeAction: Boolean =true
 )

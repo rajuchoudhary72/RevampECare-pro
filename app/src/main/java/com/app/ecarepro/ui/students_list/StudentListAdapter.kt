@@ -33,6 +33,11 @@ class StudentListAdapter(private var studentList: List<Student>,
             append(data.rollNumber)
         }
 
+        bindingm.tvClassName.text= buildString {
+            append("Class : ")
+            append(data.`class`)
+        }
+
         bindingm.admission.text= buildString {
             append("Admission No : ")
             append(data.admissionNumber)

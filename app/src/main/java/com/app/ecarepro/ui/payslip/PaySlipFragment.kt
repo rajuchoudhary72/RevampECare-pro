@@ -62,6 +62,7 @@ class PaySlipFragment : Fragment() {
             downloadFileUrl=monthSelectedData.protectedFilePath
 
             if (monthSelectedData.filePath.isNotEmpty()){
+                (requireActivity() as MainActivity).showLoader(true)
                 binding.wvPdf.loadUrl(Constant.WEBVIEW_PDF_BASE_URL+monthSelectedData.filePath)
             }
 
@@ -70,15 +71,16 @@ class PaySlipFragment : Fragment() {
         binding.autoCompleteYear.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
 
+                binding.autoCompleteMonth.setText("Select Month", false)
                 monthData= yearData[position].monthlyPaySlip
-
+                monthDataString.clear()
                 if (monthData!=null) {
                     monthDataString.clear()
                     monthData.forEach { data ->
                         monthDataString.add(data.month.toString())
                     }
 
-                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,monthDataString)
+                    val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,monthDataString)
                     binding.autoCompleteMonth.setAdapter(arrayAdapter)
                 }
 
@@ -109,7 +111,7 @@ class PaySlipFragment : Fragment() {
                                     yearDataString.add(data.year.toString())
                                 }
 
-                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,yearDataString)
+                                val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,yearDataString)
                                 binding.autoCompleteYear.setAdapter(arrayAdapter)
 
 

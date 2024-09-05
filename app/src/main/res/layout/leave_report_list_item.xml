@@ -12,8 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:background="@color/white"
+         android:background="@color/white"
         android:orientation="vertical"
          tools:ignore="RtlHardcoded">
 
@@ -365,7 +364,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/llFile"
             android:layout_marginTop="@dimen/_10sdp"
-            android:visibility="gone">
+
+             >
 
             <TextView
                 android:id="@+id/tv_approve"
@@ -428,6 +428,12 @@
                 app:fontFamily="@font/ubuntu_bold" />
         </LinearLayout>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_below="@+id/ll_approve_rej"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/_10sdp"
+             />
 
     </RelativeLayout>
 </layout>

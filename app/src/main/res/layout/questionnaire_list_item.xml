@@ -156,7 +156,7 @@
                             android:paddingRight="15dp"
                             android:text="@string/answer"
                             android:visibility="visible"
-                            app:drawableLeftCompat="@drawable/like_hover" />
+                            app:drawableLeftCompat="@drawable/ic_comment" />
 
                         <TextView
                             android:id="@+id/tv_answer"
@@ -167,9 +167,11 @@
                             android:paddingTop="10dp"
                             android:paddingRight="15dp"
                             android:text="@string/answer"
+                            android:drawableTint="@color/md_theme_light_primary"
                             android:visibility="gone"
+
                             android:textColor="@color/md_theme_light_primary"
-                            app:drawableLeftCompat="@drawable/like" />
+                            app:drawableLeftCompat="@drawable/ic_comment" />
 
                         <TextView
                             android:id="@+id/tv_total_answer"

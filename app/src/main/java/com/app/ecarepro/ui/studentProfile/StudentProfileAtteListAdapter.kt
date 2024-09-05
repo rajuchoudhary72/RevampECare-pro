@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.studentProfile
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.databinding.DayWiseTimeTableItemBinding
@@ -31,7 +32,13 @@ class StudentProfileAtteListAdapter(
     override fun getItemCount(): Int = activityLST.size
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
-        bindingm.atteData = activityLST[position]
+        val binding  = DataBindingUtil.bind<StudentProfileAttendenceListItemBinding>(holder.itemView)
+         binding?.apply {
+             binding.atteData = activityLST[position]
+             binding.tvMonthName.setOnClickListener {
+                 activityCalenderFragment.onItemClick(activityLST[position],0,false)
+             }
+         }
 
 
      }

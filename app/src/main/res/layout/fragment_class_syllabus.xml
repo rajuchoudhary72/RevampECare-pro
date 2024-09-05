@@ -7,10 +7,11 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:orientation="vertical"
         tools:context=".ui.syllabus.ClassSyllabus">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -41,12 +42,9 @@
 
         <TextView
             android:id="@+id/tv_no_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
             android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
             android:gravity="center"
@@ -56,5 +54,5 @@
 
             />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

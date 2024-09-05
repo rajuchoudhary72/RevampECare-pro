@@ -5,9 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StuAssignmentItemBinding
 import com.app.ecarepro.model.Assignment
 import com.app.ecarepro.utils.Constant
+import com.squareup.picasso.Picasso
 
 class AssignmentListAdapter(
     private var activityLST: List<Assignment>,
@@ -52,7 +54,17 @@ class AssignmentListAdapter(
 
             if ( userType == Constant.PRINCIPAL || userType ==  Constant.MANAGEMENT) {
                 bindingm.llSubmit.isVisible=false
-                bindingm.llView.isVisible=true
+                 bindingm.llView.isVisible=false
+
+                bindingm.dateRel4.isVisible=true
+                bindingm.updatedByPerson.text=assignment.updateBy
+
+                Picasso.get().
+                load(assignment.photo)
+                    .placeholder(R.drawable.default_profile)
+                    .  into(bindingm.userImg)
+
+
             }else{
                 bindingm.llSubmit.isVisible=true
                 bindingm.llView.isVisible=false

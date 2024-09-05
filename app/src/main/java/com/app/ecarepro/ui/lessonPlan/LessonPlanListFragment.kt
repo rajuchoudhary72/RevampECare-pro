@@ -340,6 +340,9 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
 
                             if (it.data.lessonPlans != null) {
 
+                                if (pageIndex == 1) {
+                                    lessonPlanListAdapter.clearData()
+                                }
                                 binding.recyclerLessonPlan.isVisible = true
                                 binding.tvNoData.isVisible = false
 
@@ -348,8 +351,11 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                                 lessonPlanListAdapter.notifyDataSetChanged()
 
                             } else {
-                                binding.recyclerLessonPlan.isVisible = false
-                                binding.tvNoData.isVisible = true
+                                if (pageIndex == 1) {
+                                    binding.recyclerLessonPlan.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
+
                             }
 
                         }
