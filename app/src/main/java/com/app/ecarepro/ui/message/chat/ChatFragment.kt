@@ -1,6 +1,8 @@
 package com.app.ecarepro.ui.message.chat
 
+import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.style.CharacterStyle
@@ -10,7 +12,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -31,8 +32,8 @@ import com.app.ecarepro.utils.Constant.Companion.boldFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.boldFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.italicFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
-import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
+import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileClickListener
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -103,17 +104,19 @@ class ChatFragment : Fragment() {
         }
 
     }
+
     private fun showRecipients() {
         RecipientsDialog.getInstance(
             (chatViewModel.uiState.value as ChatUiState.Success).recipients
         )
             .show(childFragmentManager, "")
     }
+
     private fun handleUiState(uiState: ChatUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is ChatUiState.Success || uiState == ChatUiState.EmptyInbox) {
@@ -127,7 +130,7 @@ class ChatFragment : Fragment() {
 
                     is ChatUiState.Success -> {
                         binding.tvSubject.text = "Sub: ${uiState.subject}"
-                        setUpFontStyle(binding )
+                        setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
                         binding.btnRecipient.isVisible = uiState.recipients.isNullOrEmpty().not()
                         uiState.messages.forEach { message ->
@@ -152,7 +155,7 @@ class ChatFragment : Fragment() {
                                 receiverChatMessage {
                                     id(message.msgID.toString() + message.body + message.sentOn)
                                     message(message.body)
-                                    date(message.sentOn)    
+                                    date(message.sentOn)
                                     files(message.filePaths ?: emptyList())
                                     image(
                                         if ((message.filePaths?.size
@@ -181,10 +184,36 @@ class ChatFragment : Fragment() {
     }
 
     private fun openPhoto(photo: String?) {
-        findNavController().navigate(
-            R.id.photoViewFragmentFragment,
-            bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
-        )
+        if (photo.isNullOrEmpty()) return
+        if (isPdfUrl(photo)) {
+            openPdfFromUrl(photo)
+        } else if (isAudioUrl(photo)) {
+            openPdfFromUrl(photo)
+        } else {
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
+            )
+        }
+
+    }
+
+    private fun openPdfFromUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        val chooser = Intent.createChooser(intent, "Choose an app to open with")
+        startActivity(chooser)
+    }
+
+    fun isPdfUrl(url: String): Boolean {
+        val pdfExtension = "pdf"
+        val extension = url.substringAfterLast(".", "").lowercase()
+        return pdfExtension == extension
+    }
+
+    fun isAudioUrl(url: String): Boolean {
+        val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+        val extension = url.substringAfterLast(".", "").lowercase()
+        return audioExtensions.contains(extension)
     }
 
 
@@ -194,7 +223,7 @@ class ChatFragment : Fragment() {
     }
 
 
-    fun setUpFontStyle(binding: FragmentChatBinding  ) {
+    fun setUpFontStyle(binding: FragmentChatBinding) {
 
         if (binding.tvSubject.getText().toString() != "") {
             val ssb = SpannableStringBuilder(binding.tvSubject.getText())

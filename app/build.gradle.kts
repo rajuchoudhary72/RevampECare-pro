@@ -30,9 +30,16 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 191
-        versionName = "2.1.61"
+        versionCode = 193
+        versionName = "2.1.63"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //add this in the build.gradle.kts(app) file
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] =
+                    "$projectDir/schemas"
+            }
+        }
     }
 
     buildTypes {

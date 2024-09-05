@@ -150,6 +150,7 @@ class SelectRecipientsPagerViewModel @Inject constructor(
     }
 
     fun setSelectedClassId(classId: Int?, className: String?) {
+        clearSearchQuery()
         selectedClassId.update {
             if (classId == null || className == null) {
                 null

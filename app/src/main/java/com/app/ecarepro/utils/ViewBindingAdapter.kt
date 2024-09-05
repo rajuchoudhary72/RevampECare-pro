@@ -66,14 +66,13 @@ fun getImagePlaceholder(url: String?): Int {
 }
 
 fun isAudioUrl(url: String?): Boolean {
-    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac")
+    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
     val extension = url?.substringAfterLast(".", "")?.lowercase()
     return audioExtensions.contains(extension)
 }
 
 
-
-@BindingAdapter("imageUrl", "placeholder", requireAll = false)
+/*@BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrlChat(url: String?, placeholder: Drawable? = null) {
     load(url) {
         if (url?.contains("svg") == true)
@@ -87,7 +86,7 @@ fun ImageView.imageUrlChat(url: String?, placeholder: Drawable? = null) {
             error(R.drawable.img_placeholder)
         }
     }
-}
+}*/
 
 @BindingAdapter("imageRes")
 fun ImageView.imageRes(res: Int?) {
