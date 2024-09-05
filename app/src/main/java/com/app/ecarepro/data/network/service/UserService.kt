@@ -129,8 +129,10 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
@@ -947,10 +949,13 @@ interface UserService {
     suspend fun getFormDataEmployee(
         @Url url:String
     ): FormDataEmployeeResponseDto
-
+    @POST
+    suspend fun getVisitorDetails(
+        @Url url:String
+    ): VisitorDetailsDto
     @POST
     suspend fun submitForm(
         @Url url:String,
         @Body requestBody: RequestBody
-    ): CommonResponse
+    ): AppointmentSavedDto
 }

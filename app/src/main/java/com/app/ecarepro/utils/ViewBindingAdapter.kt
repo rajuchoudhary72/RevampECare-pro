@@ -39,7 +39,6 @@ fun View.showOrGone(visible: Boolean) {
 fun View.showOrHide(invisible: Boolean) {
     isInvisible = invisible
 }
-
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
     load(url) {
@@ -50,15 +49,26 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(placeholder)
             error(placeholder)
         } else {
-            if (url?.substring(url.lastIndexOf("."))==".pdf"){
-                placeholder(R.drawable.pdf)
-            }else{
-                placeholder(R.drawable.img_placeholder)
-                error(R.drawable.img_placeholder)
-            }
-
+            placeholder(getImagePlaceholder(url))
+            error(getImagePlaceholder(url))
         }
     }
+}
+
+fun getImagePlaceholder(url: String?): Int {
+    return if (url?.contains("pdf") == true) {
+        R.drawable.ic_pdf_placeholder
+    } else if (isAudioUrl(url)) {
+        R.drawable.audio_file
+    } else {
+        R.drawable.img_placeholder
+    }
+}
+
+fun isAudioUrl(url: String?): Boolean {
+    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac")
+    val extension = url?.substringAfterLast(".", "")?.lowercase()
+    return audioExtensions.contains(extension)
 }
 
 

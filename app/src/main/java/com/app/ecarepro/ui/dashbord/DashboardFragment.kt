@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -46,6 +47,7 @@ import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
 import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -149,9 +151,17 @@ class DashboardFragment : Fragment() {
     }
 
     private fun EpoxyController.buildTeachersWorkLoad(teacherWorkLoad: List<Workload>?) {
-        if(teacherWorkLoad.isNullOrEmpty()) return
+        if (teacherWorkLoad.isNullOrEmpty()) return
 
-        TeacherWorkloadModel(teacherWorkLoad)
+        TeacherWorkloadModel(
+            workload = teacherWorkLoad,
+            onClick = { workload ->
+                findNavController().navigate(
+                    R.id.timeTableNavHostFragment,
+                    bundleOf(Constant.ID to workload.id)
+                )
+            }
+        )
             .id("workload")
             .addTo(this)
 

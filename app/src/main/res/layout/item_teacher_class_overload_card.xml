@@ -8,6 +8,10 @@
             name="workload"
             type="com.app.ecarepro.data.network.model.Workload" />
 
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -65,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:drawablePadding="8dp"
+                android:onClick="@{clickListener}"
                 android:text="Timetable"
                 android:textColor="@color/brand_color"
                 app:drawableEndCompat="@drawable/ic_arrow_right"
