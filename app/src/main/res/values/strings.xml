@@ -697,5 +697,8 @@
 
     <string name="lbl_do_you_also_want_to_send_absentee_notification_sms_push_notification">Do you also want to send the notification ?</string>
     <string name="lbl_attention">Attention</string>
+    <string name="lbl_leave_details">Leave Details</string>
 
+
+    <string name="_02_may_18"> </string>
 </resources>

@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.leave.staff
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.NetworkLeaveSetting
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
@@ -21,6 +22,9 @@ class StaffApplyLeaveViewModel @Inject constructor(
     private val leaveApplyMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
     val leaveApplyStateFlow: StateFlow<NetworkResult<CommonResponse>> = leaveApplyMutableStateFlow
+    private val leaveSettingMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLeaveSetting>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val leaveSettingStateFlow: StateFlow<NetworkResult<NetworkLeaveSetting>> = leaveSettingMutableStateFlow
 
 
 
@@ -46,6 +50,17 @@ class StaffApplyLeaveViewModel @Inject constructor(
     }
 
 
+
+    fun leaveSetting(  )=viewModelScope.launch {
+        runCatching {
+            leaveSettingMutableStateFlow.value = NetworkResult.Loading( )
+            userRepository.leaveSetting(  )
+        }.onSuccess {
+            leaveSettingMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            leaveSettingMutableStateFlow .value = NetworkResult.Error(it.message)
+        }
+    }
 
 
 

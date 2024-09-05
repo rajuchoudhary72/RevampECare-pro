@@ -195,6 +195,8 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)
+                userDataStore.saveClassID(it.classID ?: 0)
+
                 userDataStore.saveRoleName(it.roleName ?: "")
                 userDataStore.saveUserNameID(userName ?: "")
             }
@@ -351,7 +353,7 @@ class UserRepositoryImpl @Inject constructor(
         fromDate: String,
         tillDate: String,
         duration: Double,
-        halfdayDTL: List<HalfdayDTL>,
+        halfdayDTL: List<HalfdayDTL>?,
         reason: String,
         fileAttachment: FileAttachment?,
 

@@ -24,7 +24,9 @@ data class LoginResponseDto(
     @SerializedName("photoPath")
     val photo: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("classID")
+    val classID: Int?
 )
 
 fun LoginResponseDto.asUserEntity(): UserEntity {

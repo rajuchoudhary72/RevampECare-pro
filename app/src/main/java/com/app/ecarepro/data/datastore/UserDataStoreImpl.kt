@@ -203,6 +203,12 @@ class UserDataStoreImpl @Inject constructor(
         }
     }
 
+    override suspend fun saveClassID(classID: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[classIDKey] = classID
+        }
+    }
+
     override suspend fun saveRoleName(roleName: String) {
         context.dataStore.edit { preferences ->
             preferences[roleNameKey] = roleName
@@ -224,6 +230,12 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getUserType(): Int? {
         return context.dataStore.data.map { preferences ->
             preferences[userTypeKey]
+        }.first()
+    }
+
+    override suspend fun getClassID(): Int? {
+        return context.dataStore.data.map { preferences ->
+            preferences[classIDKey]
         }.first()
     }
 
@@ -287,6 +299,7 @@ class UserDataStoreImpl @Inject constructor(
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
+        private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }

@@ -246,7 +246,7 @@ interface UserRepository {
         fromDate: String,
         tillDate: String,
         duration: Double,
-        halfdayDTL: List<HalfdayDTL>,
+        halfdayDTL: List<HalfdayDTL>?,
         reason: String,
         fileAttachment: FileAttachment?,
 

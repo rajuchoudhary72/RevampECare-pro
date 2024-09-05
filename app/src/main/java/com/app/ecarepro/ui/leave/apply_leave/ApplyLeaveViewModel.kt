@@ -35,13 +35,14 @@ class ApplyLeaveViewModel @Inject constructor(
 
 
 
-    fun leaveApply(leaveID: Int,
-                   fromDate: String,
-                   tillDate:String,
-                   duration:Double,
-                   halfdayDTL: List<HalfdayDTL>,
-                   reason:String,
-                   fileAttachment: FileAttachment? )=viewModelScope.launch {
+    fun leaveApply(
+        leaveID: Int,
+        fromDate: String,
+        tillDate:String,
+        duration:Double,
+        halfdayDTL: List<HalfdayDTL>?,
+        reason:String,
+        fileAttachment: FileAttachment? )=viewModelScope.launch {
         runCatching {
             leaveApplyMutableStateFlow.value = NetworkResult.Loading( )
             userRepository.leaveApply(leaveID, fromDate, tillDate, duration, halfdayDTL, reason,fileAttachment )
