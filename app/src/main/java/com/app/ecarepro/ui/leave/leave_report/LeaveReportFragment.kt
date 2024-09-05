@@ -166,16 +166,22 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 )
             }
             1 -> {
-                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0)
-                leaveReportAdapter.clearData()
-                 pageIndex=1
-                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0).invokeOnCompletion {
+                    leaveReportAdapter.clearData()
+                    status=0
+                    pageIndex=1
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                }
+
             }
             2 -> {
                 leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0)
-                leaveReportAdapter.clearData()
-                 pageIndex=1
-                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    .invokeOnCompletion {
+                        leaveReportAdapter.clearData()
+                        status=0
+                        pageIndex=1
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    }
             }
         }
      }

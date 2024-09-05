@@ -78,7 +78,7 @@ class QuestionPaperFragment : Fragment() {
                     getClasses()
                 } else {
                     binding.autoInputClassInputLayout.isVisible=false
-                    userDataStore.getClassID()?.let { getQuestionPaper(it, 0) }
+                 //   userDataStore.getClassID()?.let { getQuestionPaper(it, 0) }
 
                 }
             }}

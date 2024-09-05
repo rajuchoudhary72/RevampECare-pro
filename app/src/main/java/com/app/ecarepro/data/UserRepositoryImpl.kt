@@ -195,7 +195,6 @@ class UserRepositoryImpl @Inject constructor(
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)
-                userDataStore.saveClassID(it.classID ?: 0)
 
                 userDataStore.saveRoleName(it.roleName ?: "")
                 userDataStore.saveUserNameID(userName ?: "")

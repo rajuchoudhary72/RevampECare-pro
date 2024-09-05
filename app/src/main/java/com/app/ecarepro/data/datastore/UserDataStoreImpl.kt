@@ -203,11 +203,7 @@ class UserDataStoreImpl @Inject constructor(
         }
     }
 
-    override suspend fun saveClassID(classID: Int) {
-        context.dataStore.edit { preferences ->
-            preferences[classIDKey] = classID
-        }
-    }
+
 
     override suspend fun saveRoleName(roleName: String) {
         context.dataStore.edit { preferences ->
@@ -233,11 +229,7 @@ class UserDataStoreImpl @Inject constructor(
         }.first()
     }
 
-    override suspend fun getClassID(): Int? {
-        return context.dataStore.data.map { preferences ->
-            preferences[classIDKey]
-        }.first()
-    }
+
 
     override suspend fun getRoleName(): String? {
         return context.dataStore.data.map { preferences ->
