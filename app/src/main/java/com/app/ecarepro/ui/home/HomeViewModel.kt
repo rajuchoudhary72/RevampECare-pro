@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Card
+import com.app.ecarepro.data.network.model.DashboardButtons
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.Slider
+import com.app.ecarepro.data.network.model.UserDashboardDto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
@@ -27,7 +29,9 @@ class HomeViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val schoolData = MutableLiveData<NetworkSchool>()
+     val schoolData = MutableLiveData<NetworkSchool>()
+    val dashboardButtons = MutableLiveData<List<DashboardButtons>?>()
+
     private val favouriteData = MutableStateFlow<List<Menu>?>(null)
 
     val uiState =
@@ -43,6 +47,7 @@ class HomeViewModel @Inject constructor(
             .map { (dashboard, undertaking, favourite) ->
                 if (dashboard.isSuccess && undertaking.isSuccess) {
                     val response = dashboard.getOrNull()
+                    dashboardButtons.value= dashboard.getOrNull()?.dashboardButtons
                     val cards = mutableListOf<Card>()
 
                     if (response?.showProCards == true) {

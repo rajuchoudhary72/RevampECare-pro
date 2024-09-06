@@ -93,6 +93,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        isInvisible="@{timeData.time.isEmpty()}"
                         android:src="@drawable/ic_round_access_time_24"
                         app:tint="@color/grey_40" />
 

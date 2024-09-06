@@ -28,8 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                  app:title="Message"
-                app:titleTextAppearance="?attr/titleTextAppearance"
-                app:titleTextColor="@color/white"
+                 app:titleTextColor="@color/white"
                 app:topWindowInsetToPadding="@{true}">
 
                 <LinearLayout

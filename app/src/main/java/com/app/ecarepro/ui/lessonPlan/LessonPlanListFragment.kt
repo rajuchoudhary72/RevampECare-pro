@@ -411,7 +411,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         }
     }
 
-    private fun popupFilter() {
+    private fun  popupFilter() {
         val menuItemView = requireView().findViewById<View>(R.id.menu_filter)
         val popupMenu = PopupMenu(requireContext(), menuItemView)
         popupMenu.menuInflater.inflate(R.menu.filter_menu_lesson_plan, popupMenu.menu)
