@@ -12,7 +12,7 @@ import com.app.ecarepro.data.network.Setting
 
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
-    suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String)
+    suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String)
     suspend fun getUser(): NetworkUserDetailsDto?
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)

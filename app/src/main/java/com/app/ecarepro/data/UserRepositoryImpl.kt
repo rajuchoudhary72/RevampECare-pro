@@ -146,6 +146,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MultipartBody
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -191,7 +194,7 @@ class UserRepositoryImpl @Inject constructor(
             )
         ).also {
             if (it.authenticated == true) {
-                userDataStore.saveUserDetails(it, schoolCode)
+                userDataStore.saveUserDetails(it, schoolCode, getCurrentDateTimeAmPm())
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)
@@ -200,6 +203,12 @@ class UserRepositoryImpl @Inject constructor(
             }
 
         }
+    }
+
+    fun getCurrentDateTimeAmPm(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+        return dateFormat.format(currentDate)
     }
 
     override suspend fun logout(): Flow<Result<Boolean>> {

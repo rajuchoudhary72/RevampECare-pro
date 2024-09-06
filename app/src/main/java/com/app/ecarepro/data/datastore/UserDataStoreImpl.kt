@@ -51,8 +51,8 @@ class UserDataStoreImpl @Inject constructor(
         //userDatabase.insertUser(user.asUserEntity())
     }
 
-    override suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String) {
-        userDatabase.insertUser(user.asUserEntity().copy(schoolCode = schoolCode))
+    override suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String) {
+        userDatabase.insertUser(user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time))
         val userId = getCurrentUserId()
         if (userId == null || userId == 0)
             setCurrentUserId(userId = user.userID)

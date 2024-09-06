@@ -28,7 +28,9 @@ data class LoginResponseDto(
     @SerializedName("classID")
     val classID: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("loginTime")
+    val loginTime: String?
 )
 
 fun LoginResponseDto.asUserEntity(): UserEntity {
@@ -43,6 +45,7 @@ fun LoginResponseDto.asUserEntity(): UserEntity {
         roleName = roleName,
         schoolCode = "",
         mobileNumber = mobileNumer,
-        classID = classID
+        classID = classID,
+        loginTime = loginTime
     )
 }

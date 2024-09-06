@@ -19,6 +19,7 @@ data class UserEntity(
     @ColumnInfo(name = "is_verified") val isVerified: Boolean?,
     @ColumnInfo(name = "mobileNumber") val mobileNumber: String?,
     @ColumnInfo(name = "classID") val classID: String?,
+    @ColumnInfo(name = "loginTime") val loginTime: String?,
 )
 
 fun UserEntity.asNetworkUserDetailsDto(): NetworkUserDetailsDto {
@@ -33,6 +34,7 @@ fun UserEntity.asNetworkUserDetailsDto(): NetworkUserDetailsDto {
         roleName = roleName,
         schoolCode = schoolCode,
         mobileNumber = mobileNumber,
-        classID = classID
+        classID = classID,
+        loginTime = loginTime
     )
 }

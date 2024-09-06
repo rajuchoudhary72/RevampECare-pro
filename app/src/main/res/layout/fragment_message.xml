@@ -13,8 +13,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_dashboard"
-        >
+        android:background="@color/background_dashboard">
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
@@ -27,8 +26,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 app:title="Message"
-                app:titleTextAppearance="?attr/titleTextAppearance"
+                app:title="Message"
+                app:titleTextAppearance="@style/TextAppearance.ECarePro.Toolbar"
                 app:titleTextColor="@color/white"
                 app:topWindowInsetToPadding="@{true}">
 
@@ -68,25 +67,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background_dashboard"
-                >
+                android:background="@color/background_dashboard">
 
                 <soup.neumorphism.NeumorphCardView
                     android:id="@+id/Button1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:neumorph_backgroundColor="@color/background_dashboard"
                     app:neumorph_lightSource="leftTop"
                     app:neumorph_shapeAppearance="@style/NeumorphButtonShapeAppearance"
-
-                    app:neumorph_backgroundColor="@color/background_dashboard"
-                    app:neumorph_strokeWidth="@dimen/_1sdp"
-                    >
+                    app:neumorph_strokeWidth="@dimen/_1sdp">
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                         android:background="@color/background_dashboard"
+                        android:background="@color/background_dashboard"
                         app:tabIndicatorFullWidth="false">
 
                         <com.google.android.material.tabs.TabItem
@@ -106,7 +102,6 @@
 
 
             </LinearLayout>
-
 
 
         </com.google.android.material.appbar.AppBarLayout>
