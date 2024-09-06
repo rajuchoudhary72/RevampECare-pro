@@ -23,10 +23,12 @@ data class LoginResponseDto(
     val name: String?,
     @SerializedName("photoPath")
     val photo: String?,
-    @SerializedName("status")
-    val status: String?,
+    @SerializedName("mobileNumer")
+    val mobileNumer: String?,
     @SerializedName("classID")
-    val classID: Int?
+    val classID: String?,
+    @SerializedName("status")
+    val status: String?
 )
 
 fun LoginResponseDto.asUserEntity(): UserEntity {
@@ -39,6 +41,8 @@ fun LoginResponseDto.asUserEntity(): UserEntity {
         isVerified = false,
         isUserAuthenticated = false,
         roleName = roleName,
-        schoolCode = ""
+        schoolCode = "",
+        mobileNumber = mobileNumer,
+        classID = classID
     )
 }

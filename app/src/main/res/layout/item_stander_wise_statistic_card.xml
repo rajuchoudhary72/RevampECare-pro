@@ -87,7 +87,7 @@
                 app:layout_constraintStart_toEndOf="@+id/lv_left"
                 app:lv_image="@drawable/ic_repeater"
                 app:lv_sub_text="1011"
-                app:lv_text="Absent" />
+                app:lv_text="REPEATER" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/lv_studying"

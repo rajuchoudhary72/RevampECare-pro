@@ -35,12 +35,20 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.airbnb.epoxy.EpoxyRecyclerView
-            android:id="@+id/recycler_view"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
+            bottomWindowInsetToPadding="@{true}"
             android:layout_height="match_parent"
-            android:paddingBottom="50dp"
-            app:bottomWindowInsetToPadding="@{true}"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+            android:fillViewport="true"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

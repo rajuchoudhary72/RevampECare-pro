@@ -82,12 +82,22 @@
                 app:spanCount="3"
                 tools:layout_editor_absoluteX="16dp" />
 
+            <TextView
+                android:id="@+id/subject"
+                android:text="Subject"
+                android:layout_marginTop="@dimen/horizontal_margin"
+                android:fontFamily="@font/calibri_regular"
+                app:layout_constraintStart_toStartOf="@+id/txtSubject"
+                app:layout_constraintTop_toBottomOf="@+id/recipientsRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <EditText
+                android:layout_marginTop="4dp"
                 android:id="@+id/txtSubject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/horizontal_margin"
-                android:layout_marginTop="@dimen/horizontal_margin"
                 android:autofillHints="true"
                 android:background="@drawable/bg_outline_round_corner_green_10"
                 android:fontFamily="@font/calibri_regular"
@@ -98,7 +108,7 @@
                 android:paddingHorizontal="10dp"
                 android:scrollbars="vertical"
                 android:text="@={viewModel.subject}"
-                app:layout_constraintTop_toBottomOf="@id/recipientsRecyclerView"
+                app:layout_constraintTop_toBottomOf="@id/subject"
                 tools:ignore="LabelFor" />
 
             <RelativeLayout
@@ -262,7 +272,7 @@
                 isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="recipientsRecyclerView,txtSubject"
+                app:constraint_referenced_ids="recipientsRecyclerView,txtSubject, subject"
                 tools:visibility="gone" />
 
             <LinearLayout

@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.AdmissionComparison
 import com.app.ecarepro.data.network.model.BankBalance
 import com.app.ecarepro.data.network.model.BirthDayCard
+import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.DataValue
 import com.app.ecarepro.data.network.model.FeeCollection
@@ -23,9 +26,11 @@ import com.app.ecarepro.data.network.model.StaffAttendance
 import com.app.ecarepro.data.network.model.StatusWiseStatistics
 import com.app.ecarepro.data.network.model.Timetable
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.Workload
 import com.app.ecarepro.databinding.FragmentDashboardBinding
 import com.app.ecarepro.model.Feed
 import com.app.ecarepro.todayModeWiseCollectionCard
+import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
@@ -34,19 +39,18 @@ import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
 import com.app.ecarepro.ui.dashbord.model.FeedsModel
 import com.app.ecarepro.ui.dashbord.model.LibraryBookStatusModel
 import com.app.ecarepro.ui.dashbord.model.OnlineVsOfflineAdmissionModel
+import com.app.ecarepro.ui.dashbord.model.ProCardCarouselModel
 import com.app.ecarepro.ui.dashbord.model.QuestionnaireCarouselModel
 import com.app.ecarepro.ui.dashbord.model.StaffAttendanceModel
 import com.app.ecarepro.ui.dashbord.model.StanderWiseStatisticModel
 import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
+import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
-import com.rubensousa.decorator.LinearMarginDecoration
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import androidx.navigation.fragment.findNavController
-import androidx.core.os.bundleOf
-import com.app.ecarepro.utils.Constant
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -84,11 +88,26 @@ class DashboardFragment : Fragment() {
 
     private fun buildModels(data: UserDashboardDto, feeds: List<Feed>) {
         binding.recyclerView.withModels {
-            if (data.showCollectionModeWise == true)
-                buildTodayModeWiseCollectionCard(data.collectionModeWise)
+            if (data.showProCards == true || data.showCards == true) {
+                val cards = mutableListOf<Card>()
+                if (data.showProCards == true) {
+                    cards.addAll(data.proCards ?: emptyList())
+                }
+
+                if (data.showCards == true) {
+                    cards.addAll(data.cards ?: emptyList())
+                }
+                buildProCard(cards)
+            }
 
             if (data.showFeeCollection == true)
                 buildEstimatedCollectionCard(data.feeCollection)
+
+            if (data.showCollectionModeWise == true)
+                buildTodayModeWiseCollectionCard(data.collectionModeWise)
+
+            if (data.showTeacherWorkLoad == true)
+                buildTeachersWorkLoad(data.teacherWorkLoad)
 
             if (data.showFeeDafaulter == true)
                 buildFeeDefaulterCard(data.feeDafaulter)
@@ -108,8 +127,8 @@ class DashboardFragment : Fragment() {
             if (data.showAdmissionModeComparison == true)
                 buildOnlineVsOfflineAdmissionCard(data.admissionModeComparison)
 
-            if (data.showStuCategoryStatistics == true)
-                buildStudentStatisticModel(data.stuCategoryWiseStatistics)
+            if (data.showStuReligionWiseStatistics == true)
+                buildStudentStatisticModel(data.stuReligionWiseStatistics)
 
             if (data.showLibraryDTL == true)
                 buildLibraryBookStatusModel(data.libraryDTL)
@@ -117,7 +136,7 @@ class DashboardFragment : Fragment() {
             if (data.showBDayCards == true)
                 buildTeachersBirthdayCarouselModel(data.birthDayCards)
 
-         //   buildFeedsModel(feeds)
+
 
             if (data.showTimetable == true)
                 timeTableCarouselModel(data.timetable)
@@ -131,6 +150,49 @@ class DashboardFragment : Fragment() {
 
     }
 
+    private fun EpoxyController.buildTeachersWorkLoad(teacherWorkLoad: List<Workload>?) {
+        if (teacherWorkLoad.isNullOrEmpty()) return
+
+        TeacherWorkloadModel(
+            workload = teacherWorkLoad,
+            onClick = { workload ->
+                findNavController().navigate(
+                    R.id.timeTableNavHostFragment,
+                    bundleOf(Constant.ID to workload.id)
+                )
+            }
+        )
+            .id("workload")
+            .addTo(this)
+
+    }
+
+
+    private fun EpoxyController.buildProCard(cards: List<Card>) {
+        if (cards.isEmpty()) return
+        ProCardCarouselModel(
+            cards
+        ) { favouriteSlider ->
+            if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                (requireActivity() as MainActivity).getFragmentId(
+                    favouriteSlider.menuID,
+                    favouriteSlider.chMenuID,
+                    favouriteSlider.sbChMenuID
+                )
+            } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                (requireActivity() as MainActivity).getFragmentId(
+                    favouriteSlider.menuID,
+                    favouriteSlider.chMenuID
+                )
+            } else if (favouriteSlider.menuID > 0) {
+                (requireActivity() as MainActivity).getFragmentId(
+                    favouriteSlider.menuID
+                )
+            }
+        }
+            .id("pro")
+            .addTo(this)
+    }
 
     private fun EpoxyController.buildTodayModeWiseCollectionCard(collectionModeWise: CollectionModeWise?) {
         collectionModeWise ?: return
@@ -228,20 +290,20 @@ class DashboardFragment : Fragment() {
             findNavController().navigate(
                 R.id.birthdayFragment,
                 Bundle().apply {
-                    putInt("rType",  it.rtype)
+                    putInt("rType", it.rtype)
                     putString("monthSelected", it.month)
                     putString("dateSelected", it.date)
                     putInt("uType", it.utype)
                 })
 
-          /*  findNavController().navigate(
-                R.id.birthdayFragment, bundleOf(
-                    "rType" to it.rType,
-                    "monthSelected" to it.month,
-                    "dateSelected" to it.date,
-                    "uType" to it.uType
-                )
-            )*/
+            /*  findNavController().navigate(
+                  R.id.birthdayFragment, bundleOf(
+                      "rType" to it.rType,
+                      "monthSelected" to it.month,
+                      "dateSelected" to it.date,
+                      "uType" to it.uType
+                  )
+              )*/
         })
             .id("1e5e")
             .addTo(this)
