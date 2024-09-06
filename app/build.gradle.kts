@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 193
-        versionName = "2.1.63"
+        versionCode = 194
+        versionName = "2.1.64"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -72,12 +72,12 @@ android {
         }
         create("prod") {
             dimension = "build"
-            resValue("string", "app_name", "e-Care")
+            resValue("string", "app_name", "Franciscan e-Care")
         }
         create("beta") {
             dimension = "build"
            // applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "e-Care")
+            resValue("string", "app_name", "Franciscan e-Care")
            // signingConfig = signingConfigs.getByName("beta")
         }
     }
