@@ -1,5 +1,6 @@
 package com.app.ecarepro.data
 
+import android.annotation.SuppressLint
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
@@ -144,9 +145,11 @@ import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import okhttp3.MultipartBody
 
 class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
@@ -1237,12 +1240,61 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>> {
+    override fun getFormDataEmployee(
+        departmentId: String,
+        designation: String
+    ): Flow<Result<List<Employee>>> {
         return flow {
             try {
-                val response = userService.getFormDataEmployee("https://fomapi.franciscanecare.com/api/Master/getemployees/${userDataStore.getSchoolData()?.schoolCode}/$departmentId/$designation")
+                val response =
+                    userService.getFormDataEmployee("https://fomapi.franciscanecare.com/api/Master/getemployees/${userDataStore.getSchoolData()?.schoolCode}/$departmentId/$designation")
                 if (response.status == true) {
-                    emit(Result.success(response.data?: emptyList()))
+                    emit(Result.success(response.data ?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override fun getVisitorDetails(): Flow<Result<VisitorDetails>> {
+        return flow {
+            try {
+                val response =
+                    userService.getVisitorDetails("https://fomapi.franciscanecare.com/api/Appointment/getuserdetailsfrommobile/${userDataStore.getSchoolData()?.schoolCode}/${userDataStore.getUser()?.mobileNumber}")
+                if (response.status == true) {
+                    emit(Result.success(response.data!!))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    @SuppressLint("NewApi")
+    override fun submitForm(formData: Map<String, String>): Flow<Result<String>> {
+        return flow {
+            try {
+                val builder = MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+
+                formData.forEach { (key, value) ->
+                    builder.addFormDataPart(key, value)
+                }
+
+                val response = userService.submitForm(
+                    url = "https://fomapi.franciscanecare.com/api/Appointment/saveappointmentmob/${userDataStore.getSchoolData()?.schoolCode}",
+                    requestBody = builder.build()
+                )
+                if (response.status == true) {
+                    emit(
+                        Result.success(
+                            response.data?.message ?: response.message
+                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
+                        )
+                    )
                 } else {
                     emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
                 }

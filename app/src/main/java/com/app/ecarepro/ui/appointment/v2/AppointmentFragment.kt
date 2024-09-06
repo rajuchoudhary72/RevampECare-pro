@@ -52,8 +52,9 @@ class AppointmentFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result?.data != null) {
                     val bitmap = result.data?.extras?.get("data") as Bitmap
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                     createFileFromBitmapInCache(bitmap, "$photoColumName.png")?.let { file ->
-                        viewModel.updateValue(photoColumName, file.absolutePath)
+                        viewModel.updateValue(photoColumName, file.absolutePath, imageString)
                     }
 
                 }
@@ -68,8 +69,10 @@ class AppointmentFragment : Fragment() {
                 val data = it.data
                 val imgUri = data?.data
                 val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
+                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+
                 createFileFromBitmapInCache(bitmap, "$photoColumName.png")?.let { file ->
-                    viewModel.updateValue(photoColumName, file.absolutePath)
+                    viewModel.updateValue(photoColumName, file.absolutePath, imageString)
                 }
             }
         }
@@ -211,7 +214,6 @@ class AppointmentFragment : Fragment() {
                                                 })
                                             }
                                         }
-
                                         "IdType" -> {
                                             textFiledDropdown {
                                                 id(form.columnName)
@@ -267,47 +269,42 @@ class AppointmentFragment : Fragment() {
                                         }
                                     }
                                 } else {
-                                    if (form.columnName == "CoVisitorName") {
-                                        AppointmentGuestsModel(
-                                            form = form,
-                                            addToGuestList = {viewModel.addToGuestList(it)},
-                                            removeToGuestList = {viewModel.removeToGuestList(it)},
-                                        )
-                                            .id(form.columnName)
-                                            .addTo(this)
-                                    } else {
-                                        textFiled {
-                                            id(form.columnName)
-                                            filedName(form.columnName)
-                                            hintText(form.columnDisplayName)
-                                            isMandatory(form.isrequired)
-                                            text(form.value)
-                                            if (form.columnName == "VisitingDate") {
-                                                clickListener { _ ->
-                                                    selectDate("Select Visiting Date") {
-                                                        viewModel.updateValue(form.columnName, it)
-                                                    }
-                                                }
-                                            } else if (form.columnName == "Appointmenttime") {
-                                                clickListener { _ ->
-                                                    pickTime("Select Appointment Time") {
-                                                        viewModel.updateValue(form.columnName, it)
-                                                    }
+                                    textFiled {
+                                        id(form.columnName)
+                                        filedName(form.columnName)
+                                        hintText(form.columnDisplayName)
+                                        isMandatory(form.isrequired)
+                                        text(form.value)
+                                        if (form.columnName == "VisitingDate") {
+                                            clickListener { _ ->
+                                                selectDate("Select Visiting Date") {
+                                                    viewModel.updateValue(form.columnName, it)
                                                 }
                                             }
-                                            textWatcher(makeTextWatcher {
-                                                viewModel.updateValue(
-                                                    form.columnName,
-                                                    it.toString()
-                                                )
-                                            })
+                                        } else if (form.columnName == "Appointmenttime") {
+                                            clickListener { _ ->
+                                                pickTime("Select Appointment Time") {
+                                                    viewModel.updateValue(form.columnName, it)
+                                                }
+                                            }
                                         }
+                                        textWatcher(makeTextWatcher {
+                                            viewModel.updateValue(form.columnName, it.toString())
+                                        })
                                     }
                                 }
                             }
 
                         button {
                             id("button")
+                            clickListener { _ ->
+                                viewModel.submitForm { isSuccess, message ->
+                                    mainActivity().showMessage(message)
+                                    if(isSuccess){
+                                        findNavController().popBackStack()
+                                    }
+                                }
+                            }
                         }
                     }
 

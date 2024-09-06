@@ -93,6 +93,7 @@ import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
@@ -164,8 +165,10 @@ interface UserRepository {
     fun getFormDataDepartment(): Flow<Result<List<Department>>>
 
     fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>>
+    fun getVisitorDetails(): Flow<Result<VisitorDetails>>
 
     fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
+    fun submitForm(formData:Map<String,String>): Flow<Result<String>>
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 

@@ -39,9 +39,41 @@ fun View.showOrGone(visible: Boolean) {
 fun View.showOrHide(invisible: Boolean) {
     isInvisible = invisible
 }
-
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
+    load(url) {
+        if (url?.contains("svg") == true)
+            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+        crossfade(true)
+        if (placeholder != null) {
+            placeholder(placeholder)
+            error(placeholder)
+        } else {
+            placeholder(getImagePlaceholder(url))
+            error(getImagePlaceholder(url))
+        }
+    }
+}
+
+fun getImagePlaceholder(url: String?): Int {
+    return if (url?.contains("pdf") == true) {
+        R.drawable.ic_pdf_placeholder
+    } else if (isAudioUrl(url)) {
+        R.drawable.audio_file
+    } else {
+        R.drawable.img_placeholder
+    }
+}
+
+fun isAudioUrl(url: String?): Boolean {
+    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+    val extension = url?.substringAfterLast(".", "")?.lowercase()
+    return audioExtensions.contains(extension)
+}
+
+
+/*@BindingAdapter("imageUrl", "placeholder", requireAll = false)
+fun ImageView.imageUrlChat(url: String?, placeholder: Drawable? = null) {
     load(url) {
         if (url?.contains("svg") == true)
             decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
@@ -54,7 +86,7 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             error(R.drawable.img_placeholder)
         }
     }
-}
+}*/
 
 @BindingAdapter("imageRes")
 fun ImageView.imageRes(res: Int?) {
@@ -129,7 +161,10 @@ fun TextView.autoLink(textValue: String) {
 fun TextView.rupeeText(rupee: Double?) {
     text = "₹$rupee"
 }
-
+@BindingAdapter("rupeeText")
+fun TextView.rupeeText(rupee: String?) {
+    text = "₹$rupee"
+}
 interface FileClickListener {
     fun onClick(file: String)
 }

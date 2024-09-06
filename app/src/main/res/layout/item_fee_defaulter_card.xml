@@ -85,7 +85,7 @@
                 app:layout_constraintStart_toEndOf="@+id/amount"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 app:lv_image="@drawable/ic_person"
-                app:lv_text="Amount" />
+                app:lv_text="Count" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/total"

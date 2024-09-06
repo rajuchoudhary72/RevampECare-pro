@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.app.ecarepro.BuildConfig
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -236,6 +237,7 @@ class ProfileFragment : Fragment() {
 
                 profileLogout {
                     id(131)
+                    version("v ${BuildConfig.VERSION_NAME}")
                     clickListener { _ ->
                         (requireActivity() as MainActivity).logout()
                     }
