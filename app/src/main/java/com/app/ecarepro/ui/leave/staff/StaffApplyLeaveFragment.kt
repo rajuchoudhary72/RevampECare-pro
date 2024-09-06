@@ -520,6 +520,7 @@ class StaffApplyLeaveFragment : Fragment() {
                      }
                  }
              }
+             dialog.dismiss()
         }
         tv_cancel.setOnClickListener { dialog.dismiss() }
         dialog.show()

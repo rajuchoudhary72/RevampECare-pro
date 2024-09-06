@@ -109,7 +109,7 @@ class HomeViewPagerFragment : Fragment() {
                 R.id.profile -> {
                     systemViewModel.bottomNavPositionSet(1)
                     binding.rlBottomNavigation.isVisible=false
-                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_settingsFragment)
+                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_profileFragment)
 
                     true
                 }
