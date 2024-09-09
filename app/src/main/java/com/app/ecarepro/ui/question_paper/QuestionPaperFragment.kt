@@ -75,10 +75,14 @@ class QuestionPaperFragment : Fragment() {
         lifecycleScope.launch {
             userDataStore.getUser()?.run {
                 if (userType == Constant.STAFF_TYPE) {
+                    binding.autoInputClassInputLayout.isVisible=true
                     getClasses()
                 } else {
                     binding.autoInputClassInputLayout.isVisible=false
-                 //   userDataStore.getClassID()?.let { getQuestionPaper(it, 0) }
+                    try {
+                        classSelectedID=classID!!.toInt()
+                        getQuestionPaper(classID .toInt(), 0)
+                    }catch (e:Exception){}
 
                 }
             }}
@@ -164,6 +168,8 @@ class QuestionPaperFragment : Fragment() {
                                 binding.autoCompleteSelectYear.setAdapter(arrayAdapter)
                             }
                             if (it.data.qP_List != null) {
+                                binding.tvNoData.isVisible=false
+                                binding.viewPager.isVisible=true
                                 val fragmentList: ArrayList<Fragment> = ArrayList()
                                 it.data.qP_List.forEach {
                                     fragmentList.add(QuestionPaperSubFragment(it.questionPapers))
@@ -180,7 +186,13 @@ class QuestionPaperFragment : Fragment() {
                                 ) { tab, position ->
                                     tab.text = it.data.qP_List[position].subjectName
                                 }.attach()
+                            }else{
+                                binding.tvNoData.isVisible=true
+                                binding.viewPager.isVisible=false
                             }
+                        }else{
+                            binding.tvNoData.isVisible=true
+                            binding.viewPager.isVisible=false
                         }
                     }
                 }

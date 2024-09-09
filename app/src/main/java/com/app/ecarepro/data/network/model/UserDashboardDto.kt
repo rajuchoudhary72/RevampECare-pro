@@ -14,6 +14,8 @@ data class UserDashboardDto(
     val cards: List<Card>?,
     @SerializedName("proCards")
     val proCards: List<Card>?,
+    @SerializedName("dashboardButtons")
+    val dashboardButtons: List<DashboardButtons >?,
     @SerializedName("designation")
     val designation: String?,
     @SerializedName("errorCode")
@@ -372,4 +374,14 @@ data class Questionnaire(
     val userID: Int?,
     @SerializedName("userType")
     val userType: Int?
+)
+
+
+data class DashboardButtons(
+
+
+    @SerializedName("buttonName")
+    val buttonName: String?,
+    @SerializedName("isShow")
+    val isShow: Boolean?
 )

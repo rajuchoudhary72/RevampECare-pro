@@ -56,7 +56,7 @@
                         android:id="@+id/img_search"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="40dp"
                         android:onClick="@{v -> viewModel.showSearchBar()}"
                         android:src="@drawable/round_search_24"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,17 +65,31 @@
                         app:tint="@color/white"
                         tools:ignore="ContentDescription" />
 
+                    <!--<ImageView
+                        android:id="@+id/img_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:onClick="@{v -> viewModel.showSearchBar()}"
+                        android:src="@drawable/ic_filter"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/white"
+
+                        tools:ignore="ContentDescription" />-->
+
                     <EditText
                         android:id="@+id/search_bar"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="30dp"
                         android:background="@drawable/bg_round_corner_green"
                         android:backgroundTint="@color/white"
                         android:drawableStart="@drawable/round_search_24"
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/calibri_regular"
-                        android:hint="@string/search"
+                        android:hint="@string/search_by_name_class_section_roll_no_father_name"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:paddingHorizontal="10dp"
@@ -83,6 +97,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="LabelFor" />
+
 
                     <ImageView
                         android:id="@+id/clearSearch"
@@ -92,6 +107,7 @@
                         android:background="?selectableItemBackgroundBorderless"
                         android:onClick="@{v -> viewModel.clearSearchQuery()}"
                         android:src="@drawable/round_close_24"
+
                         app:layout_constraintBottom_toBottomOf="@+id/search_bar"
                         app:layout_constraintEnd_toEndOf="@+id/search_bar"
                         app:layout_constraintTop_toTopOf="@+id/search_bar"

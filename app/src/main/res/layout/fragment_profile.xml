@@ -21,8 +21,7 @@
             android:background="?attr/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
              app:title="@string/profile"
-            app:titleTextAppearance="?attr/textAppearanceTitleMedium"
-            app:titleTextColor="@color/white"  >
+             app:titleTextColor="@color/white"  >
             <TextView
                 android:id="@+id/tv_edit_profile"
                 android:layout_width="wrap_content"

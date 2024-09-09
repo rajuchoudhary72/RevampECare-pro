@@ -275,8 +275,33 @@ class HomeFragment : Fragment() {
                             R.id.homeViewPagerFragment,
                            // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
                         )*/
+                        lifecycleScope.launch {
+                            var showDashboard=false
+                            var showAttendance=false
+                            var showFeeds=false
+                            for ( i in mViewModel.dashboardButtons.value!!){
+                                when (i.buttonName) {
+                                    "Dashboard" -> {
+                                        showDashboard= i.isShow!!
+                                    }
+                                    "Attendance" -> {
+                                        showAttendance= i.isShow!!
+                                    }
+                                    "Feed" -> {
+                                        showFeeds= i.isShow!!
+                                    }
+                                }
+                            }
+                            findNavController().navigate(R.id.homeViewPagerFragment,Bundle( ).apply {
+                                putBoolean( "Dashboard",showDashboard)
+                                putBoolean( "Attendance",showAttendance)
+                                putBoolean( "Feed",showFeeds)
+                            })
+                        }
 
-                        systemViewModel.showDashboard(true)
+
+
+                        //systemViewModel.showDashboard(true)
                     }
 
 

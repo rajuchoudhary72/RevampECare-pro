@@ -18,7 +18,9 @@ import com.app.ecarepro.ui.attendance.AttendanceFragment
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.dashbord.DashboardFragment
 import com.app.ecarepro.ui.feed.FeedsFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
 import com.app.ecarepro.ui.timeTable.TimeTableDayWiseNavHostFragment
+import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
 import com.app.ecarepro.utils.SwipeDirection
@@ -34,25 +36,28 @@ class HomeViewPagerFragment : Fragment() {
 
     private var _binding: FragmentHomeViewPagerBinding? = null
     private val binding get() = _binding!!
-
+    private var showDashboard=false
+    private var showAttendance=false
+    private var showFeeds=false
 
 
     private val systemViewModel: SystemViewModel by activityViewModels()
 
-    private val fragments: List<Fragment> by lazy {
-        mutableListOf(
-             DashboardFragment(),
-            AttendanceFragment(),
-            FeedsFragment()
-        )
-    }
+
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View  {
         _binding = FragmentHomeViewPagerBinding.inflate(inflater, container, false)
+
+        try {
+            showDashboard =  requireArguments().getBoolean("Dashboard")
+            showAttendance =  requireArguments().getBoolean("Attendance")
+            showFeeds =  requireArguments().getBoolean("Feed")
+        }catch (e:Exception){}
+
         return binding.root
     }
 
@@ -61,8 +66,25 @@ class HomeViewPagerFragment : Fragment() {
 
 
 
+        val fragmentList: ArrayList<Fragment> = ArrayList()
+        val fragmentName= mutableListOf<String>()
+
+        if (showDashboard){
+            fragmentList.add(DashboardFragment() )
+            fragmentName.add(" Dashboard")
+        }
+        if (showAttendance){
+            fragmentList.add(AttendanceFragment() )
+            fragmentName.add("Attendance")
+        }
+        if (showFeeds){
+            fragmentList.add(FeedsFragment() )
+            fragmentName.add("Feeds")
+        }
+
+
         val viewPagerAdapter = ViewPagerAdapter(
-            fragments,
+            fragmentList,
             activity?.supportFragmentManager!!,
             lifecycle
         )
@@ -73,20 +95,7 @@ class HomeViewPagerFragment : Fragment() {
             binding.tabLayout,
             binding.viewPager
         ) { tab, position ->
-            when (position) {
-
-                0 -> {
-                    tab.text = " Dashboard"
-                }
-
-                1 -> {
-                    tab.text = "Attendance"
-                }
-
-                2 -> {
-                    tab.text = "Feeds"
-                }
-            }
+            tab.text = fragmentName[position]
         }.attach()
 
 
@@ -100,7 +109,7 @@ class HomeViewPagerFragment : Fragment() {
                 R.id.profile -> {
                     systemViewModel.bottomNavPositionSet(1)
                     binding.rlBottomNavigation.isVisible=false
-                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_settingsFragment)
+                    findNavController().navigate(R.id.action_homeViewPagerFragment_to_profileFragment)
 
                     true
                 }

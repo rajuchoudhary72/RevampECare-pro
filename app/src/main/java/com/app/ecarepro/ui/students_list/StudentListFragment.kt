@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RadioGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -37,6 +38,8 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
     private lateinit var binding: FragmentStudentListBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
+    private var sortType = 0
+
 
     private val filterList =
         listOf<String>("Name", "Admission Number", "Class", "Father Name", "Contact Number")
@@ -153,6 +156,9 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
         checkIsBoarding()
 
 
+//        binding.imgFilter.setOnClickListener {
+//            popupFilter()
+//        }
 
 
 
@@ -160,10 +166,32 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
     }
 
 
+    private fun  popupFilter() {
+        val menuItemView = requireView().findViewById<View>(R.id.menu_filter)
+        val popupMenu = PopupMenu(requireContext(), menuItemView)
+        popupMenu.menuInflater.inflate(R.menu.filter_menu_student_list, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { item ->
+            setFilterAction(item.itemId)
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun setFilterAction(type: Int) {
+        when (type) {
+            R.id.menu_by_roll_no -> {
+                  }
+
+            R.id.menu_by_admission_no -> {
+
+               }  }
+    }
+
     private fun setupRecycleViewStudentList(students: List<Student>) {
         if (students.isNotEmpty()) {
             binding.rvStudentList.isVisible = true
             binding.tvNoData.isVisible = false
+
 
 
             val circularAdapter = StudentListAdapter(
