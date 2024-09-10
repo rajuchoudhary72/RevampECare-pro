@@ -379,7 +379,7 @@ interface UserRepository {
         submitDate: String,
         title: String,
         lateSubmission: Boolean,
-        attachments: Attachment?,
+        attachments: List<com.app.ecarepro.data.network.model.Attachment>?,
         classID_StID: List<ClassID_StID>,
         stIDs: String?
     ): CommonResponse
@@ -629,7 +629,7 @@ interface UserRepository {
         stID : Int,
         attDate: String,
         hasDropped: Boolean,
-    ): NetworkStudentToMarkTransAttendane
+    ): CommonResponse
 
     suspend fun getAppMsgUses(
         fromDate : String,

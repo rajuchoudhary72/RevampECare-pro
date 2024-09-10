@@ -49,6 +49,12 @@ class TransportAttendanceViewModel @Inject constructor(
         )
     val postTransAttendanceStateFlow: StateFlow<NetworkResult<CommonResponse>> = postTransAttendanceMutableStateFlow
 
+    private val postDropToStudentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val postDropToStudentStateFlow: StateFlow<NetworkResult<CommonResponse>> = postDropToStudentMutableStateFlow
+
 
     fun getRoutesList() = viewModelScope.launch {
         runCatching {
@@ -135,12 +141,12 @@ class TransportAttendanceViewModel @Inject constructor(
         hasDropped: Boolean,
     ) = viewModelScope.launch {
         runCatching {
-            studentToMarkTransAttendanceMutableStateFlow.value = NetworkResult.Loading()
+            postDropToStudentMutableStateFlow.value = NetworkResult.Loading()
             userRepository.dropToStudent(stID, attDate, hasDropped)
         }.onSuccess {
-            studentToMarkTransAttendanceMutableStateFlow.value = NetworkResult.Success(it)
+            postDropToStudentMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            studentToMarkTransAttendanceMutableStateFlow.value = NetworkResult.Error(it.message)
+            postDropToStudentMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }

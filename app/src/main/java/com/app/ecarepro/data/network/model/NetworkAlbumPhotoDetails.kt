@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.model
 
 import com.app.ecarepro.model.Photo
+import com.app.ecarepro.model.photo_setting.AlbumSetting
 
 data class NetworkAlbumPhotoDetails(
     val description: String,
@@ -10,5 +11,7 @@ data class NetworkAlbumPhotoDetails(
     val photos: List<Photo>,
     val status: String,
     val title: String,
-    val totalPhotos: Int
+    val totalPhotos: Int,
+    val setting: AlbumSetting
+
 )
