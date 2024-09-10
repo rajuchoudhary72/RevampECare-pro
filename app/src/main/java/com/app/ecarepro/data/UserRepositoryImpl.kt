@@ -548,7 +548,7 @@ class UserRepositoryImpl @Inject constructor(
         submitDate: String,
         title: String,
         lateSubmission: Boolean,
-        attachments: com.app.ecarepro.data.network.model.Attachment?,
+        attachments: List<com.app.ecarepro.data.network.model.Attachment>?,
         classID_StID: List<ClassID_StID>,
         stIDs: String?
     ): CommonResponse {
@@ -804,7 +804,7 @@ class UserRepositoryImpl @Inject constructor(
         stID: Int,
         attDate: String,
         hasDropped: Boolean
-    ): NetworkStudentToMarkTransAttendane {
+    ): CommonResponse {
         return userService.dropToStudent(stID, attDate, hasDropped)
     }
 

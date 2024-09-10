@@ -12,21 +12,26 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:fitsSystemWindows="true"
-        android:layout_margin="@dimen/_10sdp"
+
         tools:context=".ui.studentProfile.medical_card.MedicalCardFragment">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/_10sdp"
             android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/bcg"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
+
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
@@ -36,15 +41,22 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.bcg}"
                 android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/diphtheria"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
+
                 android:textSize="@dimen/_12sdp" />
 
             <TextView
@@ -53,7 +65,18 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.diphtheria}"
                 android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,16 +84,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/dpt_booster"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.dptBooster }"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textColor="@color/grey_60"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -78,8 +108,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/whooping_cough"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,7 +116,16 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.whoopingCough}"
                 android:textColor="@color/grey_60"
-                android:textSize="@dimen/_12sdp" />
+                android:layout_marginStart="@dimen/_5sdp"
+                 android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,8 +133,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/tetanus"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -104,16 +141,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.tetanus}"
                 android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/measles"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -121,16 +165,22 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.measles}"
                 android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/mmr"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -138,16 +188,22 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.mmr}"
                 android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/chicken_pox"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -155,17 +211,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@{medicalCard.chicken_pox}"
                 android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
 
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/hepatitis_a"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -173,17 +235,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.hepatitisA}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/hepatitis_b"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -191,18 +259,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.hepatitisB}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/typhoid"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -210,18 +283,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.typhoid}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/covid_dose_1"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -229,18 +307,24 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.covidDose1}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
 
+        </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/covid_dose_2"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -248,18 +332,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.covidDose2}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/covid_booster_dose"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -267,8 +356,15 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.covidBoosterDose}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -276,8 +372,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/allergies"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -285,18 +380,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.allergies}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/surgery_undergone_in_the_past"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -304,17 +404,22 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.surgeryUndergoneInthePast}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/specific_past_disease"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -322,18 +427,23 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.specificPastDisease}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_medium"
                 android:text="@string/child_regular_medication"
                 android:textColor="@color/grey_40"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_12sdp" />
+                 android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -341,8 +451,11 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:textColor="@color/grey_60"
                 android:text="@{medicalCard.childRegularMedication}"
-
+                android:layout_marginStart="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+
 
 
         </LinearLayout>
