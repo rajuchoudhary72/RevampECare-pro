@@ -97,7 +97,7 @@ class OutPassReportFragment : Fragment() {
                 }
             }
         }
-        outPassReportViewModel.getOutPassReport(attDate)
+        outPassReportViewModel.getOutPassReport(Constant.toSystemDate(attDate))
 
     }
 

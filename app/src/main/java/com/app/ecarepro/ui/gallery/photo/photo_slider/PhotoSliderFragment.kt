@@ -33,6 +33,11 @@ class PhotoSliderFragment : Fragment() {
     private   var  galleryType: Int  = 1
     private   var  isLike: Boolean  = false
     private   var  isFav: Boolean  = false
+
+    private   var  isAddFavouriteEnabled: Boolean  = false
+    private   var  isShareEnabled: Boolean  = false
+    private   var  isLikeEnabled: Boolean  = false
+
     private   var  likes: Int  = 0
     private var totalLikes = 0
 
@@ -50,6 +55,11 @@ class PhotoSliderFragment : Fragment() {
         isLike = requireArguments().getBoolean("isLiked")
         isFav = requireArguments().getBoolean("isFav")
         likes = requireArguments().getInt("likes")
+
+        isAddFavouriteEnabled = requireArguments().getBoolean("isAddFavouriteEnabled")
+        isShareEnabled = requireArguments().getBoolean("isShareEnabled")
+        isLikeEnabled = requireArguments().getBoolean("isLikeEnabled")
+
         return binding.root
     }
 
@@ -60,6 +70,10 @@ class PhotoSliderFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+
+        binding.rlFav.isVisible=isAddFavouriteEnabled
+        binding.rlLikes.isVisible=isLikeEnabled
+        binding.rlShare.isVisible=isShareEnabled
 
          binding.tvNumberLike.text = "$likes Likes "
         totalLikes=likes

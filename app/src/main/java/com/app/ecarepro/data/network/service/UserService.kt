@@ -732,7 +732,7 @@ interface UserService {
         @Query("StID") stID : Int,
         @Query("AttDate") attDate: String,
         @Query("hasDroped") hasDropped: Boolean,
-    ): NetworkStudentToMarkTransAttendane
+    ): CommonResponse
 
     @GET("Report/AppMsgUses")
     suspend fun getAppMsgUses(

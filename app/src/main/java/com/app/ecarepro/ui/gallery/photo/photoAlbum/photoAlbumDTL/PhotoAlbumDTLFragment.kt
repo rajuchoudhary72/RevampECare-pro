@@ -21,6 +21,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
 import com.app.ecarepro.model.Photo
+import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
+    private lateinit var albumSetting: AlbumSetting
     private var photoAlbumId: String = ""
     private lateinit var photoAlbumAdapter: PhotoAlbumDTLAdapter
     private lateinit var binding: FragmentPhotoAlbumDTLBinding
@@ -118,7 +120,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                 if (pageIndex==1){
                                     photoAlbumAdapter.clearData()
                                 }
-
+                                albumSetting=it.data.setting
                                 photoAlbumAdapter.setData(it.data.photos.toMutableList())
 
                             } else {
@@ -187,6 +189,12 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                 putBoolean("isLiked", t.isLike)
                 putBoolean("isFav", t.isFavourite)
                 putInt("likes", t.likes)
+
+                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled)
+                putBoolean("isShareEnabled", albumSetting.isShareEnabled)
+                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled)
+
+
             })
 
     }

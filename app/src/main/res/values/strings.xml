@@ -704,4 +704,5 @@
     <string name="search_by_name_class_section_roll_no_father_name">Search by name, class, section, roll no, father name</string>
     <string name="sort_by_roll_no">Sort by Roll No</string>
     <string name="sort_by_admission_no">Sort by Admission No</string>
+    <string name="o">O</string>
 </resources>

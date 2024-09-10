@@ -204,7 +204,7 @@ class TransportAttendanceReportFragment : Fragment() {
             transportAttReportViewModel.getTransAttendanceReport(
                 routeID = routerSelectData.routeID,
                 stopIDs = ids.toString(),
-                attDate =  binding. tvSelectDate.text.toString()
+                attDate =  Constant.toSystemDate(binding. tvSelectDate.text.toString())
             )
         }
 

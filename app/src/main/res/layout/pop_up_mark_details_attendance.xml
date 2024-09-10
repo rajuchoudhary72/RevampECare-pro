@@ -156,7 +156,7 @@
                     android:background="@drawable/circle_leave"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/lbl_l"
+                    android:text="@string/o"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp" />
 
@@ -166,7 +166,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/lbl_leave"
+                    android:text="@string/out_pass"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_13sdp" />
 
