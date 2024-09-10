@@ -150,6 +150,9 @@ import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
@@ -180,7 +183,11 @@ class UserRepositoryImpl @Inject constructor(
             )
         )
     }
-
+    fun getCurrentDateTimeAmPm(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+        return dateFormat.format(currentDate)
+    }
     override suspend fun login(
         schoolCode: String,
         userName: String,
@@ -194,7 +201,7 @@ class UserRepositoryImpl @Inject constructor(
             )
         ).also {
             if (it.authenticated == true) {
-                userDataStore.saveUserDetails(it, schoolCode)
+                userDataStore.saveUserDetails(it, schoolCode, getCurrentDateTimeAmPm())
                 userDataStore.saveAuthToken(it.authToken ?: "")
                 userDataStore.setAsUserAuthenticated(it.authenticated)
                 userDataStore.saveUserType(it.userType ?: 0)

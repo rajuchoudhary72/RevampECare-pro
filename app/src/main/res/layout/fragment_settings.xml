@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -97,11 +98,12 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
+        android:id="@+id/lastSyncTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/calibri_regular"
         android:gravity="center"
-        android:text="Last Sync : 12 Jan 2020 4:31 PM" />
+        tools:text="Last Sync : 12 Jan 2020 4:31 PM" />
 
 </LinearLayout>

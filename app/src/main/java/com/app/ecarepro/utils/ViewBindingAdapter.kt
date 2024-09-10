@@ -64,12 +64,15 @@ fun getImagePlaceholder(url: String?): Int {
         R.drawable.img_placeholder
     }
 }
-
 fun isAudioUrl(url: String?): Boolean {
-    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+    val audioExtensions = setOf(
+        "mp3", "wav", "ogg", "flac", "aac", "m4a", "m4b", "m4p", "alac", "aiff",
+        "ape", "wv", "mpc", "tak", "opus", "spx", "gsm", "dts", "wma", "au", "aiff","audio"
+    )
     val extension = url?.substringAfterLast(".", "")?.lowercase()
     return audioExtensions.contains(extension)
 }
+
 
 
 /*@BindingAdapter("imageUrl", "placeholder", requireAll = false)

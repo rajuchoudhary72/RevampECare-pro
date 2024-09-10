@@ -12,14 +12,17 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
-
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-
+    @Inject
+    lateinit var usetDataStore: com.app.ecarepro.data.datastore.UserDataStore
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +42,9 @@ class SettingsFragment : Fragment() {
             cardChangeUserName.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
 
             cardRateUs.setOnClickListener { launchPlayStore() }
+            viewLifecycleOwner.lifecycleScope.launch {
+                lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
+            }
         }
     }
 

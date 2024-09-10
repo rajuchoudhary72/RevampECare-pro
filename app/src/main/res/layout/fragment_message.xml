@@ -13,8 +13,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_dashboard"
-        >
+        android:background="@color/background_dashboard">
 
         <com.google.android.material.appbar.AppBarLayout
             style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
@@ -27,8 +26,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                 app:title="Message"
-                 app:titleTextColor="@color/white"
+                app:title="Message"
+                app:titleTextAppearance="@style/TextAppearance.ECarePro.Toolbar"
                 app:topWindowInsetToPadding="@{true}">
 
                 <LinearLayout
