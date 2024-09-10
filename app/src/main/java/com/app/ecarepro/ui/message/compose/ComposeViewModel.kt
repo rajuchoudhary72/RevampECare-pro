@@ -212,7 +212,9 @@ class ComposeViewModel @Inject constructor(
             5
         } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
             3
-        } else {
+        } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
+            3
+        }else {
             2
         }
     }

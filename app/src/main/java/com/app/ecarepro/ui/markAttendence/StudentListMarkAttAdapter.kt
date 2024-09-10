@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.markAttendence
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -57,7 +58,10 @@ class StudentListMarkAttAdapter(
             append(data.otherDTL[1].value)
         }
 
-
+        if (isLateEnable) {
+            binding.tvMarkLate.isVisible =true
+            binding.viewLine.isVisible =true
+        }
 
         if (canEdit) {
             binding.tvMarkPresent.isEnabled = true

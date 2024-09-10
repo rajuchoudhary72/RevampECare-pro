@@ -41,48 +41,48 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
+class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
 
 
-    private var openPreviousDay: Boolean=false
-    private var mIsCurrentDate: Boolean=true
+    private var openPreviousDay: Boolean = false
+    private var mIsCurrentDate: Boolean = true
     private lateinit var studentListWithData: NetworkStudentListToMarkAtt
     private lateinit var markAttModel: NetworkStudentListToMarkAtt
-    private var from: String= ""
+    private var from: String = ""
     private var isLateEnable: Boolean = false
-     private var studentListArrayList= mutableListOf<StudentListMarkAtt>()
-    private var uploadStudentList= mutableListOf<StudentAtt>()
+    private var studentListArrayList = mutableListOf<StudentListMarkAtt>()
+    private var uploadStudentList = mutableListOf<StudentAtt>()
 
     private var subID: Int = 0
     private lateinit var mySubjectList: List<MySubject>
     private lateinit var classesForSubTeaches: List<ClassesForSubTeach>
     private lateinit var classesForClsTeaches: List<ClassesForClsTeach>
-    private   var _binding: FragmentStuMarkAttendenceBinding? = null
-    private var mDate: String  = ""
-    private var className: String  = ""
-    private var subjectName: String  = ""
+    private var _binding: FragmentStuMarkAttendenceBinding? = null
+    private var mDate: String = ""
+    private var className: String = ""
+    private var subjectName: String = ""
     var rbType: Int = 0
 
     private val binding get() = _binding!!
 
-    private val stuMarkAttendanceViewModel : StuMarkAttendanceViewModel by viewModels()
-    private var classID= 0
-    private var p  = 0
-    private var a  = 0
-    private var l  = 0
-    private var lt  = 0
-    private var na  = 0
+    private val stuMarkAttendanceViewModel: StuMarkAttendanceViewModel by viewModels()
+    private var classID = 0
+    private var p = 0
+    private var a = 0
+    private var l = 0
+    private var lt = 0
+    private var na = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
-        _binding  = FragmentStuMarkAttendenceBinding.inflate(inflater, container, false).apply {
+        _binding = FragmentStuMarkAttendenceBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
         }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        binding.toolbar.title=from
+     //   binding.toolbar.title = from
 
 
         return binding.root
@@ -90,81 +90,83 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        from=  getString(R.string.class_attendance)
+        from = getString(R.string.class_attendance)
         binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbClassWise -> {
-                    classID=0
-                    subID=0
+                    classID = 0
+                    subID = 0
                     binding.recyclerNotice.isVisible = false
-                    binding.btnSave.isVisible=false
-                    binding.autoCompleteSub.setText("Select Subject ",false)
-                    binding.autoCompleteClass.setText("Select Class ",false)
-                    from=getString(R.string.class_attendance)
+                    binding.btnSave.isVisible = false
+                    binding.autoCompleteSub.setText("Select Subject ", false)
+                    binding.autoCompleteClass.setText("Select Class ", false)
+                    from = getString(R.string.class_attendance)
                     getClassList()
                 }
+
                 R.id.rbStudentWise -> {
-                    classID=0
-                    subID=0
+                    classID = 0
+                    subID = 0
                     binding.recyclerNotice.isVisible = false
-                    binding.btnSave.isVisible=false
-                    binding.autoCompleteSub.setText("Select Subject ",false)
-                    binding.autoCompleteClass.setText("Select Class ",false)
-                    from=getString(R.string.subject_attendance)
+                    binding.btnSave.isVisible = false
+                    binding.autoCompleteSub.setText("Select Subject ", false)
+                    binding.autoCompleteClass.setText("Select Class ", false)
+                    from = getString(R.string.subject_attendance)
                     getClassList()
                 }
             }
-            binding.autoInputSubInputLayout.isVisible=from==getString(R.string.subject_attendance)
+            binding.autoInputSubInputLayout.isVisible =
+                from == getString(R.string.subject_attendance)
         }
 
-
+        binding.toolbar.title = from
 
         binding.btnSave.setOnClickListener {
             popUpDetailsMarkAttendance()
         }
 
-        binding.autoCompleteClass.onItemClickListener=
+        binding.autoCompleteClass.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                if (from==getString(R.string.subject_attendance)){
-                    classID=classesForSubTeaches[pos].classID
-                    className=classesForSubTeaches[pos].className
+                if (from == getString(R.string.subject_attendance)) {
+                    classID = classesForSubTeaches[pos].classID
+                    className = classesForSubTeaches[pos].className
                     getSubjectList(classID)
-                }else{
-                    subID=0
-                    binding.autoCompleteSub.setText("Select Subject ",false)
-                    classID=classesForClsTeaches[pos].classID
-                    getStudentListToMarkAtt(classID,subID)
+                } else {
+                    subID = 0
+                    binding.autoCompleteSub.setText("Select Subject ", false)
+                    classID = classesForClsTeaches[pos].classID
+                    getStudentListToMarkAtt(classID, subID)
                 }
 
             }
 
-        binding.autoCompleteSub.onItemClickListener=
+        binding.autoCompleteSub.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
-                subID=mySubjectList[pos].subID
-                subjectName=mySubjectList[pos].subjectName
-                getStudentListToMarkAtt(classID,subID)
+                subID = mySubjectList[pos].subID
+                subjectName = mySubjectList[pos].subjectName
+                getStudentListToMarkAtt(classID, subID)
             }
 
         getClassList()
 
 
-        mDate=Constant.currentDate()
+        mDate = Constant.currentDate()
         binding.startDate.setText(Constant.currentDate())
         binding.startDate.setOnClickListener {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.startDate.setText(Constant.dateToShow(date.toString()))
-                    mDate=  Constant.dateToShow(date.toString())
-                    mIsCurrentDate=isCurrentDate
-                    if (from==getString(R.string.subject_attendance)){
-                        if (classID!=0 && subID!=0){
-                            getStudentListToMarkAtt(classID,subID)
+                    mDate = Constant.dateToShow(date.toString())
+                    mIsCurrentDate = isCurrentDate
+                    if (from == getString(R.string.subject_attendance)) {
+                        if (classID != 0 && subID != 0) {
+                            getStudentListToMarkAtt(classID, subID)
                         }
 
-                    }else{
-                        if (classID!=0  ){
-                            getStudentListToMarkAtt(classID,subID)
+                    } else {
+                        if (classID != 0) {
+                            getStudentListToMarkAtt(classID, subID)
                         }
                     }
                 }
@@ -175,56 +177,71 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     }
 
 
-
     private fun getStudentListToMarkAtt(classID: Int, subID: Int) {
 
         lifecycleScope.launch {
-            stuMarkAttendanceViewModel.stuListToMarkAttStateFlow.collectLatest {  when (it) {
-                is NetworkResult.Loading -> {
-                    (requireActivity() as MainActivity).showLoader(true)
-                } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                    binding.recyclerNotice.isVisible = true
+            stuMarkAttendanceViewModel.stuListToMarkAttStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
 
-                    if (it.data != null) {
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
 
-                        if (it.data.studentList != null) {
-                            binding.btnSave.isVisible=true
-                            binding.recyclerNotice.isVisible = true
-                            binding.tvNoData.isVisible = false
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.recyclerNotice.isVisible = true
 
-                             isLateEnable=it.data.isLateEnable
-                            studentListWithData=it.data
-                            markAttModel=it.data
-                            studentListArrayList.clear()
-                            studentListArrayList.addAll(it.data.studentList)
+                        if (it.data != null) {
 
-                            val studentListMarkAttAdapter = StudentListMarkAttAdapter(
-                                studentListArrayList,
-                                it.data.isLateEnable,
-                                it.data.hasMarked,
-                                it.data.canEdit,
-                                this@StuMarkAttendanceFragment
-                            )
+                            if (it.data.studentList != null) {
+                                binding.btnSave.isVisible = true
+                                binding.recyclerNotice.isVisible = true
+                                binding.tvNoData.isVisible = false
+                                if (it.data.canEdit) {
+                                    binding.btnSave.isVisible = true
+                                    binding.btnSave.setText("Modified")
+                                } else {
+                                    binding.btnSave.isVisible = false
+                                }
+                                isLateEnable = it.data.isLateEnable
+                                studentListWithData = it.data
+                                markAttModel = it.data
+                                studentListArrayList.clear()
+                                studentListArrayList.addAll(it.data.studentList)
 
-                            binding.recyclerNotice.apply {
-                                setHasFixedSize(true)
-                                layoutManager = LinearLayoutManager(activity)
-                                adapter = studentListMarkAttAdapter
+                                val studentListMarkAttAdapter = StudentListMarkAttAdapter(
+                                    studentListArrayList,
+                                    it.data.isLateEnable,
+                                    it.data.hasMarked,
+                                    it.data.canEdit,
+                                    this@StuMarkAttendanceFragment
+                                )
+
+                                binding.recyclerNotice.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = studentListMarkAttAdapter
+                                }
+
+                            } else {
+                                binding.recyclerNotice.isVisible = false
+                                binding.tvNoData.isVisible = true
                             }
 
-                        } else {
-                            binding.recyclerNotice.isVisible = false
-                            binding.tvNoData.isVisible = true
                         }
 
                     }
-
-                } }  } }
-        stuMarkAttendanceViewModel.getStudentListToMarkAtt(classID,subID,Constant.toSystemDate(mDate))
-
+                }
+            }
+        }
+        stuMarkAttendanceViewModel.getStudentListToMarkAtt(
+            classID,
+            subID,
+            Constant.toSystemDate(mDate)
+        )
 
 
     }
@@ -232,30 +249,40 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private fun getSubjectList(classID: Int) {
 
         lifecycleScope.launch {
-            stuMarkAttendanceViewModel.subjectsStateFlow.collectLatest {  when (it) {
-                is NetworkResult.Loading -> {
-                    (requireActivity() as MainActivity).showLoader(true)
-                } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                    if (it.data != null) {
-                        if (it.data.mySubjects != null) {
-                            mySubjectList = it.data.mySubjects
-                            val subjectDataString: ArrayList<String> = ArrayList()
-                            subjectDataString.clear()
-                            it.data.mySubjects.forEach { data ->
-                                subjectDataString.add(data.subjectName )
+            stuMarkAttendanceViewModel.subjectsStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (it.data.mySubjects != null) {
+                                mySubjectList = it.data.mySubjects
+                                val subjectDataString: ArrayList<String> = ArrayList()
+                                subjectDataString.clear()
+                                it.data.mySubjects.forEach { data ->
+                                    subjectDataString.add(data.subjectName)
+                                }
+                                val arrayAdapter = ArrayAdapter(
+                                    requireContext(),
+                                    android.R.layout.simple_list_item_1,
+                                    subjectDataString
+                                )
+                                binding.autoCompleteSub.setAdapter(arrayAdapter)
+                            } else {
+                                binding.tvNoData.isVisible = true
                             }
-                            val arrayAdapter = ArrayAdapter(
-                                requireContext(),
-                                android.R.layout.simple_list_item_1,
-                                subjectDataString
-                            )
-                            binding.autoCompleteSub.setAdapter(arrayAdapter)
-                        } else {
-                            binding.tvNoData.isVisible = true
-                        } } } }  } }
+                        }
+                    }
+                }
+            }
+        }
         stuMarkAttendanceViewModel.mySubjects(classID)
 
 
@@ -264,32 +291,37 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private fun getClassList() {
 
         lifecycleScope.launch {
-            stuMarkAttendanceViewModel.myClassStateFlow.collectLatest {  when (it) {
+            stuMarkAttendanceViewModel.myClassStateFlow.collectLatest {
+                when (it) {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                    } is NetworkResult.Error -> {
+                    }
+
+                    is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                    } is NetworkResult.Success -> {
+                    }
+
+                    is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                         if (it.data != null) {
+                        if (it.data != null) {
 
-                             binding.rbClassWise.isVisible=it.data.classAttendance
-                             binding.rbStudentWise.isVisible=it.data.subjectAttendance
+                            binding.rbClassWise.isVisible = it.data.classAttendance
+                            binding.rbStudentWise.isVisible = it.data.subjectAttendance
 
-                             if (!it.data.classAttendance ){
-                                 binding.rbStudentWise.isChecked=true
-                                 from=getString(R.string.subject_attendance)
-                             }
+                            if (!it.data.classAttendance) {
+                                binding.rbStudentWise.isChecked = true
+                                from = getString(R.string.subject_attendance)
+                            }
 
-                            if (from==getString(R.string.subject_attendance)){
+                            if (from == getString(R.string.subject_attendance)) {
                                 if (it.data.classesForSubTeach != null) {
                                     classesForSubTeaches = it.data.classesForSubTeach
-                                    openPreviousDay=it.data.openPreviousDay
-                                    binding.tilStartDate.isVisible=openPreviousDay
+                                    openPreviousDay = it.data.openPreviousDay
+                                    binding.tilStartDate.isVisible = openPreviousDay
                                     val classesDataString: ArrayList<String> = ArrayList()
                                     classesDataString.clear()
                                     it.data.classesForSubTeach.forEach { data ->
-                                        classesDataString.add(data.className )
+                                        classesDataString.add(data.className)
                                     }
                                     val arrayAdapter = ArrayAdapter(
                                         requireContext(),
@@ -300,15 +332,15 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 } else {
                                     binding.tvNoData.isVisible = true
                                 }
-                            }else{
+                            } else {
                                 if (it.data.classesForClsTeach != null) {
                                     classesForClsTeaches = it.data.classesForClsTeach
                                     val classesDataString: ArrayList<String> = ArrayList()
                                     classesDataString.clear()
-                                    openPreviousDay=it.data.openPreviousDay
-                                    binding.tilStartDate.isVisible=openPreviousDay
+                                    openPreviousDay = it.data.openPreviousDay
+                                    binding.tilStartDate.isVisible = openPreviousDay
                                     it.data.classesForClsTeach.forEach { data ->
-                                        classesDataString.add(data.className )
+                                        classesDataString.add(data.className)
                                     }
                                     val arrayAdapter = ArrayAdapter(
                                         requireContext(),
@@ -320,13 +352,15 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                     binding.tvNoData.isVisible = true
                                 }
                             }
-                         }
+                        }
 
-                    } }  } }
+                    }
+                }
+            }
+        }
         stuMarkAttendanceViewModel.getMarkAttendance()
 
     }
-
 
 
     private fun popUpDetailsMarkAttendance() {
@@ -357,12 +391,12 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         tv_leave_count = dialog.findViewById(R.id.leave_day)
         na_day = dialog.findViewById(R.id.na_day)
         tvLateCount = dialog.findViewById(R.id.late_day)
-        p  = 0
-        a  = 0
-        l  = 0
-        lt  = 0
-        na  = 0
-        for (i in   studentListArrayList) {
+        p = 0
+        a = 0
+        l = 0
+        lt = 0
+        na = 0
+        for (i in studentListArrayList) {
 
             if (i.status == 1 && i.isLate == 0)
                 p++
@@ -394,56 +428,64 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     }
 
-    private fun saveMarkAttendance(){
-        var mode : Int = 1
-        mode = if (from==getString(R.string.subject_attendance)){
+    private fun saveMarkAttendance() {
+        var mode: Int = 1
+        mode = if (from == getString(R.string.subject_attendance)) {
             1
-        }else{
+        } else {
             2
         }
         lifecycleScope.launch {
-            stuMarkAttendanceViewModel.postMarkAttendanceStateFlow.collectLatest {  when (it) {
-                is NetworkResult.Loading -> {
-                    (requireActivity() as MainActivity).showLoader(true)
-                } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                    if (it.data != null) {
-                        if ( from!=getString(R.string.subject_attendance) ) {
-                            if (mIsCurrentDate) {
-                                SmsAlertPopup()
-                            }
-                            else {
-                                SuccessAlertPopup(
+            stuMarkAttendanceViewModel.postMarkAttendanceStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (from == getString(R.string.class_attendance)) {
+                                if (mIsCurrentDate) {
+                                    SmsAlertPopup()
+                                } else {
+                                    SuccessAlertPopup(
+                                        "",
+                                        String.format(
+                                            requireContext().resources.getString(R.string.attendance__alert),
+                                            className + ""
+                                        )
+                                    )
+                                }
+                            } else {
+                                if (from != getString(R.string.subject_attendance)) SuccessAlertPopup(
                                     "",
                                     String.format(
                                         requireContext().resources.getString(R.string.attendance__alert),
                                         className + ""
                                     )
                                 )
+                                else SuccessAlertPopup(
+                                    "",
+                                    String.format(
+                                        requireContext().resources.getString(R.string.attendance__alert),
+                                        subjectName + ""
+                                    )
+                                )
                             }
-                        } else {
-                            if ( from!=getString(R.string.subject_attendance)) SuccessAlertPopup(
-                                "",
-                                String.format(
-                                    requireContext().resources.getString(R.string.attendance__alert),
-                                    className+ ""
-                                )
-                            )
-                            else SuccessAlertPopup(
-                                "",
-                                String.format(
-                                    requireContext().resources.getString(R.string.attendance__alert),
-                                    subjectName + ""
-                                )
-                            )
+                            mainActivity().showMessage(it.data.message.toString())
                         }
-                        mainActivity().showMessage(it.data.message.toString())
-                          } } }  } }
+                    }
+                }
+            }
+        }
         uploadStudentList.clear()
         for (i in studentListArrayList) {
-            uploadStudentList.add(StudentAtt(i.isLate,i.stID,i.status))
+            uploadStudentList.add(StudentAtt(i.isLate, i.stID, i.status))
 
         }
 
@@ -452,16 +494,16 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         stuMarkAttendanceViewModel.postMarkAttendance(
             classID,
             subID,
-            mode ,
+            mode,
             Constant.toSystemDate(mDate),
             uploadStudentList
-            )
+        )
 
 
     }
 
     override fun onItemClick(t: StudentAtt, pos: Int, boolean: Boolean) {
-       // uploadStudentList.add( t)
+        // uploadStudentList.add( t)
 //       val data= studentList[pos]
 //        data.status=t.status
 //        data.isLate=t.isLate
@@ -575,9 +617,14 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             if (rbType == 0) {
                 Toast.makeText(context, "Please select Notification type", Toast.LENGTH_SHORT)
                     .show()
-             } else   {
+            } else {
                 dialog.dismiss()
-                stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
+                stuMarkAttendanceViewModel.sendMessage(
+                    markAttModel,
+                    studentListArrayList,
+                    className,
+                    rbType
+                ) { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
                     mainActivity().showMessage(message)
                     if (isSuccess) {
@@ -586,7 +633,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 }
 
             }
-            })
+        })
         tv_done.setOnClickListener {
             dialog.dismiss()
 
