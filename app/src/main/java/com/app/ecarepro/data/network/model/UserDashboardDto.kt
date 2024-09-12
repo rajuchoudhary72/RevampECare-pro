@@ -109,7 +109,10 @@ data class AttendanceSummary(
     val totalLeave: Int?,
     @SerializedName("totalPresent")
     val totalPresent: Int?
-) : Serializable
+) : Serializable {
+    fun totalStudent() =
+        (totalPresent ?: 0) + (totalAbsent ?: 0) + (totalLeave ?: 0) + (totalLate ?: 0)
+}
 
 data class BirthDayCard(
     @SerializedName("color")

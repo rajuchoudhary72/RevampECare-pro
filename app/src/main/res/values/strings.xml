@@ -661,4 +661,8 @@
     <string name="assessments_are_currently_unavailable_for_you">Assessments are currently unavailable for you!</string>
     <string name="InboxList">"P/o" %1$s ", " %2$s </string>
     <string name="upgrade_now">Upgrade now</string>
+    <string name="present_count"><b>Present:</b> %s</string>
+    <string name="absent_count"><b>Absent:</b> %s</string>
+    <string name="leave_count"><b>Leave:</b> %s</string>
+    <string name="late_count"><b>Late:</b> %s</string>
 </resources>
