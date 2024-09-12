@@ -212,7 +212,9 @@ class ComposeViewModel @Inject constructor(
             5
         } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
             3
-        } else {
+        } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
+            3
+        }else {
             2
         }
     }
@@ -253,7 +255,7 @@ class ComposeViewModel @Inject constructor(
                     val attach = getBase64StringFromUri(file)
                     Attachment(
                         attachment = attach,
-                        fileExt = getFileExtension(file),
+                        fileExt = "mp3",
                         fileURL = null
                     )
                 } else {
@@ -316,7 +318,7 @@ class ComposeViewModel @Inject constructor(
             val bytes: ByteArray = readBytes(
                 imageStream
             )
-            Base64.encodeToString(bytes, Base64.DEFAULT)
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
         } catch (e: IOException) {
             e.printStackTrace()
             null

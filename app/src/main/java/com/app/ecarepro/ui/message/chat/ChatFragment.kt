@@ -40,6 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.utils.isAudioUrl
 
 
 @AndroidEntryPoint
@@ -210,12 +211,12 @@ class ChatFragment : Fragment() {
         return pdfExtension == extension
     }
 
-    fun isAudioUrl(url: String): Boolean {
+   /* fun isAudioUrl(url: String): Boolean {
         val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
         val extension = url.substringAfterLast(".", "").lowercase()
         return audioExtensions.contains(extension)
     }
-
+*/
 
     override fun onDestroyView() {
         super.onDestroyView()

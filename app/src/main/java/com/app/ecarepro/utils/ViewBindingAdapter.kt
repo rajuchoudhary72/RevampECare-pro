@@ -57,16 +57,19 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
 
 fun getImagePlaceholder(url: String?): Int {
     return if (url?.contains("pdf") == true) {
-        R.drawable.ic_pdf_placeholder
+        R.drawable.baseline_file_present_24
     } else if (isAudioUrl(url)) {
-        R.drawable.audio_file
+        R.drawable.baseline_audio_file_24
     } else {
         R.drawable.img_placeholder
     }
 }
 
 fun isAudioUrl(url: String?): Boolean {
-    val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+    val audioExtensions = setOf(
+        "mp3", "wav", "ogg", "flac", "aac", "m4a", "m4b", "m4p", "alac", "aiff",
+        "ape", "wv", "mpc", "tak", "opus", "spx", "gsm", "dts", "wma", "au", "aiff","audio"
+    )
     val extension = url?.substringAfterLast(".", "")?.lowercase()
     return audioExtensions.contains(extension)
 }

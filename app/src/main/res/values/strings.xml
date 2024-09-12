@@ -222,7 +222,7 @@
     <string name="add_infraction">Add Infraction</string>
     <string name="p">P</string>
     <string name="attendance_confirmation">Attendance Confirmation</string>
-    <string name="please_confirm_student_s_attendance">Please Confirm Student\\\'s Attendance</string>
+    <string name="please_confirm_student_s_attendance">Please Confirm Student\'s Attendance</string>
     <string name="as_you_have_marked">As you have marked :</string>
 
     <string name="lbl_present">Present :</string>
