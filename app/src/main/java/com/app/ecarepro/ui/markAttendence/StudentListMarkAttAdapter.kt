@@ -58,10 +58,7 @@ class StudentListMarkAttAdapter(
             append(data.otherDTL[1].value)
         }
 
-        if (isLateEnable) {
-            binding.tvMarkLate.isVisible =true
-            binding.viewLine.isVisible =true
-        }
+        binding.tvMarkLate.isVisible=isLateEnable
 
         if (canEdit) {
             binding.tvMarkPresent.isEnabled = true
@@ -282,7 +279,7 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkLeave.background =
-                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_leave)
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.background_box_rectangle_blue)
                 binding.tvMarkNa.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 

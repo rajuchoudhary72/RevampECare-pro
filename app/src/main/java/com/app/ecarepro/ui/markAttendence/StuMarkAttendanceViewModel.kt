@@ -174,7 +174,7 @@ class StuMarkAttendanceViewModel  @Inject constructor(
                                 result(true, response.getOrNull() ?: "")
                             } else {
                                 result(
-                                    false,
+                                    true,
                                     response.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
                                 )
                             }

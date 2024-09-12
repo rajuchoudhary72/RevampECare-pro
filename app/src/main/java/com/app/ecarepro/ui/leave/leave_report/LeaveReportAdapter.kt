@@ -18,6 +18,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         private lateinit var binding:   LeaveReportListItemBinding
         private var canTalkeAction = true
         private var applType: Int=0
+        private var status: Int=0
 
 
 
@@ -44,6 +45,20 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 append("Applied On : ")
                 append(data.submittedOn)
             }
+            if (status==1){
+                tvHolderApproveBy.text= buildString {
+                    append("Approved By : ")
+                }
+                tvHolderApproveOn.text= buildString {
+                    append("Approved On : ")
+                }
+            }else if (status==2){
+                tvHolderApproveBy.text= buildString {
+                    append("Rejected By : ")
+                }
+                tvHolderApproveOn.text= buildString {
+                    append("Rejected On : ")
+            }}
 
             tvApproveBy.text= buildString {
                  append(data.teacherName)
@@ -95,9 +110,10 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         }
    }
 
-    fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean, applType: Int){
+    fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean, applType: Int, status: Int){
         this.canTalkeAction=canTalkeAction
         this.applType=applType
+        this.status=status
         this. leaveList.addAll(leaveList)
 
         notifyDataSetChanged()

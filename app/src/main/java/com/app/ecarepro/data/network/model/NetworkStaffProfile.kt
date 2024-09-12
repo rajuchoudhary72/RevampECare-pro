@@ -24,5 +24,6 @@ data class NetworkStaffProfile(
     val status: String,
     val timetableEnabled: Boolean,
     val timetableSummary: TimetableSummary,
-    val workLoad: String
+    val workLoad: String,
+    val sectionControl: SectionControl,
 )

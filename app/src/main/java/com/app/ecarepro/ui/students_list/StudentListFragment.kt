@@ -99,13 +99,41 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
             studentListViewModel.searchQuery.collectLatest {
 
                 if (it.isNotEmpty() && studentList != null) {
-                    studentListFilter = studentList!!.filter { s ->
-                        s.name.lowercase().contains(it.lowercase()) ||
-                                s.admissionNumber.lowercase().contains(it.lowercase())||
-                                s.`class`.lowercase().contains(it.lowercase())||
-                                s.fatherName.lowercase().contains(it.lowercase()) ||
-                                s.contactMob.lowercase().contains(it.lowercase())
+                    when (filterPos) {
+                        0 -> {
+                            studentListFilter = studentList!!.filter { s ->
+                                s.name.lowercase().contains(it.lowercase())
+                            }
 
+                        }
+
+                        1 -> {
+                            studentListFilter = studentList!!.filter { s ->
+                                s.admissionNumber.lowercase().contains(it.lowercase())
+                            }
+
+                        }
+
+                        2 -> {
+                            studentListFilter = studentList!!.filter { s ->
+                                s.`class`.lowercase().contains(it.lowercase())
+                            }
+
+                        }
+
+                        3 -> {
+                            studentListFilter = studentList!!.filter { s ->
+                                s.fatherName.lowercase().contains(it.lowercase())
+                            }
+
+                        }
+
+                        4 -> {
+                            studentListFilter = studentList!!.filter { s ->
+                                s.contactMob.lowercase().contains(it.lowercase())
+                            }
+
+                        }
                     }
                     setupRecycleViewStudentList(studentListFilter)
                 } else {

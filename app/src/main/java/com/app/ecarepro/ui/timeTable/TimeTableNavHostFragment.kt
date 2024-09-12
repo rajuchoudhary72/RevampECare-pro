@@ -31,6 +31,8 @@ class TimeTableNavHostFragment : Fragment() {
     private val timeTableNavHostViewModel : TimeTableNavHostViewModel by viewModels()
     private   var id: String=""
     private   var toFragment: String=""
+    private   var name: String=""
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +43,14 @@ class TimeTableNavHostFragment : Fragment() {
         try {
             id= requireArguments().getString(Constant.ID).toString()
             toFragment= requireArguments().getString(Constant.TIME_TABLE_TYPE).toString()
+            name= requireArguments().getString(Constant.NAME).toString()
+
+             if (name.isEmpty()){
+                 binding.toolbar.title="TimeTable"
+             }else{
+                 binding.toolbar.title= "TimeTable of $name"
+             }
+
         }catch (_:Exception){}
         return binding.root
     }

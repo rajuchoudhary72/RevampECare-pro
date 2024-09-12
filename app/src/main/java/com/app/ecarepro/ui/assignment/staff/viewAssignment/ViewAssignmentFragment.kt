@@ -23,6 +23,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.databinding.FragmentViewAssignmentBinding
 import com.app.ecarepro.model.AssignSubmitStudent
+import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.AndroidDownloader
@@ -38,6 +39,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
+    private var assignmentDetails: TeacherAssignment? = null
     private var isLateSubmitted: Boolean=false
      private var viewAssignmentData: NetworkViewAssignment? = null
      private var assignmentId: String  = ""
@@ -54,6 +56,8 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
          try {
              assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
              isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
+
+
          }catch (_:Exception){}
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
          return binding.root

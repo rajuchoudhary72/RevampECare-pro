@@ -413,7 +413,9 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
 
 
     private fun popUpDetailsMarkAttendance() {
-
+        p  = 0
+        a  = 0
+        l  = 0
 
         val tv_cancel: TextView
         val tv_ok: TextView
@@ -433,7 +435,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
             ColorDrawable(Color.TRANSPARENT)
         )
         dialog.window!!.attributes.windowAnimations = R.style.Animations
-        dialog.setContentView(R.layout.pop_up_mark_details_attendance)
+        dialog.setContentView(R.layout.pop_up_mark_details_trans_attendance)
         tv_cancel = dialog.findViewById(R.id.tv_cancel)
         tv_ok = dialog.findViewById(R.id.tv_ok)
         llLate = dialog.findViewById(R.id.llLate)

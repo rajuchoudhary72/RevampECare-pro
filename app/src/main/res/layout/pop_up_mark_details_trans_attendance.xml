@@ -153,7 +153,7 @@
                     android:id="@+id/tv_mark_leave"
                     android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_25sdp"
-                    android:background="@drawable/background_box_rectangle_blue"
+                    android:background="@drawable/circle_leave"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:text="@string/lbl_a"
@@ -166,7 +166,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/leave"
+                    android:text="@string/out_pass"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_13sdp" />
 
@@ -186,6 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <TextView

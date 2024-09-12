@@ -89,7 +89,7 @@
                         android:drawableStart="@drawable/round_search_24"
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/calibri_regular"
-                        android:hint="@string/search_by_name_class_section_roll_no_father_name"
+                        android:hint="@string/search"
                         android:importantForAutofill="no"
                         android:inputType="text"
                         android:paddingHorizontal="10dp"
@@ -141,7 +141,7 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginHorizontal="10dp"
             android:hint="@string/select_search_filter"
              >
@@ -197,6 +197,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
+            android:visibility="gone"
             >
             <LinearLayout
                 android:layout_width="wrap_content"
