@@ -29,7 +29,7 @@ class SearchInstitutionViewModel @Inject constructor(
                 return@combine emptyList()
             }
             schools.filter {
-                it.schoolCode?.contains(query, true) == true || it.address?.contains(
+                it.name?.contains(query, true) == true ||it.schoolCode?.contains(query, true) == true || it.address?.contains(
                     query,
                     true
                 ) == true
