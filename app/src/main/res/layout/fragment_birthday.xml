@@ -63,6 +63,44 @@
                         app:layout_collapseMode="parallax"
                         app:layout_scrollFlags="scroll|enterAlways">
 
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup_wisesubmission"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginHorizontal="10dp"
+                             android:layout_gravity="center"
+                            android:checkedButton="@id/rbDateWise"
+                            >
+                            <RadioButton
+                                android:id="@+id/rbDateWise"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date"
+                                android:theme="@style/RadioButtonStyle"
+                                android:textColor="@color/white"
+                                android:buttonTint="@color/white"
+                                />
+                            <RadioButton
+                                android:id="@+id/rbMonthWise"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/months"
+                                android:theme="@style/RadioButtonStyle"
+                                android:layout_marginStart="@dimen/_20sdp"
+                                android:textColor="@color/white"
+                                android:buttonTint="@color/white"
+                                   android:layout_marginEnd="@dimen/_15sdp"
+                                />
+
+
+
+
+                        </RadioGroup>
+
+
+
                         <com.google.android.material.button.MaterialButtonToggleGroup
                             android:id="@+id/toggleButton_type_user"
                             android:layout_width="match_parent"
@@ -122,18 +160,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/autoInputClassInputLayout"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
+                                android:layout_width="match_parent"
+                                 android:layout_height="wrap_content"
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                 android:layout_marginHorizontal="10dp"
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="@dimen/_10sdp"
 
                                 >
 
@@ -151,17 +188,16 @@
 
                             <TextView
                                 android:id="@+id/tv_date"
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="48dp"
-                                android:layout_weight="1"
-                                android:layout_gravity="center"
-                                android:background="@color/white_grey"
-                                android:layout_marginBottom="3dp"
+                                 android:background="@color/white_grey"
+                                android:layout_marginBottom="@dimen/_10sdp"
                                 android:text="@string/select_date"
-                                android:layout_marginEnd="12dp"
-                                android:gravity="center"
-                                android:textSize="16sp"
+                                 android:textSize="16sp"
 
+                                android:gravity="center_vertical"
+                                android:paddingStart="@dimen/_10sdp"
+                                android:layout_marginHorizontal="10dp"
                                 android:fontFamily="@font/ubuntu_light" />
 
                         </LinearLayout>
@@ -188,8 +224,8 @@
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/iv_no_item"
                 android:fontFamily="@font/ubuntu_medium"
                 android:layout_gravity="center"

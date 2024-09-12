@@ -14,6 +14,15 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStaffProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.ui.studentProfile.StudentProfileAttendanceFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileFeeSummaryFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileLibraryTransFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileMedicineIssuedFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileTransportDetailsFragment
+import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciationFragment
+import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
+import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
@@ -74,16 +83,41 @@ class StaffProfileNavHostFragment : Fragment() {
                                 .placeholder(R.drawable.default_profile)
                                 .  into(binding.civStuPic)
 
-                            var fragmentList : ArrayList<Fragment> = ArrayList();
+                            val fragmentList: ArrayList<Fragment> = ArrayList()
+                            val fragmentName= mutableListOf<String>()
 
 
-                                fragmentList.add(StaffProfileFragment(it.data.details))
-                                fragmentList.add(ProfileAtteFragment(it.data.attendanceDTL))
-                                fragmentList.add(ProfileTimeTableFragment(it.data.timetableSummary))
-                                fragmentList.add(ProfileSalaryStrFragment(it.data.salaryStructure))
+                            for (i in it.data.sectionControl.sections ){
+                                when(i.name){
+                                    "PersonalDetails" -> {
+                                        if (i.isShow){
+                                            fragmentList.add(StaffProfileFragment(it.data.details))
+                                            fragmentName.add("Personal Details")
+                                        }
+                                    }
+                                    "Attendance" -> {
+                                        if (i.isShow){
+                                            fragmentList.add(ProfileAtteFragment(it.data.attendanceDTL))
+                                            fragmentName.add("Attendance")
+                                        }
+                                    }
+                                    "Salary" -> {
+                                        if (i.isShow){
+                                            fragmentList.add(ProfileSalaryStrFragment(it.data.salaryStructure))
+                                            fragmentName.add("Salary")
+                                        }
+                                    }
+                                    "Timetable" -> {
+                                        if (i.isShow){
+                                            fragmentList.add(ProfileTimeTableFragment(it.data.timetableSummary))
+                                            fragmentName.add("Timetable")
+                                        }
+                                    }
 
 
-                            val viewPagerAdapter = ViewPagerAdapter(
+                                }
+                            }
+                              val viewPagerAdapter = ViewPagerAdapter(
                                 fragmentList,
                                 activity?.supportFragmentManager!!,
                                 lifecycle
@@ -95,16 +129,7 @@ class StaffProfileNavHostFragment : Fragment() {
                                 binding.viewPager
                             ) { tab, position ->
 
-                                when (position) {
-                                    0 -> {
-                                        tab.text = "Teacher's Profile"
-                                    } 1 -> {
-                                        tab.text = "Attendance"
-                                    }   2 -> {
-                                        tab.text = "TimeTable"
-                                    } 3 -> {
-                                        tab.text = "Current Salary Structure"
-                                    } }
+                                tab.text = fragmentName[position]
                             }.attach()
                            }
 

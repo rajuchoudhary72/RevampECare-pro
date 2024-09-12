@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_margin="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_15sdp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:src="@drawable/outline_info_24"
+        />
+
+    <TextView
+        android:id="@+id/tv_pending_leave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pending Leave: "
+        android:textSize="@dimen/_16sdp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:fontFamily="@font/ubuntu_light"
+        android:textColor="@color/module"
+        android:layout_marginTop="@dimen/_15sdp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please take action (either accept or reject) on the pending leave request!"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:fontFamily="@font/ubuntu_light"
+        android:layout_marginTop="@dimen/_3sdp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:weightSum="3"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_yes"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_6sdp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="@color/brand_color"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="View"
+                    android:textColor="@color/white"
+                    />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_skip"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_6sdp"
+            android:layout_marginBottom="5dp"
+            app:cardBackgroundColor="@color/soft_blue"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="Skip"
+                    android:textColor="@color/white"
+                    />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_no"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            app:cardBackgroundColor="@color/bluey_grey"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:gravity="center"
+                    android:text="Close"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:textColor="@color/white"
+                    />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

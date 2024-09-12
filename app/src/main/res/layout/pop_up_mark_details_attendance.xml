@@ -28,7 +28,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_335sdp"
+        android:layout_height="wrap_content"
         android:background="@color/white">
 
         <LinearLayout
@@ -153,10 +153,10 @@
                     android:id="@+id/tv_mark_leave"
                     android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_25sdp"
-                    android:background="@drawable/circle_leave"
+                    android:background="@drawable/background_box_rectangle_blue"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/o"
+                    android:text="@string/lbl_a"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp" />
 
@@ -166,7 +166,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/out_pass"
+                    android:text="@string/leave"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_13sdp" />
 
@@ -270,6 +270,7 @@
         android:layout_height="@dimen/_45sdp"
         android:background="@color/grey_light"
         android:baselineAligned="false"
+        android:layout_marginTop="@dimen/_10sdp"
         android:orientation="horizontal">
 
 

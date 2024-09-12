@@ -93,9 +93,18 @@ class AssignmentNavHostFragment : Fragment() {
                                         tab.text = it.data.subjectAssignments[position].subject
                                       val badgeDrawable : BadgeDrawable = tab.orCreateBadge
 
-                                  //  badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
+                                     //badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
                                      badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
+                                     if (it.data.subjectAssignments[position].assignments!=null){
+                                         var count=0
+                                         for (assignment in it.data.subjectAssignments[position].assignments){
+                                             if (assignment.isSubmitted!!){
+                                                 count++
+                                             }
+                                         }
+                                         badgeDrawable.number = it.data.subjectAssignments[position].assignments.size-count
 
+                                     }
 
 
                                 }.attach()

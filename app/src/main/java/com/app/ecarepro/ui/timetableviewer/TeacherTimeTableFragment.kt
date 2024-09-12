@@ -63,6 +63,7 @@ class TeacherTimeTableFragment(private val teachers: List<Teacher>, private val 
                 navigate(R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment, Bundle().apply {
                     putString(Constant.ID, t.id)
                     putString(Constant.TIME_TABLE_TYPE, Constant.TEACHER_TIME_TABLE)
+                    putString(Constant.NAME, t.name)
 
                 })
             }

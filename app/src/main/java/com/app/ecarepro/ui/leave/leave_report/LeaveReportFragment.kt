@@ -136,7 +136,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                             if (pageIndex==1){
                                 leaveReportAdapter.clearData()
                              }
-                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction,applType)
+                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction,applType,status)
 
                         }else{
                             if (pageIndex==1){
