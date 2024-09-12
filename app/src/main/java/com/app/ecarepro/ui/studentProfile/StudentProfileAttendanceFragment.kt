@@ -258,7 +258,7 @@ class StudentProfileAttendanceFragment(
 
     override fun onItemClick(t: SummaryAttendance, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
-            putInt("monthID",t.monthID)
+            putInt("studentID",studentID)
         })
 
     }
