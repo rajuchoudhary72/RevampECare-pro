@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.assignment
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -93,7 +94,7 @@ class AssignmentNavHostFragment : Fragment() {
                                         tab.text = it.data.subjectAssignments[position].subject
                                       val badgeDrawable : BadgeDrawable = tab.orCreateBadge
 
-                                     //badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
+                                     badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
                                      badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
                                      if (it.data.subjectAssignments[position].assignments!=null){
                                          var count=0
@@ -102,6 +103,8 @@ class AssignmentNavHostFragment : Fragment() {
                                                  count++
                                              }
                                          }
+                                         badgeDrawable.badgeGravity=BadgeDrawable.TOP_START
+
                                          badgeDrawable.number = it.data.subjectAssignments[position].assignments.size-count
 
                                      }

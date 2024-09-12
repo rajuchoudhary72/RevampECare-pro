@@ -104,6 +104,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     binding.autoCompleteClass.setText("Select Class ",false)
                     from=getString(R.string.class_attendance)
                     getClassList()
+                    binding.toolbar.title = from
                 }
                 R.id.rbStudentWise -> {
                     classID=0
@@ -114,12 +115,13 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     binding.autoCompleteClass.setText("Select Class ",false)
                     from=getString(R.string.subject_attendance)
                     getClassList()
+                    binding.toolbar.title = from
                 }
             }
             binding.autoInputSubInputLayout.isVisible=from==getString(R.string.subject_attendance)
         }
 
-
+        binding.toolbar.title = from
 
         binding.btnSave.setOnClickListener {
             popUpDetailsMarkAttendance()
@@ -192,17 +194,26 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
                     if (it.data != null) {
 
-                        if (it.data.studentList != null) {
-                            binding.btnSave.isVisible=true
-                            binding.recyclerNotice.isVisible = true
-                            binding.tvNoData.isVisible = false
+                            if (it.data.studentList != null) {
+                                binding.btnSave.isVisible = true
+                                binding.recyclerNotice.isVisible = true
+                                binding.tvNoData.isVisible = false
+                                 if (it.data.hasMarked){
+                                     if (it.data.canEdit) {
+                                         binding.btnSave.isVisible = true
 
-                             isLateEnable=it.data.isLateEnable
-                            pendingLeave=it.data.pendingLeave
-                            studentListWithData=it.data
-                            markAttModel=it.data
-                            studentListArrayList.clear()
-                            studentListArrayList.addAll(it.data.studentList)
+                                     } else {
+                                         binding.btnSave.isVisible = false
+                                     }
+                                     binding.btnSave.text = "Modify"
+                                 }else{
+                                     binding.btnSave.text = "Save"
+                                 }
+                                isLateEnable = it.data.isLateEnable
+                                studentListWithData = it.data
+                                markAttModel = it.data
+                                studentListArrayList.clear()
+                                studentListArrayList.addAll(it.data.studentList)
 
                             val studentListMarkAttAdapter = StudentListMarkAttAdapter(
                                 studentListArrayList,
