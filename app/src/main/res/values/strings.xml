@@ -705,4 +705,8 @@
     <string name="sort_by_roll_no">Sort by Roll No</string>
     <string name="sort_by_admission_no">Sort by Admission No</string>
     <string name="o">O</string>
+    <string name="present_count"><b>Present:</b> %s</string>
+    <string name="absent_count"><b>Absent:</b> %s</string>
+    <string name="leave_count"><b>Leave:</b> %s</string>
+    <string name="late_count"><b>Late:</b> %s</string>
 </resources>

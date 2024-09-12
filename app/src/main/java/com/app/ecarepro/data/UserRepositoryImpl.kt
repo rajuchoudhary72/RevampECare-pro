@@ -886,9 +886,10 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getAttendance(
         from: String,
         till: String,
-        yrID: String
+        yrID: String,
+        ID: String
     ): AttendanceResponse {
-        return userService.getAttendance(from, till, yrID)
+        return userService.getAttendance(from, till, yrID,ID)
     }
 
     override suspend fun teachersTimetable(id: String): NetworkTeachersTimetable {

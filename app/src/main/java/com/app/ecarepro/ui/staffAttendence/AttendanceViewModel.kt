@@ -2,7 +2,6 @@ package com.app.ecarepro.ui.staffAttendence
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.repository.UserRepository
@@ -52,10 +51,11 @@ class AttendanceViewModel @Inject constructor(
         from: String,
         till: String,
         yrID: String,
+        studentID: String,
     ) = viewModelScope.launch {
         runCatching {
             attendanceMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getAttendance(from, till, yrID)
+            userRepository.getAttendance(from, till, yrID,studentID)
         }.onSuccess {
             attendanceMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

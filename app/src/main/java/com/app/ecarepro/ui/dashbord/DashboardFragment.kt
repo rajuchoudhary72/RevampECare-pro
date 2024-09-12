@@ -66,7 +66,7 @@ class DashboardFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
@@ -143,11 +143,7 @@ class DashboardFragment : Fragment() {
 
             if (data.showQuestionnaire == true)
                 questionnaireCarouselModel(data.questionnaire)
-
-
         }
-
-
     }
 
     private fun EpoxyController.buildTeachersWorkLoad(teacherWorkLoad: List<Workload>?) {
@@ -156,10 +152,17 @@ class DashboardFragment : Fragment() {
         TeacherWorkloadModel(
             workload = teacherWorkLoad,
             onClick = { workload ->
-                findNavController().navigate(
-                    R.id.timeTableNavHostFragment,
-                    bundleOf(Constant.ID to workload.id)
-                )
+                this@DashboardFragment.findNavController()
+                    .navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                        putString(Constant.ID, workload.id)
+                        putString(Constant.NAME, workload.teacherName)
+                    })
+
+                /* findNavController().navigate(
+                      R.id.timeTableNavHostFragment,
+                      bundleOf(Constant.ID to workload.id)
+
+                  )*/
             }
         )
             .id("workload")

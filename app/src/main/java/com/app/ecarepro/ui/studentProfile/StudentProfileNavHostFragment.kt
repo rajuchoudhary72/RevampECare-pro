@@ -13,7 +13,6 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
-import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerformanceNavHostFragment
 import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciationFragment
 import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
 import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
@@ -92,7 +91,7 @@ class StudentProfileNavHostFragment : Fragment() {
                                         }
                                         "Attendance" -> {
                                             if (i.isShow){
-                                                fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID))
+                                                fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID,it.data.id))
                                                 fragmentName.add("Attendance")
                                             }
                                         }

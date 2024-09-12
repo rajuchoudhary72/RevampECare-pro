@@ -22,13 +22,11 @@ import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.model.SummaryAttendance
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
 import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,7 +37,8 @@ import kotlin.math.roundToInt
 class StudentProfileAttendanceFragment(
     private val attendanceDTL: ProfileAttendanceDTL,
     private val academicYears: List<AcademicYear>,
-    private val studentID: Int
+    private val studentID: Int,
+    private val  monthID: String
 ) : Fragment() ,ItemListener<SummaryAttendance> {
 
     private lateinit var selectedYearData: AcademicYear
@@ -258,7 +257,9 @@ class StudentProfileAttendanceFragment(
 
     override fun onItemClick(t: SummaryAttendance, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
-            putInt("studentID",studentID)
+            putString("studentID",monthID)
+            putString("formDate",t.startDate)
+            putString("tillDate",t.endDate)
         })
 
     }

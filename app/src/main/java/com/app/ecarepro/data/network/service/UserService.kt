@@ -465,6 +465,7 @@ interface UserService {
         @Query("From") from: String,
         @Query("Till") till: String,
         @Query("YrID") yrID: String,
+        @Query("ID") ID: String,
     ): AttendanceResponse
 
     @GET("Academic/TeachersTimetable")
