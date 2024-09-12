@@ -431,9 +431,9 @@ class ComposeFragment : Fragment() {
     private fun buildAttachmentModels(attachments: List<MiMedia>) {
         binding.attachments.isVisible = attachments.isNotEmpty()
         binding.attachments.withModels {
-            attachments.forEach { attachment ->
+            attachments.forEachIndexed { index, attachment ->
                 attachment {
-                    id(attachment.id)
+                    id(index)
                     image(attachment.path)
                     onClickRemove { _ ->
                         composeViewModel.removeAttachment(attachment)

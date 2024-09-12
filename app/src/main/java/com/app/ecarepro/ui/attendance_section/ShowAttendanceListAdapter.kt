@@ -29,7 +29,12 @@ class ShowAttendanceListAdapter(
             bindings.sNo = "${position + 1}"
             if (syllabusLST[position].status == 2) {
                 bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.red))
-            } else {
+            } else if (syllabusLST[position].status == 7) {
+                bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.light))
+            }else if (syllabusLST[position].status == 6) {
+                bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.blue_light))
+            }
+            else {
                 bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.white))
             }
         }
