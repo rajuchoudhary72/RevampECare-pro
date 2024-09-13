@@ -158,6 +158,7 @@ class DashboardFragment : Fragment() {
                         putString(Constant.NAME, workload.teacherName)
                     })
 
+
                 /* findNavController().navigate(
                       R.id.timeTableNavHostFragment,
                       bundleOf(Constant.ID to workload.id)
