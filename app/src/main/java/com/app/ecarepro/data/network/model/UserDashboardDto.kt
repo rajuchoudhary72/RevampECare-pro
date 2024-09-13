@@ -63,7 +63,7 @@ data class UserDashboardDto(
     @SerializedName("timetable")
     val timetable: List<Timetable>?,
     @SerializedName("upcomingActivities")
-    val upcomingActivities: List<Any>?,
+    val upcomingActivities: List<Activity>?,
     @SerializedName("collectionModeWise")
     val collectionModeWise: CollectionModeWise?,
     @SerializedName("feeCollection")
@@ -88,6 +88,21 @@ data class UserDashboardDto(
     val staffAttendanceSummary: StaffAttendance?,
     @SerializedName("admissionComparison")
     val admissionComparison: AdmissionComparison?,
+)
+
+data class Activity(
+    @SerializedName("duration")
+    val duration: Int?,
+    @SerializedName("fromDate")
+    val fromDate: String?,
+    @SerializedName("id")
+    val id: Any?,
+    @SerializedName("isWorking")
+    val isWorking: Boolean?,
+    @SerializedName("tillDate")
+    val tillDate: Any?,
+    @SerializedName("title")
+    val title: String?
 )
 
 data class AttendanceSummary(

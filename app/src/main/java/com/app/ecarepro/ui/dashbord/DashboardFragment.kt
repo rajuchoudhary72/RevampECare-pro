@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.Activity
 import com.app.ecarepro.data.network.model.AdmissionComparison
 import com.app.ecarepro.data.network.model.BankBalance
 import com.app.ecarepro.data.network.model.BirthDayCard
@@ -34,6 +35,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
+import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
 import com.app.ecarepro.ui.dashbord.model.FeedsModel
@@ -105,6 +107,9 @@ class DashboardFragment : Fragment() {
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
 
+            if (data.showActivities == true)
+                buildActivitiesCard(data.upcomingActivities)
+
             if (data.showTeacherWorkLoad == true)
                 buildTeachersWorkLoad(data.teacherWorkLoad)
 
@@ -147,6 +152,13 @@ class DashboardFragment : Fragment() {
         }
 
 
+    }
+
+    private fun EpoxyController.buildActivitiesCard(activities: List<Activity>?) {
+        if (activities.isNullOrEmpty()) return
+        CalenderActivityModel(activities)
+            .id("cal")
+            .addTo(this)
     }
 
     private fun EpoxyController.buildTeachersWorkLoad(teacherWorkLoad: List<Workload>?) {

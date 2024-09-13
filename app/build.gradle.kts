@@ -52,6 +52,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -170,4 +171,6 @@ dependencies {
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
 
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
+    implementation("com.kizitonwose.calendar:view:2.5.4")
 }
