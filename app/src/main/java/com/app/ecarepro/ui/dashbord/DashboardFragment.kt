@@ -51,6 +51,8 @@ import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.data.network.model.Activity
+import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -105,7 +107,8 @@ class DashboardFragment : Fragment() {
 
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
-
+            if (data.showActivities == true)
+                buildActivitiesCard(data.upcomingActivities)
             if (data.showTeacherWorkLoad == true)
                 buildTeachersWorkLoad(data.teacherWorkLoad)
 
@@ -144,6 +147,13 @@ class DashboardFragment : Fragment() {
             if (data.showQuestionnaire == true)
                 questionnaireCarouselModel(data.questionnaire)
         }
+    }
+
+    private fun EpoxyController.buildActivitiesCard(activities: List<Activity>?) {
+        if (activities.isNullOrEmpty()) return
+        CalenderActivityModel(activities)
+            .id("cal")
+            .addTo(this)
     }
 
     private fun EpoxyController.buildTeachersWorkLoad(teacherWorkLoad: List<Workload>?) {

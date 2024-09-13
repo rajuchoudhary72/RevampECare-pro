@@ -157,7 +157,7 @@ class BirthdayFragment : Fragment() {
                     )
 
                 }
-            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+            })
         }
 
 
