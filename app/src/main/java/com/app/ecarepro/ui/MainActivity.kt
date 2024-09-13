@@ -355,7 +355,31 @@ class MainActivity : AppCompatActivity() {
                             }
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
-                            if (versionCode < it.data.android.versionCode) {
+
+                            if (versionName < it.data.android.currentVersion) {
+                                // open  dialog
+                                if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
+                                    //soft  update
+                                    UpdateAppVersionDialog(
+                                        0,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                }else{
+                                    //force update
+                                    UpdateAppVersionDialog(
+                                        1,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                }
+                            }else{
+                                // nothing  open  version  dialog
+                            }
+
+                           /* if (versionCode < it.data.android.versionCode) {
+
+
                                 if (versionName == it.data.android.criticalVersion.trim()
                                 ) // force update
                                     UpdateAppVersionDialog(
@@ -369,7 +393,7 @@ class MainActivity : AppCompatActivity() {
                                         it.data.android.title,
                                         it.data.android.description
                                     )
-                            }
+                            }*/
                         }
 
                     }
