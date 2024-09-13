@@ -43,6 +43,11 @@ import com.lassi.data.media.MiMedia
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -70,7 +75,7 @@ class PostAssignmentFragment : Fragment() {
     private var assignmentId: String  = ""
     private var studentList = mutableListOf<Student>()
     private var lastClickAttachmentType: AttachmentType? = null
-
+    var submitDate=""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -162,7 +167,7 @@ class PostAssignmentFragment : Fragment() {
         binding.ctvAssignmentDt.setOnClickListener {
             ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.ctvAssignmentDt.text = date
+                    binding.ctvAssignmentDt.text = Constant.dateToShow(date.toString())
                 }
 
             })
@@ -171,7 +176,7 @@ class PostAssignmentFragment : Fragment() {
         binding.tvSubmissionDt.setOnClickListener {
             ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvSubmissionDt.text = date
+                    binding.tvSubmissionDt.text = Constant.dateToShow(date.toString())
                 }
 
             })
@@ -267,19 +272,16 @@ class PostAssignmentFragment : Fragment() {
 
 
        if (isValidate ){
-           var submitDate=""
-           submitDate = if (binding.isSubmitDate.isChecked){
-               binding.tvSubmissionDt.text.toString()
-           }else{
-               ""
+
+           if (!isEdit){
+               submitDate = if (binding.isSubmitDate.isChecked){
+                   Constant.toSystemDate( binding.tvSubmissionDt.text.toString())
+               }else{
+                   getCurrentYearLastDate()
+               }
            }
-
-
-
-
-
-               postAssignmentViewModel.createAssignment(
-                   asgDate =  binding.ctvAssignmentDt.text.toString(),
+                postAssignmentViewModel.createAssignment(
+                   asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
                    asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,
                    classID = if (isEdit) ids.toString().toInt()   else 0,
                    classIDs =  if (isEdit)  "" else if (isClassWise)  ids.toString()   else "" ,
@@ -314,6 +316,14 @@ class PostAssignmentFragment : Fragment() {
        }
 
 
+    }
+
+    private fun getCurrentYearLastDate(): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.MONTH, Calendar.DECEMBER)
+        calendar.set(Calendar.DAY_OF_MONTH, 31)
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return formatter.format(calendar.time)
     }
 
     private fun getMyClasses(subID: Int){
@@ -577,7 +587,7 @@ class PostAssignmentFragment : Fragment() {
         tvHeading.text= getText(R.string.lbl_select_Student)
         val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
         val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
-        llSelectAll.isVisible=true
+        llSelectAll.isVisible=false
         builder.setView(view)
 
         relOk.setOnClickListener {
@@ -673,6 +683,8 @@ class PostAssignmentFragment : Fragment() {
                         isClassSelected=true
 
                         if (data!=null){
+
+                            submitDate=data.submitDate
                             binding.etTitle.setText(data.title)
                             binding.etDescription.setText(data.data)
                             binding.ctvAssignmentDt.text= data.asgDate
