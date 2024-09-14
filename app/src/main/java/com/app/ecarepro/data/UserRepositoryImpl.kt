@@ -141,10 +141,12 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
@@ -1055,10 +1057,10 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun saveUserUndertaking(id: String): Flow<Result<String>> {
+    override fun saveUserUndertaking(request: UserUndertakingModule):  Flow<Result<String>> {
         return flow {
             try {
-                val response = userService.saveUserUndertaking(id)
+                val response = userService.saveUserUndertaking(request)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message?:"Success"))
                 } else {

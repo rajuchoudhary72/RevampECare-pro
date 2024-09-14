@@ -1,15 +1,22 @@
 package com.app.ecarepro.ui.home
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -39,6 +46,8 @@ import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
@@ -184,7 +193,7 @@ class HomeFragment : Fragment() {
             binding.btnSubmit.setOnClickListener {
                 if (binding.checkbox.isChecked) {
                     (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
+                    mViewModel.submitUserUndertaking(jsonObject.getString("utID"),) { isSuccess, message ->
                         (requireActivity() as MainActivity).showLoader(false)
                         mainActivity().showMessage(message)
                         if (isSuccess) {
@@ -200,7 +209,56 @@ class HomeFragment : Fragment() {
         }
 
     }
+    private fun startLocationFetch() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 120
+            )
+            return
+        }
+        if (isGPSEnabled().not()) {
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
+                .setCancelable(false)
+                .setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setPositiveButton("No") { d, _ ->
+                    d.dismiss()
+                    findNavController().popBackStack()
+                }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                    d.dismiss()
+                    val callGPSSettingIntent = Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                    )
+                    startActivity(callGPSSettingIntent)
+                }.show()
+        } else {
+            fusedLocationClient
+                .lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    mViewModel.currentLocation =
+                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+                }
+                .addOnFailureListener {
+                    Log.e("MSG", "startLocationFetch: " + it.message)
+                }
+        }
+    }
 
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
+    private fun isGPSEnabled(): Boolean {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
     private fun removeUTFCharacters(data: String): StringBuffer {
         val p: Pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})")
         val m: Matcher = p.matcher(data)
@@ -497,7 +555,21 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
+        startLocationFetch()
 
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 120) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationFetch()
+            } else {
+                mainActivity().showMessage("GPS permission denied")
+            }
+        }
     }
 
     private fun dashboardPrompt( ) {

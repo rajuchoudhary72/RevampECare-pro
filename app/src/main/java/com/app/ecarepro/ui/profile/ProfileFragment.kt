@@ -55,8 +55,6 @@ class ProfileFragment : Fragment() {
     private lateinit var photoType: PhotoType
 
 
-
-
     @Inject
     lateinit var userDataStore: UserDataStore
 
@@ -68,18 +66,30 @@ class ProfileFragment : Fragment() {
                 val data = it.data
                 val imgUri = data?.data
                 // binding.ivAddedImage.setImageURI(imgUri)
+                try {
+                    val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
 
-                val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                    val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                    /*val imageExt =
+                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
 
-                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                    uploadPhoto(imageString, imageExt)
+                } catch (e: NullPointerException) {
+                    e.message
+                }
 
-                val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-
-                uploadPhoto(imageString, imageExt)
 
             }
         }
-
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
     private fun uploadPhoto(imageString: String, imageExt: String) {
         (requireActivity() as MainActivity).showLoader(true)
         profileViewModel.uploadPhoto(
@@ -98,13 +108,17 @@ class ProfileFragment : Fragment() {
                 if (result?.data != null) {
                     val bitmap = result.data?.extras?.get("data") as Bitmap
                     // binding.ivAddedImage.setImageBitmap(bitmap)
+                    try {
+                        val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                        val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                       /* val imageExt =
+                            FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
 
-                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                        uploadPhoto(imageString, imageExt)
+                    } catch (e: NullPointerException) {
+                        e.message
+                    }
 
-                    val imageExt =
-                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-
-                    uploadPhoto(imageString, imageExt)
 
                 }
             }
@@ -112,7 +126,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
@@ -141,7 +155,7 @@ class ProfileFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is ProfileUiState.Success) {
@@ -154,8 +168,8 @@ class ProfileFragment : Fragment() {
                     designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
                     contactNumber(uiState.profile.emergencyContactNo)
-                /*    canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
-                    canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)*/
+                    /*    canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
+                        canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)*/
 
                     canEditBannerImage(uiState.profile.canChangeCoverImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.coverImg != 1))
                     canEditProfileImage(uiState.profile.canChangeProfileImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.profileImg != 1))
@@ -194,9 +208,9 @@ class ProfileFragment : Fragment() {
                     account {
                         id(it.userId)
                         name(
-                            if(it.name.isNullOrEmpty()){
+                            if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
-                            }else {
+                            } else {
                                 it.name + "(${it.roleName})"
                             }
 
@@ -496,15 +510,16 @@ class ProfileFragment : Fragment() {
             }
         }
     }
- private fun setUpViews() {
+
+    private fun setUpViews() {
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-     viewLifecycleOwner.lifecycleScope.launch {
-         userDataStore.getUser()?.run {
-             binding.tvEditProfile.isVisible =   Constant.PARENT_TYPE == userType
-         }
-     }
+        viewLifecycleOwner.lifecycleScope.launch {
+            userDataStore.getUser()?.run {
+                binding.tvEditProfile.isVisible = Constant.PARENT_TYPE == userType
+            }
+        }
 
         binding.tvEditProfile.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)
