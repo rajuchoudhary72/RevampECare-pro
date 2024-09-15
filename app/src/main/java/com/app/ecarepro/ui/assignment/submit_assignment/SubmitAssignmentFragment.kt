@@ -331,24 +331,24 @@ class SubmitAssignmentFragment : Fragment() {
         builder.show()
     }
 
-    private fun openFile(fileSource:String){
+    private fun openFile(fileSource: String) {
         if (Constant.isPdfUrl(fileSource)) {
-            findNavController().navigate(R.id.openPdfFragment,Bundle( ).apply {
+            findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
             })
-        }else{
-            findNavController().navigate(R.id.openImageFragment,Bundle( ).apply {
+        } else {
+            findNavController().navigate(R.id.openImageFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
             })
         }
 
     }
 
-    private fun downloadFile(fileSource:String){
+    private fun downloadFile(fileSource: String) {
         if (Constant.isPdfUrl(fileSource)) {
             val androidDownloader = AndroidDownloader(requireContext())
             androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-        }else{
+        } else {
             val androidDownloader = AndroidDownloader(requireContext())
             androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
         }
