@@ -1,6 +1,7 @@
 package com.app.ecarepro
 
 import android.app.Application
+import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings.Secure
@@ -55,4 +56,13 @@ class ECateProApp : Application() {
             }
         }
     }
+    fun getContext(): Context {
+        return applicationContext
+    }
+
+    companion object {
+        var instance: ECateProApp? = null
+            private set
+    }
+
 }

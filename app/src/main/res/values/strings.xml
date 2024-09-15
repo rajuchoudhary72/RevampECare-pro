@@ -524,7 +524,7 @@
     <string name="select_session">Session</string>
     <string name="select_session_one">Session First</string>
     <string name="select_session_two">Session Second </string>
-    <string name="default_notification_channel_id">e-Care</string>
+    <string name="default_notification_channel_id">Franciscan e-Care</string>
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>

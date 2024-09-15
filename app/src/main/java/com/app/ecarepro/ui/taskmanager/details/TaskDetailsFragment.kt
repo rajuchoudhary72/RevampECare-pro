@@ -57,11 +57,19 @@ class TaskDetailsFragment : Fragment() {
                 val imgUri = data?.data
                 val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                //val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
                 uploadPhoto(imageString, imageExt)
             }
         }
-
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
     private fun uploadPhoto(imageString: String, imageExt: String) {
         (requireActivity() as MainActivity).showLoader(true)
         mViewModel.updateAttachment(imageString, imageExt){ message:String ->
@@ -78,8 +86,9 @@ class TaskDetailsFragment : Fragment() {
                     val bitmap = result.data?.extras?.get("data") as Bitmap
 
                     val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                    val imageExt =
-                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                    val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                 /*   val imageExt =
+                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
                     uploadPhoto(imageString, imageExt)
                 }
             }

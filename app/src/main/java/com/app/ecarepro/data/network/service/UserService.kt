@@ -131,7 +131,9 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
@@ -801,7 +803,7 @@ interface UserService {
 
     @POST("User/SaveUndertakingAckowledgement")
     suspend fun saveUserUndertaking(
-        @Query("UtID") id:String,
+        @Body request: UserUndertakingModule
     ): CommonResponse
 
     @GET("Academic/QuestionPaper")
