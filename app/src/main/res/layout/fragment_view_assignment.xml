@@ -143,7 +143,6 @@
             android:id="@+id/llEditDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
 
             >
 
@@ -167,38 +166,11 @@
                     android:text="@string/view"
                     android:textColor="@color/brand_color"
                     app:drawableTint="@color/brand_color"
-                    app:drawableLeftCompat="@drawable/view_white" />
+                    app:drawableLeftCompat="@drawable/baseline_attach_file_24" />
 
             </LinearLayout>
 
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="1dp"
-                android:layout_height="match_parent"/>
 
-
-
-
-            <LinearLayout
-                android:id="@+id/llDownload"
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/download"
-                    android:textColor="@color/brand_color"
-                    app:drawableLeftCompat="@drawable/download_24px"
-                    app:drawableTint="@color/brand_color"
-                    />
-            </LinearLayout>
 
         </LinearLayout>
 

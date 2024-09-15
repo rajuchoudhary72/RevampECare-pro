@@ -480,6 +480,12 @@ class Constant {
 
             return indexes
         }
-
+        fun isPdfUrl(url: String): Boolean {
+            val pdfExtension = "pdf"
+            val extension = url.substringAfterLast(".", "").lowercase()
+            return pdfExtension == extension
+        }
     }
+
+
 }

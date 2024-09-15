@@ -853,6 +853,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.viewAssignment(iD)
     }
 
+    override suspend fun assignmentDTL(iD: String): NetworkViewAssignment {
+        return userService.assignmentDTL(iD)
+    }
+
     override suspend fun assignmnetSubmissionRPT(
         iD: String,
         notSubmitted: Boolean

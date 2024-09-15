@@ -428,6 +428,11 @@ interface UserService {
         @Query("ID") iD: String,
     ): NetworkViewAssignment
 
+    @GET("Academic/AssignmentDTL")
+    suspend fun assignmentDTL(
+        @Query("ID") iD: String,
+    ): NetworkViewAssignment
+
     @GET("Academic/AssignmnetSubmissionRPT")
     suspend fun assignmnetSubmissionRPT(
         @Query("ID") iD: String,

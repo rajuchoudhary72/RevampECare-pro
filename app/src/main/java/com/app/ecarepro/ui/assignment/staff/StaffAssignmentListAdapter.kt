@@ -67,7 +67,7 @@ class StaffAssignmentListAdapter(
             bindingm.llEdit.setOnClickListener {
                 activityCalenderFragment.onItemClick(teacherAssignment,2,false)
             }
-             if (teacherAssignment.isActive){
+             if (teacherAssignment.isActive!!){
                 bindingm.tvStatus.text="  Active"
                 bindingm.tvStatus.setTextColor(Color.parseColor("#4DAC3C"))
 

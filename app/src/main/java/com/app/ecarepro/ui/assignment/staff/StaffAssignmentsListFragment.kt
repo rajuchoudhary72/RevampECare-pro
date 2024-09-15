@@ -118,9 +118,11 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     override fun onItemClick(t: TeacherAssignment, pos: Int, boolean: Boolean) {
         when (pos) {
             1 -> {
-                findNavController().navigate(R.id.action_staffAssignmentsListFragment_to_viewAssignmentFragment,Bundle( ).apply {
+                findNavController().navigate(R.id.viewAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
-                    putBoolean(Constant.IS_LATE_SUBMITTED, t.lateSubmission)
+                    putBoolean(Constant.IS_LATE_SUBMITTED, t.lateSubmission!!)
+                    putParcelable("TeacherAssignment", t)
+
 
                 })
             }
@@ -132,7 +134,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
                 })
             }
             3 -> {
-                teacherAssignmentViewModel.deleteAssignment(t.id)
+                teacherAssignmentViewModel.deleteAssignment(t.id!!)
                 lifecycleScope.launch {
                     teacherAssignmentViewModel.deleteAssignmentStateFlow.collectLatest {
                         when (it) {  is NetworkResult.Loading -> {

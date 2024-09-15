@@ -388,6 +388,10 @@ interface UserRepository {
           iD: String,
     ): NetworkViewAssignment
 
+    suspend fun assignmentDTL(
+          iD: String,
+    ): NetworkViewAssignment
+
     suspend fun assignmnetSubmissionRPT(
           iD: String,
           notSubmitted: Boolean,

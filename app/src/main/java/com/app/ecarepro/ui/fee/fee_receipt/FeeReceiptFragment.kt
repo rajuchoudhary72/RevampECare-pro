@@ -40,6 +40,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     private var sessionListData = mutableListOf<FeeReceiptSession>()
     private lateinit var binding: FragmentFeeReceiptBinding
     private val feeReceiptViewModel: FeeReceiptViewModel by viewModels()
+    private var firstTime=true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +75,11 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
 
-                            sessionListData = it.data.session_data.toMutableList()
+                            if (firstTime){
+                                sessionListData = it.data.session_data.toMutableList()
+                                firstTime=false
+                            }
+
 
                             if (  it.data.receipt_data.isNotEmpty()) {
 
@@ -166,7 +171,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
         feeReceiptViewModel.getFeeReceipt(
             feeReceiptViewModel.feePaymentURL.replace("mlogin.aspx", "")+"/api/feereceipt",
-            0
+            yearID
         )
     }
 

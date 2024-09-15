@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentNoticeListBinding
@@ -24,6 +25,7 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -34,11 +36,12 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
     private val noticeViewModel: NoticeViewModel by viewModels()
     private lateinit var binding :  FragmentNoticeListBinding
-    private lateinit var mMyClass: List<MyClasseItem>
+    private   var mMyClass= mutableListOf<MyClasseItem>()
     private var mMyClassDataString: ArrayList<String> = ArrayList()
     private var noticeType=""
     private var userType=""
-
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
 
 
@@ -68,9 +71,12 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
         if (noticeType==Constant.NOTICE_CLASS){
             if (userType==Constant.USER_STAFF){
                 binding.autoInputClassInputLayout.isVisible=true
+                getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
+            }else{
+                fetchNotices(Constant.PAGE_INDEX, 0,noticeType==Constant.NOTICE_CLASS)
+
             }
-            getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
-        }else{
+         }else{
             fetchNotices(Constant.PAGE_INDEX, 0,noticeType==Constant.NOTICE_CLASS)
 
         }
@@ -96,7 +102,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
                         if (it.data!=null){
 
-                            if (it.data.noticeList!=null){
+                            if (it.data.noticeList!=null && it.data.noticeList.isNotEmpty() ){
 
                                 binding.recyclerNotice.isVisible=true
                                 binding.tvNoData.isVisible=false
@@ -139,7 +145,9 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                         if (it.data!=null){
                             if (it.data.myClasses!=null) {
 
-                                mMyClass=it.data.myClasses
+                                mMyClass.clear()
+                                mMyClassDataString.clear()
+                                mMyClass= it.data.myClasses as MutableList<MyClasseItem>
 
                                 mMyClass.forEach { data ->
                                     mMyClassDataString.add(data.className.toString())
@@ -192,11 +200,21 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
     }
 
 
-    private fun fetchNotices(pg: Int, classID: Int, isClassNotice: Boolean) {
+    private fun fetchNotices(pg: Int, classid: Int, isClassNotice: Boolean) {
         if (noticeType==Constant.NOTICE_CLASS){
-            mMyClass[0].classID?.let {
-                noticeViewModel.getNotice(pg, classID,isClassNotice)
+            if (userType==Constant.USER_STAFF){
+
+                    noticeViewModel.getNotice(pg, classid,isClassNotice)
+
+            }else{
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        noticeViewModel.getNotice(pg,classID!!.toInt(),isClassNotice)
+                    }
+                }
+
             }
+
 
         }else{
             noticeViewModel.getNotice(pg, 0,isClassNotice)

@@ -389,10 +389,10 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/submit"
+                    android:text="@string/view"
                     android:textColor="@color/brand_color"
-                    app:drawableLeftCompat="@drawable/ic_upload"
                     app:drawableTint="@color/brand_color"
+                    app:drawableLeftCompat="@drawable/view_white"
                     />
             </LinearLayout>
 
