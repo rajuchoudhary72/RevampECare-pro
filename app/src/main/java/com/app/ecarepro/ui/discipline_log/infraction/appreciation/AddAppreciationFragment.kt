@@ -40,14 +40,14 @@ class AddAppreciationFragment : Fragment() {
 
     private var studentID: Int = 0
     private lateinit var subAppreciationCatData: TypeAppreciation
-    private lateinit var subAppreciationSubCateList: List<TypeAppreciation>
+    private   var subAppreciationSubCateList= mutableListOf<TypeAppreciation>()
     private lateinit var appreciationReward: AppreciationReward
     private var apprecTypeSelected: Boolean = false
     private var SubApprecTypeSelected: Boolean = false
     private var apprecRewardSelected: Boolean = false
     private lateinit var appreciationCatData: AppreciationType
-    private lateinit var appreciationRewardList: List<AppreciationReward>
-    private lateinit var appreciationTypeList: List<AppreciationType>
+    private   var appreciationRewardList = mutableListOf<AppreciationReward>()
+    private   var appreciationTypeList= mutableListOf<AppreciationType>()
      private val addAppreciationViewModel : AddAppreciationViewModel by viewModels()
     private lateinit var binding : FragmentAddAppreciationBinding
 
@@ -75,7 +75,10 @@ class AddAppreciationFragment : Fragment() {
         }
 
         binding.tvSelectApprecCate.setOnClickListener {
-            popUpSelectAppreciationCat()
+
+                popUpSelectAppreciationCat()
+
+
         }
 
         binding.tvSelectSubApprec.setOnClickListener {
@@ -114,12 +117,13 @@ class AddAppreciationFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
+                            subAppreciationSubCateList.clear()
+                            if (!it.data.types.isNullOrEmpty()){
 
-                            subAppreciationSubCateList=it.data.types
+                                subAppreciationSubCateList= it.data.types.toMutableList()
 
-
-
-                        }
+                            }
+                    }
 
                     }
 
@@ -168,9 +172,19 @@ class AddAppreciationFragment : Fragment() {
                                 append(getString(R.string.contact_no))
                                 append(it.data.studentDTL.contactMob)
                             }
+                            appreciationRewardList.clear()
+                            appreciationTypeList.clear()
+                            if (!it.data.appreciationTypes.isNullOrEmpty()){
 
-                            appreciationTypeList=it.data.appreciationTypes
-                            appreciationRewardList=it.data.appreciationRewards  }  }
+                                appreciationTypeList= it.data.appreciationTypes.toMutableList()
+
+                            }
+                            if (!it.data.appreciationRewards.isNullOrEmpty()){
+
+                                appreciationRewardList= it.data.appreciationRewards.toMutableList()
+
+                            }
+                         }  }
                 }
             }
         }
@@ -191,18 +205,20 @@ class AddAppreciationFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectApprecCate.text= appreciationCatData .appreciation
-            apprecTypeSelected=true
+             if (apprecTypeSelected){
+                 binding.tvSelectApprecCate.text= appreciationCatData .appreciation
 
-            getSubAppreciation(appreciationCatData.aprID)
+                 getSubAppreciation(appreciationCatData.aprID)
 
-            builder.dismiss()
+                 builder.dismiss()
+             }
 
         }
 
         val infractionCatPopUpListAdapter= AppreciationCatPopUpListAdapter(appreciationTypeList, object : ItemListener<AppreciationType> {
             override fun onItemClick(t: AppreciationType, pos: Int, boolean: Boolean) {
                 appreciationCatData = t
+                apprecTypeSelected=true
             }  })
 
         rvYears.apply {
@@ -231,17 +247,20 @@ class AddAppreciationFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectSubApprec.text= subAppreciationCatData.appreciation
-            SubApprecTypeSelected=true
-            addAppreciationViewModel.appreciationInstance( subAppreciationCatData.aprSubID,studentID)
-            setInfrenceInstance()
-            builder.dismiss()
+            if (SubApprecTypeSelected){
+                binding.tvSelectSubApprec.text= subAppreciationCatData.appreciation
+
+                addAppreciationViewModel.appreciationInstance( subAppreciationCatData.aprSubID,studentID)
+                setInfrenceInstance()
+                builder.dismiss()
+            }
 
         }
 
         val infractionCatPopUpListAdapter= SubAppreciationPopUpListAdapter(subAppreciationSubCateList, object : ItemListener<TypeAppreciation> {
             override fun onItemClick(t: TypeAppreciation, pos: Int, boolean: Boolean) {
                 subAppreciationCatData = t
+                SubApprecTypeSelected=true
             }  })
 
         rvYears.apply {
@@ -297,15 +316,18 @@ class AddAppreciationFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectReward.text= appreciationReward .reward
-            apprecRewardSelected=true
-            builder.dismiss()
+             if (apprecRewardSelected){
+                 binding.tvSelectReward.text= appreciationReward .reward
+                 apprecRewardSelected=true
+                 builder.dismiss()
+             }
 
         }
 
         val infractionCatPopUpListAdapter= AppreciationConsPopUpListAdapter(appreciationRewardList, object : ItemListener<AppreciationReward> {
             override fun onItemClick(t: AppreciationReward, pos: Int, boolean: Boolean) {
                 appreciationReward = t
+                apprecRewardSelected=true
             }  })
 
         rvYears.apply {
@@ -348,7 +370,7 @@ class AddAppreciationFragment : Fragment() {
                 subAppreciationCatData.aprSubID,
                 appreciationReward.rwdID,
                 binding.tvInstance.text.toString().toInt(),
-                Constant.currentDate(),
+                Constant.getCurrentDateTime(),
                 binding.etRemark.text.toString())
 
             lifecycleScope.launch {

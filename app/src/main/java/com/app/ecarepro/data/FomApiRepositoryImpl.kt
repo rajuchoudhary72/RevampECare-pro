@@ -11,6 +11,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
 import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
+import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
 import com.app.ecarepro.model.FeeCertificateList
@@ -60,6 +61,13 @@ class FomApiRepositoryImpl @Inject constructor(
 
     override suspend fun getFeeCertificate(url: String): FeeCertificateList {
         return fomApiService.getFeeCertificate(url)
+    }
+
+    override suspend fun getFeeReceiptDownload(
+        url: String,
+        request: FeeReceiptDownloadRequest
+    ): NetworkFeeCerDownload {
+        return fomApiService.getFeeReceiptDownload(url, request)
     }
 
     override suspend fun getFeeCertificateDownload(

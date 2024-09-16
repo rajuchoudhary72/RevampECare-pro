@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:strokeWidth="2dp"
+        android:layout_margin="@dimen/_5sdp">
+
+        <LinearLayout
+             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tvSubmitOn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                 android:layout_gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/tvtittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_gravity="center_vertical" />
+
+
+            <TextView
+                android:id="@+id/tvAsgData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/ubuntu_light"
+                android:gravity="center"
+                android:padding="5dp"
+                 android:layout_marginStart="@dimen/_10sdp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="@dimen/_10sdp"
+                />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+            <LinearLayout
+                android:id="@+id/llEditDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+
+
+
+                <LinearLayout
+                    android:id="@+id/llView"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/view"
+                        android:textColor="@color/brand_color"
+                        app:drawableTint="@color/brand_color"
+                        app:drawableLeftCompat="@drawable/view_white" />
+
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent" />
+
+
+                <LinearLayout
+                    android:id="@+id/llDownload"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/download"
+                        android:textColor="@color/brand_color"
+                        app:drawableLeftCompat="@drawable/download_24px"
+                        app:drawableTint="@color/brand_color" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

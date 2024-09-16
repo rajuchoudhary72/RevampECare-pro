@@ -167,6 +167,78 @@
 
             </LinearLayout>
 
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/_10sdp"
+
+                />
+
+
+            <LinearLayout
+                android:id="@+id/llAttachments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                 >
+
+                <LinearLayout
+                    android:id="@+id/llView"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="@string/view"
+                        android:textColor="@color/brand_color"
+                        app:drawableTint="@color/brand_color"
+                        app:drawableLeftCompat="@drawable/baseline_attach_file_24" />
+
+                </LinearLayout>
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    />
+                <LinearLayout
+                    android:id="@+id/llSubmitReport"
+                    android:layout_width="10dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="5dp"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:text="Submitted Report"
+                        android:textColor="@color/brand_color"
+                        app:drawableTint="@color/brand_color"
+                        app:drawableLeftCompat="@drawable/search" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                />
 
             <LinearLayout
                 android:id="@+id/llFile"
@@ -204,9 +276,11 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llPostAnswer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
             android:layout_alignParentBottom="true">
 
             <RelativeLayout

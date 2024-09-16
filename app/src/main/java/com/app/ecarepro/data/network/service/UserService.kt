@@ -430,6 +430,11 @@ interface UserService {
         @Query("ID") iD: String,
     ): NetworkViewAssignment
 
+    @GET("Academic/AssignmentDTL")
+    suspend fun assignmentDTL(
+        @Query("ID") iD: String,
+    ): NetworkViewAssignment
+
     @GET("Academic/AssignmnetSubmissionRPT")
     suspend fun assignmnetSubmissionRPT(
         @Query("ID") iD: String,
@@ -532,6 +537,11 @@ interface UserService {
 
     @GET("Report/StaffProfile")
     suspend fun getStaffProfile(
+        @Query("SID") sId: Int
+    ): NetworkStaffProfile
+
+    @GET("Staff/Profile")
+    suspend fun getStaffProfileMain(
         @Query("SID") sId: Int
     ): NetworkStaffProfile
 

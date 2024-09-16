@@ -23,7 +23,7 @@ class StaffProfileNavHostViewModel @Inject constructor(
     fun  getStaffProfile( sId: Int )=viewModelScope.launch {
         runCatching {
             staffProfileMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getStaffProfile(sId)
+            userRepository.getStaffProfileMain(sId)
         }.onSuccess {
             staffProfileMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

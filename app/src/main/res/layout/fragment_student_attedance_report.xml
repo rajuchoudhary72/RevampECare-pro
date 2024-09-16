@@ -49,236 +49,242 @@
               android:fillViewport="true">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical">
 
 
-                <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                    android:id="@+id/pieChartView"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_200sdp" />
-
                 <LinearLayout
+                    android:id="@+id/llMain"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp">
+                    android:orientation="vertical">
+                    <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+                        android:id="@+id/pieChartView"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_200sdp" />
 
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:padding="@dimen/_5sdp"
-                        app:srcCompat="@drawable/circle_green_solid" />
-
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:fontFamily="@font/ubuntu_regular"
-                        android:text="@string/present"
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_14sdp" />
+                        android:padding="@dimen/_10sdp">
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:srcCompat="@drawable/circle_green_solid" />
 
                         <TextView
-                            android:id="@+id/tvPresentPer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
-                            android:textColor="@color/grey_60"
-                            android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvPresentCount"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
-                            android:textColor="@color/grey_60"
-                            android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp">
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:padding="@dimen/_5sdp"
-                        app:srcCompat="@drawable/absent_circle2" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:fontFamily="@font/ubuntu_regular"
-                        android:text="@string/absent"
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_14sdp" />
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvAbsentPer"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="@string/present"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvPresentPer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvPresentCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        android:padding="@dimen/_10sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:srcCompat="@drawable/absent_circle2" />
 
                         <TextView
-                            android:id="@+id/tvAbsentCount"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="@string/absent"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvAbsentPer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvAbsentCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
 
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp">
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:padding="@dimen/_5sdp"
-                        app:srcCompat="@drawable/circle_leave" />
-
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:fontFamily="@font/ubuntu_regular"
-                        android:text="@string/leave"
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_14sdp" />
+                        android:padding="@dimen/_10sdp">
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:srcCompat="@drawable/circle_leave" />
 
                         <TextView
-                            android:id="@+id/tvLeavePer"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="@string/leave"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvLeavePer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvLeaveCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llLate"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                        android:padding="@dimen/_10sdp"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:srcCompat="@drawable/circle_late" />
+
 
                         <TextView
-                            android:id="@+id/tvLeaveCount"
-                            android:layout_width="match_parent"
+
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="Late "
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
 
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/llLate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:padding="@dimen/_5sdp"
-                        app:srcCompat="@drawable/circle_late" />
-
-
-                    <TextView
-
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:fontFamily="@font/ubuntu_regular"
-                        android:text="Late "
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_14sdp" />
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:id="@+id/tvLatePer"
-                            android:layout_width="match_parent"
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
-                            android:textColor="@color/grey_60"
-                            android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
+                            android:layout_weight="1">
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                            <TextView
+                                android:id="@+id/tvLatePer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/tvLateCount"
-                            android:layout_width="match_parent"
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_bold"
-                            android:gravity="end"
-                            android:textColor="@color/grey_60"
-                            android:textSize="@dimen/_14sdp" />
-                    </RelativeLayout>
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvLateCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
 
 
+                    </LinearLayout>
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

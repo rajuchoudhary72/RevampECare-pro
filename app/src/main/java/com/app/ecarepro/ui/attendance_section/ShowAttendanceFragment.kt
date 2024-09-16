@@ -56,9 +56,11 @@ class ShowAttendanceFragment : Fragment() {
         binding = FragmentShowAttendanceBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.autoCompleteYear.setAdapter(sessionAdapter)
-        toFragment = requireArguments().getString("studentID").toString()
-        toStartDate = requireArguments().getString("formDate").toString()
-        toEndDate = requireArguments().getString("tillDate").toString()
+        try {
+            toFragment = requireArguments().getString("studentID").toString()
+            toStartDate = requireArguments().getString("formDate").toString()
+            toEndDate = requireArguments().getString("tillDate").toString()
+        }catch (e:Exception){}
         binding.dateRange.setOnClickListener {
             pickDateRange()
         }

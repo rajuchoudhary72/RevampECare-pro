@@ -198,7 +198,7 @@ class FeeCertificateFragment : Fragment() {
         val file = File(getFilePath(fileName))
 
         if (file.exists()) {
-            val fileProviderAuthority = "{APPLICATION_ID}.fileprovider"
+            val fileProviderAuthority = "com.franciscan.ecare_pro.myFileProvider"
             val path: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 FileProvider.getUriForFile(requireContext(), fileProviderAuthority, file)
             } else {

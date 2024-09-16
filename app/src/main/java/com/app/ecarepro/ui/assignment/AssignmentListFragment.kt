@@ -91,32 +91,37 @@ class AssignmentListFragment(
                 /*this@AssignmentListFragment.findNavController() .navigate(R.id.action_assignmentListFragment_to_submitAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                 })*/
-                if (t.isSubmissionOpened==true){
-                    findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
-                        putParcelable(Constant.ASSIGNMENT_ID, t)
-                    })
-                }else{
-                    if (t.lateSubmission ){
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder.setTitle("Are you sure ?")
-                        builder.setMessage("The submission deadline for this assignment has passed. You may still submit your assignment, but it will be marked as a late submission")
+//                if (t.isSubmissionOpened==true){
+//                    findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+//                        putParcelable(Constant.ASSIGNMENT_ID, t)
+//                    })
+//                }else{
+//                    if (t.lateSubmission ){
+//                        val builder = AlertDialog.Builder(requireContext())
+//                        builder.setTitle("Are you sure ?")
+//                        builder.setMessage("The submission deadline for this assignment has passed. You may still submit your assignment, but it will be marked as a late submission")
+//
+//                        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
+//                            findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+//                                putParcelable(Constant.ASSIGNMENT_ID, t)
+//                            })
+//                        }
+//
+//                        builder.setNegativeButton(android.R.string.no) { dialog, which ->
+//
+//                        }
+//
+//                        builder.show()
+//                    }else{
+//                        mainActivity().showMessage("The submission deadline for this assignment has passed. ")
+//
+//                    }
+//                 }
 
-                        builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-                            findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
-                                putParcelable(Constant.ASSIGNMENT_ID, t)
-                            })
-                        }
+                findNavController().navigate(R.id.submitAssignmentFragment,Bundle().apply {
+                    putParcelable(Constant.ASSIGNMENT_ID, t)
+                })
 
-                        builder.setNegativeButton(android.R.string.no) { dialog, which ->
-
-                        }
-
-                        builder.show()
-                    }else{
-                        mainActivity().showMessage("The submission deadline for this assignment has passed. ")
-
-                    }
-                 }
 
             }
 

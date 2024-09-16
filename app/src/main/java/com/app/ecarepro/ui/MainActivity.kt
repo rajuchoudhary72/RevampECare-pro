@@ -404,7 +404,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-        systemViewModel.checkAppVersion()
+       // systemViewModel.checkAppVersion()
     }
 
 

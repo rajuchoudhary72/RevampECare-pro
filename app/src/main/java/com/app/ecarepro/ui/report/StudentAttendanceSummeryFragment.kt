@@ -55,7 +55,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvDate.text = Constant.dateToShow(date.toString())
-                    studentAttRepoViewModel.getAttendanceSummary(binding.tvDate.text.toString())
+                    studentAttRepoViewModel.getAttendanceSummary(Constant.toSystemDate(binding.tvDate.text.toString()))
                 }
             }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
         }
@@ -117,7 +117,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             }
         }
 
-        studentAttRepoViewModel.getAttendanceSummary(binding.tvDate.text.toString())
+        studentAttRepoViewModel.getAttendanceSummary(Constant.toSystemDate(binding.tvDate.text.toString()))
 
     }
 
@@ -125,65 +125,70 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave + data.totalLate
 
 
-        with(binding) {
+        if (totalStudent > 0) {
+            binding.llMain.isVisible = true
+            with(binding) {
 
-            tvAbsentCount.text = buildString {
-                append(data.totalAbsent)
-            }
-            tvLateCount.text = buildString {
-                append(data.totalLate)
-            }
-            tvLeaveCount.text = buildString {
-                append(data.totalLeave)
-            }
-            tvPresentCount.text = buildString {
-                append(data.totalPresent)
-            }
+                tvAbsentCount.text = buildString {
+                    append(data.totalAbsent)
+                }
+                tvLateCount.text = buildString {
+                    append(data.totalLate)
+                }
+                tvLeaveCount.text = buildString {
+                    append(data.totalLeave)
+                }
+                tvPresentCount.text = buildString {
+                    append(data.totalPresent)
+                }
 
-            try {
-                tvPresentPer.text = buildString {
+                try {
+                    tvPresentPer.text = buildString {
 
                         append(setCalculatedPercentageToInt(data.totalPresent, totalStudent))
 
-                    append("%")
-                }
+                        append("%")
+                    }
 
-                tvAbsentPer.text = buildString {
+                    tvAbsentPer.text = buildString {
 
-                    append(setCalculatedPercentageToInt(data.totalAbsent, totalStudent))
-                    append("%")
-                }
+                        append(setCalculatedPercentageToInt(data.totalAbsent, totalStudent))
+                        append("%")
+                    }
 
-                tvLeavePer.text = buildString {
+                    tvLeavePer.text = buildString {
 
-                    append(setCalculatedPercentageToInt(data.totalLeave, totalStudent))
+                        append(setCalculatedPercentageToInt(data.totalLeave, totalStudent))
 
-                    append("%")
-                }
-                tvLatePer.text = buildString {
+                        append("%")
+                    }
+                    tvLatePer.text = buildString {
 
-                    append(setCalculatedPercentageToInt(data.totalLate, totalStudent))
+                        append(setCalculatedPercentageToInt(data.totalLate, totalStudent))
 
-                    append("%")
-                }
+                        append("%")
+                    }
 
-                binding.pieChartView.aa_drawChartWithChartModel(
-                    getBarChartModel(
-                        setCalculatedPercentageToInt(data.totalPresent, totalStudent),
-                        setCalculatedPercentageToInt(data.totalLeave, totalStudent),
-                        setCalculatedPercentageToInt(data.totalAbsent, totalStudent),
-                        setCalculatedPercentageToInt(data.totalLate, totalStudent),
+                    binding.pieChartView.aa_drawChartWithChartModel(
+                        getBarChartModel(
+                            setCalculatedPercentageToInt(data.totalPresent, totalStudent),
+                            setCalculatedPercentageToInt(data.totalLeave, totalStudent),
+                            setCalculatedPercentageToInt(data.totalAbsent, totalStudent),
+                            setCalculatedPercentageToInt(data.totalLate, totalStudent),
 
+                            )
                     )
-                )
 
 
-            } catch (_: Exception) {
+                } catch (_: Exception) {
+
+                }
+
 
             }
-
-
-        }
+        }else{
+            binding.llMain.isVisible = false
+         }
 
 
     }

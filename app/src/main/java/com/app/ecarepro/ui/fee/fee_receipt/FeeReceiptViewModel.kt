@@ -4,12 +4,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
 import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
+import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.repository.UserRepository
@@ -48,6 +51,9 @@ class FeeReceiptViewModel @Inject constructor(
 
 
     }
+    private val feeCertificateDownloadMutableStateFlow: MutableStateFlow<NetworkResult<NetworkFeeCerDownload>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val feeCertificateDownloadStateFlow: StateFlow<NetworkResult<NetworkFeeCerDownload>> = feeCertificateDownloadMutableStateFlow
 
 
     private val feeReceiptMutableStateFlow: MutableStateFlow<NetworkResult<NetworkFeeReceipt>> = MutableStateFlow(
@@ -81,7 +87,25 @@ class FeeReceiptViewModel @Inject constructor(
     }
 
 
+    fun getFeeReceiptDownload(recid : String ,sessionid:Int)=viewModelScope.launch {
+        runCatching {
+            feeCertificateDownloadMutableStateFlow.value = NetworkResult.Loading()
+            fomApiRepository.getFeeReceiptDownload(
+                //"https://payment.agnelgreaternoida.org/api/certificate",
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/receiptdownload" ,
+                FeeReceiptDownloadRequest(
+                    userDataStore.getSchoolData()!!.schoolCode,
+                    userDataStore.getUserNameID().toString(),
+                    recid,"",sessionid
 
+                ) )
+        }.onSuccess {
+            feeCertificateDownloadMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            feeCertificateDownloadMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
 
 
 }
