@@ -35,12 +35,12 @@ import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileClickListener
-import com.app.ecarepro.utils.isAudioUrl
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.utils.isAudioUrl
 
 
 @AndroidEntryPoint
@@ -211,7 +211,12 @@ class ChatFragment : Fragment() {
         return pdfExtension == extension
     }
 
-
+   /* fun isAudioUrl(url: String): Boolean {
+        val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+        val extension = url.substringAfterLast(".", "").lowercase()
+        return audioExtensions.contains(extension)
+    }
+*/
 
     override fun onDestroyView() {
         super.onDestroyView()

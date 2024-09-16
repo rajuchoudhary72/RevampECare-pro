@@ -131,8 +131,9 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
-import com.app.ecarepro.data.network.model.VisitorDetails
+import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
@@ -253,6 +254,11 @@ interface UserService {
     @GET("Questionnaire/DeleteAnswer")
     suspend fun deleteAnswer(
         @Query("AnsID") ansID: Int
+    ): CommonResponse
+
+    @GET("Questionnaire/DeleteAnswer")
+    suspend fun deleteQID(
+        @Query("QID") QID: Int
     ): CommonResponse
 
     @GET("Questionnaire/AnswerList")
@@ -461,6 +467,7 @@ interface UserService {
         @Query("From") from: String,
         @Query("Till") till: String,
         @Query("YrID") yrID: String,
+        @Query("ID") ID: String,
     ): AttendanceResponse
 
     @GET("Academic/TeachersTimetable")
@@ -728,7 +735,7 @@ interface UserService {
         @Query("StID") stID : Int,
         @Query("AttDate") attDate: String,
         @Query("hasDroped") hasDropped: Boolean,
-    ): NetworkStudentToMarkTransAttendane
+    ): CommonResponse
 
     @GET("Report/AppMsgUses")
     suspend fun getAppMsgUses(
@@ -791,7 +798,7 @@ interface UserService {
 
     @POST("User/SaveUndertakingAckowledgement")
     suspend fun saveUserUndertaking(
-        @Query("UtID") id:String,
+        @Body request: UserUndertakingModule
     ): CommonResponse
 
     @GET("Academic/QuestionPaper")
@@ -931,16 +938,10 @@ interface UserService {
     suspend fun getFormData(
         @Url url:String
     ): AppointmentFormData
-
     @GET
     suspend fun getFormDataPurpose(
         @Url url:String
     ): FormDataPurposeResponseDto
-
-    @POST
-    suspend fun getVisitorDetails(
-        @Url url:String
-    ): VisitorDetailsDto
 
     @GET
     suspend fun getFormDataDepartments(
@@ -956,7 +957,10 @@ interface UserService {
     suspend fun getFormDataEmployee(
         @Url url:String
     ): FormDataEmployeeResponseDto
-
+    @POST
+    suspend fun getVisitorDetails(
+        @Url url:String
+    ): VisitorDetailsDto
     @POST
     suspend fun submitForm(
         @Url url:String,

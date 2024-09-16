@@ -20,7 +20,9 @@ class SelectMarkAttendanceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentSelectMarkAttendanceBinding.inflate(inflater,container,false)
-
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
          return binding.root
     }
 

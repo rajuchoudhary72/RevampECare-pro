@@ -24,6 +24,7 @@ data class Details(
     val lName: String,
     val mName: String,
     val maritalStatus: String,
+    val cbseid: String,
     val mobile: String,
     val name: String,
     val nationality: String,

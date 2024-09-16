@@ -90,12 +90,15 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
+import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
 import com.app.ecarepro.data.network.model.post_leave_request.HalfdayDTL
 import com.app.ecarepro.data.network.model.post_mark_attedance.StudentAtt
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
@@ -121,6 +124,7 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.Query
 
 interface UserRepository {
 
@@ -160,14 +164,12 @@ interface UserRepository {
     fun getFormData(): Flow<Result<List<Form>>>
     fun getFormDataPurpose(): Flow<Result<List<Purpose>>>
 
-    fun getVisitorDetails(): Flow<Result<VisitorDetails>>
-
     fun getFormDataDepartment(): Flow<Result<List<Department>>>
 
     fun getFormDataDesignationWithDepartment(departmentId:String): Flow<Result<List<Designation>>>
+    fun getVisitorDetails(): Flow<Result<VisitorDetails>>
 
     fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
-
     fun submitForm(formData:Map<String,String>): Flow<Result<String>>
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
@@ -207,6 +209,7 @@ interface UserRepository {
     suspend fun postAnswer(qid: String, answer: String): CommonResponse
 
     suspend fun deleteAnswer(ansID: Int): CommonResponse
+    suspend fun deleteQID(  QID: Int ): CommonResponse
     suspend fun addQuestion(
         question: String,
         attachment: String,
@@ -248,11 +251,11 @@ interface UserRepository {
         fromDate: String,
         tillDate: String,
         duration: Double,
-        halfdayDTL: List<HalfdayDTL>,
+        halfdayDTL: List<HalfdayDTL>?,
         reason: String,
-        attachment: String,
-        fileExt: String
-    ): CommonResponse
+        fileAttachment: FileAttachment?,
+
+        ): CommonResponse
 
     suspend fun leaveSetting(): NetworkLeaveSetting
 
@@ -378,7 +381,7 @@ interface UserRepository {
         submitDate: String,
         title: String,
         lateSubmission: Boolean,
-        attachments: Attachment?,
+        attachments: List<com.app.ecarepro.data.network.model.Attachment>?,
         classID_StID: List<ClassID_StID>,
         stIDs: String?
     ): CommonResponse
@@ -421,6 +424,7 @@ interface UserRepository {
         from: String,
         till: String,
          yrID: String,
+          ID: String,
     ): AttendanceResponse
     suspend fun teachersTimetable(
          id: String
@@ -442,8 +446,7 @@ interface UserRepository {
     fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(): Flow<Result<String>>
-    fun saveUserUndertaking(id:String): Flow<Result<String>>
-
+    fun saveUserUndertaking(request: UserUndertakingModule): Flow<Result<String>>
 
     suspend fun reportCardDTL(
         stID: Int
@@ -628,7 +631,7 @@ interface UserRepository {
         stID : Int,
         attDate: String,
         hasDropped: Boolean,
-    ): NetworkStudentToMarkTransAttendane
+    ): CommonResponse
 
     suspend fun getAppMsgUses(
         fromDate : String,

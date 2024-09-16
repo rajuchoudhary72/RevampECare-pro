@@ -127,6 +127,8 @@ class ConversationFragment : Fragment() {
                                         R.drawable.ic_audio
                                     } else if (message.msgType == 4) {
                                         R.drawable.ic_msg_type_sms
+                                    }  else if (message.msgType == 5) {
+                                        R.drawable.pdf
                                     } else {
                                         null
                                     }
@@ -138,6 +140,8 @@ class ConversationFragment : Fragment() {
                                         "Audio"
                                     } else if (message.msgType == 4) {
                                         "SMS"
+                                    } else if (message.msgType == 5) {
+                                        "PDF"
                                     } else {
                                         null
                                     }

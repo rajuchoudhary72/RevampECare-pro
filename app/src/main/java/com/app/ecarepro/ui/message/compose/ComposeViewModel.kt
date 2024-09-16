@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.message.compose
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.util.Base64
@@ -52,7 +53,8 @@ class ComposeViewModel @Inject constructor(
     private val messageRepository: MessageRepository,
     private val userDataStore: UserDataStore,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) :
+    ViewModel() {
 
     val composeMessageType =
         savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.ONLY_APP_MESSAGE)
@@ -80,7 +82,8 @@ class ComposeViewModel @Inject constructor(
             flow = contacts,
             flow2 = attachments,
             flow3 = composeMessageType
-        ) { contacts, attachments, composeMessageType ->
+        )
+        { contacts, attachments, composeMessageType ->
             Triple(contacts, attachments, composeMessageType)
         }
             .map { (contacts, attachments, composeMessageType) ->
@@ -212,7 +215,9 @@ class ComposeViewModel @Inject constructor(
             5
         } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
             3
-        } else {
+        } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
+            3
+        }else {
             2
         }
     }
@@ -268,7 +273,9 @@ class ComposeViewModel @Inject constructor(
             } else {
                 val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+              //  saveBitmapAndGetExtension(bitmap)
+                val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+          //      val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
                 Attachment(
                     attachment = imageString,
                     fileExt = imageExt,
@@ -279,7 +286,27 @@ class ComposeViewModel @Inject constructor(
             null
         }
     }
+    fun saveBitmapAndGetExtension(bitmap: Bitmap): String {
+        val file = File(context.cacheDir, "image_${System.currentTimeMillis()}.png")
 
+        // You can change the compress format as needed (JPEG, PNG, WEBP)
+        val compressFormat = Bitmap.CompressFormat.PNG
+
+        file.outputStream().use { outputStream ->
+            bitmap.compress(compressFormat, 100, outputStream)
+        }
+
+        // Get the file extension
+        return getImageExtension(bitmap, compressFormat)
+    }
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
     private fun isPdf(attachment: MiMedia) =
         mutableListOf(
             AttachmentType.PDF.name,

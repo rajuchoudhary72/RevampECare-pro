@@ -26,7 +26,6 @@
         android:layout_height="wrap_content"
         app:neumorph_lightSource="leftTop"
         app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
-
         app:neumorph_backgroundColor="@color/background_dashboard"
         app:neumorph_strokeWidth="@dimen/_1sdp"
         >

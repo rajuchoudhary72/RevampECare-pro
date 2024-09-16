@@ -16,6 +16,7 @@ import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.imageUrl
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -32,6 +33,11 @@ class PhotoSliderFragment : Fragment() {
     private   var  galleryType: Int  = 1
     private   var  isLike: Boolean  = false
     private   var  isFav: Boolean  = false
+
+    private   var  isAddFavouriteEnabled: Boolean  = false
+    private   var  isShareEnabled: Boolean  = false
+    private   var  isLikeEnabled: Boolean  = false
+
     private   var  likes: Int  = 0
     private var totalLikes = 0
 
@@ -49,6 +55,11 @@ class PhotoSliderFragment : Fragment() {
         isLike = requireArguments().getBoolean("isLiked")
         isFav = requireArguments().getBoolean("isFav")
         likes = requireArguments().getInt("likes")
+
+        isAddFavouriteEnabled = requireArguments().getBoolean("isAddFavouriteEnabled")
+        isShareEnabled = requireArguments().getBoolean("isShareEnabled")
+        isLikeEnabled = requireArguments().getBoolean("isLikeEnabled")
+
         return binding.root
     }
 
@@ -58,12 +69,24 @@ class PhotoSliderFragment : Fragment() {
         binding.btnClose.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.photoView.imageUrl(url)
-        binding.tvNumberLike.text=likes.toString()
+
+
+        binding.rlFav.isVisible=isAddFavouriteEnabled
+        binding.rlLikes.isVisible=isLikeEnabled
+        binding.rlShare.isVisible=isShareEnabled
+
+         binding.tvNumberLike.text = "$likes Likes "
         totalLikes=likes
 
         if (galleryType==Constant.GALLERY_TYPE_VIDEO ){
             binding.ivVideoPlay.isVisible=true
+            Picasso.get().load(url)
+                .placeholder(R.drawable.default_profile)
+                .into(binding.photoView)
+        }else{
+            Picasso.get().load(fullUrl)
+                .placeholder(R.drawable.default_profile)
+                .into(binding.photoView)
         }
 
         binding.ivVideoPlay.setOnClickListener {
@@ -103,14 +126,14 @@ class PhotoSliderFragment : Fragment() {
         binding.llLike.setOnClickListener {
             isLike = if (isLike){
                 totalLikes -= 1
-                binding.tvNumberLike.text=totalLikes.toString()
+                binding.tvNumberLike.text="$totalLikes Likes "
                 binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
                 photoSliderViewModel.manageLikes(Id,galleryType,false )
                 false
             }else{
 
                 totalLikes += 1
-                binding.tvNumberLike.text=totalLikes.toString()
+                binding.tvNumberLike.text="$totalLikes Likes "
                 binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
                 photoSliderViewModel.manageLikes(Id,galleryType,true )
                 true

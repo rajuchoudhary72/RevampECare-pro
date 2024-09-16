@@ -81,11 +81,12 @@ class AddSyllabusViewModel @Inject constructor(
         classID: Int,
         id: String,
         subID: Int,
-        title: String
+        title: String,
+        browsedFile: BrowsedFile?
     )=viewModelScope.launch {
         runCatching {
             saveSyllabusMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.saveSyllabus(PostSyllabus(getAttachment()!!,classID, id, subID, title))
+            userRepository.saveSyllabus(PostSyllabus(browsedFile ,classID, id, subID, title))
         }.onSuccess {
             saveSyllabusMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {

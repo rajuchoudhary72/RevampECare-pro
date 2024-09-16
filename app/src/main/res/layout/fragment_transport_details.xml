@@ -8,7 +8,7 @@
             type="com.app.ecarepro.model.TransDetails" />
     </data>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/_10sdp"
@@ -16,161 +16,241 @@
         android:padding="@dimen/_10sdp"
         tools:context=".ui.studentProfile.StudentProfileTransportDetailsFragment">
 
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/transport_type"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
+            android:orientation="vertical"
+            >
 
-        <TextView
-            android:id="@+id/tvTransportType"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.transportType}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+              >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/transport_type"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tvTransportType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.transportType}"
+                android:textColor="@color/grey_60" 
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/vehicle_number"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
+             >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/vehicle_number"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-             android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.vehicleNumber}"
+                android:textColor="@color/grey_60"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.vehicleNumber}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="Vehicle Type"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.vehicleType}"
+                android:textColor="@color/grey_60"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="Vehicle Type"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/driver_name"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-             android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.driverName}"
+                android:textColor="@color/grey_60"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.vehicleType}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/vehicle_name"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.vehicleNumber}"
+                android:textColor="@color/grey_60"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/driver_name"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/contact_no"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-             android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.driverName}"
+                android:textColor="@color/grey_60"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.driverName}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/route_no"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.routeNo}"
+                android:textColor="@color/grey_60"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/vehicle_name"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/route_incharge_name"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-             android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@{transDetails.schoolTransport.routeInchargeName}"
+                android:textColor="@color/grey_60"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+
+                android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.vehicleNumber}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:text="@string/route_incharge_mobile_no"
+                android:textColor="@color/grey_40"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:textSize="@dimen/_12sdp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/contact_no"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textColor="@color/grey_60"
+                android:text="@{transDetails.schoolTransport.routeInchargeMobile}"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
 
-        <TextView
-             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.vehicleNumber}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/route_no"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
-
-        <TextView
-             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.routeNumber}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/route_incharge_name"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
-
-        <TextView
-             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@{transDetails.routeNumber}"
-            android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/route_incharge_mobile_no"
-            android:textColor="@color/grey_40"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:textSize="@dimen/_12sdp" />
 
-        <TextView
-             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_medium"
-             android:textColor="@color/grey_60"
-            android:textSize="@dimen/_12sdp" />
+        </LinearLayout>
 
 
-    </LinearLayout>
+
+    </ScrollView>
 </layout>

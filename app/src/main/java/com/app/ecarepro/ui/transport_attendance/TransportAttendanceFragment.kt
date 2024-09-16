@@ -121,14 +121,17 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                          1 -> {
                           tripType=Constant.UP_TRIP
                              getStoppersList()
+                             binding.tvSave.isVisible=true
 
                          }
                          2 -> {
                              tripType=Constant.DOWN_TRIP
                              getStoppersList()
+                             binding.tvSave.isVisible=true
                          }
                          3 -> {
                              tripType=Constant.DROP_STUDENT_TRIP
+                             binding.tvSave.isVisible=false
                          }
                      }
                 }
@@ -261,14 +264,14 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                 transportAttendanceViewModel.getStudentToDrop(
                     routeID = routerSelectData.routeID,
                     stopID = stoppersSelectData.stopID,
-                    attDate = Constant.currentDate().toString()
+                    attDate = Constant.toSystemDate(Constant.currentDate().toString())
                 )
             }else{
                 transportAttendanceViewModel.getStudentToMarkTransAttendance(
                     routeIDs =   routerSelectData.routeID.toString(),
                     stopID= 0,
                     trip = tripType,
-                    attDate =  Constant.currentDate().toString(),
+                    attDate = Constant.toSystemDate(Constant.currentDate()),
                     stopIDs =ids.toString()
 
                 )
@@ -370,8 +373,12 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                              }
                          }
                      }
+
+                     binding.tvSelectStoppage.text= name
+                 }else{
+                     binding.tvSelectStoppage.text= stoppersSelectData.stopName
                  }
-                 binding.tvSelectStoppage.text= name
+
                  getStudentToMarkTransAttendance(ids)
                  builder.dismiss()
              }
@@ -393,7 +400,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
 
     override fun onItemClick(t: StuLst, pos: Int, action: Int) {
         if (action==Constant.DROP_CONFORM){
-            transportAttendanceViewModel.dropToStudent(t.stID,Constant.currentDate(),true).invokeOnCompletion {
+            transportAttendanceViewModel.dropToStudent(t.stID,Constant.toSystemDate(Constant.currentDate()),true).invokeOnCompletion {
                 Toast.makeText(requireContext(),"Updated Successfully!!!",Toast.LENGTH_SHORT).show()
             }
         }else{
@@ -406,7 +413,9 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
 
 
     private fun popUpDetailsMarkAttendance() {
-
+        p  = 0
+        a  = 0
+        l  = 0
 
         val tv_cancel: TextView
         val tv_ok: TextView
@@ -426,7 +435,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
             ColorDrawable(Color.TRANSPARENT)
         )
         dialog.window!!.attributes.windowAnimations = R.style.Animations
-        dialog.setContentView(R.layout.pop_up_mark_details_attendance)
+        dialog.setContentView(R.layout.pop_up_mark_details_trans_attendance)
         tv_cancel = dialog.findViewById(R.id.tv_cancel)
         tv_ok = dialog.findViewById(R.id.tv_ok)
         llLate = dialog.findViewById(R.id.llLate)
@@ -493,7 +502,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
         }
 
         transportAttendanceViewModel.postTransAttendance(
-            Constant.currentDate().toString(),
+            Constant.toSystemDate(Constant.currentDate().toString()),
             routerSelectData.routeID,
             0,
             requestList,

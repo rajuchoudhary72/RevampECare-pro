@@ -70,6 +70,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textUserName"
                 inputText="@{text}"
+                android:imeOptions="actionNext"
                 textWatcher="@{textWatcher}"
                 clickListener="@{clickListener}"
                 android:layout_width="match_parent"

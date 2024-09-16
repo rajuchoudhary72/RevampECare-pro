@@ -14,6 +14,8 @@ data class UserDashboardDto(
     val cards: List<Card>?,
     @SerializedName("proCards")
     val proCards: List<Card>?,
+    @SerializedName("dashboardButtons")
+    val dashboardButtons: List<DashboardButtons >?,
     @SerializedName("designation")
     val designation: String?,
     @SerializedName("errorCode")
@@ -56,6 +58,8 @@ data class UserDashboardDto(
     val showAdmissionModeComparison: Boolean?,
     @SerializedName("showStuCategoryStatistics")
     val showStuCategoryStatistics: Boolean?,
+    @SerializedName("showStuReligionWiseStatistics")
+    val showStuReligionWiseStatistics: Boolean?,
     @SerializedName("showLibraryDTL")
     val showLibraryDTL: Boolean?,
     @SerializedName("status")
@@ -74,12 +78,17 @@ data class UserDashboardDto(
     val bankBalance: List<BankBalance>?,
     @SerializedName("stuStatusWiseStatistics")
     val stuStatusWiseStatistics: List<StatusWiseStatistics>?,
-    @SerializedName("teacherWorkLoad")
-    val teacherWorkLoad: List<Workload>?,
     @SerializedName("admissionModeComparison")
     val admissionModeComparison: List<DataValue>?,
+    @SerializedName("teacherWorkLoad")
+    val teacherWorkLoad: List<Workload>?,
+    @SerializedName("stuReligionWiseStatistics")
+    val stuReligionWiseStatistics: List<DataValue>?,
+
     @SerializedName("stuCategoryWiseStatistics")
     val stuCategoryWiseStatistics: List<DataValue>?,
+
+
     @SerializedName("questionnaire")
     val questionnaire: List<Questionnaire>?,
     @SerializedName("libraryDTL")
@@ -89,7 +98,16 @@ data class UserDashboardDto(
     @SerializedName("admissionComparison")
     val admissionComparison: AdmissionComparison?,
 )
-
+data class Workload(
+    @SerializedName("id")
+    val id: String?,
+    @SerializedName("periodCount")
+    val periodCount: Int?,
+    @SerializedName("photo")
+    val photo: String?,
+    @SerializedName("teacherName")
+    val teacherName: String?
+)
 data class Activity(
     @SerializedName("duration")
     val duration: Int?,
@@ -104,7 +122,6 @@ data class Activity(
     @SerializedName("title")
     val title: String?
 )
-
 data class AttendanceSummary(
     @SerializedName("classSummary")
     val classSummary: List<ClassSummary>?,
@@ -151,18 +168,6 @@ data class BirthDayCard(
 ) {
     fun getIconUrl() = BASE_URL_COM + icon
 }
-
-
-data class Workload(
-    @SerializedName("id")
-    val id: String?,
-    @SerializedName("periodCount")
-    val periodCount: Int?,
-    @SerializedName("photo")
-    val photo: String?,
-    @SerializedName("teacherName")
-    val teacherName: String?
-)
 
 data class Card(
     @SerializedName("color")
@@ -386,4 +391,14 @@ data class Questionnaire(
     val userID: Int?,
     @SerializedName("userType")
     val userType: Int?
+)
+
+
+data class DashboardButtons(
+
+
+    @SerializedName("buttonName")
+    val buttonName: String?,
+    @SerializedName("isShow")
+    val isShow: Boolean?
 )

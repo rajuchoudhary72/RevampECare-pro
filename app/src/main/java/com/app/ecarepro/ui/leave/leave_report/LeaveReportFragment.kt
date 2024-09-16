@@ -85,17 +85,20 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 R.id.btn_pen -> {
                     leaveReportAdapter.clearData()
                     status=0
+                    pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
                 }
                 R.id.btn_app -> {
                     leaveReportAdapter.clearData()
                     status=1
+                    pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
                 }
 
                 else -> {
                     leaveReportAdapter.clearData()
                     status=2
+                    pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
                 }
             }
@@ -130,12 +133,17 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                             binding.recyclerLeaveReport.isVisible = true
                             binding.tvNoData.isVisible = false
 
-
-                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction)
+                            if (pageIndex==1){
+                                leaveReportAdapter.clearData()
+                             }
+                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction,applType,status)
 
                         }else{
-                            binding.recyclerLeaveReport.isVisible = false
-                            binding.tvNoData.isVisible = true
+                            if (pageIndex==1){
+                                binding.recyclerLeaveReport.isVisible = false
+                                binding.tvNoData.isVisible = true
+                            }
+
                         }
 
 
@@ -158,12 +166,22 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 )
             }
             1 -> {
-                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0)
-                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0).invokeOnCompletion {
+                    leaveReportAdapter.clearData()
+                    status=0
+                    pageIndex=1
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                }
+
             }
             2 -> {
                 leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0)
-                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    .invokeOnCompletion {
+                        leaveReportAdapter.clearData()
+                        status=0
+                        pageIndex=1
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    }
             }
         }
      }

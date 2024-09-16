@@ -163,42 +163,60 @@ class PostAssignmentViewModel @Inject constructor(
     }
 
 
-    private fun getAttachment(): com.app.ecarepro.data.network.model.Attachment? {
+    private fun getAttachment(): List<com.app.ecarepro.data.network.model.Attachment>? {
         val attachments = attachments.value
+        val attList= mutableListOf<com.app.ecarepro.data.network.model.Attachment>()
         return if (attachments.isEmpty()) {
             null
-        } else if (attachments.size == 1) {
-            val attachment = attachments.first()
+        } else   {
+            for (attachment in attachments) {
+                if (isPdf(attachment)) {
+                    val file = context.getFile(attachment.path?.toUri())
+                    val attach = getBase64StringFromUri(file!!.toUri())
+                    attList.add(com.app.ecarepro.data.network.model.Attachment(
+                        attachment = attach,
+                        fileExt = getFileExtension(file),
+                        fileURL = null
+                    ))
+                } else {
+                    val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                    val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+                    attList.add(com.app.ecarepro.data.network.model.Attachment(
+                        attachment = imageString,
+                        fileExt = imageExt,
+                        fileURL = null
+                    ))
+                }
+            }
+
+            return attList
+        }
+    }
+
+
+    private fun getMultipleAttachment(): List<String>? {
+        val attachments = attachments.value
+        if (attachments.isEmpty() || attachments.size > 0)
+            return null
+
+        return attachments.map { attachment ->
             if (isPdf(attachment)) {
                 if (attachment.name == AttachmentType.RECORDING.name) {
                     val file = File(attachment.path)
-                    val attach = getBase64StringFromUri(file)
-                    com.app.ecarepro.data.network.model.Attachment(
-                        attachment = attach,
-                        fileExt = getFileExtension(file),
-                        fileURL = null
-                    )
+                    getBase64StringFromUri(file) ?: ""
                 } else {
                     val file = context.getFile(attachment.path?.toUri())
-                    val attach = getBase64StringFromUri(file!!.toUri())
-                    com.app.ecarepro.data.network.model.Attachment(
-                        attachment = attach,
-                        fileExt = getFileExtension(file),
-                        fileURL = null
-                    )
+                    getBase64StringFromUri(file!!.toUri()) ?: ""
                 }
             } else {
-                val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
-                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
-                com.app.ecarepro.data.network.model.Attachment(
-                    attachment = imageString,
-                    fileExt = imageExt,
-                    fileURL = null
+                FileAccess.bitmapToByteArrayBase64String(
+                    FileAccess.bitmapFromFile(
+                        context,
+                        attachment.path!!
+                    )
                 )
             }
-        } else {
-            null
         }
     }
 

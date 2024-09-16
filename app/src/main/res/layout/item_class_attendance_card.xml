@@ -79,13 +79,11 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category1"
                 app:lv_text="Present" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/lv_present_late"
-                subTitle="@{String.valueOf(classSummary.present+classSummary.late)}"
+                subTitle="@{String.valueOf(classSummary.late)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -93,9 +91,7 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/lv_present"
                 app:layout_constraintTop_toBottomOf="@id/title"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category1"
-                app:lv_text="Present + Late" />
+                app:lv_text="Late" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/lv_absent"
@@ -107,8 +103,6 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lv_present"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category2"
                 app:lv_text="Absent" />
 
             <com.app.ecarepro.ui.views.LegendView
@@ -121,8 +115,6 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/lv_absent"
                 app:layout_constraintTop_toBottomOf="@id/lv_present"
-                app:lv_image="@drawable/ic_person"
-                app:lv_image_tint="@color/category3"
                 app:lv_sub_text="1011"
                 app:lv_text="Leave" />
 

@@ -55,7 +55,7 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
             staffListViewModel.searchQuery.collectLatest {
 
                 if (it.isNotEmpty() && teacherList!=null){
-                    teacherListFilter = teacherList!!.filter { s -> s .name.lowercase().contains(it.lowercase())   }
+                    teacherListFilter = teacherList!!.filter { s ->   s .name.lowercase().contains(it.lowercase()) || s .mobile.lowercase().contains(it.lowercase()) || s .designation.lowercase().contains(it.lowercase()) || s .mobile.lowercase().contains(it.lowercase())  }
                     setupRecycleViewStudentList(teacherListFilter)
                 }else{
                     teacherList?.let { it1 -> setupRecycleViewStudentList(it1) }
@@ -92,11 +92,8 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
                         binding.rvStaffList.isVisible = true
 
                         if (it.data!=null){
-
+                            teacherList = it.data.staffs
                             setupRecycleViewStudentList(it.data.staffs)
-
-
-
                         }
 
                     }
@@ -126,8 +123,7 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
     private fun setupRecycleViewStudentList(staffs: List<Staff>) {
         if ( staffs != null) {
 
-
-            if ( staffs.isNotEmpty()) {
+         if ( staffs.isNotEmpty()) {
                 binding.rvStaffList.isVisible = true
                 binding.tvNoData.isVisible = false
 

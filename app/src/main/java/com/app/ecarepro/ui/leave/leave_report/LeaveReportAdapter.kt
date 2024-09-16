@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LeaveReportListItemBinding
 import com.app.ecarepro.model.Dtl
+import com.squareup.picasso.Picasso
 
 class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                          private var leaveReportFragment: LeaveReportFragment
@@ -14,7 +16,9 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
     RecyclerView.Adapter<LeaveReportAdapter.LeaveHistoryViewHolder>() {
 
         private lateinit var binding:   LeaveReportListItemBinding
-        private var canTalkeAction = false
+        private var canTalkeAction = true
+        private var applType: Int=0
+        private var status: Int=0
 
 
 
@@ -33,10 +37,43 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         with(binding) {
              val data =leaveList[position]
 
+             if (data.attachment!=null){
+                 llFile.isVisible=data.attachment.isNotEmpty()
+             }
+
              tvAppliedOn.text= buildString {
                 append("Applied On : ")
                 append(data.submittedOn)
             }
+            if (status==1){
+                tvHolderApproveBy.text= buildString {
+                    append("Approved By : ")
+                }
+                tvHolderApproveOn.text= buildString {
+                    append("Approved On : ")
+                }
+            }else if (status==2){
+                tvHolderApproveBy.text= buildString {
+                    append("Rejected By : ")
+                }
+                tvHolderApproveOn.text= buildString {
+                    append("Rejected On : ")
+            }}
+
+            tvApproveBy.text= buildString {
+                 append(data.teacherName)
+            }
+            tvApproveOn.text= buildString {
+                append(data.actionOn)
+            }
+
+            llApplicant.isVisible = data.status != "Pending"
+
+            llApproveRej.isVisible=data.status=="Pending"
+
+           // llApproveRej.isVisible=canTalkeAction
+
+
 
             tvApprove.setOnClickListener {
                 leaveReportFragment.onItemClick(data,1,false)
@@ -48,15 +85,35 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 leaveReportFragment.onItemClick(data,0,false)
             }
 
-            if (canTalkeAction){
-                llApproveRej.isVisible=data.status=="Pending"
+
+
+            if (applType==3){
+                tvApplicant.isVisible=false
+                tvApplicantVal.isVisible=false
+                textUserName.text= buildString {
+                     append(data.applicantName)
+                }
+                Picasso.get().
+                load(data.applicantPhoto)
+                    .placeholder(R.drawable.default_profile)
+                    .  into(binding .userImg)
+                }else{
+                textUserName.text= buildString {
+                    append(data.studentName)
+                }
+                Picasso.get().
+                load(data.studentPhoto)
+                    .placeholder(R.drawable.default_profile)
+                    .  into(binding .userImg)
             }
 
         }
    }
 
-    fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean){
+    fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean, applType: Int, status: Int){
         this.canTalkeAction=canTalkeAction
+        this.applType=applType
+        this.status=status
         this. leaveList.addAll(leaveList)
 
         notifyDataSetChanged()

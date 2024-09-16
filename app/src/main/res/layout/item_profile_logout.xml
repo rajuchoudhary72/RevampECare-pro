@@ -8,11 +8,9 @@
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
-
         <variable
             name="version"
             type="java.lang.String" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

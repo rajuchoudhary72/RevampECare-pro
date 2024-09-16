@@ -52,14 +52,33 @@ class BirthdayFragment : Fragment() {
             userType = requireArguments().getInt("uType")
             monthSelected = requireArguments().getString("monthSelected").toString().toInt()
             dateSelected = requireArguments().getString("dateSelected").toString()
+
+            if (userType == Constant.STAFF_TYPE) {
+                binding.toggleButtonTypeUser.check(R.id.btn_class_staff)
+            } else {
+                binding.toggleButtonTypeUser.check(R.id.btn_student)
+            }
+
+            if (rptType == 2) {
+                binding.autoInputClassInputLayout.isVisible=true
+                binding.tvDate.isVisible=false
+                binding.rbMonthWise.isChecked=true
+            }else{
+                binding.autoInputClassInputLayout.isVisible=false
+                binding.tvDate.isVisible=true
+                binding.tvDate.text = Constant.currentDate()
+                binding.rbDateWise.isChecked=true
+                if (dateSelected.isEmpty()) {
+                    binding.tvDate.text = Constant.currentDate()
+                } else {
+                    binding.tvDate.text = dateSelected
+                }
+            }
+
         } catch (e: Exception) {
         }
 
-        if (dateSelected.isEmpty()) {
-            binding.tvDate.text = Constant.currentDate()
-        } else {
-            binding.tvDate.text = dateSelected
-        }
+
 
         bindMonthArray()
 
@@ -70,6 +89,22 @@ class BirthdayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rbMonthWise -> {
+                    rptType = 2
+                    binding.autoInputClassInputLayout.isVisible=true
+                    binding.tvDate.isVisible=false
+
+                }
+                R.id.rbDateWise -> {
+                    rptType = 1
+                    binding.autoInputClassInputLayout.isVisible=false
+                    binding.tvDate.isVisible=true
+                }
+            }
+        }
+
 
         binding.toggleButtonTypeUser.addOnButtonCheckedListener { _, _, _ ->
             when (binding.toggleButtonTypeUser.checkedButtonId) {
@@ -79,7 +114,18 @@ class BirthdayFragment : Fragment() {
                             userType,
                             rptType,
                             monthSelected,
-                            binding.tvDate.text.toString()
+                            Constant.toSystemDate(binding.tvDate.text.toString())
+                    )
+
+
+                }
+                R.id.btn_parent -> {
+                    userType = Constant.PARENT_TYPE
+                    birthdayViewModel.birthday(
+                        userType,
+                        rptType,
+                        monthSelected,
+                        Constant.toSystemDate(binding.tvDate.text.toString())
                     )
 
 
@@ -91,7 +137,7 @@ class BirthdayFragment : Fragment() {
                             userType,
                             rptType,
                             monthSelected,
-                            binding.tvDate.text.toString()
+                        Constant.toSystemDate(binding.tvDate.text.toString())
                     )
 
                 }
@@ -99,15 +145,15 @@ class BirthdayFragment : Fragment() {
         }
 
         binding.tvDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvDate.text = date
+                    binding.tvDate.text = Constant.dateToShow(date.toString())
                     rptType = 1
                     birthdayViewModel.birthday(
                             userType,
                             rptType,
                             monthSelected,
-                            binding.tvDate.text.toString()
+                        Constant.toSystemDate(binding.tvDate.text.toString())
                     )
 
                 }
@@ -120,11 +166,11 @@ class BirthdayFragment : Fragment() {
                 AdapterView.OnItemClickListener { parent, view, pos, id ->
                     monthSelected = monthModelArrayList[pos].monthID
                     rptType = 2
-                    birthdayViewModel.birthday(
+                     birthdayViewModel.birthday(
                             userType,
                             rptType,
                             monthSelected,
-                            binding.tvDate.text.toString()
+                        Constant.toSystemDate(binding.tvDate.text.toString())
                     )
                 }
 
@@ -181,25 +227,27 @@ class BirthdayFragment : Fragment() {
             }
         }
 
-        birthdayViewModel.birthday(userType, rptType, monthSelected, binding.tvDate.text.toString())
 
-        if (monthSelected != null) {
+
             monthModelArrayList.forEach { d ->
                 if (monthSelected == d.monthID) {
                     binding.autoCompleteMonth.setText(d.month, false)
                 }
             }
-        }
 
-        if (dateSelected == "null") {
+
+
             binding.tvDate.text = Constant.currentDate()
-        }
+
 
         if (userType == Constant.STAFF_TYPE) {
             binding.toggleButtonTypeUser.check(R.id.btn_class_staff)
         } else {
             binding.toggleButtonTypeUser.check(R.id.btn_student)
         }
+
+        birthdayViewModel.birthday(userType, rptType, monthSelected, Constant.toSystemDate(binding.tvDate.text.toString()))
+
 
 
     }
@@ -258,7 +306,7 @@ class BirthdayFragment : Fragment() {
 
         val arrayAdapter = ArrayAdapter(
                 requireContext(),
-                R.layout.view_drop_down_menu,
+                android.R.layout.simple_list_item_1,
                 monthDataString
         )
         binding.autoCompleteMonth.setAdapter(arrayAdapter)

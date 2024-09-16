@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "8073aa2029e84dbd7de049b62e9bab1e",
+    "identityHash": "ec5f1035e8dec89c0781cb9ae00a7847",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `photo` TEXT, `userType` INTEGER NOT NULL, `auth_token` TEXT, `roleName` TEXT, `schoolCode` TEXT, `is_user_authenticated` INTEGER, `is_verified` INTEGER, `mobileNumber` TEXT, `classID` TEXT, `loginTime` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `photo` TEXT, `userType` INTEGER NOT NULL, `auth_token` TEXT, `roleName` TEXT, `schoolCode` TEXT, `is_user_authenticated` INTEGER, `is_verified` INTEGER, `mobileNumber` TEXT, `classID` TEXT)",
         "fields": [
           {
             "fieldPath": "userId",
@@ -71,12 +71,6 @@
           {
             "fieldPath": "classID",
             "columnName": "classID",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "loginTime",
-            "columnName": "loginTime",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -258,7 +252,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8073aa2029e84dbd7de049b62e9bab1e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ec5f1035e8dec89c0781cb9ae00a7847')"
     ]
   }
 }

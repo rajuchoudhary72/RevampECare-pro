@@ -340,6 +340,9 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
 
                             if (it.data.lessonPlans != null) {
 
+                                if (pageIndex == 1) {
+                                    lessonPlanListAdapter.clearData()
+                                }
                                 binding.recyclerLessonPlan.isVisible = true
                                 binding.tvNoData.isVisible = false
 
@@ -348,8 +351,11 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                                 lessonPlanListAdapter.notifyDataSetChanged()
 
                             } else {
-                                binding.recyclerLessonPlan.isVisible = false
-                                binding.tvNoData.isVisible = true
+                                if (pageIndex == 1) {
+                                    binding.recyclerLessonPlan.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
+
                             }
 
                         }
@@ -405,7 +411,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         }
     }
 
-    private fun popupFilter() {
+    private fun  popupFilter() {
         val menuItemView = requireView().findViewById<View>(R.id.menu_filter)
         val popupMenu = PopupMenu(requireContext(), menuItemView)
         popupMenu.menuInflater.inflate(R.menu.filter_menu_lesson_plan, popupMenu.menu)

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +17,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentQuestionnaireListBinding
 import com.app.ecarepro.model.Question
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -101,14 +101,19 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
                             isLoading=true
                             if (it.data.questions != null) {
-
+                                if (pageIndex==1){
+                                    noticeAdapter.clearData()
+                                }
                                 binding.recyclerQuestionnaire.isVisible = true
                                 binding.tvNoData.isVisible = false
-                                noticeAdapter.setData(it.data.questions)
+                                noticeAdapter.setData(it.data.questions,myQues)
 
                             } else {
-                                binding.recyclerQuestionnaire.isVisible = false
-                                binding.tvNoData.isVisible = true
+                                if (pageIndex==1){
+                                    binding.recyclerQuestionnaire.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
+
                             }
 
                         }
@@ -125,7 +130,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
         }
 
-        questionnaireViewModel.getQuestionnaireList(Constant.PAGE_INDEX, false)
+        questionnaireViewModel.getQuestionnaireList(pageIndex, false)
 
         binding.recyclerQuestionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -158,6 +163,20 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
         when (pos) {
             1 -> {
                 questionnaireViewModel.questionnaireLike(t.qid, boolean)
+            }
+            3 -> {
+                questionnaireViewModel.deleteAnswer(t.qid )
+                lifecycleScope.launch {
+                    questionnaireViewModel.deleteAnswerStateFlow.collectLatest {
+                        when (it) { is NetworkResult.Loading -> {
+                                (requireActivity() as MainActivity).showLoader(true)
+                            } is NetworkResult.Error -> {
+                                (requireActivity() as MainActivity).showLoader(false)
+                            }  is NetworkResult.Success -> {
+                                (requireActivity() as MainActivity).showLoader(false)
+                            mainActivity().showMessage(it.data!!.message.toString())
+                            questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
+                            } }  } }
             }
 
             4 -> {

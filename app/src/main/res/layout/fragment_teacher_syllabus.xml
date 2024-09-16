@@ -7,7 +7,7 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -18,11 +18,11 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
+             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
             app:title="Syllabus"
+            android:layout_alignParentTop="true"
             app:layout_constraintTop_toTopOf="parent"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
@@ -34,8 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
-            tools:listitem="@layout/teacher_syllabus_item"
+            android:layout_below="@+id/toolbar"
+             tools:listitem="@layout/teacher_syllabus_item"
 
             />
 
@@ -48,8 +48,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:fontFamily="@font/ubuntu_medium"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_centerInParent="true"
             android:visibility="gone"
             android:text="@string/no_Syllabus_available"
             android:textSize="16sp"
@@ -64,11 +63,11 @@
             android:layout_height="wrap_content"
             android:text="@string/add_syllabus"
             app:icon="@drawable/baseline_add_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+             android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
             android:layout_margin="15dp"
             />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 16
-        versionName = "1.1.14"
+        versionCode = 204
+        versionName = "2.1.74"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -73,12 +73,12 @@ android {
         }
         create("prod") {
             dimension = "build"
-            resValue("string", "app_name", "e-Care")
+            resValue("string", "app_name", "Franciscan e-Care")
         }
         create("beta") {
             dimension = "build"
            // applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "e-Care")
+            resValue("string", "app_name", "Franciscan e-Care")
            // signingConfig = signingConfigs.getByName("beta")
         }
     }
@@ -170,7 +170,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
+
 }

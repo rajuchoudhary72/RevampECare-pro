@@ -13,6 +13,7 @@ import com.app.ecarepro.data.network.Setting
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
     suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String)
+
     suspend fun getUser(): NetworkUserDetailsDto?
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)
@@ -43,6 +44,8 @@ interface UserDataStore {
     suspend fun saveUserType(userType: Int)
 
     suspend fun getUserType(): Int?
+
+
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
     suspend fun getAuthToken(): String?

@@ -12,8 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:background="@color/white"
+         android:background="@color/white"
         android:orientation="vertical"
          tools:ignore="RtlHardcoded">
 
@@ -33,7 +32,7 @@
                 app:strokeColor="?attr/colorOutlineVariant"
                 app:strokeWidth="1dp"
                 tools:src="@drawable/default_profile"
-                app:imageUrl="@{data.applicantPhoto}" />
+                  />
 
             <TextView
                 android:id="@+id/textUserName"
@@ -41,8 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/user_img"
-                android:text="@{data.applicantName}"
-                android:textSize="12sp"
+                 android:textSize="12sp"
                 android:fontFamily="@font/ubuntu_bold"
                 />
 
@@ -225,10 +223,82 @@
             android:textSize="@dimen/_12sdp" />
 
         <LinearLayout
-            android:id="@+id/llForwarded"
+            android:id="@+id/llApplicant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_applicant"
+            android:visibility="gone"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/tv_holder_approve_by"
+                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/_10sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:padding="@dimen/_2sdp"
+                    android:text="@string/approved_by"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/tv_approve_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingRight="@dimen/_2sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                     android:textColor="@color/grey_60"
+                    android:textSize="@dimen/_12sdp" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/tv_holder_approve_on"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:padding="@dimen/_2sdp"
+                    android:text="@string/approved_on"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/tv_approve_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingRight="@dimen/_2sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                     android:textColor="@color/grey_60"
+                    android:textSize="@dimen/_12sdp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llForwarded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llApplicant"
             android:visibility="gone"
             android:orientation="horizontal">
 
@@ -266,11 +336,10 @@
             android:background="@drawable/rectangle_border_gray_corner_radius"
             android:gravity="center"
             android:padding="@dimen/_5sdp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
+                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:ellipsize="end"
@@ -298,7 +367,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/llFile"
             android:layout_marginTop="@dimen/_10sdp"
-            android:visibility="gone">
+
+             >
 
             <TextView
                 android:id="@+id/tv_approve"
@@ -361,6 +431,12 @@
                 app:fontFamily="@font/ubuntu_bold" />
         </LinearLayout>
 
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_below="@+id/ll_approve_rej"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/_10sdp"
+             />
 
     </RelativeLayout>
 </layout>

@@ -56,7 +56,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="?actionBarSize"
-                        android:background="@color/md_theme_light_primary"
+                        android:background="@color/grey_light1"
                         android:gravity="center"
                         android:fitsSystemWindows="true"
                         android:orientation="vertical"
@@ -70,7 +70,7 @@
                             android:layout_height="wrap_content"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_marginHorizontal="10dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             android:layout_marginBottom="10dp"
 
@@ -113,11 +113,8 @@
                             android:layout_height="wrap_content"
                             app:tabGravity="fill"
                             app:tabMode="scrollable"
-                            android:background="@color/brand_color"
-                            app:tabIndicatorFullWidth="true"
-                            app:tabIndicatorColor="@color/white"
-                            app:tabTextColor="@color/grey"
-                            app:tabSelectedTextColor="@color/white" />
+                             app:tabIndicatorFullWidth="true"
+                             />
 
 
                     </LinearLayout>
@@ -137,6 +134,18 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+
+            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentQuestionPaperBinding
@@ -22,6 +24,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class QuestionPaperFragment : Fragment() {
@@ -33,6 +36,9 @@ class QuestionPaperFragment : Fragment() {
     private val questionPaperViewModel: QuestionPaperViewModel by viewModels()
     private lateinit var mMyClass: List<MyClasseItem>
     private var mMyClassDataString: ArrayList<String> = ArrayList()
+
+    @Inject
+    lateinit var userDataStore: UserDataStore
 
 
     override fun onCreateView(
@@ -66,7 +72,21 @@ class QuestionPaperFragment : Fragment() {
                 }
         }
 
-        getClasses()
+        lifecycleScope.launch {
+            userDataStore.getUser()?.run {
+                if (userType == Constant.STAFF_TYPE) {
+                    binding.autoInputClassInputLayout.isVisible=true
+                    getClasses()
+                } else {
+                    binding.autoInputClassInputLayout.isVisible=false
+                    try {
+                        classSelectedID=classID!!.toInt()
+                        getQuestionPaper(classID .toInt(), 0)
+                    }catch (e:Exception){}
+
+                }
+            }}
+
 
     }
 
@@ -148,6 +168,8 @@ class QuestionPaperFragment : Fragment() {
                                 binding.autoCompleteSelectYear.setAdapter(arrayAdapter)
                             }
                             if (it.data.qP_List != null) {
+                                binding.tvNoData.isVisible=false
+                                binding.viewPager.isVisible=true
                                 val fragmentList: ArrayList<Fragment> = ArrayList()
                                 it.data.qP_List.forEach {
                                     fragmentList.add(QuestionPaperSubFragment(it.questionPapers))
@@ -164,7 +186,13 @@ class QuestionPaperFragment : Fragment() {
                                 ) { tab, position ->
                                     tab.text = it.data.qP_List[position].subjectName
                                 }.attach()
+                            }else{
+                                binding.tvNoData.isVisible=true
+                                binding.viewPager.isVisible=false
                             }
+                        }else{
+                            binding.tvNoData.isVisible=true
+                            binding.viewPager.isVisible=false
                         }
                     }
                 }

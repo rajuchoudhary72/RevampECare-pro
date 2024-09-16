@@ -524,7 +524,11 @@
     <fragment
         android:id="@+id/selectMarkAttendanceFragment"
         android:name="com.app.ecarepro.ui.markAttendence.SelectMarkAttendanceFragment"
-        android:label="SelectMarkAttendanceFragment" >
+        android:label="SelectMarkAttendanceFragment"
+        android:theme="@style/Theme.Transparent"
+        android:windowSoftInputMode="stateHidden|adjustResize"
+
+        >
         <action
             android:id="@+id/action_selectMarkAttendanceFragment_to_stuMarkAttendanceFragment"
             app:destination="@id/stuMarkAttendanceFragment" />
@@ -887,12 +891,7 @@
         android:id="@+id/homeViewPagerFragment"
         android:name="com.app.ecarepro.ui.home.HomeViewPagerFragment"
         android:label="HomeViewPagerFragment" >
-        <action
-            android:id="@+id/action_homeViewPagerFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment"
-            app:popUpTo="@id/homeViewPagerFragment"
-            app:popUpToInclusive="true"
-            />
+
         <action
             android:id="@+id/action_homeViewPagerFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -908,6 +907,12 @@
         <action
             android:id="@+id/action_homeViewPagerFragment_to_messageFragment"
             app:destination="@id/messageFragment"
+            app:popUpTo="@id/homeViewPagerFragment"
+            app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/action_homeViewPagerFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
             app:popUpTo="@id/homeViewPagerFragment"
             app:popUpToInclusive="true"
             />

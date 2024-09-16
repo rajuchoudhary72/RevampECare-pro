@@ -95,29 +95,31 @@ class StudentListToMarkAttAdapter(
                     llTransportAtt.isVisible = false
                     tvTripTypeStatus.text = "Drop  Status"
                     if (stuLstList[absoluteAdapterPosition].isdropped) {
-                        llDrop.isVisible = true
-                        tvDrop.isVisible = false
+                         tvDrop.isVisible = false
                         tvDropped.isVisible = true
+                        llConformCancel.isVisible = false
                     } else {
-                        llConformCancel.isVisible = true
-                        llDrop.isVisible = false
-
+                        llConformCancel.isVisible = false
+                        tvDropped.isVisible = false
+                        tvDrop.isVisible = true
                         tvDrop.setOnClickListener {
-                            llDrop.isVisible = false
+                             tvDropped.isVisible = false
                             llConformCancel.isVisible = true
                         }
                         tvCancel.setOnClickListener {
-                            llDrop.isVisible = true
-                            tvDrop.isVisible = true
-                            tvDropped.isVisible = true
+                             tvDrop.isVisible = true
+                            tvDropped.isVisible = false
 
                             llConformCancel.isVisible = false
                         }
                         tvConform.setOnClickListener {
-                            llDrop.isVisible = true
                             tvDrop.isVisible = false
                             tvDropped.isVisible = true
-                            llConformCancel.isVisible = false  }
+
+                            llConformCancel.isVisible = false
+                            transportAttendanceFragment.onItemClick(stuLstList[absoluteAdapterPosition], absoluteAdapterPosition, Constant.DROP_CONFORM)
+
+                        }
 
                     }
                 } else if (tripType == Constant.DOWN_TRIP) {
@@ -196,10 +198,7 @@ class StudentListToMarkAttAdapter(
                     }
 
                 }
-                tvConform.setOnClickListener {
-                    transportAttendanceFragment.onItemClick(stuLstList[absoluteAdapterPosition], absoluteAdapterPosition, Constant.DROP_CONFORM)
 
-                }
 
 
             }

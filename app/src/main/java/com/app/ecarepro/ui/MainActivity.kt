@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -29,6 +30,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowCompat
@@ -62,6 +64,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -77,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
-
+    private lateinit var IMEINumber: String
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
@@ -183,10 +186,14 @@ class MainActivity : AppCompatActivity() {
         setUpBottomNavigationView()
 
         setUpMoreOptions()
+        try {
+            Picasso.setSingletonInstance(Picasso.Builder(this).build())
+        } catch (e: RuntimeException) {
+            e.toString()
+        }
 
-        //  Picasso.setSingletonInstance(Picasso.Builder(this).build())
         /* checking  for update version  */
-        //  checkAppVersion()
+          checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -232,6 +239,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        // Check for permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_STATE), 1)
+        } else {
+            // Permission is already granted, get the IMEI
+            getIMEINumber()
+        }
 
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -256,10 +272,57 @@ class MainActivity : AppCompatActivity() {
                     Log.e("FCM Token", "Unknown error", e)
                 }
             }
-
-
         intent?.extras?.let { data ->
             handleNotificationClick(data)
+        }
+
+    }
+    // Handle the permission request response
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getIMEINumber()
+            }
+        }
+    }
+
+    private fun getIMEINumber() {
+        val telephonyManager = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+
+        val imei: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // On Android 10 and above, getting IMEI directly is restricted
+            "Access Restricted"
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            telephonyManager.imei // For Android 8.0 and above
+        } else {
+            @Suppress("DEPRECATION")
+            telephonyManager.deviceId // Deprecated in Android O and above
+        }
+
+        imei?.let {
+            // Do something with the IMEI number
+            println("IMEI Number: $imei")
+
+
+        }
+    }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        intent?.extras?.let { data ->
+            handleNotificationClick(data)
+        }
+
+    }
+
+    private fun handleNotificationClick(data: Bundle) {
+        val menuId = data.getString("MenuId")?.toInt()
+        val childMenuId = data.getString("ChMenuID")?.toInt()
+        if (menuId != null) {
+            if (childMenuId != null) {
+                getFragmentId(menuId, childMenuId)
+            }
         }
     }
 
@@ -292,7 +355,31 @@ class MainActivity : AppCompatActivity() {
                             }
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
-                            if (versionCode < it.data.android.versionCode) {
+
+                            if (versionName < it.data.android.currentVersion) {
+                                // open  dialog
+                                if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
+                                    //soft  update
+                                    UpdateAppVersionDialog(
+                                        0,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                }else{
+                                    //force update
+                                    UpdateAppVersionDialog(
+                                        1,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                }
+                            }else{
+                                // nothing  open  version  dialog
+                            }
+
+                           /* if (versionCode < it.data.android.versionCode) {
+
+
                                 if (versionName == it.data.android.criticalVersion.trim()
                                 ) // force update
                                     UpdateAppVersionDialog(
@@ -306,7 +393,7 @@ class MainActivity : AppCompatActivity() {
                                         it.data.android.title,
                                         it.data.android.description
                                     )
-                            }
+                            }*/
                         }
 
                     }
@@ -363,7 +450,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.itemDrawerFooter.appVersion = "App Version 1.0.0"
+        binding.itemDrawerFooter.appVersion = "App Version: 2.1.62"
         binding.itemDrawerFooter.setClickListener {
             logout()
         }
@@ -516,12 +603,11 @@ class MainActivity : AppCompatActivity() {
         }
         when (menuID) {
             3 -> {
-
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
+                                if (roleName == "Principal" || roleName == "Management") {
                                     navController.navigate(
                                         R.id.classAndTeacherListFragment,
                                         Bundle().apply {
@@ -543,34 +629,58 @@ class MainActivity : AppCompatActivity() {
             }
 
             4 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_TIMETABLE)
-                                })
-                        } else {
-                            navController.navigate(R.id.timeTableNavHostFragment)
+
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                userDataStore.getUser()?.run {
+                                    if (roleName == "Principal" || roleName == "Management") {
+                                        navController.navigate(
+                                            R.id.classAndTeacherListFragment,
+                                            Bundle().apply {
+                                                putString(Constant.TO, Constant.FRA_TIMETABLE)
+                                            })
+                                    } else {
+                                        navController.navigate(R.id.timeTableNavHostFragment)
+                                    }
+                                }
+
+
+                            } else {
+                                navController.navigate(
+                                    R.id.timeTableNavHostFragment,
+                                    Bundle().apply {
+                                        putString(
+                                            Constant.TIME_TABLE_TYPE,
+                                            Constant.CLASS_TIME_TABLE
+                                        )
+                                    })
+                            }
+                        } catch (e: Exception) {
                         }
-
-                    } else {
-                        navController.navigate(R.id.timeTableNavHostFragment, Bundle().apply {
-                            putString(Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE)
-                        })
                     }
-                } catch (e: Exception) {
-
                 }
 
 
             }
 
-            5 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                navController.navigate(R.id.teacherSyllabusFragment)
-            } else {
-                navController.navigate(R.id.classSyllabus)
+            5 -> {
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.teacherSyllabusFragment)
+                            } else {
+                                navController.navigate(R.id.classSyllabus)
+                            }
+
+                        } catch (e: Exception) {
+                        }
+                    }
+                }
+
+
             }
 
 
@@ -579,16 +689,21 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
+               15 -> navController.navigate(R.id.questionPaperFragment)
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
-                try {
-                    if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.attendanceFragment)
-                    } else {
-                        navController.navigate(R.id.showAttendanceFragment)
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.attendanceFragment)
+                            } else {
+                                navController.navigate(R.id.showAttendanceFragment)
+                            }
+                        } catch (_: Exception) {
+                        }
                     }
-                } catch (_: Exception) {
                 }
             }
 
@@ -598,12 +713,20 @@ class MainActivity : AppCompatActivity() {
             21 -> navController.navigate(R.id.thoughtsListFragment)
 
             22 -> {
-                if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                    navController.navigate(R.id.appointmentReportFragment)
-                } else {
-                    navController.navigate(R.id.appointmentFragment)
-                }
+                lifecycleScope.launch {
+                    userDataStore.getUser()?.run {
+                        try {
+                            if (userType == Constant.STAFF_TYPE) {
+                                navController.navigate(R.id.appointmentReportFragment)
+                            } else {
+                                navController.navigate(R.id.appointmentFragment)
+                            }
 
+
+                        } catch (e: Exception) {
+                        }
+                    }
+                }
             }
 
             24 -> {
@@ -616,14 +739,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             25 -> navController.navigate(R.id.excellenceAwardFragment)
-            26 -> navController.navigate(R.id.selectMarkAttendanceFragment)
+            26 -> navController.navigate(R.id.stuMarkAttendanceFragment)
 
 
             27 -> {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         try {
-                            if (systemViewModel.UType == Constant.STAFF_TYPE) {
+                            if (userType == Constant.STAFF_TYPE) {
                                 lifecycleScope.launch {
                                     userDataStore.getSchoolData()?.let {
                                         it.marksEntryURL?.let { url ->
@@ -739,6 +862,11 @@ class MainActivity : AppCompatActivity() {
 
 
     fun getFragmentId(menuID: Int, childMenuId: Int) {
+        lifecycleScope.launch {
+            userDataStore.getUser()?.let {
+                systemViewModel.UType = userDataStore.getUserType()!!
+            }
+        }
         when (menuID) {
             1 -> {
                 when (childMenuId) {
@@ -799,17 +927,23 @@ class MainActivity : AppCompatActivity() {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
                     })
 
-                    12 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
-                            putString(Constant.USER_TYPE, Constant.USER_STAFF)
-                        })
-                    } else {
-                        navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                            putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
-                            putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
-                        })
+                    12 -> {
+                        lifecycleScope.launch {
+                            userDataStore.getUser()?.run {
+                                if (userType == Constant.STAFF_TYPE) {
+                                    navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                                        putString(Constant.USER_TYPE, Constant.USER_STAFF)
+                                    })
+                                } else {
+                                    navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_CLASS)
+                                        putString(Constant.USER_TYPE, Constant.USER_PARENT_STUDENT)
+                                    })
 
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -818,22 +952,27 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
                     14 -> navController.navigate(R.id.birthdayFragment)
-                    15 -> if (systemViewModel.UType == Constant.STAFF_TYPE) {
-                        if (systemViewModel.userRoleName == "Principal" || systemViewModel.userRoleName == "Management") {
-                            navController.navigate(
-                                R.id.classAndTeacherListFragment,
-                                Bundle().apply {
-                                    putString(Constant.TO, Constant.FRA_LESSON_PLAN)
-                                })
-                        } else {
-                            navController.navigate(R.id.lessonPlanListFragment)
 
+                    15 -> {
+                        lifecycleScope.launch {
+                            userDataStore.getUser()?.run {
+                                if (userType == Constant.STAFF_TYPE) {
+                                    if (roleName == "Principal" || roleName == "Management") {
+                                        navController.navigate(
+                                            R.id.classAndTeacherListFragment,
+                                            Bundle().apply {
+                                                putString(Constant.TO, Constant.FRA_LESSON_PLAN)
+                                            })
+                                    } else {
+                                        navController.navigate(R.id.lessonPlanListFragment)
+                                    }
+                                }
+                            }
                         }
-
                     }
 
                     16 -> navController.navigate(R.id.questionPaperFragment)
-                    //   42 -> navController.navigate(R.id.smsMsgReportFragment)
+                    40 -> navController.navigate(R.id.conversationReportFragment)
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                     47 -> navController.navigate(R.id.surveyListFragment)
@@ -870,7 +1009,6 @@ class MainActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
                         when (childMenuId) {
-
                             21 -> if (userType == Constant.STAFF_TYPE) {
                                 navController.navigate(R.id.appreciationSelectionFragment)
 
@@ -962,7 +1100,7 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             8 -> {
-                                navController.navigate(R.id.selectMarkAttendanceFragment)
+                                navController.navigate(R.id.stuMarkAttendanceFragment)
                             }
 
                         }
@@ -1255,8 +1393,13 @@ class MainActivity : AppCompatActivity() {
         ll_normal_update = dialog.findViewById(R.id.ll_normal_update)
         tv_title.text = title
         tv_description.text = message
-        if (dialog_value == 1) ll_critical_update.visibility = View.VISIBLE
-        else ll_normal_update.visibility = View.VISIBLE
+        if (dialog_value == 1) {
+            ll_critical_update.visibility = View.VISIBLE
+            ll_normal_update.visibility = View.GONE
+        } else {
+            ll_normal_update.visibility = View.VISIBLE
+            ll_critical_update.visibility = View.GONE
+        }
         rel_normal_update_cancel.setOnClickListener { dialog.dismiss() }
         rel_normal_update_update.setOnClickListener {
             try {
@@ -1296,22 +1439,6 @@ class MainActivity : AppCompatActivity() {
         if (null != intent.resolveActivity(context.packageManager)) {
             context.startActivity(intent)
         }
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        intent?.extras?.let { data ->
-            handleNotificationClick(data)
-        }
-
-    }
-
-    private fun handleNotificationClick(data: Bundle) {
-        val menuId = data.getInt("MenuId")
-        val childMenuId = data.getInt("ChMenuID")
-
-        getFragmentId(menuId, childMenuId)
     }
 
 }

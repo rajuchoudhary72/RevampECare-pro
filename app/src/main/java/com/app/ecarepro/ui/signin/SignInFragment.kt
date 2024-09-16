@@ -13,10 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.runBlocking
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
@@ -25,9 +25,9 @@ import com.google.android.gms.tasks.OnCompleteListener
 import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.util.concurrent.ExecutionException
+import com.app.ecarepro.data.datastore.UserDataStore
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,10 +40,8 @@ class SignInFragment : Fragment() {
 
     private var userNameValid = false
     private val systemViewModel: SystemViewModel by activityViewModels()
-
     @Inject
     lateinit var userDataStore: UserDataStore
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -90,6 +88,7 @@ class SignInFragment : Fragment() {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
                             if (arguments?.containsKey("add_account") == true) {
+                              //  findNavController().popBackStack()
                                 viewLifecycleOwner.lifecycleScope.launch {
                                     userDataStore.setCurrentUserId(it.userID)
                                     restartApp()
@@ -180,7 +179,6 @@ class SignInFragment : Fragment() {
         startActivity(intent)
         Runtime.getRuntime().exit(0)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

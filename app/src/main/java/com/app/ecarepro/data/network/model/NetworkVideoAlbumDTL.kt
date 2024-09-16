@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.model
 
+import com.app.ecarepro.model.photo_setting.AlbumSetting
+
 data class NetworkVideoAlbumDTL(
     val description: String,
     val errorCode: Int,
@@ -8,5 +10,6 @@ data class NetworkVideoAlbumDTL(
     val status: String,
     val title: String,
     val totalVideos: Int,
-    val videos: List<Video>
+    val videos: List<Video>,
+    val setting: AlbumSetting
 )

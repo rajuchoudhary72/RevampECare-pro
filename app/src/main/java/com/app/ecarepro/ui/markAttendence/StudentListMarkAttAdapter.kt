@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.markAttendence
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -40,10 +41,10 @@ class StudentListMarkAttAdapter(
         val data = studentListArrayList[position]
 
 
-        Picasso.get()
-            .load(data.photo)
+        Picasso.get().
+        load(data.photo)
             .placeholder(R.drawable.default_profile)
-            .networkPolicy(NetworkPolicy.OFFLINE).into(binding!!.userImg)
+            .  into(binding!!.userImg)
 
 
 
@@ -57,7 +58,7 @@ class StudentListMarkAttAdapter(
             append(data.otherDTL[1].value)
         }
 
-
+        binding.tvMarkLate.isVisible=isLateEnable
 
         if (canEdit) {
             binding.tvMarkPresent.isEnabled = true
@@ -220,7 +221,7 @@ class StudentListMarkAttAdapter(
                 data.isLate=0
                 studentListArrayList[ absoluteAdapterPosition] = data
 
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,1),absoluteAdapterPosition,false)
+               // stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,1),absoluteAdapterPosition,false)
 
             }
 
@@ -254,7 +255,7 @@ class StudentListMarkAttAdapter(
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
 
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,2),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,2),absoluteAdapterPosition,false)
             }
 
             3 -> {
@@ -278,14 +279,14 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkLeave.background =
-                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_leave)
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.background_box_rectangle_blue)
                 binding.tvMarkNa.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
                 data.status=3
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,3),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,3),absoluteAdapterPosition,false)
             }
 
             4 -> {
@@ -316,7 +317,7 @@ class StudentListMarkAttAdapter(
                 data.status=1
                 data.isLate=1
                 studentListArrayList[absoluteAdapterPosition] = data
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(1,data .stID,1),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(1,data .stID,1),absoluteAdapterPosition,false)
             }
 
             5 -> {
@@ -346,7 +347,7 @@ class StudentListMarkAttAdapter(
                 data.status=4
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
-                stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,4),absoluteAdapterPosition,false)
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,4),absoluteAdapterPosition,false)
             }
         }
     }

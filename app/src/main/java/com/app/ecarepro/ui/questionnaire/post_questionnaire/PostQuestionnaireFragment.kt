@@ -25,8 +25,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PostQuestionnaireFragment : Fragment() {
 
-    private lateinit var imageExt: String
-    private lateinit var imageString: String
+    private   var imageExt: String =""
+    private   var imageString: String =""
     private lateinit var binding: FragmentPostQustionnaireBinding
     private val viewMode: PostQuestionViewModel by viewModels()
 
@@ -35,7 +35,9 @@ class PostQuestionnaireFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostQustionnaireBinding.inflate(inflater, container, false)
-
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 
@@ -54,10 +56,12 @@ class PostQuestionnaireFragment : Fragment() {
             viewMode.addQuestion(
                 binding.textFiledThoughts.text.toString(),
                 imageString, "", imageExt
-            )
+            ).invokeOnCompletion {
+                mainActivity().showMessage(getString(R.string .successfully))
+                findNavController().popBackStack()
+            }
 
-            mainActivity().showMessage(getString(R.string .successfully))
-            findNavController().popBackStack()
+
         }
 
         binding.btnAddImage.setOnClickListener {

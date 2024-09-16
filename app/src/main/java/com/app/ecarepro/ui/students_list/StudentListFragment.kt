@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RadioGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,15 +29,21 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class StudentListFragment : Fragment(), ItemListener<Student> {
+class  StudentListFragment : Fragment(), ItemListener<Student> {
 
     private var filterPos: Int = 0
-    private var studentList: List<Student>? = null
+    private var studentList= mutableListOf<Student>()
     private lateinit var studentListFilter: List<Student>
     private var toFragment: String = ""
     private lateinit var binding: FragmentStudentListBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
+    private var sortType = 0
+    private var rollNoFilterAsc=true
+    private var admissionFilterAsc=true
+    private var nameFilterAsc=true
+
+
 
     private val filterList =
         listOf<String>("Name", "Admission Number", "Class", "Father Name", "Contact Number")
@@ -158,7 +165,7 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
 
                         if (it.data != null) {
 
-                            studentList = it.data.students
+                            studentList = it.data.students.toMutableList()
                             setupRecycleViewStudentList(it.data.students)
 
 
@@ -181,17 +188,68 @@ class StudentListFragment : Fragment(), ItemListener<Student> {
         checkIsBoarding()
 
 
+//        binding.imgFilter.setOnClickListener {
+//            popupFilter()
+//        }
 
 
+        binding.tvSortByRollNo.setOnClickListener {
+            rollNoFilterAsc=!rollNoFilterAsc
+            if (studentList!=null){
+                studentList = if (rollNoFilterAsc) studentList.sortedBy  { it.rollNumber }.toMutableList()
+                else  studentList.sortedByDescending { it.rollNumber }.toMutableList()
+                setupRecycleViewStudentList(studentList)
+            }
+
+        }
+        binding.tvSortByAdmission.setOnClickListener {
+            admissionFilterAsc=!admissionFilterAsc
+            if (studentList!=null){
+                studentList = if (admissionFilterAsc) studentList.sortedBy  { it.admissionNumber }.toMutableList()
+                else  studentList.sortedByDescending { it.admissionNumber }.toMutableList()
+                setupRecycleViewStudentList(studentList)
+            }
+            }
+
+        binding.tvSortByName.setOnClickListener {
+            nameFilterAsc=!nameFilterAsc
+            if (studentList!=null){
+                studentList = if (nameFilterAsc) studentList.sortedBy  { it.name.trim().lowercase() }.toMutableList()
+                else  studentList.sortedByDescending { it.name.trim().lowercase()  }.toMutableList()
+                setupRecycleViewStudentList(studentList)
+            }
+        }
 
 
     }
 
 
+    private fun  popupFilter() {
+        val menuItemView = requireView().findViewById<View>(R.id.menu_filter)
+        val popupMenu = PopupMenu(requireContext(), menuItemView)
+        popupMenu.menuInflater.inflate(R.menu.filter_menu_student_list, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { item ->
+            setFilterAction(item.itemId)
+            true
+        }
+        popupMenu.show()
+    }
+
+    private fun setFilterAction(type: Int) {
+        when (type) {
+            R.id.menu_by_roll_no -> {
+                  }
+
+            R.id.menu_by_admission_no -> {
+
+               }  }
+    }
+
     private fun setupRecycleViewStudentList(students: List<Student>) {
         if (students.isNotEmpty()) {
             binding.rvStudentList.isVisible = true
             binding.tvNoData.isVisible = false
+
 
 
             val circularAdapter = StudentListAdapter(

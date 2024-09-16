@@ -223,6 +223,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
+            android:visibility="gone"
             android:hint="@string/enter_your_reason"
 
             >
@@ -320,6 +321,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="@string/terms_and_conditions"
+                android:textColor="@color/grey_60"
                 app:fontFamily="@font/ubuntu_medium" />
         </LinearLayout>
 

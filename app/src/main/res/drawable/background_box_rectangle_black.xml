@@ -2,8 +2,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <stroke
         android:width="@dimen/_1sdp"
-        android:color="@color/grey_light" />
+        android:color="@color/grey_60" />
 
-    <solid android:color="@color/white" />
+    <solid android:color="@color/background_dashboard" />
     <corners android:radius="@dimen/_5sdp" />
 </shape>

@@ -19,6 +19,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.Video
 import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
 import com.app.ecarepro.model.Photo
+import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
@@ -36,7 +37,7 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
     private lateinit var albumDTLAdapter: VideoAlbumDTLAdapter
     private lateinit var binding: FragmentPhotoAlbumDTLBinding
    private val videoAlbumDTLViewModel : VideoAlbumDTLViewModel by viewModels()
-
+    private lateinit var albumSetting: AlbumSetting
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
     private var totalItemCount: Int = 0
@@ -113,7 +114,7 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
                                 } else {
                                     binding.tvMore.setVisibility(View.GONE)
                                 }
-
+                                albumSetting=it.data.setting
                                 albumDTLAdapter.setData(it.data.videos.toMutableList())
 
                             }else{
@@ -180,6 +181,9 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
                 putBoolean("isLiked", t.isLike)
                 putBoolean("isFav", t.isFavourite)
                 putInt("likes", t.likes)
+                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled)
+                putBoolean("isShareEnabled", albumSetting.isShareEnabled)
+                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled)
             })
     }
 

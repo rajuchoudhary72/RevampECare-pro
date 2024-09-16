@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -19,14 +20,13 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentProfileAttendanceBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.ProfileAttendanceDTL
+import com.app.ecarepro.model.SummaryAttendance
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
 import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
-import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,8 +37,9 @@ import kotlin.math.roundToInt
 class StudentProfileAttendanceFragment(
     private val attendanceDTL: ProfileAttendanceDTL,
     private val academicYears: List<AcademicYear>,
-    private val studentID: Int
-) : Fragment() {
+    private val studentID: Int,
+    private val  monthID: String
+) : Fragment() ,ItemListener<SummaryAttendance> {
 
     private lateinit var selectedYearData: AcademicYear
     private lateinit var binding: FragmentStudentProfileAttendanceBinding
@@ -210,7 +211,7 @@ class StudentProfileAttendanceFragment(
                     append(setCalculatedPercentageToInt(attendanceDTL.late, attendanceDTL.working))
                     append("%)")
                 }
-
+                binding.pieChartView. isClearBackgroundColor = true
                 binding.pieChartView.aa_drawChartWithChartModel(
                     getBarChartModel(
                         setCalculatedPercentageToInt(attendanceDTL.present, attendanceDTL.working).toInt(),
@@ -252,6 +253,15 @@ class StudentProfileAttendanceFragment(
 
 
         }
+    }
+
+    override fun onItemClick(t: SummaryAttendance, pos: Int, boolean: Boolean) {
+        findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
+            putString("studentID",monthID)
+            putString("formDate",t.startDate)
+            putString("tillDate",t.endDate)
+        })
+
     }
 
 

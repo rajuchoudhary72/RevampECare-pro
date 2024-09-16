@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         app:neumorph_lightSource="leftTop"
         app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
-         app:neumorph_backgroundColor="@color/background_dashboard"
+        app:neumorph_backgroundColor="@color/background_dashboard"
         app:neumorph_strokeWidth="@dimen/_1sdp"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -220,6 +220,7 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title">
@@ -238,6 +239,7 @@
                 android:id="@+id/text_input_Year"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="130dp"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 app:layout_constraintStart_toEndOf="@+id/text_input_fee_type"
@@ -425,7 +427,7 @@
                 tools:visibility="gone"
                 isVisible="@{isExpanded}"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="text_input_fee_type,text_input_Year,lineChart,img_exp_estimated,text_exp_estimated,text_exp_estimated_amount,img_exp_received,text_exp_received,text_exp_received_amount,img_exp_concession,text_exp_concession,text_exp_concession_amount,img_exp_due,text_exp_concession_due,text_exp_due" />
+                app:constraint_referenced_ids="lineChart,img_exp_estimated,text_exp_estimated,text_exp_estimated_amount,img_exp_received,text_exp_received,text_exp_received_amount,img_exp_concession,text_exp_concession,text_exp_concession_amount,img_exp_due,text_exp_concession_due,text_exp_due" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -433,4 +435,4 @@
     </soup.neumorphism.NeumorphCardView>
 
 
- </layout>
+</layout>

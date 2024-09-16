@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.Activity
 import com.app.ecarepro.data.network.model.AdmissionComparison
 import com.app.ecarepro.data.network.model.BankBalance
 import com.app.ecarepro.data.network.model.BirthDayCard
@@ -35,7 +34,6 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
-import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
 import com.app.ecarepro.ui.dashbord.model.FeedsModel
@@ -49,9 +47,12 @@ import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
 import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.data.network.model.Activity
+import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -67,7 +68,7 @@ class DashboardFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
@@ -106,10 +107,8 @@ class DashboardFragment : Fragment() {
 
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
-
             if (data.showActivities == true)
                 buildActivitiesCard(data.upcomingActivities)
-
             if (data.showTeacherWorkLoad == true)
                 buildTeachersWorkLoad(data.teacherWorkLoad)
 
@@ -131,8 +130,8 @@ class DashboardFragment : Fragment() {
             if (data.showAdmissionModeComparison == true)
                 buildOnlineVsOfflineAdmissionCard(data.admissionModeComparison)
 
-            if (data.showStuCategoryStatistics == true)
-                buildStudentStatisticModel(data.stuCategoryWiseStatistics)
+            if (data.showStuReligionWiseStatistics == true)
+                buildStudentStatisticModel(data.stuReligionWiseStatistics)
 
             if (data.showLibraryDTL == true)
                 buildLibraryBookStatusModel(data.libraryDTL)
@@ -147,11 +146,7 @@ class DashboardFragment : Fragment() {
 
             if (data.showQuestionnaire == true)
                 questionnaireCarouselModel(data.questionnaire)
-
-
         }
-
-
     }
 
     private fun EpoxyController.buildActivitiesCard(activities: List<Activity>?) {
@@ -167,10 +162,18 @@ class DashboardFragment : Fragment() {
         TeacherWorkloadModel(
             workload = teacherWorkLoad,
             onClick = { workload ->
-                findNavController().navigate(
-                    R.id.timeTableNavHostFragment,
-                    bundleOf("ID" to workload.id)
-                )
+                this@DashboardFragment.findNavController()
+                    .navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                        putString(Constant.ID, workload.id)
+                        putString(Constant.NAME, workload.teacherName)
+                    })
+
+
+                /* findNavController().navigate(
+                      R.id.timeTableNavHostFragment,
+                      bundleOf(Constant.ID to workload.id)
+
+                  )*/
             }
         )
             .id("workload")

@@ -53,6 +53,8 @@ data class Profile(
     val motherResidentialAddress: String,
     val name: String,
     val nationality: String,
+    val peN_Number: String,
+    val club: String,
     val parentAnniversaryDate: Any,
     val parentStaus: Any,
     val permanentAddress: Any,

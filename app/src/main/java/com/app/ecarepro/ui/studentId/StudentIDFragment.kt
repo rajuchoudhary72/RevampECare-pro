@@ -164,8 +164,8 @@ class StudentIDFragment : Fragment() {
 
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-
+           //     val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
                 uploadPhoto(imageString, imageExt)
 
             }
@@ -190,15 +190,23 @@ class StudentIDFragment : Fragment() {
                     // binding.ivAddedImage.setImageBitmap(bitmap)
 
                     val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-
-                    val imageExt =
-                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                    val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                  //  val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
                     uploadPhoto(imageString, imageExt)
 
                 }
             }
         }
+
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
 
     private fun uploadPhoto(imageString: String, imageExt: String) {
         val requestImage = StudentIDRequest()

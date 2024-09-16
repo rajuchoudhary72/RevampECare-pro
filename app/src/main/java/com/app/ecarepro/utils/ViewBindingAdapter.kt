@@ -4,13 +4,7 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.text.Html
-import android.text.SpannableStringBuilder
-import android.text.style.CharacterStyle
-import android.text.style.StyleSpan
-import android.text.style.UnderlineSpan
 import android.text.util.Linkify
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -28,6 +22,12 @@ import com.app.ecarepro.data.network.model.TransactionDetail
 import com.app.ecarepro.databinding.ItemCollectionBinding
 import com.app.ecarepro.databinding.ItemCollectionCollectFooterBinding
 import com.app.ecarepro.messageFilePreview
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.style.CharacterStyle
+import android.text.style.StyleSpan
+import android.text.style.UnderlineSpan
+import android.util.Log
 
 
 @BindingAdapter("isVisible")
@@ -39,7 +39,6 @@ fun View.showOrGone(visible: Boolean) {
 fun View.showOrHide(invisible: Boolean) {
     isInvisible = invisible
 }
-
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
     load(url) {
@@ -58,9 +57,9 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
 
 fun getImagePlaceholder(url: String?): Int {
     return if (url?.contains("pdf") == true) {
-        R.drawable.ic_pdf_placeholder
+        R.drawable.baseline_file_present_24
     } else if (isAudioUrl(url)) {
-        R.drawable.audio_file
+        R.drawable.baseline_audio_file_24
     } else {
         R.drawable.img_placeholder
     }
@@ -69,11 +68,28 @@ fun getImagePlaceholder(url: String?): Int {
 fun isAudioUrl(url: String?): Boolean {
     val audioExtensions = setOf(
         "mp3", "wav", "ogg", "flac", "aac", "m4a", "m4b", "m4p", "alac", "aiff",
-        "ape", "wv", "mpc", "tak", "opus", "spx", "gsm", "dts", "wma", "au", "aiff"
+        "ape", "wv", "mpc", "tak", "opus", "spx", "gsm", "dts", "wma", "au", "aiff","audio"
     )
     val extension = url?.substringAfterLast(".", "")?.lowercase()
     return audioExtensions.contains(extension)
 }
+
+
+/*@BindingAdapter("imageUrl", "placeholder", requireAll = false)
+fun ImageView.imageUrlChat(url: String?, placeholder: Drawable? = null) {
+    load(url) {
+        if (url?.contains("svg") == true)
+            decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
+        crossfade(true)
+        if (placeholder != null) {
+            placeholder(placeholder)
+            error(placeholder)
+        } else {
+            placeholder(R.drawable.img_placeholder)
+            error(R.drawable.img_placeholder)
+        }
+    }
+}*/
 
 @BindingAdapter("imageRes")
 fun ImageView.imageRes(res: Int?) {
@@ -148,12 +164,10 @@ fun TextView.autoLink(textValue: String) {
 fun TextView.rupeeText(rupee: Double?) {
     text = "₹$rupee"
 }
-
 @BindingAdapter("rupeeText")
 fun TextView.rupeeText(rupee: String?) {
     text = "₹$rupee"
 }
-
 interface FileClickListener {
     fun onClick(file: String)
 }
@@ -187,7 +201,7 @@ fun TextView.setStyledText(text: String?) {
             var boldstart = 0
             var boldend = 0
             var deleteIndesx = 0
-            if (boldStartIndexes?.size!! >= 1 && boldEndIndexes?.size!! >= 1) {
+            if (boldStartIndexes?.size!! >= 1 && boldEndIndexes?.size !!>= 1) {
                 for (i in boldStartIndexes.indices) {
                     boldstart = boldStartIndexes[i]
                     for (j in i until boldEndIndexes.size) {
@@ -205,7 +219,7 @@ fun TextView.setStyledText(text: String?) {
 
             var dboldstart = 0
             var dboldend = 0
-            if (boldStartIndexes.size >= 1 && boldEndIndexes?.size!! >= 1) {
+            if (boldStartIndexes.size >= 1 && boldEndIndexes?.size !!>= 1) {
                 for (i in boldStartIndexes.indices) {
                     dboldstart = boldStartIndexes[i]
                     for (j in i until boldEndIndexes.size) {
@@ -307,7 +321,7 @@ fun TextView.setStyledText(text: String?) {
                 }
             }
 
-            //   binding.tvSubject.setText(ssbbbitalicstrikethrough)
+         //   binding.tvSubject.setText(ssbbbitalicstrikethrough)
             this.text = ssbbbitalicstrikethrough
             val ssbbbitalicstrikethroughDelete =
                 SpannableStringBuilder(text)
@@ -335,7 +349,7 @@ fun TextView.setStyledText(text: String?) {
                 }
             }
             this.text = ssbbbitalicstrikethroughDelete
-            //   binding.tvSubject.setText(ssbbbitalicstrikethroughDelete)
+         //   binding.tvSubject.setText(ssbbbitalicstrikethroughDelete)
         } catch (ignored: Exception) {
         }
     }

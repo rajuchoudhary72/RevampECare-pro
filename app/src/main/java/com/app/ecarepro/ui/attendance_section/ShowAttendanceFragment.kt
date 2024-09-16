@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentShowAttendanceBinding
-import com.app.ecarepro.model.MyClasseX
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.staffAttendence.AttendanceViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -24,7 +23,6 @@ import com.lassi.common.extenstions.hide
 import com.lassi.common.extenstions.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -46,15 +44,25 @@ class ShowAttendanceFragment : Fragment() {
     private val dateFrom: Calendar = Calendar.getInstance()
     val dateFormateForApi = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val dateTo: Calendar = Calendar.getInstance()
-    private var yId=0
+    private var yId = 0
+    private var toFragment: String = ""
+    private var toStartDate: String = ""
+    private var toEndDate: String = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         binding = FragmentShowAttendanceBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.autoCompleteYear.setAdapter(sessionAdapter)
+        try {
+            toFragment = requireArguments().getString("studentID").toString()
+            toStartDate = requireArguments().getString("formDate").toString()
+            toEndDate = requireArguments().getString("tillDate").toString()
+        }catch (e:IllegalStateException){
+            e.message
+        }
         binding.dateRange.setOnClickListener {
             pickDateRange()
         }
@@ -66,18 +74,21 @@ class ShowAttendanceFragment : Fragment() {
         }
         updateDateFilterText()
         callApi()
-        binding.tvSession.text =getString(R.string.attendance_in_session_2021_2022,"")
-        binding.autoCompleteYear.onItemClickListener=
+        binding.tvSession.text = getString(R.string.attendance_in_session_2021_2022, "")
+
+        binding.autoCompleteYear.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
-                yId= sessionAdapter.getItem(pos)?.yrID ?: 0
-                val session= sessionAdapter.getItem(pos)?.session ?: ""
-                binding.tvSession.text =getString(R.string.attendance_in_session_2021_2022,session)
+                yId = sessionAdapter.getItem(pos)?.yrID ?: 0
+                val session = sessionAdapter.getItem(pos)?.session ?: ""
+                binding.tvSession.text =
+                    getString(R.string.attendance_in_session_2021_2022, session)
                 callApi()
 
             }
         return binding.root
     }
+
     private fun updateDateFilterText(setAsFilter: Boolean = false) {
         val dateFormate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         dateFormate.format(Date(dateFrom.timeInMillis))
@@ -87,13 +98,27 @@ class ShowAttendanceFragment : Fragment() {
 
 
         binding.apply {
-            dateRange.setText("$from - $to")
-            tvHeadingDateRange.text =getString(R.string.attendance_between_01_aug_2021_to_09_oct_2021,"$from to $to")
+
+            if (toFragment != null) {
+                dateRange.setText("$toStartDate - $toEndDate")
+                tvHeadingDateRange.text = getString(
+                    R.string.attendance_between_01_aug_2021_to_09_oct_2021,
+                    "$toStartDate to $toEndDate"
+                )
+            } else {
+                dateRange.setText("$from - $to")
+                tvHeadingDateRange.text = getString(
+                    R.string.attendance_between_01_aug_2021_to_09_oct_2021,
+                    "$from to $to"
+                )
+            }
+
         }
         if (setAsFilter)
             callApi()
 
     }
+
     private fun pickDateRange() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         builder.setSelection(androidx.core.util.Pair(dateFrom.timeInMillis, dateTo.timeInMillis))
@@ -144,12 +169,13 @@ class ShowAttendanceFragment : Fragment() {
                             it.data.attendance?.let { it1 ->
                                 binding.tvNoData.hide()
                                 binding.rvAttendence.show()
-                                list.addAll(it1) }
-                                ?:run {
-
-                                binding.tvNoData.show()
-                                binding.rvAttendence.hide()
+                                list.addAll(it1)
                             }
+                                ?: run {
+
+                                    binding.tvNoData.show()
+                                    binding.rvAttendence.hide()
+                                }
                             noticeAdapter.notifyItemChanged(0, list.size)
 
 
@@ -163,11 +189,19 @@ class ShowAttendanceFragment : Fragment() {
         }
 
 
-
     }
 
-    private fun callApi(){
-        attendanceViewModel.getAttendance(dateFormateForApi.format(Date(dateFrom.timeInMillis)), dateFormateForApi.format(Date(dateTo.timeInMillis)), "$yId")
+    private fun callApi() {
+        if (toFragment != null) {
+            attendanceViewModel.getAttendance(toStartDate, toEndDate, "$yId", toFragment)
+        } else {
+            attendanceViewModel.getAttendance(
+                dateFormateForApi.format(Date(dateFrom.timeInMillis)),
+                dateFormateForApi.format(Date(dateTo.timeInMillis)),
+                "$yId",
+                toFragment
+            )
+        }
     }
 
 }

@@ -40,7 +40,7 @@
     <string name="clock_icon">Clock Icon</string>
     <string name="date">Date :</string>
     <string name="update_on">Update On :</string>
-    <string name="updated_by">Update By\n</string>
+    <string name="updated_by">Update By </string>
     <string name="like">Like </string>
     <string name="no_notice_available">No Notice Available</string>
     <string name="no_history_available">No Leave History</string>
@@ -222,7 +222,7 @@
     <string name="add_infraction">Add Infraction</string>
     <string name="p">P</string>
     <string name="attendance_confirmation">Attendance Confirmation</string>
-    <string name="please_confirm_student_s_attendance">Please Confirm Student\\\'s Attendance</string>
+    <string name="please_confirm_student_s_attendance">Please Confirm Student\'s Attendance</string>
     <string name="as_you_have_marked">As you have marked :</string>
 
     <string name="lbl_present">Present :</string>
@@ -437,6 +437,8 @@
     <string name="pAddress">Permanent Address</string>
     <string name="aadharCardNo">Aadhar Card Number</string>
     <string name="paNNumber">PAN Card Number</string>
+    <string name="cbseid">CBSE ID</string>
+    <string name="club">Club</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
@@ -520,7 +522,9 @@
     <string name="recharged_volume">Recharged Volume</string>
     <string name="previous_balance">Previous Balance</string>
     <string name="select_session">Session</string>
-    <string name="default_notification_channel_id">e-Care</string>
+    <string name="select_session_one">Session First</string>
+    <string name="select_session_two">Session Second </string>
+    <string name="default_notification_channel_id">Franciscan e-Care</string>
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
@@ -661,6 +665,46 @@
     <string name="assessments_are_currently_unavailable_for_you">Assessments are currently unavailable for you!</string>
     <string name="InboxList">"P/o" %1$s ", " %2$s </string>
     <string name="upgrade_now">Upgrade now</string>
+    <string name="bcg">BCG</string>
+    <string name="diphtheria">Diphtheria</string>
+    <string name="dpt_booster">DPT Booster</string>
+    <string name="whooping_cough">Whooping Cough</string>
+    <string name="tetanus">Tetanus</string>
+    <string name="measles">Measles</string>
+    <string name="mmr">MMR</string>
+    <string name="chicken_pox">Chicken Pox</string>
+    <string name="hepatitis_a">Hepatitis A</string>
+    <string name="hepatitis_b">Hepatitis B</string>
+    <string name="typhoid">Typhoid</string>
+    <string name="covid_dose_1">Covid Dose 1</string>
+    <string name="covid_dose_2">Covid Dose 2</string>
+    <string name="covid_booster_dose">Covid Booster Dose</string>
+    <string name="allergies">Allergies</string>
+    <string name="surgery_undergone_in_the_past">Surgery Undergone In The Past</string>
+    <string name="specific_past_disease">Specific Past Disease</string>
+    <string name="child_regular_medication">Child Regular Medication</string>
+    <string name="start_date">Start Date</string>
+    <string name="approved_on">Approved On :</string>
+    <string name="lets_start_by_adding_your_favorite_menus_for_quick_access">Lets start by adding your favorite menus\nfor quick access</string>
+    <string name="term_and_conditions"><u>Terms and Conditions</u></string>
+    <string name="important_notes_leave"><u>Important Notes</u></string>
+    <string name="rules_for_leave"><u>Rules for Leave</u></string>
+    <string name="lbl_agree">Agree</string>
+    <string name="attendance__alert">Attendance of class (%s) has been marked.</string>
+    <string name="attendance_locked_alert_for_subject">Attendance of subject (%s) has been locked. For any change please contact school/college admin.</string>
+    <string name="lbl_saved_successfully">Saved Successfully</string>
+    <string name="attendance_locked_alert">Attendance of class (%s) has been locked. For any change please contact school/college admin.</string>
+
+    <string name="lbl_do_you_also_want_to_send_absentee_notification_sms_push_notification">Do you also want to send the notification ?</string>
+    <string name="lbl_attention">Attention</string>
+    <string name="lbl_leave_details">Leave Details</string>
+
+
+    <string name="_02_may_18"> </string>
+    <string name="search_by_name_class_section_roll_no_father_name">Search by name, class, section, roll no, father name</string>
+    <string name="sort_by_roll_no">Sort by Roll No</string>
+    <string name="sort_by_admission_no">Sort by Admission No</string>
+    <string name="o">O</string>
     <string name="present_count"><b>Present:</b> %s</string>
     <string name="absent_count"><b>Absent:</b> %s</string>
     <string name="leave_count"><b>Leave:</b> %s</string>

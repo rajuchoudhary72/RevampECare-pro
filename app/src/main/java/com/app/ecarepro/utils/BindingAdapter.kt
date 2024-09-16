@@ -16,7 +16,6 @@ fun loadImage(imageView: ImageView, url: String) {
     Picasso.get().load(url).placeholder(R.drawable.default_profile)
         .into(imageView)
 }
-
 @BindingAdapter("cardBgColor")
 fun MaterialCardView.cardBackgroundColor(colorCode: String?) {
     setCardBackgroundColor(

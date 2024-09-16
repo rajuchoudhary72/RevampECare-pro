@@ -30,8 +30,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
     private lateinit var binding: FragmentLeaveListBinding
     private val leaveHistoryViewModel: LeaveHistoryViewModel by viewModels()
-    private var UType: Int = -1
-    @Inject
+     @Inject
     lateinit var userDataStore: UserDataStore
 
     override fun onCreateView(
@@ -47,11 +46,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
-            userDataStore.getUser()?.let {
-                UType = userDataStore.getUserType()!!
-            }
-        }
+
 
         lifecycleScope.launch {
             leaveHistoryViewModel.leaveHistoryStateFlow.collectLatest {
@@ -112,11 +107,16 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
 
 
         binding.fbApplyForLeave.setOnClickListener {
-            if (UType == Constant.STAFF_TYPE) {
-                findNavController().navigate(R.id.leaveSettingFragment)
-            } else {
-                findNavController().navigate(R.id.applyLeaveFragment)
-            }
+            lifecycleScope.launch {
+                userDataStore.getUser()?.run {
+                    if (userType == Constant.STAFF_TYPE) {
+                        findNavController().navigate(R.id.leaveSettingFragment)
+                    } else {
+                        findNavController().navigate(R.id.applyLeaveFragment)
+                    }
+                }}
+
+
 
         }
     }

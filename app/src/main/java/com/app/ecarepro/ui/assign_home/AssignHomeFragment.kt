@@ -274,6 +274,7 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
                 houseID = "$houseId",
                 rollNumber = student.rollNumber,
                 stID = "${student.stID}"
+
             )
             val list = mutableListOf<AssignHouseRequest>()
             list.add(request)

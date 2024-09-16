@@ -160,7 +160,7 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
 
     override fun onItemClick(t: FavList, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.action_favoritesListFragment_to_photoSliderFragment,
+        findNavController().navigate(R.id.photoSliderFragment,
             Bundle().apply {
                 putString(Constant.ID, t.id)
                 putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.fileName))

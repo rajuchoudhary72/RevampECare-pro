@@ -19,7 +19,7 @@ data class PostCreateAssignment(
     val submitDate: String,
     val title: String,
     val lateSubmission: Boolean,
-    val attachments: com.app.ecarepro.data.network.model.Attachment?,
+    val attachments: List<com.app.ecarepro.data.network.model.Attachment>?,
     val classID_StID: List<ClassID_StID>,
     val stIDs: String?
 

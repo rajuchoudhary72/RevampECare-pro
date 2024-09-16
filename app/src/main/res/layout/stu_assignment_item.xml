@@ -121,6 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/date_rel3"
+                        android:visibility="gone"
                         android:orientation="horizontal">
 
                         <TextView
@@ -263,7 +264,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@+id/word_space"
-                            android:textSize="14dp" />
+                            android:textSize="14sp" />
 
                     </RelativeLayout>
 
@@ -273,33 +274,38 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/llStatus"
                         android:visibility="gone"
-                        android:layout_marginTop="8dp">
+                         android:layout_marginTop="8dp">
 
 
-                        <TextView
-                            android:id="@+id/updated_by"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="3dp"
                             android:layout_toEndOf="@+id/user_img"
-                            android:text="@string/updated_by"
-                            app:fontFamily="@font/ubuntu_light" />
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/updated_by"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="3dp"
+                                android:text="@string/updated_by"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                app:fontFamily="@font/ubuntu_light"
+                                />
 
-                        <TextView
-                            android:id="@+id/updated_by_person"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/updated_by"
-                            android:layout_marginStart="3dp"
-                            android:text="@{assignmentData.updateBy}"
-                            android:layout_toEndOf="@+id/user_img"
-                            app:fontFamily="@font/ubuntu_medium" />
+                             <TextView
+                                android:id="@+id/updated_by_person"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                 android:layout_marginStart="3dp"
+                                  app:fontFamily="@font/ubuntu_medium" />
+                        </LinearLayout>
+
 
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/user_img"
-                            imageUrl="@{assignmentData.photo}"
-                            placeholder="@{@drawable/default_profile}"
+                             placeholder="@{@drawable/default_profile}"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_centerVertical="true"

@@ -1,15 +1,22 @@
 package com.app.ecarepro.ui.home
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.location.Location
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -29,6 +36,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
+import com.app.ecarepro.emptyFav
 import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
@@ -38,6 +46,8 @@ import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
@@ -88,9 +98,9 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
        // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
-      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
+      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
       binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-       // binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
+      //  binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
@@ -183,7 +193,7 @@ class HomeFragment : Fragment() {
             binding.btnSubmit.setOnClickListener {
                 if (binding.checkbox.isChecked) {
                     (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
+                    mViewModel.submitUserUndertaking(jsonObject.getString("utID"),) { isSuccess, message ->
                         (requireActivity() as MainActivity).showLoader(false)
                         mainActivity().showMessage(message)
                         if (isSuccess) {
@@ -199,7 +209,56 @@ class HomeFragment : Fragment() {
         }
 
     }
+    private fun startLocationFetch() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), 120
+            )
+            return
+        }
+        if (isGPSEnabled().not()) {
+            MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
+                .setCancelable(false)
+                .setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setPositiveButton("No") { d, _ ->
+                    d.dismiss()
+                    findNavController().popBackStack()
+                }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                    d.dismiss()
+                    val callGPSSettingIntent = Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                    )
+                    startActivity(callGPSSettingIntent)
+                }.show()
+        } else {
+            fusedLocationClient
+                .lastLocation
+                .addOnSuccessListener { location: Location? ->
+                    mViewModel.currentLocation =
+                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+                }
+                .addOnFailureListener {
+                    Log.e("MSG", "startLocationFetch: " + it.message)
+                }
+        }
+    }
 
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
+    private fun isGPSEnabled(): Boolean {
+        val locationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
     private fun removeUTFCharacters(data: String): StringBuffer {
         val p: Pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})")
         val m: Matcher = p.matcher(data)
@@ -274,8 +333,33 @@ class HomeFragment : Fragment() {
                             R.id.homeViewPagerFragment,
                            // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
                         )*/
+                        lifecycleScope.launch {
+                            var showDashboard=false
+                            var showAttendance=false
+                            var showFeeds=false
+                            for ( i in mViewModel.dashboardButtons.value!!){
+                                when (i.buttonName) {
+                                    "Dashboard" -> {
+                                        showDashboard= i.isShow!!
+                                    }
+                                    "Attendance" -> {
+                                        showAttendance= i.isShow!!
+                                    }
+                                    "Feed" -> {
+                                        showFeeds= i.isShow!!
+                                    }
+                                }
+                            }
+                            findNavController().navigate(R.id.homeViewPagerFragment,Bundle( ).apply {
+                                putBoolean( "Dashboard",showDashboard)
+                                putBoolean( "Attendance",showAttendance)
+                                putBoolean( "Feed",showFeeds)
+                            })
+                        }
 
-                        systemViewModel.showDashboard(true)
+
+
+                        //systemViewModel.showDashboard(true)
                     }
 
 
@@ -285,70 +369,76 @@ class HomeFragment : Fragment() {
                     id("fav")
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
                 }
-
-                uiState.favourites.forEach { favouriteSlider: Menu ->
-                    cardOption {
-                        id(favouriteSlider.title)
-                        data(favouriteSlider)
-                        clickListener { _ ->
-                            if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    favouriteSlider.menuID,
-                                    favouriteSlider.chMenuID,
-                                    favouriteSlider.sbChMenuID
-                                )
-                            } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    favouriteSlider.menuID,
-                                    favouriteSlider.chMenuID
-                                )
-                            } else if (favouriteSlider.menuID > 0) {
-                                (requireActivity() as MainActivity).getFragmentId(
-                                    favouriteSlider.menuID
-                                )
-                            } else {
-                                if (favouriteSlider.title!!.contains(
-                                        getString(R.string.assessment),
-                                        true
+                if (uiState.favourites.isEmpty()) {
+                    emptyFav {
+                        id("fave")
+                        spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                    }
+                } else {
+                    uiState.favourites.forEach { favouriteSlider: Menu ->
+                        cardOption {
+                            id(favouriteSlider.title)
+                            data(favouriteSlider)
+                            clickListener { _ ->
+                                if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID,
+                                        favouriteSlider.sbChMenuID
                                     )
-                                ) {
-                                    schoolData?.let {
-                                        it.assessmentMarksURL?.let { url ->
-                                            webViewCall(
-                                                url,
-                                                getString(R.string.assessment_headling)
-                                            )
-                                        }
-                                    }
-                                } else if (favouriteSlider.title.contains(
-                                        getString(R.string.marks_manager),
-                                        true
+                                } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                    (requireActivity() as MainActivity).getFragmentId(
+                                        favouriteSlider.menuID,
+                                        favouriteSlider.chMenuID
                                     )
-                                ) {
-                                    schoolData?.let {
-                                        it.marksEntryURL?.let { url ->
-                                            webViewCall(
-                                                url,
-                                                getString(R.string.marks_entry_heading)
-                                            )
-                                        }
-                                    }
-                                } else if (favouriteSlider.title.contains(
-                                        getString(R.string.website),
-                                        true
-                                    )
-                                ) {
-                                    schoolData?.let {
-                                        it.webSite?.let { url ->
-                                            webViewCall(url, getString(R.string.website_txt))
-                                        }
-                                    }
-                                } else {
+                                } else if (favouriteSlider.menuID > 0) {
                                     (requireActivity() as MainActivity).getFragmentId(
                                         favouriteSlider.menuID
                                     )
-                                }
+                                } else {
+                                    if (favouriteSlider.title!!.contains(
+                                            getString(R.string.assessment),
+                                            true
+                                        )
+                                    ) {
+                                        schoolData?.let {
+                                            it.assessmentMarksURL?.let { url ->
+                                                webViewCall(
+                                                    url,
+                                                    getString(R.string.assessment_headling)
+                                                )
+                                            }
+                                        }
+                                    } else if (favouriteSlider.title.contains(
+                                            getString(R.string.marks_manager),
+                                            true
+                                        )
+                                    ) {
+                                        schoolData?.let {
+                                            it.marksEntryURL?.let { url ->
+                                                webViewCall(
+                                                    url,
+                                                    getString(R.string.marks_entry_heading)
+                                                )
+                                            }
+                                        }
+                                    } else if (favouriteSlider.title.contains(
+                                            getString(R.string.website),
+                                            true
+                                        )
+                                    ) {
+                                        schoolData?.let {
+                                            it.webSite?.let { url ->
+                                                webViewCall(url, getString(R.string.website_txt))
+                                            }
+                                        }
+                                    } else {
+                                        (requireActivity() as MainActivity).getFragmentId(
+                                            favouriteSlider.menuID
+                                        )
+                                    }
 
+                                }
                             }
                         }
                     }
@@ -465,7 +555,21 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
+        startLocationFetch()
 
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 120) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationFetch()
+            } else {
+                mainActivity().showMessage("GPS permission denied")
+            }
+        }
     }
 
     private fun dashboardPrompt( ) {
