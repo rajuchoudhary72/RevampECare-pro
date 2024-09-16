@@ -149,7 +149,7 @@ class StudentIDFragment : Fragment() {
 
 
                 // binding.ivAddedImage.setImageURI(imgUri)
-               /* when (uploadImage) {
+                when (uploadImage) {
                     1 -> {//f
                         binding.circleImageViewFather.setImageURI(imgUri)
                     }
@@ -159,17 +159,25 @@ class StudentIDFragment : Fragment() {
                     3 -> {//e
                         binding.circleImageViewEscort.setImageURI(imgUri)
                     }
-                }*/
+                }
                 val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
 
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-
-           //     val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
                 val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
                 uploadPhoto(imageString, imageExt)
 
             }
         }
+
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
+
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -199,14 +207,7 @@ class StudentIDFragment : Fragment() {
             }
         }
 
-    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
-        return when (compressFormat) {
-            Bitmap.CompressFormat.JPEG -> "jpg"
-            Bitmap.CompressFormat.PNG -> "png"
-            Bitmap.CompressFormat.WEBP -> "webp"
-            else -> "unknown"
-        }
-    }
+
 
     private fun uploadPhoto(imageString: String, imageExt: String) {
         val requestImage = StudentIDRequest()

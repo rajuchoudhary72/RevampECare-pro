@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.app.ecarepro.data.network.model.Notification
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.noDataFoundView
 
 
 @AndroidEntryPoint
@@ -72,16 +73,22 @@ class NotificationFragment : Fragment() {
 
         if (uiState is NotificationUiState.Success) {
             binding.recyclerView.withModels {
-                uiState.notifications.forEach { notification: Notification ->
-                    notificationCard {
-                        id(notification.id)
-                        notification(notification)
-                        clickListener { _ ->
-                            notification.moduleID?.let {
-                                notification.chMenuID?.let { it1 ->
-                                    (requireActivity() as MainActivity).getFragmentId(
-                                        it, it1
-                                    )
+                if(uiState.notifications.isEmpty()){
+                    noDataFoundView {
+                        id("noDataFound")
+                    }
+                }else{
+                    uiState.notifications.forEach { notification: Notification ->
+                        notificationCard {
+                            id(notification.id)
+                            notification(notification)
+                            clickListener { _ ->
+                                notification.moduleID?.let {
+                                    notification.chMenuID?.let { it1 ->
+                                        (requireActivity() as MainActivity).getFragmentId(
+                                            it, it1
+                                        )
+                                    }
                                 }
                             }
                         }
