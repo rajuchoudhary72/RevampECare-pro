@@ -338,7 +338,7 @@ class MainActivity : AppCompatActivity() {
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
 
-            if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID } == null){
+            if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
                 return@launch
             }
 
