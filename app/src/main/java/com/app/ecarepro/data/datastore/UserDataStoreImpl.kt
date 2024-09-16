@@ -186,7 +186,14 @@ class UserDataStoreImpl @Inject constructor(
             val json = preferences[dashboardData]
             if (json == null) {
                 null
-            } else gson.fromJson(json, UserDashboardDto::class.java)
+            } else {
+                try {
+                    gson.fromJson(json, UserDashboardDto::class.java)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                    null
+                }
+            }
         }
     }
 
