@@ -61,7 +61,7 @@ class ClassAttendanceFragment : Fragment()  {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.startDate.setText(Constant.dateToShow(date.toString()))
-                    classAttViewModel.getClassAttendance(classId.toString(),binding.startDate.text.toString())
+                    classAttViewModel.getClassAttendance(classId.toString(),Constant.toSystemDate(binding.startDate.text.toString()))
                 }
 
             }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
@@ -73,7 +73,7 @@ class ClassAttendanceFragment : Fragment()  {
             AdapterView.OnItemClickListener { parent, view, pos, id ->
 
                 classId= mMyClass[pos].id!!
-                classAttViewModel.getClassAttendance(classId.toString(),binding.startDate.text.toString())
+                classAttViewModel.getClassAttendance(classId.toString(),Constant.toSystemDate(binding.startDate.text.toString()))
 
             }
 
@@ -176,7 +176,7 @@ class ClassAttendanceFragment : Fragment()  {
                         }
                     }  } } }
 
-        classAttViewModel.getClassAttendance(classId.toString(),binding.startDate.text.toString())
+        classAttViewModel.getClassAttendance(classId.toString(),Constant.toSystemDate(binding.startDate.text.toString()))
     }
 
     private fun getFilterList(attReport: List<AttReport>, status: Int ): List<AttReport> {

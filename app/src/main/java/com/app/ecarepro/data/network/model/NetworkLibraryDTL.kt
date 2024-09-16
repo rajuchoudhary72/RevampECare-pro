@@ -6,9 +6,9 @@ import com.app.ecarepro.model.LatestBook
 data class NetworkLibraryDTL(
     val addBook: AddBook,
     val errorCode: Int,
-    val latestBook: List<LatestBook>,
+    val latestBook: List<LatestBook>?,
     val megaBookLink: String,
     val message: String,
-    val myAccount: List<MyAccount>,
+    val myAccount: List<MyAccount>?,
     val status: String
 )

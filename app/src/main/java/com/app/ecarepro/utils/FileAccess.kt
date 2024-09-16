@@ -73,6 +73,14 @@ class FileAccess {
 
         }
 
+          fun pickPdfFileIntent() : Intent  {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "application/pdf"
+            }
+             return intent
+        }
+
 
 
         fun bitmapFromFile(context: Context, filePath: String): Bitmap {
@@ -105,6 +113,12 @@ class FileAccess {
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
             return Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
+        }
+
+          fun convertPdfToBase64(uri: Uri,inContext: Context): String {
+            val inputStream = inContext.contentResolver.openInputStream(uri)
+            val bytes = inputStream?.readBytes()
+            return bytes?.let { Base64.encodeToString(it, Base64.NO_WRAP) } ?: ""
         }
 
 

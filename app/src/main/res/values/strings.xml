@@ -709,4 +709,5 @@
     <string name="absent_count"><b>Absent:</b> %s</string>
     <string name="leave_count"><b>Leave:</b> %s</string>
     <string name="late_count"><b>Late:</b> %s</string>
+    <string name="view_file">View File</string>
 </resources>

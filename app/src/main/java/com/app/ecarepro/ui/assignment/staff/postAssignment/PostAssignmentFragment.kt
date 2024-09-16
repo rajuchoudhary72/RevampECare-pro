@@ -55,7 +55,7 @@ class PostAssignmentFragment : Fragment() {
 
     private var isClassWise: Boolean=true
     private var viewAssignmentData: NetworkViewAssignment? = null
-    private var isClassSelected: Boolean = false
+     private var isClassSelected: Boolean = false
     private var isStudentSelected: Boolean = false
     private lateinit var classesList: List<MyClasseItem>
     private lateinit var subjectData: MySubject
@@ -81,11 +81,11 @@ class PostAssignmentFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View  {
-        binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
-        try {
-            assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
-            isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
-        }catch (e:Exception){}
+       binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
+       try {
+           assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
+           isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
+       }catch (e:Exception){}
         return  binding.root
     }
 
@@ -101,7 +101,7 @@ class PostAssignmentFragment : Fragment() {
         binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbClassWise -> {
-                    binding.tvSelectstudent.isVisible=false
+                     binding.tvSelectstudent.isVisible=false
                     isClassWise=true
 
                 }
@@ -123,7 +123,7 @@ class PostAssignmentFragment : Fragment() {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.data!=null){
                         if (it.data.mySubjects!=null){
-                            subjectList=it.data.mySubjects
+                             subjectList=it.data.mySubjects
                         }
                     }
 
@@ -134,13 +134,13 @@ class PostAssignmentFragment : Fragment() {
 
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
         binding.tvSelectClass.setOnClickListener {
-            if (isSubjectSelected){
-                if (classesList!=null){
-                    popUpSelectClass()
-                }
-            }else{
-                mainActivity().showMessage("Select Subject")
-            }
+             if (isSubjectSelected){
+                 if (classesList!=null){
+                     popUpSelectClass()
+                 }
+             }else{
+                 mainActivity().showMessage("Select Subject")
+             }
         }
 
         binding.btnSubmit.setOnClickListener { uploadAssignment() }
@@ -153,7 +153,7 @@ class PostAssignmentFragment : Fragment() {
             if (studentList!=null){
                 popUpStudentListByClass(studentList)
             }
-        }
+             }
 
         binding.llFile.setOnClickListener {
             binding.llFile.isVisible=false
@@ -271,49 +271,49 @@ class PostAssignmentFragment : Fragment() {
 
 
 
-        if (isValidate ){
+       if (isValidate ){
 
-            if (!isEdit){
-                submitDate = if (binding.isSubmitDate.isChecked){
-                    Constant.toSystemDate( binding.tvSubmissionDt.text.toString())
-                }else{
-                    getCurrentYearLastDate()
-                }
-            }
-            postAssignmentViewModel.createAssignment(
-                asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
-                asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,
-                classID = if (isEdit) ids.toString().toInt()   else 0,
-                classIDs =  if (isEdit)  "" else if (isClassWise)  ids.toString()   else "" ,
-                data =  binding.etDescription.text.toString() ,
-                file = "",
-                id =if (isEdit) viewAssignmentData!!.id else  "" ,
-                isActive =binding.cbActive.isChecked,
-                isFileRemoved =false,
-                multipleSubmission = binding.cbMultipleActive.isChecked,
-                subjectID = if (isEdit) viewAssignmentData!!.subjectID else subjectData.subID,
-                submitDate =submitDate,
-                title = binding.etTitle.text.toString(),
-                lateSubmission = binding.cbLateSubmission.isChecked ,
-                attachments =attachmentsList,
-                classID_StID = classID_StID,
-                stIDs =   null
-            )
+           if (!isEdit){
+               submitDate = if (binding.isSubmitDate.isChecked){
+                   Constant.toSystemDate( binding.tvSubmissionDt.text.toString())
+               }else{
+                   getCurrentYearLastDate()
+               }
+           }
+                postAssignmentViewModel.createAssignment(
+                   asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
+                   asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,
+                   classID = if (isEdit) ids.toString().toInt()   else 0,
+                   classIDs =  if (isEdit)  "" else if (isClassWise)  ids.toString()   else "" ,
+                   data =  binding.etDescription.text.toString() ,
+                   file = "",
+                   id =if (isEdit) viewAssignmentData!!.id else  "" ,
+                   isActive =binding.cbActive.isChecked,
+                   isFileRemoved =false,
+                   multipleSubmission = binding.cbMultipleActive.isChecked,
+                   subjectID = if (isEdit) viewAssignmentData!!.subjectID else subjectData.subID,
+                   submitDate =submitDate,
+                   title = binding.etTitle.text.toString(),
+                   lateSubmission = binding.cbLateSubmission.isChecked ,
+                   attachments =attachmentsList,
+                   classID_StID = classID_StID,
+                   stIDs =   null
+               )
 
 
-            lifecycleScope.launch {
-                postAssignmentViewModel.createAssignmentStateFlow.collectLatest {
-                    when (it) {  is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }  is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    } is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage("Assignment Uploaded Successfully")
+           lifecycleScope.launch {
+               postAssignmentViewModel.createAssignmentStateFlow.collectLatest {
+                   when (it) {  is NetworkResult.Loading -> {
+                       (requireActivity() as MainActivity).showLoader(true)
+                   }  is NetworkResult.Error -> {
+                       (requireActivity() as MainActivity).showLoader(false)
+                   } is NetworkResult.Success -> {
+                       (requireActivity() as MainActivity).showLoader(false)
+                       mainActivity().showMessage("Assignment Uploaded Successfully")
                         findNavController().popBackStack()
-                    }  }
-                } }
-        }
+                   }  }
+               } }
+       }
 
 
     }
@@ -361,13 +361,13 @@ class PostAssignmentFragment : Fragment() {
 
         relOk.setOnClickListener {
 
-            try {
-                isSubjectSelected = true
-                binding.tvSelectSubject.text= subjectData .subjectName
+                 try {
+                     isSubjectSelected = true
+                     binding.tvSelectSubject.text= subjectData .subjectName
 
-                getMyClasses(subjectData.subID)
-                builder.dismiss()
-            }catch (e:Exception){  }
+                     getMyClasses(subjectData.subID)
+                     builder.dismiss()
+                 }catch (e:Exception){  }
 
 
 
@@ -416,33 +416,33 @@ class PostAssignmentFragment : Fragment() {
                 val name = StringBuilder()
                 ids.clear()
 
-                for (classeItem in classesList) {
-                    if (classeItem.checked == true) {
-                        if (ids.toString().isEmpty()) {
-                            ids.append(classeItem.classID)
-                            name.append(classeItem.className)
-                        } else {
-                            ids.append(",").append(classeItem.classID)
-                            name.append(",").append(classeItem.className)
+                    for (classeItem in classesList) {
+                        if (classeItem.checked == true) {
+                            if (ids.toString().isEmpty()) {
+                                ids.append(classeItem.classID)
+                                name.append(classeItem.className)
+                            } else {
+                                ids.append(",").append(classeItem.classID)
+                                name.append(",").append(classeItem.className)
+                            }
                         }
                     }
-                }
 
 
 
                 binding.tvSelectClass.text= name
-                if (!isClassWise){
-                    getStudentListByClass(1,ids.toString(),2,false)
-                }
+               if (!isClassWise){
+                   getStudentListByClass(1,ids.toString(),2,false)
+               }
                 builder.dismiss()
             }
 
         }
 
-        val subjectListAdapter= ClassListAdapter(classesList, selectAll, true, object : ItemListener<MyClasseItem> {
+         val subjectListAdapter= ClassListAdapter(classesList, selectAll, true, object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
-                isClassSelected = true
+                 isClassSelected = true
             }
 
         })
@@ -551,11 +551,11 @@ class PostAssignmentFragment : Fragment() {
                         if (it.data.students!=null){
                             studentList= it.data.students.toMutableList()
 
-                            if (isEdit){
-                                setUpselectedStudent( )
-                            }else{
-                                popUpStudentListByClass(it.data.students)
-                            }
+                             if (isEdit){
+                                 setUpselectedStudent( )
+                             }else{
+                                  popUpStudentListByClass(it.data.students)
+                             }
                         }
 
                     }
@@ -619,15 +619,15 @@ class PostAssignmentFragment : Fragment() {
 
         }
 
-        if (isEdit){
-            val selectedStudents = mutableSetOf<String>()
-            viewAssignmentData!!.stIDs!!.split(",").map {
-                selectedStudents.add(it)
-            }
-            for (student in students)  {
-                student.isSelected = selectedStudents.contains(student.stID.toString())
-            }
-        }
+         if (isEdit){
+             val selectedStudents = mutableSetOf<String>()
+             viewAssignmentData!!.stIDs!!.split(",").map {
+                 selectedStudents.add(it)
+             }
+             for (student in students)  {
+                 student.isSelected = selectedStudents.contains(student.stID.toString())
+             }
+         }
 
 
 
@@ -667,59 +667,62 @@ class PostAssignmentFragment : Fragment() {
 
 
 
-        lifecycleScope.launch {
-            postAssignmentViewModel.viewAssignmentStateFlow.collectLatest {
-                when (it) {  is NetworkResult.Loading -> {
-                    (requireActivity() as MainActivity).showLoader(true)
-                }  is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
+            lifecycleScope.launch {
+                postAssignmentViewModel.viewAssignmentStateFlow.collectLatest {
+                    when (it) {  is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }  is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    } is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
 
-                    val  data= it.data
-                    viewAssignmentData= it.data
+                        val  data= it.data
+                        viewAssignmentData= it.data
 
-                    isSubjectSelected=true
-                    isClassSelected=true
+                        isSubjectSelected=true
+                        isClassSelected=true
 
-                    if (data!=null){
+                        if (data!=null){
 
-                        submitDate=data.submitDate
-                        binding.etTitle.setText(data.title)
-                        binding.etDescription.setText(data.data)
-                        binding.ctvAssignmentDt.text= data.asgDate
-                        binding.tvSubmissionDt.text= data.submitDate
-                        binding.tvSubmissionDt.isVisible = data.submitDate!=null && data.submitDate.isNotEmpty()
-                        binding.cbActive.isChecked= data.isActive
-                        binding.cbMultipleActive.isChecked= data.multipleSubmission
-                        binding.cbLateSubmission.isChecked= data.lateSubmission
-                        // binding.tvSelectClass.text=data.classIDs.toString()
-                        // binding.tvSelectSubject.text=data.su.toString()
+                            submitDate=data.submitDate
+                            binding.etTitle.setText(data.title)
+                            binding.etDescription.setText(data.data)
+                            binding.ctvAssignmentDt.text= data.asgDate
+                            binding.tvSubmissionDt.text= data.submitDate
+                            binding.tvSubmissionDt.isVisible = data.submitDate!=null && data.submitDate.isNotEmpty()
+                            binding.cbActive.isChecked= data.isActive
+                            binding.cbMultipleActive.isChecked= data.multipleSubmission
+                            binding.cbLateSubmission.isChecked= data.lateSubmission
+                            // binding.tvSelectClass.text=data.classIDs.toString()
+                            // binding.tvSelectSubject.text=data.su.toString()
 
-                        if (it.data.stIDs!=null){
-                            binding.tvSelectstudent.isVisible= it.data.stIDs.isNotEmpty()
-                        }
-                        binding.isSubmitDate.isChecked= data.submitDate.isNotEmpty()
-
-                        postAssignmentViewModel.getMyClass(data.subjectID,Constant.MY_CLASS_ID)
-
-                        ids=     StringBuilder(it.data.classID.toString())
-
-                        binding.radioGroupWisesubmission.isVisible=false
-
-                        if (it.data.stIDs  !=null){
-                            if (it.data.stIDs!=null && it.data.stIDs!!.isEmpty()){
-                                binding.tvSelectstudent.isVisible=false
-                            }else{
-                                studentIds= StringBuilder(it.data.stIDs)
-                                getStudentListByClass(1,it.data.classID.toString(),2,false)
+                            if (it.data.stIDs!=null){
+                                binding.tvSelectstudent.isVisible= it.data.stIDs.isNotEmpty()
                             }
-                        }
-                        getMyClasses(viewAssignmentData!!.subjectID)
+                            binding.isSubmitDate.isChecked= data.submitDate.isNotEmpty()
 
-                    }
-                }  }
-            } }
+                            postAssignmentViewModel.getMyClass(data.subjectID,Constant.MY_CLASS_ID)
+
+                            ids=     StringBuilder(it.data.classID.toString())
+
+                            binding.radioGroupWisesubmission.isVisible=false
+
+                            if (it.data.stIDs  !=null){
+                                if (it.data.stIDs!=null && it.data.stIDs!!.isEmpty()){
+                                    binding.tvSelectstudent.isVisible=false
+                                }else{
+                                    studentIds= StringBuilder(it.data.stIDs)
+                                    getStudentListByClass(1,it.data.classID.toString(),2,false)
+                                }
+                            }
+
+
+
+                            getMyClasses(viewAssignmentData!!.subjectID)
+
+                        }
+                    }  }
+                } }
 
 
         postAssignmentViewModel.viewAssignment(assignmentId)

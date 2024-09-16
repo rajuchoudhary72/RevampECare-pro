@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.assignment.staff.viewAssignment
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,15 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
@@ -26,10 +28,10 @@ import com.app.ecarepro.model.AssignSubmitStudent
 import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.studentProfile.PopUpListAdapterLibTrans
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
-import com.app.ecarepro.utils.formatDate
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -56,7 +58,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
          try {
              assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
              isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
+             arguments?.getParcelable<TeacherAssignment>("TeacherAssignment").let { data ->
+                 assignmentDetails= data!!
 
+             }
 
          }catch (_:Exception){}
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -67,6 +72,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLateSubmit.isVisible=isLateSubmitted
+         if (assignmentDetails!=null){
+             binding.llEditDelete.isVisible= assignmentDetails!! .hasAttachment!!
+
+         }
 
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
@@ -240,14 +249,48 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
 
         binding.llView.setOnClickListener {
-            openFile(viewAssignmentData!!.asgFile)
-        }
-        binding.llDownload.setOnClickListener {
-            downloadFile(viewAssignmentData!!.asgFile)
+            popUpFileList(assignmentDetails!!.asgFiles!!)
         }
 
 
 
+
+    }
+
+    private fun popUpFileList(filelist: List<String>) {
+
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.popup_file_list,null)
+        val  rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
+        val  ivCross = view.findViewById<ImageView>(R.id.ivCross)
+        val  tvHeading = view.findViewById<TextView>(R.id.tvHeading)
+        tvHeading.text="View File"
+
+        builder.setView(view)
+
+
+        val popUpFileListAdapter= PopUpFileListAdapter(filelist ){ t, pos ->
+            builder.dismiss()
+            when(pos){
+                1 -> {
+                    openFile(t)
+                }
+                2 -> {
+                    downloadFile(t)
+                }
+        }}
+        rvDetails.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(activity)
+            adapter = popUpFileListAdapter
+        }
+
+        ivCross.setOnClickListener {
+            builder.dismiss()
+        }
+
+        builder.setCanceledOnTouchOutside(false)
+        builder.show()
     }
 
     private fun openFile(fileSource:String){
@@ -274,6 +317,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 }
             }
             3 -> {
+                submitType=2
                 dateSelctedPoPUp(t)
             }
         }
@@ -298,7 +342,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         ll_date.setOnClickListener {
 
 
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     tv_date.text = date
                 }

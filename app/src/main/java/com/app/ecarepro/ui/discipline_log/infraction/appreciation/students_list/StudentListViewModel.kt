@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.discipline_log.infraction.appreciation.students_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.repository.UserRepository
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StudentListViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userDataStore: UserDataStore,
 ) : ViewModel() {
 
     private val studentListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStudentList>> = MutableStateFlow(
@@ -22,8 +24,9 @@ class StudentListViewModel @Inject constructor(
 
     fun  getStudentList(
         scholarType: Int,
-        showAll: Boolean
+        showAl : Boolean
     )=viewModelScope.launch {
+        val showAll = userDataStore.isGeneralSettingEnabled("DisciplineLogStudent")
         runCatching {
             studentListMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStudentList(scholarType, showAll)
