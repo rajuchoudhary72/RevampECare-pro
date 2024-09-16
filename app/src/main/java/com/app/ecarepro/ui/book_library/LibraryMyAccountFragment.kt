@@ -11,7 +11,7 @@ import com.app.ecarepro.data.network.model.MyAccount
 import com.app.ecarepro.databinding.FragmentLibraryMyAccountBinding
 
 
-class LibraryMyAccountFragment( private val myAccount: List<MyAccount>) : Fragment() {
+class LibraryMyAccountFragment( private val myAccount: List<MyAccount>?) : Fragment() {
 
     private lateinit var binding: FragmentLibraryMyAccountBinding
 

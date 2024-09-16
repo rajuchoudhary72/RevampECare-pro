@@ -76,19 +76,19 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 when (checkedId) {
                     R.id.rb_all -> {
                         schoolType = 2
-                        studentListViewModel.getStudentList(schoolType)
+                        studentListViewModel.getStudentList(schoolType,toFragment)
 
                     }
 
                     R.id.rb_boarding -> {
                         schoolType = 1
-                        studentListViewModel.getStudentList(schoolType)
+                        studentListViewModel.getStudentList(schoolType,toFragment)
 
                     }
 
                     R.id.rb_day_scolar -> {
                         schoolType = 0
-                        studentListViewModel.getStudentList(schoolType)
+                        studentListViewModel.getStudentList(schoolType,toFragment)
 
                     }
 
@@ -184,7 +184,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
 
         /* now we  pass  this  boolean  from setting */
 
-        studentListViewModel.getStudentList(schoolType)
+        studentListViewModel.getStudentList(schoolType,toFragment)
         checkIsBoarding()
 
 

@@ -566,6 +566,10 @@ class UserRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getStaffProfileMain(sId: Int): NetworkStaffProfile {
+        return userService.getStaffProfileMain(sId)
+    }
+
     override suspend fun postMarkAttedance(
         classID: Int,
         subID: Int,

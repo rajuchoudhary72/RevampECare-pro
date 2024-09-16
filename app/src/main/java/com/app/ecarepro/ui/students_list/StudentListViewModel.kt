@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,9 +41,13 @@ class StudentListViewModel @Inject constructor(
     val studentListStateFlow: StateFlow<NetworkResult<NetworkStudentList>> = studentListMutableStateFlow
 
     fun  getStudentList(
-        scholarType: Int
+        scholarType: Int,
+        toFragment:String
     )=viewModelScope.launch {
-        val showAll = userDataStore.isGeneralSettingEnabled("DisciplineLogStudent")
+        var showAll=false
+        if (toFragment== Constant.FRA_ADD_APPRE || toFragment== Constant.FRA_VIEW_APPRE || toFragment== Constant.FRA_VIEW_INFE || toFragment== Constant.FRA_ADD_INFE ){
+            showAll = userDataStore.isGeneralSettingEnabled("DisciplineLogStudent")
+        }
         runCatching {
             studentListMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStudentList(scholarType, showAll)

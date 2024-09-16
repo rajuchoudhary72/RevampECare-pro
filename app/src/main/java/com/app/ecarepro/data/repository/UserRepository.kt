@@ -124,6 +124,7 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface UserRepository {
@@ -385,6 +386,10 @@ interface UserRepository {
         classID_StID: List<ClassID_StID>,
         stIDs: String?
     ): CommonResponse
+
+     suspend fun getStaffProfileMain(
+          sId: Int
+    ): NetworkStaffProfile
 
     suspend fun viewAssignment(
           iD: String,

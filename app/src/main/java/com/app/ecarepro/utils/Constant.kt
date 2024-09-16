@@ -256,6 +256,14 @@ class Constant {
             return df.format(c)
         }
 
+        fun getCurrentDateTime():String{
+            val c: Date = Calendar.getInstance().time
+            val df = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
+            return df.format(c)
+        }
+
+
+
        /* fun incrementDateByDay( noOfDays:Int):Long{
             val c = Calendar.getInstance()
             c.time = Calendar.getInstance().time

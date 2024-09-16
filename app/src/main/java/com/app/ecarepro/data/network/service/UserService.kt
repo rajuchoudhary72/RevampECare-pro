@@ -540,6 +540,11 @@ interface UserService {
         @Query("SID") sId: Int
     ): NetworkStaffProfile
 
+    @GET("Staff/Profile")
+    suspend fun getStaffProfileMain(
+        @Query("SID") sId: Int
+    ): NetworkStaffProfile
+
     @POST("User/ChangeUsername")
     suspend fun changeUsername(
         @Body request: ChangeUserNameRequestDto,

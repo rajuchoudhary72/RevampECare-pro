@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class LatestBookFragment(private val latestBook: List<LatestBook> ) : Fragment() , ItemListener<LatestBook> {
+class LatestBookFragment(private val latestBook: List<LatestBook>? ) : Fragment() , ItemListener<LatestBook> {
 
     private lateinit var latestBookBinding: FragmentLatestBookBinding
 
