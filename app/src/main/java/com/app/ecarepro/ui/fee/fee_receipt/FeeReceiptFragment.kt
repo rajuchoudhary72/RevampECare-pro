@@ -35,9 +35,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import com.itextpdf.text.Document
-import com.itextpdf.text.Paragraph
-import com.itextpdf.text.pdf.PdfWriter
 
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -315,23 +312,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
         }
         return file.absolutePath.toString() + "/" + filename + ".pdf"
     }
-    private fun createPdfFromString(text: String, i: Int) {
-        try {
-            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-            val fileName = "FeeReceipt_$timeStamp.pdf"
-            val file = File( requireContext(). getExternalFilesDir(null), fileName)
-            val document = Document()
-            PdfWriter.getInstance(document, FileOutputStream(file))
-            document.open()
-            document.add(Paragraph(text))
-            document.close()
-            if (i==1){
-                openPdfFile(file)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
+
 
     private fun openPdfFile(file: File) {
         val intent = Intent(Intent.ACTION_VIEW)

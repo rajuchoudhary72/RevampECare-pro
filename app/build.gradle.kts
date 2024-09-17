@@ -30,8 +30,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 204
-        versionName = "2.1.74"
+        versionCode = 205
+        versionName = "2.1.75"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -170,6 +170,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
-    implementation("com.itextpdf:itextg:5.5.10")
 }

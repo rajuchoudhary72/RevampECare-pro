@@ -393,7 +393,7 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionName $versionName")
 
                             if (versionName < it.data.android.currentVersion) {
-                                // open  dialog
+                              // open  dialog
                                 if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
                                     //soft  update
                                     UpdateAppVersionDialog(
