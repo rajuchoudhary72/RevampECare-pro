@@ -38,14 +38,14 @@ class AddInfractionFragment : Fragment() {
 
     private var studentID: Int = 0
     private lateinit var subInfractionCatData: Type
-    private lateinit var subInfractionSubCateList: List<Type>
+    private   var subInfractionSubCateList= mutableListOf<Type>()
     private lateinit var infractionConsequence: InfractionConsequence
     private var infrTypeSelected: Boolean = false
     private var SubInfrTypeSelected: Boolean = false
     private var infrConsSelected: Boolean = false
     private lateinit var infractionCatData: InfractionType
-    private lateinit var infractionConsequencesList: List<InfractionConsequence>
-    private lateinit var infractionTypeList: List<InfractionType>
+    private   var infractionConsequencesList = mutableListOf<InfractionConsequence>()
+    private   var infractionTypeList= mutableListOf<InfractionType>()
     private lateinit var binding: FragmentAddInfractionBinding
     private val addInfractionViewModel : AddInfractionViewModel by viewModels()
 
@@ -120,8 +120,12 @@ class AddInfractionFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
+                            subInfractionSubCateList.clear()
+                            if (!it.data.types.isNullOrEmpty()){
 
-                            subInfractionSubCateList=it.data.types
+                                subInfractionSubCateList= it.data.types.toMutableList()
+
+                            }
 
 
 
@@ -174,9 +178,19 @@ class AddInfractionFragment : Fragment() {
                                 append(getString(R.string.contact_no))
                                 append(it.data.studentDTL.contactMob)
                             }
+                            infractionTypeList.clear()
+                            infractionConsequencesList.clear()
+                            if (!it.data.infractionTypes.isNullOrEmpty()){
 
-                            infractionTypeList=it.data.infractionTypes
-                            infractionConsequencesList=it.data.infractionConsequences  }  }
+                                infractionTypeList= it.data.infractionTypes.toMutableList()
+                            }
+
+                            if (!it.data.infractionConsequences.isNullOrEmpty()){
+
+                                infractionConsequencesList= it.data.infractionConsequences.toMutableList()
+                            }
+
+                         }  }
                 }
             }
         }
@@ -197,18 +211,21 @@ class AddInfractionFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectInfractionCate.text= infractionCatData .infraction
-            infrTypeSelected=true
+           if (infrTypeSelected){
+               binding.tvSelectInfractionCate.text= infractionCatData .infraction
 
-            getSubInfection(infractionCatData.infrTypeID)
 
-             builder.dismiss()
+               getSubInfection(infractionCatData.infrTypeID)
 
+               builder.dismiss()
+
+           }
         }
 
         val infractionCatPopUpListAdapter= InfractionCatPopUpListAdapter(infractionTypeList, object : ItemListener<InfractionType> {
             override fun onItemClick(t: InfractionType, pos: Int, boolean: Boolean) {
                 infractionCatData = t
+                infrTypeSelected=true
                     }  })
 
         rvYears.apply {
@@ -237,18 +254,21 @@ class AddInfractionFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectSubInfraction.text= subInfractionCatData .infraction
-            SubInfrTypeSelected=true
-            addInfractionViewModel.getinfractionInstance(infractionCatData.infrTypeID,
-                subInfractionCatData.infrTypeID,448)
-            setInfrenceInstance()
-            builder.dismiss()
+             if (SubInfrTypeSelected){
+                 binding.tvSelectSubInfraction.text= subInfractionCatData .infraction
+
+                 addInfractionViewModel.getinfractionInstance(infractionCatData.infrTypeID,
+                     subInfractionCatData.infrTypeID,448)
+                 setInfrenceInstance()
+                 builder.dismiss()
+             }
 
         }
 
         val infractionCatPopUpListAdapter= SubInfractionPopUpListAdapter(subInfractionSubCateList, object : ItemListener<Type> {
             override fun onItemClick(t: Type, pos: Int, boolean: Boolean) {
                 subInfractionCatData = t
+                SubInfrTypeSelected=true
             }  })
 
         rvYears.apply {
@@ -304,15 +324,18 @@ class AddInfractionFragment : Fragment() {
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectCons.text= infractionConsequence .consequences
-            infrConsSelected=true
-            builder.dismiss()
+           if (infrConsSelected){
+               binding.tvSelectCons.text= infractionConsequence .consequences
+
+               builder.dismiss()
+           }
 
         }
 
         val infractionCatPopUpListAdapter= InfractionConsPopUpListAdapter(infractionConsequencesList, object : ItemListener<InfractionConsequence> {
             override fun onItemClick(t: InfractionConsequence, pos: Int, boolean: Boolean) {
                 infractionConsequence = t
+                infrConsSelected=true
             }  })
 
         rvYears.apply {
@@ -355,7 +378,7 @@ class AddInfractionFragment : Fragment() {
                 subInfractionCatData.infrTypeID,
                 infractionConsequence.consID,
                 binding.tvInstance.text.toString().toInt(),
-                Constant.currentDate(),
+                Constant.getCurrentDateTime(),
                 binding.etPlanName.text.toString())
 
             lifecycleScope.launch {

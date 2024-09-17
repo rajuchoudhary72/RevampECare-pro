@@ -66,15 +66,14 @@ import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -195,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* checking  for update version  */
-        checkAppVersion()
+          checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -255,7 +254,6 @@ class MainActivity : AppCompatActivity() {
             // Permission is already granted, get the IMEI
             getIMEINumber()
         }
-
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -284,13 +282,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
     // Handle the permission request response
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -319,7 +312,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -328,8 +320,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
-    private fun handleNotificationClick(data: Bundle) {
+/*    private fun handleNotificationClick(data: Bundle) {
         lifecycleScope.launch {
             showLoader(true)
             delay(2000)
@@ -360,6 +351,15 @@ class MainActivity : AppCompatActivity() {
             showLoader(false)
         }
 
+    }*/
+    private fun handleNotificationClick(data: Bundle) {
+        val menuId = data.getString("MenuId")?.toInt()
+        val childMenuId = data.getString("ChMenuID")?.toInt()
+        if (menuId != null) {
+            if (childMenuId != null) {
+                getFragmentId(menuId, childMenuId)
+            }
+        }
     }
 
     private fun checkAppVersion() {
@@ -393,15 +393,15 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionName $versionName")
 
                             if (versionName < it.data.android.currentVersion) {
-                                // open  dialog
-                                if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
+                              // open  dialog
+                                if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
                                     //soft  update
                                     UpdateAppVersionDialog(
                                         0,
                                         it.data.android.title,
                                         it.data.android.description
                                     )
-                                } else {
+                                }else{
                                     //force update
                                     UpdateAppVersionDialog(
                                         1,
@@ -409,27 +409,27 @@ class MainActivity : AppCompatActivity() {
                                         it.data.android.description
                                     )
                                 }
-                            } else {
+                            }else{
                                 // nothing  open  version  dialog
                             }
 
-                            /* if (versionCode < it.data.android.versionCode) {
+                           /* if (versionCode < it.data.android.versionCode) {
 
 
-                                 if (versionName == it.data.android.criticalVersion.trim()
-                                 ) // force update
-                                     UpdateAppVersionDialog(
-                                         1,
-                                         it.data.android.title,
-                                         it.data.android.description
-                                     )
-                                 else  // normal update
-                                     UpdateAppVersionDialog(
-                                         0,
-                                         it.data.android.title,
-                                         it.data.android.description
-                                     )
-                             }*/
+                                if (versionName == it.data.android.criticalVersion.trim()
+                                ) // force update
+                                    UpdateAppVersionDialog(
+                                        1,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                                else  // normal update
+                                    UpdateAppVersionDialog(
+                                        0,
+                                        it.data.android.title,
+                                        it.data.android.description
+                                    )
+                            }*/
                         }
 
                     }
@@ -440,7 +440,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-        systemViewModel.checkAppVersion()
+       // systemViewModel.checkAppVersion()
     }
 
 
@@ -725,7 +725,7 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
-            15 -> navController.navigate(R.id.questionPaperFragment)
+               15 -> navController.navigate(R.id.questionPaperFragment)
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {

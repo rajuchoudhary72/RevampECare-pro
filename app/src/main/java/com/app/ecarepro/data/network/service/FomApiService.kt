@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
 import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
+import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
 import com.app.ecarepro.model.FeeCertificateList
@@ -51,6 +52,12 @@ interface FomApiService {
         @Url url: String,
         @Body request: FeeReceiptRequest
     ): NetworkFeeReceipt
+
+    @POST
+    suspend fun getFeeReceiptDownload (
+        @Url url: String,
+        @Body request: FeeReceiptDownloadRequest
+    ): NetworkFeeCerDownload
 
     @GET
     suspend fun getFeeCertificate(

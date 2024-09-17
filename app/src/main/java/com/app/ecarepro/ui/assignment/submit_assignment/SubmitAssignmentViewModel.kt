@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +22,22 @@ class SubmitAssignmentViewModel @Inject constructor(
         NetworkResult.Loading())
     val submitAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = submitAssignmentMutableStateFlow
 
+    private val viewAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkViewAssignment>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val viewAssignmentStateFlow: StateFlow<NetworkResult<NetworkViewAssignment>> = viewAssignmentMutableStateFlow
 
 
+    fun viewAssignment(  iD: String )=viewModelScope.launch {
+        runCatching {
+            viewAssignmentMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.assignmentDTL(iD )
+        }.onSuccess {
+            viewAssignmentMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            viewAssignmentMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
 
       suspend fun submitAssignment(
         id: String,

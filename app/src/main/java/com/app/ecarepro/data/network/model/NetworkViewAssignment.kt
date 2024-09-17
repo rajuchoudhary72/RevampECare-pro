@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.model
 
+import com.app.ecarepro.model.AssignSubmitStudent
+
 data class NetworkViewAssignment(
     val asgDate: String,
     val asgID: Int,
@@ -19,8 +21,11 @@ data class NetworkViewAssignment(
     val subjectID: Int,
     val submitDate: String,
     val hasAttachment: Boolean,
+    val isSubmissionOpened: Boolean,
     val asgFile: String,
     val title: String,
     val stIDs: String?,
+    val studentSubmission: List<AssignSubmitStudent>?
+
 
     )

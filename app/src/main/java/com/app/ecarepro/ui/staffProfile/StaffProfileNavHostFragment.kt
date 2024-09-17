@@ -44,7 +44,10 @@ class StaffProfileNavHostFragment : Fragment() {
     ): View {
         binding = FragmentStaffProfileNavHostBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        staffId= requireArguments().getInt(Constant.STAFF_ID_ARGUMENT)
+       try {
+           staffId= requireArguments().getInt(Constant.STAFF_ID_ARGUMENT)
+       }catch (e:Exception) {
+       }
         return binding.root
     }
 

@@ -566,6 +566,10 @@ class UserRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun getStaffProfileMain(sId: Int): NetworkStaffProfile {
+        return userService.getStaffProfileMain(sId)
+    }
+
     override suspend fun postMarkAttedance(
         classID: Int,
         subID: Int,
@@ -853,6 +857,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun viewAssignment(iD: String): NetworkViewAssignment {
         return userService.viewAssignment(iD)
+    }
+
+    override suspend fun assignmentDTL(iD: String): NetworkViewAssignment {
+        return userService.assignmentDTL(iD)
     }
 
     override suspend fun assignmnetSubmissionRPT(

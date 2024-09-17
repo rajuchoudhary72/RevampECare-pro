@@ -94,7 +94,6 @@ class NotificationFragment : Fragment() {
                         }
                     }
                 }
-
             }
         }
     }

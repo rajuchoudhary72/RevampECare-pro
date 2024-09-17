@@ -30,23 +30,26 @@ class OpenImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-         val imageUrl=  requireArguments().getString(Constant.URL_ARGUMENT)
+        try {
+            val imageUrl=  requireArguments().getString(Constant.URL_ARGUMENT)
+            binding.pbIma.isVisible=true
 
-        binding.pbIma.isVisible=true
+            binding.ivBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
 
-        binding.ivBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
+            Picasso.get()
+                .load(imageUrl)
+                .into(binding.ivShowAttachment, object : Callback {
+                    override fun onSuccess() {
+                        binding.pbIma.isVisible=false
+                    }
+                    override fun onError(e: Exception?) {
+                        binding.pbIma.isVisible=false
+                    }  })
+        }catch (e:Exception){ }
 
-        Picasso.get()
-            .load(imageUrl)
-            .into(binding.ivShowAttachment, object : Callback {
-                override fun onSuccess() {
-                    binding.pbIma.isVisible=false
-                }
-                override fun onError(e: Exception?) {
-                    binding.pbIma.isVisible=false
-                }  })
+
 
 
     }
