@@ -100,7 +100,6 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
-    implementation(libs.firebase.messaging)
     implementation(libs.com.google.firebase.firebase.crashlytics)
     kapt(libs.hilt.android.compiler)
 
@@ -123,7 +122,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.cloud.messaging)
-
+    implementation(libs.firebase.messaging)
     /* OTP Pin View */
     implementation(libs.otpview)
 
@@ -169,6 +168,7 @@ dependencies {
     implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
     implementation("com.google.firebase:firebase-analytics")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
+
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
