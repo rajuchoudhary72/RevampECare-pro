@@ -35,7 +35,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AssignRollNoFragment : Fragment(), MenuProvider {
+class AssignRollNoFragment : Fragment()  {
 
     private lateinit var assignRollNoListAdapter: AssignRollNoListAdapter
     private var studentListArrayList = mutableListOf<StudentRllNo>()
@@ -44,8 +44,8 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
     private lateinit var selectedClassData: MyClasseTeacherOf
     private lateinit var binding: FragmentAssignRollNoBinding
     private val assignRollNoViewModel: AssignRollNoViewModel by viewModels()
-    private lateinit var mMyClass: List<MyClasseTeacherOf>
-
+    private   var mMyClass= mutableListOf<MyClasseTeacherOf>()
+    private var isClassSelected=false
     private var mMyClassDataString: ArrayList<String> = ArrayList()
     private val nameFilter = listOf("Name", "Roll No", "Admission")
 
@@ -57,11 +57,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
         binding = FragmentAssignRollNoBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        if (activity is AppCompatActivity) {
-            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        }
-        menuHost = requireActivity()
-        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
 
         assignRollNoListAdapter =
             AssignRollNoListAdapter(studentListArrayList, this@AssignRollNoFragment)
@@ -99,6 +95,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
             AdapterView.OnItemClickListener { parent, view, pos, id ->
                 selectedClassData = mMyClass[pos]
                 getStudentListToAssignRollNo()
+                isClassSelected=true
             }
         binding.autoCompleteFilter.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
@@ -115,13 +112,18 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                         selectedFilterType = Constant.FILTER_ADMISSION_NO
                     }
                 }
-                if (selectedClassData != null) {
-                    getStudentListToAssignRollNo()
+                if (isClassSelected){
+                    if (selectedClassData != null) {
+                        getStudentListToAssignRollNo()
+                    }
                 }
+
             }
 
 
-
+binding.tvSave.setOnClickListener {
+    uploadAssignRollNo()
+}
 
 
     }
@@ -143,7 +145,8 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
                             if (it.data.myClasses != null) {
-                                mMyClass = it.data.myClasses
+
+                                mMyClass = it.data.myClasses.toMutableList()
 
                                 mMyClass.forEach { data ->
                                     mMyClassDataString.add(data.className.toString())
@@ -205,6 +208,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
 
                             if (it.data.students != null) {
 
+                                binding.tvSave.isVisible=true
                                 binding.recyclerAssignRollno.isVisible = true
                                 binding.tvNoData.isVisible = false
 
@@ -215,6 +219,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
                                 assignRollNoListAdapter.setData(it.data.students.toMutableList())
 
                             } else {
+                                binding.tvSave.isVisible=false
                                 binding.recyclerAssignRollno.isVisible = false
                                 binding.tvNoData.isVisible = true
                             }
@@ -230,20 +235,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
         assignRollNoViewModel.getStudentListToAssignRollNo(selectedClassData.id, selectedFilterType)
     }
 
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_save, menu)
-    }
 
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.action_save -> {
-                uploadAssignRollNo()
-                true
-            }
-
-            else -> false
-        }
-    }
 
     private fun uploadAssignRollNo() {
 
@@ -255,7 +247,7 @@ class AssignRollNoFragment : Fragment(), MenuProvider {
         assignRollNoViewModel.assignRollNumber(requestList).invokeOnCompletion {
             Toast.makeText(requireContext(), "Roll Number Assign Successfully", Toast.LENGTH_SHORT)
                 .show()
-            menuHost.removeMenuProvider(this)
+           binding.tvSave.isVisible=false
         }
 
 

@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* checking  for update version  */
-          checkAppVersion()
+           checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {

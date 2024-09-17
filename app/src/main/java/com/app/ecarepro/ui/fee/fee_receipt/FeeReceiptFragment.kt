@@ -1,22 +1,27 @@
 package com.app.ecarepro.ui.fee.fee_receipt
 
+import android.Manifest
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -36,10 +41,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
 @AndroidEntryPoint
 class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
@@ -50,7 +51,9 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     private lateinit var binding: FragmentFeeReceiptBinding
     private val feeReceiptViewModel: FeeReceiptViewModel by viewModels()
     private var firstTime=true
+    private val STORAGE_PERMISSION_REQUEST_CODE = 1001
 
+    private var base64String=""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -194,16 +197,16 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     override fun onItemClick(t: FeeReceipt, pos: Int, boolean: Boolean) {
          when(pos){
              1 ->{
-                 getFeeCertificateDownload(t.recid.toString(),1)
+                 getFeeCertificateDownload(t.recid.toString(),1,t.recdate)
              }
              2 ->{
-                 getFeeCertificateDownload(t.recid.toString(),2)
+                 getFeeCertificateDownload(t.recid.toString(),2,t.recdate)
              }
          }
          }
 
 
-    fun getFeeCertificateDownload(recid: String, i: Int){
+    fun getFeeCertificateDownload(recid: String, i: Int, recdate: String?){
         lifecycleScope.launch {
             feeReceiptViewModel.feeCertificateDownloadStateFlow.collectLatest {
                 when (it) {
@@ -257,8 +260,13 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                             } catch (e: Exception) {
                                 // Handle exception
                             }*/
-
-                            generatePDFFromBase64(it.data.bytedata,"FeeReceipt" )
+                            base64String=it.data.bytedata
+                            if (checkStoragePermission()) {
+                                saveAndOpenPdf(it.data.bytedata,"FeeReceipt",i,recdate )
+                            } else {
+                                requestStoragePermission()
+                            }
+                           // generatePDFFromBase64(it.data.bytedata,"FeeReceipt" )
                         }
                     } }
             }
@@ -323,5 +331,106 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
         intent.setDataAndType(uri, "application/pdf")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(intent)
+    }
+
+
+
+    private fun saveAndOpenPdf(base64String: String, s: String, i: Int, recdate: String?) {
+
+
+
+        try {
+            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+
+
+           // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
+            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                "/eCarePro Download/FeeReceipt$recdate.pdf"
+            )
+            try {
+
+                val outputStream = FileOutputStream(file)
+                outputStream.write(decodedBytes)
+                outputStream.close()
+                if (i==2){
+                    Toast.makeText(requireContext(), "Fee Receipt saved to eCarePro Download", Toast.LENGTH_SHORT).show()
+             }
+             } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+                 Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
+            }
+
+
+if (i==1){
+    val intent = Intent(Intent.ACTION_VIEW)
+    val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".myFileProvider", file)
+    intent.setDataAndType(uri, "application/pdf")
+    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    startActivity(intent)
+}
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // Handle exceptions appropriately (e.g., show an error message)
+        }
+    }
+
+    private fun checkStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Android 14 and above
+            val imagePermission = ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED
+            val videoPermission = ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_MEDIA_VIDEO
+            ) == PackageManager.PERMISSION_GRANTED
+            imagePermission && videoPermission
+        } else {
+            // Android 13 and below
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun requestStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // For Android 14 (API level 33) and above
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.READ_MEDIA_IMAGES,
+                    Manifest.permission.READ_MEDIA_VIDEO
+                ),
+                STORAGE_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // For Android 13 (API level 32) and below
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                STORAGE_PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with saving and opening the PDF
+              //  saveAndOpenPdf(base64String, "FeeReceipt", i, recdate) // Assuming you have the Base64 string available
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message)
+                Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

@@ -195,14 +195,17 @@ class StuMarkAttendanceViewModel  @Inject constructor(
         val data = mutableListOf<Recipient>()
 
         uploadStudentList. forEach { contact ->
-            data.add(
-                Recipient(
-                     receiverID = contact.stID,
-                    body = markAttModel.smS_Temp .replace("S____", contact.stName ?: "")
-                        .replace("C____", className ?: ""),
-                    receiverType = 2
+            if (contact.status==2){
+                data.add(
+                    Recipient(
+                        receiverID = contact.stID,
+                        body = markAttModel.smS_Temp .replace("S____", contact.stName ?: "")
+                            .replace("C____", className ?: ""),
+                        receiverType = 2
+                    )
                 )
-            )
+            }
+
         }
 
         return data
@@ -216,18 +219,20 @@ class StuMarkAttendanceViewModel  @Inject constructor(
         val data = mutableListOf<Data>()
 
         uploadStudentList. forEach { contact ->
-            data.add(
-                Data(
-                    mobile = contact.contactMob,
-                    rCPTID = contact.stID.toString(),
-                    rCPTType = 2,
-                    templateID = markAttModel.templateID.toString(),
-                    sMS = markAttModel.smS_Temp .replace("S____", contact.stName ?: "")
-                        .replace("C____", className ?: "")
+             if (contact.status==2){
+                 data.add(
+                     Data(
+                         mobile = contact.contactMob,
+                         rCPTID = contact.stID.toString(),
+                         rCPTType = 2,
+                         templateID = markAttModel.templateID.toString(),
+                         sMS = markAttModel.smS_Temp .replace("S____", contact.stName ?: "")
+                             .replace("C____", className ?: "")
 
 
-                )
-            )
+                     )
+                 )
+             }
         }
 
         return data

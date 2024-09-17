@@ -26,7 +26,22 @@
             app:title="Assign Roll Number"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            <TextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:fontFamily="@font/ubuntu_medium"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                 android:layout_marginEnd="@dimen/_10sdp"
+                 android:textColor="@color/white"
+                android:text="@string/save_C"
+                android:textSize="16sp"
+
+                />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -148,8 +163,8 @@
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/iv_no_item"
                 android:fontFamily="@font/ubuntu_medium"
                 android:layout_gravity="center"
