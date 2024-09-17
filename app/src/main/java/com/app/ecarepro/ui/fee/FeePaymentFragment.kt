@@ -87,18 +87,20 @@ class FeePaymentFragment : Fragment() {
        Log.i("paymentUrl",feePaymentViewModel.feePayemtURL + "?token=" + tokenKey)
 
         binding.apply {
-
+            (requireActivity() as MainActivity).showLoader(true)
             wvFeePayment.settings.javaScriptEnabled = true
             wvFeePayment.settings.setSupportZoom(true)
             wvFeePayment.webViewClient= object  : WebViewClient(){
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    (requireActivity() as MainActivity).showLoader(true)
+
                     super.onPageStarted(view, url, favicon)
+
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    (requireActivity() as MainActivity).showLoader(false)
+
                     super.onPageFinished(view, url)
+                    (requireActivity() as MainActivity).showLoader(false)
                 }
             }
 
