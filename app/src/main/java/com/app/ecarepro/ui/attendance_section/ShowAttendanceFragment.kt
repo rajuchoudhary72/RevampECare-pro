@@ -45,9 +45,9 @@ class ShowAttendanceFragment : Fragment() {
     val dateFormateForApi = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val dateTo: Calendar = Calendar.getInstance()
     private var yId = 0
-    private var toFragment: String = ""
+ /*   private var toFragment: String = ""
     private var toStartDate: String = ""
-    private var toEndDate: String = ""
+    private var toEndDate: String = ""*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -56,11 +56,17 @@ class ShowAttendanceFragment : Fragment() {
         binding = FragmentShowAttendanceBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.autoCompleteYear.setAdapter(sessionAdapter)
-        try {
+      /*  try {
+        if (toFragment.isNullOrEmpty()){
+
+        }else{
             toFragment = requireArguments().getString("studentID").toString()
             toStartDate = requireArguments().getString("formDate").toString()
             toEndDate = requireArguments().getString("tillDate").toString()
-        }catch (e:Exception){}
+        }
+        }catch (e:IllegalStateException){
+            e.message
+        }*/
         binding.dateRange.setOnClickListener {
             pickDateRange()
         }
@@ -96,8 +102,12 @@ class ShowAttendanceFragment : Fragment() {
 
 
         binding.apply {
-
-            if (toFragment != null) {
+            dateRange.setText("$from - $to")
+            tvHeadingDateRange.text = getString(
+                R.string.attendance_between_01_aug_2021_to_09_oct_2021,
+                "$from to $to"
+            )
+            /*if (toFragment.isNullOrEmpty()){
                 dateRange.setText("$toStartDate - $toEndDate")
                 tvHeadingDateRange.text = getString(
                     R.string.attendance_between_01_aug_2021_to_09_oct_2021,
@@ -109,7 +119,7 @@ class ShowAttendanceFragment : Fragment() {
                     R.string.attendance_between_01_aug_2021_to_09_oct_2021,
                     "$from to $to"
                 )
-            }
+            }*/
 
         }
         if (setAsFilter)
@@ -188,10 +198,13 @@ class ShowAttendanceFragment : Fragment() {
 
 
     }
-
-    private fun callApi() {
-        if (toFragment != null) {
-            attendanceViewModel.getAttendance(toStartDate, toEndDate, "$yId", toFragment)
+    private fun callApi(){
+        attendanceViewModel.getAttendance(dateFormateForApi.format(Date(dateFrom.timeInMillis)), dateFormateForApi.format(Date(dateTo.timeInMillis)), "$yId","")
+    }
+  /*  private fun callApi() {
+        attendanceViewModel.getAttendance(toStartDate, toEndDate, "$yId", "")
+      *//*  if (toFragment.isNullOrEmpty()){
+            attendanceViewModel.getAttendance(toStartDate, toEndDate, "$yId", "")
         } else {
             attendanceViewModel.getAttendance(
                 dateFormateForApi.format(Date(dateFrom.timeInMillis)),
@@ -199,7 +212,7 @@ class ShowAttendanceFragment : Fragment() {
                 "$yId",
                 toFragment
             )
-        }
+        }*//*
     }
-
+*/
 }

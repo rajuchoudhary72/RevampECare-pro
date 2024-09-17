@@ -72,7 +72,8 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -241,14 +242,18 @@ class MainActivity : AppCompatActivity() {
         }
         // Check for permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             // Request the permission
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_PHONE_STATE), 1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_PHONE_STATE),
+                1
+            )
         } else {
             // Permission is already granted, get the IMEI
             getIMEINumber()
         }
-
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -315,7 +320,38 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+/*    private fun handleNotificationClick(data: Bundle) {
+        lifecycleScope.launch {
+            showLoader(true)
+            delay(2000)
+            val schCode = data.getString("schCode") ?: return@launch
+            val userID = data.getString("userID")?.toInt() ?: return@launch
+            val menuId = data.getString("MenuId")?.toInt()
+            val childMenuId = data.getString("ChMenuID")?.toInt()
 
+            if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
+                return@launch
+            }
+
+            val currentSchool = userDataStore.getSchoolData()
+            if (currentSchool?.schoolCode != schCode) {
+                userDataStore.setCurrentSchoolCode(schCode)
+            }
+
+            val currentUser = userDataStore.getUser()
+            if (currentUser?.userId != userID) {
+                userDataStore.setCurrentUserId(userID)
+            }
+
+            if (menuId != null) {
+                if (childMenuId != null) {
+                    getFragmentId(menuId, childMenuId)
+                }
+            }
+            showLoader(false)
+        }
+
+    }*/
     private fun handleNotificationClick(data: Bundle) {
         val menuId = data.getString("MenuId")?.toInt()
         val childMenuId = data.getString("ChMenuID")?.toInt()
@@ -357,7 +393,7 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionName $versionName")
 
                             if (versionName < it.data.android.currentVersion) {
-                                // open  dialog
+                              // open  dialog
                                 if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
                                     //soft  update
                                     UpdateAppVersionDialog(
@@ -404,7 +440,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-         systemViewModel.checkAppVersion()
+       systemViewModel.checkAppVersion()
     }
 
 
@@ -1393,8 +1429,13 @@ class MainActivity : AppCompatActivity() {
         ll_normal_update = dialog.findViewById(R.id.ll_normal_update)
         tv_title.text = title
         tv_description.text = message
-        if (dialog_value == 1) ll_critical_update.visibility = View.VISIBLE
-        else ll_normal_update.visibility = View.VISIBLE
+        if (dialog_value == 1) {
+            ll_critical_update.visibility = View.VISIBLE
+            ll_normal_update.visibility = View.GONE
+        } else {
+            ll_normal_update.visibility = View.VISIBLE
+            ll_critical_update.visibility = View.GONE
+        }
         rel_normal_update_cancel.setOnClickListener { dialog.dismiss() }
         rel_normal_update_update.setOnClickListener {
             try {
