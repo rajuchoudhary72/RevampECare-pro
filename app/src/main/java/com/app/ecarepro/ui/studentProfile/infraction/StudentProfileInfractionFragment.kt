@@ -12,7 +12,7 @@ import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionListAdapter
 
 
-class StudentProfileInfractionFragment( val recentInfractions: List<RecentInfraction>) : Fragment() {
+class StudentProfileInfractionFragment( val recentInfractions: List<RecentInfraction>?) : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileInfractionBinding
 
@@ -30,6 +30,7 @@ class StudentProfileInfractionFragment( val recentInfractions: List<RecentInfrac
         super.onViewCreated(view, savedInstanceState)
 
         if (recentInfractions!=null){
+        if (recentInfractions.isNotEmpty()){
             binding.recyclerInfractionList.isVisible=true
             binding.tvNoData.isVisible=false
 
@@ -43,6 +44,10 @@ class StudentProfileInfractionFragment( val recentInfractions: List<RecentInfrac
                 layoutManager = LinearLayoutManager(activity)
                 adapter = circularAdapter
             }
+        }else{
+            binding.recyclerInfractionList.isVisible=false
+            binding.tvNoData.isVisible=true
+        }
         }else{
             binding.recyclerInfractionList.isVisible=false
             binding.tvNoData.isVisible=true

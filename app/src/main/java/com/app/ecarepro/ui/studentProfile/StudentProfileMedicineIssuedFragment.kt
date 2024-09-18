@@ -30,6 +30,7 @@ class StudentProfileMedicineIssuedFragment(private val medicineIssued: List<Medi
 
 
             if (medicineIssued!=null) {
+            if (medicineIssued.isNotEmpty()) {
 
                 binding.rvMedicineIssue.isVisible = true
                 binding.tvNoData.isVisible = false
@@ -42,6 +43,10 @@ class StudentProfileMedicineIssuedFragment(private val medicineIssued: List<Medi
                     layoutManager = LinearLayoutManager(activity)
                     adapter = profileMedicineListAdapter
                 }
+            } else {
+                binding.rvMedicineIssue.isVisible = false
+                binding.tvNoData.isVisible = true
+            }
             } else {
                 binding.rvMedicineIssue.isVisible = false
                 binding.tvNoData.isVisible = true

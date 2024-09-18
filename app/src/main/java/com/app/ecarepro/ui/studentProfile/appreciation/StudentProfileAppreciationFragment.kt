@@ -12,7 +12,7 @@ import com.app.ecarepro.model.RecentAppreciation
 import com.app.ecarepro.ui.discipline_log.infraction.appreciation.adapter.AppreciationListAdapter
 
 
-class StudentProfileAppreciationFragment(val recentAppreciations: List<RecentAppreciation>) : Fragment() {
+class StudentProfileAppreciationFragment(val recentAppreciations: List<RecentAppreciation>?) : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileappreciationBinding
 
@@ -27,7 +27,8 @@ class StudentProfileAppreciationFragment(val recentAppreciations: List<RecentApp
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (recentAppreciations!=null){
+        if (recentAppreciations!=null   ){
+        if (recentAppreciations.isNotEmpty()   ){
             binding.recyclerInfractionList.isVisible=true
             binding.tvNoData.isVisible=false
 
@@ -41,6 +42,10 @@ class StudentProfileAppreciationFragment(val recentAppreciations: List<RecentApp
                 layoutManager = LinearLayoutManager(activity)
                 adapter = appreciationListAdapter
             }
+        }else{
+            binding.recyclerInfractionList.isVisible=false
+            binding.tvNoData.isVisible=true
+        }
         }else{
             binding.recyclerInfractionList.isVisible=false
             binding.tvNoData.isVisible=true

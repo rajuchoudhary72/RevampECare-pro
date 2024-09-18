@@ -127,19 +127,19 @@ class StudentProfileNavHostFragment : Fragment() {
                                         }
                                         "Infraction" -> {
                                             if (i.isShow){
-                                                if (it.data.recentInfractions!=null){
+
                                                     fragmentList.add(StudentProfileInfractionFragment(it.data.recentInfractions))
                                                     fragmentName.add("Infraction Details")
-                                                }
+
 
                                             }
                                         }
                                         "Appreciation" -> {
                                             if (i.isShow){
-                                                if (it.data.recentAppreciations!=null){
+
                                                     fragmentList.add(StudentProfileAppreciationFragment(it.data.recentAppreciations))
                                                     fragmentName.add("Appreciation Details")
-                                                }
+
 
                                             }
                                         }

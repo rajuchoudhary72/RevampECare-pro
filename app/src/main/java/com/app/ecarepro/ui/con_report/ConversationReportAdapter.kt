@@ -158,7 +158,7 @@ class ConversationReportAdapter(
                 try {
                     val date = sdf.parse(conversation.sentOn)
                     val destDate = SimpleDateFormat("dd MMM",Locale.getDefault())
-                    tvTimeAgo.text = Constant.dateToShowCon(dt)
+                    tvTimeAgo.text = Constant.dateToShowConn(dt)
                 } catch (e: ParseException) {
                     e.printStackTrace()
                 }

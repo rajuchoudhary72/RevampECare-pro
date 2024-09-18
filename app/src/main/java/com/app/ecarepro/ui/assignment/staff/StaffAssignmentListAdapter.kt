@@ -13,7 +13,7 @@ import com.app.ecarepro.utils.Constant
 class StaffAssignmentListAdapter(
     private var activityLST: List<TeacherAssignment>,
     private var activityCalenderFragment: StaffAssignmentsListFragment,
-    val userType: String
+    val teacherTypeUser: Boolean
 ) :
     RecyclerView.Adapter<StaffAssignmentListAdapter.AssignmentListAdapter>() {
 
@@ -51,7 +51,7 @@ class StaffAssignmentListAdapter(
 
             bindingm.assignmentData = teacherAssignment
 
-            if ( userType == Constant.PRINCIPAL || userType ==  Constant.MANAGEMENT) {
+            if (!teacherTypeUser) {
                 bindingm.llDelete.isVisible=false
                 bindingm.llEdit.isVisible=false
             }

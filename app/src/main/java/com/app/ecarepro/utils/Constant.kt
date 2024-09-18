@@ -46,6 +46,7 @@ class Constant {
         const val NOTICE_SCHOOL = "notice_school"
         const val USER_TYPE = "user_type"
         const val USER_STAFF = "user_staff"
+        const val USER_TEACHER = "user_teacher"
         const val USER_PARENT_STUDENT = "user_parent_student"
 
         const val url = "url"
@@ -158,7 +159,7 @@ class Constant {
             return  outputFormat.format(date!!)
         }
 
-        fun dateToShowCon(inputDateStr:String):String {
+        fun dateToShowConn(inputDateStr:String):String {
             val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.getDefault() )
             val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
             val date: Date? = inputFormat.parse(inputDateStr)
