@@ -318,41 +318,49 @@ class MainActivity : AppCompatActivity() {
         intent?.extras?.let { data ->
             handleNotificationClick(data)
         }
-
     }
-/*    private fun handleNotificationClick(data: Bundle) {
+
+    private fun handleNotificationClick(data: Bundle) {
         lifecycleScope.launch {
             showLoader(true)
             delay(2000)
-            val schCode = data.getString("schCode") ?: return@launch
-            val userID = data.getString("userID")?.toInt() ?: return@launch
+
+            Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
+            val schCode = data.getString("SchCode") ?: return@launch
+            val userID = data.getString("UserID")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
 
+            Log.e("Note", "$schCode $userID $menuId $childMenuId" )
+
             if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
+                Log.e("Note", "return@launch", )
                 return@launch
             }
 
             val currentSchool = userDataStore.getSchoolData()
             if (currentSchool?.schoolCode != schCode) {
-                userDataStore.setCurrentSchoolCode(schCode)
+                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
+                userDataStore.setCurrentSchoolCode(schCode!!)
             }
 
             val currentUser = userDataStore.getUser()
             if (currentUser?.userId != userID) {
-                userDataStore.setCurrentUserId(userID)
+                Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
+                userDataStore.setCurrentUserId(userID!!)
             }
 
             if (menuId != null) {
                 if (childMenuId != null) {
+                    Log.e("Note","getFragmentId(menuId, childMenuId)", )
                     getFragmentId(menuId, childMenuId)
                 }
             }
             showLoader(false)
         }
 
-    }*/
-    private fun handleNotificationClick(data: Bundle) {
+    }
+/*    private fun handleNotificationClick(data: Bundle) {
         val menuId = data.getString("MenuId")?.toInt()
         val childMenuId = data.getString("ChMenuID")?.toInt()
         if (menuId != null) {
@@ -360,7 +368,7 @@ class MainActivity : AppCompatActivity() {
                 getFragmentId(menuId, childMenuId)
             }
         }
-    }
+    }*/
 
     private fun checkAppVersion() {
         lifecycleScope.launch {
