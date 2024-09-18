@@ -225,10 +225,15 @@ class AddQuestionBankFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
+                            if(!it.data.questionTypes.isNullOrEmpty()){
+                                questionTypes = it.data.questionTypes .toMutableList()
 
-                            questionTypes = it.data.questionTypes.toMutableList()
-                            myClasses = it.data.myClasses.toMutableList()
 
+                            }
+                              if(!it.data.myClasses.isNullOrEmpty()){
+                                 myClasses = it.data.myClasses .toMutableList()
+
+                            }
                         }
 
                     } } } }
@@ -252,8 +257,10 @@ class AddQuestionBankFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
+                            if(!it.data.subjects.isNullOrEmpty()){
+                                subjectLists = it.data.subjects.toMutableList()
 
-                            subjectLists = it.data.subjects.toMutableList()
+                            }
 
 
                         }
@@ -283,8 +290,11 @@ class AddQuestionBankFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
 
-                            chapterLists = it.data.chapters.toMutableList()
 
+                            if(!it.data.chapters.isNullOrEmpty()){
+                                chapterLists = it.data.chapters.toMutableList()
+
+                            }
 
                         }
 

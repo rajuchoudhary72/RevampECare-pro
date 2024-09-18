@@ -310,8 +310,14 @@ class ProfileFragment : Fragment() {
         profileItem {
             id(R.string.spouse_name)
             iconRes(R.drawable.ic_profile)
-            title(getString(R.string.spouse_name))
-            subTitle(profile.fatherHusbandName)
+            if (profile.isSpouseName==true){
+                title(getString(R.string.spouse_name))
+                subTitle(profile.fatherHusbandName)
+            }else{
+                title("Father Name")
+                subTitle(profile.fatherHusbandName)
+            }
+
         }
         profileItem {
             id(R.string.date_of_anniversary)

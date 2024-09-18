@@ -314,9 +314,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                             binding.tvNoData.isVisible = true
                         } } } }  } }
         stuMarkAttendanceViewModel.mySubjects(classID)
-
-
-    }
+ }
 
     private fun getClassList() {
 

@@ -115,7 +115,7 @@ class InboxMessageFragment : Fragment() {
                                     designation(message.designation)
                                 }else  if (message.senderType==1){
                                     designation("Class :-"+message.className)
-                                }else{
+                                }else  if (message.senderType==2){
                                     designation(
                                         stringFormat2String((requireActivity() as MainActivity),
                                             R.string.InboxList,
@@ -123,6 +123,9 @@ class InboxMessageFragment : Fragment() {
                                             message.className
                                         )
                                     )
+                                }
+                                else{
+                                    designation("N/A")
                                 }
                                 photo(message.photo)
                                 date(message.sentOn)

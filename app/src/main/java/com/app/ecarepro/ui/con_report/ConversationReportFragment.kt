@@ -185,8 +185,8 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
 
         conversationReportViewModel.getConversationReport(
             pg,
-            binding.tvDateFrom.text.toString(),
-            binding.tvDateTo.text.toString()
+            Constant.toSystemDate(binding.tvDateFrom.text.toString()),
+            Constant.toSystemDate(binding.tvDateTo.text.toString())
         )
 
     }
@@ -250,8 +250,8 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
         val rgRecipientRb4 = rgRecipient.findViewById<RadioButton>(R.id.rgRecipientRb4)
         val rgAnyRb1 = rgHasWord.findViewById<RadioButton>(R.id.rgAnyRb1)
         val rgSpecificRb2 = rgHasWord.findViewById<RadioButton>(R.id.rgSpecificRb2)
-        tvFilterStartDate.setText(Constant.dateToShowCon(mFilterStartDate))
-        tvFilterEnd.setText(Constant.dateToShowCon(mFilterEndDate))
+        tvFilterStartDate.text = mFilterStartDate
+        tvFilterEnd.text = mFilterEndDate
         ivCross.setOnClickListener { dialog.dismiss() }
         llFilterStart.setOnClickListener {
             ECareDataPicker(

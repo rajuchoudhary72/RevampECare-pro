@@ -159,8 +159,13 @@ class ApplyLeaveFragment : Fragment() {
 
                         if (it.data != null) {
 
-                            holidayList = it.data.holidayList.holiday as MutableList<Holiday>
-                            leaveTerm=it.data.leaveTerms
+                            if ( it.data.holidayList !=null){
+                            if ( it.data.holidayList.holiday !=null){
+                                holidayList = it.data.holidayList.holiday as MutableList<Holiday>
+
+                            }
+                            }
+                             leaveTerm=it.data.leaveTerms
                             termCondition=it.data.termCondition
 
                              if (it.data.leaveTypes!=null){
