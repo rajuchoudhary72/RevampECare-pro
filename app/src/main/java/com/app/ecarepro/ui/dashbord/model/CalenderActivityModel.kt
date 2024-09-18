@@ -104,13 +104,17 @@ class CalenderActivityModel(val activities: List<Activity>) :
     private fun getEvents(date: LocalDate): List<Activity> {
         val formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH)
         return activities.filter { activity ->
-            activity.fromDate?.let {
-                val activityDate = LocalDate.parse(it, formatter)
-                activityDate == date
-            } ?: false
+            try {
+                activity.fromDate?.let {
+                    val activityDate = LocalDate.parse(it, formatter)
+                    activityDate == date
+                } ?: false
+            }catch (e:Exception){
+                e.printStackTrace()
+                false
+            }
         }
     }
-
     private fun ItemCalenderActivityBinding.buildEventModel(events: List<Activity>) {
         eventsView.isVisible = events.isNotEmpty()
         eventsView.withModels {
