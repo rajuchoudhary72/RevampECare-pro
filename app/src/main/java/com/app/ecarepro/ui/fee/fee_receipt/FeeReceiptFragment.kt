@@ -345,7 +345,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
            // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
             val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "/eCarePro Download/FeeReceipt$recdate.pdf"
+                "FeeReceipt$recdate.pdf"
             )
             try {
 

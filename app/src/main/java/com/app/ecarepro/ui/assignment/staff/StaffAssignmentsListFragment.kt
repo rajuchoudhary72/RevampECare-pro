@@ -31,6 +31,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     private   var staffId: String=""
     private   lateinit var binding : FragmentStaffAssignmentsListBinding
     private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
+    private var teacherTypeUser= true
 
 
     override fun onCreateView(
@@ -48,8 +49,9 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if ( teacherAssignmentViewModel. userType == Constant.PRINCIPAL || teacherAssignmentViewModel. userType ==  Constant.MANAGEMENT) {
+        if ( staffId.isNotEmpty()) {
             binding.fbPostAssignment.isVisible=false
+            teacherTypeUser=false
         }
 
         binding.fbPostAssignment.setOnClickListener {
@@ -80,7 +82,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
                                 val assignmentListAdapter =
                                     StaffAssignmentListAdapter(it.data.assignments,
                                         this@StaffAssignmentsListFragment,
-                                        teacherAssignmentViewModel.userType)
+                                        teacherTypeUser)
 
                                 binding.rvAssignment.apply {
                                     setHasFixedSize(true)
@@ -121,6 +123,7 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
                 findNavController().navigate(R.id.viewAssignmentFragment,Bundle( ).apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                     putBoolean(Constant.IS_LATE_SUBMITTED, t.lateSubmission!!)
+                    putBoolean(Constant.USER_TEACHER, teacherTypeUser)
                     putParcelable("TeacherAssignment", t)
 
 

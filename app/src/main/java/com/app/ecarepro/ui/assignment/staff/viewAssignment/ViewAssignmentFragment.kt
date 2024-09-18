@@ -48,6 +48,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     private lateinit var binding : FragmentViewAssignmentBinding
     private val viewAssignmentViewModel : ViewAssignmentViewModel by viewModels()
     private var submitType =1
+    private var teacherTypeUser= true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +59,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
          try {
              assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
              isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
+             teacherTypeUser = requireArguments().getBoolean(Constant.USER_TEACHER)
              arguments?.getParcelable<TeacherAssignment>("TeacherAssignment").let { data ->
                  assignmentDetails= data!!
 
@@ -70,6 +72,13 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (!teacherTypeUser){
+            binding.llSubmitNotSubmit.isVisible=false
+            binding.rvSubmitList.isVisible=false
+            binding.tvAssignmentDate.isVisible=false
+
+        }
 
         binding.btnLateSubmit.isVisible=isLateSubmitted
          if (assignmentDetails!=null){
@@ -242,9 +251,12 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
                 }  }
             } }
-
         viewAssignmentViewModel.viewAssignment(assignmentId)
-        viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
+
+        if ( teacherTypeUser){
+             viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
+        }
+
 
 
 
@@ -354,6 +366,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             if (tv_date.text.toString() == "") {
                 mainActivity().showMessage("Please Select Date")
             } else {
+
                  offlineSubmited(t, tv_date.text.toString())
                 dialog.dismiss()
             }

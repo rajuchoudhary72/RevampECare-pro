@@ -34,7 +34,7 @@ class StudentRepoAttAdapter(private var classSummaryList: List<ClassSummary>,
             }
             tvTotalStudentCount.text= buildString {
                 append("Total Student : ")
-                append(data.present+data.absent+data.late+data.leave+data.present)
+                append(data.present+data.absent+data.late+data.leave )
             }
             tvTotalAbsentCount.text= buildString {
                 append("Absent : ")

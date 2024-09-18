@@ -73,7 +73,7 @@ class FeeReceiptViewModel @Inject constructor(
                 userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/feereceipt",
                 FeeReceiptRequest(
                 userDataStore.getSchoolData()!!.schoolCode,
-                    userDataStore.getUserNameID().toString(),
+                    userDataStore.getUser()?.userId.toString(),
                 "",
                 "",
                 sessionid
@@ -95,7 +95,7 @@ class FeeReceiptViewModel @Inject constructor(
                 userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/receiptdownload" ,
                 FeeReceiptDownloadRequest(
                     userDataStore.getSchoolData()!!.schoolCode,
-                    userDataStore.getUserNameID().toString(),
+                    userDataStore.getUser()?.userId.toString(),
                     recid,"",sessionid
 
                 ) )
