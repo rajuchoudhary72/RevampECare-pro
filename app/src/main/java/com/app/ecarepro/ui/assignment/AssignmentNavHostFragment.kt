@@ -30,6 +30,7 @@ class AssignmentNavHostFragment : Fragment() {
     private   var assignmentType: String=""
     private   var assignmentID: String=""
     private lateinit var binding : FragmentAssignmentNavHostBinding
+    private var isClassAssignment=false
     private val assignmentNavHostViewModel : AssignmentNavHostViewModel by viewModels()
 
     override fun onCreateView(
@@ -75,7 +76,7 @@ class AssignmentNavHostFragment : Fragment() {
 
                                  it.data.subjectAssignments.forEach { assignmentsData ->
                                     fragmentList.add(AssignmentListFragment(assignmentsData.assignments,
-                                       assignmentNavHostViewModel.userType,assignmentType,assignmentID ))
+                                       isClassAssignment ))
                                  }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
@@ -129,8 +130,10 @@ class AssignmentNavHostFragment : Fragment() {
         }
 
         if (assignmentType==Constant.CLASS_ASSIGNMENT){
+            isClassAssignment=true
             assignmentNavHostViewModel.getClassAssignment(assignmentID)
         }else{
+            isClassAssignment=false
             assignmentNavHostViewModel.getAssignment()
         }
 

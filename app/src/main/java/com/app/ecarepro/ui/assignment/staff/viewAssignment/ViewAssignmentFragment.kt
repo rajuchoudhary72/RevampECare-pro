@@ -76,7 +76,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         if (!teacherTypeUser){
             binding.llSubmitNotSubmit.isVisible=false
             binding.rvSubmitList.isVisible=false
-            binding.tvAssignmentDate.isVisible=false
+            binding.tvDetailsAssi.isVisible=false
 
         }
 
@@ -261,7 +261,12 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
 
         binding.llView.setOnClickListener {
-            popUpFileList(assignmentDetails!!.asgFiles!!)
+            if (assignmentDetails!=null){
+                if (assignmentDetails!!.asgFiles !=null){
+                    popUpFileList(assignmentDetails!!.asgFiles!!)
+                }
+            }
+
         }
 
 

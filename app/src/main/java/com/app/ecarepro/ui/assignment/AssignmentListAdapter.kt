@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso
 class AssignmentListAdapter(
     private var activityLST: List<Assignment>,
     private var activityCalenderFragment: AssignmentListFragment,
-    val userType: String
+    val isClassAssignment: Boolean
 ) :
     RecyclerView.Adapter<AssignmentListAdapter.AssignmentListAdapter>() {
 
@@ -52,10 +52,10 @@ class AssignmentListAdapter(
             }
 
 
-            if ( userType == Constant.PRINCIPAL || userType ==  Constant.MANAGEMENT) {
+            if ( isClassAssignment) {
                 bindingm.llSubmit.isVisible=false
-                 bindingm.llView.isVisible=false
 
+                bindingm.llView.isVisible=true
                 bindingm.dateRel4.isVisible=true
                 bindingm.updatedByPerson.text=assignment.updateBy
 
