@@ -167,7 +167,7 @@ class ProfileFragment : Fragment() {
                     name(uiState.profile.name)
                     designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
-                    contactNumber(uiState.profile.emergencyContactNo)
+                    contactNumber(uiState.profile.mobile)
                     /*    canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
                         canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)*/
 
@@ -310,7 +310,7 @@ class ProfileFragment : Fragment() {
         profileItem {
             id(R.string.spouse_name)
             iconRes(R.drawable.ic_profile)
-            if (profile.isSpouseName==true){
+            if (profile.gender=="Female"&&profile.maritalStatus=="Married"){
                 title(getString(R.string.spouse_name))
                 subTitle(profile.fatherHusbandName)
             }else{
@@ -396,16 +396,23 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.uan_account_number))
         }
         profileItem {
-            id(R.string.contact_number)
+            id(R.string.emergencyContactNo)
             iconRes(R.drawable.ic_contact_no_)
-            title(getString(R.string.contact_number))
+            title(getString(R.string.emergencyContactNo))
             subTitle(profile.emergencyContactNo)
         }
         profileItem {
             id(R.string.spouse_contact_number)
-            iconRes(R.drawable.ic_contact_no_)
-            title(getString(R.string.spouse_contact_number))
-            subTitle(profile.fatherHusbandMob)
+            if (profile.gender=="Female"&&profile.maritalStatus=="Married"){
+                iconRes(R.drawable.ic_contact_no_)
+                title(getString(R.string.spouse_contact_number))
+                subTitle(profile.fatherHusbandMob)
+            }else{
+                iconRes(R.drawable.ic_contact_no_)
+                title("Father Contact No. :")
+                subTitle(profile.fatherHusbandMob)
+            }
+
         }
         profileItem {
             id(R.string.email_id)

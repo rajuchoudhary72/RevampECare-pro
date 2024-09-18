@@ -109,16 +109,10 @@ data class Workload(
     val teacherName: String?
 )
 data class Activity(
-    @SerializedName("duration")
-    val duration: Int?,
     @SerializedName("fromDate")
     val fromDate: String?,
     @SerializedName("id")
     val id: Any?,
-    @SerializedName("isWorking")
-    val isWorking: Boolean?,
-    @SerializedName("tillDate")
-    val tillDate: Any?,
     @SerializedName("title")
     val title: String?
 )

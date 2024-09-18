@@ -97,6 +97,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="@dimen/_30sdp"
+                android:padding="1dp"
+                android:backgroundTint="@color/green"
                 android:background="@color/green"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/label_total_student"

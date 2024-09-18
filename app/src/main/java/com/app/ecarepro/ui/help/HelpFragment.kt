@@ -39,7 +39,7 @@ class HelpFragment : Fragment() {
         binding.btnFaq.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("title", "F&Q")
-            bundle.putString("url", "https://www.franciscansolutions.com/Default.aspx#faqBox    ")
+            bundle.putString("url", "https://www.franciscansolutions.com/Default.aspx#faqBox")
             findNavController().navigate(R.id.webViewFragment,bundle)
         }
 
