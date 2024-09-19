@@ -702,7 +702,7 @@
 
 
     <string name="_02_may_18"> </string>
-    <string name="search_by_name_class_section_roll_no_father_name">Search by name, class, section, roll no, father name</string>
+    <string name="search_by_name_class_section_roll_no_father_name">Search by Name, Section, Roll No, Father name</string>
     <string name="sort_by_roll_no">Sort by Roll No</string>
     <string name="sort_by_admission_no">Sort by Admission No</string>
     <string name="o">O</string>
@@ -712,4 +712,7 @@
     <string name="late_count"><b>Late:</b> %s</string>
     <string name="view_file">View File</string>
     <string name="save_C">SAVE</string>
+    <string name="day_scholer">Day Scholer</string>
+    <string name="total_student_s">Total Students</string>
+    <string name="no_mega_book_available">"Mega E-book is not available "</string>
 </resources>

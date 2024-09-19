@@ -83,7 +83,7 @@ class EBookFragment(val data: List<Book>) : Fragment(), ItemListener<Book> {
                         if (it.data != null) {
 
                             findNavController().navigate(R.id.openPdfFragment,Bundle().apply {
-                                putString(Constant.URL_ARGUMENT,  it.message)
+                                putString(Constant.URL_ARGUMENT,  it.data.message)
                             })
 
                         }

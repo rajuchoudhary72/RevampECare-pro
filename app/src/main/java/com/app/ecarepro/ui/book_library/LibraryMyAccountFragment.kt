@@ -30,6 +30,7 @@ class LibraryMyAccountFragment( private val myAccount: List<MyAccount>?) : Fragm
 
 
         if (myAccount!=null){
+        if (myAccount.isNotEmpty()){
 
             binding.rvLatestBook.isVisible=true
             binding.tvNoData.isVisible=false
@@ -41,6 +42,10 @@ class LibraryMyAccountFragment( private val myAccount: List<MyAccount>?) : Fragm
                 layoutManager = LinearLayoutManager(activity)
                 adapter = myAccountAdapter
             }
+        }else{
+            binding.rvLatestBook.isVisible=false
+            binding.tvNoData.isVisible=true
+        }
         }else{
             binding.rvLatestBook.isVisible=false
             binding.tvNoData.isVisible=true

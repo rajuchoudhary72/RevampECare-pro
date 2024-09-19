@@ -20,6 +20,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBookLibraryBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.book_library.view_model.BookLibraryViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -116,27 +117,31 @@ class BookLibraryFragment : Fragment() {
     }
 
     private fun setUpMegaBook(megaBookLink: String) {
+         if (megaBookLink.isNotEmpty()){
+             (requireActivity() as MainActivity).showLoader(true)
+             bookLibraryBinding.wvMegabook.zoomIn()
+             bookLibraryBinding.wvMegabook.settings .loadWithOverviewMode = true
+             bookLibraryBinding.wvMegabook.settings.javaScriptEnabled = true
+             bookLibraryBinding.wvMegabook.settings.supportZoom()
+             bookLibraryBinding.wvMegabook.settings.builtInZoomControls=true
+             bookLibraryBinding.wvMegabook.webViewClient= object  : WebViewClient(){
 
-        bookLibraryBinding.wvMegabook.zoomIn()
-        bookLibraryBinding.wvMegabook.settings .loadWithOverviewMode = true
-        bookLibraryBinding.wvMegabook.settings.javaScriptEnabled = true
-        bookLibraryBinding.wvMegabook.settings.supportZoom()
-        bookLibraryBinding.wvMegabook.settings.builtInZoomControls=true
-        bookLibraryBinding.wvMegabook.webViewClient= object  : WebViewClient(){
 
 
+                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                     (requireActivity() as MainActivity).showLoader(true)
+                     super.onPageStarted(view, url, favicon)
+                 }
 
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                (requireActivity() as MainActivity).showLoader(true)
-                super.onPageStarted(view, url, favicon)
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                (requireActivity() as MainActivity).showLoader(false)
-                super.onPageFinished(view, url)
-            }
-        }
-        bookLibraryBinding.wvMegabook.loadUrl(megaBookLink)
+                 override fun onPageFinished(view: WebView?, url: String?) {
+                     (requireActivity() as MainActivity).showLoader(false)
+                     super.onPageFinished(view, url)
+                 }
+             }
+             bookLibraryBinding.wvMegabook.loadUrl(megaBookLink)
+         }else{
+            // mainActivity().showMessage(getString(R.string.no_mega_book_available))
+         }
     }
 
 
