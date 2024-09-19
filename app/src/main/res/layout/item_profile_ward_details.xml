@@ -284,7 +284,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="6dp"
             android:fontFamily="@font/calibri_regular"
-            android:text="@{studentProfile.aadhaarNumber}"
+            android:text="@{studentProfile.peN_Number}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/titlePermanentEducationNumber"

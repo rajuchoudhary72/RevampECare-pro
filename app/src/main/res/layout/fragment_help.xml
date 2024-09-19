@@ -153,9 +153,10 @@
                 android:drawablePadding="@dimen/vertical_margin"
                 android:fontFamily="@font/ubuntu_regular"
                 android:autoLink="email"
-                tools:text="testsklfhliewkur908375980r3uwropaj;lsam@gmail.com"
+                android:maxLines="2"
+                tools:text="contact@littlescholars-kashipur.com"
                 android:text="@{viewModel.school.contactEmail}"
-                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textAppearance="?attr/textAppearanceBodySmall"
                 app:layout_constraintBaseline_toBaselineOf="@+id/label_email"
                 app:layout_constraintStart_toStartOf="@+id/text_contact_number" />
 

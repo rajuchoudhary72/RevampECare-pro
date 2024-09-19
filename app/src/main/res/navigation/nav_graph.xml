@@ -416,7 +416,7 @@
         android:label="AppreciationListFragment" />
     <fragment
         android:id="@+id/studentListFragment2"
-        android:name="com.app.ecarepro.ui.students_list.StudentListFragment"
+        android:name="com.app.ecarepro.ui.students_list.students_new_list.StudentListNavHost"
         android:label="StudentListFragment" >
         <action
             android:id="@+id/action_studentListFragment2_to_addAppreciationFragment"
