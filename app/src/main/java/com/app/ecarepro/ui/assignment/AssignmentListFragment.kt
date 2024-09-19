@@ -27,9 +27,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AssignmentListFragment(
     private val assignments: List<Assignment>?,
-    val userType: String,
-    val assignmentType: String,
-    val assignmentID: String
+
+    val isClassAssignment: Boolean,
+
 ) : Fragment(), ItemListener<Assignment> {
 
     private lateinit var binding : FragmentAssignmentListBinding
@@ -56,7 +56,7 @@ class AssignmentListFragment(
 
             val assignmentListAdapter =
                 AssignmentListAdapter(assignments,
-                    this@AssignmentListFragment,userType)
+                    this@AssignmentListFragment,isClassAssignment)
 
             binding.rvAssignment.apply {
                 setHasFixedSize(true)
@@ -85,6 +85,7 @@ class AssignmentListFragment(
                 })*/
                 findNavController().navigate(R.id.viewAssignmentFragment,Bundle().apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
+                    putBoolean(Constant.USER_TEACHER, false)
                 })
             }
             2 -> {
