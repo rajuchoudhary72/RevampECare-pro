@@ -442,6 +442,7 @@
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
+    <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
     <string name="ward_details">Ward Details</string>
     <string name="admission_number">Admission Number</string>

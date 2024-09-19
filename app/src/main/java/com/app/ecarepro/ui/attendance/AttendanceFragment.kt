@@ -61,7 +61,7 @@ class AttendanceFragment : Fragment() {
                                         Bundle().apply {
                                             putString(Constant.CLASS_ID_ARGUMENT, classSummary.id)
                                             putString(Constant.NAME, classSummary.className)
-                                            putString(Constant.DATE, getCurrentDate())
+                                            putString(Constant.DATE, Constant.currentDate())
                                         })
                                 }
                             }
