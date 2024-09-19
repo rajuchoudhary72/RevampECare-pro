@@ -324,27 +324,35 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             showLoader(true)
             delay(2000)
-            val schCode = data.getString("schCode") ?: return@launch
-            val userID = data.getString("userID")?.toInt() ?: return@launch
+
+            Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
+            val schCode = data.getString("SchCode") ?: return@launch
+            val userID = data.getString("UserID")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
 
+            Log.e("Note", "$schCode $userID $menuId $childMenuId" )
+
             if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
+                Log.e("Note", "return@launch", )
                 return@launch
             }
 
             val currentSchool = userDataStore.getSchoolData()
             if (currentSchool?.schoolCode != schCode) {
-                userDataStore.setCurrentSchoolCode(schCode)
+                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
+                userDataStore.setCurrentSchoolCode(schCode!!)
             }
 
             val currentUser = userDataStore.getUser()
             if (currentUser?.userId != userID) {
-                userDataStore.setCurrentUserId(userID)
+                Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
+                userDataStore.setCurrentUserId(userID!!)
             }
 
             if (menuId != null) {
                 if (childMenuId != null) {
+                    Log.e("Note","getFragmentId(menuId, childMenuId)", )
                     getFragmentId(menuId, childMenuId)
                 }
             }
@@ -1165,7 +1173,45 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    fun clearAppCache() {
+        try {
+            val cacheDir = cacheDir
+            cacheDir.deleteRecursively()
 
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            Runtime.getRuntime().exit(0)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            Runtime.getRuntime().exit(0)
+        }
+    }
+    fun clearAppData() {
+        try {
+            // Delete all app databases
+
+            val databases = databaseList()
+            for (dbName in databases) {
+                deleteDatabase(dbName)
+            }
+
+            // Clear Shared Preferences
+            val sharedPreferences = getSharedPreferences("SHARED_PREF_NAME_PROMPT", Context.MODE_PRIVATE)
+            sharedPreferences.edit().clear().apply()
+
+            // Clear cache as well
+            clearAppCache()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
     fun logout() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.logout))
@@ -1173,10 +1219,7 @@ class MainActivity : AppCompatActivity() {
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 try {
                     systemViewModel.logout {
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        startActivity(intent)
-                        Runtime.getRuntime().exit(0)
+                        clearAppData()
                     }
                 } catch (e: Exception) {
 
