@@ -31,7 +31,7 @@ class MegaEBookCollectionFragment(val megaBookLink: String) : Fragment() {
     }
 
     private fun setUpMegaBook(megaBookLink: String) {
-
+        (requireActivity() as MainActivity).showLoader(true)
         binding.wvMegabook.zoomIn()
         binding.wvMegabook.settings .loadWithOverviewMode = true
         binding.wvMegabook.settings.javaScriptEnabled = true

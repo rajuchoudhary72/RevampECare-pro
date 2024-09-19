@@ -407,8 +407,7 @@ class ApplyLeaveFragment : Fragment() {
 
                         imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                        imageExt =
-                            FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                        imageExt =  FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
                         binding.imageViewCancel.isVisible = true
                         binding.attachmentImage.isVisible = true
 
