@@ -231,6 +231,8 @@ data class StudentProfile(
     val className: String?,
     @SerializedName("classification")
     val classification: String?,
+    @SerializedName("peN_Number")
+    val peN_Number: String?,
     @SerializedName("contactEmailID")
     val contactEmailID: String?,
     @SerializedName("contactMobile")
