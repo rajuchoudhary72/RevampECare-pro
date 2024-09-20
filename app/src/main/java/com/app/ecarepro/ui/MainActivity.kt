@@ -45,6 +45,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -522,7 +523,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.itemDrawerFooter.appVersion = "App Version: 2.1.62"
+        binding.itemDrawerFooter.appVersion = "App Version:${BuildConfig.VERSION_NAME}"
         binding.itemDrawerFooter.setClickListener {
             logout()
         }
