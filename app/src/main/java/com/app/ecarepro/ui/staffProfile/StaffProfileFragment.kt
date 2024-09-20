@@ -11,7 +11,7 @@ import com.app.ecarepro.databinding.FragmentStaffProfileBinding
 import com.app.ecarepro.model.Details
 
 
-class StaffProfileFragment(private val details: Details) : Fragment() {
+class StaffProfileFragment(private val details: Details?) : Fragment() {
 
     private lateinit var binding : FragmentStaffProfileBinding
 

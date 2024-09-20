@@ -68,14 +68,15 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                 mainActivity().showMessage("Please enter title!!!")
             }
         }
+        pageIndex=1
         return fragmentCircularBinding.root
 
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        pageIndex=1
+
+
         circularListAdapter = CircularListAdapter( circularList , this@CircularFragment)
 
             fragmentCircularBinding.recyclerCircular.adapter = circularListAdapter
@@ -112,6 +113,9 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                         if (it.data!=null){
                             if (it.data.academicYears!=null){
                                 yearList=it.data.academicYears
+                                if (it.data.academicYears.isNotEmpty()){
+                                    fragmentCircularBinding.tvSelectSession.text= it.data.academicYears[0].session
+                                }
                             }
 
                             if (it.data.circularList!=null  ){
@@ -121,6 +125,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                                     fragmentCircularBinding.tvNoData.isVisible=false
                                     isLoading=true
                                     if (pageIndex==1){
+
                                         circularListAdapter.clearData()
                                     }
                                     circularListAdapter.setData(it.data.circularList.toMutableList())
@@ -152,7 +157,11 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
             }
         }
         setupRecycleViewPager()
-        circularViewModel.getCirculars(pageIndex,selectedYearID,"")
+
+        if (savedInstanceState == null) {
+            circularViewModel.getCirculars(pageIndex,selectedYearID,"")
+        }
+        super.onViewCreated(view, savedInstanceState)
 
     }
 
@@ -175,6 +184,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
         relOk.setOnClickListener {
             if (isYearSelected){
+                pageIndex=1
                 fragmentCircularBinding.tvSelectSession.text= selectedYearData!!.session
                 circularViewModel.getCirculars(pageIndex, selectedYearID,"")
                 builder.dismiss()

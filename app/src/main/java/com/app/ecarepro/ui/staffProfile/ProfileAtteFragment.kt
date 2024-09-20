@@ -11,7 +11,7 @@ import com.app.ecarepro.databinding.FragmentStaffProfileBinding
 import com.app.ecarepro.model.AttendanceDTL
 
 
-class ProfileAtteFragment(private val attendanceDTL: AttendanceDTL) : Fragment() {
+class ProfileAtteFragment(private val attendanceDTL: AttendanceDTL?) : Fragment() {
 
     private lateinit var binding: FragmentProfileAtteBinding
 
