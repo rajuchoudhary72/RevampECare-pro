@@ -310,17 +310,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         builder.show()
     }
 
-    private fun openFile(fileSource:String){
-        findNavController().navigate(R.id.action_viewAssignmentFragment_to_openPdfFragment,Bundle( ).apply {
-            putString(Constant.URL_ARGUMENT, fileSource)
-        })
-    }
 
-    private fun downloadFile(fileSource:String){
-
-        val androidDownloader = AndroidDownloader(requireContext())
-        androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-    }
 
     override fun onItemClick(t: AssignSubmitStudent, pos: Int, boolean: Boolean) {
         when (pos) {
@@ -340,7 +330,30 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         }
     }
 
+    private fun openFile(fileSource: String) {
+        if (Constant.isPdfUrl(fileSource)) {
+            findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                putString(Constant.URL_ARGUMENT, fileSource)
+            })
+        } else {
+            findNavController().navigate(R.id.openImageFragment, Bundle().apply {
+                putString(Constant.URL_ARGUMENT, fileSource)
+            })
+        }
 
+    }
+
+    private fun downloadFile(fileSource: String) {
+        if (Constant.isPdfUrl(fileSource)) {
+            val androidDownloader = AndroidDownloader(requireContext())
+            androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+        } else {
+            val androidDownloader = AndroidDownloader(requireContext())
+            androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+        }
+
+
+    }
     private fun dateSelctedPoPUp(t: AssignSubmitStudent) {
         val tv_date: TextView
         val btn_canel: Button

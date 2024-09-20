@@ -73,42 +73,46 @@ class StudentListNavHost : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
 
                         if (listNetworkResult.data != null) {
+                        if (listNetworkResult.data.students != null) {
 
 
 
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                val classList = mutableListOf<String> ()
-                                 val fragmentList : ArrayList<Fragment> = ArrayList()
+                            try {
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val classList = mutableListOf<String> ()
+                                    val fragmentList : ArrayList<Fragment> = ArrayList()
 
-                                 withContext(Dispatchers.Default) {
-                                     listNetworkResult.data.students.forEach {
-                                         if (!classList.contains(it.`class`)) {
-                                             classList.add(it.`class`)
-                                         }
-                                     }
-                                    classList. forEach { itemDat ->
-                                        fragmentList.add( StudentListSubFragment(listNetworkResult.data.students, itemDat ,toFragment ))
+                                    withContext(Dispatchers.Default) {
+                                        listNetworkResult.data.students.forEach {
+                                            if (!classList.contains(it.`class`)) {
+                                                classList.add(it.`class`)
+                                            }
+                                        }
+                                        classList. forEach { itemDat ->
+                                            fragmentList.add( StudentListSubFragment(listNetworkResult.data.students, itemDat ,toFragment ))
+                                        }
                                     }
+                                    val viewPagerAdapter = ViewPagerAdapter(
+                                        fragmentList,
+                                        activity?.supportFragmentManager!!,
+                                        lifecycle
+                                    )
+                                    binding.viewPager.adapter = viewPagerAdapter
+
+                                    TabLayoutMediator(
+                                        binding.tabLayout,
+                                        binding.viewPager
+                                    ) { tab, position ->
+                                        tab.text = classList[position]
+                                    }.attach()
+
+
                                 }
-                                 val viewPagerAdapter = ViewPagerAdapter(
-                                    fragmentList,
-                                    activity?.supportFragmentManager!!,
-                                    lifecycle
-                                )
-                                binding.viewPager.adapter = viewPagerAdapter
-
-                                TabLayoutMediator(
-                                    binding.tabLayout,
-                                    binding.viewPager
-                                ) { tab, position ->
-                                    tab.text = classList[position]
-                                }.attach()
-
-
-                            }
+                            }catch (_:Exception){ }
 
 
 
+                        }
                         }
 
                     }

@@ -35,8 +35,8 @@ import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class StudentProfileAttendanceFragment(
-    private val attendanceDTL: ProfileAttendanceDTL,
-    private val academicYears: List<AcademicYear>,
+    private val attendanceDTL: ProfileAttendanceDTL?,
+    private val academicYears: List<AcademicYear>?,
     private val studentID: Int,
     private val  monthID: String
 ) : Fragment() ,ItemListener<SummaryAttendance> {
@@ -59,15 +59,21 @@ class StudentProfileAttendanceFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUi(attendanceDTL)
-        if (academicYears.isNotEmpty()) {
-            for (i in academicYears ) {
-                if (i.isCur) {
-                    binding.ctvSelectYear.text = i.session
-                    break
+        if (attendanceDTL!=null){
+            setupUi(attendanceDTL)
+
+        }
+        if (academicYears!=null){
+            if (academicYears.isNotEmpty()) {
+                for (i in academicYears ) {
+                    if (i.isCur) {
+                        binding.ctvSelectYear.text = i.session
+                        break
+                    }
                 }
             }
         }
+
 
 
     }
