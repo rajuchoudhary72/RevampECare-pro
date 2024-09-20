@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* checking  for update version  */
-           checkAppVersion()
+        checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -281,9 +281,35 @@ class MainActivity : AppCompatActivity() {
             handleNotificationClick(data)
         }
 
+        askNotificationPermission()
+
     }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
     // Handle the permission request response
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -312,6 +338,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -320,46 +347,47 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-/*    private fun handleNotificationClick(data: Bundle) {
-        lifecycleScope.launch {
-            showLoader(true)
-            delay(2000)
 
-            Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
-            val schCode = data.getString("SchCode") ?: return@launch
-            val userID = data.getString("UserID")?.toInt() ?: return@launch
-            val menuId = data.getString("MenuId")?.toInt()
-            val childMenuId = data.getString("ChMenuID")?.toInt()
+    /*    private fun handleNotificationClick(data: Bundle) {
+            lifecycleScope.launch {
+                showLoader(true)
+                delay(2000)
 
-            Log.e("Note", "$schCode $userID $menuId $childMenuId" )
+                Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
+                val schCode = data.getString("SchCode") ?: return@launch
+                val userID = data.getString("UserID")?.toInt() ?: return@launch
+                val menuId = data.getString("MenuId")?.toInt()
+                val childMenuId = data.getString("ChMenuID")?.toInt()
 
-            if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
-                Log.e("Note", "return@launch", )
-                return@launch
-            }
+                Log.e("Note", "$schCode $userID $menuId $childMenuId" )
 
-            val currentSchool = userDataStore.getSchoolData()
-            if (currentSchool?.schoolCode != schCode) {
-                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
-                userDataStore.setCurrentSchoolCode(schCode!!)
-            }
-
-            val currentUser = userDataStore.getUser()
-            if (currentUser?.userId != userID) {
-                Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
-                userDataStore.setCurrentUserId(userID!!)
-            }
-
-            if (menuId != null) {
-                if (childMenuId != null) {
-                    Log.e("Note","getFragmentId(menuId, childMenuId)", )
-                    getFragmentId(menuId, childMenuId)
+                if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
+                    Log.e("Note", "return@launch", )
+                    return@launch
                 }
-            }
-            showLoader(false)
-        }
 
-    }*/
+                val currentSchool = userDataStore.getSchoolData()
+                if (currentSchool?.schoolCode != schCode) {
+                    Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
+                    userDataStore.setCurrentSchoolCode(schCode!!)
+                }
+
+                val currentUser = userDataStore.getUser()
+                if (currentUser?.userId != userID) {
+                    Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
+                    userDataStore.setCurrentUserId(userID!!)
+                }
+
+                if (menuId != null) {
+                    if (childMenuId != null) {
+                        Log.e("Note","getFragmentId(menuId, childMenuId)", )
+                        getFragmentId(menuId, childMenuId)
+                    }
+                }
+                showLoader(false)
+            }
+
+        }*/
     private fun handleNotificationClick(data: Bundle) {
         val menuId = data.getString("MenuId")?.toInt()
         val childMenuId = data.getString("ChMenuID")?.toInt()
@@ -401,15 +429,15 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionName $versionName")
 
                             if (versionName < it.data.android.currentVersion) {
-                              // open  dialog
-                                if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
+                                // open  dialog
+                                if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                     //soft  update
                                     UpdateAppVersionDialog(
                                         0,
                                         it.data.android.title,
                                         it.data.android.description
                                     )
-                                }else{
+                                } else {
                                     //force update
                                     UpdateAppVersionDialog(
                                         1,
@@ -417,27 +445,27 @@ class MainActivity : AppCompatActivity() {
                                         it.data.android.description
                                     )
                                 }
-                            }else{
+                            } else {
                                 // nothing  open  version  dialog
                             }
 
-                           /* if (versionCode < it.data.android.versionCode) {
+                            /* if (versionCode < it.data.android.versionCode) {
 
 
-                                if (versionName == it.data.android.criticalVersion.trim()
-                                ) // force update
-                                    UpdateAppVersionDialog(
-                                        1,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
-                                else  // normal update
-                                    UpdateAppVersionDialog(
-                                        0,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
-                            }*/
+                                 if (versionName == it.data.android.criticalVersion.trim()
+                                 ) // force update
+                                     UpdateAppVersionDialog(
+                                         1,
+                                         it.data.android.title,
+                                         it.data.android.description
+                                     )
+                                 else  // normal update
+                                     UpdateAppVersionDialog(
+                                         0,
+                                         it.data.android.title,
+                                         it.data.android.description
+                                     )
+                             }*/
                         }
 
                     }
@@ -448,7 +476,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-       systemViewModel.checkAppVersion()
+        systemViewModel.checkAppVersion()
     }
 
 
@@ -733,7 +761,7 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
-               15 -> navController.navigate(R.id.questionPaperFragment)
+            15 -> navController.navigate(R.id.questionPaperFragment)
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
@@ -1173,49 +1201,44 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     fun clearAppCache() {
         try {
             val cacheDir = cacheDir
             cacheDir.deleteRecursively()
-
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-            Runtime.getRuntime().exit(0)
-
+            appOut()
         } catch (e: Exception) {
             e.printStackTrace()
-
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-            Runtime.getRuntime().exit(0)
+            appOut()
         }
     }
+
     fun clearAppData() {
         try {
             // Delete all app databases
-
             val databases = databaseList()
             for (dbName in databases) {
                 deleteDatabase(dbName)
             }
-
             // Clear Shared Preferences
-            val sharedPreferences = getSharedPreferences("SHARED_PREF_NAME_PROMPT", Context.MODE_PRIVATE)
+            val sharedPreferences =
+                getSharedPreferences("SHARED_PREF_NAME_PROMPT", Context.MODE_PRIVATE)
             sharedPreferences.edit().clear().apply()
-
             // Clear cache as well
             clearAppCache()
-
         } catch (e: Exception) {
             e.printStackTrace()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-            Runtime.getRuntime().exit(0)
+            appOut()
         }
     }
+
+    private fun appOut() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
+    }
+
     fun logout() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.logout))
@@ -1226,11 +1249,9 @@ class MainActivity : AppCompatActivity() {
                         clearAppData()
                     }
                 } catch (e: Exception) {
-
                 }
             }
             .setNegativeButton(getString(R.string.no)) { _, _ ->
-
             }
             .show()
     }
