@@ -9,7 +9,7 @@ import com.app.ecarepro.databinding.FragmentProfileSalaryStrBinding
 import com.app.ecarepro.model.SalaryStructure
 
 
-class ProfileSalaryStrFragment( private val salaryStructure: SalaryStructure) : Fragment() {
+class ProfileSalaryStrFragment( private val salaryStructure: SalaryStructure?) : Fragment() {
 
 
     private lateinit var binding: FragmentProfileSalaryStrBinding
