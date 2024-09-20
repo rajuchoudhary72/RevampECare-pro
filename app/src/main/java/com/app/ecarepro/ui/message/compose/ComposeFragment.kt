@@ -511,7 +511,7 @@ class ComposeFragment : Fragment() {
             lastClickAttachmentType = AttachmentType.AUDIO
             openAudioRecorder()
         }
-       // FileAccess.checkPermission(this@ComposeFragment)
+       FileAccess.checkPermission(this@ComposeFragment)
         binding.btnCamera.setOnClickListener {
             try {
                 hideAttachmentCard()
