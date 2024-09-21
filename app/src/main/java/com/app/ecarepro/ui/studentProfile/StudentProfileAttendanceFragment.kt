@@ -2,6 +2,9 @@ package com.app.ecarepro.ui.studentProfile
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +30,9 @@ import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -90,6 +96,7 @@ class StudentProfileAttendanceFragment(
     private fun getBarChartModel(present: Int, leave: Int, absent: Int, late: Int) = AAChartModel()
 
         .chartType(AAChartType.Pie)
+
          .colorsTheme(
 
              arrayOf("#4DAC3C","#FF352F","#FFD700","#FFFEA11C")
@@ -104,6 +111,7 @@ class StudentProfileAttendanceFragment(
                     .innerSize("70%")
                     .borderWidth(0)
                     .allowPointSelect(false)
+
 
 
                     .data(
@@ -217,6 +225,17 @@ class StudentProfileAttendanceFragment(
                     append(setCalculatedPercentageToInt(attendanceDTL.late, attendanceDTL.working))
                     append("%)")
                 }
+
+                binding.llLate.isVisible=attendanceDTL.isLateEnabled
+
+                showPieChart(attendanceDTL.isLateEnabled,
+                    attendanceDTL.present,
+                            attendanceDTL.absent,
+                            attendanceDTL.leave,
+                            attendanceDTL.late
+                )
+
+
                 binding.pieChartView. isClearBackgroundColor = true
                 binding.pieChartView.aa_drawChartWithChartModel(
                     getBarChartModel(
@@ -226,7 +245,11 @@ class StudentProfileAttendanceFragment(
                         setCalculatedPercentageToInt(attendanceDTL.late, attendanceDTL.working).toInt()
 
                     )
+
                 )
+
+
+
             } catch (_: Exception) {
             }
 
@@ -269,6 +292,76 @@ class StudentProfileAttendanceFragment(
         })
 
     }
+    private fun showPieChart(
+        isLate: Boolean,
+        totalPresent: Int,
+        totalAbsent: Int,
+        totalLeave: Int,
+        totalLate: Int
+    ) {
+         binding.pieChart.setUsePercentValues(true)
+        binding.pieChart.setUsePercentValues(false)
+        binding.pieChart.setRotationEnabled(false)
+        binding.pieChart.setDrawMarkerViews(false)
+        val yvalues = ArrayList<PieEntry>()
+        if (!isLate) {
+            yvalues.add(PieEntry(totalPresent.toFloat(), 0))
+            yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
+            yvalues.add(PieEntry(totalLeave.toFloat(), 2))
+        } else {
+            yvalues.add(PieEntry((totalPresent - totalLate).toFloat(), 0))
+            yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
+            yvalues.add(PieEntry(totalLeave.toFloat(), 2))
+            yvalues.add(PieEntry(totalLate.toFloat(), 3))
+        }
+
+        val dataSet = PieDataSet(yvalues, "")
+        dataSet.sliceSpace = 2f
+        val xVals = ArrayList<String>()
+        xVals.add("")
+        xVals.add("")
+        val data = PieData(dataSet)
+        // data.setValueFormatter(new PercentFormatter());
+        binding.pieChart.setData(data)
+        if (!isLate) dataSet.setColors(
+            resources.getColor(R.color.disabled),
+            resources.getColor(R.color.absent_red),
+            resources.getColor(R.color.att_leave_color)
+        )
+        else dataSet.setColors(
+            resources.getColor(R.color.disabled),
+            resources.getColor(R.color.absent_red),
+            resources.getColor(R.color.att_leave_color),
+            resources.getColor(R.color.att_late_color)
+        )
+
+        data.setValueTextSize(13f)
+        data.setDrawValues(false)
+        binding.pieChart.getLegend().setEnabled(false)
+        binding.pieChart.animateXY(1400, 1400)
+
+//        val s = """
+//            ${totalPresent + totalAbsent + totalLeave}
+//            Student(s)
+//            """.trimIndent()
+//        val length = (totalPresent + totalAbsent + totalLeave).toString() + ""
+//        val ss1 = SpannableString(s)
+//        ss1.setSpan(RelativeSizeSpan(2f), 0, length.length, 0) // set size
+//        ss1.setSpan(
+//            ForegroundColorSpan(resources.getColor(R.color.deep_black)),
+//            0,
+//            3,
+//            0
+//        ) // set color
+//
+//        binding.pieChart.centerText = ss1
+        binding.pieChart.setCenterTextSize(16f)
+        binding.pieChart.setCenterTextColor(resources.getColor(R.color.deep_black))
+        binding.pieChart.holeRadius = 70f
+        binding.pieChart.description = null
+    }
+
+
 
 
 }

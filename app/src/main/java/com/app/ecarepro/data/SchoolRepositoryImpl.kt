@@ -2,6 +2,7 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
@@ -60,6 +61,10 @@ class SchoolRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun appGeneralSettings(): GeneralSettingsDto {
+        return schoolService.appGeneralSettings()
     }
 
     override fun validateSchoolCode(schoolCode: String): Flow<NetworkSchool?> {
