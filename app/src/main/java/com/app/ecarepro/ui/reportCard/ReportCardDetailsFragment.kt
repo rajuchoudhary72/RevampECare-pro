@@ -63,33 +63,59 @@ class ReportCardDetailsFragment(private val itemDat: ReportClasse) : Fragment(),
     override fun onItemClick(t: ReportCard, pos: Int, boolean: Boolean) {
         if (pos == 1) {
             if (boolean) {
-                if (t.frontFileName != null) {
+
+                     if (t.viewMode==1){
+                         findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                             putString(Constant.URL_ARGUMENT, t.fileName)
+                         })
+                     }else{
+                         findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                             putString(Constant.URL_ARGUMENT, t.frontFileName)
+                         })
+                     }
+
+                 } else {
+                if (t.viewMode==1) {
                     findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                        putString(Constant.URL_ARGUMENT, t.frontFileName)
+                        putString(Constant.URL_ARGUMENT, t.fileName)
                     })
 
-                }
-
-            } else {
-                if (t.backFileName != null) {
+                }else{
                     findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
                         putString(Constant.URL_ARGUMENT, t.backFileName)
                     })
-
                 }
 
             }
         } else if (pos == 2) {
             if (boolean) {
-                if (t.frontFileName != null) {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(t.frontFileName, getString(R.string.report_card))
+                if (t.viewMode==1) {
+                    if (t.fileName!=null){
+                        val androidDownloader = AndroidDownloader(requireContext())
+                        androidDownloader.downloadFile(t.fileName, getString(R.string.report_card))
+                    }
+
+                }else{
+                    if (t.frontFileName!=null){
+                        val androidDownloader = AndroidDownloader(requireContext())
+                        androidDownloader.downloadFile(t.frontFileName, getString(R.string.report_card))
+                    }
+
                 }
 
             } else {
-                if (t.backFileName != null) {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(t.backFileName, getString(R.string.report_card))
+                if (t.viewMode==1) {
+                    if (t.fileName!=null){
+                        val androidDownloader = AndroidDownloader(requireContext())
+                        androidDownloader.downloadFile(t.fileName, getString(R.string.report_card))
+                    }
+
+                }else{
+                    if (t.backFileName!=null){
+                        val androidDownloader = AndroidDownloader(requireContext())
+                        androidDownloader.downloadFile(t.backFileName, getString(R.string.report_card))
+                    }
+
                 }
 
             }

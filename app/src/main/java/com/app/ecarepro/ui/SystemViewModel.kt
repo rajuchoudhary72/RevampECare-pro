@@ -12,6 +12,7 @@ import com.app.ecarepro.data.repository.SchoolRepository
 
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
@@ -56,6 +57,10 @@ class SystemViewModel @Inject constructor(
     private val appVersionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppVersion>> = MutableStateFlow(
         NetworkResult.Loading())
     val appVersionStateFlow: StateFlow<NetworkResult<NetworkAppVersion>> = appVersionMutableStateFlow
+
+    private val generalSettingsMutableStateFlow: MutableStateFlow<NetworkResult<GeneralSettingsDto>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val generalSettingsStateFlow: StateFlow<NetworkResult<GeneralSettingsDto>> = generalSettingsMutableStateFlow
 
 
     val refresh = MutableSharedFlow<Boolean>()
@@ -223,6 +228,18 @@ class SystemViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun appGeneralSettings( )=viewModelScope.launch {
+        runCatching {
+            generalSettingsMutableStateFlow.value = NetworkResult.Loading()
+            schoolRepository.appGeneralSettings( )
+        }.onSuccess {
+             generalSettingsMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            generalSettingsMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
     }
 }
 
