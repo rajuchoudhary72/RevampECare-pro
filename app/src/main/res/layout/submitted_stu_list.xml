@@ -98,8 +98,28 @@
                     />
 
             </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_text_filed_remark"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/grey_40"
+                android:hint="Remark"
+
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textFiledRemark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
 
 
         <com.google.android.material.divider.MaterialDivider

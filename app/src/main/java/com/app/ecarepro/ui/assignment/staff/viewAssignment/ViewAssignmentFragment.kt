@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.databinding.FragmentViewAssignmentBinding
 import com.app.ecarepro.model.AssignSubmitStudent
 import com.app.ecarepro.model.TeacherAssignment
@@ -49,6 +50,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     private val viewAssignmentViewModel : ViewAssignmentViewModel by viewModels()
     private var submitType =1
     private var teacherTypeUser= true
+    private var submitStudentsList= mutableListOf<AssignSubmitStudent>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,7 +91,8 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_submit -> {
-
+                    binding.tvSaveRemark.isVisible=true
+                    binding.llAllRemark.isVisible=true
                     submitType=1
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false) 
 
@@ -97,10 +100,13 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 R.id.btn_late_submit -> {
                     submitType=3
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
-
+                    binding.tvSaveRemark.isVisible=false
+                    binding.llAllRemark.isVisible=false
                 }
 
                 else -> {
+                    binding.tvSaveRemark.isVisible=false
+                    binding.llAllRemark.isVisible=false
                     submitType=2
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,true)
                 }
@@ -147,9 +153,15 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                                 if (it.data.studentList!=null){
 
                                     binding.rvSubmitList.isVisible=true
+                                    submitStudentsList.clear()
+                                    if (it.data.studentList!=null){
+                                        submitStudentsList= it.data.studentList.toMutableList()
 
-                                    val noticeAdapter = SubmitAssignListAdapter(it.data.studentList ,
-                                        this@ViewAssignmentFragment)
+                                    }
+                                     val noticeAdapter = SubmitAssignListAdapter(submitStudentsList ,
+                                        this@ViewAssignmentFragment ){ remark, pos ->
+                                         submitStudentsList[pos].remark=remark
+                                     }
 
                                     binding.rvSubmitList.apply {
                                         setHasFixedSize(true)
@@ -269,8 +281,25 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
         }
 
+        binding.tvSaveRemark.setOnClickListener {
+            postAssignmentRemark()
+        }
 
+        binding.tvCopyToAll.setOnClickListener {
+            submitStudentsList.forEach {
+                it.remark=binding.textFiledAllRemark.text.toString()
+            }
+            val noticeAdapter = SubmitAssignListAdapter(submitStudentsList ,
+                this@ViewAssignmentFragment ){ remark, pos ->
+                submitStudentsList[pos].remark=remark
+            }
 
+            binding.rvSubmitList.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(activity)
+                adapter = noticeAdapter
+            }
+        }
 
     }
 
@@ -421,6 +450,37 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
         }}
 
+    private fun postAssignmentRemark( ) {
 
+         val remarklist= mutableListOf<AssignmentRemarkPost>()
+
+        submitStudentsList.forEach {
+            remarklist.add(AssignmentRemarkPost(it.asgSubID, it.remark!!))
+        }
+
+        viewAssignmentViewModel.postAssignmentRemark(remarklist )
+
+        lifecycleScope.launch {
+            viewAssignmentViewModel.postAssignmentRemarkStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        mainActivity().showMessage("Remark saved successfully" )
+                    }
+
+                }
+
+
+            }
+
+        }}
 
 }

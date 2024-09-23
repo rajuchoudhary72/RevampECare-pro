@@ -113,6 +113,16 @@ class StaffApplyLeaveFragment : Fragment() {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
+                    days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                    if (selectedLeaveTypeData.sandwichEnable){
+                        days =  calculateDaysAfterHolidays(days)
+                    }
+
+                    binding.tvDuration.text = buildString {
+                        append(days)
+                        append(" ")
+                        append(getString(R.string.day_s))
+                    }
                 }
             }, timestampBack, timestampforward)
         }
@@ -211,7 +221,11 @@ class StaffApplyLeaveFragment : Fragment() {
                     append(" ")
                     append(getString(R.string.day_s))
                 }
-                leaveApplicationDialog()
+               if (days>0){
+                   leaveApplicationDialog()
+               }else{
+                   mainActivity().showMessage("Please Select Valid Date")
+               }
 
 
             }

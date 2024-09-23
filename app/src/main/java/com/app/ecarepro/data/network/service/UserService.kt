@@ -135,6 +135,7 @@ import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
@@ -976,4 +977,9 @@ interface UserService {
         @Url url:String,
         @Body requestBody: RequestBody
     ): AppointmentSavedDto
+
+    @POST("Academic/PostAssignmentRemark")
+    suspend fun postAssignmentRemark(
+        @Body request:  List<AssignmentRemarkPost>,
+    ): CommonResponse
 }
