@@ -186,6 +186,14 @@ class UserRepositoryImpl @Inject constructor(
             )
         )
     }
+    override suspend fun forgotPassword(
+        SchCode: String,
+        UserID: String,
+        UserType: String,
+        RcvOn: String
+    ): NetworkUserDetailsDto {
+        return userService.forgotPassword(SchCode,UserID,UserType,RcvOn)
+    }
     fun getCurrentDateTimeAmPm(): String {
         val currentDate = Date()
         val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())

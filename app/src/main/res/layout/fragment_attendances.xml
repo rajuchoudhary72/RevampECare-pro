@@ -75,7 +75,7 @@
                     android:text="@{String.format(@string/absent_count,viewModel.absentCount)}"
                     tools:text="@string/absent_count"
                     app:drawableStartCompat="@drawable/ic_abcent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_present"
                     app:layout_constraintTop_toBottomOf="@+id/tv_present" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     tools:text="@string/leave_count"
                     android:text="@{String.format(@string/leave_count,viewModel.leaveCount)}"
                     app:drawableStartCompat="@drawable/ic_leave"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/tv_absent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_absent" />
 
                 <TextView
@@ -104,8 +104,8 @@
                     android:minWidth="120dp"
                     tools:text="@string/late_count"
                     android:text="@{String.format(@string/late_count,viewModel.lateCount)}"
-                    app:drawableStartCompat="@drawable/ic_leave"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:drawableStartCompat="@drawable/ic_late"
+                    app:layout_constraintStart_toStartOf="@+id/tv_leave"
                     app:layout_constraintTop_toBottomOf="@+id/tv_leave" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
