@@ -141,7 +141,12 @@ interface UserRepository {
         mobile: String?,
         email: String?
     ): NetworkUserDetailsDto
-
+    suspend fun forgotPassword(
+        SchCode: String,
+        UserID: String,
+        UserType: String,
+        RcvOn: String
+    ): NetworkUserDetailsDto
     suspend fun login(
         schoolCode: String,
         userName: String,

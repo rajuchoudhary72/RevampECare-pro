@@ -545,7 +545,13 @@ interface UserService {
     suspend fun getStaffProfileMain(
         @Query("SID") sId: Int
     ): NetworkStaffProfile
-
+    @GET("User/GetUsernameByUID")
+    suspend fun forgotPassword(
+        @Query("SchCode") SchCode: String,
+        @Query("UserID") UserID: String,
+        @Query("UserType") UserType: String,
+        @Query("RcvOn") RcvOn: String,
+    ): NetworkUserDetailsDto
     @POST("User/ChangeUsername")
     suspend fun changeUsername(
         @Body request: ChangeUserNameRequestDto,
