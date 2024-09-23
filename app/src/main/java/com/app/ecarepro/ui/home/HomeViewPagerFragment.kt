@@ -79,7 +79,7 @@ class HomeViewPagerFragment : Fragment() {
         }
         if (showFeeds){
             fragmentList.add(FeedsFragment() )
-            fragmentName.add("Feeds")
+            fragmentName.add("Feed")
         }
 
 
