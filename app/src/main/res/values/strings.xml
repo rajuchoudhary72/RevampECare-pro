@@ -478,6 +478,7 @@
     <string name="total_leave_s">Total Leave(s):</string>
     <string name="view_halfday_details">View HalfDay Details</string>
     <string name="reason">Reason:</string>
+    <string name="reason_s">Reason</string>
     <string name="applicant">Applicant:</string>
     <string name="leave_forwarded">Leave Forwarded</string>
     <string name="approve">Approve</string>
@@ -718,4 +719,11 @@
     <string name="total_student_s">Total Students</string>
     <string name="no_mega_book_available">"Mega E-book is not available "</string>
     <string name="alternate_mobile">Alternate Mobile</string>
+    <string name="confirm">Confirm</string>
+    <string name="reject_request">Reject Request</string>
+    <string name="are_you_sure_you_want_to_reject_this_application">Are you sure you want to reject this leave  ?</string>
+    <string name="close">Close</string>
+    <string name="reject_leave">Reject Leave</string>
+    <string name="save_remark">Save Remark</string>
+    <string name="copy_to_all"> <u>Copy To All</u></string>
 </resources>

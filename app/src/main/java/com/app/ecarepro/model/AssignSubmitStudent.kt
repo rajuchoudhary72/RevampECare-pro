@@ -10,5 +10,7 @@ data class AssignSubmitStudent(
     val rollNumber: String,
     val stID: Int,
     val studentName: String,
-    val submittedOn: String
+    val submittedOn: String,
+    var remark: String?
+
 )

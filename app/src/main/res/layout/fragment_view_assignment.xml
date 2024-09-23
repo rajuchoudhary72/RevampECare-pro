@@ -181,6 +181,47 @@
 
 
 
+      <LinearLayout
+          android:id="@+id/llAllRemark"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginHorizontal="10dp"
+          android:orientation="horizontal"
+          android:layout_marginTop="25dp"
+          android:layout_marginBottom="@dimen/_5sdp"
+          >
+
+          <com.google.android.material.textfield.TextInputLayout
+              android:id="@+id/til_text_filed_all_remark"
+              style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:layout_weight="6"
+              android:textColorHint="@color/grey_40"
+              android:hint="Remark"
+
+              >
+
+              <com.google.android.material.textfield.TextInputEditText
+                  android:id="@+id/textFiledAllRemark"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:fontFamily="@font/ubuntu_regular"
+                   />
+
+          </com.google.android.material.textfield.TextInputLayout>
+          <TextView
+              android:id="@+id/tv_copy_to_all"
+              android:layout_width="0dp"
+              android:layout_weight="4"
+              android:layout_height="wrap_content"
+              android:text="@string/copy_to_all"
+              android:textSize="@dimen/_16sdp"
+              android:layout_marginStart="@dimen/_10sdp"
+              />
+
+      </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_submit_notSubmit"
             android:layout_width="match_parent"
@@ -188,7 +229,7 @@
             android:background="@color/md_theme_light_primary"
             android:gravity="center"
             android:orientation="vertical"
-             android:layout_marginTop="25dp">
+             android:layout_marginTop="@dimen/_5sdp">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/toggleButton_type_noti"
@@ -262,6 +303,7 @@
             android:id="@+id/rv_submit_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_45sdp"
             tools:listitem="@layout/not_submitted_stu_list" />
 
 
@@ -269,6 +311,19 @@
 
     </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_save_remark"
+            android:layout_width="match_parent"
+             android:layout_height="@dimen/_45sdp"
+            android:background="@color/brand_color"
+            android:baselineAligned="false"
+            android:fontFamily="@font/ubuntu_medium"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:text="@string/save_remark"
+            android:textColor="@color/white"
+             android:layout_alignParentBottom="true"
+            />
 
 
     </RelativeLayout>

@@ -1,11 +1,16 @@
 package com.app.ecarepro.ui.leave.leave_report
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -21,6 +26,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,6 +47,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
+    private var isRejectionReasonReq: Boolean = false
     private var toFragment: String= ""
 
 
@@ -132,7 +139,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
                             binding.recyclerLeaveReport.isVisible = true
                             binding.tvNoData.isVisible = false
-
+                            isRejectionReasonReq=it.data .isRejectionReasonReq
                             if (pageIndex==1){
                                 leaveReportAdapter.clearData()
                              }
@@ -166,7 +173,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 )
             }
             1 -> {
-                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0).invokeOnCompletion {
+                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0,"").invokeOnCompletion {
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
@@ -175,17 +182,64 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
             }
             2 -> {
-                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0)
-                    .invokeOnCompletion {
-                        leaveReportAdapter.clearData()
-                        status=0
-                        pageIndex=1
-                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
-                    }
+                popUpRemark(t)
+
             }
         }
      }
 
+
+
+    fun popUpRemark(t: Dtl) {
+             val tv_done: TextView
+            val tv_cancel: TextView
+            val textInputEditText: TextInputEditText
+
+
+            val dialog = Dialog(requireContext())
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
+                ColorDrawable(Color.TRANSPARENT)
+            )
+            dialog.window!!.attributes.windowAnimations = R.style.Animations
+            dialog.setContentView(R.layout.custom_popup_leave_reject)
+            tv_done = dialog.findViewById(R.id.tv_done)
+            tv_cancel = dialog.findViewById(R.id.tv_cancel)
+            textInputEditText = dialog.findViewById(R.id.textFiledReason)
+            tv_done.setOnClickListener {
+
+                if (isRejectionReasonReq){
+                    if ( textInputEditText.text.toString().isNotEmpty()){
+
+                        leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                            .invokeOnCompletion {
+                                leaveReportAdapter.clearData()
+                                status=0
+                                pageIndex=1
+                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                            }
+                        dialog.dismiss()
+                    }else{
+                        textInputEditText.error="Rejection Reason is mandatory field"
+                    }
+                }else{
+                    leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                        .invokeOnCompletion {
+                            leaveReportAdapter.clearData()
+                            status=0
+                            pageIndex=1
+                            leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                        }
+
+                    dialog.dismiss()
+                }
+
+
+            }
+            tv_cancel.setOnClickListener { dialog.dismiss() }
+            dialog.show()
+
+    }
 
     private fun setupRecycleViewPager() {
         leaveReportAdapter.clearData()

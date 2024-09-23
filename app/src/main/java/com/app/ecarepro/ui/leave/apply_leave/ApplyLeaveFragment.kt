@@ -97,6 +97,11 @@ class ApplyLeaveFragment : Fragment() {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
+                    days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                    days =  calculateDaysAfterHolidays(days)
+                    binding.tvNumberDays.text = buildString {
+                        append(days  )
+                    }
                 }
             },timestampBack,timestampforward)
         }
@@ -225,16 +230,21 @@ class ApplyLeaveFragment : Fragment() {
             binding.btnSubmit.setOnClickListener {
 
                 if (validateData()) {
-                    leaveApplyLeaveViewModel.leaveApply(
-                        0,
-                         Constant.toSystemDate(binding.tvStartDate.text.toString()),
-                        Constant.toSystemDate(binding.tvEndDate.text.toString() ),
-                        binding.tvNumberDays.text.toString().toDouble(),
-                        null,
-                        binding.autoCompleteReason.text.toString(),
-                        if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
+                    if ( binding.tvNumberDays.text.toString().toDouble().toInt()>0){
+                        leaveApplyLeaveViewModel.leaveApply(
+                            0,
+                            Constant.toSystemDate(binding.tvStartDate.text.toString()),
+                            Constant.toSystemDate(binding.tvEndDate.text.toString() ),
+                            binding.tvNumberDays.text.toString().toDouble(),
+                            null,
+                            binding.autoCompleteReason.text.toString(),
+                            if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
 
-                    )
+                        )
+                    }else{
+                        mainActivity().showMessage("Please Select Valid Date")
+                    }
+
                 }
 
             }
