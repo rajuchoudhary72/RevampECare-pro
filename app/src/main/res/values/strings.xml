@@ -445,6 +445,7 @@
     <string name="contact_number">Contact Number</string>
     <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
+    <string name="alt_email_id">Alternate Email ID</string>
     <string name="ward_details">Ward Details</string>
     <string name="admission_number">Admission Number</string>
     <string name="permanent_education_number">Permanent Education Number</string>
@@ -716,4 +717,5 @@
     <string name="day_scholer">Day Scholer</string>
     <string name="total_student_s">Total Students</string>
     <string name="no_mega_book_available">"Mega E-book is not available "</string>
+    <string name="alternate_mobile">Alternate Mobile</string>
 </resources>

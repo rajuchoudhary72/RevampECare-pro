@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
 import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.HiltAndroidApp
@@ -26,7 +27,7 @@ class ECateProApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-       // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         FirebaseApp.initializeApp(this)
        // registerToken()
