@@ -287,11 +287,13 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
         binding.tvCopyToAll.setOnClickListener {
             submitStudentsList.forEach {
-                it.remark=binding.textFiledAllRemark.text.toString()
+                it.remark = binding.textFiledAllRemark.text.toString()
             }
-            val noticeAdapter = SubmitAssignListAdapter(submitStudentsList ,
-                this@ViewAssignmentFragment ){ remark, pos ->
-                submitStudentsList[pos].remark=remark
+            val noticeAdapter = SubmitAssignListAdapter(
+                submitStudentsList,
+                this@ViewAssignmentFragment
+            ) { remark, pos ->
+                submitStudentsList[pos].remark = remark
             }
 
             binding.rvSubmitList.apply {
