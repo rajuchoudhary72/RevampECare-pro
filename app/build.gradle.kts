@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.safeArgs)
     kotlin("kapt")
     alias(libs.plugins.kotlinParcelize)
+    id("com.google.devtools.ksp")
 }
 
 kapt {
@@ -38,6 +39,9 @@ android {
             annotationProcessorOptions {
                 arguments["room.schemaLocation"] =
                     "$projectDir/schemas"
+            }
+            ksp {
+                arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
     }
@@ -103,10 +107,15 @@ dependencies {
     implementation(libs.com.google.firebase.firebase.crashlytics)
     kapt(libs.hilt.android.compiler)
 
-    /* Database */
+/*    *//* Database *//*
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
+   // kapt(libs.androidx.room.compiler)
+    annotationProcessor("androidx.room:room-compiler:2.5.1")
+    implementation(libs.androidx.room.ktx)*/
+    val roomVersion = "2.5.2"
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
 
     /* Preferences */
     implementation(libs.androidx.datastore.preferences)

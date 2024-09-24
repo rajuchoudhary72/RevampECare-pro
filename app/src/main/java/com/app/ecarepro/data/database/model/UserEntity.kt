@@ -7,7 +7,7 @@ import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 
 @Entity(tableName = "users")
 data class UserEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id:Int = 0,
     @ColumnInfo(name = "user_id") val userId: Int,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "photo") val photo: String?,

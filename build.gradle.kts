@@ -13,7 +13,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.firebaseCrashlytics) apply false
     id("com.google.gms.google-services") version "4.4.2" apply false
-
+    id("com.google.devtools.ksp") version "1.8.21-1.0.11" apply false
     alias(libs.plugins.kotlinParcelize) apply false
 }
 true // Needed to make the Suppress annotation work for the plugins block

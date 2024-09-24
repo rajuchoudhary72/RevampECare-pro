@@ -7,18 +7,22 @@ import com.app.ecarepro.data.database.dao.UserDao
 import com.app.ecarepro.data.database.model.SchoolEntity
 import com.app.ecarepro.data.database.model.UserEntity
 import androidx.room.AutoMigration
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [UserEntity::class, SchoolEntity::class],
-    version = 4,
+    version = 6,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
-    ]
+    ],
 )
 abstract class ECareProDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun schoolDao(): SchoolDao
 }
+
+
