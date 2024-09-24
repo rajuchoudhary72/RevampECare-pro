@@ -964,4 +964,12 @@
         android:id="@+id/fomGuardFragment"
         android:name="com.app.ecarepro.ui.fom_guard.FomGuardFragment"
         android:label="FomGuardFragment" />
+    <fragment
+        android:id="@+id/photoSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderNavHostFragment"
+        android:label="PhotoSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/favoriteSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.favorites.favorites_slider.FavoriteSliderNavHostFragment"
+        android:label="FavoriteSliderNavHostFragment" />
 </navigation>

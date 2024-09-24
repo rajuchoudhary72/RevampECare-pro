@@ -41,7 +41,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
 
-                    android:text="@string/admissio_n_no"
+                    android:text="@string/gender"
                     android:textColor="@color/grey_40"
                     android:textSize="@dimen/_12sdp" />
 
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.admissionNo}"
+                    android:text="@{studentData.gender}"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
 
@@ -308,7 +308,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/pan_number"
+                    android:text="@string/peen_number"
                     android:textColor="@color/grey_40"
                     android:textSize="@dimen/_12sdp" />
 

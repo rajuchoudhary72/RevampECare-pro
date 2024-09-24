@@ -62,14 +62,14 @@ class MediaDetailsFragment : Fragment() {
 
 
     companion object {
-        const val description = ""
-        const val fileName = ""
-        const val fileNameFullSize = ""
-        const val headline = ""
-        const val id = ""
-        const val newsName = ""
-        const val publishedOn = ""
-        const val updatedOn = ""
+        const val description = "description"
+        const val fileName = "fileName"
+        const val fileNameFullSize = "fileNameFullSize"
+        const val headline = "headline"
+        const val id = "id"
+        const val newsName = "newsName"
+        const val publishedOn = "publishedOn"
+        const val updatedOn = "updatedOn"
     }
 
 }

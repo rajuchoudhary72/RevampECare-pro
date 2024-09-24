@@ -55,7 +55,7 @@ class PhotoAlbumDTLAdapter(
                 .into(item.ivPhoto)
 
             item.ivPhoto.setOnClickListener {
-                photoAlbumDTLFragment.onItemClick(data,1,false)
+                photoAlbumDTLFragment.onItemClick(data,absoluteAdapterPosition,false)
             }
 
 

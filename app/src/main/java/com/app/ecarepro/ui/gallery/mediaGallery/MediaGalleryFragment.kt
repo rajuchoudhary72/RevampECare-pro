@@ -245,9 +245,7 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
             )
         )
         }
-
-
-    private fun popUpSearchBy() {
+  private fun popUpSearchBy() {
 
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)

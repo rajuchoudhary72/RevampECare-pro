@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
 import com.app.ecarepro.model.Photo
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     private lateinit var albumSetting: AlbumSetting
+    private lateinit var photoDetails: NetworkAlbumPhotoDetails
     private var photoAlbumId: String = ""
     private lateinit var photoAlbumAdapter: PhotoAlbumDTLAdapter
     private lateinit var binding: FragmentPhotoAlbumDTLBinding
@@ -50,7 +52,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View  {
         binding = FragmentPhotoAlbumDTLBinding.inflate(inflater, container, false)
         photoAlbumId = requireArguments().getString(Constant.ID).toString()
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -71,6 +73,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
+            binding.tvMore.isVisible = false
         }
 
         lifecycleScope.launch {
@@ -120,7 +123,8 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                 if (pageIndex==1){
                                     photoAlbumAdapter.clearData()
                                 }
-                                albumSetting=it.data.setting
+                                albumSetting= it.data.setting!!
+                                photoDetails=it.data
                                 photoAlbumAdapter.setData(it.data.photos.toMutableList())
 
                             } else {
@@ -180,22 +184,29 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     override fun onItemClick(t: Photo, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.photoSliderFragment ,
+//        findNavController().navigate(R.id.photoSliderFragment ,
+//            Bundle().apply {
+//                putString(Constant.ID, t.id)
+//                putString(Constant.URL_ARGUMENT, t.photoPath)
+//                putString(Constant.FULL_URL_ARGUMENT, t.photoPath)
+//                putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
+//                putBoolean("isLiked", t.isLike)
+//                putBoolean("isFav", t.isFavourite)
+//                putInt("likes", t.likes)
+//
+//                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled)
+//                putBoolean("isShareEnabled", albumSetting.isShareEnabled)
+//                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled)
+//
+//
+//            })
+
+        findNavController().navigate(R.id.photoSliderNavHostFragment ,
             Bundle().apply {
-                putString(Constant.ID, t.id)
-                putString(Constant.URL_ARGUMENT, t.photoPath)
-                putString(Constant.FULL_URL_ARGUMENT, t.photoPath)
+                putParcelable("photoDetails", photoDetails)
+                putInt("photoPosition", pos)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
-                putBoolean("isLiked", t.isLike)
-                putBoolean("isFav", t.isFavourite)
-                putInt("likes", t.likes)
-
-                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled)
-                putBoolean("isShareEnabled", albumSetting.isShareEnabled)
-                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled)
-
-
-            })
+                  })
 
     }
 

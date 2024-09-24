@@ -165,7 +165,7 @@ class ClassAttendanceFragment : Fragment()  {
                                         }
 
                                         3 -> {
-                                            tab.text = "Late"
+                                            tab.text = "Leave"
                                         }
                                     }
                                 }.attach()

@@ -288,6 +288,7 @@
     <string name="allowance">Allowance</string>
     <string name="basic">Basic</string>
     <string name="pan_number">PAN Number</string>
+    <string name="peen_number">PEN Number</string>
     <string name="admissio_n_no">Admissio n No.</string>
     <string name="house">House</string>
     <string name="bloodgroup">BloodGroup</string>
