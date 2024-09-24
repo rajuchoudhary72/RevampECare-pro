@@ -27,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="Message"
-                app:titleTextAppearance="@style/TextAppearance.ECarePro.Toolbar"
-                app:topWindowInsetToPadding="@{true}">
+                app:titleTextColor="@color/white"
+                 app:topWindowInsetToPadding="@{true}">
 
                 <LinearLayout
                     android:layout_width="wrap_content"

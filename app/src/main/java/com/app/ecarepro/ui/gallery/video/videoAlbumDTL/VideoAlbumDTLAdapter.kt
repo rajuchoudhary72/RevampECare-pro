@@ -57,7 +57,7 @@ class VideoAlbumDTLAdapter(
             item.ivVideoPlay.isVisible=true
 
             item.ivPhoto.setOnClickListener {
-                videoAlbumDTLFragment.onItemClick(data,1,false)
+                videoAlbumDTLFragment.onItemClick(data,absoluteAdapterPosition,false)
             }
 
 

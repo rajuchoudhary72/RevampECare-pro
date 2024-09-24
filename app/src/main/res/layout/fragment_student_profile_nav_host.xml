@@ -138,7 +138,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/ubuntu_medium"
-                                        android:text="@string/gender"
+                                        android:text="@string/admission_no"
                                         android:textColor="@color/grey_40"
                                         android:textSize="@dimen/_10sdp" />
 
@@ -150,7 +150,7 @@
                                         android:textColor="@color/grey_60"
                                         android:textSize="@dimen/_10sdp"
                                         android:layout_marginStart="8dp"
-                                        android:text="@{userData.gender}" />
+                                        android:text="@{userData.admissionNo}" />
                                 </LinearLayout>
 
                                 <LinearLayout

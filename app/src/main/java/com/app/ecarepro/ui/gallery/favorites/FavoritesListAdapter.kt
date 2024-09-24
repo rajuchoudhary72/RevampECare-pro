@@ -62,7 +62,7 @@ class FavoritesListAdapter(
 
 
             item.rlPhoto.setOnClickListener {
-                favoritesListFragment.onItemClick(data,1,false)
+                favoritesListFragment.onItemClick(data,absoluteAdapterPosition,false)
             }
 
 
