@@ -310,7 +310,7 @@ class ProfileFragment : Fragment() {
         profileItem {
             id(R.string.spouse_name)
             iconRes(R.drawable.ic_profile)
-            if (profile.gender=="Female"&&profile.maritalStatus=="Married"){
+            if (profile.isSpouseName==true){
                 title(getString(R.string.spouse_name))
                 subTitle(profile.fatherHusbandName)
             }else{
@@ -403,7 +403,7 @@ class ProfileFragment : Fragment() {
         }
         profileItem {
             id(R.string.spouse_contact_number)
-            if (profile.gender=="Female"&&profile.maritalStatus=="Married"){
+            if (profile.isSpouseName==true){
                 iconRes(R.drawable.ic_contact_no_)
                 title(getString(R.string.spouse_contact_number))
                 subTitle(profile.fatherHusbandMob)
@@ -415,11 +415,25 @@ class ProfileFragment : Fragment() {
 
         }
         profileItem {
+            id(R.string.alternate_mobile)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.alternate_mobile))
+            subTitle(profile.alternateMobile)
+        }
+        profileItem {
             id(R.string.email_id)
             iconRes(R.drawable.ic_email_id)
             title(getString(R.string.email_id))
             subTitle(profile.emailID)
         }
+
+        profileItem {
+            id(R.string.alt_email_id)
+            iconRes(R.drawable.ic_email_id)
+            title(getString(R.string.alt_email_id))
+            subTitle(profile.alternateEmailID)
+        }
+
 
     }
 
