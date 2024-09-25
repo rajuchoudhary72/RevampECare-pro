@@ -98,10 +98,10 @@ class FeePaymentFragment : Fragment() {
        Log.i("paymentUrl",feePaymentViewModel.feePayemtURL + "?token=" + tokenKey)
 
 // https://payment.lfconventschoolsangrur.com/mlogin.aspx
-        val tabIntent = CustomTabsIntent.Builder()
+      /*  val tabIntent = CustomTabsIntent.Builder()
             .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
-        openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))
-      /*  binding.apply {
+        openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))*/
+        binding.apply {
             (requireActivity() as MainActivity).showLoader(true)
             wvFeePayment.settings.javaScriptEnabled = true
             wvFeePayment.settings.setSupportZoom(true)
@@ -121,7 +121,7 @@ class FeePaymentFragment : Fragment() {
 
 
             wvFeePayment.loadUrl( feePaymentViewModel.feePayemtURL + "?token=" + tokenKey   )
-        }*/
+        }
 
 
 
