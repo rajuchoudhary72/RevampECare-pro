@@ -13,6 +13,7 @@ import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asNetworkSchool
 import com.app.ecarepro.data.database.model.asNetworkUserDetailsDto
+import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
@@ -23,7 +24,6 @@ import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
-import com.app.ecarepro.data.network.Setting
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
@@ -52,10 +52,12 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String) {
-        userDatabase.insertUser(user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time))
+        val id = userDatabase.insertUser(
+            user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time)
+        )
         val userId = getCurrentUserId()
         if (userId == null || userId == 0)
-            setCurrentUserId(userId = user.userID)
+            setCurrentUserId(id.toInt())
 
     }
 
@@ -73,7 +75,7 @@ class UserDataStoreImpl @Inject constructor(
                     it.asNetworkUserDetailsDto().copy(
                         school = schoolDatabase.getSchool(it.schoolCode ?: "").asNetworkSchool()
                     )
-                }?: emptyList()
+                } ?: emptyList()
             }
     }
 
@@ -82,6 +84,7 @@ class UserDataStoreImpl @Inject constructor(
             preferences[currentUserId] = userId
         }
     }
+
     override suspend fun saveGeneralSettings(settings: List<Setting>) {
         context.dataStore.edit { preferences ->
             preferences[generalSettingsKey] = gson.toJson(settings)
@@ -133,16 +136,17 @@ class UserDataStoreImpl @Inject constructor(
                     null
                 )
             }
-            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it?.asNetworkUserDetailsDto() }
+            else userDatabase.getUserFlow(getCurrentUserId()!!)
+                .map { it?.asNetworkUserDetailsDto() }
         }
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
         if (schoolDatabase.getSchoolData(school.schoolCode) == null)
             schoolDatabase.insertSchool(school.asNetworkSchool())
-       /* val schoolCode = getCurrentSchoolCode()
-        if (schoolCode.isNullOrEmpty())
-            setCurrentSchoolCode(school.schoolCode)*/
+        /* val schoolCode = getCurrentSchoolCode()
+         if (schoolCode.isNullOrEmpty())
+             setCurrentSchoolCode(school.schoolCode)*/
         setCurrentSchoolCode(school.schoolCode)
     }
 
@@ -189,7 +193,7 @@ class UserDataStoreImpl @Inject constructor(
             } else {
                 try {
                     gson.fromJson(json, UserDashboardDto::class.java)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                     null
                 }
@@ -209,7 +213,6 @@ class UserDataStoreImpl @Inject constructor(
             preferences[userTypeKey] = userType
         }
     }
-
 
 
     override suspend fun saveRoleName(roleName: String) {
@@ -235,7 +238,6 @@ class UserDataStoreImpl @Inject constructor(
             preferences[userTypeKey]
         }.first()
     }
-
 
 
     override suspend fun getRoleName(): String? {

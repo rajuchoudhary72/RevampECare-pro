@@ -29,6 +29,7 @@ data class NetworkUserDetailsDto(
     val schoolCode: String?,
     val isUserAuthenticated: Boolean?,
     val loginTime:String?,
+    val id:Int,
 
     @SerializedName("userType")
     val userType: Int,

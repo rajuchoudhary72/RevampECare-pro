@@ -14,27 +14,33 @@ class UserDatabaseImpl @Inject constructor(
     private val userDao: UserDao,
     private val schoolDao: SchoolDao
 ) : UserDatabase, SchoolDatabase {
-    override suspend fun insertUser(user: UserEntity) {
-        userDao.insertUser(user)
+    override suspend fun insertUser(user: UserEntity):Long {
+       return userDao.insertUser(user)
     }
 
     override suspend fun getUser(userId: Int): UserEntity? {
         val users = getUsersFlow().first()
-        return users.firstOrNull { it.userId == userId } ?: users.firstOrNull()
+        return users.firstOrNull { it.id == userId } ?: users.firstOrNull()
+    }
+
+    override suspend fun getUser(userId: Int, schoolCode: String, userType: Int): UserEntity {
+        return userDao.getUser(userId, schoolCode, userType)
     }
 
     override fun getUserFlow(userId: Int): Flow<UserEntity?> {
         return getUsersFlow().map { users ->
-            users.firstOrNull { it.userId == userId } ?: users.firstOrNull()
+            users.firstOrNull { it.id == userId } ?: users.firstOrNull()
         }
     }
 
     override fun getUsersFlow(): Flow<List<UserEntity>> {
         return userDao.getUsersFlow()
     }
+
     override suspend fun deleteUser(userId: Int) {
         return userDao.deleteUser(userId)
     }
+
     override suspend fun deleteUser(userEntity: UserEntity) {
         return userDao.deleteUser(userEntity)
     }
