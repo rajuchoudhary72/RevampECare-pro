@@ -80,7 +80,7 @@ class StudentListMarkAttAdapter(
 
         when (data.status) {
             1 -> if (data.isLate == 0) {
-
+                binding.tvApproveLeave.isVisible=false
                 if (data.isConstant == 1) {
                     binding.tvMarkPresent.isEnabled = false
                     binding.tvMarkAbsent.isEnabled = false
@@ -88,6 +88,7 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
                 }
+
                 /*binding.tvMarkPresent.text = "P"
                 binding.tvMarkPresent.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(
@@ -108,11 +109,13 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkLate.background = stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_late)
 */
+                binding.tvApproveLeave.isVisible=false
                 updateUI(4, binding, data, position)
 
             }
 
             2 -> {
+                binding.tvApproveLeave.isVisible=false
                 if (data.isConstant == 1) {
                     binding.tvMarkPresent.isEnabled = false
                     binding.tvMarkAbsent.isEnabled = false
@@ -129,12 +132,14 @@ class StudentListMarkAttAdapter(
             }
 
             3 -> {
+                binding.tvApproveLeave.isVisible=false
                 if (data.isConstant == 1) {
                     binding.tvMarkPresent.isEnabled = false
                     binding.tvMarkAbsent.isEnabled = false
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                    binding.tvApproveLeave.isVisible=true
                 }
                /* binding.tvMarkLeave.text = "L"
                 binding.tvMarkLeave.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
@@ -145,6 +150,7 @@ class StudentListMarkAttAdapter(
             }
 
             4 -> {
+                binding.tvApproveLeave.isVisible=false
                 if (data.isConstant == 1) {
                     binding.tvMarkPresent.isEnabled = false
                     binding.tvMarkAbsent.isEnabled = false

@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentFeeReceiptBinding
 import com.app.ecarepro.model.FeeReceipt
@@ -40,6 +41,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
@@ -54,6 +56,9 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     private val STORAGE_PERMISSION_REQUEST_CODE = 1001
 
     private var base64String=""
+
+    @Inject
+    lateinit var userDataStore: UserDataStore
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,7 +85,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error$it")
+                        Log.d("mainnnnnnnn", "ErrorRRRR$it")
                     }
 
                     is NetworkResult.Success -> {
@@ -131,10 +136,21 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                 }
             }
         }
-        feeReceiptViewModel.getFeeReceipt(
-            feeReceiptViewModel.feePaymentURL.replace("mlogin.aspx", "")+"/api/feereceipt",
-             0
-        )
+
+        lifecycleScope.launch {
+            userDataStore.getSchoolData()?.run {
+                if (! feePayemtURL.isNullOrEmpty()){
+                    feeReceiptViewModel.getFeeReceipt(
+                        feePayemtURL.replace("mlogin.aspx", "")+"/api/feereceipt",
+                        0
+                    )
+                }else{
+                    Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            }
+
 
 
     }
@@ -188,10 +204,21 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
     private fun getFeeReceipt( yearID : Int) {
 
-        feeReceiptViewModel.getFeeReceipt(
-            feeReceiptViewModel.feePaymentURL.replace("mlogin.aspx", "")+"/api/feereceipt",
-            yearID
-        )
+        lifecycleScope.launch {
+            userDataStore.getSchoolData()?.run {
+                if (! feePayemtURL.isNullOrEmpty()){
+                    feeReceiptViewModel.getFeeReceipt(
+                        feePayemtURL.replace("mlogin.aspx", "")+"/api/feereceipt",
+                        yearID
+                    )
+                }else{
+                    Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+        }
+
+
     }
 
     override fun onItemClick(t: FeeReceipt, pos: Int, boolean: Boolean) {

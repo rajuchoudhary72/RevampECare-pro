@@ -10,7 +10,7 @@ data class Student(
     var isSelected: Boolean,
     val name: String,
     val recipientName: String,
-
+    val gender: String,
     val photo: String,
     val rollNumber: String,
     val stID: Int,
