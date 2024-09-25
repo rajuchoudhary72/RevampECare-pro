@@ -30,7 +30,7 @@ class FeeReceiptViewModel @Inject constructor(
 
 
 
-    var feePaymentURL : String = ""
+//    var feePaymentURL : String = ""
     lateinit var schoolDetails : NetworkSchool
     lateinit var userDetails : NetworkUserDetailsDto
 
@@ -44,9 +44,9 @@ class FeeReceiptViewModel @Inject constructor(
             userDetails = userDataStore.getUser()!!
         }
 
-        viewModelScope.launch {
-            feePaymentURL = userDataStore.getSchoolData()?.feePayemtURL.toString()
-        }
+//        viewModelScope.launch {
+//            feePaymentURL = userDataStore.getSchoolData()?.feePayemtURL.toString()
+//        }
 
 
 

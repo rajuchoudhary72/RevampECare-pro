@@ -107,8 +107,8 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:layout_marginTop="@dimen/_3sdp">
+                                    android:layout_marginTop="@dimen/_3sdp"
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -122,11 +122,11 @@
                                         android:id="@+id/tvDesignation"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/ubuntu_medium"
-                                        android:textColor="@color/grey_60"
-                                        android:textSize="@dimen/_10sdp"
                                         android:layout_marginStart="8dp"
-                                        android:text="@{userData.className}" />
+                                        android:fontFamily="@font/ubuntu_medium"
+                                        android:text="@{userData.className}"
+                                        android:textColor="@color/grey_60"
+                                        android:textSize="@dimen/_10sdp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -146,11 +146,11 @@
                                         android:id="@+id/tvGender"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/ubuntu_medium"
-                                        android:textColor="@color/grey_60"
-                                        android:textSize="@dimen/_10sdp"
                                         android:layout_marginStart="8dp"
-                                        android:text="@{userData.admissionNo}" />
+                                        android:fontFamily="@font/ubuntu_medium"
+                                        android:text="@{userData.admissionNo}"
+                                        android:textColor="@color/grey_60"
+                                        android:textSize="@dimen/_10sdp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -170,11 +170,11 @@
                                         android:id="@+id/tvDoj"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:fontFamily="@font/ubuntu_medium"
-                                        android:textColor="@color/grey_60"
-                                        android:textSize="@dimen/_10sdp"
                                         android:layout_marginStart="8dp"
-                                        android:text="@{userData.dob}" />
+                                        android:fontFamily="@font/ubuntu_medium"
+                                        android:text="@{userData.admissionDate}"
+                                        android:textColor="@color/grey_60"
+                                        android:textSize="@dimen/_10sdp" />
                                 </LinearLayout>
                             </LinearLayout>
 

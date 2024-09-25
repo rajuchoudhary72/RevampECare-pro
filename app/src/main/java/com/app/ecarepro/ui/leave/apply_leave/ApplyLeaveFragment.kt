@@ -62,7 +62,7 @@ class ApplyLeaveFragment : Fragment() {
     private var holidayList = mutableListOf<Holiday>()
 
     private var halfdayDTL = mutableListOf<HalfdayDTL>()
-    var timestampBack: Long = 0
+    var timestampBack: Long =System.currentTimeMillis()
     var timestampforward: Long = 0
 
     var timestampOneDay = "86400000".toLong()

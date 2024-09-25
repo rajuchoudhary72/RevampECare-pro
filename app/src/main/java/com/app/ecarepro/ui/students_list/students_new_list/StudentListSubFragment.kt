@@ -54,6 +54,8 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
 
             var studentList = students.filter { it.`class` == className }
             binding.tvTotalCount.text = studentList.size.toString()
+            binding.tvBoysCount.text = studentList.filter { it.gender == "Male" }.size.toString()
+            binding.tvGirlsCount.text = studentList.filter { it.gender == "Female" }.size.toString()
 
             lifecycleScope.launch {
                 studentListViewModel.searchQuery.collectLatest {

@@ -64,13 +64,74 @@
 
 </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_total_boys_girls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/_5sdp"
+             android:layout_below="@+id/ll_total_count"
+
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/tv_boys_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:id="@+id/tv_boys_Count_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:text="@string/boys"
+                    android:textSize="@dimen/_14sdp" />
+
+                <View
+                    android:id="@+id/view_two"
+                    android:layout_width="@dimen/_1sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@color/grey_light" />
+
+                <TextView
+                    android:id="@+id/tv_girls_Count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:textSize="@dimen/_14sdp" />
+
+                <TextView
+                    android:id="@+id/tv_girls_Count_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:text="@string/girls"
+                    android:textSize="@dimen/_14sdp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
 
 
          <com.google.android.material.divider.MaterialDivider
              android:id="@+id/divider_one"
              android:layout_width="match_parent"
              android:layout_height="2dp"
-             android:layout_below="@+id/ll_total_count"
+             android:layout_below="@+id/ll_total_boys_girls"
              />
 
         <HorizontalScrollView
