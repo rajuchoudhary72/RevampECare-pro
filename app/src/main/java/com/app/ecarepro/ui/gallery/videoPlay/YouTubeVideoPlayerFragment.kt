@@ -40,15 +40,7 @@ class YouTubeVideoPlayerFragment : Fragment() {
             this.videoID =videoID
         }
 
-       /* requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-
-        binding.youTubePlayerView.enterFullScreen()
-        binding.youTubePlayerView.toggleFullScreen()*/
 
 
         lifecycle.addObserver(binding.youTubePlayerView)

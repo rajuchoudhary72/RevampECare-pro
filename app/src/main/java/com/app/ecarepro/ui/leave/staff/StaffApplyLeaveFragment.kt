@@ -72,7 +72,7 @@ class StaffApplyLeaveFragment : Fragment() {
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
     private val sessionList = listOf<String> ("Session 1","Session 2")
-    var timestampBack: Long = 0
+    var timestampBack: Long = System.currentTimeMillis()
     var timestampforward: Long = 0
 
     var timestampOneDay = "86400000".toLong()
@@ -108,8 +108,10 @@ class StaffApplyLeaveFragment : Fragment() {
 
             val currentTimestamp = System.currentTimeMillis()
             timestampforward = currentTimestamp + leaveTerm.forwardDays * timestampOneDay
-            timestampBack = currentTimestamp - leaveTerm.backwardDays * timestampOneDay
+             if (leaveTerm.isPrevDatesAllow){
+                 timestampBack = currentTimestamp - leaveTerm.backwardDays * timestampOneDay
 
+             }
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())

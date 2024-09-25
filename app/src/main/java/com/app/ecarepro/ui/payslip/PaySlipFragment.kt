@@ -59,7 +59,7 @@ class PaySlipFragment : Fragment() {
         binding.autoCompleteMonth.onItemClickListener= OnItemClickListener{parent,view,pos,id ->
 
             monthSelectedData =monthData[pos]
-            downloadFileUrl=monthSelectedData.protectedFilePath
+            downloadFileUrl=monthSelectedData.filePath
 
             if (monthSelectedData.filePath.isNotEmpty()){
                 (requireActivity() as MainActivity).showLoader(true)
