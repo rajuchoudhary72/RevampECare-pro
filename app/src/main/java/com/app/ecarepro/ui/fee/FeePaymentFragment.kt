@@ -99,8 +99,6 @@ class FeePaymentFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpFeePayWebView(tokenKey: String) {
 
-     private fun setUpFeePayWebView(tokenKey: String) {
-
 // https://payment.lfconventschoolsangrur.com/mlogin.aspx
          /*  val tabIntent = CustomTabsIntent.Builder()
                .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
@@ -165,4 +163,3 @@ class FeePaymentFragment : Fragment() {
 
     }
 
-}
