@@ -52,10 +52,12 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String) {
-        userDatabase.insertUser(user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time))
+        val id = userDatabase.insertUser(
+            user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time)
+        )
         val userId = getCurrentUserId()
         if (userId == null || userId == 0)
-            setCurrentUserId(userId = user.userID)
+            setCurrentUserId(id.toInt())
 
     }
 
@@ -138,16 +140,14 @@ class UserDataStoreImpl @Inject constructor(
     }
 
     override suspend fun saveSchoolData(school: NetworkSchool) {
-        if (schoolDatabase.getSchoolData(school.schoolCode) == null){
+        if (schoolDatabase.getSchoolData(school.schoolCode) == null)
             schoolDatabase.insertSchool(school.asNetworkSchool())
-        } else{
-
-        }
-       /* val schoolCode = getCurrentSchoolCode()
-        if (schoolCode.isNullOrEmpty())
-            setCurrentSchoolCode(school.schoolCode)*/
+        /* val schoolCode = getCurrentSchoolCode()
+         if (schoolCode.isNullOrEmpty())
+             setCurrentSchoolCode(school.schoolCode)*/
         setCurrentSchoolCode(school.schoolCode)
     }
+
 
     override suspend fun getSchoolData(): NetworkSchool? {
         val user = getUser()

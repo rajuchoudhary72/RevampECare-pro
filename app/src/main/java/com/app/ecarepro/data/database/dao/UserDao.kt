@@ -6,15 +6,20 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.app.ecarepro.data.database.model.UserEntity
 import kotlinx.coroutines.flow.Flow
+import androidx.room.OnConflictStrategy
 
 @Dao
 interface UserDao {
-    @Insert
-    suspend fun insertUser(user: UserEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: UserEntity):Long
+
     @Query("DELETE FROM users WHERE user_id = :userId")
     fun deleteUser(userId: Int)
     @Query("SELECT * FROM users WHERE user_id = :userId LIMIT 1")
     suspend fun getUser(userId: Int): UserEntity
+
+    @Query("SELECT * FROM users WHERE user_id = :userId AND schoolCode = :schoolCode AND userType = :userType LIMIT 1")
+    suspend fun getUser(userId: Int, schoolCode:String, userType:Int): UserEntity
 
     @Query("SELECT * FROM users WHERE user_id = :userId LIMIT 1")
     fun getUserFlow(userId: Int): Flow<UserEntity>

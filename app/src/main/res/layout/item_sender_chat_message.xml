@@ -54,6 +54,7 @@
             android:fontFamily="@font/calibri_regular"
             android:longClickable="true"
             android:padding="17dp"
+            android:autoLink="web"
             android:text="@{message}"
             android:textColor="@color/white"
             android:textIsSelectable="true"

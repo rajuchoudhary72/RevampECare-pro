@@ -48,6 +48,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
+import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
@@ -98,7 +99,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userDataStore: UserDataStore
-
+    @Inject
+    lateinit var userDatabase: UserDatabase
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
         R.id.profileFragment,
@@ -350,7 +352,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*    private fun handleNotificationClick(data: Bundle) {
+        private fun handleNotificationClick(data: Bundle) {
             lifecycleScope.launch {
                 showLoader(true)
                 delay(2000)
@@ -358,6 +360,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
                 val schCode = data.getString("SchCode") ?: return@launch
                 val userID = data.getString("UserID")?.toInt() ?: return@launch
+                val userType = data.getString("UserType")?.toInt() ?: return@launch
                 val menuId = data.getString("MenuId")?.toInt()
                 val childMenuId = data.getString("ChMenuID")?.toInt()
 
@@ -377,7 +380,9 @@ class MainActivity : AppCompatActivity() {
                 val currentUser = userDataStore.getUser()
                 if (currentUser?.userId != userID) {
                     Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
-                    userDataStore.setCurrentUserId(userID!!)
+                            userDatabase.getUser(userID, schCode, userType)?.id?.let {
+                                userDataStore.setCurrentUserId(it)
+                            }
                 }
 
                 if (menuId != null) {
@@ -389,7 +394,9 @@ class MainActivity : AppCompatActivity() {
                 showLoader(false)
             }
 
-        }*/
+        }
+
+/*
     private fun handleNotificationClick(data: Bundle) {
         val menuId = data.getString("MenuId")?.toInt()
         val childMenuId = data.getString("ChMenuID")?.toInt()
@@ -398,7 +405,7 @@ class MainActivity : AppCompatActivity() {
                 getFragmentId(menuId, childMenuId)
             }
         }
-    }
+    }*/
 
     private fun checkAppVersion() {
         lifecycleScope.launch {

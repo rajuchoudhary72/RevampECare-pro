@@ -87,9 +87,22 @@ class FeePaymentFragment : Fragment() {
         }
         feePaymentViewModel.getGenerateToken(Constant.DEVICE_TYPE)
     }
+    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }
+    }
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setUpFeePayWebView(tokenKey: String) {
 
-     private fun setUpFeePayWebView(tokenKey: String) {
-
+// https://payment.lfconventschoolsangrur.com/mlogin.aspx
+         /*  val tabIntent = CustomTabsIntent.Builder()
+               .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
+           openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))*/
 
          lifecycleScope.launch {
              userDataStore.getSchoolData()?.run {
@@ -148,14 +161,5 @@ class FeePaymentFragment : Fragment() {
 
            }
 
-    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        val packageName = "com.android.chrome"
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
-        } else {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
-             }
-        }
+    }
 
-}
