@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
@@ -42,6 +43,8 @@ class SignInFragment : Fragment() {
     private val systemViewModel: SystemViewModel by activityViewModels()
     @Inject
     lateinit var userDataStore: UserDataStore
+    @Inject
+    lateinit var userDatabase: UserDatabase
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -90,7 +93,9 @@ class SignInFragment : Fragment() {
                             if (arguments?.containsKey("add_account") == true) {
                               //  findNavController().popBackStack()
                                 viewLifecycleOwner.lifecycleScope.launch {
-                                    userDataStore.setCurrentUserId(it.userID)
+                                    userDatabase.getUser(it.userID, mViewModel.schoolCode, it.userType)?.id?.let {
+                                        userDataStore.setCurrentUserId(it)
+                                    }
                                     restartApp()
                                 }
                             } else {

@@ -206,7 +206,7 @@ class ProfileFragment : Fragment() {
 
                 uiState.users.forEach {
                     account {
-                        id(it.userId)
+                        id(it.id)
                         name(
                             if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
@@ -217,10 +217,10 @@ class ProfileFragment : Fragment() {
                         )
                         photo(it.photo)
                         school(it.school)
-                        isCurrentUser(it.userId == uiState.currentUserId)
+                        isCurrentUser(it.id == uiState.currentUserId)
                         changeUser { _ ->
                             lifecycleScope.launch {
-                                userDataStore.setCurrentUserId(it.userId)
+                                userDataStore.setCurrentUserId(it.id)
                                 restartApp()
                             }
                         }
