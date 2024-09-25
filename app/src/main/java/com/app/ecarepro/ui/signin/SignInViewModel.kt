@@ -54,9 +54,9 @@ class SignInViewModel @Inject constructor(
             )
         }
     }
-    suspend fun isUserAlreadyLogin(userId: Int?):Boolean {
+    suspend fun isUserAlreadyLogin(userId: Int?, userType: Int?):Boolean {
         val user = userDataStore.getUsersFlow().map { users ->
-            users.firstOrNull { it.userId == userId && it.schoolCode == schoolCode }
+            users.firstOrNull { it.userId == userId && it.schoolCode == schoolCode && it.userType == userType }
         }.first()
         return user != null
     }

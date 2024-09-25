@@ -350,7 +350,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*    private fun handleNotificationClick(data: Bundle) {
+      /*  private fun handleNotificationClick(data: Bundle) {
             lifecycleScope.launch {
                 showLoader(true)
                 delay(2000)
@@ -390,6 +390,8 @@ class MainActivity : AppCompatActivity() {
             }
 
         }*/
+
+
     private fun handleNotificationClick(data: Bundle) {
         val menuId = data.getString("MenuId")?.toInt()
         val childMenuId = data.getString("ChMenuID")?.toInt()

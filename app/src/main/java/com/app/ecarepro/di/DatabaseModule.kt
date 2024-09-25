@@ -3,6 +3,8 @@ package com.app.ecarepro.di
 import android.content.Context
 import androidx.room.Room
 import com.app.ecarepro.data.database.ECareProDatabase
+import com.app.ecarepro.data.database.MIGRATION_4_5
+import com.app.ecarepro.data.database.MIGRATION_5_6
 import com.app.ecarepro.data.database.dao.SchoolDao
 import com.app.ecarepro.data.database.dao.UserDao
 import dagger.Module
@@ -22,7 +24,9 @@ object DatabaseModule {
         return Room.databaseBuilder(
             applicationContext,
             ECareProDatabase::class.java, "ecare-database"
-        ).build()
+        )
+            .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
+            .build()
     }
 
     @Provides

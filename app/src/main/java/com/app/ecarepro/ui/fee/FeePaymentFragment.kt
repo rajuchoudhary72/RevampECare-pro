@@ -1,7 +1,9 @@
 package com.app.ecarepro.ui.fee
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -80,13 +83,25 @@ class FeePaymentFragment : Fragment() {
         }
         feePaymentViewModel.getGenerateToken(Constant.DEVICE_TYPE)
     }
-
+    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }
+    }
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpFeePayWebView(tokenKey: String) {
 
        Log.i("paymentUrl",feePaymentViewModel.feePayemtURL + "?token=" + tokenKey)
 
-        binding.apply {
+
+        val tabIntent = CustomTabsIntent.Builder()
+            .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
+        openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))
+      /*  binding.apply {
             (requireActivity() as MainActivity).showLoader(true)
             wvFeePayment.settings.javaScriptEnabled = true
             wvFeePayment.settings.setSupportZoom(true)
@@ -106,7 +121,7 @@ class FeePaymentFragment : Fragment() {
 
 
             wvFeePayment.loadUrl( feePaymentViewModel.feePayemtURL + "?token=" + tokenKey   )
-        }
+        }*/
 
 
 
