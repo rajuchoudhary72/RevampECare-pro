@@ -224,6 +224,8 @@ class ProfileFragment : Fragment() {
                                 restartApp()
                             }
                         }
+                        /*childName(it.)
+                        childPhoto()*/
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Remove Account")
