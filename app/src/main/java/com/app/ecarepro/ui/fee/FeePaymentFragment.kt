@@ -100,7 +100,7 @@ class FeePaymentFragment : Fragment() {
 
         val tabIntent = CustomTabsIntent.Builder()
             .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
-       // openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))
+        openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))
         binding.apply {
             (requireActivity() as MainActivity).showLoader(true)
             wvFeePayment.settings.javaScriptEnabled = true
