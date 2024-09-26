@@ -67,14 +67,14 @@ import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* checking  for update version  */
-           checkAppVersion()
+        checkAppVersion()
 
         lifecycleScope.launch {
             systemViewModel.user.collectLatest {
@@ -286,8 +286,13 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     // Handle the permission request response
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -316,6 +321,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -329,38 +335,42 @@ class MainActivity : AppCompatActivity() {
             showLoader(true)
             delay(2000)
 
-            Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
+            Log.e(
+                "Note",
+                data.keySet().joinToString() { key -> "$key -> ${data.get(key).toString()}" })
             val schCode = data.getString("SchCode") ?: return@launch
             val userID = data.getString("UserID")?.toInt() ?: return@launch
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
 
-            Log.e("Note", "$schCode $userID $menuId $childMenuId" )
+            Log.e("Note", "$schCode $userID $menuId $childMenuId")
 
-            if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
-                Log.e("Note", "return@launch", )
+            if (userDataStore.getUsersFlow().first()
+                    .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
+            ) {
+                Log.e("Note", "return@launch")
                 return@launch
             }
 
             val currentSchool = userDataStore.getSchoolData()
             if (currentSchool?.schoolCode != schCode) {
-                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
+                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)")
                 userDataStore.setCurrentSchoolCode(schCode!!)
             }
 
             val currentUser = userDataStore.getUser()
             if (currentUser?.userId != userID) {
-                Log.e("Note", "userDataStore.setCurrentUserId(userID)", )x
-                userDatabase.getUser(userID, schCode, userType)?.id?.let {
-                    userDataStore.setCurrentUserId(it)
-                }
+                Log.e("Note", "userDataStore.setCurrentUserId(userID)")
+                        userDatabase.getUser(userID, schCode, userType)?.id?.let {
+                            userDataStore.setCurrentUserId(it)
+                        }
 
             }
 
             if (menuId != null) {
                 if (childMenuId != null) {
-                    Log.e("Note","getFragmentId(menuId, childMenuId)", )
+                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
                     getFragmentId(menuId, childMenuId)
                 }
             }
@@ -368,15 +378,15 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-/*    private fun handleNotificationClick(data: Bundle) {
-        val menuId = data.getString("MenuId")?.toInt()
-        val childMenuId = data.getString("ChMenuID")?.toInt()
-        if (menuId != null) {
-            if (childMenuId != null) {
-                getFragmentId(menuId, childMenuId)
+    /*    private fun handleNotificationClick(data: Bundle) {
+            val menuId = data.getString("MenuId")?.toInt()
+            val childMenuId = data.getString("ChMenuID")?.toInt()
+            if (menuId != null) {
+                if (childMenuId != null) {
+                    getFragmentId(menuId, childMenuId)
+                }
             }
-        }
-    }*/
+        }*/
 
     private fun checkAppVersion() {
         lifecycleScope.launch {
@@ -409,15 +419,15 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionName $versionName")
 
                             if (versionName < it.data.android.currentVersion) {
-                              // open  dialog
-                                if(versionName > it.data.android.criticalVersion && it.data.android.normalVersion  < versionName){
+                                // open  dialog
+                                if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                     //soft  update
                                     UpdateAppVersionDialog(
                                         0,
                                         it.data.android.title,
                                         it.data.android.description
                                     )
-                                }else{
+                                } else {
                                     //force update
                                     UpdateAppVersionDialog(
                                         1,
@@ -425,27 +435,27 @@ class MainActivity : AppCompatActivity() {
                                         it.data.android.description
                                     )
                                 }
-                            }else{
+                            } else {
                                 // nothing  open  version  dialog
                             }
 
-                           /* if (versionCode < it.data.android.versionCode) {
+                            /* if (versionCode < it.data.android.versionCode) {
 
 
-                                if (versionName == it.data.android.criticalVersion.trim()
-                                ) // force update
-                                    UpdateAppVersionDialog(
-                                        1,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
-                                else  // normal update
-                                    UpdateAppVersionDialog(
-                                        0,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
-                            }*/
+                                 if (versionName == it.data.android.criticalVersion.trim()
+                                 ) // force update
+                                     UpdateAppVersionDialog(
+                                         1,
+                                         it.data.android.title,
+                                         it.data.android.description
+                                     )
+                                 else  // normal update
+                                     UpdateAppVersionDialog(
+                                         0,
+                                         it.data.android.title,
+                                         it.data.android.description
+                                     )
+                             }*/
                         }
 
                     }
@@ -456,7 +466,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-       systemViewModel.checkAppVersion()
+        systemViewModel.checkAppVersion()
     }
 
 
@@ -470,6 +480,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
+            launch {
+                systemViewModel.logout.collectLatest { logout ->
+                    if (logout) {
+                        logout(forceLogout = true)
+                    }
+                }
+            }
             systemViewModel.uiState
                 .flowWithLifecycle(lifecycle)
                 .collectLatest { uiState ->
@@ -741,7 +758,7 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
-               15 -> navController.navigate(R.id.questionPaperFragment)
+            15 -> navController.navigate(R.id.questionPaperFragment)
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 
             17 -> {
@@ -1182,26 +1199,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun logout() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.logout))
-            .setMessage(getString(R.string.are_you_sure_to_logout))
-            .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                try {
-                    systemViewModel.logout {
-                        val intent = Intent(this, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        startActivity(intent)
-                        Runtime.getRuntime().exit(0)
+    fun logout(forceLogout: Boolean = false) {
+        if (forceLogout) {
+            lifecycleScope.launch {
+                userDataStore.clear()
+                restart()
+            }
+        } else {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.logout))
+                .setMessage(getString(R.string.are_you_sure_to_logout))
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    try {
+                        systemViewModel.logout {
+                            restart()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-
                 }
-            }
-            .setNegativeButton(getString(R.string.no)) { _, _ ->
+                .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                .show()
+        }
+    }
 
-            }
-            .show()
+    fun restart() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
     }
 
     private fun setUpMoreOptions() {

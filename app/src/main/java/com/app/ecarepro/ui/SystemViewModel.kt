@@ -57,6 +57,9 @@ class SystemViewModel @Inject constructor(
         NetworkResult.Loading())
     val appVersionStateFlow: StateFlow<NetworkResult<NetworkAppVersion>> = appVersionMutableStateFlow
 
+    private val _logout = MutableSharedFlow<Boolean>()
+    val logout = _logout
+
 
     val refresh = MutableSharedFlow<Boolean>()
     val showDashboardValue = MutableSharedFlow<Boolean>()
@@ -98,6 +101,9 @@ class SystemViewModel @Inject constructor(
             .map { result ->
                 if (result.isSuccess) {
                     val response = result.getOrNull()!!
+                    if(response.isAuthenticated == false){
+                        _logout.emit(true)
+                    }
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
