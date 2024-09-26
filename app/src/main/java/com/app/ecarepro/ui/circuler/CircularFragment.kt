@@ -130,7 +130,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                                     }
                                     circularListAdapter.setData(it.data.circularList.toMutableList())
 
-                                    fragmentCircularBinding.toolbar.title= "All Notices" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
+                                    fragmentCircularBinding.toolbar.title= "All Circular" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
 
                                 }else{
                                     if (pageIndex==1){
