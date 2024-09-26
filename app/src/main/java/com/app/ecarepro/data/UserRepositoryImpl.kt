@@ -146,6 +146,7 @@ import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
@@ -1198,6 +1199,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun postAssignmentRemark(request: List<AssignmentRemarkPost>): CommonResponse {
         return userService.postAssignmentRemark(request)
+    }
+
+    override suspend fun uploadStudentPhoto(request: StudentPhotoUploadModel): CommonResponse {
+        return userService.uploadStudentPhoto(request)
     }
 
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
