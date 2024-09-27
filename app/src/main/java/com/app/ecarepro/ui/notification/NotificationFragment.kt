@@ -83,6 +83,7 @@ class NotificationFragment : Fragment() {
                             id(notification.id)
                             notification(notification)
                             clickListener { _ ->
+                                notification.id?.let { mViewModel.markNotificationAsSeen(it) }
                                 notification.moduleID?.let {
                                     notification.chMenuID?.let { it1 ->
                                         (requireActivity() as MainActivity).getFragmentId(

@@ -727,19 +727,8 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                userDataStore.getUser()?.run {
-                                    if (roleName == "Principal" || roleName == "Management") {
-                                        navController.navigate(
-                                            R.id.classAndTeacherListFragment,
-                                            Bundle().apply {
-                                                putString(Constant.TO, Constant.FRA_TIMETABLE)
-                                            })
-                                    } else {
-                                        navController.navigate(R.id.timeTableNavHostFragment)
-                                    }
-                                }
 
-
+                                navController.navigate(R.id.timeTableNavHostFragment)
                             } else {
                                 navController.navigate(
                                     R.id.timeTableNavHostFragment,
@@ -1069,6 +1058,17 @@ class MainActivity : AppCompatActivity() {
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                     47 -> navController.navigate(R.id.surveyListFragment)
+                    64 ->  {
+
+                        navController.navigate(
+                            R.id.classAndTeacherListFragment,
+                            Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_TIMETABLE)
+                            })
+
+                    }
+
+
 
 
                 }

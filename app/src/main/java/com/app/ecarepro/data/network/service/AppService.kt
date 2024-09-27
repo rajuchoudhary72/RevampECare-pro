@@ -35,4 +35,9 @@ interface AppService {
     suspend fun updateFavourites(
         @Body request: List<Favourites>
     ): CommonResponse
+
+    @GET("App/NotificationSeen")
+    suspend fun notificationSeen(
+        @Query("ID") id: String
+    ): CommonResponse
 }

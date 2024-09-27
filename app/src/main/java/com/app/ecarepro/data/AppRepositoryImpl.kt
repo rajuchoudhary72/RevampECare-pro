@@ -2,6 +2,7 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppLayoutDto
+import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.service.AppService
@@ -97,5 +98,9 @@ class AppRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+
+    override suspend fun notificationSeen(id: String): CommonResponse {
+        return appService.notificationSeen(id)
     }
 }

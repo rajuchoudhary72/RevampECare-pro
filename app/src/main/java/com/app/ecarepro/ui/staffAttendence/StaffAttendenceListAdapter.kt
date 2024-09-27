@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.NoticeListItemBinding
@@ -41,7 +42,12 @@ class StaffAttendenceListAdapter(
     override fun getItemCount(): Int = syllabusLST.size
 
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
-        bindingm.attData = syllabusLST[position]
+        val binding =DataBindingUtil.getBinding<StaffAttendenceListItemBinding>(holder.itemView)
+
+        binding?.apply {
+            binding.attData = syllabusLST[position]
+        }
+
 
 
 
