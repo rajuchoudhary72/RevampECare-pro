@@ -91,75 +91,82 @@ class AttendanceFragment : Fragment() {
                         if (it.data != null) {
 
 
-                            bindYearArray(it.data.startYear)
-                            bindMonthArray()
-
-                            if (yearModelArrayList != null) {
-
-                                val monthDataString: ArrayList<String> = ArrayList()
 
 
-                                monthDataString.clear()
-
-                                yearModelArrayList.forEach { data ->
-                                    monthDataString.add(data.yearId.toString())
-                                }
-
-                                val arrayAdapter = ArrayAdapter(
-                                    requireContext(),
-                                    android.R.layout.simple_list_item_1,
-                                    monthDataString
-                                )
-                                binding.autoCompleteYear.setAdapter(arrayAdapter)
-                            }
-
-                            if (monthModelArrayList != null) {
-
-                                val monthDataString: ArrayList<String> = ArrayList()
+                             if (it.data.startYear!=0){
+                                 bindYearArray(it.data.startYear)
+                                 bindMonthArray()
+                             }
 
 
-                                monthDataString.clear()
-                                monthModelArrayList.forEach { data ->
-                                    monthDataString.add(data.month.toString())
-                                }
+                             if (yearModelArrayList != null) {
 
-                                val arrayAdapter = ArrayAdapter(
-                                    requireContext(),
-                                    android.R.layout.simple_list_item_1,
-                                    monthDataString
-                                )
-                                binding.autoCompleteMonth.setAdapter(arrayAdapter)
-                            }
+                                 val monthDataString: ArrayList<String> = ArrayList()
 
 
-                            if (it.data.attendance != null) {
+                                 monthDataString.clear()
 
-                                if (it.data.attendance.isNotEmpty()) {
+                                 yearModelArrayList.forEach { data ->
+                                     monthDataString.add(data.yearId.toString())
+                                 }
 
-                                    binding.rvAttendence.isVisible = true
-                                    binding.tvNoData.isVisible = false
+                                 val arrayAdapter = ArrayAdapter(
+                                     requireContext(),
+                                     android.R.layout.simple_list_item_1,
+                                     monthDataString
+                                 )
+                                 binding.autoCompleteYear.setAdapter(arrayAdapter)
+                             }
 
-                                    val noticeAdapter =
-                                        StaffAttendenceListAdapter(
-                                            it.data.attendance,
-                                            this@AttendanceFragment
-                                        )
+                             if (monthModelArrayList != null) {
 
-                                    binding.rvAttendence.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = noticeAdapter
-                                    }
+                                 val monthDataString: ArrayList<String> = ArrayList()
 
-                                } else {
-                                    binding.rvAttendence.isVisible = false
-                                    binding.tvNoData.isVisible = true
-                                }
 
-                            } else {
-                                binding.rvAttendence.isVisible = false
-                                binding.tvNoData.isVisible = true
-                            }
+                                 monthDataString.clear()
+                                 monthModelArrayList.forEach { data ->
+                                     monthDataString.add(data.month.toString())
+                                 }
+
+                                 val arrayAdapter = ArrayAdapter(
+                                     requireContext(),
+                                     android.R.layout.simple_list_item_1,
+                                     monthDataString
+                                 )
+                                 binding.autoCompleteMonth.setAdapter(arrayAdapter)
+                             }
+
+
+                             if (it.data.attendance != null) {
+
+                                 if (it.data.attendance.isNotEmpty()) {
+
+                                     binding.rvAttendence.isVisible = true
+                                     binding.tvNoData.isVisible = false
+
+                                     val noticeAdapter =
+                                         StaffAttendenceListAdapter(
+                                             it.data.attendance,
+                                             this@AttendanceFragment
+                                         )
+
+                                     binding.rvAttendence.apply {
+                                         setHasFixedSize(true)
+                                         layoutManager = LinearLayoutManager(activity)
+                                         adapter = noticeAdapter
+                                     }
+
+                                 } else {
+                                     binding.rvAttendence.isVisible = false
+                                     binding.tvNoData.isVisible = true
+                                 }
+
+                             } else {
+                                 binding.rvAttendence.isVisible = false
+                                 binding.tvNoData.isVisible = true
+                             }
+
+
 
                         }
 
