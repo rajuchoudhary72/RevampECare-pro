@@ -16,93 +16,131 @@
         android:layout_height="wrap_content"
         app:contentPadding="@dimen/_8sdp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/image"
-                android:scaleType="centerCrop"
-                imageUrl="@{attendance.photo}"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
-                tools:src="@drawable/img_message_user" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/image"
+                    imageUrl="@{attendance.photo}"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+                    tools:src="@drawable/img_message_user" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/calibri_bold"
+                    android:text="@{attendance.name}"
+                    app:layout_constraintBottom_toTopOf="@+id/designation"
+                    app:layout_constraintStart_toEndOf="@+id/image"
+                    app:layout_constraintTop_toTopOf="@id/image"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="Rau d" />
+
+                <TextView
+                    android:id="@+id/designation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/calibri_regular"
+                    android:text="@{attendance.designation}"
+                    app:layout_constraintBottom_toBottomOf="@id/image"
+                    app:layout_constraintStart_toEndOf="@+id/image"
+                    app:layout_constraintTop_toBottomOf="@id/name"
+                    tools:text="Rau d" />
+
+
+                <TextView
+                    isVisible="@{attendance.isPrasent()}"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:background="@drawable/bg_circle"
+                    android:fontFamily="@font/ubuntu_bold"
+                    android:gravity="center"
+                    android:text="P"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/image" />
+
+                <TextView
+                    isVisible="@{attendance.isAbsent()}"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/red"
+                    android:fontFamily="@font/ubuntu_bold"
+                    android:gravity="center"
+                    android:text="A"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/image" />
+
+                <TextView
+                    isVisible="@{attendance.isHoliday()}"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:background="@drawable/bg_circle"
+                    android:backgroundTint="@color/golden_yellow"
+                    android:fontFamily="@font/ubuntu_bold"
+                    android:gravity="center"
+                    android:text="H"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/image" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/name"
                 android:layout_width="wrap_content"
+                android:padding="10dp"
+                tools:text="adsa"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:fontFamily="@font/calibri_bold"
-                android:text="@{attendance.name}"
-                app:layout_constraintBottom_toTopOf="@+id/designation"
-                app:layout_constraintStart_toEndOf="@+id/image"
-                app:layout_constraintTop_toTopOf="@id/image"
-                app:layout_constraintVertical_chainStyle="packed"
-                tools:text="Rau d" />
+                android:text='@{@string/late_by(attendance.lateBy)}' />
 
-            <TextView
-                android:id="@+id/designation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:fontFamily="@font/calibri_regular"
-                android:text="@{attendance.designation}"
-                app:layout_constraintBottom_toBottomOf="@id/image"
-                app:layout_constraintStart_toEndOf="@+id/image"
-                app:layout_constraintTop_toBottomOf="@id/name"
-                tools:text="Rau d" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/light" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:background="@drawable/bg_circle"
-                android:fontFamily="@font/ubuntu_bold"
-                android:gravity="center"
-                isVisible="@{attendance.isPrasent()}"
-                android:text="P"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/image" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:text="adsa"
+                    android:text='@{attendance.markOn !=null   ? @string/inTime(attendance.markOn.get(0).markOn) : "N/A"}' />
 
-            <TextView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:background="@drawable/bg_circle"
-                android:fontFamily="@font/ubuntu_bold"
-                android:gravity="center"
-                android:backgroundTint="@color/red"
-                android:text="A"
-                isVisible="@{attendance.isAbsent()}"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/image" />
-
-            <TextView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:background="@drawable/bg_circle"
-                android:fontFamily="@font/ubuntu_bold"
-                android:gravity="center"
-                isVisible="@{attendance.isHoliday()}"
-                android:backgroundTint="@color/golden_yellow"
-                android:text="H"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@id/image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/image" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="adsa"
+                    android:layout_weight="1"
+                    android:text='@{attendance.markOn != null ? (attendance.markOn.size() >= 2 ? String.format(@string/OutTime, attendance.markOn.get(1).markOn) : "N/A") : "N/A"}' />
+            </LinearLayout>
+        </LinearLayout>
 
 
     </com.google.android.material.card.MaterialCardView>
