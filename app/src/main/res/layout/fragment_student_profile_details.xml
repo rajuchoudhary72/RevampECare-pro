@@ -638,7 +638,7 @@
                     android:layout_weight="1"
                     android:autoLink="phone"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.contactMobile}"
+                    android:text="@{studentData.fatherMob_1}"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
 
@@ -899,7 +899,7 @@
                     android:layout_weight="1"
                     android:autoLink="phone"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@{studentData.contactMobile}"
+                    android:text="@{studentData.motherMob_1}"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
 
