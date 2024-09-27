@@ -165,15 +165,10 @@ class AttendanceFragment : Fragment() {
                                  binding.rvAttendence.isVisible = false
                                  binding.tvNoData.isVisible = true
                              }
-
-
-
-                        }
+                       }
 
                     }
-
-
-                }
+                  }
             }
         }
 
