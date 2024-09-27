@@ -44,7 +44,7 @@ class StudentProfileAttendanceFragment(
     private val attendanceDTL: ProfileAttendanceDTL?,
     private val academicYears: List<AcademicYear>?,
     private val studentID: Int,
-    private val  monthID: String
+    private val  id: String
 ) : Fragment() ,ItemListener<SummaryAttendance> {
 
     private lateinit var selectedYearData: AcademicYear
@@ -286,10 +286,10 @@ class StudentProfileAttendanceFragment(
 
     override fun onItemClick(t: SummaryAttendance, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
-            putString("studentID",monthID)
+            putString("studentID",id)
             putString("formDate",t.startDate)
             putString("tillDate",t.endDate)
-        })
+          })
 
     }
     private fun showPieChart(
