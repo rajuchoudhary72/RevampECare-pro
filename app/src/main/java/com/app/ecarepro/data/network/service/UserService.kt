@@ -133,6 +133,7 @@ import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
@@ -987,5 +988,10 @@ interface UserService {
     @POST("Academic/PostAssignmentRemark")
     suspend fun postAssignmentRemark(
         @Body request:  List<AssignmentRemarkPost>,
+    ): CommonResponse
+
+    @POST("Admin/UploadStudentPhoto ")
+    suspend fun uploadStudentPhoto(
+        @Body request: StudentPhotoUploadModel,
     ): CommonResponse
 }

@@ -1182,6 +1182,9 @@ class MainActivity : AppCompatActivity() {
                             3 -> {
                                 navController.navigate(R.id.assignHomeFragment)
                             }
+                            10 -> {
+                                navController.navigate(R.id.updateStudentsProfileFragment)
+                            }
                         }
                     }
 
