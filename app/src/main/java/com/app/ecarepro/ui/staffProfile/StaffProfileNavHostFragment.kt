@@ -14,6 +14,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStaffProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.studentProfile.StudentProfileAttendanceFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileFeeSummaryFragment
@@ -79,61 +80,72 @@ class StaffProfileNavHostFragment : Fragment() {
 
                         if (it.data!=null){
 
-                            binding.userData=it.data.details
+                            if (it.data.details!=null){
+                                binding.userData=it.data.details
 
-                            Picasso.get().
-                            load(it.data.details.photo)
-                                .placeholder(R.drawable.default_profile)
-                                .  into(binding.civStuPic)
+                                Picasso.get().
+                                load(it.data.details.photo)
+                                    .placeholder(R.drawable.default_profile)
+                                    .  into(binding.civStuPic)
+                            }
 
                             val fragmentList: ArrayList<Fragment> = ArrayList()
                             val fragmentName= mutableListOf<String>()
 
+                            if (it.data.sectionControl!=null){
+                            if (it.data.sectionControl.sections!=null){
+                            if (it.data.sectionControl.sections.isNotEmpty()){
+                                for (i in it.data.sectionControl.sections ){
+                                    when(i.name){
+                                        "PersonalDetails" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(StaffProfileFragment(it.data.details))
+                                                fragmentName.add("Personal Details")
+                                            }
+                                        }
+                                        "Attendance" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(ProfileAtteFragment(it.data.attendanceDTL))
+                                                fragmentName.add("Attendance")
+                                            }
+                                        }
+                                        "Salary" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(ProfileSalaryStrFragment(it.data.salaryStructure))
+                                                fragmentName.add("Salary")
+                                            }
+                                        }
+                                        "Timetable" -> {
+                                            if (i.isShow){
+                                                fragmentList.add(ProfileTimeTableFragment(it.data.timetableSummary))
+                                                fragmentName.add("Timetable")
+                                            }
+                                        }
 
-                            for (i in it.data.sectionControl.sections ){
-                                when(i.name){
-                                    "PersonalDetails" -> {
-                                        if (i.isShow){
-                                            fragmentList.add(StaffProfileFragment(it.data.details))
-                                            fragmentName.add("Personal Details")
-                                        }
-                                    }
-                                    "Attendance" -> {
-                                        if (i.isShow){
-                                            fragmentList.add(ProfileAtteFragment(it.data.attendanceDTL))
-                                            fragmentName.add("Attendance")
-                                        }
-                                    }
-                                    "Salary" -> {
-                                        if (i.isShow){
-                                            fragmentList.add(ProfileSalaryStrFragment(it.data.salaryStructure))
-                                            fragmentName.add("Salary")
-                                        }
-                                    }
-                                    "Timetable" -> {
-                                        if (i.isShow){
-                                            fragmentList.add(ProfileTimeTableFragment(it.data.timetableSummary))
-                                            fragmentName.add("Timetable")
-                                        }
-                                    }
 
-
+                                    }
                                 }
+                                val viewPagerAdapter = ViewPagerAdapter(
+                                    fragmentList,
+                                    activity?.supportFragmentManager!!,
+                                    lifecycle
+                                )
+                                binding.viewPager.adapter = viewPagerAdapter
+
+                                TabLayoutMediator(
+                                    binding.tabLayout,
+                                    binding.viewPager
+                                ) { tab, position ->
+
+                                    tab.text = fragmentName[position]
+                                }.attach()
                             }
-                              val viewPagerAdapter = ViewPagerAdapter(
-                                fragmentList,
-                                activity?.supportFragmentManager!!,
-                                lifecycle
-                            )
-                            binding.viewPager.adapter = viewPagerAdapter
+                            }
+                            }else{
+                                mainActivity().showMessage("No Record Found")
+                            }
 
-                            TabLayoutMediator(
-                                binding.tabLayout,
-                                binding.viewPager
-                            ) { tab, position ->
 
-                                tab.text = fragmentName[position]
-                            }.attach()
                            }
 
                     }

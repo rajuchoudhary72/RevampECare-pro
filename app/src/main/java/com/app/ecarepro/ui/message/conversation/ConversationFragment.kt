@@ -25,6 +25,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.imageUrl
+import com.app.ecarepro.utils.stringFormat2String
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -180,7 +181,14 @@ class ConversationFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
             )
             name.text = sender.name
-            designation.text = sender.designation
+            if (sender.senderType==3){
+                designation.text = sender.designation
+            }else  if (sender.senderType==1){
+                designation.text = "Class :- "+ sender.className
+            } else  if (sender.senderType==2){
+                designation.text = "P/O  " + sender.childName+" , "+ sender.className
+            }
+
         }
     }
 

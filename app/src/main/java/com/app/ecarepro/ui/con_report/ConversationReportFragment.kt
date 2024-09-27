@@ -256,26 +256,26 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
         llFilterStart.setOnClickListener {
             ECareDataPicker(
                 requireActivity(),
-                true,
+                false,
                 object : ECareDataPicker.PickerCallback {
                     override fun onSelect(date: String?, isCurrentDate: Boolean) {
                         tvFilterStartDate.text = date
                         mFilterStartDate = date.toString()
                     }
-                }).setMinDate(Constant.getLongTimeDate(Constant.currentDate()))
+                }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
 
         }
         llFilterEnd.setOnClickListener {
 
             ECareDataPicker(
                 requireActivity(),
-                true,
+                false,
                 object : ECareDataPicker.PickerCallback {
                     override fun onSelect(date: String?, isCurrentDate: Boolean) {
                         tvFilterEnd.text = date
                         mFilterStartDate = date.toString()
                      }
-                }).setMinDate(Constant.getLongTimeDate(Constant.currentDate()))
+                }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
 
         }
         rgSender.setOnCheckedChangeListener { group, checkedId ->
@@ -374,8 +374,8 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
             dialog.dismiss()
             mStartDate = mFilterStartDate
             mEndDate = mFilterEndDate
-            binding.tvDateFrom.text = Constant.dateToShowCon(mFilterStartDate)
-            binding.tvDateTo.text = Constant.dateToShowCon(mFilterEndDate)
+            binding.tvDateFrom.text = mFilterStartDate
+            binding.tvDateTo.text = mFilterEndDate
             hasWord = etHasWord.text.toString()
             senderName = etSenderName.text.toString()
             receiverName = etRecipientName.text.toString()

@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
@@ -42,7 +43,7 @@ interface SchoolRepository {
     suspend fun getClassPromotions( classId: String): PromotionModel
     suspend fun submitClassPromotions( request: RequestClassPromotion): AppResponse
     fun getGeneralSettings(): Flow<Result<List<Setting>>>
-
+    suspend fun appGeneralSettings(): GeneralSettingsDto
     fun getFeeds(pg: Int): Flow<Result<FeedsDto>>
     fun getTaskList(filter: Int): Flow<Result<TasksDto>>
     fun getTaskDetails(taskId: String): Flow<Result<TaskDetails>>

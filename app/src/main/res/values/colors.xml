@@ -164,7 +164,7 @@
     <color name="absent_red">#FB4E4E</color>
     <color name="shimmer_color">#a2878787</color>
     <color name="background_dashboard">#f0f0f0</color>
-
+    <color name="deep_black">#2b2b2b</color>
 
     <array name="multi_color_array">
         <item>@color/android</item>

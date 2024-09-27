@@ -64,9 +64,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var className: String  = ""
     private var subjectName: String  = ""
     var rbType: Int = 0
-
+    private var rollNoFilterAsc=true
+    private var admissionFilterAsc=true
+    private var nameFilterAsc=true
     private val binding get() = _binding!!
-
+    private lateinit var studentListMarkAttAdapter: StudentListMarkAttAdapter
     private val stuMarkAttendanceViewModel : StuMarkAttendanceViewModel by viewModels()
     private var classID= 0
     private var p  = 0
@@ -172,12 +174,58 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                         }
                     }
                 }
-            })
+            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
         }
 
 
+        binding.tvSortByRollNo.setOnClickListener {
+           try {
+               rollNoFilterAsc=!rollNoFilterAsc
+               studentListArrayList = if (rollNoFilterAsc) studentListArrayList.sortedBy  { it.otherDTL[1].value  }.toMutableList()
+               else  studentListArrayList.sortedByDescending { it.otherDTL[1].value  }.toMutableList()
+               setupRecyclerView(studentListArrayList)
+           }catch (_:Exception){}
+
+        }
+        binding.tvSortByAdmission.setOnClickListener {
+            try {
+                admissionFilterAsc=!admissionFilterAsc
+                studentListArrayList = if (admissionFilterAsc) studentListArrayList.sortedBy  { it.otherDTL[0].value  }.toMutableList()
+                else  studentListArrayList.sortedByDescending { it.otherDTL[0].value  }.toMutableList()
+                setupRecyclerView(studentListArrayList)
+            }catch (_:Exception){}
+        }
+
+        binding.tvSortByName.setOnClickListener {
+           try {
+               nameFilterAsc=!nameFilterAsc
+               studentListArrayList = if (nameFilterAsc) studentListArrayList.sortedBy  { it.stName.trim().lowercase() }.toMutableList()
+               else  studentListArrayList.sortedByDescending { it.stName.trim().lowercase()  }.toMutableList()
+               setupRecyclerView(studentListArrayList)
+           }catch (_:Exception){}
+        }
+
     }
 
+    private fun setupRecyclerView(studentListArrayList: MutableList<StudentListMarkAtt>) {
+        if (studentListArrayList != null) {
+        if (studentListArrayList.isNotEmpty()) {
+            studentListMarkAttAdapter = StudentListMarkAttAdapter(
+                studentListArrayList,
+                markAttModel.isLateEnable,
+                markAttModel.hasMarked,
+                markAttModel.canEdit,
+                this@StuMarkAttendanceFragment
+            )
+
+            binding.recyclerNotice.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(activity)
+                adapter = studentListMarkAttAdapter
+            }
+        }
+        }
+    }
 
 
     private fun getStudentListToMarkAtt(classID: Int, subID: Int) {
@@ -215,7 +263,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 studentListArrayList.clear()
                                 studentListArrayList.addAll(it.data.studentList)
 
-                            val studentListMarkAttAdapter = StudentListMarkAttAdapter(
+                                studentListMarkAttAdapter = StudentListMarkAttAdapter(
                                 studentListArrayList,
                                 it.data.isLateEnable,
                                 it.data.hasMarked,

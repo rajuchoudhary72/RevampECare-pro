@@ -35,7 +35,8 @@ class LatestBookFragment(private val latestBook: List<LatestBook>? ) : Fragment(
 
 
 
-            if (latestBook!=null){
+            if (latestBook!=null  ){
+            if (latestBook.isNotEmpty()  ){
 
                 latestBookBinding.rvLatestBook.isVisible=true
                 latestBookBinding.tvNoData.isVisible=false
@@ -47,6 +48,10 @@ class LatestBookFragment(private val latestBook: List<LatestBook>? ) : Fragment(
                     layoutManager = LinearLayoutManager(activity)
                     adapter = noticeAdapter
                 }
+            }else{
+                latestBookBinding.rvLatestBook.isVisible=false
+                latestBookBinding.tvNoData.isVisible=true
+            }
             }else{
                 latestBookBinding.rvLatestBook.isVisible=false
                 latestBookBinding.tvNoData.isVisible=true

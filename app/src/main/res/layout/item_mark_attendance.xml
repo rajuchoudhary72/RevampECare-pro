@@ -160,9 +160,26 @@
                         android:textColor="@color/grey_light_compose_msg_headr_txt" />
                 </LinearLayout>
 
+
+
             </LinearLayout>
 
         </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_approve_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+             android:gravity="center"
+            android:text="@string/approved_leave"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:visibility="gone"
+
+            android:textColor="@color/accent_color" />
+
 
         <View
             android:layout_width="match_parent"

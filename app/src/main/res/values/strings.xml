@@ -172,6 +172,7 @@
     <string name="subject">"Subject: "</string>
     <string name="type_your_message_with_word_limit">Type Your Message(Word limit 200 Words)</string>
     <string name="camera_amp_browse_photo"><![CDATA[Camera & Browse Photo]]></string>
+    <string name="browse_photo"><![CDATA[Browse Photo]]></string>
     <string name="attach_photo_pdf_doc"><![CDATA[Attach PDF &amp; Doc (Max 5 MB)]]></string>
     <string name="select_subject">"Select Subject "</string>
     <string name="lbl_select_class">Select Class</string>
@@ -287,6 +288,7 @@
     <string name="allowance">Allowance</string>
     <string name="basic">Basic</string>
     <string name="pan_number">PAN Number</string>
+    <string name="peen_number">PEN Number</string>
     <string name="admissio_n_no">Admissio n No.</string>
     <string name="house">House</string>
     <string name="bloodgroup">BloodGroup</string>
@@ -442,7 +444,9 @@
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
+    <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
+    <string name="alt_email_id">Alternate Email ID</string>
     <string name="ward_details">Ward Details</string>
     <string name="admission_number">Admission Number</string>
     <string name="permanent_education_number">Permanent Education Number</string>
@@ -475,6 +479,7 @@
     <string name="total_leave_s">Total Leave(s):</string>
     <string name="view_halfday_details">View HalfDay Details</string>
     <string name="reason">Reason:</string>
+    <string name="reason_s">Reason</string>
     <string name="applicant">Applicant:</string>
     <string name="leave_forwarded">Leave Forwarded</string>
     <string name="approve">Approve</string>
@@ -701,7 +706,7 @@
 
 
     <string name="_02_may_18"> </string>
-    <string name="search_by_name_class_section_roll_no_father_name">Search by name, class, section, roll no, father name</string>
+    <string name="search_by_name_class_section_roll_no_father_name">Search by Name, Section, Roll No, Father name</string>
     <string name="sort_by_roll_no">Sort by Roll No</string>
     <string name="sort_by_admission_no">Sort by Admission No</string>
     <string name="o">O</string>
@@ -711,4 +716,16 @@
     <string name="late_count"><b>Late:</b> %s</string>
     <string name="view_file">View File</string>
     <string name="save_C">SAVE</string>
+    <string name="day_scholer">Day Scholer</string>
+    <string name="total_student_s">Total Students</string>
+    <string name="no_mega_book_available">"Mega E-book is not available "</string>
+    <string name="alternate_mobile">Alternate Mobile</string>
+    <string name="confirm">Confirm</string>
+    <string name="reject_request">Reject Request</string>
+    <string name="are_you_sure_you_want_to_reject_this_application">Are you sure you want to reject this leave  ?</string>
+    <string name="close">Close</string>
+    <string name="reject_leave">Reject Leave</string>
+    <string name="save_remark">Save Remark</string>
+    <string name="copy_to_all"> <u>Copy To All</u></string>
+    <string name="approved_leave">Approved leave</string>
 </resources>

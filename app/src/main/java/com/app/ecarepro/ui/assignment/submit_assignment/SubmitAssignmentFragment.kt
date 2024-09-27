@@ -68,7 +68,12 @@ class SubmitAssignmentFragment : Fragment() {
 
         binding.llView.isVisible= assignmentDetails.hasAttachment!!
         binding.llView.setOnClickListener {
-            popUpFileList(assignmentDetails .asgFileNames!!)
+            if (assignmentDetails!=null){
+            if (assignmentDetails .asgFileNames!=null){
+                popUpFileList(assignmentDetails .asgFileNames!!)
+            }
+            }
+
         }
         binding.llSubmitReport.setOnClickListener {
             popUpSubmitList()

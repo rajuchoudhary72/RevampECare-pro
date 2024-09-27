@@ -97,10 +97,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
-       // binding.btnMenu.setOnClickListener { systemViewModel.openDrawer(true) }
       binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
       binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-      //  binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.appointmentFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
@@ -281,49 +279,54 @@ class HomeFragment : Fragment() {
 
         if (uiState is HomeUiState.Success) {
             binding.recyclerView.withModels {
-                carouselNoSnapBuilder {
-                    id("carousel")
-                    numViewsToShowOnScreen(1.2f)
-                    spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
-                    padding(
-                        Carousel.Padding(
-                            150,
-                            resources.getDimensionPixelOffset(
-                                R.dimen.horizontal_margin
-                            ), 150,
-                            resources.getDimensionPixelOffset(
-                                R.dimen.horizontal_margin
-                            ),
-                            resources.getDimensionPixelOffset(
-                                R.dimen.horizontal_margin
+                try {
+                    carouselNoSnapBuilder {
+                        id("carousel")
+                        numViewsToShowOnScreen(1.2f)
+                        spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                        padding(
+                            Carousel.Padding(
+                                150,
+                                resources.getDimensionPixelOffset(
+                                    R.dimen.horizontal_margin
+                                ), 150,
+                                resources.getDimensionPixelOffset(
+                                    R.dimen.horizontal_margin
+                                ),
+                                resources.getDimensionPixelOffset(
+                                    R.dimen.horizontal_margin
+                                )
                             )
                         )
-                    )
-                    uiState.cards.forEach { favouriteSlider: Card ->
-                        dashboardCard {
-                            id(favouriteSlider.link)
-                            card(favouriteSlider)
-                            clickListener { _ ->
-                                if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
-                                    (requireActivity() as MainActivity).getFragmentId(
-                                        favouriteSlider.menuID,
-                                        favouriteSlider.chMenuID,
-                                        favouriteSlider.sbChMenuID
-                                    )
-                                } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
-                                    (requireActivity() as MainActivity).getFragmentId(
-                                        favouriteSlider.menuID,
-                                        favouriteSlider.chMenuID
-                                    )
-                                } else if (favouriteSlider.menuID > 0) {
-                                    (requireActivity() as MainActivity).getFragmentId(
-                                        favouriteSlider.menuID
-                                    )
+                        uiState.cards.forEach { favouriteSlider: Card ->
+                            dashboardCard {
+                                id(favouriteSlider.link)
+                                card(favouriteSlider)
+                                clickListener { _ ->
+                                    if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0 && favouriteSlider.sbChMenuID > 0) {
+                                        (requireActivity() as MainActivity).getFragmentId(
+                                            favouriteSlider.menuID,
+                                            favouriteSlider.chMenuID,
+                                            favouriteSlider.sbChMenuID
+                                        )
+                                    } else if (favouriteSlider.menuID > 0 && favouriteSlider.chMenuID > 0) {
+                                        (requireActivity() as MainActivity).getFragmentId(
+                                            favouriteSlider.menuID,
+                                            favouriteSlider.chMenuID
+                                        )
+                                    } else if (favouriteSlider.menuID > 0) {
+                                        (requireActivity() as MainActivity).getFragmentId(
+                                            favouriteSlider.menuID
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
+                }catch (E:IllegalStateException){
+
                 }
+
 
                 viewAllWidget {
                     id("view_all_widget")

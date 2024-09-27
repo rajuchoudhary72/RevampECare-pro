@@ -115,7 +115,6 @@ class CalenderActivityModel(val activities: List<Activity>) :
             }
         }
     }
-
     private fun ItemCalenderActivityBinding.buildEventModel(events: List<Activity>) {
         eventsView.isVisible = events.isNotEmpty()
         eventsView.withModels {

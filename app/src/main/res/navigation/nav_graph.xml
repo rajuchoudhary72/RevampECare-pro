@@ -416,7 +416,7 @@
         android:label="AppreciationListFragment" />
     <fragment
         android:id="@+id/studentListFragment2"
-        android:name="com.app.ecarepro.ui.students_list.StudentListFragment"
+        android:name="com.app.ecarepro.ui.students_list.students_new_list.StudentListNavHost"
         android:label="StudentListFragment" >
         <action
             android:id="@+id/action_studentListFragment2_to_addAppreciationFragment"
@@ -964,4 +964,16 @@
         android:id="@+id/fomGuardFragment"
         android:name="com.app.ecarepro.ui.fom_guard.FomGuardFragment"
         android:label="FomGuardFragment" />
+    <fragment
+        android:id="@+id/photoSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderNavHostFragment"
+        android:label="PhotoSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/favoriteSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.favorites.favorites_slider.FavoriteSliderNavHostFragment"
+        android:label="FavoriteSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/updateStudentsProfileFragment"
+        android:name="com.app.ecarepro.ui.update_students_profile.UpdateStudentsProfileFragment"
+        android:label="UpdateStudentsProfileFragment" />
 </navigation>

@@ -54,6 +54,7 @@
             android:text="@{message}"
             android:textColor="@color/black"
             android:enabled="true"
+            android:autoLink="web"
             android:textIsSelectable="true"
             android:focusable="true"
             android:longClickable="true"

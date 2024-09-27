@@ -72,7 +72,7 @@ class StaffApplyLeaveFragment : Fragment() {
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
     private val sessionList = listOf<String> ("Session 1","Session 2")
-    var timestampBack: Long = 0
+    var timestampBack: Long = System.currentTimeMillis()
     var timestampforward: Long = 0
 
     var timestampOneDay = "86400000".toLong()
@@ -108,11 +108,23 @@ class StaffApplyLeaveFragment : Fragment() {
 
             val currentTimestamp = System.currentTimeMillis()
             timestampforward = currentTimestamp + leaveTerm.forwardDays * timestampOneDay
-            timestampBack = currentTimestamp - leaveTerm.backwardDays * timestampOneDay
+             if (leaveTerm.isPrevDatesAllow){
+                 timestampBack = currentTimestamp - leaveTerm.backwardDays * timestampOneDay
 
+             }
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
+                    days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                    if (selectedLeaveTypeData.sandwichEnable){
+                        days =  calculateDaysAfterHolidays(days)
+                    }
+
+                    binding.tvDuration.text = buildString {
+                        append(days)
+                        append(" ")
+                        append(getString(R.string.day_s))
+                    }
                 }
             }, timestampBack, timestampforward)
         }
@@ -211,7 +223,11 @@ class StaffApplyLeaveFragment : Fragment() {
                     append(" ")
                     append(getString(R.string.day_s))
                 }
-                leaveApplicationDialog()
+               if (days>0){
+                   leaveApplicationDialog()
+               }else{
+                   mainActivity().showMessage("Please Select Valid Date")
+               }
 
 
             }

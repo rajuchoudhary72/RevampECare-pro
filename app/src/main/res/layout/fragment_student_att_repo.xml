@@ -353,7 +353,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="@dimen/_20sdp"
-                            android:textColor="@color/red"
+                            android:textColor="@color/green"
                             android:fontFamily="@font/ubuntu_regular"
                             android:textSize="@dimen/_15sdp" />
                     </RelativeLayout>

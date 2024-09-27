@@ -7,14 +7,19 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.UserData
+import com.app.ecarepro.databinding.BootomsheetServiceListBinding
 import com.app.ecarepro.databinding.FragmentForgotPasswordBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.addSystemWindowInsetToMargin
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -82,20 +87,23 @@ class ForgotPasswordFragment : Fragment() {
             } else if (mViewModel.rcvOn == "email" && !isValidEmail(value)) {
                 (requireActivity() as MainActivity).showMessage("Please enter a valid email address.")
             } else {
+                (requireActivity() as MainActivity).hideKeyBoard()
                 (requireActivity() as MainActivity).showLoader(true)
                 mViewModel.getCredentials(
                     binding.textFiled.text.toString()
-                ) {
+                ) { it ->
                     (requireActivity() as MainActivity).showLoader(false)
-
-                    if (it.errorCode == 404) {
-                        mainActivity().showMessage("$value is not found registered with us.")
-                    } else {
-                        mainActivity().showMessage(it.message ?: "")
-                    }
-
                     if (it.errorCode == 0) {
                         findNavController().popBackStack()
+                    } else if (it.errorCode == 404) {
+                        mainActivity().showMessage("$value is not found registered with us.")
+                    } else {
+                        it.users?.let { users ->
+                            list.clear()
+                            list.addAll(users)
+                            adapter.notifyDataSetChanged()
+                            serviceHistoryBottomSheet()
+                        }
                     }
                 }
             }
@@ -106,7 +114,32 @@ class ForgotPasswordFragment : Fragment() {
         return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
     }
 
-
+    val list = mutableListOf<UserData>()
+    val adapter by lazy { UserAdapter(list) {} }
+    private fun serviceHistoryBottomSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireActivity())
+        val inflater = layoutInflater
+        val binding: BootomsheetServiceListBinding =
+            DataBindingUtil.inflate(inflater, R.layout.bootomsheet_service_list, null, false)
+        bottomSheetDialog.setContentView(binding.root)
+        bottomSheetDialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        binding.recyclerView.adapter = adapter
+        binding.btnSubmit.setOnClickListener {
+            if (adapter.selected == -1)
+                return@setOnClickListener
+            bottomSheetDialog.dismiss()
+            (requireActivity() as MainActivity).showLoader(true)
+            mViewModel.forgotPassword(
+                list.get(adapter.selected),
+            ) { it ->
+                (requireActivity() as MainActivity).showLoader(false)
+                it.message?.let { it1 -> mainActivity().showMessage(it1) }
+                if (it.status == "ok")
+                    findNavController().popBackStack()
+            }
+        }
+        bottomSheetDialog.show()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -60,10 +60,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
-                        android:id="@+id/pieChartView"
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_200sdp" />
+                        android:layout_height="@dimen/_200sdp"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"

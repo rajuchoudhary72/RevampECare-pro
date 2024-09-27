@@ -76,13 +76,20 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         android:layout_weight="3"
                          >
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/pieChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_200sdp"
+                              />
 
                         <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                             android:id="@+id/pieChartView"
                             android:layout_width="match_parent"
                              android:layout_height="@dimen/_200sdp"
+                            android:visibility="gone"
                             android:backgroundTint="@color/transparent"
                              />
                     </LinearLayout>

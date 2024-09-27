@@ -404,8 +404,13 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                 Toast.makeText(requireContext(),"Updated Successfully!!!",Toast.LENGTH_SHORT).show()
             }
         }else{
+
             studentListToMarkAtt[pos].isSelected=true
-            studentListToMarkAtt[pos].status=action
+            if (tripType==Constant.UP_TRIP){
+                studentListToMarkAtt[pos].pickupStatus=action
+            }else if (tripType==Constant.DOWN_TRIP){
+                studentListToMarkAtt[pos].dropStatus=action
+            }
 
         }
 
@@ -456,7 +461,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
         for (i in   studentListToMarkAtt) {
 
             if (tripType==Constant.UP_TRIP){
-                when (i.status) {
+                when (i.pickupStatus) {
                     1 -> {
                         p++
                     }
@@ -466,7 +471,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                 }
 
             }else if (tripType==Constant.DOWN_TRIP){
-                when (i.status) {
+                when (i.dropStatus) {
                     1 -> {
                         p++
                     }
@@ -497,9 +502,16 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
     private fun saveMarkAttendance() {
 
         val requestList = mutableListOf<StuAtt>()
-        studentListToMarkAtt.forEach { d ->
-            requestList.add(StuAtt(d.stID,d.status,d.stopID))
+        if (tripType==Constant.UP_TRIP){
+            studentListToMarkAtt.forEach { d ->
+                requestList.add(StuAtt(d.stID,d.pickupStatus,d.stopID))
+            }
+        }else if (tripType==Constant.DOWN_TRIP){
+            studentListToMarkAtt.forEach { d ->
+                requestList.add(StuAtt(d.stID,d.dropStatus,d.stopID))
+            }
         }
+
 
         transportAttendanceViewModel.postTransAttendance(
             Constant.toSystemDate(Constant.currentDate().toString()),

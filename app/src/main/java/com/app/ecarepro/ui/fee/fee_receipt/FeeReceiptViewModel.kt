@@ -30,7 +30,7 @@ class FeeReceiptViewModel @Inject constructor(
 
 
 
-    var feePaymentURL : String = ""
+//    var feePaymentURL : String = ""
     lateinit var schoolDetails : NetworkSchool
     lateinit var userDetails : NetworkUserDetailsDto
 
@@ -44,9 +44,9 @@ class FeeReceiptViewModel @Inject constructor(
             userDetails = userDataStore.getUser()!!
         }
 
-        viewModelScope.launch {
-            feePaymentURL = userDataStore.getSchoolData()?.feePayemtURL.toString()
-        }
+//        viewModelScope.launch {
+//            feePaymentURL = userDataStore.getSchoolData()?.feePayemtURL.toString()
+//        }
 
 
 
@@ -73,7 +73,7 @@ class FeeReceiptViewModel @Inject constructor(
                 userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/feereceipt",
                 FeeReceiptRequest(
                 userDataStore.getSchoolData()!!.schoolCode,
-                    userDataStore.getUserNameID().toString(),
+                    userDataStore.getUser()?.userId.toString(),
                 "",
                 "",
                 sessionid
@@ -95,7 +95,7 @@ class FeeReceiptViewModel @Inject constructor(
                 userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/receiptdownload" ,
                 FeeReceiptDownloadRequest(
                     userDataStore.getSchoolData()!!.schoolCode,
-                    userDataStore.getUserNameID().toString(),
+                    userDataStore.getUser()?.userId.toString(),
                     recid,"",sessionid
 
                 ) )

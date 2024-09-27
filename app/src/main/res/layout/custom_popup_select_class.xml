@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/all"
+            android:layout_marginStart="@dimen/_10sdp"
             android:textSize="@dimen/_16sdp"
             android:drawablePadding="@dimen/_5sdp"
             android:layout_marginVertical="@dimen/_5sdp"

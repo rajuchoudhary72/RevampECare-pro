@@ -18,6 +18,6 @@ data class StuLst(
     var stName: String,
     var stop: String,
     var stopID: Int,
-    var status: Int,
+    //var status: Int,
     var isSelected: Boolean = false
 )

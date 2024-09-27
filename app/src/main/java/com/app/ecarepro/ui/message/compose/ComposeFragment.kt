@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.message.compose
 
 import android.Manifest
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.graphics.Typeface
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
@@ -31,6 +33,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -53,6 +56,7 @@ import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
+import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileUtils
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
@@ -61,9 +65,11 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
+import com.lassi.domain.media.LassiOption
 import com.lassi.domain.media.MediaType
 import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
@@ -137,7 +143,7 @@ class ComposeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentComposeBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -195,7 +201,8 @@ class ComposeFragment : Fragment() {
 
                 if (lvalue != binding.message.text.toString()) {
                     try {
-                        val spans: Array<out StyleSpan>? = ssb.getSpans(  0, ssb.length, StyleSpan::class.java  )
+                        val spans: Array<out StyleSpan>? =
+                            ssb.getSpans(0, ssb.length, StyleSpan::class.java)
                         for (styleSpan in spans!!) ssb.removeSpan(styleSpan)
 
 
@@ -218,29 +225,29 @@ class ComposeFragment : Fragment() {
 
                         val sentence: String = binding.message.text.toString()
                         val boldStartIndexes: List<Int> =
-                             boldFindStartIndexes(
+                            boldFindStartIndexes(
                                 sentence
                             )
                         val boldEndIndexes: List<Int> =
-                             boldFindEndStarIndexes(
+                            boldFindEndStarIndexes(
                                 sentence
                             )
 
                         val italicStartIndexes: List<Int> =
-                             italicFindStartIndexes(
+                            italicFindStartIndexes(
                                 sentence
                             )
                         val italicEndIndexes: List<Int> =
-                             italicFindEndStarIndexes(
+                            italicFindEndStarIndexes(
                                 sentence
                             )
 
                         val strikethroughStartIndexes: List<Int> =
-                             strikethroughFindStartIndexes(
+                            strikethroughFindStartIndexes(
                                 sentence
                             )
                         val strikethroughEndIndexes: List<Int> =
-                             strikethroughFindEndStarIndexes(
+                            strikethroughFindEndStarIndexes(
                                 sentence
                             )
 
@@ -491,7 +498,12 @@ class ComposeFragment : Fragment() {
         binding.btnGallery.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.GALLERY
-            requestExternalStoragePermission()
+            // Request necessary permissions and open the gallery
+            if (checkAndRequestPermissions()) {
+                // Permission is already granted, start image picker
+                launchPicker()
+            }
+            // requestExternalStoragePermission()
         }
 
         binding.btnRecord.setOnClickListener {
@@ -499,18 +511,49 @@ class ComposeFragment : Fragment() {
             lastClickAttachmentType = AttachmentType.AUDIO
             openAudioRecorder()
         }
-
+       FileAccess.checkPermission(this@ComposeFragment)
         binding.btnCamera.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.CAMERA
-            checkCameraPermissions()
+            try {
+                hideAttachmentCard()
+                lastClickAttachmentType = AttachmentType.CAMERA
+                FileAccess.checkPermission(this@ComposeFragment)
+                // checkCameraPermissions()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(300)
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                }
+            } catch (e: SecurityException) {
+                e.message
+            }
+
+
         }
     }
 
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val bitmap = result.data?.extras?.get("data") as Bitmap
+                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                file.writeBitmap(
+                    bitmap, Bitmap.CompressFormat.PNG, 100
+                )
+                composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
+            }
+        }
+
     private fun openAudioRecorder() {
+
         VoiceSenderDialog(object : AudioRecordListener {
             override fun onAudioReady(audioUri: String?) {
-                composeViewModel.setAttachments(listOf(MiMedia(path = audioUri, name = AttachmentType.RECORDING.name)))
+                composeViewModel.setAttachments(
+                    listOf(
+                        MiMedia(
+                            path = audioUri,
+                            name = AttachmentType.RECORDING.name
+                        )
+                    )
+                )
             }
 
             override fun onReadyForRecord() {}
@@ -568,10 +611,77 @@ class ComposeFragment : Fragment() {
 
     }
 
+    private fun checkAndRequestPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionList.toTypedArray(),
+                1001
+            )
+            false
+        } else {
+            true
+        }
+    }
+
+    // Register to get the result of the image selection
+    private val selectImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val clipData = result.data?.clipData
+                if (clipData != null) {
+                    // Multiple images selected
+                    for (i in 0 until clipData.itemCount) {
+                        val imageUri: Uri = clipData.getItemAt(i).uri
+                        // Process each image URI here
+                        println("Selected Image URI: $imageUri")
+                    }
+                } else {
+                    // Single image selected
+                    val imageUri: Uri? = result.data?.data
+                    imageUri?.let {
+                        println("Selected Single Image URI: $it")
+                    }
+                }
+            }
+        }
+
+    private fun openGallery() {
+        // Intent to open the gallery and select multiple images
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        selectImagesLauncher.launch(Intent.createChooser(intent, "Select Images"))
+    }
+
     private fun launchPicker() {
         when (lastClickAttachmentType) {
             AttachmentType.GALLERY -> {
-                launchPhotoPicker()
+                // Request necessary permissions and open the gallery
+                if (checkAndRequestPermissions()) {
+                    launchPhotoPicker()
+                }
+                //  launchPhotoPicker()
             }
 
             AttachmentType.AUDIO -> {
@@ -587,7 +697,24 @@ class ComposeFragment : Fragment() {
     }
 
     private fun launchPhotoPicker() {
-        val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
+        /*    val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
+            receiveData.launch(intent)*/
+        val intent = Lassi(requireContext())
+            .with(LassiOption.CAMERA_AND_GALLERY)
+            .setMediaType(MediaType.IMAGE)
+            .setMaxCount(7)
+            .setGridSize(3)
+            .setMinFileSize(0) // Restrict by minimum file size
+            .setMaxFileSize(65535) // Restrict by maximum file size
+            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
+            .setAlertDialogNegativeButtonColor(R.color.black)
+            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
+            .setStatusBarColor(R.color.md_theme_light_primary)
+            .setToolbarColor(R.color.md_theme_light_primary)
+            .setToolbarResourceColor(android.R.color.white)
+            .setProgressBarColor(R.color.red)
+            .setGalleryBackgroundColor(R.color.white)
+            .build()
         receiveData.launch(intent)
     }
 
@@ -653,9 +780,10 @@ class ComposeFragment : Fragment() {
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         if (requestCode == REQUEST_CAMERA_PERMISSION || requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkCameraPermissions()
@@ -675,6 +803,13 @@ class ComposeFragment : Fragment() {
             } else {
                 // Permission denied, show a message to the user
                 mainActivity().showMessage("Permission denied, cannot pick image")
+            }
+        } else if (requestCode == 1001) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is already granted, start image picker
+                launchPicker()
+            } else {
+                Toast.makeText(requireContext(), "Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -773,7 +908,7 @@ class ComposeFragment : Fragment() {
 
     inner class StyleCallback : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
-             val inflater = mode.menuInflater
+            val inflater = mode.menuInflater
             inflater.inflate(R.menu.custom_font, menu)
             menu.removeItem(android.R.id.selectAll)
             return true
@@ -834,7 +969,7 @@ class ComposeFragment : Fragment() {
     }
 
 
-      fun boldFindStartIndexes(sentence: String): List<Int> {
+    fun boldFindStartIndexes(sentence: String): List<Int> {
         val indexes: MutableList<Int> = java.util.ArrayList()
         val words = sentence.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
             .toTypedArray()

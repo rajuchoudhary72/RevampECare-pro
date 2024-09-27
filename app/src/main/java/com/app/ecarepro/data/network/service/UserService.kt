@@ -133,8 +133,10 @@ import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
@@ -544,7 +546,13 @@ interface UserService {
     suspend fun getStaffProfileMain(
         @Query("SID") sId: Int
     ): NetworkStaffProfile
-
+    @GET("User/GetUsernameByUID")
+    suspend fun forgotPassword(
+        @Query("SchCode") SchCode: String,
+        @Query("UserID") UserID: String,
+        @Query("UserType") UserType: String,
+        @Query("RcvOn") RcvOn: String,
+    ): NetworkUserDetailsDto
     @POST("User/ChangeUsername")
     suspend fun changeUsername(
         @Body request: ChangeUserNameRequestDto,
@@ -976,4 +984,14 @@ interface UserService {
         @Url url:String,
         @Body requestBody: RequestBody
     ): AppointmentSavedDto
+
+    @POST("Academic/PostAssignmentRemark")
+    suspend fun postAssignmentRemark(
+        @Body request:  List<AssignmentRemarkPost>,
+    ): CommonResponse
+
+    @POST("Admin/UploadStudentPhoto ")
+    suspend fun uploadStudentPhoto(
+        @Body request: StudentPhotoUploadModel,
+    ): CommonResponse
 }

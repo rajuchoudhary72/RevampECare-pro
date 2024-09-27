@@ -23,6 +23,7 @@ import com.app.ecarepro.model.RouteLST
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.UsesRPT
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.transport_attendance.out_pass.OutPassReportAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
@@ -42,10 +43,11 @@ class SmsMsgReportFragment : Fragment() {
     private var allSelected: Boolean = false
     private var staffSelected: Boolean = false
     private lateinit var staffSelectData: UsesRPT
-    private lateinit var staffList: List<UsesRPT>
+    private   var staffList= mutableListOf<UsesRPT>()
     private lateinit var binding: FragmentSmsMsgReportBinding
     private val smsMsgReportViewModel: SmsMsgReportViewModel by viewModels()
     private val dateFrom: Calendar = Calendar.getInstance()
+    private var isDateSelected=false
 
     private val dateTo: Calendar = Calendar.getInstance()
 
@@ -86,6 +88,7 @@ class SmsMsgReportFragment : Fragment() {
             dateFrom.timeInMillis = it.first
             dateTo.timeInMillis = it.second
             updateDateFilterText(true)
+            isDateSelected=true
         }
     }
 
@@ -134,7 +137,9 @@ class SmsMsgReportFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            staffList = it.data.usesRPT
+                        if (it.data.usesRPT != null) {
+                            staffList = it.data.usesRPT.toMutableList()
+                        }
                         }
 
                     }
@@ -142,9 +147,9 @@ class SmsMsgReportFragment : Fragment() {
             }
         }
         smsMsgReportViewModel.getAppMsgUsesForStaff(
-            Constant.currentDate(),
-            Constant.currentDate(),
-            ""
+           Constant.toSystemDate( Constant.currentDate() ),
+            Constant.toSystemDate( Constant.currentDate() ),
+             ""
         )
     }
 
@@ -159,7 +164,7 @@ class SmsMsgReportFragment : Fragment() {
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
         val tvSelectAll = view.findViewById<TextView>(R.id.tv_select_all)
         tvSelectAll.isVisible = true
-        tvHeading.text = getString(R.string.select_route)
+        tvHeading.text = getString(R.string.select_staff)
         builder.setView(view)
 
         tvSelectAll.setOnClickListener {
@@ -173,7 +178,6 @@ class SmsMsgReportFragment : Fragment() {
                  ""
             )
             builder.dismiss()
-
 
         }
 
@@ -218,50 +222,60 @@ class SmsMsgReportFragment : Fragment() {
         toDate: String,
         iD: String,
     ) {
-        lifecycleScope.launch {
-            smsMsgReportViewModel.smsMsgReportStateFlow.collectLatest {
-                when (it) {
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
 
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error$it")
-                    }
+        if (isDateSelected){
+        if (staffSelected){
+            lifecycleScope.launch {
+                smsMsgReportViewModel.smsMsgReportStateFlow.collectLatest {
+                    when (it) {
+                        is NetworkResult.Loading -> {
+                            (requireActivity() as MainActivity).showLoader(true)
+                        }
 
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
+                        is NetworkResult.Error -> {
+                            (requireActivity() as MainActivity).showLoader(false)
+                            Log.d("main", "Error$it")
+                        }
 
-                            if (it.data.usesRPT != null) {
+                        is NetworkResult.Success -> {
+                            (requireActivity() as MainActivity).showLoader(false)
+                            if (it.data != null) {
 
-                                binding.recyclerSmsUsageReport.isVisible = true
-                                binding.tvNoData.isVisible = false
+                                if (it.data.usesRPT != null) {
 
-                                val outPassReportAdapter = SmsReportAdapter(
-                                    it.data.usesRPT,
-                                    this@SmsMsgReportFragment
-                                )
+                                    binding.recyclerSmsUsageReport.isVisible = true
+                                    binding.tvNoData.isVisible = false
 
-                                binding.recyclerSmsUsageReport.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = outPassReportAdapter
+                                    val outPassReportAdapter = SmsReportAdapter(
+                                        it.data.usesRPT,
+                                        this@SmsMsgReportFragment
+                                    )
+
+                                    binding.recyclerSmsUsageReport.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = outPassReportAdapter
+                                    }
+
+
+                                } else {
+                                    binding.recyclerSmsUsageReport.isVisible = false
+                                    binding.tvNoData.isVisible = true
                                 }
 
-
-                            } else {
-                                binding.recyclerSmsUsageReport.isVisible = false
-                                binding.tvNoData.isVisible = true
                             }
-
                         }
                     }
                 }
             }
+
+            smsMsgReportViewModel.getAppMsgUses(Constant.toSystemDate(fromDate),Constant.toSystemDate(toDate)  , iD)
+        }else{
+            mainActivity().showMessage("Select Staff")
         }
-        smsMsgReportViewModel.getAppMsgUses(fromDate, toDate, iD)
+        }else{
+            mainActivity().showMessage("Select Date Range")
+        }
 
     }
 

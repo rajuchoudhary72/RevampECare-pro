@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,11 @@ class ViewAssignmentViewModel @Inject constructor(
     private val offlineSubmitedMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
     val offlineSubmitedStateFlow: StateFlow<NetworkResult<CommonResponse>> = offlineSubmitedMutableStateFlow
+
+    private val  postAssignmentRemarkMutableStateFlow : MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val postAssignmentRemarkStateFlow: StateFlow<NetworkResult<CommonResponse>> = postAssignmentRemarkMutableStateFlow
+
 
 
     fun viewAssignment(  iD: String )=viewModelScope.launch {
@@ -74,5 +80,20 @@ class ViewAssignmentViewModel @Inject constructor(
         }
 
     }
+    fun  postAssignmentRemark(
+
+        submissitedOn:  List<AssignmentRemarkPost>
+    )=viewModelScope.launch {
+        runCatching {
+            postAssignmentRemarkMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.postAssignmentRemark( submissitedOn )
+        }.onSuccess {
+            postAssignmentRemarkMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            postAssignmentRemarkMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
 
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMediaDetailsBinding
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.imageUrl
 import com.squareup.picasso.Picasso
 
@@ -62,14 +61,14 @@ class MediaDetailsFragment : Fragment() {
 
 
     companion object {
-        const val description = ""
-        const val fileName = ""
-        const val fileNameFullSize = ""
-        const val headline = ""
-        const val id = ""
-        const val newsName = ""
-        const val publishedOn = ""
-        const val updatedOn = ""
+        const val description = "description"
+        const val fileName = "fileName"
+        const val fileNameFullSize = "fileNameFullSize"
+        const val headline = "headline"
+        const val id = "id"
+        const val newsName = "newsName"
+        const val publishedOn = "publishedOn"
+        const val updatedOn = "updatedOn"
     }
 
 }

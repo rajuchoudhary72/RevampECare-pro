@@ -92,10 +92,12 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetails
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.network.model.postQuestionBank.NetworkPostQuestionBank
 import com.app.ecarepro.data.network.model.post_leave_request.FileAttachment
@@ -124,6 +126,7 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -139,7 +142,12 @@ interface UserRepository {
         mobile: String?,
         email: String?
     ): NetworkUserDetailsDto
-
+    suspend fun forgotPassword(
+        SchCode: String,
+        UserID: String,
+        UserType: String,
+        RcvOn: String
+    ): NetworkUserDetailsDto
     suspend fun login(
         schoolCode: String,
         userName: String,
@@ -245,6 +253,7 @@ interface UserRepository {
         lvID: Int,
         action: Int,
         forwardedTo: Int,
+        rejectionReason: String,
     ): CommonResponse
 
     suspend fun leaveApply(
@@ -778,5 +787,13 @@ interface UserRepository {
     suspend fun busLocation(
           vehicleNumber: String
     ): NetworkBusLocation
+
+    suspend fun postAssignmentRemark(
+          request:  List<AssignmentRemarkPost>,
+    ): CommonResponse
+
+    suspend fun uploadStudentPhoto(
+         request: StudentPhotoUploadModel,
+    ): CommonResponse
 
 }

@@ -44,6 +44,10 @@ interface SchoolService {
     suspend fun getSchools(): NetworkSchoolsDto
     @GET("School/GeneralSettings")
     suspend fun getGeneralSettings(): GeneralSettingsDto
+
+    @GET("School/GeneralSettings")
+    suspend fun appGeneralSettings(): GeneralSettingsDto
+
     @GET("School/Notices")
     suspend fun getNotices(
         @Query("pg") pg: Int,

@@ -9,6 +9,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
+
 }
 
 kapt {
@@ -31,8 +32,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 206
-        versionName = "2.1.76"
+        versionCode = 216
+        versionName = "2.1.86"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -107,7 +108,7 @@ dependencies {
     implementation(libs.com.google.firebase.firebase.crashlytics)
     kapt(libs.hilt.android.compiler)
 
-/*    *//* Database *//*
+    /*    *//* Database *//*
     implementation(libs.androidx.room.runtime)
    // kapt(libs.androidx.room.compiler)
     annotationProcessor("androidx.room:room-compiler:2.5.1")
@@ -116,7 +117,6 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
-
     /* Preferences */
     implementation(libs.androidx.datastore.preferences)
 
@@ -181,4 +181,4 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
-}
+  }

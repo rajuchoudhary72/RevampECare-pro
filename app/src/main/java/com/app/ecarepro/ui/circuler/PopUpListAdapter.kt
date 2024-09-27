@@ -12,7 +12,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.utils.listener.ItemListener
 
-class PopUpListAdapter(private var academicYearList: List<AcademicYear>,
+class PopUpListAdapter(private var academicYearList: List<AcademicYear>?,
                        private var itemListener: ItemListener<AcademicYear>
 ) :
     RecyclerView.Adapter<PopUpListAdapter.PopUpListViewHolder>() {
@@ -26,21 +26,25 @@ class PopUpListAdapter(private var academicYearList: List<AcademicYear>,
         return PopUpListViewHolder(view)
     }
 
-    override fun getItemCount(): Int = academicYearList.size
+    override fun getItemCount(): Int = academicYearList!!.size
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text=academicYearList[holder.bindingAdapterPosition].session
-        holder.llMain.setOnClickListener {
-            lastIndex=holder.bindingAdapterPosition
-             itemListener.onItemClick(academicYearList[holder.bindingAdapterPosition],1,true)
-            notifyDataSetChanged()
-        }
+        if (academicYearList!=null){
+        if (academicYearList!!.isNotEmpty()){
+            holder.itemName.text= academicYearList!![holder.bindingAdapterPosition].session
+            holder.llMain.setOnClickListener {
+                lastIndex=holder.bindingAdapterPosition
+                itemListener.onItemClick(academicYearList!![holder.bindingAdapterPosition],1,true)
+                notifyDataSetChanged()
+            }
 
-        if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
-        } else {
-            holder.itemName.setTextColor(Color.parseColor("#000000"))
+            if (lastIndex == holder.bindingAdapterPosition) {
+                holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
+            } else {
+                holder.itemName.setTextColor(Color.parseColor("#000000"))
+            }
+        }
         }
 
 

@@ -19,6 +19,7 @@ import com.app.ecarepro.model.UsesRPT
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.sms_app_msg_report.SmsMsgReportViewModel
 import com.app.ecarepro.ui.sms_app_msg_report.SmsReportAdapter
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -87,8 +88,8 @@ class SMSConsumptionFragment : Fragment() {
             dateTo.text = to
         }
         getAppMsgUses(
-            binding.dateFrom.text.toString(),
-            binding.dateTo.text.toString(),
+            Constant.toSystemDate(binding.dateFrom.text.toString()),
+             Constant.toSystemDate(binding.dateTo.text.toString(),)
 
         )
     }

@@ -3,6 +3,8 @@ package com.app.ecarepro.ui.reportCard
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.ReportCardListItemBinding
 import com.app.ecarepro.model.ReportCard
@@ -26,24 +28,30 @@ class ReportCardListAdapter(
     override fun getItemCount(): Int = noticeList.size
 
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
-        var data = noticeList[position]
+        val binding=DataBindingUtil.getBinding<ReportCardListItemBinding>(holder.itemView)
+        binding?.apply {
+            val data = noticeList[position]
 
-        bindingm.tvExam.text=data.examName
-        bindingm.tvSession.text=session
-        bindingm.tvUpdateOn.text= "Updated On : ${data.updatedOn}"
+             tvExam.text=data.examName
+             tvSession.text=session
+             tvUpdateOn.text= "Updated On : ${data.updatedOn}"
 
-        bindingm.llView.setOnClickListener {
-            reportCardDetailsFragment.onItemClick(data,1,true)
+             llBack.isVisible = data.viewMode != 1
+
+             llView.setOnClickListener {
+                reportCardDetailsFragment.onItemClick(data,1,true)
+            }
+             llBackView.setOnClickListener {
+                reportCardDetailsFragment.onItemClick(data,1,false)
+            }
+             llDownload.setOnClickListener {
+                reportCardDetailsFragment.onItemClick(data,2,true)
+            }
+             llBackDownload.setOnClickListener {
+                reportCardDetailsFragment.onItemClick(data,2,false)
+            }
         }
-        bindingm.llBackView.setOnClickListener {
-            reportCardDetailsFragment.onItemClick(data,1,false)
-        }
-        bindingm.llDownload.setOnClickListener {
-            reportCardDetailsFragment.onItemClick(data,2,true)
-        }
-        bindingm.llBackDownload.setOnClickListener {
-            reportCardDetailsFragment.onItemClick(data,2,false)
-        }
+
 
 
     }

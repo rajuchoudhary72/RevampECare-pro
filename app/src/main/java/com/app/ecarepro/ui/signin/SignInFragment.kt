@@ -41,13 +41,10 @@ class SignInFragment : Fragment() {
 
     private var userNameValid = false
     private val systemViewModel: SystemViewModel by activityViewModels()
-
     @Inject
     lateinit var userDataStore: UserDataStore
-
     @Inject
     lateinit var userDatabase: UserDatabase
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {

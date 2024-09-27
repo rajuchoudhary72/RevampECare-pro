@@ -1,12 +1,15 @@
 package com.app.ecarepro.ui.assignment.staff.postAssignment
 
+import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +20,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -39,7 +44,11 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.listener.ItemListener
+import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
+import com.lassi.domain.media.LassiOption
+import com.lassi.domain.media.MediaType
+import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -145,9 +154,16 @@ class PostAssignmentFragment : Fragment() {
 
         binding.btnSubmit.setOnClickListener { uploadAssignment() }
 
-        binding.tvAddAttac.setOnClickListener {
+        binding.tvBrowseFile.setOnClickListener {
             lastClickAttachmentType = AttachmentType.PDF
-            launchPdfPicker() }
+            launchPdfPicker()
+        }
+        binding.tvBrowsePhoto.setOnClickListener {
+            if (checkAndRequestPermissions()) {
+                lastClickAttachmentType = AttachmentType.GALLERY
+               launchPhotoPicker()
+            }
+        }
 
         binding.tvSelectstudent.setOnClickListener {
             if (studentList!=null){
@@ -726,6 +742,68 @@ class PostAssignmentFragment : Fragment() {
 
 
         postAssignmentViewModel.viewAssignment(assignmentId)
+    }
+    private fun launchPhotoPicker() {
+
+        val intent = Lassi(requireContext())
+            .with(LassiOption.CAMERA_AND_GALLERY)
+            .setMediaType(MediaType.IMAGE)
+            .setMaxCount(7)
+            .setGridSize(3)
+            .setMinFileSize(0) // Restrict by minimum file size
+            .setMaxFileSize(65535) // Restrict by maximum file size
+            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
+            .setAlertDialogNegativeButtonColor(R.color.black)
+            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
+            .setStatusBarColor(R.color.md_theme_light_primary)
+            .setToolbarColor(R.color.md_theme_light_primary)
+            .setToolbarResourceColor(android.R.color.white)
+            .setProgressBarColor(R.color.red)
+            .setGalleryBackgroundColor(R.color.white)
+            .build()
+        receiveData.launch(intent)
+    }
+
+    private val receiveData =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val selectedMedia =
+                    it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
+                binding.llFile.isVisible=true
+                postAssignmentViewModel.setAttachments(selectedMedia)
+            }
+        }
+
+    private fun checkAndRequestPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionList.toTypedArray(),
+                1001
+            )
+            false
+        } else {
+            true
+        }
     }
 
 }

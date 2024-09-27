@@ -146,8 +146,10 @@ import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.VisitorDetails
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
@@ -184,6 +186,14 @@ class UserRepositoryImpl @Inject constructor(
                 userType
             )
         )
+    }
+    override suspend fun forgotPassword(
+        SchCode: String,
+        UserID: String,
+        UserType: String,
+        RcvOn: String
+    ): NetworkUserDetailsDto {
+        return userService.forgotPassword(SchCode,UserID,UserType,RcvOn)
     }
     fun getCurrentDateTimeAmPm(): String {
         val currentDate = Date()
@@ -350,9 +360,10 @@ class UserRepositoryImpl @Inject constructor(
         applType: Int,
         lvID: Int,
         action: Int,
-        forwardedTo: Int
+        forwardedTo: Int,
+        rejectionReason: String,
     ): CommonResponse {
-        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID))
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,rejectionReason))
     }
 
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {
@@ -1184,6 +1195,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun busLocation(vehicleNumber: String): NetworkBusLocation {
         return userService.busLocation(vehicleNumber)
+    }
+
+    override suspend fun postAssignmentRemark(request: List<AssignmentRemarkPost>): CommonResponse {
+        return userService.postAssignmentRemark(request)
+    }
+
+    override suspend fun uploadStudentPhoto(request: StudentPhotoUploadModel): CommonResponse {
+        return userService.uploadStudentPhoto(request)
     }
 
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {

@@ -11,7 +11,7 @@ import com.app.ecarepro.databinding.FragmentProfileTimeTableBinding
 import com.app.ecarepro.model.TimetableSummary
 
 
-class ProfileTimeTableFragment(private val timetableSummary: TimetableSummary) : Fragment() {
+class ProfileTimeTableFragment(private val timetableSummary: TimetableSummary?) : Fragment() {
 
     private lateinit var binding: FragmentProfileTimeTableBinding
 

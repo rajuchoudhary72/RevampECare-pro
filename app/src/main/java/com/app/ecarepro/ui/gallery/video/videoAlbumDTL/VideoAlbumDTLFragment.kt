@@ -16,12 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.Video
 import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
 import com.app.ecarepro.model.Photo
 import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.listener.ItemListener
@@ -38,6 +39,7 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
     private lateinit var binding: FragmentPhotoAlbumDTLBinding
    private val videoAlbumDTLViewModel : VideoAlbumDTLViewModel by viewModels()
     private lateinit var albumSetting: AlbumSetting
+    private lateinit var networkVideoAlbumDTL: NetworkVideoAlbumDTL
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
     private var totalItemCount: Int = 0
@@ -70,6 +72,7 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
 
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
+            binding.tvMore.visibility = View.GONE
         }
 
         lifecycleScope.launch {
@@ -115,6 +118,8 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
                                     binding.tvMore.setVisibility(View.GONE)
                                 }
                                 albumSetting=it.data.setting
+                                networkVideoAlbumDTL=it.data
+
                                 albumDTLAdapter.setData(it.data.videos.toMutableList())
 
                             }else{
@@ -172,19 +177,27 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
         }) }
 
     override fun onItemClick(t: Video, pos: Int, boolean: Boolean) {
-        findNavController().navigate(R.id.action_videoAlbumDTLFragment_to_photoSliderFragment,
+//        findNavController().navigate(R.id.action_videoAlbumDTLFragment_to_photoSliderFragment,
+//            Bundle().apply {
+//                putString(Constant.ID, t.id)
+//                putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.url))
+//                putString(Constant.FULL_URL_ARGUMENT, t.url)
+//                putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_VIDEO)
+//                putBoolean("isLiked", t.isLike)
+//                putBoolean("isFav", t.isFavourite)
+//                putInt("likes", t.likes)
+//                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled!!)
+//                putBoolean("isShareEnabled", albumSetting.isShareEnabled!!)
+//                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled!!)
+//            })
+
+        findNavController().navigate(R.id.photoSliderNavHostFragment ,
             Bundle().apply {
-                putString(Constant.ID, t.id)
-                putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.url))
-                putString(Constant.FULL_URL_ARGUMENT, t.url)
+                putParcelable("videoDetails", networkVideoAlbumDTL)
+                putInt("photoPosition", pos)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_VIDEO)
-                putBoolean("isLiked", t.isLike)
-                putBoolean("isFav", t.isFavourite)
-                putInt("likes", t.likes)
-                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled)
-                putBoolean("isShareEnabled", albumSetting.isShareEnabled)
-                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled)
             })
+
     }
 
 }

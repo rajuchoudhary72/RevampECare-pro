@@ -1,13 +1,21 @@
 package com.app.ecarepro.ui.leave.leave_report
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LeaveReportListItemBinding
 import com.app.ecarepro.model.Dtl
+import com.google.android.material.textfield.TextInputEditText
 import com.squareup.picasso.Picasso
 
 class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
@@ -109,6 +117,8 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
         }
    }
+
+
 
     fun setData(leaveList: MutableList<Dtl>, canTalkeAction: Boolean, applType: Int, status: Int){
         this.canTalkeAction=canTalkeAction

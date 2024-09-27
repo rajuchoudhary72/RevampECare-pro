@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.FavList
+import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentPhotoAlbumBinding
 import com.app.ecarepro.model.AlbumVideo
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 class FavoritesListFragment : Fragment() , ItemListener<FavList> {
 
 
+    private lateinit var networkFavorites: NetworkFavorites
     private lateinit var favoritesListAdapter: FavoritesListAdapter
     private lateinit var binding: FragmentPhotoAlbumBinding
     private val favoritesViewModel : FavoritesViewModel by viewModels()
@@ -84,11 +86,13 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
 
                         if (it.data!=null){
 
+                            if (it.data.list!=null){
                             if (it.data.list.isNotEmpty()){
 
                                 binding.rvPhotoAlbum.isVisible=true
                                 binding.tvNoData.isVisible=false
                                 isLoading=true
+                                networkFavorites=it.data
 
                                 if (pageIndex==1){
                                     favoritesListAdapter.clearData()
@@ -104,8 +108,16 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
                             }
 
                         }else{
-                            binding.rvPhotoAlbum.isVisible=false
-                            binding.tvNoData.isVisible=true
+                                if (pageIndex==1){
+                                    binding.rvPhotoAlbum.isVisible=false
+                                    binding.tvNoData.isVisible=true
+                                }
+                        }
+                        }else{
+                            if (pageIndex==1){
+                                binding.rvPhotoAlbum.isVisible=false
+                                binding.tvNoData.isVisible=true
+                            }
                         }
 
                     }
@@ -160,15 +172,22 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
 
     override fun onItemClick(t: FavList, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.photoSliderFragment,
+//        findNavController().navigate(R.id.photoSliderFragment,
+//            Bundle().apply {
+//                putString(Constant.ID, t.id)
+//                putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.fileName))
+//                putString(Constant.FULL_URL_ARGUMENT, t.fileName)
+//                putInt(Constant.GALLERY_TYPE, t.galleryType)
+//                putBoolean("isLiked", t.islLike == 1 )
+//                putBoolean("isFav", t.isFavourite)
+//                putInt("likes", t.totalLike)
+//            })
+
+        findNavController().navigate(R.id.favoriteSliderNavHostFragment ,
             Bundle().apply {
-                putString(Constant.ID, t.id)
-                putString(Constant.URL_ARGUMENT, YoutubeURL().getTIURLFromYoutubeURL(t.fileName))
-                putString(Constant.FULL_URL_ARGUMENT, t.fileName)
-                putInt(Constant.GALLERY_TYPE, t.galleryType)
-                putBoolean("isLiked", t.islLike == 1 )
-                putBoolean("isFav", t.isFavourite)
-                putInt("likes", t.totalLike)
+                putParcelable("favDetails", networkFavorites)
+                putInt("photoPosition", pos)
+
             })
 
     }

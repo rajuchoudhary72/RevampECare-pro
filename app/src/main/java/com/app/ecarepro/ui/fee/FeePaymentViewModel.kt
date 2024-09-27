@@ -25,13 +25,9 @@ class FeePaymentViewModel @Inject constructor(
     val schoolData = MutableLiveData<NetworkSchool>()
 
 
-    var feePayemtURL : String = ""
+   // var feePayemtURL : String = ""
 
-    init {
-        viewModelScope.launch {
-            feePayemtURL = userDataStore.getSchoolData()?.feePayemtURL.toString()
-        }
-    }
+
 
 
     private val genTokenMutableStateFlow: MutableStateFlow<NetworkResult<NetworkGenerateTokenFeePay>> = MutableStateFlow(

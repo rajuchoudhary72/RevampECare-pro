@@ -29,7 +29,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.fee.fee_receipt.FeeReceiptPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
@@ -245,9 +245,7 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
             )
         )
         }
-
-
-    private fun popUpSearchBy() {
+  private fun popUpSearchBy() {
 
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)

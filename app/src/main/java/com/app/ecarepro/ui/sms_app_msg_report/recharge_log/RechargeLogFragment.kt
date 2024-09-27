@@ -15,6 +15,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentRechareLogBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.utils.Constant
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -81,8 +82,8 @@ class RechargeLogFragment : Fragment() {
             dateTo.text = to
         }
         getRechargeLog(
-            binding.dateFrom.text.toString(),
-            binding.dateTo.text.toString()
+            Constant.toSystemDate(binding.dateFrom.text.toString()),
+            Constant.toSystemDate(binding.dateTo.text.toString())
         )
     }
 

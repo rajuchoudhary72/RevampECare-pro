@@ -30,14 +30,6 @@
             name="changeUser"
             type="android.view.View.OnClickListener" />
 
-        <variable
-            name="childPhoto"
-            type="java.lang.String" />
-
-        <variable
-            name="childName"
-            type="java.lang.String" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,9 +75,7 @@
             app:layout_constraintTop_toBottomOf="@id/name"
             bind:address="@{school.schAdd1}"
             bind:name="@{school.schoolName}"
-            bind:photo="@{school.logo}"
-            bind:childPhoto="@{childPhoto}"
-            bind:childName="@{childName}" />
+            bind:photo="@{school.logo}" />
 
         <ImageView
             android:id="@+id/btn_close"

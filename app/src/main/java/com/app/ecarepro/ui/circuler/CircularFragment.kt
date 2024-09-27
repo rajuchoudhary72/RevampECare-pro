@@ -22,7 +22,9 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentCirculerBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.Circular
+import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.leave.leave_report.LeaveReportAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
@@ -40,8 +42,13 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     private val circularViewModel :CircularViewModel   by viewModels()
     private lateinit var fragmentCircularBinding: FragmentCirculerBinding
     var selectedYearData: AcademicYear? =null
-
-
+    private var pageIndex: Int = 1
+    private var pastVisiblesItems: Int = 0
+    private var totalItemCount: Int = 0
+    private var visibleItemCount: Int = 0
+    private var isLoading: Boolean = true
+    private lateinit var   circularListAdapter: CircularListAdapter
+    private var circularList = mutableListOf<Circular>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,24 +63,30 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
         fragmentCircularBinding.ivSearch.setOnClickListener {
             if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
-                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+                circularViewModel.getCirculars(pageIndex,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
             }else {
                 mainActivity().showMessage("Please enter title!!!")
             }
         }
+        pageIndex=1
         return fragmentCircularBinding.root
 
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+
+        circularListAdapter = CircularListAdapter( circularList , this@CircularFragment)
+
+            fragmentCircularBinding.recyclerCircular.adapter = circularListAdapter
+
 
         fragmentCircularBinding.edSearch.doAfterTextChanged {
             if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
-                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+                circularViewModel.getCirculars(pageIndex,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
             }else {
-                circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"" )
+                circularViewModel.getCirculars(pageIndex,selectedYearID,"" )
 
             }
         }
@@ -100,6 +113,9 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                         if (it.data!=null){
                             if (it.data.academicYears!=null){
                                 yearList=it.data.academicYears
+                                if (it.data.academicYears.isNotEmpty()){
+                                    fragmentCircularBinding.tvSelectSession.text= it.data.academicYears[0].session
+                                }
                             }
 
                             if (it.data.circularList!=null  ){
@@ -107,25 +123,29 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                                 if (it.data.circularList.isNotEmpty()){
                                     fragmentCircularBinding.recyclerCircular.isVisible=true
                                     fragmentCircularBinding.tvNoData.isVisible=false
+                                    isLoading=true
+                                    if (pageIndex==1){
 
-                                    val circularAdapter = CircularListAdapter(it.data.circularList , this@CircularFragment)
-
-                                    fragmentCircularBinding.recyclerCircular.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = circularAdapter
+                                        circularListAdapter.clearData()
                                     }
-                                    fragmentCircularBinding.toolbar.title= "All Notices" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
+                                    circularListAdapter.setData(it.data.circularList.toMutableList())
+
+                                    fragmentCircularBinding.toolbar.title= "All Circular" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
 
                                 }else{
-                                    fragmentCircularBinding.recyclerCircular.isVisible=false
-                                    fragmentCircularBinding.tvNoData.isVisible=true
+                                    if (pageIndex==1){
+                                        fragmentCircularBinding.recyclerCircular.isVisible=false
+                                        fragmentCircularBinding.tvNoData.isVisible=true
+                                    }
+
                                 }
 
 
                             }else{
-                                fragmentCircularBinding.recyclerCircular.isVisible=false
-                                fragmentCircularBinding.tvNoData.isVisible=true
+                                if (pageIndex==1){
+                                    fragmentCircularBinding.recyclerCircular.isVisible=false
+                                    fragmentCircularBinding.tvNoData.isVisible=true
+                                }
                             }
 
                         }
@@ -136,8 +156,12 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                 }
             }
         }
+        setupRecycleViewPager()
 
-        circularViewModel.getCirculars(Constant.PAGE_INDEX,selectedYearID,"")
+        if (savedInstanceState == null) {
+            circularViewModel.getCirculars(pageIndex,selectedYearID,"")
+        }
+        super.onViewCreated(view, savedInstanceState)
 
     }
 
@@ -160,8 +184,9 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
         relOk.setOnClickListener {
             if (isYearSelected){
+                pageIndex=1
                 fragmentCircularBinding.tvSelectSession.text= selectedYearData!!.session
-                circularViewModel.getCirculars(1, selectedYearID,"")
+                circularViewModel.getCirculars(pageIndex, selectedYearID,"")
                 builder.dismiss()
             }
 
@@ -190,5 +215,38 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         builder.show()
     }
 
+
+    private fun setupRecycleViewPager() {
+        circularListAdapter.clearData()
+        fragmentCircularBinding.recyclerCircular.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+
+                if (linearLayoutManager != null) {
+                    if (dy > 0) {
+                        visibleItemCount = linearLayoutManager.childCount;
+                        totalItemCount = linearLayoutManager.itemCount;
+                        pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                        if (isLoading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                isLoading = false
+                                pageIndex += 1
+                                circularViewModel.getCirculars(pageIndex,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
+
+
+
+    }
 
 }
