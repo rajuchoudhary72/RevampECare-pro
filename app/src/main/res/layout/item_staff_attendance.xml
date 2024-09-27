@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+<import type="android.view.View"/>
         <variable
             name="attendance"
             type="com.app.ecarepro.data.network.model.StaffAttendanceDetails" />
@@ -113,17 +113,20 @@
                 android:layout_width="wrap_content"
                 android:padding="10dp"
                 tools:text="adsa"
+                android:visibility="@{attendance.isPrasent() ? View.VISIBLE : View.GONE}"
                 android:layout_height="wrap_content"
                 android:text='@{@string/late_by(attendance.lateBy)}' />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
+                android:visibility="@{attendance.isPrasent() ? View.VISIBLE : View.GONE}"
                 android:background="@color/light" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:padding="10dp"
+                android:visibility="@{attendance.isPrasent() ? View.VISIBLE : View.GONE}"
                 android:layout_height="wrap_content">
 
                 <TextView

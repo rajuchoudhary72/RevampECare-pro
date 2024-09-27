@@ -223,7 +223,7 @@
                     android:background="@drawable/bg_rounded_corner_green"
                     android:fontFamily="@font/calibri_regular"
                     android:gravity="center"
-                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_7sdp"
                     android:text="1 July 2024"
                     android:textColor="@color/black"
