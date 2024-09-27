@@ -25,7 +25,9 @@ data class ConversationDetailsDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("subject")
-    val subject: String?
+    val subject: String?,
+    @SerializedName("senderDTL")
+    val senderDTL: Sender
 )
 
 data class Message(

@@ -504,6 +504,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
+            launch {
+                systemViewModel.logout.collectLatest { logout ->
+                    if (logout) {
+                        logout(forceLogout = true)
+                    }
+                }
+            }
             systemViewModel.uiState
                 .flowWithLifecycle(lifecycle)
                 .collectLatest { uiState ->
@@ -1256,11 +1263,10 @@ class MainActivity : AppCompatActivity() {
         Runtime.getRuntime().exit(0)
     }
 
-    fun logout() {
-        MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.logout))
-            .setMessage(getString(R.string.are_you_sure_to_logout))
-            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+    fun logout(forceLogout: Boolean = false) {
+
+        if (forceLogout) {
+            lifecycleScope.launch {
                 try {
                     systemViewModel.logout {
                         clearAppData()
@@ -1268,9 +1274,23 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                 }
             }
-            .setNegativeButton(getString(R.string.no)) { _, _ ->
-            }
-            .show()
+        } else {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.logout))
+                .setMessage(getString(R.string.are_you_sure_to_logout))
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    try {
+                        systemViewModel.logout {
+                            clearAppData()
+                        }
+                    } catch (e: Exception) {
+                    }
+                }
+                .setNegativeButton(getString(R.string.no)) { _, _ ->
+                }
+                .show()
+        }
+
     }
 
     private fun setUpMoreOptions() {

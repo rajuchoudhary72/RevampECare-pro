@@ -25,7 +25,7 @@ import com.app.ecarepro.model.Photo
 import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint

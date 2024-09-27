@@ -728,4 +728,8 @@
     <string name="save_remark">Save Remark</string>
     <string name="copy_to_all"> <u>Copy To All</u></string>
     <string name="approved_leave">Approved leave</string>
+
+    <string name="late_by"><b>Late by :</b> %s</string>
+    <string name="inTime"><b>In Time :</b> %s</string>
+    <string name="OutTime"><b>Out Time :</b> %s</string>
 </resources>

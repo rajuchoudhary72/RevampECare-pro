@@ -284,6 +284,20 @@ class MessageRepositoryImpl @Inject constructor(
 
      }
 
+    override suspend fun deleteSentMessage(id: String): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = messageService.deleteSentMessage(id)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
 }
 
 

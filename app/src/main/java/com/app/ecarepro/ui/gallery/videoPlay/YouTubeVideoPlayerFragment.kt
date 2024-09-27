@@ -9,7 +9,7 @@ import android.view.Window
 import com.app.ecarepro.R
 import android.view.WindowManager
 import com.app.ecarepro.databinding.FragmentYouTubeVideoPlayerBinding
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+
 import com.app.ecarepro.utils.AndroidDownloader
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer

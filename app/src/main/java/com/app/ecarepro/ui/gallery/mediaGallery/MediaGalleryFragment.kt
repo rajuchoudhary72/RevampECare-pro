@@ -29,7 +29,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.fee.fee_receipt.FeeReceiptPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener

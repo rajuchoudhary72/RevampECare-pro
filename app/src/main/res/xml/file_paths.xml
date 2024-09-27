@@ -15,4 +15,5 @@
     <external-files-path
         name="external_files_files_d"
         path="." />
+    <cache-path name="my_images" path="." />
 </paths>
