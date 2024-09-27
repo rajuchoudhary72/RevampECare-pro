@@ -55,7 +55,7 @@ class InstitutionCodeFragment : Fragment() {
             if (args.containsKey("add_account") && args.containsKey("change_school")
                     .not() && schoolCode.isNullOrEmpty().not()
             ) {
-                navigateToSignFragment(schoolCode!!)
+                navigateToSignFragment(schoolCode!!, false)
             }
         }
 
@@ -73,7 +73,10 @@ class InstitutionCodeFragment : Fragment() {
                         clickListener { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentSchoolCode(school.schoolCode)
-                                navigateToSignFragment(school.schoolCode)
+                                navigateToSignFragment(
+                                    school.schoolCode,
+                                    school.isStudentLoginBlocked?:false
+                                )
                             }
                         }
                     }
@@ -97,7 +100,7 @@ class InstitutionCodeFragment : Fragment() {
                         navigateToSignFragment(it.schoolCode)
                     }*/
 
-                    navigateToSignFragment(it.schoolCode)
+                    navigateToSignFragment(it.schoolCode, it.isStudentLoginBlocked?:false)
                 } else {
                     binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
                     mainActivity().showMessage("Please enter a valid school code.")
@@ -118,14 +121,15 @@ class InstitutionCodeFragment : Fragment() {
 
     }
 
-    private fun navigateToSignFragment(schoolCode: String) {
+    private fun navigateToSignFragment(schoolCode: String, isStudentLoginBlocked: Boolean) {
         findNavController().navigate(
             resId = R.id.signInFragment,
             args = if (arguments == null) {
-                bundleOf("schoolCode" to schoolCode)
+                bundleOf("schoolCode" to schoolCode, "isStudentLoginBlocked" to isStudentLoginBlocked)
             } else {
                 arguments?.apply {
                     putString("schoolCode", schoolCode)
+                    putBoolean("isStudentLoginBlocked", isStudentLoginBlocked)
                 }
             },
             navOptions = NavOptions.Builder()

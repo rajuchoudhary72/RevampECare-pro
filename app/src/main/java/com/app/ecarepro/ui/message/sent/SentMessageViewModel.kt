@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.onStart
 
 @HiltViewModel
 class SentMessageViewModel @Inject constructor(
@@ -62,7 +63,7 @@ class SentMessageViewModel @Inject constructor(
                             } else if (isRefresh && messages.isEmpty()) {
                                 SentMessageUiState.EmptyInbox
                             } else {
-                                SentMessageUiState.Success(messages)
+                                SentMessageUiState.Success(messages.map { it.copy(canDelete = response.canDelete) })
                             }
 
                         }
@@ -131,7 +132,21 @@ class SentMessageViewModel @Inject constructor(
         totalPageCount = DEFAULT_PAGE
         fetchInboxMessages(true)
     }
-
+    fun deleteMessage(id: String, func: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            messageRepository
+                .deleteSentMessage(id)
+                .onStart { func(true, null) }
+                .collectLatest { result ->
+                    if (result.isSuccess) {
+                        func(false, result.getOrNull() ?: "Message Deleted Successfully")
+                        refresh()
+                    } else {
+                        func(false, result.exceptionOrNull()?.message)
+                    }
+                }
+        }
+    }
 }
 
 sealed interface SentMessageUiState {
