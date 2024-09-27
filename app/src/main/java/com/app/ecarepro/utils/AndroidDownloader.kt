@@ -15,7 +15,7 @@ class AndroidDownloader(context: Context) : Downloader {
         fileName = url.substring(url.lastIndexOf('/') + 1, url.length)
         val request = DownloadManager.Request(url.toUri())
             .setMimeType(mimeType)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION)
             .setTitle(fileName)
             .setDescription(downloadType)
             .setDestinationInExternalPublicDir(

@@ -38,15 +38,9 @@ class ShowAttendanceListAdapter(
                 bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.white))
             }
         }
-
-
-
     }
-
-
     class NoticeViewHolder(itemView: ShowAttendanceItemBinding) :
         RecyclerView.ViewHolder(itemView.root) {
     }
-
 
 }
