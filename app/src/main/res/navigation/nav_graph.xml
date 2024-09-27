@@ -972,4 +972,8 @@
         android:id="@+id/favoriteSliderNavHostFragment"
         android:name="com.app.ecarepro.ui.gallery.favorites.favorites_slider.FavoriteSliderNavHostFragment"
         android:label="FavoriteSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/updateStudentsProfileFragment"
+        android:name="com.app.ecarepro.ui.update_students_profile.UpdateStudentsProfileFragment"
+        android:label="UpdateStudentsProfileFragment" />
 </navigation>

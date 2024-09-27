@@ -92,6 +92,7 @@ import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.UserUndertakingModule
@@ -789,6 +790,10 @@ interface UserRepository {
 
     suspend fun postAssignmentRemark(
           request:  List<AssignmentRemarkPost>,
+    ): CommonResponse
+
+    suspend fun uploadStudentPhoto(
+         request: StudentPhotoUploadModel,
     ): CommonResponse
 
 }

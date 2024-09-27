@@ -3,11 +3,16 @@ package com.app.ecarepro.ui.notice
 import android.app.DownloadManager
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.Html.fromHtml
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -84,6 +89,10 @@ class NoticeDetailsFragment : Fragment() {
                             noticeDetailsBinding.noticeDetailData=it.data.notice
                             fileSource=it.data.notice.filePath
 
+                            val spanned = HtmlCompat.fromHtml(it.data.notice.detail, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                            noticeDetailsBinding.tvNoticeDetails.text = spanned
+
+                            noticeDetailsBinding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
                           }
                         }
 
