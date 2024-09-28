@@ -32,16 +32,18 @@ import java.time.format.DateTimeFormatter
 @AndroidEntryPoint
 class TryAttendanceTest2 : AppCompatActivity() {
     private lateinit var binding: TryActivityTestScrollBinding
-
     private val context: Context = this
     private var month_name: String? = null
-
     private var isFromStaff = false
     private var monthId = 0
     private var yearId = 0
     private var userId: String? = null
 
-
+    /*from student profile */
+    private var studentID: String = ""
+    private var toStartDate: String = ""
+    private var toEndDate: String = ""
+    /*end var from student profile */
     private var adapter: TryViewPagerAdapter? = null
     private var progressdialog: ProgressDialog? = null
     private val attendanceViewModel: AttendanceViewModel by viewModels()
@@ -177,6 +179,16 @@ class TryAttendanceTest2 : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.try_activity_test_scroll)
         addMonthAndYear()
         isFromStaff = intent.getBooleanExtra("isFromStaff", false)
+        try {
+
+        /*    studentID = requireArguments().getString("studentID").toString()
+            toStartDate = requireArguments().getString("formDate").toString()
+            toEndDate = requireArguments().getString("tillDate").toString()*/
+            // yearID = requireArguments().getInt("yearID")
+
+        }catch (e:IllegalStateException){
+            e.message
+        }
         val id = intent.getIntExtra("id", 0)
         yearId = intent.getIntExtra("Year", 0)
         monthId = intent.getIntExtra("MonthId", 0)
@@ -306,7 +318,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
         val month = session_month_list[position];
         val year = session_year_list[position];
         val date = getMinMaxDate(year, month)
-        Log.e("AnilPage", "${date.first} ${date.second}")
+        Log.e("rajuNewPage", "${date.first} ${date.second}")
         attendanceViewModel.getAttendance(
             from = date.first,
             till = date.second,
@@ -345,7 +357,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
                                leave_days = "${data.leaveDays}"
 
                                 present_days = "${data.presentDays}"
-                                total_absent = "${data.absentDays}"
+                                total_absent = "${data.totalAbsent}"
                                 total_leave = "${data.totalLeave}"
                                 total_present = "${data.totalPresent}"
                                 working_days = "${data.workingDays}"

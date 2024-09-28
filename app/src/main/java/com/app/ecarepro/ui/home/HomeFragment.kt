@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
       binding.imgUserAvatar.setOnClickListener {
-          //findNavController().navigate(R.id.profileFragment)
+        //  findNavController().navigate(R.id.profileFragment)
           val intent =
               Intent(requireActivity(), TryAttendanceTest2::class.java)
           startActivity(intent)

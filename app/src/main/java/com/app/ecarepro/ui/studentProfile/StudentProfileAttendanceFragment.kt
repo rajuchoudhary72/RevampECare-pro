@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.studentProfile
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -25,6 +26,7 @@ import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.model.SummaryAttendance
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.TryAttendanceTest2
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
 import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
@@ -285,11 +287,18 @@ class StudentProfileAttendanceFragment(
     }
 
     override fun onItemClick(t: SummaryAttendance, pos: Int, boolean: Boolean) {
-        findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
+
+        val intent = Intent(requireActivity(), TryAttendanceTest2::class.java)
+        val bundle = Bundle()
+        bundle.putString("studentID",id)
+        bundle.putString("formDate",t.startDate)
+        bundle.putString("tillDate",t.endDate)
+        startActivity(intent)
+       /* findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
             putString("studentID",id)
             putString("formDate",t.startDate)
             putString("tillDate",t.endDate)
-          })
+          })*/
 
     }
     private fun showPieChart(

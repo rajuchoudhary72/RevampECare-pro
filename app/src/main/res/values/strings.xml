@@ -745,7 +745,7 @@
     <string name="a">A</string>
     <string name="absent_today">Absent Today</string>
     <string name="from_march">From %s - Till Today</string>
-    <string name="total_school_days">Total School/College Days</string>
+    <string name="total_school_days">Total School Days</string>
     <string name="total_late_days">Total Late</string>
     <string name="attendance">Attendance</string>
     <string name="jan">January</string>
