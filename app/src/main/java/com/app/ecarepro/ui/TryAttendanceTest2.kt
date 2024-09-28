@@ -43,6 +43,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
     private var studentID: String = ""
     private var toStartDate: String = ""
     private var toEndDate: String = ""
+
     /*end var from student profile */
     private var adapter: TryViewPagerAdapter? = null
     private var progressdialog: ProgressDialog? = null
@@ -179,16 +180,15 @@ class TryAttendanceTest2 : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.try_activity_test_scroll)
         addMonthAndYear()
         isFromStaff = intent.getBooleanExtra("isFromStaff", false)
-        try {
 
-        /*    studentID = requireArguments().getString("studentID").toString()
-            toStartDate = requireArguments().getString("formDate").toString()
-            toEndDate = requireArguments().getString("tillDate").toString()*/
-            // yearID = requireArguments().getInt("yearID")
-
-        }catch (e:IllegalStateException){
-            e.message
+        val bundle = intent.extras
+        bundle?.let {
+            studentID = it.getString("studentID", "0")
+            toStartDate = it.getString("formDate", "0")
+            toEndDate = it.getString("tillDate", "0")
         }
+
+
         val id = intent.getIntExtra("id", 0)
         yearId = intent.getIntExtra("Year", 0)
         monthId = intent.getIntExtra("MonthId", 0)
@@ -322,8 +322,8 @@ class TryAttendanceTest2 : AppCompatActivity() {
         attendanceViewModel.getAttendance(
             from = date.first,
             till = date.second,
-            yrID = "0",
-            studentID = "PBsxzEW4PEN6dmehRsHjWA=="
+            yrID = yearId.toString(),
+            studentID = studentID
         )
     }
 
@@ -350,18 +350,18 @@ class TryAttendanceTest2 : AppCompatActivity() {
                                     total_late =
                                         "${data.totalLates}"
                                 }
-                               schooldays = "${data.schoolDays}"
+                                schooldays = "${data.schoolDays}"
 
                                 absent_days = "${data.absentDays}"
 
-                               leave_days = "${data.leaveDays}"
+                                leave_days = "${data.leaveDays}"
 
                                 present_days = "${data.presentDays}"
                                 total_absent = "${data.totalAbsent}"
                                 total_leave = "${data.totalLeave}"
                                 total_present = "${data.totalPresent}"
                                 working_days = "${data.workingDays}"
-                               session = data.academicYears[0].session
+                                session = data.academicYears[0].session
                             }
                             FragmentAPI.report_arraylist.clear()
                             it.data.attendance?.let { it1 ->

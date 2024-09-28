@@ -293,6 +293,7 @@ class StudentProfileAttendanceFragment(
         bundle.putString("studentID",id)
         bundle.putString("formDate",t.startDate)
         bundle.putString("tillDate",t.endDate)
+        intent.putExtras(bundle)
         startActivity(intent)
        /* findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
             putString("studentID",id)
