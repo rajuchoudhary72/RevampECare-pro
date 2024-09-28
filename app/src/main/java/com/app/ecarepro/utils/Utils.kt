@@ -9,11 +9,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
+import com.app.ecarepro.ui.CalenderInstance
 import com.app.ecarepro.ui.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.lang.String.format
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -29,6 +31,31 @@ fun stringFormat2String(stringId1: MainActivity, stringId: Int, value1: String?,
         value1,
         value2
     )
+}
+fun getDayNumberSuffix(day: Int): String {
+    if (day >= 11 && day <= 13) {
+        return "th"
+    }
+    return when (day % 10) {
+        1 -> "st"
+        2 -> "nd"
+        3 -> "rd"
+        else -> "th"
+    }
+}
+fun date_converterDay(s: String?): String {
+    val isoFormat =
+        SimpleDateFormat("dd-MMM-yyyy")
+    isoFormat.timeZone = TimeZone.getDefault()
+    val isoFormatDay =
+        SimpleDateFormat("dd")
+    var date: Date? = null
+    try {
+        date = isoFormat.parse(s)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return isoFormatDay.format(date)
 }
 fun Context.progressDialog(): AlertDialog {
     return MaterialAlertDialogBuilder(this)
@@ -78,4 +105,12 @@ fun getDateTimeFormatted(DateTime: String): String {
         return ""
     }
 
+
+
+}
+fun calenderInstance(){
+    val calendar = Calendar.getInstance()
+    CalenderInstance.currentYear = calendar[Calendar.YEAR]
+    CalenderInstance.currentMonth = calendar[Calendar.MONTH]
+    CalenderInstance.currentDateDD = calendar[Calendar.DATE]
 }
