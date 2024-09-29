@@ -227,7 +227,7 @@
                     android:paddingVertical="@dimen/_7sdp"
                     android:text="1 July 2024"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/btn_sort_by_designation"

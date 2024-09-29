@@ -16,14 +16,15 @@ data class SentMessageDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("total")
-    val total: Int
-)
+    val total: Int,
+
+    )
 
 data class SentMessage(
     @SerializedName("abbreviation")
     val abbreviation: String?,
     @SerializedName("id")
-    val id: String?,
+    val id: String,
     @SerializedName("isReplyMsg")
     val isReplyMsg: Boolean?,
     @SerializedName("msgID")
@@ -35,7 +36,9 @@ data class SentMessage(
     @SerializedName("sentOn")
     val sentOn: String,
     @SerializedName("subject")
-    val subject: String?
+    val subject: String?,
+    @SerializedName("canDelete")
+    val canDelete: Boolean?
 )
 
 

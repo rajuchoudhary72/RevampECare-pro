@@ -344,6 +344,12 @@ class ProfileFragment : Fragment() {
             subTitle(profile.religion)
         }
         profileItem {
+            id(R.string.blood_group)
+            iconRes(R.drawable.ic_chat_bubble)
+            title(getString(R.string.blood_group))
+            subTitle(profile.bloodGroup)
+        }
+        profileItem {
             id(R.string.qualification)
             iconRes(R.drawable.ic_baseline_menu_book_24)
             title(getString(R.string.qualification))

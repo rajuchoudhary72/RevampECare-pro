@@ -11,6 +11,7 @@ import com.app.ecarepro.data.network.model.Message
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Recipient
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
+import com.app.ecarepro.data.network.model.Sender
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,6 +53,7 @@ class ChatViewModel @Inject constructor(
                     if (response.msgDTL.isNullOrEmpty()) {
                         ChatUiState.EmptyInbox
                     } else {
+                        /*  senderDTL =  response.senderDTL*/
                         ChatUiState.Success(
                             messages = response.msgDTL,
                             msgID = response.msgID,
@@ -61,6 +63,7 @@ class ChatViewModel @Inject constructor(
                             canReply = response.canReply,
                             recipients = response.recipients ?: emptyList(),
                             subject = response.subject
+
                         )
                     }
                 }
@@ -139,6 +142,8 @@ sealed interface ChatUiState {
 
     object EmptyInbox : ChatUiState
 
+
+    /*  val senderDTL: Sender*/
     data class Success(
         val messages: List<Message>,
         val recipients: List<Recipient>,

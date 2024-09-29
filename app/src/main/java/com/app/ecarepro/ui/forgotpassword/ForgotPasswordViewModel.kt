@@ -16,6 +16,7 @@ class ForgotPasswordViewModel @Inject constructor(
     private val userRepository: UserRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    val isStudentLoginBlocked = savedStateHandle.get<Boolean>("isStudentLoginBlocked")
 
     val schoolCode = savedStateHandle.get<String>("schoolCode")
         ?: throw IllegalArgumentException("School code required")

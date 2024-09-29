@@ -35,7 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:fontFamily="@font/calibri_light"
-            android:text="unread"
+            tools:text="unread"
+            android:text='@{recipient.hasRead ? "read":"unread"}'
             android:textColor="@color/grey_40"
             app:layout_constraintBottom_toBottomOf="@id/image"
             app:layout_constraintStart_toEndOf="@id/image"

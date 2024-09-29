@@ -22,7 +22,7 @@ import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
 import com.app.ecarepro.model.Photo
 import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.listener.ItemListener

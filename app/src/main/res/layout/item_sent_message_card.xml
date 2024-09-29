@@ -26,7 +26,15 @@
             type="java.lang.String" />
 
         <variable
+            name="canDelete"
+            type="java.lang.Boolean" />
+
+        <variable
             name="clickListener"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="deleteMessageListener"
             type="android.view.View.OnClickListener" />
 
 
@@ -39,7 +47,6 @@
         app:neumorph_lightSource="leftTop"
         android:onClick="@{clickListener}"
         app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
-
         app:neumorph_backgroundColor="@color/background_dashboard"
         app:neumorph_strokeWidth="@dimen/_1sdp"
         >
@@ -116,6 +123,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="23 May 2034 " />
 
+            <ImageView
+                android:id="@+id/imgDelete"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                android:src="@drawable/delete"
+                isVisible="@{canDelete}"
+                android:onClick="@{deleteMessageListener}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,4 +140,4 @@
 
 
 
- </layout>
+</layout>

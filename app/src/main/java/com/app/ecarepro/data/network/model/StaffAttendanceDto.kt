@@ -28,14 +28,18 @@ data class StaffAttendanceDetails(
     @SerializedName("isPrasent")
     val isPrasent: Boolean?,
     @SerializedName("lateBy")
-    val lateBy: Any?,
+    val lateBy: String?,
     @SerializedName("markOn")
-    val markOn: Any?,
+    val markOn: List<MarkOn>?,
     @SerializedName("name")
     val name: String,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("status")
     val status: Any?
+)
+data class MarkOn(
+    @SerializedName("markOn")
+    val markOn: String?
 )
 
