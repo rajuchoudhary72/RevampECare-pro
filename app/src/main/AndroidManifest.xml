@@ -123,8 +123,6 @@
                 android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
                 android:value="com.google.firebase.components.ComponentRegistrar" />
         </service>
-
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -136,8 +134,9 @@
                 android:resource="@xml/file_provider_paths"
                 tools:replace="android:resource" />
         </provider>
-
-
+        <activity
+            android:name=".ui.TryAttendanceTest2"
+            android:screenOrientation="portrait" />
 
     </application>
 

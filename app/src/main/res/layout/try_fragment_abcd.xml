@@ -1,0 +1,99 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/_1sdp"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/word_details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <include layout="@layout/try_week_name" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/calendar2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:fastScrollEnabled="false"
+                android:scrollbarThumbHorizontal="@color/transparent" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rel_events"
+        android:background="#f4f4f4"
+        android:layout_marginBottom="@dimen/_115sdp"
+        android:paddingBottom="@dimen/_3sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/_20sdp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/circle_date"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:background="@drawable/circle_calender_holiday_color"
+            android:gravity="center"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/circle_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/circle_date"
+            android:gravity="center_horizontal"
+            android:textColor="@color/brand_color"
+            android:textSize="@dimen/_12sdp" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_toRightOf="@+id/circle_date"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_centerVertical="true"
+            android:background="@color/light_grey" />
+
+        <TextView
+            android:id="@+id/events"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_toRightOf="@+id/view"
+            android:maxLines="3"
+            android:textColor="@color/brand_color"
+            android:textSize="@dimen/_15sdp" />
+    </RelativeLayout>
+
+
+    <com.app.ecarepro.ui.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_activity"
+        android:layout_gravity="center"
+        android:drawablePadding="@dimen/_15sdp"
+        android:text="@string/no_activity_calender"
+        android:textColor="@color/module"
+        android:textSize="@dimen/_20sdp"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        app:drawableTopCompat="@drawable/ic_no_calendar" />
+
+</FrameLayout>

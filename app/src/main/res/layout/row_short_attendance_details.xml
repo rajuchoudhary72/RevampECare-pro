@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -113,6 +116,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu_regular"
             android:textSize="@dimen/_12sdp"
+            android:text="0"
             android:textColor="@color/att_leave_color" />
 
     </LinearLayout>
@@ -140,9 +144,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu_regular"
+            android:text="0"
             android:textSize="@dimen/_12sdp"
             android:textColor="@color/att_late_color" />
 
     </LinearLayout>
 
 </LinearLayout>
+</layout>
