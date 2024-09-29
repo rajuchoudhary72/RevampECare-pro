@@ -18,8 +18,11 @@ class SelectTransportTypeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View  {
         binding=FragmentSelectTransportTypeBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
          return binding.root
     }
 
