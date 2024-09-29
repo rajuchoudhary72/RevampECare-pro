@@ -14,9 +14,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.lang.String.format
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import com.app.ecarepro.ui.CalenderInstance
 
 fun Int.toPx(context: Context) =
     (this * context.resources.displayMetrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT
@@ -30,6 +32,58 @@ fun stringFormat2String(stringId1: MainActivity, stringId: Int, value1: String?,
         value2
     )
 }
+fun calenderInstance(){
+    val calendar = Calendar.getInstance()
+    CalenderInstance.currentYear = calendar[Calendar.YEAR]
+    CalenderInstance.currentMonth = calendar[Calendar.MONTH]
+    CalenderInstance.currentDateDD = calendar[Calendar.DATE]
+}
+fun getDayNumberSuffix(day: Int): String {
+    if (day >= 11 && day <= 13) {
+        return "th"
+    }
+    return when (day % 10) {
+        1 -> "st"
+        2 -> "nd"
+        3 -> "rd"
+        else -> "th"
+    }
+}
+fun date_converterDay(s: String?): String {
+    if (s==null){
+        return 0.toString()
+    }
+    val isoFormat =
+        SimpleDateFormat("dd-MMM-yyyy")
+    isoFormat.timeZone = TimeZone.getDefault()
+    val isoFormatDay =
+        SimpleDateFormat("dd")
+    var date: Date? = null
+    try {
+
+        date = isoFormat.parse(s)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+        return s.split("-")[0]
+    }
+    return isoFormatDay.format(date)
+}
+
+fun dateToMonth(s: String?): String {
+    val isoFormat =
+        SimpleDateFormat("yyyy-MM-dd")
+    isoFormat.timeZone = TimeZone.getDefault()
+    val isoFormatDay =
+        SimpleDateFormat("MM")
+    var date: Date? = null
+    try {
+        date = isoFormat.parse(s)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return isoFormatDay.format(date)
+}
+
 fun Context.progressDialog(): AlertDialog {
     return MaterialAlertDialogBuilder(this)
         .setView(R.layout.loading_bar)
