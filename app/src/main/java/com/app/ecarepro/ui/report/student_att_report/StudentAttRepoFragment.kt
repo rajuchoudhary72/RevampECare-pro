@@ -179,9 +179,6 @@ class StudentAttRepoFragment : Fragment() {
                     append("%")  }
             }catch (_:Exception){ }
 
-
-
-
         }
     }
 
