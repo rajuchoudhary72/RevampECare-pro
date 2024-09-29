@@ -150,7 +150,7 @@
                             android:textColor="@color/grey_60" />
 
                         <TextView
-                            android:id="@+id/schoolday"
+                            android:id="@+id/working_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
@@ -296,7 +296,7 @@
                         android:layout_height="@dimen/_35sdp"
                         android:background="@color/grey_light"
                         android:gravity="center"
-                        android:text="@string/from_s_till_today"
+                        android:text="@string/from_april_s_till_today"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_15sdp" />
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -132,6 +133,11 @@ class ClassAttendanceFragment : Fragment()  {
                         if (it.data!=null){
 
                             if (it.data.attReport!=null) {
+
+                                binding.tvNoData.isVisible=false
+                                binding.tabLayout.isVisible=true
+                                binding.viewPager.isVisible=true
+
                                 val fragmentList = listOf(
                                     ClassAttSubFragment( it.data.attReport ),
                                     ClassAttSubFragment(getFilterList(it.data.attReport,1) ),
@@ -171,6 +177,10 @@ class ClassAttendanceFragment : Fragment()  {
                                 }.attach()
 
 
+                            }else{
+                                binding.tvNoData.isVisible=true
+                                binding.tabLayout.isVisible=false
+                                binding.viewPager.isVisible=false
                             }
 
                         }
