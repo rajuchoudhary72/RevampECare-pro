@@ -7,39 +7,61 @@
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
+
          tools:context=".ui.discipline_log.infraction.appreciation.AppreciationSelectionFragment">
 
-
-        <TextView
-            android:id="@+id/tv_view_appreciation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:textColor="@color/grey_80"
-            android:textSize="21sp"
-            android:layout_margin="20dp"
-            app:drawableTopCompat="@drawable/view_appreciation"
-            android:text="@string/view_appreciation"
-            app:fontFamily="@font/ubuntu_medium" />
-
-        <TextView
-            android:id="@+id/tv_add_appreciation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="10dp"
-            android:textSize="21sp"
-            android:textColor="@color/grey_80"
-            android:text="@string/add_appreciation"
-            android:layout_margin="20dp"
-            app:drawableTopCompat="@drawable/add_appreciation"
-            app:fontFamily="@font/ubuntu_medium" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/md_theme_light_primary"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:titleCentered="true"
+            android:elevation="8dp"
+            app:title="@string/appreciation"
+            android:layout_alignParentTop="true"
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-    </LinearLayout>
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+             android:gravity="center"
+             android:orientation="vertical"
+             android:layout_centerInParent="true"
+             >
+             <TextView
+                 android:id="@+id/tv_view_appreciation"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:drawablePadding="10dp"
+                 android:textColor="@color/grey_80"
+                 android:textSize="21sp"
+                 android:layout_margin="20dp"
+                 app:drawableTopCompat="@drawable/view_appreciation"
+                 android:text="@string/view_appreciation"
+                 app:fontFamily="@font/ubuntu_medium" />
+
+             <TextView
+                 android:id="@+id/tv_add_appreciation"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:drawablePadding="10dp"
+                 android:textSize="21sp"
+                 android:textColor="@color/grey_80"
+                 android:text="@string/add_appreciation"
+                 android:layout_margin="20dp"
+                 app:drawableTopCompat="@drawable/add_appreciation"
+                 app:fontFamily="@font/ubuntu_medium" />
+         </LinearLayout>
+
+
+    </RelativeLayout>
 </layout>
