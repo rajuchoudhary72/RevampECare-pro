@@ -57,6 +57,22 @@ fun date_converterDay(s: String?): String {
     }
     return isoFormatDay.format(date)
 }
+
+fun dateToMonth(s: String?): String {
+    val isoFormat =
+        SimpleDateFormat("yyyy-MM-dd")
+    isoFormat.timeZone = TimeZone.getDefault()
+    val isoFormatDay =
+        SimpleDateFormat("MM")
+    var date: Date? = null
+    try {
+        date = isoFormat.parse(s)
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return isoFormatDay.format(date)
+}
+
 fun Context.progressDialog(): AlertDialog {
     return MaterialAlertDialogBuilder(this)
         .setView(R.layout.loading_bar)

@@ -20,7 +20,10 @@ import com.app.ecarepro.databinding.TryActivityTestScrollBinding
 import com.app.ecarepro.ui.month_list.FragmentAPI
 import com.app.ecarepro.ui.staffAttendence.AttendanceViewModel
 import com.app.ecarepro.utils.calenderInstance
+import com.app.ecarepro.utils.dateToMonth
+import com.app.ecarepro.utils.date_converterDay
 import com.app.ecarepro.utils.getDayNumberSuffix
+import com.google.firebase.installations.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -178,12 +181,15 @@ class TryAttendanceTest2 : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.try_activity_test_scroll)
         addMonthAndYear()
         isFromStaff = intent.getBooleanExtra("isFromStaff", false)
-
+        calenderInstance()
         val bundle = intent.extras
         bundle?.let {
             studentID = it.getString("studentID", "0")
-            toStartDate = it.getString("formDate", "0")
-            toEndDate = it.getString("tillDate", "0")
+            toStartDate = it.getString("formDate", "")
+            toEndDate = it.getString("tillDate", "")
+            if (toStartDate.isNotEmpty() && toEndDate.isNotEmpty()) {
+                CalenderInstance.currentMonth = dateToMonth(toStartDate).toInt()-1
+            }
         }
 
 
@@ -201,7 +207,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
             binding.toolbarSerch.year.visibility = View.VISIBLE
 
         }
-        calenderInstance()
+
         progressDialog()
         init()
         initialProcess()
@@ -249,7 +255,8 @@ class TryAttendanceTest2 : AppCompatActivity() {
         })
 
         observer()
-        val ccMonthIndex = session_month_list.indexOfFirst { it == (CalenderInstance.currentMonth() + 1) }
+        val ccMonthIndex =
+            session_month_list.indexOfFirst { it == (CalenderInstance.currentMonth() + 1) }
         binding.viewpager.setCurrentItem(ccMonthIndex)
         callApi(ccMonthIndex)
     }
