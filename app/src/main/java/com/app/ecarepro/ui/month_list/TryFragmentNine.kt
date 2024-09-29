@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * Created by Chandan on 17/11/2017.
  */
-@AndroidEntryPoint
+
 class TryFragmentNine  //
     : Fragment() {
     var adapter2: TryRVCellAdapter? = null

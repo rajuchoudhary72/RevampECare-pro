@@ -1,10 +1,9 @@
 package com.app.ecarepro.ui;
 
-
-
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.app.ecarepro.R;
@@ -249,13 +246,13 @@ public class TryRVCellAdapter extends RecyclerView.Adapter<TryRVCellAdapter.View
 
         // Trailing Month days
         for (int i = 0; i < trailingSpaces; i++) {
-            list.add(String.valueOf((daysInPrevMonth - trailingSpaces + DAY_OFFSET) + i) + "-White" + "-" + getMonthAsString(prevMonth) + "-" + prevYear);
+            list.add((daysInPrevMonth - trailingSpaces + DAY_OFFSET) + i + "-White" + "-" + getMonthAsString(prevMonth) + "-" + prevYear);
         }
         CalenderInstance.setCalendar();
         for (int day = 1; day <= daysInMonth; day++) {
             CalenderInstance.calendar.set(year, month - 1, day);
             Calendar mycal = new GregorianCalendar(yy, currentMonth, 1);
-            if (!FragmentAPI.report_arraylist.isEmpty()) {
+            if (FragmentAPI.report_arraylist.size() > 0) {
                 for (int aSize = 0; aSize < FragmentAPI.report_arraylist.size(); aSize++) {
 
                     if (day < Integer.parseInt(UtilsKt.date_converterDay(FragmentAPI.report_arraylist.get(aSize).getAttDate()))) {
@@ -321,7 +318,7 @@ public class TryRVCellAdapter extends RecyclerView.Adapter<TryRVCellAdapter.View
         }
         // Leading Month days
         for (int i = 0; i < list.size() % 7; i++) {
-            list.add(String.valueOf(i + 1) + "-White" + "-" + getMonthAsString(nextMonth) + "-" + nextYear);
+            list.add(i + 1 + "-White" + "-" + getMonthAsString(nextMonth) + "-" + nextYear);
         }
     }
 

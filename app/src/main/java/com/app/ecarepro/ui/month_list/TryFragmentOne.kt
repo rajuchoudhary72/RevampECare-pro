@@ -19,10 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * Created by Chandan on 17/11/2017.
  */
-@AndroidEntryPoint
+
 class TryFragmentOne : Fragment() {
     var adapter2: TryRVCellAdapter? = null
-    private val attendanceViewModel: AttendanceViewModel by activityViewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

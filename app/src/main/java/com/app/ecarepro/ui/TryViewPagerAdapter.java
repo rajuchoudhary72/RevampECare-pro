@@ -4,6 +4,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.app.ecarepro.ui.month_list.TryFragmentEight;
+import com.app.ecarepro.ui.month_list.TryFragmentEleven;
+import com.app.ecarepro.ui.month_list.TryFragmentFive;
+import com.app.ecarepro.ui.month_list.TryFragmentFour;
+import com.app.ecarepro.ui.month_list.TryFragmentNine;
+import com.app.ecarepro.ui.month_list.TryFragmentOne;
+import com.app.ecarepro.ui.month_list.TryFragmentSeven;
+import com.app.ecarepro.ui.month_list.TryFragmentSix;
+import com.app.ecarepro.ui.month_list.TryFragmentTen;
+import com.app.ecarepro.ui.month_list.TryFragmentThree;
+import com.app.ecarepro.ui.month_list.TryFragmentTwelve;
+import com.app.ecarepro.ui.month_list.TryFragmentTwo;
+
 public class TryViewPagerAdapter extends FragmentPagerAdapter {
 
     public TryViewPagerAdapter(FragmentManager manager) {
@@ -17,29 +30,29 @@ public class TryViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return TryGetFragMonth.tab1;
+                return new TryFragmentOne();
             case 1:
-                return TryGetFragMonth.tab2;
+                return new TryFragmentTwo();
             case 2:
-                return TryGetFragMonth.tab3;
+                return  new TryFragmentThree();
             case 3:
-                return TryGetFragMonth.tab4;
+                return new TryFragmentFour();
             case 4:
-                return TryGetFragMonth.tab5;
+                return new TryFragmentFive();
             case 5:
-                return TryGetFragMonth.tab6;
+                return new TryFragmentSix();
             case 6:
-                return TryGetFragMonth.tab7;
+                return new TryFragmentSeven();
             case 7:
-                return TryGetFragMonth.tab8;
+                return new TryFragmentEight();
             case 8:
-                return TryGetFragMonth.tab9;
+                return new TryFragmentNine();
             case 9:
-                return TryGetFragMonth.tab10;
+                return new TryFragmentTen();
             case 10:
-                return TryGetFragMonth.tab11;
+                return new TryFragmentEleven();
             case 11:
-                return TryGetFragMonth.tab12;
+                return new TryFragmentTwelve();
             default:
                 return null;
         }

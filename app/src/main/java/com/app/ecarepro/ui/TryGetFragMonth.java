@@ -14,17 +14,17 @@ import com.app.ecarepro.ui.month_list.TryFragmentTwelve;
 import com.app.ecarepro.ui.month_list.TryFragmentTwo;
 
 public class TryGetFragMonth {
-    public static TryFragmentOne tab1 = new TryFragmentOne();
-    public static TryFragmentTwo tab2 = new TryFragmentTwo();
-    public static TryFragmentThree tab3 = new TryFragmentThree();
-    public static TryFragmentFour tab4 = new TryFragmentFour();
-    public static TryFragmentFive tab5 = new TryFragmentFive();
-    public static TryFragmentSix tab6 = new TryFragmentSix();
-    public static TryFragmentSeven tab7 = new TryFragmentSeven();
-    public static TryFragmentEight tab8 = new TryFragmentEight();
-    public static TryFragmentNine tab9 = new TryFragmentNine();
-    public static TryFragmentTen tab10 = new TryFragmentTen();
-    public static TryFragmentEleven tab11 = new TryFragmentEleven();
-    public static TryFragmentTwelve tab12 = new TryFragmentTwelve();
+    public  TryFragmentOne tab1 = new TryFragmentOne();
+    public  TryFragmentTwo tab2 = new TryFragmentTwo();
+    public  TryFragmentThree tab3 = new TryFragmentThree();
+    public  TryFragmentFour tab4 = new TryFragmentFour();
+    public  TryFragmentFive tab5 = new TryFragmentFive();
+    public  TryFragmentSix tab6 = new TryFragmentSix();
+    public  TryFragmentSeven tab7 = new TryFragmentSeven();
+    public  TryFragmentEight tab8 = new TryFragmentEight();
+    public  TryFragmentNine tab9 = new TryFragmentNine();
+    public  TryFragmentTen tab10 = new TryFragmentTen();
+    public  TryFragmentEleven tab11 = new TryFragmentEleven();
+    public  TryFragmentTwelve tab12 = new TryFragmentTwelve();
 
 }

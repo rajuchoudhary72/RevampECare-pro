@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -25,7 +24,6 @@ import com.app.ecarepro.utils.getDayNumberSuffix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
@@ -111,7 +109,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
                 (Math.round((late_ / total_days) * 100.0) / 100.0).toString() + "%"
         } catch (e: Exception) {
         }
-        calenderInstance()
+
         val month_current = CalenderInstance.currentMonth()
         //int month_current = TryAttendanceTest2.session_month_list.get(0);
         val date_current = CalenderInstance.currentDateDD()
@@ -192,7 +190,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
         val id = intent.getIntExtra("id", 0)
         yearId = intent.getIntExtra("Year", 0)
         monthId = intent.getIntExtra("MonthId", 0)
-        Companion.fragmentManager = supportFragmentManager
+
 
         //setTypeface();
         userId = id.toString() + ""
@@ -203,6 +201,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
             binding.toolbarSerch.year.visibility = View.VISIBLE
 
         }
+        calenderInstance()
         progressDialog()
         init()
         initialProcess()
@@ -250,7 +249,9 @@ class TryAttendanceTest2 : AppCompatActivity() {
         })
 
         observer()
-        callApi()
+        val ccMonthIndex = session_month_list.indexOfFirst { it == (CalenderInstance.currentMonth() + 1) }
+        binding.viewpager.setCurrentItem(ccMonthIndex)
+        callApi(ccMonthIndex)
     }
 
     private fun clickListener() {
@@ -549,46 +550,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
         var today_status: Int = 0
         var isLateEnabled: Boolean = false
 
-        const val DIALOG_LOADING: Int = 1
-
-        @JvmField
-        var fragmentManager: FragmentManager? = null
-        var isTab: Boolean = false
-
-        @JvmField
-        var isTab1: Boolean = false
-
-        @JvmField
-        var isTab2: Boolean = false
-
-        @JvmField
-        var isTab3: Boolean = false
-
-        @JvmField
-        var isTab4: Boolean = false
-
-        @JvmField
-        var isTab5: Boolean = false
-
-        @JvmField
-        var isTab6: Boolean = false
-
-        @JvmField
-        var isTab7: Boolean = false
-
-        @JvmField
-        var isTab8: Boolean = false
-
-        @JvmField
-        var isTab9: Boolean = false
-
-        @JvmField
-        var isTab10: Boolean = false
-
-        @JvmField
-        var isTab11: Boolean = false
-
-        @JvmField
-        var isTab12: Boolean = false
     }
+
+
 }

@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 /**
  * Created by Chandan on 17/11/2017.
  */
-@AndroidEntryPoint
+
 class TryFragmentEight  : Fragment() {
 
     private var calender2: RecyclerView? = null
