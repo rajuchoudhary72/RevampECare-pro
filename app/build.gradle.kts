@@ -27,7 +27,6 @@ android {
     }
     namespace = "com.app.ecarepro"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
