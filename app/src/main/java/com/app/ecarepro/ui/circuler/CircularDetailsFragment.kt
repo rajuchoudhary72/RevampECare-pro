@@ -94,8 +94,6 @@ class CircularDetailsFragment : Fragment() {
                             binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
                         }
                     }
-
-
                 }
             }
         }
