@@ -781,7 +781,10 @@ class MainActivity : AppCompatActivity() {
                             if (userType == Constant.STAFF_TYPE) {
                                 navController.navigate(R.id.attendanceFragment)
                             } else {
-                                navController.navigate(R.id.showAttendanceFragment)
+                                val intent1 = Intent(this@MainActivity, TryAttendanceTest2::class.java)
+                                startActivity(intent1)
+
+                            //    navController.navigate(R.id.showAttendanceFragment)
                             }
                         } catch (_: Exception) {
                         }
