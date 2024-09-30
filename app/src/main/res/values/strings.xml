@@ -734,6 +734,7 @@
     <string name="late_by"><b>Late by :</b> %s</string>
     <string name="inTime"><b>In Time :</b> %s</string>
     <string name="OutTime"><b>Out Time :</b> %s</string>
+    <string name="copy_circular"> <u>Copy Circular</u></string>
     <string name="no_activity_calender">No Activity Found</string>
     <string name="s">S</string>
     <string name="m">M</string>

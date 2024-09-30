@@ -322,7 +322,7 @@ interface UserService {
     suspend fun infractionInstance(
         @Query("InfrTypeID") infrTypeID: Int,
         @Query("InfrSubTypeID") InfrSubTypeID: Int,
-        @Query("InfrTypeID") InfrTypeID: Int
+        @Query("StID") stID: Int
     ): NetworkInfractionInstance
 
 

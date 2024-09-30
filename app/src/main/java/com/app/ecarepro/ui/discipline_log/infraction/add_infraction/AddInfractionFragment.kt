@@ -55,8 +55,10 @@ class AddInfractionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentAddInfractionBinding.inflate(inflater,container,false)
-          studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
-         return binding.root
+        try {
+            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+        } catch (_: Exception) { }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -258,7 +260,7 @@ class AddInfractionFragment : Fragment() {
                  binding.tvSelectSubInfraction.text= subInfractionCatData .infraction
 
                  addInfractionViewModel.getinfractionInstance(infractionCatData.infrTypeID,
-                     subInfractionCatData.infrTypeID,448)
+                     subInfractionCatData.infrTypeID,studentID)
                  setInfrenceInstance()
                  builder.dismiss()
              }
@@ -378,7 +380,7 @@ class AddInfractionFragment : Fragment() {
                 subInfractionCatData.infrTypeID,
                 infractionConsequence.consID,
                 binding.tvInstance.text.toString().toInt(),
-                Constant.getCurrentDateTime(),
+                Constant.getCurrentDateTimeSecond(),
                 binding.etPlanName.text.toString())
 
             lifecycleScope.launch {

@@ -32,6 +32,7 @@ import com.app.ecarepro.model.RecentAppreciation
 
         val binding = DataBindingUtil.getBinding<DisciplineViewListItemBinding>(holder.itemView)
         if (binding!=null){
+            var isMaxLineOne=true
             val data=recentInfractions[position]
             binding.ivDelete.isVisible=data.canDelete
             binding.tvMedicineName.text= buildString {
@@ -52,6 +53,17 @@ import com.app.ecarepro.model.RecentAppreciation
             binding.tvDiagnosis.text= data.reward
             binding.tvRemark.text= data.remark
             binding.tvAttdentName.text= data.staffName
+
+            binding.tvRemark.setOnClickListener {
+
+                if (isMaxLineOne) {
+                    binding.tvRemark.maxLines = Int.MAX_VALUE
+                    isMaxLineOne=false
+                } else {
+                    binding.tvRemark.maxLines = 1
+                    isMaxLineOne=true
+                }
+            }
 
             binding.ivDelete.setOnClickListener {
                 val builder = AlertDialog.Builder(infractionListFragment.requireContext())

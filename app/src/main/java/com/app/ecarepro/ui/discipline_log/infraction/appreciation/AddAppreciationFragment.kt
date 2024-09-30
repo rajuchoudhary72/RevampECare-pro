@@ -370,7 +370,7 @@ class AddAppreciationFragment : Fragment() {
                 subAppreciationCatData.aprSubID,
                 appreciationReward.rwdID,
                 binding.tvInstance.text.toString().toInt(),
-                Constant.getCurrentDateTime(),
+                Constant.getCurrentDateTimeSecond(),
                 binding.etRemark.text.toString())
 
             lifecycleScope.launch {

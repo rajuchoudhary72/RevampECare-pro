@@ -258,13 +258,24 @@ class Constant {
             return df.format(c)
         }
 
+//        fun getCurrentDateTime():String{
+//            val c: Date = Calendar.getInstance().time
+//            val df = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
+//            return df.format(c)
+//        }
+
         fun getCurrentDateTime():String{
-            val c: Date = Calendar.getInstance().time
-            val df = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
-            return df.format(c)
+            val calendar = Calendar.getInstance()
+            val currentDate = calendar.time
+            val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
+            return  dateFormat.format(currentDate)
         }
 
-
+        fun getCurrentDateTimeSecond(): String {
+            val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.ENGLISH)
+            val currentDate = Date()
+            return dateFormat.format(currentDate)
+        }
 
        /* fun incrementDateByDay( noOfDays:Int):Long{
             val c = Calendar.getInstance()

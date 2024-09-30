@@ -96,7 +96,7 @@
                     android:padding="@dimen/_4sdp"
                     android:text="Only App Message"
                     android:textSize="@dimen/_14sdp"
-                    android:fontFamily="@font/ubuntu_medium" />
+                      />
             </RadioGroup>
             <TextView
                 android:id="@+id/tv_sub_text_new"
