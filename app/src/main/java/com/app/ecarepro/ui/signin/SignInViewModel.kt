@@ -24,6 +24,7 @@ class SignInViewModel @Inject constructor(
     private val schoolDatabase: SchoolDatabase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    val isStudentLoginBlocked = savedStateHandle.get<Boolean>("isStudentLoginBlocked")
     val schoolCode = savedStateHandle.get<String>("schoolCode")
         ?: throw IllegalArgumentException("School code required")
 

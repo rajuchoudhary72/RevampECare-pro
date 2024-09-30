@@ -211,11 +211,12 @@ class ProfileFragment : Fragment() {
                             if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
                             } else {
-                                if (it.userType==3){
+                               /* if (it.userType==3){
                                     it.name + "(${it.designation})"
                                 }else{
                                     it.name + "(${it.roleName})"
-                                }
+                                }*/
+                                it.name + "(${it.roleName})"
                             }
 
                         )

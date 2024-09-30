@@ -159,7 +159,7 @@ class SignInFragment : Fragment() {
             }
         }
         binding.btnForgotPassword.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
+            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode, "isStudentLoginBlocked" to mViewModel.isStudentLoginBlocked))
         }
         binding.btnPrevious.setOnClickListener {
             if (userNameValid) {
