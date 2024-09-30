@@ -212,6 +212,11 @@ class ProfileFragment : Fragment() {
                                 "N/A (${it.roleName})"
                             } else {
                                 it.name + "(${it.roleName})"
+                               /* if (it.userType==3){
+                                    it.name + "(${it.designation})"
+                                }else{
+                                    it.name + "(${it.roleName})"
+                                }*/
                             }
 
                         )
@@ -391,16 +396,18 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.club))
             subTitle(profile.club)
         }
-        profileItem {
+      /*  profileItem {
             id(R.string.bank_account_number)
             iconRes(R.drawable.ic_bank_account)
             title(getString(R.string.bank_account_number))
+
         }
         profileItem {
             id(R.string.uan_account_number)
             iconRes(R.drawable.ic_uan)
             title(getString(R.string.uan_account_number))
-        }
+
+        }*/
         profileItem {
             id(R.string.emergencyContactNo)
             iconRes(R.drawable.ic_contact_no_)
