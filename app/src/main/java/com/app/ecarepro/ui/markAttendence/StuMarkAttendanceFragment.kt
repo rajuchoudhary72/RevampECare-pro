@@ -550,7 +550,15 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             }
         }
 
-
+        lifecycleScope.launch {
+            stuMarkAttendanceViewModel.postMarkAttendanceStateFlow.collectLatest {  when (it) {
+                is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                      } }  } }
     }
 
     override fun onItemClick(t: StudentAtt, pos: Int, boolean: Boolean) {
@@ -665,6 +673,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     .show()
              } else   {
                 dialog.dismiss()
+                (requireActivity() as MainActivity).showLoader(true)
                 stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
                     mainActivity().showMessage(message)
