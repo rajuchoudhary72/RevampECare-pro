@@ -23,6 +23,8 @@
             app:layout_collapseMode="pin"
             app:titleCentered="true"
             android:elevation="8dp"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+
             app:title="Add Question Bank"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:theme="@style/MyThemeOverlay_Toolbar"

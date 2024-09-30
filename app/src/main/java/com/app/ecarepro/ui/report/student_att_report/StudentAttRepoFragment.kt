@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
@@ -38,6 +39,9 @@ class StudentAttRepoFragment : Fragment() {
     ): View {
         binding=FragmentStudentAttRepoBinding.inflate(inflater,container,false)
          id = requireArguments().getString(Constant.ID).toString()
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
          return binding.root
     }
 
@@ -139,14 +143,13 @@ class StudentAttRepoFragment : Fragment() {
 
     private fun setupAttDetails(data: NetworkStudentAttRepo) {
         with(binding) {
-            schoolday.text=data.schoolDays.toString()
+            workingDay.text=data.workingDays.toString()
             presentDay.text=data.presentDays.toString()
             absentDay.text=data.absentDays.toString()
             leaveDay.text=data.leaveDays.toString()
             tvLateCount.text=data.lateDays.toString()
 
-            val totalStudent = data.totalPresent + data.totalPresent +  data.totalPresent + data.totalPresent
-            totalSchoolDay.text=totalStudent.toString()
+             totalSchoolDay.text=data.schoolDays.toString()
             totalPresentDay.text=data.totalPresent.toString()
             totalAbsentDay.text=data.totalAbsent.toString()
             totalLeaveDay.text=data.totalLeave.toString()
@@ -156,30 +159,31 @@ class StudentAttRepoFragment : Fragment() {
 
             try {
                 perPresent.text = buildString {
-                    append(
-                        ((data.totalPresent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalPresent, data.schoolDays))
                     append("%")  }
                 perAbsent.text = buildString {
-                    append(
-                        ((data.totalAbsent * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalAbsent, data.schoolDays))
+
                     append("%")  }
                 perLeave.text = buildString {
-                    append(
-                        ((data.totalLeave * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalLeave, data.schoolDays))
+
                     append("%")  }
                 tvLateCircle.text = buildString {
-                    append(
-                        ((data.totalLates * 100 / totalStudent * 100.0).roundToInt() / 100.0).toString()
-                    )
+
+                    append(setCalculatedPercentageToInt(data.totalLates, data.schoolDays))
+
                     append("%")  }
             }catch (_:Exception){ }
 
-
-
-
         }
     }
+
+    private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Double {
+        return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00)
+    }
+
 }

@@ -41,7 +41,6 @@ import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
-import com.app.ecarepro.ui.TryAttendanceTest2
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.Constant
@@ -98,12 +97,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
-      binding.imgUserAvatar.setOnClickListener {
-        //  findNavController().navigate(R.id.profileFragment)
-          val intent =
-              Intent(requireActivity(), TryAttendanceTest2::class.java)
-          startActivity(intent)
-      }
+      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
       binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(

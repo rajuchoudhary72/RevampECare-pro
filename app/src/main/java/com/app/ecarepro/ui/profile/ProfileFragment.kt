@@ -211,7 +211,11 @@ class ProfileFragment : Fragment() {
                             if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
                             } else {
-                                it.name + "(${it.roleName})"
+                                if (it.userType==3){
+                                    it.name + "(${it.designation})"
+                                }else{
+                                    it.name + "(${it.roleName})"
+                                }
                             }
 
                         )
@@ -342,6 +346,12 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.religin_icon)
             title(getString(R.string.religion))
             subTitle(profile.religion)
+        }
+        profileItem {
+            id(R.string.blood_group)
+            iconRes(R.drawable.ic_chat_bubble)
+            title(getString(R.string.blood_group))
+            subTitle(profile.bloodGroup)
         }
         profileItem {
             id(R.string.qualification)

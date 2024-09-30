@@ -274,6 +274,9 @@ public class TryRVCellAdapter extends RecyclerView.Adapter<TryRVCellAdapter.View
                             case 3:
                                 list.add(day + "-leave" + "-" + getMonthAsString(currentMonth) + "-" + yy+"-"+FragmentAPI.report_arraylist.get(aSize).getTemp());
                                 break;
+                            case 6:
+                                list.add(day + "-holiday" + "-" + getMonthAsString(currentMonth) + "-" + yy+"-"+FragmentAPI.report_arraylist.get(aSize).getTemp());
+                                break;
                             case 5:
                                 if (FragmentAPI.report_arraylist.get(aSize).getDuration() > 0) {
                                     for (int i = 0; i < FragmentAPI.report_arraylist.get(aSize).getDuration(); i++) {
@@ -289,7 +292,6 @@ public class TryRVCellAdapter extends RecyclerView.Adapter<TryRVCellAdapter.View
                             default:
                                 list.add(day + "-nothing" + "-" + getMonthAsString(currentMonth) + "-" + yy+"-"+FragmentAPI.report_arraylist.get(aSize).getTemp());
                                 break;
-
                         }
                         break;
                     }

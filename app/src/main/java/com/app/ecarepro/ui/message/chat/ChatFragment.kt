@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -21,6 +22,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.Sender
 import com.app.ecarepro.databinding.FragmentChatBinding
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.receiverChatMessage
@@ -35,6 +37,7 @@ import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileClickListener
+import com.app.ecarepro.utils.imageUrl
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -115,11 +118,9 @@ class ChatFragment : Fragment() {
 
     private fun handleUiState(uiState: ChatUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
-
         uiState.getErrorOrNull()?.let { error ->
             mainActivity().showMessage(error.message ?: "")
         }
-
         if (uiState is ChatUiState.Success || uiState == ChatUiState.EmptyInbox) {
             binding.recyclerView.withModels {
                 when (uiState) {
@@ -128,8 +129,8 @@ class ChatFragment : Fragment() {
                             id(R.id.empty_view)
                         }
                     }
-
                     is ChatUiState.Success -> {
+                       // setUpToolbar(uiState.senderDTL)
                         binding.tvSubject.text = "Sub: ${uiState.subject}"
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
@@ -177,13 +178,28 @@ class ChatFragment : Fragment() {
                         }
 
                     }
-
                     else -> {}
                 }
             }
         }
     }
+  /*  private fun setUpToolbar(sender: Sender) {
+        binding.apply {
+            photo.imageUrl(
+                sender.photo,
+                ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
+            )
+            name.text = sender.name
+            if (sender.senderType==3){
+                designation.text = sender.designation
+            }else  if (sender.senderType==1){
+                designation.text = "Class :- "+ sender.className
+            } else  if (sender.senderType==2){
+                designation.text = "P/O  " + sender.childName+" , "+ sender.className
+            }
 
+        }
+    }*/
     private fun openPhoto(photo: String?) {
         if (photo.isNullOrEmpty()) return
         if (isPdfUrl(photo)) {

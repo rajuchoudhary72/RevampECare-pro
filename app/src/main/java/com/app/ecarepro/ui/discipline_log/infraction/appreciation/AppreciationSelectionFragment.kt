@@ -21,6 +21,9 @@ import com.app.ecarepro.utils.Constant
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentAppreciationSelectionBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 

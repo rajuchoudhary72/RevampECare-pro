@@ -43,7 +43,9 @@ interface MessageRepository {
         messageType: MessageType
     ): Flow<Result<ConversationDetailsDto>>
 
-
+    suspend fun deleteSentMessage(
+        id:String
+    ): Flow<Result<String>>
 
     fun replyMessage(
         request: ReplyMessageRequestDto

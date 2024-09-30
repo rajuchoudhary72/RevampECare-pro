@@ -355,7 +355,7 @@ public class Generic {
     }
 
     public static boolean checkCurrentDate(String dt) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         simpleDateFormat.setTimeZone(TimeZone.getDefault());
         Date dateTime = null;
         SimpleDateFormat finalDate = new SimpleDateFormat("dd MMM, yyyy");

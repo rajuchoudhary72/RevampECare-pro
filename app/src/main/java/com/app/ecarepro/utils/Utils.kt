@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
-import com.app.ecarepro.ui.CalenderInstance
 import com.app.ecarepro.ui.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.lang.String.format
@@ -19,6 +18,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import com.app.ecarepro.ui.CalenderInstance
 
 fun Int.toPx(context: Context) =
     (this * context.resources.displayMetrics.densityDpi) / DisplayMetrics.DENSITY_DEFAULT
@@ -32,6 +32,12 @@ fun stringFormat2String(stringId1: MainActivity, stringId: Int, value1: String?,
         value2
     )
 }
+fun calenderInstance(){
+    val calendar = Calendar.getInstance()
+    CalenderInstance.currentYear = calendar[Calendar.YEAR]
+    CalenderInstance.currentMonth = calendar[Calendar.MONTH]
+    CalenderInstance.currentDateDD = calendar[Calendar.DATE]
+}
 fun getDayNumberSuffix(day: Int): String {
     if (day >= 11 && day <= 13) {
         return "th"
@@ -44,6 +50,9 @@ fun getDayNumberSuffix(day: Int): String {
     }
 }
 fun date_converterDay(s: String?): String {
+    if (s==null){
+        return 0.toString()
+    }
     val isoFormat =
         SimpleDateFormat("dd-MMM-yyyy")
     isoFormat.timeZone = TimeZone.getDefault()
@@ -51,9 +60,11 @@ fun date_converterDay(s: String?): String {
         SimpleDateFormat("dd")
     var date: Date? = null
     try {
+
         date = isoFormat.parse(s)
     } catch (e: ParseException) {
         e.printStackTrace()
+        return s.split("-")[0]
     }
     return isoFormatDay.format(date)
 }
@@ -121,12 +132,4 @@ fun getDateTimeFormatted(DateTime: String): String {
         return ""
     }
 
-
-
-}
-fun calenderInstance(){
-    val calendar = Calendar.getInstance()
-    CalenderInstance.currentYear = calendar[Calendar.YEAR]
-    CalenderInstance.currentMonth = calendar[Calendar.MONTH]
-    CalenderInstance.currentDateDD = calendar[Calendar.DATE]
 }

@@ -57,9 +57,10 @@ class TryFragmentFive  //
             calender2!!.adapter = adapter2
         } catch (e: Exception) {
             e.stackTrace
-            Toast.makeText(context, TryAttendanceTest2.server_error, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun setId(view: View) {
         calender2 = view.findViewById(R.id.calendar2)

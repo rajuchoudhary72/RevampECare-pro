@@ -287,7 +287,6 @@ class StudentProfileAttendanceFragment(
     }
 
     override fun onItemClick(t: SummaryAttendance, pos: Int, boolean: Boolean) {
-
         val intent = Intent(requireActivity(), TryAttendanceTest2::class.java)
         val bundle = Bundle()
         bundle.putString("studentID",id)
@@ -295,6 +294,7 @@ class StudentProfileAttendanceFragment(
         bundle.putString("tillDate",t.endDate)
         intent.putExtras(bundle)
         startActivity(intent)
+
        /* findNavController().navigate(R.id.showAttendanceFragment,Bundle().apply {
             putString("studentID",id)
             putString("formDate",t.startDate)

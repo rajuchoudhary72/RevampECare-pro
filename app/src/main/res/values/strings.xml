@@ -359,6 +359,7 @@
     <string name="treatment">Treatment</string>
     <string name="tap_for_more">tap for more</string>
     <string name="from_s_till_today">From %s - Till Today</string>
+    <string name="from_april_s_till_today">From April  - Till Today</string>
     <string name="total_school_college_days">Total School Days</string>
     <string name="total_leave">Total Leave</string>
     <string name="total_late">Total Late</string>
@@ -728,18 +729,16 @@
     <string name="save_remark">Save Remark</string>
     <string name="copy_to_all"> <u>Copy To All</u></string>
     <string name="approved_leave">Approved leave</string>
+    <string name="appreciation">Appreciation</string>
+
     <string name="late_by"><b>Late by :</b> %s</string>
     <string name="inTime"><b>In Time :</b> %s</string>
     <string name="OutTime"><b>Out Time :</b> %s</string>
     <string name="no_activity_calender">No Activity Found</string>
     <string name="s">S</string>
-
     <string name="m">M</string>
-
     <string name="t">T</string>
-
     <string name="w">W</string>
-
     <string name="f">F</string>
     <string name="present_today">Present Today</string>
     <string name="a">A</string>
@@ -749,26 +748,15 @@
     <string name="total_late_days">Total Late</string>
     <string name="attendance">Attendance</string>
     <string name="jan">January</string>
-
     <string name="feb">"February"</string>
-
     <string name="mar">March</string>
-
     <string name="apr">April</string>
-
     <string name="may">May</string>
-
     <string name="jun">June</string>
-
     <string name="jul">July</string>
-
     <string name="aug">August</string>
-
     <string name="sep">September</string>
-
     <string name="oct">October</string>
-
     <string name="nov">November</string>
-
     <string name="dec">December</string>
 </resources>

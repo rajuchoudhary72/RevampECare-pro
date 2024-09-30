@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userDataStore: UserDataStore
-
     @Inject
     lateinit var userDatabase: UserDatabase
     private val topLevelFragments = mutableListOf(
@@ -171,7 +170,6 @@ class MainActivity : AppCompatActivity() {
         binding.itemDrawerHeader.imgUserAvatar.setOnClickListener {
             navController.navigate(R.id.profileFragment)
             systemViewModel.openDrawer(false)
-
         }
 
 
@@ -354,64 +352,60 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun handleNotificationClick(data: Bundle) {
-        lifecycleScope.launch {
-            showLoader(true)
-            delay(2000)
+        private fun handleNotificationClick(data: Bundle) {
+            lifecycleScope.launch {
+                showLoader(true)
+                delay(2000)
 
-            Log.e(
-                "Note",
-                data.keySet().joinToString() { key -> "$key -> ${data.get(key).toString()}" })
-            val schCode = data.getString("SchCode") ?: return@launch
-            val userID = data.getString("UserID")?.toInt() ?: return@launch
-            val userType = data.getString("UserType")?.toInt() ?: return@launch
-            val menuId = data.getString("MenuId")?.toInt()
-            val childMenuId = data.getString("ChMenuID")?.toInt()
+                Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
+                val schCode = data.getString("SchCode") ?: return@launch
+                val userID = data.getString("UserID")?.toInt() ?: return@launch
+                val userType = data.getString("UserType")?.toInt() ?: return@launch
+                val menuId = data.getString("MenuId")?.toInt()
+                val childMenuId = data.getString("ChMenuID")?.toInt()
 
-            Log.e("Note", "$schCode $userID $menuId $childMenuId")
+                Log.e("Note", "$schCode $userID $menuId $childMenuId" )
 
-            if (userDataStore.getUsersFlow().first()
-                    .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
-            ) {
-                Log.e("Note", "return@launch")
-                return@launch
-            }
-
-            val currentSchool = userDataStore.getSchoolData()
-            if (currentSchool?.schoolCode != schCode) {
-                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)")
-                userDataStore.setCurrentSchoolCode(schCode!!)
-            }
-
-            val currentUser = userDataStore.getUser()
-            if (currentUser?.userId != userID) {
-                Log.e("Note", "userDataStore.setCurrentUserId(userID)")
-                userDatabase.getUser(userID, schCode, userType)?.id?.let {
-                    userDataStore.setCurrentUserId(it)
+                if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
+                    Log.e("Note", "return@launch", )
+                    return@launch
                 }
+
+                val currentSchool = userDataStore.getSchoolData()
+                if (currentSchool?.schoolCode != schCode) {
+                    Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
+                    userDataStore.setCurrentSchoolCode(schCode!!)
+                }
+
+                val currentUser = userDataStore.getUser()
+                if (currentUser?.userId != userID) {
+                    Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
+                            userDatabase.getUser(userID, schCode, userType)?.id?.let {
+                                userDataStore.setCurrentUserId(it)
+                            }
+                }
+
+                if (menuId != null) {
+                    if (childMenuId != null) {
+                        Log.e("Note","getFragmentId(menuId, childMenuId)", )
+                        getFragmentId(menuId, childMenuId)
+                    }
+                }
+                showLoader(false)
             }
 
-            if (menuId != null) {
-                if (childMenuId != null) {
-                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId)
-                }
-            }
-            showLoader(false)
         }
 
-    }
-
-    /*
-        private fun handleNotificationClick(data: Bundle) {
-            val menuId = data.getString("MenuId")?.toInt()
-            val childMenuId = data.getString("ChMenuID")?.toInt()
-            if (menuId != null) {
-                if (childMenuId != null) {
-                    getFragmentId(menuId, childMenuId)
-                }
+/*
+    private fun handleNotificationClick(data: Bundle) {
+        val menuId = data.getString("MenuId")?.toInt()
+        val childMenuId = data.getString("ChMenuID")?.toInt()
+        if (menuId != null) {
+            if (childMenuId != null) {
+                getFragmentId(menuId, childMenuId)
             }
-        }*/
+        }
+    }*/
 
     private fun checkAppVersion() {
         lifecycleScope.launch {
@@ -500,7 +494,6 @@ class MainActivity : AppCompatActivity() {
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
-
     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
@@ -734,19 +727,8 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                userDataStore.getUser()?.run {
-                                    if (roleName == "Principal" || roleName == "Management") {
-                                        navController.navigate(
-                                            R.id.classAndTeacherListFragment,
-                                            Bundle().apply {
-                                                putString(Constant.TO, Constant.FRA_TIMETABLE)
-                                            })
-                                    } else {
-                                        navController.navigate(R.id.timeTableNavHostFragment)
-                                    }
-                                }
 
-
+                                navController.navigate(R.id.timeTableNavHostFragment)
                             } else {
                                 navController.navigate(
                                     R.id.timeTableNavHostFragment,
@@ -799,11 +781,10 @@ class MainActivity : AppCompatActivity() {
                             if (userType == Constant.STAFF_TYPE) {
                                 navController.navigate(R.id.attendanceFragment)
                             } else {
-                               val intent1 = Intent(this@MainActivity, TryAttendanceTest2::class.java)
+                                val intent1 = Intent(this@MainActivity, TryAttendanceTest2::class.java)
                                 startActivity(intent1)
-                             //navController.navigate(R.id.showAttendanceFragment)
 
-
+                            //    navController.navigate(R.id.showAttendanceFragment)
                             }
                         } catch (_: Exception) {
                         }
@@ -1080,6 +1061,17 @@ class MainActivity : AppCompatActivity() {
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                     47 -> navController.navigate(R.id.surveyListFragment)
+                    64 ->  {
+
+                        navController.navigate(
+                            R.id.classAndTeacherListFragment,
+                            Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_TIMETABLE)
+                            })
+
+                    }
+
+
 
 
                 }
@@ -1193,7 +1185,6 @@ class MainActivity : AppCompatActivity() {
                             3 -> {
                                 navController.navigate(R.id.assignHomeFragment)
                             }
-
                             10 -> {
                                 navController.navigate(R.id.updateStudentsProfileFragment)
                             }

@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @AndroidEntryPoint
 class SentMessageFragment : Fragment() {
@@ -188,6 +189,7 @@ class SentMessageFragment : Fragment() {
                             sentMessageCard {
                                 id(message.id)
                                 name(message.subject)
+                                canDelete(message.canDelete)
                                 recipients(
                                     if (message.recipients.isNullOrEmpty()) {
                                         null
@@ -214,6 +216,21 @@ class SentMessageFragment : Fragment() {
                                             "MessageType" to MessageType.SENT.value
                                         )
                                     )
+                                }
+                                deleteMessageListener { _ ->
+                                    MaterialAlertDialogBuilder(requireContext())
+                                        .setTitle("Delete Message")
+                                        .setMessage("Are you sure to delete this message?")
+                                        .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                            sentMessageViewModel.deleteMessage(message.id) { isLoading, msg ->
+                                                mainActivity().showLoader(isLoading)
+                                                msg?.let {
+                                                    mainActivity().showMessage(it)
+                                                }
+                                            }
+                                        }
+                                        .setNegativeButton(getString(R.string.no)) { _, _ -> }
+                                        .show()
                                 }
                             }
                         }

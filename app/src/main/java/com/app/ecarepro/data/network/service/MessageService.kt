@@ -48,7 +48,10 @@ interface MessageService {
         @Query("pg") pg: Int,
         @Query("ID") id: String
     ): MessageFormDto
-
+    @GET("Message/DeleteMessage")
+    suspend fun deleteSentMessage(
+        @Query("ID") id: String,
+    ): CommonResponse
     @GET("Message/SearchInbox")
     suspend fun searchConversation(
         @Query("pg") pg: Int,

@@ -60,6 +60,20 @@ class StudentListMarkAttAdapter(
 
         binding.tvMarkLate.isVisible=isLateEnable
 
+        if (data.isConstant == 1) {
+            binding.tvMarkPresent.isEnabled = false
+            binding.tvMarkAbsent.isEnabled = false
+            binding.tvMarkLeave.isEnabled = false
+            binding.tvMarkLate.isEnabled = false
+            binding.tvMarkNa.isEnabled = false
+        }else{
+            binding.tvMarkPresent.isEnabled = true
+            binding.tvMarkAbsent.isEnabled = true
+            binding.tvMarkLeave.isEnabled = true
+            binding.tvMarkLate.isEnabled = true
+            binding.tvMarkNa.isEnabled = true
+        }
+
         if (canEdit) {
             binding.tvMarkPresent.isEnabled = true
             binding.tvMarkAbsent.isEnabled = true
@@ -81,13 +95,7 @@ class StudentListMarkAttAdapter(
         when (data.status) {
             1 -> if (data.isLate == 0) {
                 binding.tvApproveLeave.isVisible=false
-                if (data.isConstant == 1) {
-                    binding.tvMarkPresent.isEnabled = false
-                    binding.tvMarkAbsent.isEnabled = false
-                    binding.tvMarkLeave.isEnabled = false
-                    binding.tvMarkLate.isEnabled = false
-                    binding.tvMarkNa.isEnabled = false
-                }
+
 
                 /*binding.tvMarkPresent.text = "P"
                 binding.tvMarkPresent.setTextColor(
@@ -116,13 +124,7 @@ class StudentListMarkAttAdapter(
 
             2 -> {
                 binding.tvApproveLeave.isVisible=false
-                if (data.isConstant == 1) {
-                    binding.tvMarkPresent.isEnabled = false
-                    binding.tvMarkAbsent.isEnabled = false
-                    binding.tvMarkLeave.isEnabled = false
-                    binding.tvMarkLate.isEnabled = false
-                    binding.tvMarkNa.isEnabled = false
-                }
+
                 /*binding.tvMarkAbsent.text = "A"
                 binding.tvMarkAbsent.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkAbsent.background =
@@ -134,11 +136,7 @@ class StudentListMarkAttAdapter(
             3 -> {
                 binding.tvApproveLeave.isVisible=false
                 if (data.isConstant == 1) {
-                    binding.tvMarkPresent.isEnabled = false
-                    binding.tvMarkAbsent.isEnabled = false
-                    binding.tvMarkLeave.isEnabled = false
-                    binding.tvMarkLate.isEnabled = false
-                    binding.tvMarkNa.isEnabled = false
+
                     binding.tvApproveLeave.isVisible=true
                 }
                /* binding.tvMarkLeave.text = "L"
@@ -151,13 +149,7 @@ class StudentListMarkAttAdapter(
 
             4 -> {
                 binding.tvApproveLeave.isVisible=false
-                if (data.isConstant == 1) {
-                    binding.tvMarkPresent.isEnabled = false
-                    binding.tvMarkAbsent.isEnabled = false
-                    binding.tvMarkLeave.isEnabled = false
-                    binding.tvMarkLate.isEnabled = false
-                    binding.tvMarkNa.isEnabled = false
-                }
+
                 /*binding.tvMarkNa.text = "NA"
                 binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkNa.background =

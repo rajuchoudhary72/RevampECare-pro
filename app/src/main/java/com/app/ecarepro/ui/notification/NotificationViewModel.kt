@@ -9,11 +9,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    appRepository: AppRepository
+    val appRepository: AppRepository
 ) : ViewModel() {
 
     val uiState = appRepository
@@ -35,6 +36,12 @@ class NotificationViewModel @Inject constructor(
             initialValue = NotificationUiState.Loading,
             started = SharingStarted.WhileSubscribed(400)
         )
+
+    fun markNotificationAsSeen(id: String) {
+        viewModelScope.launch {
+            appRepository.notificationSeen(id)
+        }
+    }
 
 }
 

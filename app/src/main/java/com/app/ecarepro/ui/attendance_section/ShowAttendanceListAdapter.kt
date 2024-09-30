@@ -30,7 +30,7 @@ class ShowAttendanceListAdapter(
             if (syllabusLST[position].status == 2) {
                 bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.red))
             } else if (syllabusLST[position].status == 7) {
-                bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.light))
+                bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.grey_light_compose_msg_headr_txt))
             }else if (syllabusLST[position].status == 6) {
                 bindings.llMain.setBackgroundColor(bindings.llMain.context.getColorRes(R.color.blue_light))
             }
