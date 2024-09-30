@@ -471,7 +471,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 p++
             else if (i.status == 2)
                 a++
-            else if (i.status == 3)
+            else if (i.status == 3 && i.isConstant != 1)
                 l++
             else if (i.status == 1 && i.isLate == 1)
                 lt++
@@ -499,13 +499,16 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private fun saveMarkAttendance(){
         var mode : Int = 1
         mode = if (from==getString(R.string.subject_attendance)){
-            1
-        }else{
             2
+        }else{
+            1
         }
          uploadStudentList.clear()
         for (i in studentListArrayList) {
-            uploadStudentList.add(StudentAtt(i.isLate,i.stID,i.status))
+            if (i.isConstant==0){
+                uploadStudentList.add(StudentAtt(i.isLate,i.stID,i.status))
+            }
+
 
         }
 

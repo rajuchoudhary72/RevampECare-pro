@@ -412,9 +412,9 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun infractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        InfrTypeID: Int
+        stID: Int
     ): NetworkInfractionInstance {
-        return userService.infractionInstance(infrTypeID, InfrSubTypeID, InfrTypeID)
+        return userService.infractionInstance(infrTypeID, InfrSubTypeID, stID)
     }
 
     override suspend fun addInfraction(stID: Int): NetworkAddInfraction {
