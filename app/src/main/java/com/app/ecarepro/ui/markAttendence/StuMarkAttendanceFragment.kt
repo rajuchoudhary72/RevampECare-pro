@@ -16,7 +16,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.view.isVisible
+ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -76,6 +76,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var l  = 0
     private var lt  = 0
     private var na  = 0
+    private lateinit var   dialog  : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,6 +95,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+          dialog = Dialog(requireContext())
+
         from=  getString(R.string.class_attendance)
         binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -140,6 +144,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     subID=0
                     binding.autoCompleteSub.setText("Select Subject ",false)
                     classID=classesForClsTeaches[pos].classID
+                    className=classesForClsTeaches[pos].className
                     getStudentListToMarkAtt(classID,subID)
                 }
 
@@ -174,7 +179,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                         }
                     }
                 }
-            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+            })
         }
 
 
@@ -276,8 +281,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 layoutManager = LinearLayoutManager(activity)
                                 adapter = studentListMarkAttAdapter
                             }
-
+                                if (dialog.isShowing) {
+                                    dialog.dismiss()
+                                }
                             if (it.data.pendingLeave > 0) {
+
                                 showPendingAlertDialog(it.data.pendingLeave)
                             }
 
@@ -301,9 +309,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         val cv_yes: CardView
         val cv_no: CardView
         val cv_skip: CardView
-        val dialog = Dialog(requireContext())
+
+        dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
         if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
             ColorDrawable(Color.TRANSPARENT)
         )
@@ -318,20 +326,31 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         cv_no = dialog.findViewById<CardView>(R.id.cv_no)
         cv_skip = dialog.findViewById<CardView>(R.id.cv_skip)
 
-        dialog.show()
+
 
         cv_no.setOnClickListener { view: View? ->
             dialog.dismiss()
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
             findNavController().popBackStack()
         }
         cv_yes.setOnClickListener { view: View? ->
+            dialog.dismiss()
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
             findNavController().navigate(R.id.leaveReportFragment, Bundle().apply {
                 putString(Constant.TO, Constant.FRA_STU_LEAVE)
             })
         }
         cv_skip.setOnClickListener { view: View? ->
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
             dialog.dismiss()
         }
+        dialog.show()
     }
 
     private fun getSubjectList(classID: Int) {
@@ -543,7 +562,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 else SuccessAlertPopup(
                     "",
                     String.format(
-                        requireContext().resources.getString(R.string.attendance__alert),
+                        requireContext().resources.getString(R.string.attendance_locked_alert_for_subject),
                         subjectName + ""
                     )
                 )

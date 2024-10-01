@@ -21,6 +21,7 @@ class TransportAttReportAdapter(
     RecyclerView.Adapter<TransportAttReportAdapter.NoticeViewHolder>() {
 
         private lateinit var bindingm:   ItemTransAttendanceBinding
+        var globalPosition = 1
 
 
 
@@ -36,20 +37,22 @@ class TransportAttReportAdapter(
         val data= stopLSTList[position]
         binding?.apply {
             tvStopName.text=data.stopName
-            addLayout(binding.llView,data.stuLst)
+            addLayout(binding.llView,data.stuLst,position)
         }
 
     }
 
-    private fun addLayout(mLinearLayout: LinearLayout, items: List<StuLst>?) {
+    private fun addLayout(mLinearLayout: LinearLayout, items: List<StuLst>?, position: Int) {
         mLinearLayout.removeAllViews()
         if (items != null && items.size > 0) {
             var i = 0
             while (items.size > i) {
+
                 val item: StuLst = items[i]
                 val v: View = LayoutInflater.from(mLinearLayout.context)
                     .inflate(R.layout.item_trans_view, mLinearLayout, false)
                 val name = v.findViewById<TextView>(R.id.tv_stu_name)
+                val tvSerialNumber = v.findViewById<TextView>(R.id.tv_serial_number)
                 val tv_class = v.findViewById<TextView>(R.id.tv_class)
                 val tv_roll_no = v.findViewById<TextView>(R.id.tv_roll_no)
                 val tv_admission_no = v.findViewById<TextView>(R.id.tv_admission_no)
@@ -64,6 +67,7 @@ class TransportAttReportAdapter(
                 tv_class.text = "Class: " + item.className
                 tv_roll_no.text = "Roll No.:" + item.rollNo
                 tv_admission_no.text = "Admission No. : " + item.admissionNo
+                tvSerialNumber.text = globalPosition.toString()
                 when (item.pickupAtt) {
                     "Present" -> {
                         tvPickup.setTextColor(v.context.resources.getColor(R.color.disabled))
@@ -101,6 +105,7 @@ class TransportAttReportAdapter(
                 }
                 mLinearLayout.addView(v)
                 i++
+                globalPosition++
             }
         }
     }

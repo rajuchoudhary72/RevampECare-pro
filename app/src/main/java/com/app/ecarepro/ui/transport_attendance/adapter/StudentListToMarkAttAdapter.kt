@@ -61,6 +61,7 @@ class StudentListToMarkAttAdapter(
                 tvRollNo.text = "Roll No: " + data.rollNo
                 tvClassName.text = "Class: " + data.className
                 tvAdmissionNo.text = "Admission No: " + data.admissionNo
+                tvSerialNumber.text = (absoluteAdapterPosition + 1).toString()
 
                 Picasso.get().load(data.photo)
                     .placeholder(R.drawable.default_profile)
