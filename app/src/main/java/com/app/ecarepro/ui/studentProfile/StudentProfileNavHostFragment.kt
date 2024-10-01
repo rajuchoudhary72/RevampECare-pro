@@ -14,6 +14,8 @@ import com.app.ecarepro.databinding.FragmentStudentProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.reportCard.ReportCardDetailsNavHostFragment
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerformanceNavHostFragment
 import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciationFragment
 import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
 import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
@@ -102,12 +104,24 @@ class StudentProfileNavHostFragment : Fragment() {
                                                     fragmentName.add("Attendance")
                                                 }
                                             }
-                                            "PersonalDetails" -> {
+                                            "AcademicPerformance" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
-                                                    fragmentName.add("Personal Details")
+                                                    fragmentList.add(
+                                                        AcademicPerformanceNavHostFragment( it.data.academicYears,studentID )
+                                                    )
+                                                    fragmentName.add("Academic Performance")
                                                 }
                                             }
+//                                            "ReportCard" -> {
+//                                                if (i.isShow){
+//
+//                                                    fragmentList.add(
+//                                                        ReportCardDetailsNavHostFragment(it.data.reportCardDTLs,true  )
+//                                                    )
+//                                                    fragmentName.add("Report Card")
+//                                                }
+//                                            }
+
                                             "FeeDetails" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery,it.data.academicYears,studentID))

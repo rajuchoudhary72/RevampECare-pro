@@ -205,7 +205,7 @@ class BirthdayFragment : Fragment() {
 
                                 val noticeAdapter = BirthListAdapter(
                                         it.data.usersBirthday,
-                                        this@BirthdayFragment
+                                        this@BirthdayFragment,userType
                                 )
 
                                 binding.recyclerNotice.apply {
