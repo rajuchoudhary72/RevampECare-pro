@@ -350,51 +350,56 @@ class TryAttendanceTest2 : AppCompatActivity() {
 
                     is NetworkResult.Success -> {
 
+
                         if (it.data != null) {
-                            it.data.let { data ->
-                                if (data.isLateEnable == true) {
-                                    isLateEnabled = true
-                                    late_days = "${data.lateDays}"
-                                    total_late =
-                                        "${data.totalLates}"
+                            if (it.data.errorCode == 0) {
+                                it.data.let { data ->
+                                    if (data.isLateEnable == true) {
+                                        isLateEnabled = true
+                                        late_days = "${data.lateDays}"
+                                        total_late =
+                                            "${data.totalLates}"
+                                    }
+                                    schooldays = "${data.schoolDays}"
+
+                                    absent_days = "${data.absentDays}"
+
+                                    leave_days = "${data.leaveDays}"
+
+                                    present_days = "${data.presentDays}"
+                                    total_absent = "${data.totalAbsent}"
+                                    total_leave = "${data.totalLeave}"
+                                    total_present = "${data.totalPresent}"
+                                    working_days = "${data.workingDays}"
+                                    session = data.academicYears[0].session
                                 }
-                                schooldays = "${data.schoolDays}"
+                                FragmentAPI.report_arraylist.clear()
+                                it.data.attendance?.let { it1 ->
 
-                                absent_days = "${data.absentDays}"
+                                    for (i in it1.indices) {
+                                        val report_attendance = RPT()
+                                        report_attendance.attDate = it1[i].attDate
+                                        report_attendance.status = it1[i].status
+                                        report_attendance.late = it1[i].isLate
+                                        report_attendance.duration = 1
+                                        FragmentAPI.report_arraylist.add(report_attendance)
+                                        if (Generic.checkCurrentDate(report_attendance.attDate)) today_status =
+                                            report_attendance.status
+                                    }
 
-                                leave_days = "${data.leaveDays}"
-
-                                present_days = "${data.presentDays}"
-                                total_absent = "${data.totalAbsent}"
-                                total_leave = "${data.totalLeave}"
-                                total_present = "${data.totalPresent}"
-                                working_days = "${data.workingDays}"
-                                session = data.academicYears[0].session
-                            }
-                            FragmentAPI.report_arraylist.clear()
-                            it.data.attendance?.let { it1 ->
-
-                                for (i in it1.indices) {
-                                    val report_attendance = RPT()
-                                    report_attendance.attDate = it1[i].attDate
-                                    report_attendance.status = it1[i].status
-                                    report_attendance.late = it1[i].isLate
-                                    report_attendance.duration = 1
-                                    FragmentAPI.report_arraylist.add(report_attendance)
-                                    if (Generic.checkCurrentDate(report_attendance.attDate)) today_status =
-                                        report_attendance.status
                                 }
+                                if (session_month_list.size > 0) {
 
+                                }
+                                else Toast.makeText(
+                                    context,
+                                    server_error,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                uiSetup()
+                                adapter!!.notifyDataSetChanged()
                             }
-                            if (session_month_list.size > 0) {
 
-                            } else Toast.makeText(
-                                context,
-                                server_error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            uiSetup()
-                            adapter!!.notifyDataSetChanged()
                         }
                         progressdialog?.dismiss()
                     }
