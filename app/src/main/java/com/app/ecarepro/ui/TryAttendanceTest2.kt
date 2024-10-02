@@ -398,8 +398,12 @@ class TryAttendanceTest2 : AppCompatActivity() {
                                 ).show()
                                 uiSetup()
                                 adapter!!.notifyDataSetChanged()
+                            }else{
+                                Toast.makeText(context, "Something  network issue  please try again ", Toast.LENGTH_SHORT).show()
                             }
 
+                        }else{
+                            Toast.makeText(context, "No Record Found ", Toast.LENGTH_SHORT).show()
                         }
                         progressdialog?.dismiss()
                     }
