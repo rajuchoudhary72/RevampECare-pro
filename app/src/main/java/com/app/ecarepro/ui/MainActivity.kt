@@ -437,26 +437,28 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
 
-                            if (versionName < it.data.android.currentVersion) {
-                                // open  dialog
-                                if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
-                                    //soft  update
-                                    UpdateAppVersionDialog(
-                                        0,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
+                            try {
+                                if (versionName < it.data.android.currentVersion) {
+                                    // open  dialog
+                                    if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
+                                        //soft  update
+                                        UpdateAppVersionDialog(
+                                            0,
+                                            it.data.android.title,
+                                            it.data.android.description
+                                        )
+                                    } else {
+                                        //force update
+                                        UpdateAppVersionDialog(
+                                            1,
+                                            it.data.android.title,
+                                            it.data.android.description
+                                        )
+                                    }
                                 } else {
-                                    //force update
-                                    UpdateAppVersionDialog(
-                                        1,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
+                                    // nothing  open  version  dialog
                                 }
-                            } else {
-                                // nothing  open  version  dialog
-                            }
+                            } catch (_: Exception) { }
 
                             /* if (versionCode < it.data.android.versionCode) {
 
@@ -700,7 +702,7 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                if (roleName == "Principal" || roleName == "Management") {
+                                if (roleName == Constant.PRINCIPAL || roleName == Constant.MANAGEMENT) {
                                     navController.navigate(
                                         R.id.classAndTeacherListFragment,
                                         Bundle().apply {
@@ -1042,7 +1044,7 @@ class MainActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
-                                    if (roleName == "Principal" || roleName == "Management") {
+                                    if (roleName == Constant.PRINCIPAL || roleName == Constant.MANAGEMENT) {
                                         navController.navigate(
                                             R.id.classAndTeacherListFragment,
                                             Bundle().apply {

@@ -29,9 +29,6 @@ class ReportCardDetailsNavHostFragment(  ) : Fragment() {
 
 
 
-     companion object {
-        fun newInstance(  )  { }
-    }
 
 
 
@@ -41,6 +38,7 @@ class ReportCardDetailsNavHostFragment(  ) : Fragment() {
     ): View  {
         binding = FragmentReportCardNavHostBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         return binding.root
     }
 
@@ -49,37 +47,6 @@ class ReportCardDetailsNavHostFragment(  ) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-//            if (isFromStudentProfile){
-//                binding.toolbar.isVisible=false
-//                if (reportCardDTLs!=null ) {
-//
-//                    val fragmentList : ArrayList<Fragment> = ArrayList()
-//
-//                    reportCardDTLs. forEach { itemDat ->
-//                        fragmentList.add( ReportCardDetailsFragment(itemDat  ))
-//                    }
-//
-//                    val viewPagerAdapter = ViewPagerAdapter(
-//                        fragmentList,
-//                        activity?.supportFragmentManager!!,
-//                        lifecycle
-//                    )
-//                    binding.viewPager.adapter = viewPagerAdapter
-//
-//
-//                    TabLayoutMediator(
-//                        binding.tabLayout,
-//                        binding.viewPager
-//                    ) { tab, position ->
-//
-//                        tab.text = reportCardDTLs[position].className
-//
-//                    }.attach()
-//
-//
-//                }
-//            }
-//         else{
             lifecycleScope.launch {
                 reportCardDetailsViewModel.reportCardDetailsStateFlow.collectLatest {
 

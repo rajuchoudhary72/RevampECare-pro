@@ -90,6 +90,12 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                }else{
+                    binding.tvMarkPresent.isEnabled = true
+                    binding.tvMarkAbsent.isEnabled = true
+                    binding.tvMarkLeave.isEnabled = true
+                    binding.tvMarkLate.isEnabled = true
+                    binding.tvMarkNa.isEnabled = true
                 }
 
                 /*binding.tvMarkPresent.text = "P"
@@ -128,6 +134,12 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                }else{
+                    binding.tvMarkPresent.isEnabled = true
+                    binding.tvMarkAbsent.isEnabled = true
+                    binding.tvMarkLeave.isEnabled = true
+                    binding.tvMarkLate.isEnabled = true
+                    binding.tvMarkNa.isEnabled = true
                 }
                 /*binding.tvMarkAbsent.text = "A"
                 binding.tvMarkAbsent.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
@@ -147,6 +159,12 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
                     binding.tvApproveLeave.isVisible=true
+                }else{
+                    binding.tvMarkPresent.isEnabled = true
+                    binding.tvMarkAbsent.isEnabled = true
+                    binding.tvMarkLeave.isEnabled = true
+                    binding.tvMarkLate.isEnabled = true
+                    binding.tvMarkNa.isEnabled = true
                 }
                /* binding.tvMarkLeave.text = "L"
                 binding.tvMarkLeave.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
@@ -164,7 +182,13 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
-                 }
+                 }else{
+                    binding.tvMarkPresent.isEnabled = true
+                    binding.tvMarkAbsent.isEnabled = true
+                    binding.tvMarkLeave.isEnabled = true
+                    binding.tvMarkLate.isEnabled = true
+                    binding.tvMarkNa.isEnabled = true
+                }
                 /*binding.tvMarkNa.text = "NA"
                 binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkNa.background =
