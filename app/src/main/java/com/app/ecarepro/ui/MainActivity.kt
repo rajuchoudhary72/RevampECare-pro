@@ -437,6 +437,8 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
 
+                            if(BuildConfig.DEBUG) return@collectLatest
+
                             if (versionName < it.data.android.currentVersion) {
                                 // open  dialog
                                 if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
