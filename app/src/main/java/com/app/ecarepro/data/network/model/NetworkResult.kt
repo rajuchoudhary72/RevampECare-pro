@@ -9,3 +9,5 @@ package com.app.ecarepro.data.network.model
 
      class Loading<T> : NetworkResult<T>()
 }
+
+
