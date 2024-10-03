@@ -221,8 +221,7 @@ class StudentListMarkAttAdapter(
 
     }
 
-
-    private fun updateUI(
+   private fun updateUI(
         action: Int,
         binding: ItemMarkAttendanceBinding,
         data: StudentListMarkAtt,
