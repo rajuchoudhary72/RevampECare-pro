@@ -38,9 +38,9 @@ class ProfileViewModel @Inject constructor(
     val uiState =
         refresh.flatMapLatest {
             combine(
-                flow = userDataStore.getUsersFlow(),
-                flow2 = userRepository.getUserProfile(),
-                flow3 = userDataStore.getCurrentUserIdAsFlow()
+                flow = userDataStore.getUsersFlow(),  // get  data  base to fetch user  detail
+                flow2 = userRepository.getUserProfile(),   // api
+                flow3 = userDataStore.getCurrentUserIdAsFlow()   // selected user
             ) { users, profile, userId ->
                 Triple(users, profile, userId)
             }

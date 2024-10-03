@@ -9,20 +9,22 @@ import java.util.Locale
 
 class Constant {
     companion object {
-        const val DEVICE_TYPE: Int= 1
-       // const val BASE_URL = "https://api.franciscanecare.net/"
-        const val BASE_URL = "https://androidapi.franciscanecare.net/"
+        const val DEVICE_TYPE: Int = 1
+        /*old base url*/
+        const val BASE_URL = "https://api.franciscanecare.net/"
+        /*New base url*/
+        //  const val BASE_URL = "https://androidapi.franciscanecare.net/"
         const val BASE_URL_COM = "https://app.franciscanecare.com"
-        const val AUTH_BEFORE_LOGIN_NEW ="Kq4IYAuSXLh4EsnexoTSfA=="
+        const val AUTH_BEFORE_LOGIN_NEW = "Kq4IYAuSXLh4EsnexoTSfA=="
         const val PDF_Mime_Type = "application/pdf"
         const val WEBVIEW_PDF_BASE_URL = "https://docs.google.com/gview?embedded=true&url="
         const val SMS_USER_PASSWORD = "07Pro2019"
         const val SMS_USER_USER_NAME = "FSPL"
-         const val SMS_TOKEN_URL = "http://sms.franciscanecare.com/api/Token/Generate"
-         const val SMS_BULK_MSG_URL = "http://sms.franciscanecare.com/api/SMSService/BulkSMS"
-         const val APPOINTMENT_BASEURL = "https://fomapi.franciscanecare.com/api/Appointment/"
-         const val APPROVE_APPOINTMENT_URL = "approveappointment/"
-         const val REJECT_APPOINTMENT_URL = "rejectappointment/"
+        const val SMS_TOKEN_URL = "http://sms.franciscanecare.com/api/Token/Generate"
+        const val SMS_BULK_MSG_URL = "http://sms.franciscanecare.com/api/SMSService/BulkSMS"
+        const val APPOINTMENT_BASEURL = "https://fomapi.franciscanecare.com/api/Appointment/"
+        const val APPROVE_APPOINTMENT_URL = "approveappointment/"
+        const val REJECT_APPOINTMENT_URL = "rejectappointment/"
         const val BOOK_ID_ARGUMENT = "bookID"
         const val URL_ARGUMENT = "url"
         const val FULL_URL_ARGUMENT = "full_url"
@@ -38,7 +40,7 @@ class Constant {
         const val QUES_ID_ARGUMENT = "QuesID"
         const val LEAVE_ID_ARGUMENT = "LeaveID"
         const val CLASS_ID_ARGUMENT = "ClassID"
-        const val  ID  = "ID"
+        const val ID = "ID"
         const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
         const val TO = "to"
@@ -69,8 +71,8 @@ class Constant {
         const val REJECT = 4
 
         const val FROM = "from"
-    const val LEAVE_ACTION_APPROVE = 1
-    const val LEAVE_ACTION_REJECT = 2
+        const val LEAVE_ACTION_APPROVE = 1
+        const val LEAVE_ACTION_REJECT = 2
 
         const val PROFILE_FRA_STU = "ProfileFragmentStudent"
         const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
@@ -100,25 +102,23 @@ class Constant {
         const val THOUGHTS_DIR = 1
 
 
-
         const val FILTER_NAME = 0
         const val FILTER_ROLL_NO = 1
         const val FILTER_ADMISSION_NO = 2
 
 
-
         const val PRESENT = 1
         const val ABSENT = 0
         const val OP = 2
-        const val DROP_CONFORM=5
+        const val DROP_CONFORM = 5
 
-        const val UP_TRIP= 1
-        const val DOWN_TRIP= 2
-        const val DROP_STUDENT_TRIP= 3
+        const val UP_TRIP = 1
+        const val DOWN_TRIP = 2
+        const val DROP_STUDENT_TRIP = 3
 
-        const val DOWNLOAD= 1
-        const val EDIT= 2
-        const val DELETE= 3
+        const val DOWNLOAD = 1
+        const val EDIT = 2
+        const val DELETE = 3
 
         const val TRUE_VALUE = 1
         const val FALSE_VALUE = 0
@@ -131,9 +131,8 @@ class Constant {
         const val APPOINTMENT_APPROVE = 1
         const val APPOINTMENT_REJECT = 2
 
-        const val PRINCIPAL =  "Principal"
-        const val MANAGEMENT =  "Management"
-
+        const val PRINCIPAL = "Principal"
+        const val MANAGEMENT = "Management"
 
 
         fun getLongTimeDate(sessionStart: String?): Long {
@@ -146,33 +145,33 @@ class Constant {
             }
             return 0
         }
-        fun dateToShow(inputDateStr:String):String {
-            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault() )
-            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
-             val date: Date? = inputFormat.parse(inputDateStr)
-            return  outputFormat.format(date!!)
-        }
 
-        fun toSystemDate(inputDateStr:String):String {
-            val inputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault() )
-            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd",Locale.getDefault())
+        fun dateToShow(inputDateStr: String): String {
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             val date: Date? = inputFormat.parse(inputDateStr)
-            return  outputFormat.format(date!!)
+            return outputFormat.format(date!!)
         }
 
-        fun dateToShowConn(inputDateStr:String):String {
-            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss",Locale.getDefault() )
-            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy",Locale.getDefault())
+        fun toSystemDate(inputDateStr: String): String {
+            val inputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val date: Date? = inputFormat.parse(inputDateStr)
-            return  outputFormat.format(date!!)
+            return outputFormat.format(date!!)
         }
 
-
+        fun dateToShowConn(inputDateStr: String): String {
+            val inputFormat: DateFormat =
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return outputFormat.format(date!!)
+        }
 
 
         fun getDateDiff(dateString1: String?, dateString2: String?): Double {
             var diff = 0.0
-            val df1: DateFormat = SimpleDateFormat("dd MMM yyyy" )
+            val df1: DateFormat = SimpleDateFormat("dd MMM yyyy")
             var date1: Date? = null
             var date2: Date? = null
             try {
@@ -201,7 +200,7 @@ class Constant {
         fun isDateInBetweenIncludingEndPoints(
             start_date: String?,
             end_date: String?,
-            holiDay: String?
+            holiDay: String?,
         ): Boolean {
             var result = false
 
@@ -227,9 +226,10 @@ class Constant {
 
             return false
         }
+
         fun holidayLastDateGreaterSelectLastDate(
             holiday_date: String?,
-            selected_day: String?
+            selected_day: String?,
         ): Boolean {
             var result = false
 
@@ -252,7 +252,7 @@ class Constant {
             return false
         }
 
-        fun currentDate():String{
+        fun currentDate(): String {
             val c: Date = Calendar.getInstance().time
             val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             return df.format(c)
@@ -264,11 +264,11 @@ class Constant {
 //            return df.format(c)
 //        }
 
-        fun getCurrentDateTime():String{
+        fun getCurrentDateTime(): String {
             val calendar = Calendar.getInstance()
             val currentDate = calendar.time
             val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
-            return  dateFormat.format(currentDate)
+            return dateFormat.format(currentDate)
         }
 
         fun getCurrentDateTimeSecond(): String {
@@ -277,22 +277,21 @@ class Constant {
             return dateFormat.format(currentDate)
         }
 
-       /* fun incrementDateByDay( noOfDays:Int):Long{
-            val c = Calendar.getInstance()
-            c.time = Calendar.getInstance().time
-            c.add(Calendar.DATE, noOfDays)
-             return  getLongTimeDate(df.format(c))
-        }*/
+        /* fun incrementDateByDay( noOfDays:Int):Long{
+             val c = Calendar.getInstance()
+             c.time = Calendar.getInstance().time
+             c.add(Calendar.DATE, noOfDays)
+              return  getLongTimeDate(df.format(c))
+         }*/
 
-       /* fun incrementDateByDay( noOfDays:Int): Date? {
-            val c = Calendar.getInstance()
-            c.time = Calendar.getInstance().time
-            val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-            df.format(c)
-            c.add(Calendar.DATE, noOfDays)
-            return c.time
-        }*/
-
+        /* fun incrementDateByDay( noOfDays:Int): Date? {
+             val c = Calendar.getInstance()
+             c.time = Calendar.getInstance().time
+             val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+             df.format(c)
+             c.add(Calendar.DATE, noOfDays)
+             return c.time
+         }*/
 
 
         fun boldFindStartIndexes(sentence: String): List<Int> {
@@ -501,6 +500,7 @@ class Constant {
 
             return indexes
         }
+
         fun isPdfUrl(url: String): Boolean {
             val pdfExtension = "pdf"
             val extension = url.substringAfterLast(".", "").lowercase()

@@ -39,12 +39,12 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
-        loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,   // log print in logout
+        authInterceptor: AuthInterceptor   // token add in header
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
-            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)  //before server call interceptors
             .addInterceptor(authInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)

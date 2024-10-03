@@ -632,7 +632,7 @@ interface UserService {
 
     @GET("User/MyProfile")
     suspend fun getUserProfile(
-        @Query("Edit") edit: Boolean = true
+        @Query("Edit") edit: Boolean = false
     ): UserProfileDto
 
     @GET("User/MyProfile")

@@ -948,7 +948,8 @@ class UserRepositoryImpl @Inject constructor(
                 val response = userService.getUserProfile()
                 if (response.errorCode == 0) {
                     emit(Result.success(response.profile))
-                } else {
+                }
+                else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
             } catch (error: Throwable) {
