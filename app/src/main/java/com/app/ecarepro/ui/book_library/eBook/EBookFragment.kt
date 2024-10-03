@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class EBookFragment(val data: List<Book>) : Fragment(), ItemListener<Book> {
+class EBookFragment(val data: List<Book>?) : Fragment(), ItemListener<Book> {
 
     private lateinit var binding: FragmentEBookBinding
     private val eBookDetailsViewModel: EBookDetailsViewModel by viewModels()

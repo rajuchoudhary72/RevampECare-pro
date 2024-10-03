@@ -1,8 +1,17 @@
 package com.app.ecarepro.ui.webview
 
+import android.Manifest
+import android.app.DownloadManager
+import android.content.Context.DOWNLOAD_SERVICE
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebResourceRequest
@@ -10,19 +19,11 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentWebViewBinding
-import dagger.hilt.android.AndroidEntryPoint
-import android.Manifest
-import android.app.DownloadManager
-import android.content.Context.DOWNLOAD_SERVICE
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.widget.Toast
 import com.app.ecarepro.ui.mainActivity
+import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class WebViewFragment : Fragment() {
@@ -44,9 +45,15 @@ class WebViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.title = title
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener {
+              if (binding.webView.canGoBack()) binding.webView.goBack() else findNavController().popBackStack() }
         loadUrl(url)
+
+
     }
+
+
+
 
     private fun loadUrl(url: String) {
         binding.webView.settings.apply {
@@ -93,6 +100,19 @@ class WebViewFragment : Fragment() {
             }
         }
         binding.webView.loadUrl(url)
+
+
+        binding.webView.setOnKeyListener(object : View.OnKeyListener  {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                    if (binding. webView.canGoBack()) {
+                        binding.webView.goBack()
+                        return  true
+                    }
+                }
+                return   false
+            }
+        })
     }
     private fun isStoragePermission(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

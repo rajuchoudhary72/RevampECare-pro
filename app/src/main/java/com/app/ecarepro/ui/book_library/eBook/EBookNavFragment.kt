@@ -33,14 +33,15 @@ class EBookNavFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentENavBookBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
+        binding.toolbar.setNavigationOnClickListener {  findNavController().popBackStack()  }
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         lifecycleScope.launch {
             eBookViewModel.eBookListStateFlow.collectLatest {
@@ -78,7 +79,7 @@ class EBookNavFragment : Fragment() {
 
     }
 
-    private fun setUpViewPager(data: List<Book>, megaBookLink: String) {
+    private fun setUpViewPager(data: List<Book>?, megaBookLink: String) {
 
         val tabItem =
             mutableListOf(getString(R.string.my_school_library), getString(R.string.mega_e_book))
@@ -109,6 +110,12 @@ class EBookNavFragment : Fragment() {
             tab.text = tabItem[position]
         }.attach()
 
+
+
+
+
     }
+
+
 
 }
