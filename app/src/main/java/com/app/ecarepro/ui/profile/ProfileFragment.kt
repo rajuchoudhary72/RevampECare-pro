@@ -82,6 +82,7 @@ class ProfileFragment : Fragment() {
 
             }
         }
+
     fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
         return when (compressFormat) {
             Bitmap.CompressFormat.JPEG -> "jpg"
@@ -90,6 +91,7 @@ class ProfileFragment : Fragment() {
             else -> "unknown"
         }
     }
+
     private fun uploadPhoto(imageString: String, imageExt: String) {
         (requireActivity() as MainActivity).showLoader(true)
         profileViewModel.uploadPhoto(
@@ -111,8 +113,8 @@ class ProfileFragment : Fragment() {
                     try {
                         val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                         val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
-                       /* val imageExt =
-                            FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
+                        /* val imageExt =
+                             FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
 
                         uploadPhoto(imageString, imageExt)
                     } catch (e: NullPointerException) {
@@ -212,14 +214,17 @@ class ProfileFragment : Fragment() {
                                 "N/A (${it.roleName})"
                             } else {
                                 it.name + "(${it.roleName})"
-                               /* if (it.userType==3){
-                                    it.name + "(${it.designation})"
-                                }else{
-                                    it.name + "(${it.roleName})"
-                                }*/
+                                /* if (it.userType==3){
+                                     it.name + "(${it.designation})"
+                                 }else{
+                                     it.name + "(${it.roleName})"
+                                 }*/
                             }
 
                         )
+                        /*show  child info  if  user is parent*/
+                        if (it.stName.isNullOrEmpty().not())
+                            childName("${it.stName ?: ""} (${it.className ?: ""})")
                         photo(it.photo)
                         school(it.school)
                         isCurrentUser(it.id == uiState.currentUserId)
@@ -315,10 +320,10 @@ class ProfileFragment : Fragment() {
         profileItem {
             id(R.string.spouse_name)
             iconRes(R.drawable.ic_profile)
-            if (profile.isSpouseName==true){
+            if (profile.isSpouseName == true) {
                 title(getString(R.string.spouse_name))
                 subTitle(profile.fatherHusbandName)
-            }else{
+            } else {
                 title("Father Name")
                 subTitle(profile.fatherHusbandName)
             }
@@ -396,18 +401,18 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.club))
             subTitle(profile.club)
         }
-      /*  profileItem {
-            id(R.string.bank_account_number)
-            iconRes(R.drawable.ic_bank_account)
-            title(getString(R.string.bank_account_number))
+        /*  profileItem {
+              id(R.string.bank_account_number)
+              iconRes(R.drawable.ic_bank_account)
+              title(getString(R.string.bank_account_number))
 
-        }
-        profileItem {
-            id(R.string.uan_account_number)
-            iconRes(R.drawable.ic_uan)
-            title(getString(R.string.uan_account_number))
+          }
+          profileItem {
+              id(R.string.uan_account_number)
+              iconRes(R.drawable.ic_uan)
+              title(getString(R.string.uan_account_number))
 
-        }*/
+          }*/
         profileItem {
             id(R.string.emergencyContactNo)
             iconRes(R.drawable.ic_contact_no_)
@@ -416,11 +421,11 @@ class ProfileFragment : Fragment() {
         }
         profileItem {
             id(R.string.spouse_contact_number)
-            if (profile.isSpouseName==true){
+            if (profile.isSpouseName == true) {
                 iconRes(R.drawable.ic_contact_no_)
                 title(getString(R.string.spouse_contact_number))
                 subTitle(profile.fatherHusbandMob)
-            }else{
+            } else {
                 iconRes(R.drawable.ic_contact_no_)
                 title("Father Contact No. :")
                 subTitle(profile.fatherHusbandMob)

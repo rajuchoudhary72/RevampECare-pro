@@ -10,7 +10,15 @@
             type="java.lang.String" />
 
         <variable
+            name="childPhoto"
+            type="java.lang.String" />
+
+        <variable
             name="name"
+            type="java.lang.String" />
+
+        <variable
+            name="childName"
             type="java.lang.String" />
 
         <variable
@@ -31,7 +39,6 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
@@ -60,12 +67,41 @@
             android:fontFamily="@font/calibri_light"
             android:text="@{address}"
             android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:text="Raju" />
 
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/childPhoto"
+            isInvisible="@{childPhoto==null}"
+            imageUrl="@{childPhoto}"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+            tools:src="@drawable/img_message_user" />
+
+        <TextView
+            android:id="@+id/childName"
+            android:layout_width="0dp"
+            isVisible="@{childName!=null}"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{childName}"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image"
+            app:layout_constraintTop_toTopOf="@+id/childPhoto"
+            app:layout_constraintBottom_toBottomOf="@+id/childPhoto"
+            tools:text="Raju" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
