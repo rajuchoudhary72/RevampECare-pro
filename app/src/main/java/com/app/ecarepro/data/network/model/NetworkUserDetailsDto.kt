@@ -23,6 +23,10 @@ data class NetworkUserDetailsDto(
     val mobileNumber: String?,
     @SerializedName("classID")
     val classID: String?,
+    @SerializedName("class")
+    val className: String?,
+    @SerializedName("stName")
+    val stName: String?,
     @SerializedName("status")
     val status: String? = "0",
     val authToken: String?,
@@ -56,6 +60,8 @@ fun NetworkUserDetailsDto.asUserEntity(): UserEntity {
         schoolCode = schoolCode,
         mobileNumber = mobileNumber,
         classID = classID,
-        loginTime = loginTime
+        loginTime = loginTime,
+        className = className,
+        stName = stName
     )
 }
