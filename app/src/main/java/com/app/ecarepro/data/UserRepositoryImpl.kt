@@ -270,7 +270,7 @@ class UserRepositoryImpl @Inject constructor(
                     ChangeUserNameRequestDto(
                         newPassword = password,
                         newUsername = confirmPassword,
-                        currentUsername = "SF129"
+                        currentUsername = ""
                     )
                 )
                 if (response.errorCode == 0) {
