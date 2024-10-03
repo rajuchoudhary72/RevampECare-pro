@@ -127,6 +127,7 @@ class ChatFragment : Fragment() {
                     ChatUiState.EmptyInbox -> {
                         noDataFoundView {
                             id(R.id.empty_view)
+                            binding.toolbar.title = "Message"
                         }
                     }
                     is ChatUiState.Success -> {

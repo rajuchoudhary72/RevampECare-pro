@@ -223,8 +223,12 @@ class ProfileFragment : Fragment() {
 
                         )
                         /*show  child info  if  user is parent*/
-                        if (it.stName.isNullOrEmpty().not())
+                        if (it.stName.isNullOrEmpty().not()){
                             childName("${it.stName ?: ""} (${it.className ?: ""})")
+                        }else{
+                            childName(null)
+                        }
+
                         photo(it.photo)
                         school(it.school)
                         isCurrentUser(it.id == uiState.currentUserId)
