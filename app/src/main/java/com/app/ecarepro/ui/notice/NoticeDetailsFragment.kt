@@ -89,11 +89,15 @@ class NoticeDetailsFragment : Fragment() {
                             noticeDetailsBinding.noticeDetailData=it.data.notice
                             fileSource=it.data.notice.filePath
 
-                            val spanned = HtmlCompat.fromHtml(it.data.notice.detail, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+
+                            val htmlWithLineBreaks = it.data.notice.detail.replace("\n", "<br>")
+                            val spanned = HtmlCompat.fromHtml(htmlWithLineBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
                             noticeDetailsBinding.tvNoticeDetails.text = spanned
 
                             noticeDetailsBinding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
-                          }
+
+                        }
                         }
 
 

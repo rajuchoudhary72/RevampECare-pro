@@ -69,7 +69,7 @@ class BookLibraryFragment : Fragment() {
 
                             setUpViewPager(it.data)
 
-                            setUpMegaBook(it.data.megaBookLink)
+                           // setUpMegaBook(it.data.megaBookLink)
 
                         }
 

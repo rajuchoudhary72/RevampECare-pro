@@ -1,7 +1,6 @@
 package com.app.ecarepro.ui.assignment.staff
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,12 +25,16 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment> {
+class StaffAssignmentsListFragment(
+    val assignments: List<TeacherAssignment>,
+    val className: String,
+    private val teacherTypeUser: Boolean,
+    private val staffId: String
+) : Fragment(), ItemListener<TeacherAssignment> {
 
-    private   var staffId: String=""
-    private   lateinit var binding : FragmentStaffAssignmentsListBinding
+     private   lateinit var binding : FragmentStaffAssignmentsListBinding
     private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
-    private var teacherTypeUser= true
+
 
 
     override fun onCreateView(
@@ -39,80 +42,44 @@ class StaffAssignmentsListFragment : Fragment(), ItemListener<TeacherAssignment>
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStaffAssignmentsListBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        try {
-            staffId= requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
-        }catch (_:Exception){}
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if ( staffId.isNotEmpty()) {
-            binding.fbPostAssignment.isVisible=false
-            teacherTypeUser=false
-        }
-
-        binding.fbPostAssignment.setOnClickListener {
-            findNavController().navigate(R.id.postAssignmentFragment)
-        }
-
-        lifecycleScope.launch {
-            teacherAssignmentViewModel.teacAssignmentStateFlow.collectLatest {
-
-                when (it) {
-
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
-
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error" + it)
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-
-                        if (it.data != null) {
-
-                            if (it.data.assignments!=null ) {
-
-                                val assignmentListAdapter =
-                                    StaffAssignmentListAdapter(it.data.assignments,
-                                        this@StaffAssignmentsListFragment,
-                                        teacherTypeUser)
-
-                                binding.rvAssignment.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = assignmentListAdapter
-                                }
-                                binding.rvAssignment.isVisible=true
-                                binding.tvNoData.isVisible=false
-
-
-                            }else{
-                                binding.rvAssignment.isVisible=false
-                                binding.tvNoData.isVisible=true
-
-                            }
-
-                            }
-
-                        }
 
 
 
-                    else -> {}
+            if (assignments!=null   ) {
+            if (assignments.isNotEmpty()) {
+                val classAssignments = assignments.filter { it.`class` == className }
+                val assignmentListAdapter =
+                    StaffAssignmentListAdapter(classAssignments,
+                        this@StaffAssignmentsListFragment,
+                        teacherTypeUser)
+
+                binding.rvAssignment.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = assignmentListAdapter
                 }
+                binding.rvAssignment.isVisible=true
+                binding.tvNoData.isVisible=false
 
+
+            }else{
+                binding.rvAssignment.isVisible=false
+                binding.tvNoData.isVisible=true
 
             }
-        }
+            }else{
+                binding.rvAssignment.isVisible=false
+                binding.tvNoData.isVisible=true
 
-        teacherAssignmentViewModel.teachersAssignment(staffId )
+            }
+
 
 
     }

@@ -10,9 +10,7 @@ import com.app.ecarepro.databinding.StaffAssignmentItemBinding
 import com.app.ecarepro.databinding.StuAssignmentItemBinding
 import com.app.ecarepro.model.Activity
 import com.app.ecarepro.model.AssignSubmitStudent
-import com.app.ecarepro.model.Assignment
-import com.app.ecarepro.model.TeacherAssignment
-import com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListFragment
+
 
 class NotSubmitAssignListAdapter(
     private var activityLST: List<AssignSubmitStudent>,

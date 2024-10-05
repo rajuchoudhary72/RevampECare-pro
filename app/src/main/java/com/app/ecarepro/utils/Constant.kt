@@ -1,5 +1,8 @@
 package com.app.ecarepro.utils
 
+import android.content.Context
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -506,6 +509,16 @@ class Constant {
             val extension = url.substringAfterLast(".", "").lowercase()
             return pdfExtension == extension
         }
+
+        fun checkApiResponse(errorCode: Int, context: Context): Boolean {
+            if (errorCode==1) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                return true
+            } else {
+                return false
+            }
+        }
+
     }
 
 
