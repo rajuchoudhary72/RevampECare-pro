@@ -460,14 +460,9 @@
         android:label="AssignmentNavHostFragment" />
     <fragment
         android:id="@+id/staffAssignmentsListFragment"
-        android:name="com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListNavHostFragment"
         android:label="StaffAssignmentsListFragment" >
-        <action
-            android:id="@+id/action_staffAssignmentsListFragment_to_viewAssignmentFragment"
-            app:destination="@id/viewAssignmentFragment" />
-        <action
-            android:id="@+id/action_staffAssignmentsListFragment_to_editAssignmentFragment"
-            app:destination="@id/editAssignmentFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/viewAssignmentFragment"

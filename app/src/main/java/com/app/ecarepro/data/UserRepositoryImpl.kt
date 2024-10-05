@@ -695,7 +695,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getStudents(): Flow<Result<List<Student>>> {
         return flow {
             try {
-                val response = userService.getStudentList(2, true)
+                val response = userService.getStudentList(2, false)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.students))
                 } else {

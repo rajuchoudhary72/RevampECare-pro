@@ -1,5 +1,10 @@
 package com.app.ecarepro.utils
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -506,6 +511,22 @@ class Constant {
             val extension = url.substringAfterLast(".", "").lowercase()
             return pdfExtension == extension
         }
+
+        fun checkApiResponse(errorCode: Int, context: Context): Boolean {
+            if (errorCode==1) {
+                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                return true
+            } else {
+                return false
+            }
+        }
+
+          fun isNetworkConnected(context: Context): Boolean {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        }
+
     }
 
 

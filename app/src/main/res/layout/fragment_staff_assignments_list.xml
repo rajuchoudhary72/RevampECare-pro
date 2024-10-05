@@ -15,22 +15,6 @@
         tools:context=".ui.assignment.staff.StaffAssignmentsListFragment">
 
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Assignments"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -38,8 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/stu_assignment_item"
-            android:layout_below="@+id/toolbar"
-             />
+              />
 
         <TextView
             android:id="@+id/tv_no_data"
@@ -53,19 +36,6 @@
             android:text="@string/no_assinment_available"
             android:textSize="16sp"
 
-            />
-
-
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fb_post_assignment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/post_assignment"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/_15sdp"
-            app:icon="@drawable/rounded_add_24"
             />
 
 
