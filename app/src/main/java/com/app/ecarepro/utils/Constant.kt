@@ -1,6 +1,8 @@
 package com.app.ecarepro.utils
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
 import java.text.DateFormat
@@ -517,6 +519,12 @@ class Constant {
             } else {
                 return false
             }
+        }
+
+          fun isNetworkConnected(context: Context): Boolean {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
         }
 
     }

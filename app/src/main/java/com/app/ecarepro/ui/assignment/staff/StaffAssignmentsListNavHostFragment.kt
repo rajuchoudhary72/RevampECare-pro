@@ -109,7 +109,10 @@ class StaffAssignmentsListNavHostFragment : Fragment()  {
                                             tab.text = classList[position]
                                         }.attach()
 
-                                        binding.fbPostAssignment.isVisible=true
+                                        if ( staffId.isEmpty()) {
+                                            binding.fbPostAssignment.isVisible=true
+                                        }
+
                                     }
                                 }catch (_:Exception){ }
 

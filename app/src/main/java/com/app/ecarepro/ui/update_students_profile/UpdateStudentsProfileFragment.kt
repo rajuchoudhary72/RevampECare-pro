@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -54,7 +55,12 @@ class UpdateStudentsProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.autoCompleteClass.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+                selectedClassData = mMyClass[pos]
+                assignRollNoViewModel.getStudentListToAssignRollNo(selectedClassData.id, Constant.FILTER_NAME)
 
+            }
         getMyClass()
     }
 
