@@ -96,7 +96,12 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                                 if (!it.data.session_data.isNullOrEmpty()){
                                     sessionListData = it.data.session_data.toMutableList()
                                     if (sessionListData.isNotEmpty()){
-                                        sessionSelectData=it.data.session_data[sessionListData.size-1]
+                                        for (i in sessionListData){
+                                            if (i.active=="1"){
+                                                sessionSelectData=i
+                                            }
+                                        }
+
                                         binding.tvSelectSession.text=sessionSelectData.yearname
                                     }
                                     firstTime=false

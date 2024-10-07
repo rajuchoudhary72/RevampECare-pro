@@ -33,6 +33,7 @@ class StudentListNavHost : Fragment() {
     private lateinit var binding: FragmentStudentListNavHostBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
+    private var isDataLoaded = false
 
     @Inject
     lateinit var userDataStore: UserDataStore
@@ -106,6 +107,7 @@ class StudentListNavHost : Fragment() {
                                         tab.text = classList[position]
                                     }.attach()
 
+                                    isDataLoaded=true
 
                                 }
                             }catch (_:Exception){ }
@@ -127,7 +129,9 @@ class StudentListNavHost : Fragment() {
         }
 
 
-        studentListViewModel.getStudentList(schoolType,toFragment)
+        if (!isDataLoaded) {
+            studentListViewModel.getStudentList(schoolType,toFragment)
+        }
 
 
         binding.toggleButtonSchoolType.addOnButtonCheckedListener { _, checkedId, isChecked ->
