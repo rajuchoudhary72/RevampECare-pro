@@ -1,63 +1,39 @@
 package com.app.ecarepro.data.network.intercepter
 
- import android.app.Activity
  import android.app.AlertDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Handler
 import android.os.Looper
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.core.content.ContextCompat.getString
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import com.app.ecarepro.R
-import com.app.ecarepro.ui.mainActivity
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
+  import com.app.ecarepro.ECateProApp
+ import dagger.hilt.android.qualifiers.ApplicationContext
+ import kotlinx.coroutines.runBlocking
+ import okhttp3.Interceptor
 import okhttp3.Response
-import java.io.IOException
-import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.SystemViewModel
-import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.utils.Constant
 
-import javax.inject.Inject
-import kotlin.jvm.java
+ import javax.inject.Inject
 
 class ConnectivityInterceptor @Inject constructor(
     @ApplicationContext val mcontext: Context,
-
-
- ) : Interceptor {
+  ) : Interceptor {
 
     private val handler = Handler(Looper.getMainLooper()) // Handler for the main thread
+    private var dialogShown = false // Prevent multiple dialogs
 
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        if (!isNetworkConnected()) {
-            // Show  on the main thread
-           // handler.post { showRetryDialog(chain) }
-//            val activity = getActivity(mcontext) as? MainActivity
-//
-//            // Check if Activity is valid
-//            if (activity != null && !activity.isFinishing) {
-//
-//                activity.showRetryDialog(chain,mcontext)
-//            } else {
-//                // Handle the case where Activity is not available (e.g., show a Toast)
-//                (mcontext as? android.app.Application)?.mainExecutor?.execute {
-//                    Toast.makeText(mcontext, "No Internet Connection", Toast.LENGTH_SHORT).show()
-//                }
-//            }
+        while (!isNetworkConnected()) {
+            runBlocking {
+                // Show retry dialog only once
+                if (!dialogShown) {
+                    showRetryDialog {
+                        dialogShown = false // Reset flag once dialog closes
+                    }
+                }
 
-//            val activity = getActivity(mcontext) as? MainActivity
-//            activity!!.showRetryDialog(chain,mcontext)
-           // mainActivity.showRetryDialog(chain)
-            showAlert("No Internet Connection", "Please check your internet connection and try again.")
 
+            }
         }
         return chain.proceed(chain.request())
     }
@@ -68,53 +44,34 @@ class ConnectivityInterceptor @Inject constructor(
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
     }
 
-    private fun showAlert(title: String, message: String) {
-        Handler(Looper.getMainLooper()).post {
-            // Creating the alert dialog requires an Activity context
-            AlertDialog.Builder(mcontext)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-             }}
 
-    private fun showRetryDialog(chain: Interceptor.Chain) {
-        val activity = getActivity(mcontext) // Get the current activity
-        if (activity != null && !activity.isFinishing) { // Check if activity is valid
-            activity.runOnUiThread { // Run on UI thread
-                val dialog = AlertDialog.Builder(activity)
-                    .setTitle("No Internet Connection")
-                    .setMessage("Please check your internet connection and try again.")
-                    .setPositiveButton("Retry") { _, _ ->
-                        if (isNetworkConnected()) {
-                            try {
-                                chain.proceed(chain.request()) // Retry the API call
-                            } catch (e: Exception) {
-                                // Handle error if retry fails
-                            }
-                        } else {
-                            showRetryDialog(chain) // Show dialog again if still no internet
-                        }
+
+    private fun showRetryDialog(onDialogClosed: () -> Unit) {
+        val appContext = mcontext as ECateProApp
+        if (dialogShown) return // Only show one dialog at a time
+        dialogShown = true
+
+        handler.post {
+            val dialog = AlertDialog.Builder(appContext.getCurrentActivity() )
+                .setTitle("No Internet Connection")
+                .setMessage("Please check your internet connection and try again.")
+                .setPositiveButton("Retry") { _, _ ->
+                    if (isNetworkConnected()) {
+                        onDialogClosed() // Internet is available, allow request to proceed
+                    } else {
+                        dialogShown=false
+                        showRetryDialog(onDialogClosed) // Retry if no internet still
                     }
-                    .setCancelable(false)
-                    .create()
-                dialog.show()
-            }
+                }
+                .setCancelable(false)
+                .create()
+            dialog.show()
         }
-    }
 
-    private fun getActivity(context: Context): android.app.Activity? {
-        if (context is android.app.Activity) {
-            return context
-        } else if (context is android.content.ContextWrapper) {
-            return getActivity(context.baseContext)
-        }
-        return null
     }
 
 
 }
+
 
 

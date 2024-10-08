@@ -2,6 +2,8 @@ package com.app.ecarepro.di
 
 import android.content.Context
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
+import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
 import com.app.ecarepro.data.network.service.AppService
 import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.network.service.MessageService
@@ -40,12 +42,16 @@ object NetworkModule {
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        connectivityInterceptor: ConnectivityInterceptor,
+        customResponseInterceptor: CustomResponseInterceptor
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(customResponseInterceptor)
+            .addInterceptor(connectivityInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
