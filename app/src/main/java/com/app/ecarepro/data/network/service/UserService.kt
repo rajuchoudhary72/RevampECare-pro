@@ -354,6 +354,11 @@ interface UserService {
         @Query("ShowAll") showAll: Boolean
     ): NetworkStudentList
 
+    @GET("Report/StudentList")
+    suspend fun getStudentListSerch(
+        @Query("ScholarType") scholarType: Int
+    ): NetworkStudentList
+
 
     @GET("Report/StudentMedicalCard")
     suspend fun getStudentMedicalCard(

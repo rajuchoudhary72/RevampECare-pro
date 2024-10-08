@@ -864,7 +864,7 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            14 -> {
+           /* 14 -> {
                 try {
                     lifecycleScope.launch {
                         userDataStore.getSchoolData()?.let {
@@ -883,7 +883,7 @@ class MainActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                 }
 
-            }
+            }*/
 
             37 -> {
                 try {

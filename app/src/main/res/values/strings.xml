@@ -761,4 +761,6 @@
     <string name="nov">November</string>
     <string name="dec">December</string>
     <string name="birthday_of">Birthday Of</string>
+    <string name="mother_mobile_number">Mother Mobile Number</string>
+    <string name="father_mobile_number">Father Mobile Number</string>
 </resources>
