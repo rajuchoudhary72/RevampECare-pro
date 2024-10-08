@@ -43,10 +43,7 @@ class ConnectivityInterceptor @Inject constructor(
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
     }
-
-
-
-    private fun showRetryDialog(onDialogClosed: () -> Unit) {
+   private fun showRetryDialog(onDialogClosed: () -> Unit) {
         val appContext = mcontext as ECateProApp
         if (dialogShown) return // Only show one dialog at a time
         dialogShown = true
