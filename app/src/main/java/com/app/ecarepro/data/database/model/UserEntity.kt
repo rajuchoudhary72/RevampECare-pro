@@ -20,6 +20,8 @@ data class UserEntity(
     @ColumnInfo(name = "mobileNumber") val mobileNumber: String?,
     @ColumnInfo(name = "classID") val classID: String?,
     @ColumnInfo(name = "loginTime") val loginTime: String?,
+    @ColumnInfo(name = "stName") val stName: String?,
+    @ColumnInfo(name = "class") val className: String?,
 )
 
 fun UserEntity.asNetworkUserDetailsDto(): NetworkUserDetailsDto {
@@ -36,6 +38,8 @@ fun UserEntity.asNetworkUserDetailsDto(): NetworkUserDetailsDto {
         schoolCode = schoolCode,
         mobileNumber = mobileNumber,
         classID = classID,
-        loginTime = loginTime
+        loginTime = loginTime,
+        className = className,
+        stName = stName
     )
 }

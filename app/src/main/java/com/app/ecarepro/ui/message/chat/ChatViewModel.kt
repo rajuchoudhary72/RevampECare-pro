@@ -36,7 +36,7 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val id = savedStateHandle.getLiveData("ID", initialValue = "")
-    private val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
+     val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
 
     val messageBody = MutableStateFlow("")
 
@@ -62,7 +62,8 @@ class ChatViewModel @Inject constructor(
                             receiverType = response.receiverType,
                             canReply = response.canReply,
                             recipients = response.recipients ?: emptyList(),
-                            subject = response.subject
+                            subject = response.subject,
+                            senderDTL =  response.senderDTL
 
                         )
                     }
@@ -152,7 +153,8 @@ sealed interface ChatUiState {
         val receiverID: Int?,
         val receiverType: Int?,
         val subject: String?,
-        val canReply: Boolean?
+        val canReply: Boolean?,
+        val senderDTL: Sender?
     ) : ChatUiState
 
     data class Error(

@@ -127,10 +127,14 @@ class ChatFragment : Fragment() {
                     ChatUiState.EmptyInbox -> {
                         noDataFoundView {
                             id(R.id.empty_view)
+                            binding.toolbar.title = "Message"
                         }
                     }
                     is ChatUiState.Success -> {
-                       // setUpToolbar(uiState.senderDTL)
+                        uiState.senderDTL?.let {
+                            setUpToolbar(it)
+                        }
+                        binding.toolbar.title = "Message"
                         binding.tvSubject.text = "Sub: ${uiState.subject}"
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
@@ -183,23 +187,30 @@ class ChatFragment : Fragment() {
             }
         }
     }
-  /*  private fun setUpToolbar(sender: Sender) {
-        binding.apply {
-            photo.imageUrl(
-                sender.photo,
-                ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
-            )
-            name.text = sender.name
-            if (sender.senderType==3){
-                designation.text = sender.designation
-            }else  if (sender.senderType==1){
-                designation.text = "Class :- "+ sender.className
-            } else  if (sender.senderType==2){
-                designation.text = "P/O  " + sender.childName+" , "+ sender.className
-            }
+    private fun setUpToolbar(sender: Sender) {
+        if (chatViewModel.messageType==MessageType.INBOX.value){
+            binding.apply {
+                headerView.isVisible = true
+                photo.imageUrl(
+                    sender.photo,
+                    ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
+                )
+                name.text = sender.name
+                if (sender.senderType==3){
+                    designation.text = sender.designation
+                }else  if (sender.senderType==1){
+                    designation.text = "Class :- "+ sender.className
+                } else  if (sender.senderType==2){
+                    designation.text = "P/O  " + sender.childName+" , "+ sender.className
+                }
 
+            }
+        }else{
+            binding.headerView.isVisible =false
+            binding.toolbar.setTitle("Message")
         }
-    }*/
+
+    }
     private fun openPhoto(photo: String?) {
         if (photo.isNullOrEmpty()) return
         if (isPdfUrl(photo)) {

@@ -705,8 +705,8 @@ class ComposeFragment : Fragment() {
             .setMaxCount(7)
             .setGridSize(3)
             .setMinFileSize(0) // Restrict by minimum file size
-            .setMaxFileSize(65535) // Restrict by maximum file size
-            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
+            .setMaxFileSize(12000) // Restrict by maximum file size
+            .setCompressionRatio(65) // compress image for single item selection (can be 0 to 100)
             .setAlertDialogNegativeButtonColor(R.color.black)
             .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
             .setStatusBarColor(R.color.md_theme_light_primary)

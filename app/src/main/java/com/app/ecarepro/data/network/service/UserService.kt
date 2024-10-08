@@ -354,6 +354,11 @@ interface UserService {
         @Query("ShowAll") showAll: Boolean
     ): NetworkStudentList
 
+    @GET("Report/StudentList")
+    suspend fun getStudentListSerch(
+        @Query("ScholarType") scholarType: Int
+    ): NetworkStudentList
+
 
     @GET("Report/StudentMedicalCard")
     suspend fun getStudentMedicalCard(
@@ -632,7 +637,7 @@ interface UserService {
 
     @GET("User/MyProfile")
     suspend fun getUserProfile(
-        @Query("Edit") edit: Boolean = true
+        @Query("Edit") edit: Boolean = false
     ): UserProfileDto
 
     @GET("User/MyProfile")

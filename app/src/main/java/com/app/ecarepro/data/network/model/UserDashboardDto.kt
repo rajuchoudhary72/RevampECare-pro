@@ -113,6 +113,8 @@ data class Activity(
     val fromDate: String?,
     @SerializedName("id")
     val id: Any?,
+    @SerializedName("isWorking")
+    val isWorking: Boolean?,
     @SerializedName("title")
     val title: String?
 )

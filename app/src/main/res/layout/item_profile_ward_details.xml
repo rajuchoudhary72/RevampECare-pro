@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="Roll No:"
+            android:text="@string/roll_no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_class" />
 
@@ -177,7 +177,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="Admission No:"
+
+            android:text="@string/admission_no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleRollNo" />
 
@@ -201,7 +202,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="Blood Group:"
+            android:text="@string/blood_group"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleAdmissionNo" />
 
@@ -225,7 +226,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:text="House:"
+            android:text="@string/house_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleBloodGroup" />
 
@@ -273,8 +274,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:paddingBottom="15dp"
-            android:text="Permanent Education Number"
+            android:text="@string/permanent_education_number"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/titleHaadharCardNo" />
 
@@ -291,7 +291,102 @@
             app:layout_constraintEnd_toStartOf="@+id/profileImage"
             app:layout_constraintStart_toEndOf="@id/titlePermanentEducationNumber"
             tools:text="Raju" />
+        <TextView
+            android:id="@+id/titleFatherName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="@string/father_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titlePermanentEducationNumber" />
+
+        <TextView
+            android:id="@+id/father_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.fatherName}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleFatherName"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleFatherName"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/titleMotherName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="@string/mother_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleFatherName" />
 
 
+        <TextView
+            android:id="@+id/mother_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.motherName}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/titleMotherName"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/titleMotherName"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/FatherContact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="@string/father_mobile_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/titleMotherName" />
+
+        <TextView
+            android:id="@+id/father_contact_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.fatherMob1}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/FatherContact"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/FatherContact"
+            tools:text="Raju" />
+
+        <TextView
+            android:id="@+id/MotherContact"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:paddingBottom="15dp"
+            android:text="@string/mother_mobile_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/FatherContact" />
+
+        <TextView
+            android:id="@+id/mother_contact_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.motherMob1}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/MotherContact"
+            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintStart_toEndOf="@id/MotherContact"
+            tools:text="Raju" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
