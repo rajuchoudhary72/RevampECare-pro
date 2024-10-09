@@ -42,16 +42,13 @@ object NetworkModule {
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
-        connectivityInterceptor: ConnectivityInterceptor,
-        customResponseInterceptor: CustomResponseInterceptor
+        authInterceptor: AuthInterceptor
+
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
-            .addInterceptor(customResponseInterceptor)
-            .addInterceptor(connectivityInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
