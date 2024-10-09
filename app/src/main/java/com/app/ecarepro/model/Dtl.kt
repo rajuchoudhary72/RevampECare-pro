@@ -12,6 +12,7 @@ data class Dtl(
     val fromDate: String,
     val studentName: String,
     val studentPhoto: String,
+    val studentClass: String,
 
     val halfdayDTL: Any,
     val leaveAbbr: String,

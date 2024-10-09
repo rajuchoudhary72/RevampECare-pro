@@ -46,9 +46,9 @@ class TimeTableNavHostFragment : Fragment() {
             name= requireArguments().getString(Constant.NAME).toString()
 
              if (name.isEmpty() || name=="null"){
-                 binding.toolbar.title="TimeTable"
+                 binding.toolbar.title="Timetable"
              }else{
-                 binding.toolbar.title= "TimeTable of $name"
+                 binding.toolbar.title= "Timetable of $name"
              }
 
         }catch (_:Exception){}
