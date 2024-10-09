@@ -17,7 +17,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:orientation="vertical">
 
@@ -455,7 +455,9 @@
                 android:textSize="@dimen/_12sdp" />
         </LinearLayout>
 
-
+   <View
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_25sdp"/>
 
 
         </LinearLayout>

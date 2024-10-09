@@ -108,6 +108,8 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 }else{
                 textUserName.text= buildString {
                     append(data.studentName)
+                    append(" - ")
+                    append(data.studentClass)
                 }
                 Picasso.get().
                 load(data.studentPhoto)
