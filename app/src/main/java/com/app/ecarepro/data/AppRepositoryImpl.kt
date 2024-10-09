@@ -12,9 +12,17 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
+import com.app.ecarepro.data.network.model.asUserEntity
+import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.network.model.asUserEntity
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    private val userDatabase: UserDatabase
 ) : AppRepository {
     override fun getAppLayout(): Flow<Result<AppLayoutDto>> {
         return flow {
@@ -98,6 +106,33 @@ class AppRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+    override fun syncData(): Flow<Result<Boolean>> {
+        return flow {
+            try {
+                val response = appService.syncData()
+                if (response.errorCode == 0) {
+                    response.data?.asUserEntity()?.let { user ->
+                        userDataStore.getUser()?.let { currentUserInDatabase ->
+                            userDatabase.deleteUserById(currentUserInDatabase.id)
+                            val id = userDatabase.insertUser(user.copy(schoolCode = userDataStore.getCurrentSchoolCode(), loginTime = getCurrentDateTimeAmPm()))
+                            userDataStore.setCurrentUserId(id.toInt())
+                        }
+                    }
+                    emit(Result.success(true))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    fun getCurrentDateTimeAmPm(): String {
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+        return dateFormat.format(currentDate)
     }
 
     override suspend fun notificationSeen(id: String): CommonResponse {
