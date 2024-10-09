@@ -16,4 +16,6 @@ interface AppRepository {
     fun getFavourites(): Flow<Result<List<Favourites>>>
     fun updateFavourites(items:List<Favourites>): Flow<Result<String>>
     suspend fun notificationSeen(  id: String ): CommonResponse
+    fun syncData(): Flow<Result<Boolean>>
+
 }

@@ -235,7 +235,9 @@ class ProfileFragment : Fragment() {
                         changeUser { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentUserId(it.id)
-                                restartApp()
+                                mainActivity().syncData {
+                                    restartApp()
+                                }
                             }
                         }
                         removeAccountListener { _ ->

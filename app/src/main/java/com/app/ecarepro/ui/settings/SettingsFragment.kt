@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.mainActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,16 +55,23 @@ class SettingsFragment : Fragment() {
 
             cardChangeUserName.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
 
-            cardRateUs.setOnClickListener { launchPlayStore() }
-            viewLifecycleOwner.lifecycleScope.launch {
-                lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
+            cardSync.setOnClickListener {
+                mainActivity().syncData { setLastSyncTime() }
             }
+
+            cardRateUs.setOnClickListener { launchPlayStore() }
+
+            setLastSyncTime()
         }
         generalSettings()
 
 
     }
-
+    private fun FragmentSettingsBinding.setLastSyncTime() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
+        }
+    }
 
     private fun launchPlayStore() {
         var intent: Intent? = null

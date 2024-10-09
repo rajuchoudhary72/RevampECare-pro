@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
 
     private var expandedMenuId: Int = -1
     private var listenMenuItemClickEvent = true
+    private var isActivityPaused = false
 
 
     @Inject
@@ -1595,7 +1596,33 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
     }
-
+    fun syncData(showMessage: Boolean = true, onSuccess: (() -> Unit?)? = null) {
+        lifecycleScope.launch {
+            if (userDataStore.isUserAuthenticated().not()) return@launch
+            showLoader(true)
+            systemViewModel.syncData { isSuccess, message ->
+                showLoader(false)
+                message?.let {
+                    if (showMessage)
+                        showMessage(message)
+                }
+                if (isSuccess) {
+                    onSuccess?.invoke()
+                }
+            }
+        }
+    }
+    override fun onPause() {
+        super.onPause()
+        isActivityPaused = true
+    }
+    override fun onResume() {
+        super.onResume()
+        if (isActivityPaused) {
+            syncData(showMessage = false)
+            isActivityPaused = false
+        }
+    }
 }
 
 fun Fragment.mainActivity(): MainActivity {

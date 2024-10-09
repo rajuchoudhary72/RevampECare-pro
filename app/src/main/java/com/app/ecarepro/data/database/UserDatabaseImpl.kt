@@ -61,7 +61,9 @@ class UserDatabaseImpl @Inject constructor(
     override fun getSchoolsFlow(): Flow<List<SchoolEntity>> {
         return schoolDao.getSchoolsFlow()
     }
-
+    override suspend fun deleteUserById(id: Int) {
+        userDao.deleteUserById(id)
+    }
     override suspend fun deleteSchool(schoolEntity: SchoolEntity) {
         schoolDao.deleteSchool(schoolEntity)
     }

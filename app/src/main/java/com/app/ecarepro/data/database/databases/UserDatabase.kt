@@ -11,5 +11,6 @@ interface UserDatabase {
     fun getUsersFlow(): Flow<List<UserEntity>?>
     suspend fun deleteUser(userEntity: UserEntity)
     suspend fun deleteUser(userId: Int)
+    suspend fun deleteUserById(id: Int)
 
 }
