@@ -7,19 +7,16 @@ import android.os.Build
 import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
-import com.app.ecarepro.data.repository.SchoolRepository
-
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
 import com.app.ecarepro.data.network.model.UserInfo
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
@@ -34,6 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,21 +46,26 @@ class SystemViewModel @Inject constructor(
 
     ) : ViewModel() {
     private val _openNavigationDrawer = MutableLiveData(false)
-      val _showPrompt = MutableLiveData(false)
+    val _showPrompt = MutableLiveData(false)
     val openNavigationDrawer = _openNavigationDrawer
 
     private val _navigateBack = MutableSharedFlow<Boolean>()
     val navigateBack = _navigateBack
 
-    private val appVersionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppVersion>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val appVersionStateFlow: StateFlow<NetworkResult<NetworkAppVersion>> = appVersionMutableStateFlow
+    private val appVersionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAppVersion>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val appVersionStateFlow: StateFlow<NetworkResult<NetworkAppVersion>> =
+        appVersionMutableStateFlow
 
 
-
-    private val generalSettingsMutableStateFlow: MutableStateFlow<NetworkResult<GeneralSettingsDto>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val generalSettingsStateFlow: StateFlow<NetworkResult<GeneralSettingsDto>> = generalSettingsMutableStateFlow
+    private val generalSettingsMutableStateFlow: MutableStateFlow<NetworkResult<GeneralSettingsDto>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val generalSettingsStateFlow: StateFlow<NetworkResult<GeneralSettingsDto>> =
+        generalSettingsMutableStateFlow
 
 
     private val _logout = MutableSharedFlow<Boolean>()
@@ -81,17 +84,17 @@ class SystemViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                UType = userDataStore.getUserType()?:1
+                UType = userDataStore.getUserType() ?: 1
             } catch (e: NullPointerException) {
                 e.toString()
             }
         }
     }
 
-    fun checkAppVersion( )=viewModelScope.launch {
+    fun checkAppVersion() = viewModelScope.launch {
         runCatching {
             appVersionMutableStateFlow.value = NetworkResult.Loading()
-            schoolRepository.checkAppVersion( )
+            schoolRepository.checkAppVersion()
         }.onSuccess {
             appVersionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -107,7 +110,7 @@ class SystemViewModel @Inject constructor(
             .map { result ->
                 if (result.isSuccess) {
                     val response = result.getOrNull()!!
-                    if(response.isAuthenticated == false){
+                    if (response.isAuthenticated == false) {
                         _logout.emit(true)
                     }
                     MainActivityUiState.Success(
@@ -237,16 +240,32 @@ class SystemViewModel @Inject constructor(
         }
     }
 
-    fun appGeneralSettings( )=viewModelScope.launch {
+    fun appGeneralSettings() = viewModelScope.launch {
         runCatching {
             generalSettingsMutableStateFlow.value = NetworkResult.Loading()
-            schoolRepository.appGeneralSettings( )
+            schoolRepository.appGeneralSettings()
         }.onSuccess {
-             generalSettingsMutableStateFlow.value = NetworkResult.Success(it)
+            generalSettingsMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             generalSettingsMutableStateFlow.value = NetworkResult.Error(it.message)
         }
+    }
 
+    fun syncData(resultListener: (Boolean, String?) -> Unit) {
+        viewModelScope.launch {
+            appRepository
+                .syncData()
+                .collectLatest { value: Result<Boolean> ->
+                    if (value.isSuccess) {
+                        resultListener(true, "Success")
+                    } else {
+                        resultListener(
+                            false,
+                            value.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                        )
+                    }
+                }
+        }
     }
 }
 

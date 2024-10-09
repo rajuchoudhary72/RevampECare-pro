@@ -11,6 +11,8 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.FavouritesDto
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
+import com.app.ecarepro.data.network.model.SyncDataDto
+
 interface AppService {
     @GET("App/Layout")
     suspend fun getAppLayout(
@@ -40,4 +42,7 @@ interface AppService {
     suspend fun notificationSeen(
         @Query("ID") id: String
     ): CommonResponse
+
+    @GET("App/Sync")
+    suspend fun syncData(): SyncDataDto
 }

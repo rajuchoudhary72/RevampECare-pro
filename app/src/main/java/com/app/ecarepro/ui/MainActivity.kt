@@ -69,14 +69,14 @@ import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userDataStore: UserDataStore
+
     @Inject
     lateinit var userDatabase: UserDatabase
     private val topLevelFragments = mutableListOf(
@@ -107,6 +108,8 @@ class MainActivity : AppCompatActivity() {
         R.id.notificationFragment,
         R.id.messageFragment,
     )
+
+    private var isActivityPaused = false
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun enableNotificationPermission() {
@@ -352,60 +355,64 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-        private fun handleNotificationClick(data: Bundle) {
-            lifecycleScope.launch {
-                showLoader(true)
-                delay(2000)
-
-                Log.e("Note", data.keySet().joinToString() {key -> "$key -> ${data.get(key).toString()}"  } )
-                val schCode = data.getString("SchCode") ?: return@launch
-                val userID = data.getString("UserID")?.toInt() ?: return@launch
-                val userType = data.getString("UserType")?.toInt() ?: return@launch
-                val menuId = data.getString("MenuId")?.toInt()
-                val childMenuId = data.getString("ChMenuID")?.toInt()
-
-                Log.e("Note", "$schCode $userID $menuId $childMenuId" )
-
-                if(userDataStore.getUsersFlow().first().firstOrNull { it.userId == userID && it.schoolCode == schCode } == null){
-                    Log.e("Note", "return@launch", )
-                    return@launch
-                }
-
-                val currentSchool = userDataStore.getSchoolData()
-                if (currentSchool?.schoolCode != schCode) {
-                    Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)", )
-                    userDataStore.setCurrentSchoolCode(schCode!!)
-                }
-
-                val currentUser = userDataStore.getUser()
-                if (currentUser?.userId != userID) {
-                    Log.e("Note", "userDataStore.setCurrentUserId(userID)", )
-                            userDatabase.getUser(userID, schCode, userType)?.id?.let {
-                                userDataStore.setCurrentUserId(it)
-                            }
-                }
-
-                if (menuId != null) {
-                    if (childMenuId != null) {
-                        Log.e("Note","getFragmentId(menuId, childMenuId)", )
-                        getFragmentId(menuId, childMenuId)
-                    }
-                }
-                showLoader(false)
-            }
-
-        }
-
-/*
     private fun handleNotificationClick(data: Bundle) {
-        val menuId = data.getString("MenuId")?.toInt()
-        val childMenuId = data.getString("ChMenuID")?.toInt()
-        if (menuId != null) {
-            if (childMenuId != null) {
-                getFragmentId(menuId, childMenuId)
+        lifecycleScope.launch {
+            showLoader(true)
+            delay(2000)
+
+            Log.e(
+                "Note",
+                data.keySet().joinToString() { key -> "$key -> ${data.get(key).toString()}" })
+            val schCode = data.getString("SchCode") ?: return@launch
+            val userID = data.getString("UserID")?.toInt() ?: return@launch
+            val userType = data.getString("UserType")?.toInt() ?: return@launch
+            val menuId = data.getString("MenuId")?.toInt()
+            val childMenuId = data.getString("ChMenuID")?.toInt()
+
+            Log.e("Note", "$schCode $userID $menuId $childMenuId")
+
+            if (userDataStore.getUsersFlow().first()
+                    .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
+            ) {
+                Log.e("Note", "return@launch")
+                return@launch
             }
+
+            val currentSchool = userDataStore.getSchoolData()
+            if (currentSchool?.schoolCode != schCode) {
+                Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)")
+                userDataStore.setCurrentSchoolCode(schCode!!)
+            }
+
+            val currentUser = userDataStore.getUser()
+            if (currentUser?.userId != userID) {
+                Log.e("Note", "userDataStore.setCurrentUserId(userID)")
+                userDatabase.getUser(userID, schCode, userType)?.id?.let {
+                    userDataStore.setCurrentUserId(it)
+                }
+            }
+
+            if (menuId != null) {
+                if (childMenuId != null) {
+                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
+                    getFragmentId(menuId, childMenuId)
+                }
+            }
+            showLoader(false)
         }
-    }*/
+
+    }
+
+    /*
+        private fun handleNotificationClick(data: Bundle) {
+            val menuId = data.getString("MenuId")?.toInt()
+            val childMenuId = data.getString("ChMenuID")?.toInt()
+            if (menuId != null) {
+                if (childMenuId != null) {
+                    getFragmentId(menuId, childMenuId)
+                }
+            }
+        }*/
 
     private fun checkAppVersion() {
         lifecycleScope.launch {
@@ -437,7 +444,7 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
 
-                            if(BuildConfig.DEBUG) return@collectLatest
+                            if (BuildConfig.DEBUG) return@collectLatest
 
                             if (versionName < it.data.android.currentVersion) {
                                 // open  dialog
@@ -496,6 +503,7 @@ class MainActivity : AppCompatActivity() {
             imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
     fun setUpDrawer() {
         systemViewModel.openNavigationDrawer.observe(this) { open ->
             if (open) {
@@ -783,10 +791,11 @@ class MainActivity : AppCompatActivity() {
                             if (userType == Constant.STAFF_TYPE) {
                                 navController.navigate(R.id.attendanceFragment)
                             } else {
-                                val intent1 = Intent(this@MainActivity, TryAttendanceTest2::class.java)
+                                val intent1 =
+                                    Intent(this@MainActivity, TryAttendanceTest2::class.java)
                                 startActivity(intent1)
 
-                            //    navController.navigate(R.id.showAttendanceFragment)
+                                //    navController.navigate(R.id.showAttendanceFragment)
                             }
                         } catch (_: Exception) {
                         }
@@ -1063,7 +1072,7 @@ class MainActivity : AppCompatActivity() {
                     45 -> navController.navigate(R.id.staticalReport)
                     46 -> navController.navigate(R.id.appUserReportFragment)
                     47 -> navController.navigate(R.id.surveyListFragment)
-                    64 ->  {
+                    64 -> {
 
                         navController.navigate(
                             R.id.classAndTeacherListFragment,
@@ -1072,8 +1081,6 @@ class MainActivity : AppCompatActivity() {
                             })
 
                     }
-
-
 
 
                 }
@@ -1187,6 +1194,7 @@ class MainActivity : AppCompatActivity() {
                             3 -> {
                                 navController.navigate(R.id.assignHomeFragment)
                             }
+
                             10 -> {
                                 navController.navigate(R.id.updateStudentsProfileFragment)
                             }
@@ -1587,6 +1595,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    fun syncData(showMessage: Boolean = true, onSuccess: (() -> Unit?)? = null) {
+        lifecycleScope.launch {
+            if (userDataStore.isUserAuthenticated().not()) return@launch
+            showLoader(true)
+            systemViewModel.syncData { isSuccess, message ->
+                showLoader(false)
+                message?.let {
+                    if (showMessage)
+                        showMessage(message)
+                }
+                if (isSuccess) {
+                    onSuccess?.invoke()
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isActivityPaused = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isActivityPaused) {
+            syncData(showMessage = false)
+            isActivityPaused = false
+        }
+    }
 }
 
 fun Fragment.mainActivity(): MainActivity {
