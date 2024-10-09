@@ -121,6 +121,7 @@ class ConversationFragment : Fragment() {
                                 abbreviation(message.abbreviation)
                                 date(message.sentOn)
                                 name(message.subject)
+                                hasRead(message.hasRead)
                                 msgTypeImageRes(
                                     if (message.msgType == 2) {
                                         R.drawable.ic_photo

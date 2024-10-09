@@ -67,6 +67,7 @@ import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
 import com.lassi.domain.media.LassiOption
 import com.lassi.domain.media.MediaType
+import com.lassi.domain.media.SortingOption
 import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -703,6 +704,7 @@ class ComposeFragment : Fragment() {
             .with(LassiOption.CAMERA_AND_GALLERY)
             .setMediaType(MediaType.IMAGE)
             .setMaxCount(7)
+            .setAscSort(SortingOption.DESCENDING)
             .setGridSize(3)
             .setMinFileSize(0) // Restrict by minimum file size
             .setMaxFileSize(12000) // Restrict by maximum file size
