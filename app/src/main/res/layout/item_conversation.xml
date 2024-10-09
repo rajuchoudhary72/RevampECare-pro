@@ -14,6 +14,10 @@
             type="java.lang.String" />
 
         <variable
+            name="hasRead"
+            type="java.lang.Boolean" />
+
+        <variable
             name="date"
             type="java.lang.String" />
 
@@ -77,8 +81,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/calibri_bold"
                 android:text="@{name}"
+                isBold="@{hasRead}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"

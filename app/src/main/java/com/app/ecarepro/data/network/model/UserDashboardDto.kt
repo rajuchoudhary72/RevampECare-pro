@@ -114,7 +114,9 @@ data class Activity(
     @SerializedName("id")
     val id: Any?,
     @SerializedName("title")
-    val title: String?
+    val title: String?,
+    @SerializedName("isWorking")
+    val isWorking: Boolean?
 )
 data class AttendanceSummary(
     @SerializedName("classSummary")

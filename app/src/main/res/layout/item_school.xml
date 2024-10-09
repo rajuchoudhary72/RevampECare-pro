@@ -75,10 +75,10 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/childPhoto"
-            isInvisible="@{childPhoto==null}"
             imageUrl="@{childPhoto}"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/_4sdp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,8 +99,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"
-            app:layout_constraintTop_toTopOf="@+id/childPhoto"
-            app:layout_constraintBottom_toBottomOf="@+id/childPhoto"
+            app:layout_constraintTop_toBottomOf="@+id/image"
             tools:text="Raju" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

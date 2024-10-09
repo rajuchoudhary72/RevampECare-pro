@@ -28,6 +28,7 @@ import android.text.style.CharacterStyle
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
+import androidx.core.content.res.ResourcesCompat
 
 
 @BindingAdapter("isVisible")
@@ -176,6 +177,11 @@ interface FileClickListener {
 @BindingAdapter("htmlText")
 fun TextView.htmlText(html: String?) {
     text = Html.fromHtml(html)
+}
+
+@BindingAdapter("isBold")
+fun TextView.isBold(isBold:Boolean) {
+    typeface = ResourcesCompat.getFont(context, if(isBold) R.font.calibri_bold else R.font.calibri_regular)
 }
 
 @BindingAdapter("styledText")
