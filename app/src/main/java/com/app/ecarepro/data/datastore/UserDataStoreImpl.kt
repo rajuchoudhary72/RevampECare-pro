@@ -291,17 +291,17 @@ class UserDataStoreImpl @Inject constructor(
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
         private val currentSchoolCode = stringPreferencesKey("currentSchoolCode")
-        private val schoolDataKey = stringPreferencesKey("schoolData")
+        //private val schoolDataKey = stringPreferencesKey("schoolData")
         private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")
-        private val userPreferenceKey = stringPreferencesKey("user")
+       // private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
         private val generalSettingsKey = stringPreferencesKey("generalSettings")
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
-        private val classIDKey = intPreferencesKey("classID")
+      //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }

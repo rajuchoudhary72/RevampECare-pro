@@ -167,8 +167,11 @@ class CalenderActivityModel(val activities: List<Activity>) :
                         else -> {
                             textView.setTextColorRes(R.color.black)
                             textView.background = null
-                            dotView.isVisible = getEvents(data.date).isNotEmpty()
-                            dotView.isClickable = getEvents(data.date).isNotEmpty()
+                            val events = getEvents(data.date)
+                            dotView.isVisible = events.isNotEmpty()
+                            dotView.isClickable = events.isNotEmpty()
+                            val isWorkingDay = events.all { it.isWorking == true }
+                            dotView.setBackgroundResource(if(isWorkingDay) R.drawable.calender_today_bg else R.drawable.calender_today_bg_red)
                         }
                     }
                 } else {
