@@ -10,6 +10,8 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
     ViewBindingKotlinModel<ItemFeeDefaulterCardBinding>(R.layout.item_fee_defaulter_card) {
@@ -24,9 +26,9 @@ class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
 
         /**/
         // Convert to BigDecimal to avoid scientific notation
-        val bigDecimalValue = feeDefaulter.amount?.let { BigDecimal(it) }
-        val formattedValue = bigDecimalValue?.toPlainString()
-        amount.subTitle("₹" + formattedValue)
+        val number = feeDefaulter.amount
+        val roundedNumber = String.format("%.2f", number)
+        amount.subTitle("₹" + roundedNumber)
         total.subTitle(feeDefaulter.totalStudent.toString())
         defaulter.subTitle(feeDefaulter.dafaulterCount.toString())
         chartView.isClearBackgroundColor = true
