@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.FragmentSettingsBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
@@ -35,6 +36,9 @@ class SettingsFragment : Fragment() {
 
     private val viewModel: SystemViewModel by viewModels()
 
+    @Inject
+    lateinit var syncManager: SyncManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,7 +58,16 @@ class SettingsFragment : Fragment() {
             cardChangeUserName.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
 
             cardSync.setOnClickListener {
-                mainActivity().syncData { setLastSyncTime() }
+                lifecycleScope.launch {
+                    mainActivity().showLoader(true)
+                    syncManager.sync { isSuccess, message ->
+                        mainActivity().showLoader(false)
+                        if (isSuccess)
+                            setLastSyncTime()
+
+                        mainActivity().showMessage(message)
+                    }
+                }
             }
 
             cardRateUs.setOnClickListener { launchPlayStore() }

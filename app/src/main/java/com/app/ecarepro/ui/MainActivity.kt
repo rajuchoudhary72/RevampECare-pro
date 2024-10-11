@@ -52,6 +52,7 @@ import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
@@ -110,6 +111,9 @@ class MainActivity : AppCompatActivity() {
     )
 
     private var isActivityPaused = false
+
+    @Inject
+    lateinit var syncManager: SyncManager
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun enableNotificationPermission() {
@@ -1596,19 +1600,11 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun syncData(showMessage: Boolean = true, onSuccess: (() -> Unit?)? = null) {
+    private fun syncData(forceSync: Boolean) {
         lifecycleScope.launch {
-            if (userDataStore.isUserAuthenticated().not()) return@launch
             showLoader(true)
-            systemViewModel.syncData { isSuccess, message ->
+            syncManager.sync(forceSync) { _, _ ->
                 showLoader(false)
-                message?.let {
-                    if (showMessage)
-                        showMessage(message)
-                }
-                if (isSuccess) {
-                    onSuccess?.invoke()
-                }
             }
         }
     }
@@ -1621,8 +1617,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (isActivityPaused) {
-            syncData(showMessage = false)
+            syncData(false)
             isActivityPaused = false
+        } else {
+            syncData(true)
         }
     }
 }

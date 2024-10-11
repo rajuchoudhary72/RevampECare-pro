@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.app.ecarepro.BuildConfig
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -19,13 +17,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.FragmentProfileBinding
 import com.app.ecarepro.profileAddAccount
 import com.app.ecarepro.profileHeader
@@ -58,6 +57,9 @@ class ProfileFragment : Fragment() {
     @Inject
     lateinit var userDataStore: UserDataStore
 
+    @Inject
+    lateinit var syncManager: SyncManager
+
     private val galleryLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -82,6 +84,7 @@ class ProfileFragment : Fragment() {
 
             }
         }
+
     fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
         return when (compressFormat) {
             Bitmap.CompressFormat.JPEG -> "jpg"
@@ -90,6 +93,7 @@ class ProfileFragment : Fragment() {
             else -> "unknown"
         }
     }
+
     private fun uploadPhoto(imageString: String, imageExt: String) {
         (requireActivity() as MainActivity).showLoader(true)
         profileViewModel.uploadPhoto(
@@ -111,8 +115,8 @@ class ProfileFragment : Fragment() {
                     try {
                         val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                         val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
-                       /* val imageExt =
-                            FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
+                        /* val imageExt =
+                             FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
 
                         uploadPhoto(imageString, imageExt)
                     } catch (e: NullPointerException) {
@@ -211,19 +215,19 @@ class ProfileFragment : Fragment() {
                             if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
                             } else {
-                               /* if (it.userType==3){
-                                    it.name + "(${it.designation})"
-                                }else{
-                                    it.name + "(${it.roleName})"
-                                }*/
+                                /* if (it.userType==3){
+                                     it.name + "(${it.designation})"
+                                 }else{
+                                     it.name + "(${it.roleName})"
+                                 }*/
                                 it.name + "(${it.roleName})"
                             }
 
                         )
 
-                        if(it.stName.isNullOrEmpty().not()) {
-                            childName("${it.stName?:""} (${it.className?:""})" )
-                        }else{
+                        if (it.stName.isNullOrEmpty().not()) {
+                            childName("${it.stName ?: ""} (${it.className ?: ""})")
+                        } else {
                             childName(null)
                         }
                         photo(it.photo)
@@ -232,8 +236,12 @@ class ProfileFragment : Fragment() {
                         changeUser { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentUserId(it.id)
-                                mainActivity().syncData {
-                                    restartApp()
+                                mainActivity().showLoader(true)
+                                syncManager.sync { isSuccess, message ->
+                                    mainActivity().showLoader(false)
+                                    if (isSuccess)
+                                        restartApp()
+                                    mainActivity().showMessage(message)
                                 }
                             }
                         }
@@ -323,10 +331,10 @@ class ProfileFragment : Fragment() {
         profileItem {
             id(R.string.spouse_name)
             iconRes(R.drawable.ic_profile)
-            if (profile.isSpouseName==true){
+            if (profile.isSpouseName == true) {
                 title(getString(R.string.spouse_name))
                 subTitle(profile.fatherHusbandName)
-            }else{
+            } else {
                 title("Father Name")
                 subTitle(profile.fatherHusbandName)
             }
@@ -422,11 +430,11 @@ class ProfileFragment : Fragment() {
         }
         profileItem {
             id(R.string.spouse_contact_number)
-            if (profile.isSpouseName==true){
+            if (profile.isSpouseName == true) {
                 iconRes(R.drawable.ic_contact_no_)
                 title(getString(R.string.spouse_contact_number))
                 subTitle(profile.fatherHusbandMob)
-            }else{
+            } else {
                 iconRes(R.drawable.ic_contact_no_)
                 title("Father Contact No. :")
                 subTitle(profile.fatherHusbandMob)

@@ -5,6 +5,7 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.asUserEntity
@@ -107,19 +108,12 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun syncData(): Flow<Result<Boolean>> {
+    override fun syncData(): Flow<Result<LoginResponseDto>> {
         return flow {
             try {
                 val response = appService.syncData()
-                if (response.errorCode == 0) {
-                    response.data?.asUserEntity()?.let { user ->
-                        userDataStore.getUser()?.let { currentUserInDatabase ->
-                            userDatabase.deleteUserById(currentUserInDatabase.id)
-                            val id = userDatabase.insertUser(user.copy(schoolCode = userDataStore.getCurrentSchoolCode(), loginTime = getCurrentDateTimeAmPm()))
-                            userDataStore.setCurrentUserId(id.toInt())
-                        }
-                    }
-                    emit(Result.success(true))
+                if (response.errorCode == 0 && response.data != null) {
+                    emit(Result.success(response.data))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
