@@ -65,6 +65,8 @@ import com.app.ecarepro.data.network.model.NetworkRouteList
 import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
 import com.app.ecarepro.data.network.model.NetworkSMSConsumption
 import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStaffList
 import com.app.ecarepro.data.network.model.NetworkStaffProfile
@@ -91,6 +93,7 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
@@ -662,6 +665,13 @@ interface UserRepository {
         toDate: String,
         iD: String,
     ): NetworkSmsMsgReport
+
+    suspend fun getSMSType ( ): NetworkSmsReportModel
+
+    suspend fun getSMSReport ( fromDate : String,
+                               toDate: String,
+                               sMSTypeD: Int,
+                               page: Int  ): NetworkSmsReportDetails
 
     suspend fun getSMSConsumption(
         fromDate : String,
