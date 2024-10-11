@@ -248,22 +248,7 @@ class SystemViewModel @Inject constructor(
         }
 
     }
-    fun syncData(resultListener: (Boolean, String?) -> Unit) {
-        viewModelScope.launch {
-            appRepository
-                .syncData()
-                .collectLatest { value: Result<Boolean> ->
-                    if (value.isSuccess) {
-                        resultListener(true, "Success")
-                    } else {
-                        resultListener(
-                            false,
-                            value.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
-                        )
-                    }
-                }
-        }
-    }
+
 }
 
 sealed interface MainActivityUiState {

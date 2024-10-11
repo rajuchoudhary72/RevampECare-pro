@@ -9,6 +9,7 @@ import com.app.ecarepro.ui.views.subTitle
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import java.math.BigDecimal
 
 class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
     ViewBindingKotlinModel<ItemFeeDefaulterCardBinding>(R.layout.item_fee_defaulter_card) {
@@ -21,7 +22,11 @@ class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
             groupCollapsed.isVisible = this@FeeDefaulterModel.isExpanded.not()
         }
 
-        amount.subTitle("₹" + feeDefaulter.amount)
+        /**/
+        // Convert to BigDecimal to avoid scientific notation
+        val bigDecimalValue = feeDefaulter.amount?.let { BigDecimal(it) }
+        val formattedValue = bigDecimalValue?.toPlainString()
+        amount.subTitle("₹" + formattedValue)
         total.subTitle(feeDefaulter.totalStudent.toString())
         defaulter.subTitle(feeDefaulter.dafaulterCount.toString())
         chartView.isClearBackgroundColor = true

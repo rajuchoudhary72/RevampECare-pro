@@ -14,6 +14,7 @@ import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.asUserEntity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -107,19 +108,12 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
-    override fun syncData(): Flow<Result<Boolean>> {
+    override fun syncData(): Flow<Result<LoginResponseDto>> {
         return flow {
             try {
                 val response = appService.syncData()
-                if (response.errorCode == 0) {
-                    response.data?.asUserEntity()?.let { user ->
-                        userDataStore.getUser()?.let { currentUserInDatabase ->
-                            userDatabase.deleteUserById(currentUserInDatabase.id)
-                            val id = userDatabase.insertUser(user.copy(schoolCode = userDataStore.getCurrentSchoolCode(), loginTime = getCurrentDateTimeAmPm()))
-                            userDataStore.setCurrentUserId(id.toInt())
-                        }
-                    }
-                    emit(Result.success(true))
+                if (response.errorCode == 0 && response.data != null) {
+                    emit(Result.success(response.data))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
@@ -129,11 +123,6 @@ class AppRepositoryImpl @Inject constructor(
         }
     }
 
-    fun getCurrentDateTimeAmPm(): String {
-        val currentDate = Date()
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
-        return dateFormat.format(currentDate)
-    }
 
     override suspend fun notificationSeen(id: String): CommonResponse {
         return appService.notificationSeen(id)
