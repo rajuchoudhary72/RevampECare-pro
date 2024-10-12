@@ -26,6 +26,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Profile
+import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.FragmentProfileBinding
 import com.app.ecarepro.profileAddAccount
 import com.app.ecarepro.profileHeader
@@ -55,6 +56,8 @@ class ProfileFragment : Fragment() {
     private lateinit var photoType: PhotoType
 
 
+    @Inject
+    lateinit var syncManager: SyncManager
     @Inject
     lateinit var userDataStore: UserDataStore
 
@@ -235,7 +238,14 @@ class ProfileFragment : Fragment() {
                         changeUser { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentUserId(it.id)
-                                restartApp()
+                                /*sync  data on Local DB when user switch account */
+                                mainActivity().showLoader(true)
+                                syncManager.sync { isSuccess, message ->
+                                    mainActivity().showLoader(false)
+                                    if (isSuccess)
+                                        restartApp()
+                                    mainActivity().showMessage(message)
+                                }
                             }
                         }
                         removeAccountListener { _ ->

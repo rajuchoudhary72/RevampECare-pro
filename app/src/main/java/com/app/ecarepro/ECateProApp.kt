@@ -46,30 +46,6 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
         return currentActivity?.get()
     }
 
-    private fun registerToken() {
-        Firebase.messaging.token.addOnSuccessListener { token ->
-            GlobalScope.launch {
-                val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-                val wInfo = wifiManager.connectionInfo
-                val macAddress = wInfo.macAddress
-                appRepository
-                        .registerDevice(
-                                RegisterDevice(
-                                        fcmToken = token,
-                                        osVersion = "OS " + Build.VERSION.SDK_INT,
-                                        deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
-                                        deviceType = 1,
-                                        imeI1 = macAddress,
-                                        imeI2 = macAddress,
-                                        deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
-                                )
-                        )
-                        .collectLatest {
-                            println(it)
-                        }
-            }
-        }
-    }
     fun getContext(): Context {
         return applicationContext
     }

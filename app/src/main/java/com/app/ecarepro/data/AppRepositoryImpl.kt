@@ -12,9 +12,18 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
+import com.app.ecarepro.data.network.model.asUserEntity
+import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.asUserEntity
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    private val userDatabase: UserDatabase
 ) : AppRepository {
     override fun getAppLayout(): Flow<Result<AppLayoutDto>> {
         return flow {
@@ -99,6 +108,21 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
+    override fun syncData(): Flow<Result<LoginResponseDto>> {
+        return flow {
+            try {
+                val response = appService.syncData()
+                if (response.errorCode == 0 && response.data != null) {
+                    emit(Result.success(response.data))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
 
     override suspend fun notificationSeen(id: String): CommonResponse {
         return appService.notificationSeen(id)

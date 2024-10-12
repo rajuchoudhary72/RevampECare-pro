@@ -248,6 +248,7 @@ class SystemViewModel @Inject constructor(
         }
 
     }
+
 }
 
 sealed interface MainActivityUiState {

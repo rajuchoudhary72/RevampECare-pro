@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.RegisterDevice
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
+import com.app.ecarepro.data.network.model.LoginResponseDto
 import retrofit2.http.Query
 
 interface AppRepository {
@@ -16,4 +17,5 @@ interface AppRepository {
     fun getFavourites(): Flow<Result<List<Favourites>>>
     fun updateFavourites(items:List<Favourites>): Flow<Result<String>>
     suspend fun notificationSeen(  id: String ): CommonResponse
+    fun syncData(): Flow<Result<LoginResponseDto>>
 }

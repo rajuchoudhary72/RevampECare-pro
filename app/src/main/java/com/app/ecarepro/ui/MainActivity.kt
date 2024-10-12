@@ -52,6 +52,7 @@ import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
@@ -95,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     private var expandedMenuId: Int = -1
     private var listenMenuItemClickEvent = true
+    private var isActivityPaused = false
 
 
     @Inject
@@ -102,6 +104,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userDatabase: UserDatabase
+    @Inject
+    lateinit var syncManager: SyncManager
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
         R.id.profileFragment,
@@ -1595,7 +1599,29 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
     }
+    private fun syncData(forceSync: Boolean) {
+        lifecycleScope.launch {
+            showLoader(true)
+            syncManager.sync(forceSync) { _, _ ->
+                showLoader(false)
+            }
+        }
+    }
 
+    override fun onPause() {
+        super.onPause()
+        isActivityPaused = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isActivityPaused) {
+            syncData(false)
+            isActivityPaused = false
+        } else {
+            syncData(true)
+        }
+    }
 }
 
 fun Fragment.mainActivity(): MainActivity {

@@ -70,6 +70,7 @@ data class UserInfo(
     val userType: Int?
 )
 
+
 data class ChildMenu(
     @SerializedName("chMenuID")
     val chMenuID: Int,
