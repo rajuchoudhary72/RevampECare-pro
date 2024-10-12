@@ -764,4 +764,7 @@
     <string name="mother_mobile_number">Mother Mobile Number</string>
     <string name="father_mobile_number">Father Mobile Number</string>
     <string name="photos">Photos</string>
+    <string name="read_by_0_recipient">Read by 0 recipient</string>
+    <string name="select_sms_type">Select Sms Type</string>
+    <string name="sent_by">Sent By :</string>
 </resources>

@@ -37,6 +37,10 @@ class ReportCardListAdapter(
              tvUpdateOn.text= "Updated On : ${data.updatedOn}"
 
              llBack.isVisible = data.viewMode != 1
+            if(data.viewMode == 1){
+                tvView.text = "View"
+                tvDownload.text="Download "
+            }
 
              llView.setOnClickListener {
                 reportCardDetailsFragment.onItemClick(data,1,true)

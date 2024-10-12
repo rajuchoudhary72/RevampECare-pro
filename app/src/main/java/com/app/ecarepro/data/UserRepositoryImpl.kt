@@ -141,7 +141,10 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -847,6 +850,20 @@ class UserRepositoryImpl @Inject constructor(
     ): NetworkSmsMsgReport {
         return userService.getSMSUses(fromDate, toDate, iD)
     }
+
+    override suspend fun getSMSType(): NetworkSmsReportModel {
+        return userService.getSMSType()
+    }
+
+    override suspend fun getSMSReport(
+        fromDate: String,
+        toDate: String,
+        sMSTypeD: Int,
+        page: Int
+    ): NetworkSmsReportDetails {
+        return userService.getSMSReport(fromDate, toDate, sMSTypeD, page)
+    }
+
 
     override suspend fun getSMSConsumption(fromDate: String, toDate: String): NetworkSMSConsumption {
         return userService.getSMSConsumption(fromDate, toDate)

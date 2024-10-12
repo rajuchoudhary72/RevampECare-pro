@@ -20,7 +20,7 @@ data class SmsType(
     @SerializedName("templates")
     val templates: List<Template>?,
     @SerializedName("typeID")
-    val typeID: Int?
+    val  typeID: Int?
 )
 
 data class Template(

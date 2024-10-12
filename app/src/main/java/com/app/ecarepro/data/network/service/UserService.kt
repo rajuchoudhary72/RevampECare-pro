@@ -131,7 +131,10 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
@@ -773,6 +776,17 @@ interface UserService {
         @Query("ToDate") toDate: String,
         @Query("ID") iD: String,
     ): NetworkSmsMsgReport
+
+    @GET("Report/SMSType")
+    suspend fun getSMSType ( ): NetworkSmsReportModel
+
+    @GET("Report/SMSReport")
+    suspend fun getSMSReport (
+        @Query("FromDate") fromDate : String,
+        @Query("TillDate") toDate: String,
+        @Query("SMSType")  sMSTypeD: Int,
+        @Query("Page")     page: Int,
+    ): NetworkSmsReportDetails
 
 
 

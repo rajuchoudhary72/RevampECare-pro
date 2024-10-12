@@ -55,6 +55,7 @@ class StaffAssignmentsListNavHostFragment : Fragment()  {
             teacherTypeUser=false
         }
 
+
         binding.fbPostAssignment.setOnClickListener {
             findNavController().navigate(R.id.postAssignmentFragment)
         }
@@ -109,9 +110,7 @@ class StaffAssignmentsListNavHostFragment : Fragment()  {
                                             tab.text = classList[position]
                                         }.attach()
 
-                                        if ( staffId.isEmpty()) {
-                                            binding.fbPostAssignment.isVisible=true
-                                        }
+
 
                                     }
                                 }catch (_:Exception){ }
@@ -127,8 +126,6 @@ class StaffAssignmentsListNavHostFragment : Fragment()  {
                         }
 
 
-
-                    else -> {}
                 }
 
 
