@@ -36,7 +36,7 @@ class AcademicPerformanceFragment(private val subjets: List<Subject>) : Fragment
                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
                 subjets.forEach { itemDat ->
-                    fragmentList.add( AcademicPerSubFragment(itemDat  ))
+                  //  fragmentList.add( AcademicPerSubFragment(itemDat  ))
                 }
 
                 val viewPagerAdapter = ViewPagerAdapter(

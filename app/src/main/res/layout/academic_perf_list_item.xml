@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-        <variable
-            name="subData"
-            type="com.app.ecarepro.model.Mark" />
-    </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,14 +32,14 @@
                     />
 
                 <TextView
-                    android:id="@+id/tv_bir_on"
+                    android:id="@+id/tv_examName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
                     android:textColor="@color/grey_40"
                     android:layout_marginStart="8dp"
                     android:textSize="16sp"
-                    android:text="@{subData.examName}"
+
 
                     />
 
@@ -69,11 +65,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_marksObtained"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_medium"
                         android:textColor="@color/grey_40"
-                        android:text="@{subData.marksObtained}"
+
                         android:layout_marginStart="8dp"
                         android:textSize="16sp" />
 
@@ -95,11 +92,12 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_maximumMarks"
                          android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_medium"
                         android:textColor="@color/grey_40"
-                        android:text="@{subData.maximumMarks}"
+
                         android:layout_marginStart="8dp"
                         android:textSize="16sp" />
 

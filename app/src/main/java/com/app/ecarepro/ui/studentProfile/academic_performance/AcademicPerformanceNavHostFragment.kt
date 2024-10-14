@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -128,13 +129,17 @@ import kotlinx.coroutines.launch
 
                          if (it.data != null) {
 
-                             if (it.data.examSystems!=null ) {
+                             if (!it.data.examSystems.isNullOrEmpty() ) {
+
+                                 binding.tvNoData.isVisible=false
+                                 binding.viewPager.isVisible=true
+                                 binding.tabLayout.isVisible=true
 
                                  val fragmentList : ArrayList<Fragment> = ArrayList()
 
 
                                  for (a in it.data.examSystems ){
-                                     fragmentList.add( AcademicPerformanceFragment( a.subjets))
+                                     fragmentList.add( AcademicPerSubFragment( a.subjets))
                                  }
 
 
@@ -157,6 +162,10 @@ import kotlinx.coroutines.launch
                                  }.attach()
 
 
+                             }else{
+                                 binding.tvNoData.isVisible=true
+                                 binding.viewPager.isVisible=false
+                                 binding.tabLayout.isVisible=false
                              }
 
                          }

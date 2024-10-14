@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
@@ -80,6 +81,13 @@ class StudentProfileNavHostFragment : Fragment() {
 
                             if (it.data.profile!=null){
                                 binding.userData = it.data.profile
+                                binding.civStuPic.setOnClickListener { _ ->
+                                    try {
+                                        findNavController().navigate(R.id.openImageFragment, Bundle().apply {
+                                            putString(Constant.URL_ARGUMENT, it.data.profile.photo)
+                                        })
+                                    } catch (_: Exception) { }
+                                }
                             }
 
 
