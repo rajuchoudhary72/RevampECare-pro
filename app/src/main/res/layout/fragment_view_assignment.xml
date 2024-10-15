@@ -315,8 +315,9 @@
                   android:layout_marginBottom="@dimen/_45sdp"
                   tools:listitem="@layout/not_submitted_stu_list" />
 
-
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"/>
 
           </LinearLayout>
 
