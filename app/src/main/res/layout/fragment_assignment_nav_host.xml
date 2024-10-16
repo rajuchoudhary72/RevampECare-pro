@@ -96,6 +96,20 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/iv_no_item"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_gravity="center"
+            android:gravity="center"
+             android:text="@string/no_record_found"
+            android:visibility="gone"
+            android:textSize="16sp"
+
+            />
+
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

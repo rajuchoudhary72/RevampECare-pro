@@ -70,7 +70,11 @@ class AssignmentNavHostFragment : Fragment() {
 
                         if (it.data != null) {
 
-                            if (it.data.subjectAssignments!=null ) {
+                            if (!it.data.subjectAssignments.isNullOrEmpty()) {
+
+                                binding.tabLayout.visibility=View.VISIBLE
+                                binding.viewPager.visibility=View.VISIBLE
+                                binding.tvNoData.visibility=View.GONE
 
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
@@ -116,6 +120,10 @@ class AssignmentNavHostFragment : Fragment() {
 
 
 
+                            }else{
+                                binding.tabLayout.visibility=View.GONE
+                                binding.viewPager.visibility=View.GONE
+                                binding.tvNoData.visibility=View.VISIBLE
                             }
 
                         }

@@ -80,6 +80,10 @@ class TimeTableNavHostFragment : Fragment() {
 
                             if (it.data.data!=null ) {
 
+                                binding.tabLayout.visibility=View.VISIBLE
+                                binding.viewPager.visibility=View.VISIBLE
+                                binding.tvNoData.visibility=View.GONE
+
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
 
@@ -112,8 +116,16 @@ class TimeTableNavHostFragment : Fragment() {
                                 }.attach()
 
 
+                            }else{
+                                binding.tabLayout.visibility=View.GONE
+                                binding.viewPager.visibility=View.GONE
+                                binding.tvNoData.visibility=View.VISIBLE
                             }
 
+                        }else{
+                            binding.tabLayout.visibility=View.GONE
+                            binding.viewPager.visibility=View.GONE
+                            binding.tvNoData.visibility=View.VISIBLE
                         }
 
                     }

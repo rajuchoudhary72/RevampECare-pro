@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_75sdp"
             android:orientation="horizontal"
             android:padding="@dimen/_8sdp"
             android:weightSum="2"
@@ -26,6 +26,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1.1"
                 android:orientation="horizontal"
+
                 android:paddingBottom="@dimen/_3sdp">
 
                 <TextView
@@ -58,7 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_regular"
-
+                        android:lines="1"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp"
                          android:visibility="visible" />
