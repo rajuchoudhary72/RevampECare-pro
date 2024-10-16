@@ -132,7 +132,6 @@ class StaffApplyLeaveFragment : Fragment() {
         }
 
 
-
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
 
