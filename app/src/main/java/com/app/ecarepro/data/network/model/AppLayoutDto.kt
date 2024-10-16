@@ -60,6 +60,8 @@ data class Menu(
 data class UserInfo(
     @SerializedName("name")
     val name: String?,
+    @SerializedName("childName")
+    val childName: String?,
     @SerializedName("otherInfo")
     val otherInfo: String?,
     @SerializedName("photo")

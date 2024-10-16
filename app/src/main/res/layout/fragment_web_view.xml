@@ -26,7 +26,12 @@
                 app:topWindowInsetToPadding="@{true}" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:fitsSystemWindows="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,7 +54,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </ScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

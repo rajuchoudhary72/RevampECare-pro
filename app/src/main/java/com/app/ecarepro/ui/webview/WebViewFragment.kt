@@ -5,6 +5,7 @@ import android.app.DownloadManager
 import android.content.Context.DOWNLOAD_SERVICE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +19,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentWebViewBinding
@@ -48,12 +50,31 @@ class WebViewFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
               if (binding.webView.canGoBack()) binding.webView.goBack() else findNavController().popBackStack() }
         loadUrl(url)
-
+        adjustScrollViewForKeyboard(binding.scrollView)
 
     }
 
 
+    fun adjustScrollViewForKeyboard(scrollView: ScrollView) {
+        scrollView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = Rect()
+            scrollView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = scrollView.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
 
+            if (keypadHeight > screenHeight * 0.15) {
+                // Keyboard is open, adjust scrolling
+                scrollView.post {
+                    scrollView.scrollTo(0, screenHeight / 2)
+                }
+            } else {
+                // Keyboard is closed, reset scroll position
+                scrollView.post {
+                    scrollView.scrollTo(0, 0)
+                }
+            }
+        }
+    }
 
     private fun loadUrl(url: String) {
         binding.webView.settings.apply {
