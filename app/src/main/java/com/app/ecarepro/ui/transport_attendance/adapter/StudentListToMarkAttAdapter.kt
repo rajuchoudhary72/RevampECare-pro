@@ -57,7 +57,7 @@ class StudentListToMarkAttAdapter(
 
         fun bind(data: StuLst) {
             bin.apply {
-                tvStuName.text = "Name: " + data.stName
+                tvStuName.text =  data.stName
                 tvRollNo.text = "Roll No: " + data.rollNo
                 tvClassName.text = "Class: " + data.className
                 tvAdmissionNo.text = "Admission No: " + data.admissionNo

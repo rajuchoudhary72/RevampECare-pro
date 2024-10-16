@@ -115,9 +115,11 @@ class StaffApplyLeaveFragment : Fragment() {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
-                    days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
-                    if (selectedLeaveTypeData.sandwichEnable){
-                        days =  calculateDaysAfterHolidays(days)
+                    binding.tvEndDate.text = Constant.dateToShow(date.toString())
+                    days = 1.0
+                    if (selectedLeaveTypeData.sandwichEnable) {
+                        days = calculateDaysAfterHolidays(days)
+
                     }
 
                     binding.tvDuration.text = buildString {
@@ -130,11 +132,12 @@ class StaffApplyLeaveFragment : Fragment() {
         }
 
 
-
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
 
-                val timestampforward = Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
+                val timestampforward = Constant.getLongTimeDate(binding.tvStartDate.text.toString()) +
+                        timestampOneDay * leaveTerm.daysLimit-timestampOneDay
+
                 val timestampBack = Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
@@ -151,7 +154,6 @@ class StaffApplyLeaveFragment : Fragment() {
                             if (selectedLeaveTypeData.sandwichEnable){
                                 days =  calculateDaysAfterHolidays(days)
                             }
-
                             binding.tvDuration.text = buildString {
                                 append(days)
                                 append(" ")
@@ -224,7 +226,12 @@ class StaffApplyLeaveFragment : Fragment() {
                     append(getString(R.string.day_s))
                 }
                if (days>0){
-                   leaveApplicationDialog()
+                   if (days<=selectedLeaveTypeData.total-selectedLeaveTypeData.taken){
+                       leaveApplicationDialog()
+                   }else{
+                       mainActivity().showMessage("Sorry, you don't have sufficient leave balance!")
+                   }
+
                }else{
                    mainActivity().showMessage("Please Select Valid Date")
                }

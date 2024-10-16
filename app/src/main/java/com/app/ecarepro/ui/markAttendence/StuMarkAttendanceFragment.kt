@@ -527,8 +527,6 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             if (i.isConstant==0){
                 uploadStudentList.add(StudentAtt(i.isLate,i.stID,i.status))
             }
-
-
         }
 
         stuMarkAttendanceViewModel.postMarkAttendance(
