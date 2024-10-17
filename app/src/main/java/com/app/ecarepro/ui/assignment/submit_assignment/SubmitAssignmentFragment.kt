@@ -335,30 +335,52 @@ class SubmitAssignmentFragment : Fragment() {
         builder.setCanceledOnTouchOutside(false)
         builder.show()
     }
-
     private fun openFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
-        } else {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(R.id.openImageFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            3 -> {
+                Constant.downloadDocxFile(fileSource, requireContext())
+             }else -> {
             findNavController().navigate(R.id.openImageFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
             })
         }
+        }
+
+
 
     }
 
     private fun downloadFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-        } else {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-        }
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+            }
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+            3 -> {
+                Constant.onlyDownloadDocxFile(fileSource, requireContext())
+            }
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
 
 
-    }
+
+
 
 }
