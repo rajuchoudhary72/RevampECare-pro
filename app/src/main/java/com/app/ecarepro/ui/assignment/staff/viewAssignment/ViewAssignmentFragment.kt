@@ -44,15 +44,8 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import com.app.ecarepro.utils.Constant.Companion.downloadDocxFile
-import com.app.ecarepro.utils.Constant.Companion.onlyDownloadDocxFile
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import java.io.File
-import java.io.IOException
+import android.widget.Toast
+
 
 
 @AndroidEntryPoint
@@ -390,7 +383,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 })
             }
             3 -> {
-                downloadDocxFile(fileSource, requireContext())
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
             }else -> {
             findNavController().navigate(R.id.openImageFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
@@ -416,7 +411,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             }
 
             3 -> {
-                onlyDownloadDocxFile(fileSource, requireContext())
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
 
             }
 
@@ -526,6 +523,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             }
 
         }}
+
+
+
 
 
 

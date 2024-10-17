@@ -2,8 +2,11 @@ package com.app.ecarepro.ui.assignment.submit_assignment
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -348,7 +351,10 @@ class SubmitAssignmentFragment : Fragment() {
                 })
             }
             3 -> {
-                Constant.downloadDocxFile(fileSource, requireContext())
+
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
              }else -> {
             findNavController().navigate(R.id.openImageFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
@@ -371,14 +377,16 @@ class SubmitAssignmentFragment : Fragment() {
                 androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
             }
             3 -> {
-                Constant.onlyDownloadDocxFile(fileSource, requireContext())
+
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
             }
             else -> {
                 val androidDownloader = AndroidDownloader(requireContext())
                 androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
             }
         } }
-
 
 
 
