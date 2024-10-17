@@ -196,6 +196,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
 
                                     }.attach()
+                                    binding.viewPager.offscreenPageLimit = 6 // Adjust based on your tab count
                                 }catch (e:Exception){ }
                             }
                                 }
