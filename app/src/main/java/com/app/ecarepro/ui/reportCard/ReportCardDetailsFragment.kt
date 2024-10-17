@@ -18,7 +18,7 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 
 
-class ReportCardDetailsFragment(private val itemDat: ReportClasse) : Fragment(),
+class ReportCardDetailsFragment(private val itemDat: ReportClasse?) : Fragment(),
         ItemListener<ReportCard> {
 
     private lateinit var binding: FragmentReportCardDetailsBinding
@@ -36,7 +36,8 @@ class ReportCardDetailsFragment(private val itemDat: ReportClasse) : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
 
-        if (itemDat.reportCards != null) {
+        if (itemDat?.reportCards != null) {
+        if (itemDat.reportCards.isNotEmpty()) {
 
 
             val reportCardListAdapter =
@@ -45,13 +46,18 @@ class ReportCardDetailsFragment(private val itemDat: ReportClasse) : Fragment(),
 
             binding.rvTimeReportCard.apply {
                 setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(activity)
+                layoutManager = LinearLayoutManager(requireContext())
                 adapter = reportCardListAdapter
             }
             binding.rvTimeReportCard.isVisible = true
             binding.tvNoData.isVisible = false
 
 
+        } else {
+            binding.rvTimeReportCard.isVisible = false
+            binding.tvNoData.isVisible = true
+
+        }
         } else {
             binding.rvTimeReportCard.isVisible = false
             binding.tvNoData.isVisible = true
