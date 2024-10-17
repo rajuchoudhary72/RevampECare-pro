@@ -1,16 +1,29 @@
 package com.app.ecarepro.utils
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.File
+import java.io.IOException
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import android.app.AlertDialog
+import android.os.Environment
+
 
 class Constant {
     companion object {
@@ -281,6 +294,11 @@ class Constant {
             val currentDate = Date()
             return dateFormat.format(currentDate)
         }
+        fun getCurrentimeSecond(): String {
+            val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm:ss", Locale.ENGLISH)
+            val currentDate = Date()
+            return dateFormat.format(currentDate)
+        }
 
         /* fun incrementDateByDay( noOfDays:Int):Long{
              val c = Calendar.getInstance()
@@ -506,10 +524,18 @@ class Constant {
             return indexes
         }
 
-        fun isPdfUrl(url: String): Boolean {
-            val pdfExtension = "pdf"
+        fun isPdfUrl(url: String): Int {
+
             val extension = url.substringAfterLast(".", "").lowercase()
-            return pdfExtension == extension
+
+            return when(extension){
+                "pdf" -> 1
+                "jpg" -> 2
+                "docx" -> 3
+                else -> 2
+            }
+
+
         }
 
         fun checkApiResponse(errorCode: Int, context: Context): Boolean {
@@ -527,7 +553,12 @@ class Constant {
             return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
         }
 
+
     }
+
+
+
+
 
 
 }

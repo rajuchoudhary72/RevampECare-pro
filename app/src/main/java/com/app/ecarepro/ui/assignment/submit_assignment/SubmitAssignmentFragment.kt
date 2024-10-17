@@ -2,8 +2,11 @@ package com.app.ecarepro.ui.assignment.submit_assignment
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -335,30 +338,57 @@ class SubmitAssignmentFragment : Fragment() {
         builder.setCanceledOnTouchOutside(false)
         builder.show()
     }
-
     private fun openFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
-        } else {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(R.id.openImageFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            3 -> {
+
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+             }else -> {
             findNavController().navigate(R.id.openImageFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
             })
         }
+        }
+
+
 
     }
 
     private fun downloadFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-        } else {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-        }
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+            }
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+            3 -> {
+
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
 
 
-    }
+
 
 }

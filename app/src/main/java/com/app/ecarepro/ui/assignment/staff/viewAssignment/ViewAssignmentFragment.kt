@@ -2,6 +2,8 @@ package com.app.ecarepro.ui.assignment.staff.viewAssignment
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.DownloadManager
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,6 +15,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.FileProvider
+import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,6 +41,11 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import android.content.Intent
+import android.net.Uri
+import android.os.Environment
+import android.widget.Toast
+
 
 
 @AndroidEntryPoint
@@ -362,29 +371,59 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     }
 
     private fun openFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
-        } else {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(R.id.openImageFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }else -> {
             findNavController().navigate(R.id.openImageFragment, Bundle().apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
             })
+            }
         }
+
+
 
     }
 
     private fun downloadFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-        } else {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-        }
+
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+            }
+
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+
+            }
+
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
 
 
-    }
     private fun dateSelctedPoPUp(t: AssignSubmitStudent) {
         val tv_date: TextView
         val btn_canel: Button
@@ -484,5 +523,12 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             }
 
         }}
+
+
+
+
+
+
+
 
 }
