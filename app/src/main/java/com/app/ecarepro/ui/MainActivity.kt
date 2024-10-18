@@ -956,9 +956,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-           // navController.navigate(R.id.webViewFragment, bundle)
+           navController.navigate(R.id.webViewFragment, bundle)
               Log.d("WebURL", url)
-              openCustomTab(tabIntent, Uri.parse(url))
+             // openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
