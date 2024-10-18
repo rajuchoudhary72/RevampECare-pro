@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -16,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -460,93 +462,23 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-    private fun navigateToFavourites(favouriteSlider: Slider) {
-        if (favouriteSlider.module.contains("notice", true)) {
-            findNavController().navigate(R.id.noticeListFragment)
-        } else if (favouriteSlider.module.contains("thought", true)) {
-            findNavController().navigate(R.id.thoughtsListFragment)
-        } else if (favouriteSlider.module.contains("circular", true)) {
-            findNavController().navigate(R.id.circularFragment)
-        } else if (favouriteSlider.module.contains("library", true)) {
-            findNavController().navigate(R.id.bookLibraryFragment)
-        } else if (favouriteSlider.module.contains("syllabus", true)) {
-            findNavController().navigate(R.id.classSyllabus)
-        } else if (favouriteSlider.module.contains("activity", true)) {
-            findNavController().navigate(R.id.calenderActivityNavHost)
-        } else if (favouriteSlider.module.contains(
-                "payslip",
-                true
-            ) || favouriteSlider.module.contains("pay slip", true)
-        ) {
-            findNavController().navigate(R.id.paySlipFragment)
-        } else if (favouriteSlider.module.contains("Questionnaire", true)) {
-            findNavController().navigate(R.id.questionnaireListFragment)
-        } else if (favouriteSlider.module.contains("Leave Request", true)) {
-            findNavController().navigate(R.id.leaveHistoryFragment)
-        } else if (favouriteSlider.module.contains("Appreciation", true)) {
-            findNavController().navigate(R.id.studentListFragment2)
-        } else if (favouriteSlider.module.contains("Class Promotion", true)) {
-            findNavController().navigate(R.id.classPromotionFragment)
-        } else if (favouriteSlider.module.contains("Timetable", true)) {
-            findNavController().navigate(R.id.timeTableNavHostFragment)
-        } else if (favouriteSlider.module.contains("Birthday", true)) {
-            findNavController().navigate(R.id.birthdayFragment)
-        } else if (favouriteSlider.module.contains("Assignment", true)) {
-            findNavController().navigate(R.id.staffAssignmentsListFragment)
-        } else if (favouriteSlider.module.contains("Attendance", true)) {
-            findNavController().navigate(R.id.attendanceFragment)
-        } else if (favouriteSlider.module.contains("Excellence Award", true)) {
-            findNavController().navigate(R.id.excellenceAwardFragment)
-        } else if (favouriteSlider.module.contains("Medicine Issue", true)) {
-            findNavController().navigate(R.id.medicineIssuedFragment)
-        } else if (favouriteSlider.module.contains("Assign House", true)) {
-            findNavController().navigate(R.id.assignHomeFragment)
-        } else if (favouriteSlider.module.contains("Medical History", true)) {
-            findNavController().navigate(R.id.medicalCardFragment)
-        } else if (favouriteSlider.module.contains("Id Card", true)) {
-            // findNavController().navigate(R.id.medicalClassFragment)
-            findNavController().navigate(R.id.studentIDFragment)
-        } else if (favouriteSlider.module.contains("SMS Addon", true)) {
-            findNavController().navigate(R.id.medicalClassFragment)
-        } else if (favouriteSlider.module.contains("Teachers", true)) {
-            findNavController().navigate(R.id.subjectTeacherFragment)
-        } else if (favouriteSlider.module.contains("Classmates", true)) {
-            findNavController().navigate(R.id.classMateFragment)
-        } else if (favouriteSlider.module.contains("Survey", true)) {
-            findNavController().navigate(R.id.surveyListFragment)
-        }
-        /*start Web view module call  from here */
-        else if (favouriteSlider.module.contains("Website", true)) {
-            schoolData?.let {
-                it.webSite?.let { url ->
-                    webViewCall(url, getString(R.string.website_txt))
-                }
-            }
-        } else if (favouriteSlider.module.contains("Marks Entry", true)) {
-            schoolData?.let {
-                it.marksEntryURL?.let { url ->
-                    webViewCall(url, getString(R.string.marks_entry_heading))
-                }
-            }
-        } else if (favouriteSlider.module.contains("Assessment", true)) {
-            schoolData?.let {
-                it.assessmentMarksURL?.let { url ->
-                    webViewCall(url, getString(R.string.assessment_headling))
-                }
-            }
-        }
-        /*end Web view module call  from here */
-        else {
-            Log.e("Home", favouriteSlider.toString())
+    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(requireContext(), uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
     }
 
     private fun webViewCall(url: String, title: String) {
+        val tabIntent = CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green)).build()
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
-        findNavController().navigate(R.id.webViewFragment, bundle)
+        openCustomTab(tabIntent, Uri.parse(url))
+      //  findNavController().navigate(R.id.webViewFragment, bundle)
     }
 
     override fun onDestroyView() {

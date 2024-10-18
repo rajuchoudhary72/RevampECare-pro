@@ -289,6 +289,7 @@ class MainActivity : AppCompatActivity() {
         intent?.extras?.let { data ->
             handleNotificationClick(data)
         }
+     //  throw NullPointerException("Test crash for logging")
 
         askNotificationPermission()
 
@@ -944,9 +945,9 @@ class MainActivity : AppCompatActivity() {
                     bundle.putString("title", title)
                     bundle.putString("url", "$url?token=$token")
                     Log.d("WebURL", "$url?token=$token")
-                    navController.navigate(R.id.webViewFragment, bundle)
-                    /*Log.d("WebURL", "$url?token=$token")
-                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))*/
+                    //navController.navigate(R.id.webViewFragment, bundle)
+                    Log.d("WebURL", "$url?token=$token")
+                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
                 }
             }
 
@@ -955,9 +956,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-            navController.navigate(R.id.webViewFragment, bundle)
-            /*  Log.d("WebURL", url)
-              openCustomTab(tabIntent, Uri.parse(url))*/
+           // navController.navigate(R.id.webViewFragment, bundle)
+              Log.d("WebURL", url)
+              openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 

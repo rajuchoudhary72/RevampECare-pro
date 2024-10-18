@@ -36,7 +36,8 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         FirebaseApp.initializeApp(this)
        // registerToken()
-
+        /*// Set the custom crash handler
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))*/
 
         // Register the activity lifecycle callbacks
         registerActivityLifecycleCallbacks(this)

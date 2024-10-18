@@ -48,33 +48,13 @@ class WebViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.title = title
         binding.toolbar.setNavigationOnClickListener {
-              if (binding.webView.canGoBack()) binding.webView.goBack() else findNavController().popBackStack() }
+            if (binding.webView.canGoBack()) binding.webView.goBack() else findNavController().popBackStack() }
         loadUrl(url)
-        adjustScrollViewForKeyboard(binding.scrollView)
 
     }
 
 
-    fun adjustScrollViewForKeyboard(scrollView: ScrollView) {
-        scrollView.viewTreeObserver.addOnGlobalLayoutListener {
-            val rect = Rect()
-            scrollView.getWindowVisibleDisplayFrame(rect)
-            val screenHeight = scrollView.rootView.height
-            val keypadHeight = screenHeight - rect.bottom
 
-            if (keypadHeight > screenHeight * 0.15) {
-                // Keyboard is open, adjust scrolling
-                scrollView.post {
-                    scrollView.scrollTo(0, screenHeight / 2)
-                }
-            } else {
-                // Keyboard is closed, reset scroll position
-                scrollView.post {
-                    scrollView.scrollTo(0, 0)
-                }
-            }
-        }
-    }
 
     private fun loadUrl(url: String) {
         binding.webView.settings.apply {
