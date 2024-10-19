@@ -1,9 +1,14 @@
 package com.app.ecarepro.ui.gallery.favorites.favorites_slider
 
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,8 +22,13 @@ import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderViewModel
 import com.app.ecarepro.ui.gallery.videoPlay.YouTubeVideoPlayerFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import java.io.FileOutputStream
 
 
 @AndroidEntryPoint
@@ -72,6 +82,9 @@ class FavoriteSliderFragment(
                                  bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList.fileName))
                              )
                          }
+                         binding.rlShare.setOnClickListener {
+                             shareImageFromUrl(requireContext(), favList.fileName.toString())
+                         }
                      }else{
                          binding.ivVideoPlay.isVisible=true
                          Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(favList.fileName))
@@ -84,6 +97,9 @@ class FavoriteSliderFragment(
                                  R.id.youTubeVideoPlayerFragment,
                                  bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList.fileName))
                              )
+                         }
+                         binding.rlShare.setOnClickListener {
+                             shareUrl(requireContext(), favList.fileName.toString())
                          }
                      }
 
@@ -158,6 +174,50 @@ class FavoriteSliderFragment(
 
 
 
+    }
+
+
+    private fun shareImageFromUrl(context: Context, imageUrl: String) {
+        Glide.with(context)
+            .asBitmap()
+            .load(imageUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    val cachePath = File(context.cacheDir, "images")
+                    cachePath.mkdirs() // don't forget to make the directory
+                    val stream = FileOutputStream("$cachePath/image.png") // overwrites this image every time
+                    resource.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    stream.close()
+
+                    val imagePath = File(context.cacheDir, "images")
+                    val newFile = File(imagePath, "image.png")
+                    val contentUri = FileProvider.getUriForFile(context, "${context.packageName}.myFileProvider", newFile)
+
+                    if (contentUri != null) {
+                        val shareIntent = Intent()
+                        shareIntent.action = Intent.ACTION_SEND
+                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) // temp permission for receiving app to read this file
+                        shareIntent.setDataAndType(contentUri, context.contentResolver.getType(contentUri))
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
+                        context.startActivity(Intent.createChooser(shareIntent, "Choose an app"))
+                    }
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Handle case when the image load is cleared
+                }
+            })
+    }
+
+    private fun shareUrl(context: Context, url: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
     }
 
 
