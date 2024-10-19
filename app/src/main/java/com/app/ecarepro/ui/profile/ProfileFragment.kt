@@ -238,7 +238,12 @@ class ProfileFragment : Fragment() {
                         changeUser { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentUserId(it.id)
-                                /*sync  data on Local DB when user switch account */
+                                restartApp()
+                            }
+
+                            /*lifecycleScope.launch {
+                                userDataStore.setCurrentUserId(it.id)
+                             //   sync  data on Local DB when user switch account
                                 mainActivity().showLoader(true)
                                 syncManager.sync { isSuccess, message ->
                                     mainActivity().showLoader(false)
@@ -246,7 +251,7 @@ class ProfileFragment : Fragment() {
                                         restartApp()
                                     mainActivity().showMessage(message)
                                 }
-                            }
+                            }*/
                         }
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())

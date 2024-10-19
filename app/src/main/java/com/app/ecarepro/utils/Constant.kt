@@ -22,7 +22,11 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import android.app.AlertDialog
+import android.graphics.Typeface
 import android.os.Environment
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 
 
 class Constant {
@@ -151,6 +155,34 @@ class Constant {
 
         const val PRINCIPAL = "Principal"
         const val MANAGEMENT = "Management"
+
+        fun boldTextBetweenAsterisks(text: String): String {
+            val regex = Regex("\\*(.*?)\\*")
+            return regex.replace(text) { matchResult ->
+                "<b>${matchResult.groupValues[1]}</b>"
+            }
+        }
+        /*to set  bold  if message  have bold  like *bold**/
+        fun getBoldSpannableString(text: String): SpannableString {
+            val spannable = SpannableString(text)
+            val pattern = Regex("\\*(.*?)\\*")
+            val matches = pattern.findAll(text)
+
+            for (match in matches) {
+                val start = match.range.first
+                val end = match.range.last + 1
+
+                // Apply bold span
+                spannable.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+
+            return spannable
+        }
 
 
         fun getLongTimeDate(sessionStart: String?): Long {

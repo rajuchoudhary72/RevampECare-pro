@@ -289,7 +289,7 @@ class MainActivity : AppCompatActivity() {
         intent?.extras?.let { data ->
             handleNotificationClick(data)
         }
-     //  throw NullPointerException("Test crash for logging")
+     // throw NullPointerException("Test crash for logging")
 
         askNotificationPermission()
 

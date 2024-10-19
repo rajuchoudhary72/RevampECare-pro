@@ -99,9 +99,10 @@ class ComposeFragment : Fragment() {
     private val receiveData =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                val selectedMedia =
-                    it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
-                composeViewModel.setAttachments(selectedMedia)
+                val selectedMedia = it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
+                if (selectedMedia.isNotEmpty()) {
+                    composeViewModel.setAttachments(selectedMedia)
+                }
             }
         }
 
@@ -705,11 +706,17 @@ class ComposeFragment : Fragment() {
             .setMediaType(MediaType.IMAGE)
             .setMaxCount(7)
             .setAscSort(SortingOption.DESCENDING)
+            .setPlaceHolder(R.drawable.img_placeholder)
+            .setErrorDrawable(R.drawable.img_placeholder)
             .setGridSize(3)
             .setMinFileSize(0) // Restrict by minimum file size
             .setMaxFileSize(12000) // Restrict by maximum file size
             .setCompressionRatio(65) // compress image for single item selection (can be 0 to 100)
             .setAlertDialogNegativeButtonColor(R.color.black)
+            .setSupportedFileTypes(
+                "jpg", "jpeg", "png", "webp", "gif", "mp4", "mkv", "webm", "avi", "flv", "3gp",
+                "pdf", "odt", "doc", "docs", "docx", "txt", "ppt", "pptx", "rtf", "xlsx", "xls"
+            )
             .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
             .setStatusBarColor(R.color.md_theme_light_primary)
             .setToolbarColor(R.color.md_theme_light_primary)

@@ -139,10 +139,13 @@ class ChatFragment : Fragment() {
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
                         binding.btnRecipient.isVisible = uiState.recipients.isNullOrEmpty().not()
+
                         uiState.messages.forEach { message ->
                             if (message.isMine) {
                                 senderChatMessage {
                                     id(message.msgID.toString() + message.body + message.sentOn)
+                                  /*  message(message.body?.let { Constant.getBoldSpannableString(it) }
+                                        .toString())*/
                                     message(message.body)
                                     date(message.sentOn)
                                     image(
@@ -160,6 +163,9 @@ class ChatFragment : Fragment() {
                             } else {
                                 receiverChatMessage {
                                     id(message.msgID.toString() + message.body + message.sentOn)
+                                   /* message(message.body?.let {
+                                        Constant.boldTextBetweenAsterisks(it)
+                                    }.toString())*/
                                     message(message.body)
                                     date(message.sentOn)
                                     files(message.filePaths ?: emptyList())
