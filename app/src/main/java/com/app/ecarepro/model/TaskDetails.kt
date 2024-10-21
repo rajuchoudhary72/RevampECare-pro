@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class TaskDetails(
     @SerializedName("activities")
     val activities: List<TaskActivity>?,
+    @SerializedName("comments")
+    val comments: List<Comment>?,
     @SerializedName("errorCode")
     val errorCode: Int?,
     @SerializedName("message")
@@ -17,6 +19,24 @@ data class TaskDetails(
     @SerializedName("task")
     val task: TaskInfo?
 )
+data class Comment(
+    @SerializedName("comment")
+    val comment: String?,
+    @SerializedName("commentBy")
+    val commentBy: Int?,
+    @SerializedName("commentOn")
+    val commentOn: String?,
+    @SerializedName("designation")
+    val designation: String?,
+    @SerializedName("name")
+    val name: String?,
+    @SerializedName("photo")
+    val photo: String?
+){
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+}
 
 data class TaskActivity(
     @SerializedName("actionOn")
@@ -65,7 +85,9 @@ data class TaskInfo(
     @SerializedName("tskID")
     val tskID: Int?,
     @SerializedName("watchers")
-    val watchers: List<Watcher>?
+    val watchers: List<Watcher>?,
+    @SerializedName("canChangeStatus")
+    val canChangeStatus: Boolean?
 )
 
 data class Assign(

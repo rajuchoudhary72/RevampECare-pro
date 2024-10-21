@@ -26,7 +26,9 @@
         <item name="cornerSizeBottomLeft">34dp</item>
         <item name="cornerSizeBottomRight">34dp</item>
     </style>
-
+    <style name="button_overlay" >
+        <item name="colorSecondaryContainer">@color/green_60</item>
+    </style>
     <style name="ShapeAppearanceOverlay.ECarePro.TopRoundedCorner" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">32dp</item>

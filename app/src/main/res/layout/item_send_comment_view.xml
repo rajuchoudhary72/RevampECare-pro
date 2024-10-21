@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="text"
+            type="java.lang.String" />
+        <variable
+            name="textWatcher"
+            type="android.text.TextWatcher" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/calibri_regular"
+            android:inputType="text"
+            android:paddingHorizontal="@dimen/_4sdp"
+            inputText="@{text}"
+            textWatcher="@{textWatcher}"
+            android:hint="Enter your comment..."
+            android:background="@drawable/bg_outline_round_corner_green" />
+        <TextView
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_outline_round_corner_green"
+            android:backgroundTint="@color/brand_color"
+            android:fontFamily="@font/calibri_bold"
+            android:gravity="center"
+            android:onClick="@{clickListener}"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:text="Send"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</layout>
