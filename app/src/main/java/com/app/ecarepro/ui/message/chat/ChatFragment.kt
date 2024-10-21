@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -139,6 +140,7 @@ class ChatFragment : Fragment() {
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
                         binding.btnRecipient.isVisible = uiState.recipients.isNullOrEmpty().not()
+
                         uiState.messages.forEach { message ->
                             if (message.isMine) {
                                 senderChatMessage {

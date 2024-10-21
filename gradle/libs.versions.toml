@@ -1,6 +1,7 @@
 [versions]
 activity-ktx = "1.8.0"
-agp = "8.6.1"
+agp = "8.1.1"
+kotlin_version = "1.8.20"
 datastore-preferences = "1.0.0"
 decorator = "2.0.0"
 dotsindicator = "5.0"

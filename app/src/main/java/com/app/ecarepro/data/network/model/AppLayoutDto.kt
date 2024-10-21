@@ -70,8 +70,14 @@ data class UserInfo(
     val userID: Int?,
     @SerializedName("userType")
     val userType: Int?
-)
-
+){
+    fun getFullName(): String? {
+        return if (childName.isNullOrEmpty())
+            name
+        else
+            "$name  \nP/O  $childName"
+    }
+}
 
 data class ChildMenu(
     @SerializedName("chMenuID")

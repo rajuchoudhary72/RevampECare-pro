@@ -37,7 +37,9 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
-
+/*,
+        connectivityInterceptor: ConnectivityInterceptor,
+        customResponseInterceptor: CustomResponseInterceptor*/
     @Provides
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
@@ -54,7 +56,8 @@ object NetworkModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-
+/* .addInterceptor(connectivityInterceptor)
+            .addInterceptor(customResponseInterceptor)*/
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,

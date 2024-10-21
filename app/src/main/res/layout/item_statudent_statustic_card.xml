@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="false"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
