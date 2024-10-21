@@ -99,7 +99,8 @@ class ComposeFragment : Fragment() {
     private val receiveData =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                val selectedMedia = it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
+                val selectedMedia =
+                    it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
                 if (selectedMedia.isNotEmpty()) {
                     composeViewModel.setAttachments(selectedMedia)
                 }
@@ -513,7 +514,7 @@ class ComposeFragment : Fragment() {
             lastClickAttachmentType = AttachmentType.AUDIO
             openAudioRecorder()
         }
-       FileAccess.checkPermission(this@ComposeFragment)
+        FileAccess.checkPermission(this@ComposeFragment)
         binding.btnCamera.setOnClickListener {
             try {
                 hideAttachmentCard()
@@ -668,12 +669,12 @@ class ComposeFragment : Fragment() {
         }
 
     private fun openGallery() {
-        // Intent to open the gallery and select multiple images
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        }
-        selectImagesLauncher.launch(Intent.createChooser(intent, "Select Images"))
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        resultLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
+
     }
 
     private fun launchPicker() {
@@ -700,7 +701,7 @@ class ComposeFragment : Fragment() {
 
     private fun launchPhotoPicker() {
         /*    val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
-            receiveData.launch(intent)*/
+           receiveData.launch(intent)*/
         val intent = Lassi(requireContext())
             .with(LassiOption.CAMERA_AND_GALLERY)
             .setMediaType(MediaType.IMAGE)
@@ -725,7 +726,56 @@ class ComposeFragment : Fragment() {
             .setGalleryBackgroundColor(R.color.white)
             .build()
         receiveData.launch(intent)
+        /*openGallery()*/
+
     }
+
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val attachments = mutableListOf<MiMedia>()
+//   val data= result.data
+                val clipData = result.data?.clipData
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        val imageUri: Uri = clipData.getItemAt(i).uri
+                        // Process each image URI here
+                        println("Selected Image URI: $imageUri")
+                        val miMedia = MiMedia(
+                            id = 0,
+                            name = imageUri.lastPathSegment,
+                            path = imageUri.toString(),
+                        )
+                        attachments.add(miMedia)
+                    }
+                    composeViewModel.setAttachments(attachments)
+                    /*  //val count = data.clipData!!.itemCount
+                      for (i in 0 until count){
+                          val imageUri = data.clipData!!.getItemAt(i).uri
+                          val miMedia = MiMedia(
+                              id = 0,
+                              name = imageUri.lastPathSegment,
+                              path = imageUri.toString(),
+                          )
+                          attachments.add(miMedia)
+                      }
+                      composeViewModel.setAttachments(attachments)*/
+                } else {
+                    // Single image selected
+                    val imageUri: Uri? = result.data?.data
+                    imageUri?.let {
+                        println("Selected Single Image URI: $it")
+                        val miMedia = MiMedia(
+                            id = 0,
+                            name = it.lastPathSegment,
+                            path = it.toString(),
+                        )
+                        attachments.add(miMedia)
+                    }
+                    composeViewModel.setAttachments(attachments)
+                }
+            }
+        }
 
     private fun launchAudioPicker() {
         val intent = Intent()

@@ -1,32 +1,22 @@
 package com.app.ecarepro.utils
 
 import android.content.Context
-import android.content.Intent
+import android.graphics.Typeface
+import android.graphics.Typeface.BOLD
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.Uri
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.widget.Toast
-import androidx.core.content.FileProvider
-import com.google.android.material.snackbar.Snackbar
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import java.io.File
-import java.io.IOException
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import android.app.AlertDialog
-import android.graphics.Typeface
-import android.os.Environment
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class Constant {
@@ -156,33 +146,6 @@ class Constant {
         const val PRINCIPAL = "Principal"
         const val MANAGEMENT = "Management"
 
-        fun boldTextBetweenAsterisks(text: String): String {
-            val regex = Regex("\\*(.*?)\\*")
-            return regex.replace(text) { matchResult ->
-                "<b>${matchResult.groupValues[1]}</b>"
-            }
-        }
-        /*to set  bold  if message  have bold  like *bold**/
-        fun getBoldSpannableString(text: String): SpannableString {
-            val spannable = SpannableString(text)
-            val pattern = Regex("\\*(.*?)\\*")
-            val matches = pattern.findAll(text)
-
-            for (match in matches) {
-                val start = match.range.first
-                val end = match.range.last + 1
-
-                // Apply bold span
-                spannable.setSpan(
-                    StyleSpan(Typeface.BOLD),
-                    start,
-                    end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
-
-            return spannable
-        }
 
 
         fun getLongTimeDate(sessionStart: String?): Long {

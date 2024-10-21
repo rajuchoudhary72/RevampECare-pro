@@ -1,7 +1,11 @@
 package com.app.ecarepro.utils
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.StyleSpan
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -84,5 +88,57 @@ fun TextView.showEditButton(show: Boolean) {
         setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
     }else{
         setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+    }
+}
+
+
+@BindingAdapter("formattedText")
+fun setFormattedText(textView: TextView, text: String?) {
+    if (text != null) {
+        // Create a SpannableStringBuilder to build the formatted text
+        val spannableString = SpannableStringBuilder()
+
+        // Use regex to find all *...* wrapped text
+        val pattern = "\\*(.*?)\\*".toRegex()
+        val matches = pattern.findAll(text)
+
+        var lastEnd = 0
+
+        // Loop through each match and apply bold formatting
+        for (match in matches) {
+            val start = match.range.first
+            val end = match.range.last + 1 // End should include the trailing '*'
+
+            // Append text before the match
+            spannableString.append(text.substring(lastEnd, start))
+
+            // Extract the bold text without * characters
+            val boldText = match.groups[1]?.value ?: ""
+            spannableString.append(boldText)
+
+            // Apply bold style to the extracted text
+            val boldStart = spannableString.length - boldText.length
+            val boldEnd = spannableString.length
+
+            spannableString.setSpan(
+                StyleSpan(Typeface.BOLD),
+                boldStart,
+                boldEnd,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            // Update lastEnd to the end of the current match
+            lastEnd = end
+        }
+
+        // Append any remaining text after the last match
+        if (lastEnd < text.length) {
+            spannableString.append(text.substring(lastEnd))
+        }
+
+        // Set the formatted text to the TextView
+        textView.text = spannableString
+    } else {
+        textView.text = ""
     }
 }
