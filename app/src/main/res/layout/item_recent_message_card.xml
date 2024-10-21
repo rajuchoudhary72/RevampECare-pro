@@ -97,7 +97,7 @@
                 isVisible="@{lastMessage!=null}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{lastMessage}"
+                app:formattedText="@{lastMessage}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/grey_60"
                 app:layout_constraintEnd_toEndOf="parent"
