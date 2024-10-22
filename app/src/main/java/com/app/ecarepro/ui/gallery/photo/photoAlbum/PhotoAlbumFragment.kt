@@ -45,7 +45,7 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding=FragmentPhotoAlbumBinding.inflate(inflater,container,false)
         photoAlbumAdapter =    PhotoAlbumAdapter(this@PhotoAlbumFragment)
         binding.rvPhotoAlbum.apply {
@@ -61,6 +61,14 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+            getPhotoAlbums()
+
+
+
+        }
+
+    private fun getPhotoAlbums(){
         lifecycleScope.launch {
             photoAlbumViewModel.photoAlbumStateFlow.collectLatest {
                 when (it) {
@@ -87,12 +95,12 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
                                 binding.rvPhotoAlbum.isVisible=true
                                 binding.tvNoData.isVisible=false
                                 isLoading=true
-
                                 if (pageIndex==1){
                                     photoAlbumAdapter.clearData()
                                 }
 
                                 photoAlbumAdapter.setData(it.data.albums.toMutableList())
+
 
                             }else{
                                 if (pageIndex==1){
@@ -113,10 +121,12 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
 
         }
 
-        photoAlbumViewModel.getPhotoAlbums(albumType.typeID ,pageIndex)
+
+            photoAlbumViewModel.getPhotoAlbums(albumType.typeID ,pageIndex)
+
+
 
         setupRecycleViewPager()
-
     }
 
 

@@ -1228,7 +1228,7 @@ class MainActivity : AppCompatActivity() {
                     42 -> {
                         when (childChildMenuId) {
                             4 -> {
-                                navController.navigate(R.id.smsReportFragment)
+                                navController.navigate(R.id.smsMsgReportFragment)
                             }
 
                             5 -> {
@@ -1339,7 +1339,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpBottomNavigationView() {
 
-        binding.appBarMain.contentMain.searchBar.setOnClickListener {
+        binding.appBarMain.contentMain.rlMainSearch.setOnClickListener {
             navController.navigate(
                 R.id.searchFragment,
                 bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })

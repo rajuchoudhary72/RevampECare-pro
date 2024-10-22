@@ -18,5 +18,5 @@ data class NetworkStudentListToMarkAtt(
     val smsType: Int,
     val status: String,
     val studentList: List<StudentListMarkAtt>,
-    val templateID: Any
+    val templateID: String?
 )
