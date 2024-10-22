@@ -668,24 +668,56 @@ class ComposeFragment : Fragment() {
             }
         }
 
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedImages = mutableListOf<Uri>()
+                result.data?.let { data ->
+                    val clipData = data.clipData
+                    if (clipData != null) {
+                        for (i in 0 until clipData.itemCount) {
+                            if (selectedImages.size < 7) {
+                                val imageUri = clipData.getItemAt(i).uri
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                    } else {
+                        data.data?.let { imageUri ->
+                            if (selectedImages.size < 7) {
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                    }
+                    composeViewModel.setAttachments(selectedImages.map {
+                        MiMedia(
+                            path = it.toString(),
+                            name = lastClickAttachmentType?.name
+                        )
+                    })
+                }
+            }
+        }
     private fun openGallery() {
         val intent = Intent()
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.action = Intent.ACTION_GET_CONTENT
-        resultLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
-
+        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
     }
+
 
     private fun launchPicker() {
         when (lastClickAttachmentType) {
             AttachmentType.GALLERY -> {
+                openGallery()
+            }
+           /* AttachmentType.GALLERY -> {
                 // Request necessary permissions and open the gallery
                 if (checkAndRequestPermissions()) {
                     launchPhotoPicker()
                 }
                 //  launchPhotoPicker()
-            }
+            }*/
 
             AttachmentType.AUDIO -> {
                 launchAudioPicker()
