@@ -180,4 +180,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
+
+    implementation ("com.github.bumptech.glide:glide:4.4.0")
+    kapt ("com.github.bumptech.glide:compiler:4.4.0")
   }

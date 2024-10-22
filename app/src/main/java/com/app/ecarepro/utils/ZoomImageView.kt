@@ -27,11 +27,33 @@ class ZoomImageView(context: Context, attrs: AttributeSet) : AppCompatImageView(
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         if (changed) {
-            // Center the image initially
-            matrix.setTranslate((width - drawable.intrinsicWidth) / 2f, (height - drawable.intrinsicHeight) / 2f)
+            // Get the drawable (image) dimensions
+            val drawable = drawable ?: return
+            val imageWidth = drawable.intrinsicWidth
+            val imageHeight = drawable.intrinsicHeight
+
+            // Get the view (ZoomImageView) dimensions
+            val viewWidth = width
+            val viewHeight = height
+
+            // Calculate the scale to fit the image into the view while maintaining aspect ratio
+            val widthScale = viewWidth.toFloat() / imageWidth
+            val heightScale = viewHeight.toFloat() / imageHeight
+            val scale = widthScale.coerceAtMost(heightScale)
+
+            // Scale the image
+            matrix.setScale(scale, scale)
+
+            // Center the image
+            val offsetX = (viewWidth - imageWidth * scale) / 2f
+            val offsetY = (viewHeight - imageHeight * scale) / 2f
+            matrix.postTranslate(offsetX, offsetY)
+
+            // Apply the matrix to the ImageView
             imageMatrix = matrix
         }
     }
+
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {

@@ -1,9 +1,11 @@
 package com.app.ecarepro.ui.gallery.photo.photo_slider
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -19,6 +21,17 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import com.app.ecarepro.utils.shareImageFromUrl
+import com.app.ecarepro.utils.shareUrl
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
+import java.io.File
+import java.io.FileOutputStream
 
 
 @AndroidEntryPoint
@@ -96,6 +109,12 @@ class PhotoSliderFragment(
                         }
 
                     }
+
+
+                    binding.rlShare.setOnClickListener {
+                        shareImageFromUrl(requireContext(), itemDat.photoPath.toString())
+                    }
+
                 }
 
 
@@ -113,6 +132,10 @@ class PhotoSliderFragment(
                     Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(itemVideo.url))
                         .placeholder(R.drawable.default_profile)
                         .into(binding.photoView)
+
+                    binding.rlShare.setOnClickListener {
+                        shareUrl(requireContext(), itemVideo.url.toString())
+                    }
 
 
 
@@ -155,10 +178,7 @@ class PhotoSliderFragment(
                         }
 
                     }
-
-
                 }
-
             }
 
 
@@ -194,6 +214,9 @@ class PhotoSliderFragment(
 
 
     }
+
+
+
 
 
 

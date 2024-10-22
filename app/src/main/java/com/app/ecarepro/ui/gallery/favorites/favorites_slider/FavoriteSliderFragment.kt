@@ -1,9 +1,14 @@
 package com.app.ecarepro.ui.gallery.favorites.favorites_slider
 
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -17,8 +22,15 @@ import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderViewModel
 import com.app.ecarepro.ui.gallery.videoPlay.YouTubeVideoPlayerFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
+import com.app.ecarepro.utils.shareImageFromUrl
+import com.app.ecarepro.utils.shareUrl
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import java.io.FileOutputStream
 
 
 @AndroidEntryPoint
@@ -72,6 +84,9 @@ class FavoriteSliderFragment(
                                  bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList.fileName))
                              )
                          }
+                         binding.rlShare.setOnClickListener {
+                             shareImageFromUrl(requireContext(), favList.fileName.toString())
+                         }
                      }else{
                          binding.ivVideoPlay.isVisible=true
                          Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(favList.fileName))
@@ -84,6 +99,9 @@ class FavoriteSliderFragment(
                                  R.id.youTubeVideoPlayerFragment,
                                  bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList.fileName))
                              )
+                         }
+                         binding.rlShare.setOnClickListener {
+                             shareUrl(requireContext(), favList.fileName.toString())
                          }
                      }
 
@@ -159,6 +177,10 @@ class FavoriteSliderFragment(
 
 
     }
+
+
+
+
 
 
 
