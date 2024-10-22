@@ -689,15 +689,32 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 Toast.makeText(context, "Please select Notification type", Toast.LENGTH_SHORT)
                     .show()
              } else   {
-                dialog.dismiss()
-                (requireActivity() as MainActivity).showLoader(true)
-                stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
-                    (requireActivity() as MainActivity).showLoader(false)
-                    mainActivity().showMessage(message)
+                 if (rbType==1){
+                     if (studentListWithData.templateID!=null){
+                         dialog.dismiss()
+                         (requireActivity() as MainActivity).showLoader(true)
+                         stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
+                             (requireActivity() as MainActivity).showLoader(false)
+                             mainActivity().showMessage(message)
 //                    if (isSuccess) {
 //                        findNavController().popBackStack()
 //                    }
-                }
+                         }
+                     }else{
+                         Toast.makeText(context, "Sms Template not defined", Toast.LENGTH_SHORT).show()
+                     }
+                 }else{
+                     dialog.dismiss()
+                     (requireActivity() as MainActivity).showLoader(true)
+                     stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
+                         (requireActivity() as MainActivity).showLoader(false)
+                         mainActivity().showMessage(message)
+//                    if (isSuccess) {
+//                        findNavController().popBackStack()
+//                    }
+                     }
+                 }
+
 
             }
             })

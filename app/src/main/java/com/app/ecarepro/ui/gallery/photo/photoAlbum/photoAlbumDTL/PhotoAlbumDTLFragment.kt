@@ -48,6 +48,8 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
+    private var isDataLoaded: Boolean = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +78,14 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
             binding.tvMore.isVisible = false
         }
 
+
+           getPhotoAlbumDTL()
+
+
+
+    }
+
+    private fun getPhotoAlbumDTL() {
         lifecycleScope.launch {
             photoAlbumDTLViewModel.photoAlbumStateFlow.collectLatest {
                 when (it) {
@@ -111,7 +121,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                     fromHtml(it.data.description)
                                 }
 
-                                 binding.tvDatePhoto.text =
+                                binding.tvDatePhoto.text =
                                     it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
 
                                 if (binding.tvDes.getLineCount() >= 4) {
@@ -126,7 +136,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
                                 albumSetting= it.data.setting!!
                                 photoDetails=it.data
                                 photoAlbumAdapter.setData(it.data.photos.toMutableList())
-
+                                isDataLoaded = true
                             } else {
                                 if (pageIndex == 1) {
                                     binding.rvAlbum.isVisible = false
@@ -146,10 +156,12 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
         }
 
-        photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
+        if (!isDataLoaded) {
+            photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
+
+        }
 
         setupRecycleViewPager()
-
 
     }
 

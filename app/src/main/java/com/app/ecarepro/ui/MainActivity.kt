@@ -1228,7 +1228,7 @@ class MainActivity : AppCompatActivity() {
                     42 -> {
                         when (childChildMenuId) {
                             4 -> {
-                                navController.navigate(R.id.smsReportFragment)
+                                navController.navigate(R.id.smsMsgReportFragment)
                             }
 
                             5 -> {

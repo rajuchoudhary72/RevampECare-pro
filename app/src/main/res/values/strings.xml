@@ -769,4 +769,6 @@
     <string name="select_sms_type">Select Sms Type</string>
     <string name="sent_by">Sent By :</string>
     <string name="timetable">Timetable</string>
+    <string name="only_app_push_notification">Only App Push Notification</string>
+    <string name="sms_and_app_message">SMS and App Message</string>
 </resources>
