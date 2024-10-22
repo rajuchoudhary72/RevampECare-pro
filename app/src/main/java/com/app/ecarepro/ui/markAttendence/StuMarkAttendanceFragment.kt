@@ -451,7 +451,6 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     private fun popUpDetailsMarkAttendance() {
 
-
         val tv_cancel: TextView
         val tv_ok: TextView
         val tv_present_count: TextView
