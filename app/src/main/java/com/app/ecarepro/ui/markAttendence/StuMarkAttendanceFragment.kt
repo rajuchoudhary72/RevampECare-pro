@@ -449,8 +449,6 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     }
 
-
-
     private fun popUpDetailsMarkAttendance() {
 
 
