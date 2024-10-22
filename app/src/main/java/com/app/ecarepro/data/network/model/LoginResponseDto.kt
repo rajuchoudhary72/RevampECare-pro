@@ -34,7 +34,9 @@ data class LoginResponseDto(
     @SerializedName("class")
     val className: String?,
     @SerializedName("stName")
-    val stName: String?
+    val stName: String?,
+    @SerializedName("schoolCode")
+    val schoolCode: String? = null
 )
 
 fun LoginResponseDto.asUserEntity(): UserEntity {

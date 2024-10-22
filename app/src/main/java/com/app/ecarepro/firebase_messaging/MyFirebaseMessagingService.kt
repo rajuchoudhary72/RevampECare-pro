@@ -92,7 +92,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             }
         )
-
+       /* val sounduri = Uri.parse(
+            "android.resource://" + ECateProApp.instance!!.getContext().packageName
+                .toString() + "/" + R.raw.notification
+        )*/
       /*  //End
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)

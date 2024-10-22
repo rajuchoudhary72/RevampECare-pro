@@ -12,10 +12,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,16 +25,21 @@ import com.app.ecarepro.data.network.model.TaskFiledName
 import com.app.ecarepro.databinding.FragmentTaskDetailsBinding
 import com.app.ecarepro.headline
 import com.app.ecarepro.model.Assign
+import com.app.ecarepro.sendCommentView
 import com.app.ecarepro.taskAssigneeCarouselItem
 import com.app.ecarepro.taskDetailAttachment
 import com.app.ecarepro.taskDetailHistoryItem
 import com.app.ecarepro.taskDetails
 import com.app.ecarepro.taskDetailsDate
+import com.app.ecarepro.taskTabs
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.taskmanager.TaskStatus
 import com.app.ecarepro.ui.taskmanager.add.selectDate
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.FileAccess
+import com.app.ecarepro.utils.makeTextWatcher
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,6 +50,10 @@ class TaskDetailsFragment : Fragment() {
     private var _binding: FragmentTaskDetailsBinding? = null
     private val binding get() = _binding!!
     private val mViewModel: TaskDetailsViewModel by viewModels()
+
+    private var isCommentSelected: Boolean = false
+
+    private var comment: String? = ""
 
     private val galleryLauncher =
         registerForActivityResult(
@@ -62,6 +69,7 @@ class TaskDetailsFragment : Fragment() {
                 uploadPhoto(imageString, imageExt)
             }
         }
+
     fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
         return when (compressFormat) {
             Bitmap.CompressFormat.JPEG -> "jpg"
@@ -70,11 +78,12 @@ class TaskDetailsFragment : Fragment() {
             else -> "unknown"
         }
     }
+
     private fun uploadPhoto(imageString: String, imageExt: String) {
         (requireActivity() as MainActivity).showLoader(true)
-        mViewModel.updateAttachment(imageString, imageExt){ message:String ->
+        mViewModel.updateAttachment(imageString, imageExt) { message: String ->
             (requireActivity() as MainActivity).showLoader(false)
-            mainActivity().showMessage(message?:"")
+            mainActivity().showMessage(message ?: "")
         }
     }
 
@@ -87,8 +96,8 @@ class TaskDetailsFragment : Fragment() {
 
                     val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                     val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
-                 /*   val imageExt =
-                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
+                    /*   val imageExt =
+                           FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
                     uploadPhoto(imageString, imageExt)
                 }
             }
@@ -116,11 +125,30 @@ class TaskDetailsFragment : Fragment() {
         }
     }
 
+    private fun updateTask(status: Int) {
+        val items = TaskStatus.getTaskApartFromThis(status)
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Update Status")
+            .setItems(items.map { it.value }.toTypedArray()) { dialog, which ->
+                (requireActivity() as MainActivity).showLoader(true)
+                mViewModel.updateTask(items[which].id) { _, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    mainActivity().showMessage(message ?: "")
+
+                }
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     private fun buildModels(uiState: TaskDetailsUiState) {
+        if (uiState.isLoading()) {
+            comment = null
+        }
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is TaskDetailsUiState.Success && uiState.taskDetails != null) {
@@ -133,7 +161,10 @@ class TaskDetailsFragment : Fragment() {
                     canEdit(uiState.taskDetails.task?.imOwner)
                     onClickEdit { v: View ->
                         if (v.id == R.id.title) {
-                            openTextInputDialog("Title", uiState.taskDetails.task?.taskTitle ?: "") {
+                            openTextInputDialog(
+                                "Title",
+                                uiState.taskDetails.task?.taskTitle ?: ""
+                            ) {
                                 (requireActivity() as MainActivity).showLoader(true)
                                 mViewModel.updateTask(
                                     TaskFiledName.TASK_TITLE,
@@ -141,7 +172,7 @@ class TaskDetailsFragment : Fragment() {
                                     it
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
-                                    mainActivity().showMessage(message?:"")
+                                    mainActivity().showMessage(message ?: "")
                                 }
                             }
                         } else if (v.id == R.id.description) {
@@ -156,7 +187,7 @@ class TaskDetailsFragment : Fragment() {
                                     it
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
-                                    mainActivity().showMessage(message?:"")
+                                    mainActivity().showMessage(message ?: "")
 
                                 }
                             }
@@ -169,6 +200,7 @@ class TaskDetailsFragment : Fragment() {
                     startDate(uiState.taskDetails.task?.startDate)
                     endDate(uiState.taskDetails.task?.dueDate)
                     priority(uiState.taskDetails.task?.priority)
+                    status(uiState.taskDetails.task?.status)
                     canEdit(uiState.taskDetails.task?.imOwner)
                     editStartDate { _ ->
                         selectDate("Start Date") {
@@ -179,7 +211,7 @@ class TaskDetailsFragment : Fragment() {
                                 it
                             ) { isSuccess, message ->
                                 (requireActivity() as MainActivity).showLoader(false)
-                                mainActivity().showMessage(message?:"")
+                                mainActivity().showMessage(message ?: "")
                             }
                         }
                     }
@@ -192,9 +224,15 @@ class TaskDetailsFragment : Fragment() {
                                 it
                             ) { isSuccess, message ->
                                 (requireActivity() as MainActivity).showLoader(false)
-                                mainActivity().showMessage(message?:"")
+                                mainActivity().showMessage(message ?: "")
                             }
                         }
+                    }
+                    updateStatusListener { _ ->
+                        if (uiState.taskDetails.task?.canChangeStatus == true) {
+                            uiState.taskDetails.task.status?.let { updateTask(it) }
+                        }
+
                     }
                 }
 
@@ -220,23 +258,67 @@ class TaskDetailsFragment : Fragment() {
                         id("attachment")
                         attachment(uiState.taskDetails.task.attachment)
                         canUploadAttachment(uiState.taskDetails.task.imOwner)
-                        clickListener { _ -> selectImageOptionDialog()}
+                        clickListener { _ -> selectImageOptionDialog() }
                     }
                 }
 
-                if (uiState.taskDetails.activities.isNullOrEmpty().not()) {
-                    headline {
-                        id("history")
-                        title("History")
+                taskTabs {
+                    id("taskTabs")
+                    clickListener { v ->
+                        isCommentSelected = v.id == R.id.btn_comment
+                        binding.recyclerView.requestModelBuild()
                     }
+                }
+
+                headline {
+                    id("history")
+                    title(if (isCommentSelected) "Comment" else "History")
+                }
+
+                if (isCommentSelected) {
+                    uiState.taskDetails.comments?.forEach { comment ->
+                        taskDetailHistoryItem {
+                            id(comment.hashCode())
+                            title(comment.name + ": " + comment.comment)
+                            date(comment.commentOn)
+                        }
+                    }
+
+                    sendCommentView {
+                        id("sendComment")
+                        text(comment)
+                        textWatcher(makeTextWatcher {
+                            comment = it.toString()
+                        })
+                        clickListener { _ ->
+                            if (comment.isNullOrEmpty()) {
+                                mainActivity().showMessage("Please enter comment")
+                                return@clickListener
+                            }
+                            (requireActivity() as MainActivity).showLoader(true)
+                            mViewModel.sendComment(comment!!) { isSuccess, message ->
+                                (requireActivity() as MainActivity).showLoader(false)
+                                mainActivity().showMessage(message ?: "")
+                                if (isSuccess) {
+                                    this@TaskDetailsFragment.comment = null
+                                    mViewModel.refresh()
+                                }
+                            }
+                        }
+                    }
+
+
+                } else {
                     uiState.taskDetails.activities?.forEach { activity ->
                         taskDetailHistoryItem {
-                            id(activity.actorID)
+                            id(activity.hashCode())
                             title(activity.name + ": " + activity.activity)
                             date(activity.actionOn)
                         }
                     }
                 }
+
+
             }
         }
 

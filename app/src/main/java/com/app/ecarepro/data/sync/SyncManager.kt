@@ -81,7 +81,7 @@ class SyncManager @Inject constructor(
             userDatabase.deleteUserById(currentUserInDatabase.id)
             val id = userDatabase.insertUser(
                 user.copy(
-                    schoolCode = userDataStore.getCurrentSchoolCode(),
+                    schoolCode = data.schoolCode,
                     loginTime = getCurrentSyncTime()
                 )
             )

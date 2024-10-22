@@ -24,6 +24,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 
 import com.app.ecarepro.model.UpdateMedicalCardRequest
@@ -179,7 +180,20 @@ class SchoolRepositoryImpl @Inject constructor(
             }
         }
     }
-
+    override suspend fun sendComment(id: String, comment: String): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = schoolService.sendComment(SendCommentDto(comment = comment, id = id))
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: ""))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override fun addTask(request: AddTaskDto): Flow<Result<String>> {
         return flow {
             try {

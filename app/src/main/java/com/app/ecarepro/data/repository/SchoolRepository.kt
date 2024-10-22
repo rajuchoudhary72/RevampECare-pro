@@ -58,4 +58,5 @@ interface SchoolRepository {
     suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse
     fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>
     suspend fun checkAppVersion( ): NetworkAppVersion
+    suspend fun sendComment(id: String, comment: String): Flow<Result<String>>
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButton_type_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            app:checkedButton="@id/btn_history"
+            app:layout_constraintTop_toTopOf="parent"
+            app:materialThemeOverlay="@style/button_overlay"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_history"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{clickListener}"
+                android:layout_weight="1"
+                android:fontFamily="@font/calibri_bold"
+                android:includeFontPadding="false"
+                android:text="History"
+                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
+                app:strokeColor="@color/brand_color" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_comment"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{clickListener}"
+                android:fontFamily="@font/calibri_bold"
+                android:includeFontPadding="false"
+                android:text="Comment"
+                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
+                app:strokeColor="@color/brand_color" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

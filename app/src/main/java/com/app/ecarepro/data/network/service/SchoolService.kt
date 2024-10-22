@@ -17,6 +17,7 @@ import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.PromotionModel
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.GeneralSettingsDto
+import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 
 import com.app.ecarepro.model.RequestClassPromotion
@@ -54,7 +55,10 @@ interface SchoolService {
         @Query("ClassID") classID: Int,
         @Query("isClassNotice") isClassNotice: Boolean,
     ): NetworkNotice
-
+    @POST("TaskManager/CommentOnTask")
+    suspend fun sendComment(
+        @Body request: SendCommentDto
+    ): CommonResponse
     @GET("School/Circulars")
     suspend fun getCirculars(
         @Query("pg") pg: Int,
