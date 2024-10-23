@@ -27,6 +27,10 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
+    <queries>
+        <package android:name="com.android.chrome" />
+    </queries>
+
     <application
         android:name=".ECateProApp"
         android:allowBackup="false"
@@ -145,6 +149,7 @@
             android:screenOrientation="portrait" />
 
     </application>
+
 
 
 </manifest>

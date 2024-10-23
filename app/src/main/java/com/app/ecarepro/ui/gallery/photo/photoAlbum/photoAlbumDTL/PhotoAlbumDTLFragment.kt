@@ -71,7 +71,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        pageIndex = 1
 
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
@@ -79,7 +79,9 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
         }
 
 
-           getPhotoAlbumDTL()
+            getPhotoAlbumDTL()
+
+
 
 
 
@@ -87,7 +89,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     private fun getPhotoAlbumDTL() {
         lifecycleScope.launch {
-            photoAlbumDTLViewModel.photoAlbumStateFlow.collectLatest {
+            photoAlbumDTLViewModel.photoAlbumStateFlow.observe(viewLifecycleOwner) {
                 when (it) {
 
                     is NetworkResult.Loading -> {
@@ -156,10 +158,10 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
         }
 
-        if (!isDataLoaded) {
+
             photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
 
-        }
+
 
         setupRecycleViewPager()
 

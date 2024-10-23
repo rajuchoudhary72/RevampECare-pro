@@ -42,7 +42,7 @@ data class StudentProfile(
     var isBoarding: Boolean,
     var motherAadhaarNumber: String,
     var motherAnnualIncome: String,
-    var motherDOB: Any,
+    var motherDOB: String,
     var motherDesignation: String,
     var motherEmail_1: String,
     var motherEmail_2: String,

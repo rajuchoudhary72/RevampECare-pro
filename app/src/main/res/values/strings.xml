@@ -528,7 +528,7 @@
     <string name="new_balance">New Balance</string>
     <string name="recharged_volume">Recharged Volume</string>
     <string name="previous_balance">Previous Balance</string>
-    <string name="select_session">Session</string>
+    <string name="select_session">Select Session</string>
     <string name="select_session_one">Session First</string>
     <string name="select_session_two">Session Second </string>
     <string name="default_notification_channel_id">Franciscan e-Care</string>

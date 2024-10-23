@@ -39,6 +39,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.Serializable
+import android.content.pm.PackageManager
+
 
 
 @AndroidEntryPoint
@@ -338,12 +340,52 @@ class SubmitAssignmentFragment : Fragment() {
         builder.setCanceledOnTouchOutside(false)
         builder.show()
     }
+
+    private fun isPdfViewerAvailable(context: Context): Boolean {
+        val pdfIntent = Intent(Intent.ACTION_VIEW)
+        pdfIntent.setDataAndType(Uri.parse("file:///fakepath/sample.pdf"), "application/pdf")
+        pdfIntent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+        val packageManager: PackageManager = context.packageManager
+        val resolvedActivities = packageManager.queryIntentActivities(pdfIntent, PackageManager.MATCH_DEFAULT_ONLY)
+
+        // Return true if there is at least one app that can handle PDF
+        return resolvedActivities.isNotEmpty()
+    }
+
     private fun openFile(fileSource: String) {
         when (Constant.isPdfUrl(fileSource)){
             1 -> {
-                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(Uri.parse(fileSource), "application/pdf")
+                intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+                // Check if there's an app that can handle PDFs
+                val chooser = Intent.createChooser(intent, "Open PDF")
+                requireContext().startActivity(chooser)
+                if (isPdfViewerAvailable(requireContext())){
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.setDataAndType(Uri.parse(fileSource), "application/pdf")
+                        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+                        // Check if there's an app that can handle PDFs
+                        val chooser = Intent.createChooser(intent, "Open PDF")
+                        requireContext().startActivity(chooser)
+                    } catch (e: Exception) {
+                        // Handle the exception (if no app is available to open PDFs)
+                        findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                            putString(Constant.URL_ARGUMENT, fileSource)
+                        })
+                    }
+                }else{
+                    findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                        putString(Constant.URL_ARGUMENT, fileSource)
+                    })
+                }
+
+
+
             }
             2 -> {
                 findNavController().navigate(R.id.openImageFragment, Bundle().apply {

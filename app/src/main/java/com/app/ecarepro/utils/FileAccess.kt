@@ -115,6 +115,15 @@ class FileAccess {
             return Base64.encodeToString(stream.toByteArray(), Base64.NO_WRAP)
         }
 
+         fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+            return when (compressFormat) {
+                Bitmap.CompressFormat.JPEG -> "jpg"
+                Bitmap.CompressFormat.PNG -> "png"
+                Bitmap.CompressFormat.WEBP -> "webp"
+                else -> "unknown"
+            }
+        }
+
           fun convertPdfToBase64(uri: Uri,inContext: Context): String {
             val inputStream = inContext.contentResolver.openInputStream(uri)
             val bytes = inputStream?.readBytes()
