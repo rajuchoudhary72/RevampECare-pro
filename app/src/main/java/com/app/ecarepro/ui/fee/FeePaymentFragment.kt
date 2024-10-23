@@ -1,7 +1,10 @@
 package com.app.ecarepro.ui.fee
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +27,7 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentFeePaymentBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -84,15 +88,32 @@ class FeePaymentFragment : Fragment() {
         }
         feePaymentViewModel.getGenerateToken(Constant.DEVICE_TYPE)
     }
-    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        val packageName = "com.android.chrome"
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
-        } else {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+    private fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        if (isChromeInstalled(requireContext())){
+            val packageName = "com.android.chrome"
+            if (packageName != null) {
+                customTabsIntent.intent.setPackage(packageName)
+                customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
+            } else {
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+        }else{
+            mainActivity().showMessage("Chrome is not installed")
         }
+
     }
+
+    private fun isChromeInstalled(context: Context): Boolean {
+        val chromePackageName = "com.android.chrome"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+        intent.setPackage(chromePackageName)
+
+        val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfoList.isNotEmpty()
+    }
+
+
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpFeePayWebView(tokenKey: String) {
 

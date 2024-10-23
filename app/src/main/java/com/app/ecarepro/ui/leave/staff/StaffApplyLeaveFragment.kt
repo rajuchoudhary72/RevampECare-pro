@@ -71,7 +71,7 @@ class StaffApplyLeaveFragment : Fragment() {
     private   var imageExt: String =""
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
-    private val sessionList = listOf<String> ("Session 1","Session 2")
+    private val sessionList = listOf<String> ("First Half","Second Half")
     var timestampBack: Long = System.currentTimeMillis()
     var timestampforward: Long = 0
 
@@ -371,7 +371,7 @@ class StaffApplyLeaveFragment : Fragment() {
 
                 imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                 imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
 
                 binding.imageViewCancel.isVisible = true
                 binding.attachmentImage.isVisible = true
@@ -388,7 +388,7 @@ class StaffApplyLeaveFragment : Fragment() {
 
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                    imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                    imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
                     binding.imageViewCancel.isVisible = true
                     binding.attachmentImage.isVisible = true
 

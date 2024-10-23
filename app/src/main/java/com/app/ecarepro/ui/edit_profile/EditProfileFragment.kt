@@ -239,7 +239,7 @@ binding.cbSameAddress.setOnCheckedChangeListener {
             textFatherAadharNumber.setText(profile.studentProfile.fatherAadhaarNumber)
 
             textMotherName.setText(profile.studentProfile.motherName)
-            textMotherDOB.setText(profile.studentProfile.fatherDOB)
+            textMotherDOB.setText(profile.studentProfile.motherDOB)
             MotherProfession.setText(profile.studentProfile.motherProfession, false)
             MotherDesignation.setText(profile.studentProfile.motherDesignation, false)
 
