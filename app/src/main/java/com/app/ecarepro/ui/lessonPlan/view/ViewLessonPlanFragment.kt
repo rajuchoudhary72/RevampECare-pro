@@ -102,9 +102,9 @@ class ViewLessonPlanFragment : Fragment() {
                                     binding. tvStatus.text="Approved"
 
                                 }
-                                if (it.data.lessonPlans.fileName!=null){
+                                if (it.data.lessonPlans.attachment.fileURL!=null){
                                     binding.llFile.setOnClickListener { _ ->
-                                        downloadFile(it.data.lessonPlans.fileName,)
+                                        downloadFile(it.data.lessonPlans.attachment.fileURL)
                                     }
                                 }else{
                                     binding.llFile.isVisible=false
@@ -137,10 +137,29 @@ class ViewLessonPlanFragment : Fragment() {
     }
 
     private fun downloadFile(fileSource:String){
-        findNavController().navigate(
-            R.id.photoViewFragmentFragment,
-            bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
-        )
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+            }
+
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+
+            }
+
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
     }
 
 
@@ -149,4 +168,3 @@ class ViewLessonPlanFragment : Fragment() {
 
 
 
-}
