@@ -38,3 +38,13 @@ data class Attachment(
     @SerializedName("fileExt")
     val fileExt: String?
 )
+
+data class AttachmentView(
+    @SerializedName("attachment")
+    val attachment: String?,
+    @SerializedName("fileExt")
+    val fileExt: String?,
+    @SerializedName("fileURL")
+    val fileURL: String?,
+
+)
