@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -28,6 +30,7 @@ import com.app.ecarepro.model.AuditorLst
 import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.model.RequiredField
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.assignment.staff.postAssignment.ClassListAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
@@ -43,10 +46,10 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     private var isAuditorySelected: Boolean=false
     private lateinit var requiredFiled: RequiredField
     private var lPlanId: String= ""
-    private lateinit var auditorSelectDat: AuditorLst
+    private var audID= ""
+    private var auditor= ""
     private lateinit var classData: NetworkMyClass
     private var isClassSelected: Boolean = false
-    private lateinit var selectClassData: MyClasseItem
     private var isSubSelected: Boolean = false
     private lateinit var subjectList: List<MySubject>
     private lateinit var binding: FragmentAddLessonBinding
@@ -54,6 +57,9 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     private val addLessonViewModel : AddLessonViewModel by viewModels()
     private   var imageExt: String= ""
     private   var imageString: String=""
+    var selectAll: Boolean = false
+    var classIds = StringBuilder()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,7 +77,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ctvFromDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback  {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback  {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.ctvFromDate.text=date
                 }
@@ -122,8 +128,8 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     imageString,
                     imageExt,
                     "",
-                    auditorSelectDat.auditor,
-                    selectClassData.classID.toString(),
+                    auditor,
+                    classIds = id.toString(),
                     binding.etClosure.text.toString(),
                     binding.etExtension.text.toString(),
                     "",
@@ -255,7 +261,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
                 imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
 
             }
         }
@@ -279,7 +285,8 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
     override fun onItemClick(t: AuditorLst, pos: Int, boolean: Boolean) {
         isAuditorySelected=true
-        auditorSelectDat=t
+        auditor=t.auditor
+        audID=t.audID
     }
 
     private fun popUpSelectSubject( ) {
@@ -348,7 +355,9 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     }
 
 
-    private fun popUpSelectClass(myClasses: List<MyClasseItem>) {
+
+
+    private fun popUpSelectClass(classesList: List<MyClasseItem>){
 
         val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
@@ -356,30 +365,55 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text="Select Class"
+        tvHeading.text= getText(R.string.lbl_select_class)
+        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        llSelectAll.isVisible=true
         builder.setView(view)
 
         relOk.setOnClickListener {
             if (isClassSelected){
-                binding.ctvSelectClass. text= selectClassData.className
-                 builder.dismiss()
 
+                val name = StringBuilder()
+                classIds.clear()
+
+                for (classeItem in classesList) {
+                    if (classeItem.checked == true) {
+                        if (classIds.toString().isEmpty()) {
+                            classIds.append(classeItem.classID)
+                            name.append(classeItem.className)
+                        } else {
+                            classIds.append(",").append(classeItem.classID)
+                            name.append(",").append(classeItem.className)
+                        }
+                    }
+                }
+
+                binding.ctvSelectClass.text= name
+                builder.dismiss()
             }
 
         }
 
-        val popUpClassListAdapter= PopUpClassListAdapter(myClasses!!, object : ItemListener<MyClasseItem>{
+        val subjectListAdapter= ClassListAdapter(classesList, selectAll, true, object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
-                selectClassData = t
-                isClassSelected=true
-
+                isClassSelected = true
             }
 
         })
         rvYears.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
-            adapter = popUpClassListAdapter
+            adapter = subjectListAdapter
+        }
+
+        llSelectAll.setOnClickListener {
+            selectAll = !selectAll
+            for (i in classesList) {
+                i .checked=selectAll
+            }
+            subjectListAdapter.notifyDataSetChanged()
+            checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
         }
 
         relCancel.setOnClickListener {
@@ -412,8 +446,9 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                         if (it.data.lessonPlans != null) {
                             val data= it.data.lessonPlans
 
-                            auditorSelectDat=AuditorLst( data.auditoryIds, data.auditoryTxt )
-                            selectClassData=MyClasseItem(0,data.classesName,data.classIds,false   )
+                            auditor=data.auditoryTxt
+                            audID=data.auditoryIds
+                            classIds = StringBuilder(data.classIds)
                             binding.etClosure.setText(data.closure)
                             binding.etExtension.setText(data.extensionTopic)
                             lPlanId=data.id
