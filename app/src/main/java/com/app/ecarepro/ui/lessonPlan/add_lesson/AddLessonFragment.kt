@@ -414,6 +414,25 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
             }
             subjectListAdapter.notifyDataSetChanged()
             checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
+
+            val name = StringBuilder()
+            classIds.clear()
+
+            for (classeItem in classesList) {
+                if (classeItem.checked) {
+                    if (classIds.toString().isEmpty()) {
+                        classIds.append(classeItem.classID)
+                        name.append(classeItem.className)
+                    } else {
+                        classIds.append(",").append(classeItem.classID)
+                        name.append(",").append(classeItem.className)
+                    }
+                }
+            }
+
+            binding.ctvSelectClass.text= name
+            isClassSelected=selectAll
+
         }
 
         relCancel.setOnClickListener {
