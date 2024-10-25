@@ -771,5 +771,5 @@
     <string name="timetable">Timetable</string>
     <string name="only_app_push_notification">Only App Push Notification</string>
     <string name="sms_and_app_message">SMS and App Message</string>
-    <string name="s_r_n_umrn_sats_no">S.R.N./UMRN/SATS No.:</string>
+    <string name="s_r_n_umrn_sats_no">S.R.N./UMRN/SATS No.</string>
 </resources>
