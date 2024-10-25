@@ -36,8 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:layout_marginRight="@dimen/_20sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -166,7 +165,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/leave"
+                    android:text="@string/lbl_leave"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_13sdp" />
 
@@ -176,9 +175,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center"
                     android:textColor="@color/grey_60"
-                    android:textSize="@dimen/_13sdp" />
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_13sdp"
+                    />
             </LinearLayout>
 
             <LinearLayout

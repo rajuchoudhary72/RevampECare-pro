@@ -182,7 +182,8 @@ class StaffApplyLeaveFragment : Fragment() {
             val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             if (selectedLeaveTypeData.applyBeforeHours <currentHour) {
             if (validateData()) {
-
+                filterDays=days
+                halfdayDTL.clear()
                 if (sessionFromPos == 0 && sessionToPos == 1) {
                     halfdayDTL.clear()
                 } else
@@ -484,6 +485,8 @@ class StaffApplyLeaveFragment : Fragment() {
         val tv_reason: TextView
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
         if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
             ColorDrawable(Color.TRANSPARENT)
         )
@@ -499,8 +502,9 @@ class StaffApplyLeaveFragment : Fragment() {
         tv_reason.text = "Reason: " +  binding.textFiledReason.text.toString()
         tv_submit = dialog.findViewById<TextView>(R.id.tv_submit)
         tv_cancel = dialog.findViewById(R.id.tv_cancel)
-         tv_submit.setOnClickListener {
-             leaveApplyLeaveViewModel.leaveApply(
+
+        tv_submit.setOnClickListener {
+              leaveApplyLeaveViewModel.leaveApply(
                  leaveID,
                  toSystemDate(binding.tvStartDate.text.toString()),
                  toSystemDate(binding.tvEndDate.text.toString()),
@@ -545,7 +549,11 @@ class StaffApplyLeaveFragment : Fragment() {
              }
              dialog.dismiss()
         }
-        tv_cancel.setOnClickListener { dialog.dismiss() }
+        tv_cancel.setOnClickListener {
+            days=filterDays
+            dialog.dismiss()
+
+        }
         dialog.show()
     }
 

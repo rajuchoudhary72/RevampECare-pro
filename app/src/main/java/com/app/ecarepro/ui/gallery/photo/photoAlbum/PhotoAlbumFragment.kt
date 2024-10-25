@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemListener<Album> {
+class PhotoAlbumFragment(private val albumType: AlbumType?) : Fragment() , ItemListener<Album> {
 
 
     private lateinit var photoAlbumAdapter: PhotoAlbumAdapter
@@ -62,7 +62,10 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
         super.onViewCreated(view, savedInstanceState)
 
 
+        if (albumType!=null){
             getPhotoAlbums()
+        }
+
 
 
 
@@ -122,7 +125,7 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
         }
 
 
-            photoAlbumViewModel.getPhotoAlbums(albumType.typeID ,pageIndex)
+            photoAlbumViewModel.getPhotoAlbums(albumType!!.typeID ,pageIndex)
 
 
 
@@ -151,7 +154,7 @@ class PhotoAlbumFragment(private val albumType: AlbumType) : Fragment() , ItemLi
                                 if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                     isLoading = false
                                     pageIndex += 1
-                                    photoAlbumViewModel.getPhotoAlbums(albumType.typeID,pageIndex)
+                                    photoAlbumViewModel.getPhotoAlbums(albumType!!.typeID,pageIndex)
                                 }
                             }
 

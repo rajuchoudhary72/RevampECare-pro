@@ -74,7 +74,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var p  = 0
     private var a  = 0
     private var l  = 0
-    private var con_leave  = 0
+    private var approve_leave  = 0
     private var lt  = 0
     private var na  = 0
     private lateinit var   dialog  : Dialog
@@ -480,7 +480,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         p  = 0
         a  = 0
         l  = 0
-        con_leave=0
+        approve_leave=0
         lt  = 0
         na  = 0
         for (i in   studentListArrayList) {
@@ -492,7 +492,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             else if (i.status == 3) {
                 l++
                 if (i.isConstant == 1) {
-                    con_leave++
+                    approve_leave += 1
                 }
             }else if (i.status == 1 && i.isLate == 1)
                 lt++
@@ -503,15 +503,20 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         }
         tv_present_count.text = p.toString() + ""
         tv_absent_count.text = a.toString() + ""
-        if (con_leave>0){
+        if (approve_leave>0 && (l-approve_leave)>0){
         tv_leave_count.text = buildString {
         append(l)
         append(" (")
-        append(l-con_leave)
+        append(l-approve_leave)
         append(" Marked, ")
-        append(con_leave)
+        append(approve_leave)
         append(" Pre-Approved)")
-       } } else{
+       } } else if (approve_leave>0){
+            tv_leave_count.text = buildString {
+                append(approve_leave)
+                append(" (Pre-Approved)")
+            }
+        }else{
             tv_leave_count.text = l.toString() + ""
         }
 
