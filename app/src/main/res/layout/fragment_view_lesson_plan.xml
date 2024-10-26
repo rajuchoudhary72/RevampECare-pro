@@ -497,7 +497,7 @@
                                 android:layout_width="@dimen/_25sdp"
                                 android:layout_height="@dimen/_25sdp"
                                 android:visibility="visible"
-                                android:src="@drawable/view" />
+                                android:src="@drawable/download_fill" />
 
                         </LinearLayout>
 
