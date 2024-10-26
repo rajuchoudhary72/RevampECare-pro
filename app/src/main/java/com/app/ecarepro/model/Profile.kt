@@ -63,6 +63,7 @@ data class Profile(
     val photo: String,
     val previousSchoolDTL: Any,
     val religion: String,
+    val srN_UMRN_SATSNumber: String,
     val rollNo: String,
     val state: Any,
     val transport: String,

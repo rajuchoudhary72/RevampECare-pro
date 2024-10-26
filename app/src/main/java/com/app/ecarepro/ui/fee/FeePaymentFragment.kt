@@ -59,7 +59,6 @@ class FeePaymentFragment : Fragment() {
 
     }
 
-
     private fun getGenToken(){
         lifecycleScope.launch {
             feePaymentViewModel.genTokenStateFlow.collectLatest {
