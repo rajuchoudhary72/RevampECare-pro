@@ -490,7 +490,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        startLocationFetch()
+        //startLocationFetch()
 
     }
     @Deprecated("Deprecated in Java")
@@ -500,7 +500,7 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationFetch()
+               // startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
             }

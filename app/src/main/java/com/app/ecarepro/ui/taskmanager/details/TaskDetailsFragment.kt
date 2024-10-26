@@ -152,174 +152,181 @@ class TaskDetailsFragment : Fragment() {
         }
 
         if (uiState is TaskDetailsUiState.Success && uiState.taskDetails != null) {
-            binding.recyclerView.withModels {
-                taskDetails {
-                    id(uiState.taskDetails.task?.id)
-                    title(uiState.taskDetails.task?.taskTitle)
-                    assignBy(uiState.taskDetails.task?.assignBy)
-                    description(uiState.taskDetails.task?.description)
-                    canEdit(uiState.taskDetails.task?.imOwner)
-                    onClickEdit { v: View ->
-                        if (v.id == R.id.title) {
-                            openTextInputDialog(
-                                "Title",
-                                uiState.taskDetails.task?.taskTitle ?: ""
-                            ) {
+            try {
+                binding.recyclerView.withModels {
+                    taskDetails {
+                        id(uiState.taskDetails.task?.id)
+                        title(uiState.taskDetails.task?.taskTitle)
+                        assignBy(uiState.taskDetails.task?.assignBy)
+                        description(uiState.taskDetails.task?.description)
+                        canEdit(uiState.taskDetails.task?.imOwner)
+                        onClickEdit { v: View ->
+                            if (v.id == R.id.title) {
+                                openTextInputDialog(
+                                    "Title",
+                                    uiState.taskDetails.task?.taskTitle ?: ""
+                                ) {
+                                    (requireActivity() as MainActivity).showLoader(true)
+                                    mViewModel.updateTask(
+                                        TaskFiledName.TASK_TITLE,
+                                        uiState.taskDetails.task?.taskList,
+                                        it
+                                    ) { isSuccess, message ->
+                                        (requireActivity() as MainActivity).showLoader(false)
+                                        mainActivity().showMessage(message ?: "")
+                                    }
+                                }
+                            } else if (v.id == R.id.description) {
+                                openTextInputDialog(
+                                    "Description",
+                                    uiState.taskDetails.task?.description ?: ""
+                                ) {
+                                    (requireActivity() as MainActivity).showLoader(true)
+                                    mViewModel.updateTask(
+                                        TaskFiledName.DESCRIPTION,
+                                        uiState.taskDetails.task?.description,
+                                        it
+                                    ) { isSuccess, message ->
+                                        (requireActivity() as MainActivity).showLoader(false)
+                                        mainActivity().showMessage(message ?: "")
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    taskDetailsDate {
+                        id(uiState.taskDetails.task?.startDate)
+                        startDate(uiState.taskDetails.task?.startDate)
+                        endDate(uiState.taskDetails.task?.dueDate)
+                        priority(uiState.taskDetails.task?.priority)
+                        status(uiState.taskDetails.task?.status)
+                        canEdit(uiState.taskDetails.task?.imOwner)
+                        editStartDate { _ ->
+                            selectDate("Start Date") {
                                 (requireActivity() as MainActivity).showLoader(true)
                                 mViewModel.updateTask(
-                                    TaskFiledName.TASK_TITLE,
-                                    uiState.taskDetails.task?.taskList,
+                                    TaskFiledName.START_DATE,
+                                    uiState.taskDetails.task?.startDate,
                                     it
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
                                     mainActivity().showMessage(message ?: "")
                                 }
                             }
-                        } else if (v.id == R.id.description) {
-                            openTextInputDialog(
-                                "Description",
-                                uiState.taskDetails.task?.description ?: ""
-                            ) {
+                        }
+                        editEndDate { _ ->
+                            selectDate("Due Date") {
                                 (requireActivity() as MainActivity).showLoader(true)
                                 mViewModel.updateTask(
-                                    TaskFiledName.DESCRIPTION,
-                                    uiState.taskDetails.task?.description,
+                                    TaskFiledName.DUE_DATE,
+                                    uiState.taskDetails.task?.dueDate,
                                     it
                                 ) { isSuccess, message ->
                                     (requireActivity() as MainActivity).showLoader(false)
                                     mainActivity().showMessage(message ?: "")
-
                                 }
                             }
                         }
-                    }
-                }
-
-                taskDetailsDate {
-                    id(uiState.taskDetails.task?.startDate)
-                    startDate(uiState.taskDetails.task?.startDate)
-                    endDate(uiState.taskDetails.task?.dueDate)
-                    priority(uiState.taskDetails.task?.priority)
-                    status(uiState.taskDetails.task?.status)
-                    canEdit(uiState.taskDetails.task?.imOwner)
-                    editStartDate { _ ->
-                        selectDate("Start Date") {
-                            (requireActivity() as MainActivity).showLoader(true)
-                            mViewModel.updateTask(
-                                TaskFiledName.START_DATE,
-                                uiState.taskDetails.task?.startDate,
-                                it
-                            ) { isSuccess, message ->
-                                (requireActivity() as MainActivity).showLoader(false)
-                                mainActivity().showMessage(message ?: "")
+                        updateStatusListener { _ ->
+                            if (uiState.taskDetails.task?.canChangeStatus == true) {
+                                uiState.taskDetails.task.status?.let { updateTask(it) }
                             }
-                        }
-                    }
-                    editEndDate { _ ->
-                        selectDate("Due Date") {
-                            (requireActivity() as MainActivity).showLoader(true)
-                            mViewModel.updateTask(
-                                TaskFiledName.DUE_DATE,
-                                uiState.taskDetails.task?.dueDate,
-                                it
-                            ) { isSuccess, message ->
-                                (requireActivity() as MainActivity).showLoader(false)
-                                mainActivity().showMessage(message ?: "")
-                            }
-                        }
-                    }
-                    updateStatusListener { _ ->
-                        if (uiState.taskDetails.task?.canChangeStatus == true) {
-                            uiState.taskDetails.task.status?.let { updateTask(it) }
-                        }
 
-                    }
-                }
-
-                group {
-                    id("group")
-                    layout(R.layout.group_task_assign)
-                    carouselNoSnapBuilder {
-                        id("car")
-                        numViewsToShowOnScreen(1.9f)
-                        uiState.taskDetails.task?.assignTo?.forEach { assign: Assign ->
-                            taskAssigneeCarouselItem {
-                                id(assign.userID)
-                                photo(assign.photo)
-                                name(assign.name)
-                                designation(assign.designation)
-                            }
-                        }
-                    }
-                }
-
-                if (uiState.taskDetails.task?.attachment != null || uiState.taskDetails.task?.imOwner == true) {
-                    taskDetailAttachment {
-                        id("attachment")
-                        attachment(uiState.taskDetails.task.attachment)
-                        canUploadAttachment(uiState.taskDetails.task.imOwner)
-                        clickListener { _ -> selectImageOptionDialog() }
-                    }
-                }
-
-                taskTabs {
-                    id("taskTabs")
-                    clickListener { v ->
-                        isCommentSelected = v.id == R.id.btn_comment
-                        binding.recyclerView.requestModelBuild()
-                    }
-                }
-
-                headline {
-                    id("history")
-                    title(if (isCommentSelected) "Comment" else "History")
-                }
-
-                if (isCommentSelected) {
-                    uiState.taskDetails.comments?.forEach { comment ->
-                        taskDetailHistoryItem {
-                            id(comment.hashCode())
-                            title(comment.name + ": " + comment.comment)
-                            date(comment.commentOn)
                         }
                     }
 
-                    sendCommentView {
-                        id("sendComment")
-                        text(comment)
-                        textWatcher(makeTextWatcher {
-                            comment = it.toString()
-                        })
-                        clickListener { _ ->
-                            if (comment.isNullOrEmpty()) {
-                                mainActivity().showMessage("Please enter comment")
-                                return@clickListener
-                            }
-                            (requireActivity() as MainActivity).showLoader(true)
-                            mViewModel.sendComment(comment!!) { isSuccess, message ->
-                                (requireActivity() as MainActivity).showLoader(false)
-                                mainActivity().showMessage(message ?: "")
-                                if (isSuccess) {
-                                    this@TaskDetailsFragment.comment = null
-                                    mViewModel.refresh()
+                    if(uiState.taskDetails.task?.assignTo.isNullOrEmpty().not()){
+                        group {
+                            id("group")
+                            layout(R.layout.group_task_assign)
+                            carouselNoSnapBuilder {
+                                id("car")
+                                numViewsToShowOnScreen(1.9f)
+                                uiState.taskDetails.task?.assignTo?.forEach { assign: Assign ->
+                                    taskAssigneeCarouselItem {
+                                        id(assign.userID)
+                                        photo(assign.photo)
+                                        name(assign.name)
+                                        designation(assign.designation)
+                                    }
                                 }
                             }
                         }
                     }
 
-
-                } else {
-                    uiState.taskDetails.activities?.forEach { activity ->
-                        taskDetailHistoryItem {
-                            id(activity.hashCode())
-                            title(activity.name + ": " + activity.activity)
-                            date(activity.actionOn)
+                    if (uiState.taskDetails.task?.attachment != null || uiState.taskDetails.task?.imOwner == true) {
+                        taskDetailAttachment {
+                            id("attachment")
+                            attachment(uiState.taskDetails.task.attachment)
+                            canUploadAttachment(uiState.taskDetails.task.imOwner)
+                            clickListener { _ -> selectImageOptionDialog() }
                         }
                     }
+
+                    taskTabs {
+                        id("taskTabs")
+                        clickListener { v ->
+                            isCommentSelected = v.id == R.id.btn_comment
+                            binding.recyclerView.requestModelBuild()
+                        }
+                    }
+
+                    headline {
+                        id("history")
+                        title(if (isCommentSelected) "Comment" else "History")
+                    }
+
+                    if (isCommentSelected) {
+                        uiState.taskDetails.comments?.forEach { comment ->
+                            taskDetailHistoryItem {
+                                id(comment.hashCode())
+                                title(comment.name + ": " + comment.comment)
+                                date(comment.commentOn)
+                            }
+                        }
+
+                        sendCommentView {
+                            id("sendComment")
+                            text(comment)
+                            textWatcher(makeTextWatcher {
+                                comment = it.toString()
+                            })
+                            clickListener { _ ->
+                                if (comment.isNullOrEmpty()) {
+                                    mainActivity().showMessage("Please enter comment")
+                                    return@clickListener
+                                }
+                                (requireActivity() as MainActivity).showLoader(true)
+                                mViewModel.sendComment(comment!!) { isSuccess, message ->
+                                    (requireActivity() as MainActivity).showLoader(false)
+                                    mainActivity().showMessage(message ?: "")
+                                    if (isSuccess) {
+                                        this@TaskDetailsFragment.comment = null
+                                        mViewModel.refresh()
+                                    }
+                                }
+                            }
+                        }
+
+
+                    } else {
+                        uiState.taskDetails.activities?.forEach { activity ->
+                            taskDetailHistoryItem {
+                                id(activity.hashCode())
+                                title(activity.name + ": " + activity.activity)
+                                date(activity.actionOn)
+                            }
+                        }
+                    }
+
+
                 }
-
-
+            }catch (e:NullPointerException){
+                e.message
             }
+
         }
 
     }

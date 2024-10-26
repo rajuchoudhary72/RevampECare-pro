@@ -532,6 +532,12 @@ class ProfileFragment : Fragment() {
             subTitle(profile.club)
         }
         profileItem {
+            id(R.string.s_r_n_umrn_sats_no)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.s_r_n_umrn_sats_no))
+            subTitle(profile.srN_UMRN_SATSNumber)
+        }
+        profileItem {
             id(R.string.house_name)
             iconRes(R.drawable.outline_help_outline_24)
             title(getString(R.string.house_name))
