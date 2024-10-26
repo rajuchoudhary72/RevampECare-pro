@@ -71,6 +71,8 @@ data class Profile(
     val cbseID: String?,
     @SerializedName("club")
     val club: String?,
+    @SerializedName("srN_UMRN_SATSNumber")
+    val srN_UMRN_SATSNumber: String?,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("qualification")
@@ -291,6 +293,8 @@ data class StudentProfile(
     val motherEmail2: String?,
     @SerializedName("motherMob_1")
     val motherMob1: String?,
+    @SerializedName("srN_UMRN_SATSNumber")
+    val srN_UMRN_SATSNumber: String?,
     @SerializedName("motherMob_2")
     val motherMob2: String?,
     @SerializedName("motherName")
