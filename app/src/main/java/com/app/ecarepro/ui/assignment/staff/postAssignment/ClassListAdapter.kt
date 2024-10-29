@@ -42,7 +42,9 @@ class ClassListAdapter(
         holder.llMain.setOnClickListener {
               itemListener.onItemClick(academicYearList[holder.bindingAdapterPosition],1,true)
             academicYearList[holder.bindingAdapterPosition].checked =! academicYearList[holder.bindingAdapterPosition].checked
+            lastIndex = holder.bindingAdapterPosition
             notifyDataSetChanged()
+
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {

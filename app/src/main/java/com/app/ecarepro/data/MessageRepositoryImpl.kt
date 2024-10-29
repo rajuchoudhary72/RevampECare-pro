@@ -223,10 +223,10 @@ class MessageRepositoryImpl @Inject constructor(
                     token.authenticationToken,
                     request
                 )
-                if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: "Success"))
+                if (response.ErrorCode == 0) {
+                    emit(Result.success(response.Message ?: "Success"))
                 } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+                    emit(Result.failure(IllegalArgumentException(response.Message)))
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))

@@ -87,8 +87,9 @@ class CircularDetailsFragment : Fragment() {
                             binding.circularDetails=it.data.circuler
                             fileSource=it.data.circuler.filePath
 
-                            val htmlWithLineBreaks = it.data.circuler.message.replace("\n", "<br>")
-                            val spanned = HtmlCompat.fromHtml(htmlWithLineBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
+                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
+                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
                             binding.tvNoticeDetails.text = spanned
 
                             binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()

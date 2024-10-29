@@ -713,10 +713,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                          (requireActivity() as MainActivity).showLoader(true)
                          stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
                              (requireActivity() as MainActivity).showLoader(false)
-                             mainActivity().showMessage(message)
-//                    if (isSuccess) {
-//                        findNavController().popBackStack()
-//                    }
+                             if (isSuccess){
+                                 mainActivity().showMessage("SMS Sent Successfully")
+                             }else{
+                                 mainActivity().showMessage(message)
+                             }
                          }
                      }else{
                          Toast.makeText(context, "Sms Template not defined", Toast.LENGTH_SHORT).show()
@@ -726,10 +727,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                      (requireActivity() as MainActivity).showLoader(true)
                      stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
                          (requireActivity() as MainActivity).showLoader(false)
-                         mainActivity().showMessage(message)
-//                    if (isSuccess) {
-//                        findNavController().popBackStack()
-//                    }
+                         if (isSuccess){
+                             mainActivity().showMessage(message)
+                         }else{
+                             mainActivity().showMessage(message)
+                         }
                      }
                  }
 

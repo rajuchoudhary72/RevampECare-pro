@@ -91,6 +91,7 @@ class FeeCertificateViewModel @Inject constructor(
                 //"https://payment.agnelgreaternoida.org/api/certificate",
                 userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/certificate" ,
                 PostDataFeeCertificate(
+                    "",
                     userDataStore.getUser()?.userId.toString(),
                      userDataStore.getSchoolData()!!.schoolCode,
                     //"PR1572",

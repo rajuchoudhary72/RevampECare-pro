@@ -47,6 +47,8 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
              if (data.attachment!=null){
                  llFile.isVisible=data.attachment.isNotEmpty()
+             }else{
+                 llFile.isVisible=false
              }
 
              tvAppliedOn.text= buildString {
