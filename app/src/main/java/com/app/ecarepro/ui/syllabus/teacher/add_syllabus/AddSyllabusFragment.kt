@@ -9,6 +9,7 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -215,24 +216,24 @@ class AddSyllabusFragment : Fragment() {
         val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        val llOkCancel = view.findViewById<LinearLayout>(R.id.llOkCancel)
+        llOkCancel.isVisible = false
         tvHeading.text = getText(R.string.lbl_select_class)
         builder.setView(view)
 
-        relOk.setOnClickListener {
-            if (isClassSelected) {
-                binding.tvSelectClass.text = classData.className
-                staffSubjects(classData.classID!!)
-                builder.dismiss()
-
-            }
-
-        }
         val subjectListAdapter = ClassListAdapter(classesList,false, false, object : ItemListener<MyClasseItem> {
             override fun onItemClick(t: MyClasseItem, pos: Int, boolean: Boolean) {
 
                 classData = t
                 classID= classData.classID!!
                 isClassSelected = true
+
+                if (isClassSelected) {
+                    binding.tvSelectClass.text = classData.className
+                    staffSubjects(classData.classID!!)
+                    builder.dismiss()
+
+                }
             }
 
         })
@@ -259,23 +260,37 @@ class AddSyllabusFragment : Fragment() {
         val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        val tvSelectAll = view.findViewById<TextView>(R.id.tv_select_all_two)
+        val llOkCancel = view.findViewById<LinearLayout>(R.id.llOkCancel)
+        llOkCancel.isVisible = false
+        tvSelectAll.isVisible = true
         tvHeading.text = getText(R.string.select_subject)
         builder.setView(view)
 
-        relOk.setOnClickListener {
-            if (isSubjectSelected) {
-                binding.tvSelectSubject.text = subjectData.subjectName
-                builder.dismiss()
 
-            }
+        tvSelectAll.setOnClickListener {
 
+            binding.tvSelectSubject.text = "All Subject"
+            isSubjectSelected=true
+            subID=0
+
+            builder.dismiss()
         }
+
+
         val subjectListAdapter = SubjectListAdapter(subjectList, object : ItemListener<MySubject> {
             override fun onItemClick(t: MySubject, pos: Int, boolean: Boolean) {
 
                 subjectData = t
-                subID= subjectData.subID!!
+                subID= subjectData.subID
                 isSubjectSelected = true
+                if (isSubjectSelected) {
+                    binding.tvSelectSubject.text = subjectData.subjectName
+                    builder.dismiss()
+
+                }
+
+
             }
 
         })

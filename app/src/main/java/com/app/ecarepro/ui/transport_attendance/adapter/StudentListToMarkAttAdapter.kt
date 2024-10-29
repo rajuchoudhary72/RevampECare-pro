@@ -58,9 +58,22 @@ class StudentListToMarkAttAdapter(
         fun bind(data: StuLst) {
             bin.apply {
                 tvStuName.text =  data.stName
-                tvRollNo.text = "Roll No: " + data.rollNo
-                tvClassName.text = "Class: " + data.className
-                tvAdmissionNo.text = "Admission No: " + data.admissionNo
+                tvStopName.text = buildString {
+                    append("Stop: ")
+                    append(data.stop)
+                }
+                tvRollNo.text = buildString {
+                    append("Roll No: ")
+                    append(data.rollNo)
+                }
+                tvClassName.text = buildString {
+                    append("Class: ")
+                    append(data.className)
+                }
+                tvAdmissionNo.text = buildString {
+                    append("Admission No: ")
+                    append(data.admissionNo)
+                }
                 tvSerialNumber.text = (absoluteAdapterPosition + 1).toString()
 
                 Picasso.get().load(data.photo)

@@ -84,6 +84,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        pageIndex=1
         setupRecycleViewPager()
         getLeaveReport()
 
