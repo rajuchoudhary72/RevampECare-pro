@@ -8,6 +8,8 @@ data class UserProfileDto(
     val errorCode: Int?,
     @SerializedName("message")
     val message: String?,
+    @SerializedName("canEditProfile")
+    val canEditProfile: Boolean?,
     @SerializedName("profile")
     val profile: Profile,
     @SerializedName("status")
