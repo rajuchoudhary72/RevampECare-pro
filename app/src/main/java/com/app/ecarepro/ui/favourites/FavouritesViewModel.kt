@@ -66,7 +66,7 @@ class FavouritesViewModel @Inject constructor(
             val maxSl: Int = (uiState.value as FavouritesUiState.Success).favourites.maxByOrNull { it.slNo?:0 }?.slNo?:0
             appRepository
                 .updateFavourites(updatedItems.mapIndexed { index, favourites ->
-                    favourites.copy(isModified = true, slNo = maxSl.plus(index+1))
+                    favourites.copy(isModified = true, slNo = maxSl)
                 })
                 .collectLatest { result ->
                     if (result.isSuccess) {
