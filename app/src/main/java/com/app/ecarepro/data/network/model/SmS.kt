@@ -7,6 +7,7 @@ data class SmS(
     val `receiver`: Recipient,
     val senderName: String,
     val sentOn: String,
+    val statusOn: String,
     val smsType: String,
     val status: String,
     val text: String
