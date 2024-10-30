@@ -135,7 +135,7 @@ class EstimateCollectionModel(
         )
 }
 enum class FeeFilterType(val text: String, val id: Int) {
-    ALL_FEE_TYPE("All Fee Type", 1),
+    ALL_FEE_TYPE("All Fee Type", 0),
     SCHOOL("School", 8);
     companion object {
         fun fromString(text: String): FeeFilterType {
