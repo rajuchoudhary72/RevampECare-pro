@@ -140,6 +140,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -1222,7 +1223,20 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun uploadStudentPhoto(request: StudentPhotoUploadModel): CommonResponse {
         return userService.uploadStudentPhoto(request)
     }
-
+    override suspend fun feeCollection(
+        feeTypeID: Int,
+        fromDate: String,
+        tillDate: String
+    ): Flow<Result<FeeCollection>> {
+        return flow {
+            try {
+                val response = userService.feeCollection(feeTypeID, fromDate, tillDate)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
         return userService.surveyList(pg, isReport)
     }

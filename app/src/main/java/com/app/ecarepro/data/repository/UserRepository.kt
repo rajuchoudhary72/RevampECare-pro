@@ -40,6 +40,7 @@ import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.Purpose
 
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -157,6 +158,9 @@ interface UserRepository {
         password: String
     ): LoginResponseDto
 
+    suspend fun feeCollection(
+        feeTypeID: Int, fromDate: String, tillDate: String
+    ): Flow<Result<FeeCollection>>
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
     ): Flow<Result<CommonResponse>>

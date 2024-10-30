@@ -130,6 +130,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -155,7 +156,12 @@ interface UserService {
         @Query("DeviceType") deviceType: Int = 1,
         @Query("deviceID") deviceID: String ,
     ): CommonResponse
-
+    @GET("Report/FeeCollection")
+    suspend fun feeCollection(
+        @Query("FeeTypeId") feeTypeId: Int,
+        @Query("FromDate") fromDate: String,
+        @Query("TillDate") tillDate: String,
+    ): FeeCollection
     @POST("User/GetCredentials")
     suspend fun getCredentials(
         @Body request: GetCredentialsRequest,

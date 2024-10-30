@@ -10,7 +10,10 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 
-class EstimateCollectionModel(val feeCollection: FeeCollection) :
+class EstimateCollectionModel(
+    private val feeCollection: FeeCollection,
+    private val updateFeeCollectionDate: ((feeTypeId: Int, dateFilterType: DateFilterType, isCalenderClick: Boolean) -> Unit)? = null,
+) :
     ViewBindingKotlinModel<ItemEstimateCollectionCardBinding>(R.layout.item_estimate_collection_card) {
     private var isExpanded = false
     override fun ItemEstimateCollectionCardBinding.bind() {
@@ -33,7 +36,29 @@ class EstimateCollectionModel(val feeCollection: FeeCollection) :
 
         barChart.isClearBackgroundColor = true
         lineChart.isClearBackgroundColor = true
-
+        btnCalender.setOnClickListener {
+            updateFeeCollectionDate?.invoke(
+                FeeFilterType.fromString(editTextFeeType.text.toString()).id,
+                DateFilterType.fromString(editTextDate.text.toString()),
+                true
+            )
+        }
+        editTextFeeType.setOnItemClickListener { parent, view, position, id ->
+            val selectedItem = parent.getItemAtPosition(position) as String // Assuming your items are strings
+            updateFeeCollectionDate?.invoke(
+                FeeFilterType.fromString(selectedItem).id,
+                DateFilterType.fromString(editTextDate.text.toString()),
+                false
+            )
+        }
+        editTextDate.setOnItemClickListener { parent, view, position, id ->
+            val selectedItem = parent.getItemAtPosition(position) as String // Assuming your items are strings
+            updateFeeCollectionDate?.invoke(
+                FeeFilterType.fromString(selectedItem ).id,
+                DateFilterType.fromString(editTextDate.text.toString()),
+                false
+            )
+        }
         barChart.aa_drawChartWithChartModel(getBarChartModel(feeCollection))
         lineChart.aa_drawChartWithChartModel(getLineChartModel(feeCollection))
     }
@@ -108,5 +133,23 @@ class EstimateCollectionModel(val feeCollection: FeeCollection) :
                     )
             }?.toTypedArray() ?: emptyArray()
         )
-
+}
+enum class FeeFilterType(val text: String, val id: Int) {
+    ALL_FEE_TYPE("All Fee Type", 0),
+    SCHOOL("School", 8);
+    companion object {
+        fun fromString(text: String): FeeFilterType {
+            return (values().firstOrNull { it.text == text } ?: ALL_FEE_TYPE)
+        }
+    }
+}
+enum class DateFilterType(val text: String) {
+    TODAY("Today"),
+    THIS_MONTH("This Month"),
+    THIS_YEAR("This Year");
+    companion object {
+        fun fromString(text: String): DateFilterType {
+            return values().firstOrNull { it.text == text } ?: TODAY
+        }
+    }
 }
