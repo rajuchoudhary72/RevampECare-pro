@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.contentMain.rlBottomNavigation.isVisible =
                 topLevelFragments.contains(destination.id)
         }
-        throw RuntimeException("Test crash for after merge in new code")
+
 
         setUpDrawer()
 
