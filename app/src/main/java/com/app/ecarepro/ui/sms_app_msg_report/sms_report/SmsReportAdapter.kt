@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.sms_app_msg_report.sms_report
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -82,6 +83,16 @@ class SmsReportAdapter(private var smsReportList : MutableList<SmS> ,
              tvStatus.text= buildString {
                  append("Delivery Status: ")
                  append(smSs.status)
+             }
+
+             if (!smSs.statusOn.isNullOrEmpty()){
+                 tvStatusOn.isVisible=true
+                 tvStatusOn.text= buildString {
+                     append("On ")
+                     append(smSs.statusOn)
+                 }
+             }else{
+                 tvStatusOn.isVisible=false
              }
 
              val includePersonDetailsBottomBinding =  binding.includePersonDetailsBottom
