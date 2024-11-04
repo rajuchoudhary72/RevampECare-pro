@@ -60,18 +60,31 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:fontFamily="@font/ubuntu_regular"
-
                 android:padding="@dimen/_2sdp" />
 
-            <TextView
-                android:id="@+id/tv_status"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
-                android:fontFamily="@font/ubuntu_regular"
-                android:padding="@dimen/_2sdp"
-                   />
+                >
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:padding="@dimen/_2sdp"
+                    />
+                <TextView
+                    android:id="@+id/tv_status_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:padding="@dimen/_2sdp"
+
+                    />
+            </LinearLayout>
 
             <include
                 android:id="@+id/include_person_details_bottom"
