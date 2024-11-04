@@ -1049,7 +1049,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             8 -> {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
