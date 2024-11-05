@@ -18,6 +18,7 @@ import com.app.ecarepro.ui.fom_guard.model.verify_code.NetworkVerifyCode
 import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.Url
+import com.app.ecarepro.model.CollectionReport
 
 interface FomApiRepository {
     suspend   fun approveAppointment(
@@ -29,7 +30,8 @@ interface FomApiRepository {
          senderId : String,
          dateFrom : String,
          dateTo : String,
-    ): NetworkFeeCollection
+    ): List<CollectionReport>
+
 
     suspend fun defaulterFilters(
          url: String

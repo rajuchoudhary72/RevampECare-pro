@@ -61,6 +61,10 @@
         android:name="com.app.ecarepro.ui.statical.StaticalReport"
         tools:layout="@layout/fragment_statical_report" />
     <fragment
+        android:id="@+id/collectionReport"
+        android:name="com.app.ecarepro.ui.collection_report.CollectionReportFragment"
+        tools:layout="@layout/collection_report" />
+    <fragment
         android:id="@+id/appUserReportFragment"
         android:name="com.app.ecarepro.ui.appuserreport.AppUserReportFragment"
         tools:layout="@layout/fragment_statical_report" />

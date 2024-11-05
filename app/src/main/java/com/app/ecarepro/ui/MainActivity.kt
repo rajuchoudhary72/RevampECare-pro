@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userDatabase: UserDatabase
+
     @Inject
     lateinit var syncManager: SyncManager
     private val topLevelFragments = mutableListOf(
@@ -186,7 +187,6 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.contentMain.rlBottomNavigation.isVisible =
                 topLevelFragments.contains(destination.id)
         }
-
 
         setUpDrawer()
 
@@ -286,7 +286,7 @@ class MainActivity : AppCompatActivity() {
         intent?.extras?.let { data ->
             handleNotificationClick(data)
         }
-     // throw NullPointerException("Test crash for logging")
+        // throw NullPointerException("Test crash for logging")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
             enableNotificationPermission()
         }
@@ -868,26 +868,26 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-           /* 14 -> {
-                try {
-                    lifecycleScope.launch {
-                        userDataStore.getSchoolData()?.let {
-                            if (it.assessmentMarksURL == null) {
-                                showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
-                            } else {
-                                it.assessmentMarksURL?.let { url ->
-                                    webViewCall(
-                                        url,
-                                        getString(R.string.assessment_headling)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                }
+            /* 14 -> {
+                 try {
+                     lifecycleScope.launch {
+                         userDataStore.getSchoolData()?.let {
+                             if (it.assessmentMarksURL == null) {
+                                 showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
+                             } else {
+                                 it.assessmentMarksURL?.let { url ->
+                                     webViewCall(
+                                         url,
+                                         getString(R.string.assessment_headling)
+                                     )
+                                 }
+                             }
+                         }
+                     }
+                 } catch (e: Exception) {
+                 }
 
-            }*/
+             }*/
 
             37 -> {
                 try {
@@ -955,9 +955,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-           navController.navigate(R.id.webViewFragment, bundle)
-              Log.d("WebURL", url)
-             // openCustomTab(tabIntent, Uri.parse(url))
+            navController.navigate(R.id.webViewFragment, bundle)
+            Log.d("WebURL", url)
+            // openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
@@ -1048,6 +1048,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
             8 -> {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
@@ -1224,6 +1225,7 @@ class MainActivity : AppCompatActivity() {
 
             8 -> {
                 when (childMenuId) {
+                    /*sms report*/
                     42 -> {
                         when (childChildMenuId) {
                             4 -> {
@@ -1236,6 +1238,22 @@ class MainActivity : AppCompatActivity() {
 
                             6 -> {
                                 navController.navigate(R.id.rechargeLogFragment)
+                            }
+                        }
+                    }
+                    /* fee report*/
+                    67 -> {
+                        when (childChildMenuId) {
+                            11 -> {
+                                navController.navigate(R.id.collectionReport)
+                            }
+
+                            12 -> {
+                                navController.navigate(R.id.collectionReport)
+                            }
+
+                            13 -> {
+                                navController.navigate(R.id.collectionReport)
                             }
                         }
                     }
@@ -1599,6 +1617,7 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
     }
+
     private fun syncData(forceSync: Boolean) {
         lifecycleScope.launch {
             showLoader(true)
