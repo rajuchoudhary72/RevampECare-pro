@@ -371,7 +371,11 @@ class TryAttendanceTest2 : AppCompatActivity() {
                                     total_leave = "${data.totalLeave}"
                                     total_present = "${data.totalPresent}"
                                     working_days = "${data.workingDays}"
-                                    session = data.academicYears[0].session
+                                  try {
+                                      session = data.academicYears[0].session
+                                  }catch (e:NullPointerException){
+                                      e.printStackTrace()
+                                  }
                                 }
                                 FragmentAPI.report_arraylist.clear()
                                 it.data.attendance?.let { it1 ->

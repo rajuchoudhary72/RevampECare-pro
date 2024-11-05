@@ -77,6 +77,13 @@ data class UserInfo(
         else
             "$name  \nP/O  $childName"
     }
+
+    fun getFullHomeScreenName(): String? {
+        return if (childName.isNullOrEmpty())
+            name
+        else
+            "$name  \nP/O  $childName ($otherInfo)"
+    }
 }
 
 data class ChildMenu(
