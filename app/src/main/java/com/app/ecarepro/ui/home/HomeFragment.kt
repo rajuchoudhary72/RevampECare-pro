@@ -148,7 +148,8 @@ class HomeFragment : Fragment() {
                         uiState.userInfo.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
-                                txtUserName.text = user.name
+                               // txtUserName.text = user.name
+                                 txtUserName.text = user.getFullHomeScreenName()
                                 profilePrompt()
                             }
                         }

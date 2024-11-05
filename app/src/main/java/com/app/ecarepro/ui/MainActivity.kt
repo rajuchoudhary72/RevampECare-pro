@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
-    private lateinit var IMEINumber: String
     private val systemViewModel: SystemViewModel by viewModels()
 
     private val navController: NavController by lazy {
@@ -165,9 +164,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
-            enableNotificationPermission()
-        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -291,7 +287,9 @@ class MainActivity : AppCompatActivity() {
             handleNotificationClick(data)
         }
      // throw NullPointerException("Test crash for logging")
-
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
+            enableNotificationPermission()
+        }
         askNotificationPermission()
 
     }
