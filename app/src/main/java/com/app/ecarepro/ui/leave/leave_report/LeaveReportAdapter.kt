@@ -27,6 +27,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         private var canTalkeAction = true
         private var applType: Int=0
         private var status: Int=0
+        private var allSelect: Boolean=false
 
 
 
@@ -43,6 +44,9 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         binding!!.data=leaveList[position]
 
         with(binding) {
+
+            cbLeave.isVisible = status==0
+
              val data =leaveList[position]
 
              if (data.attachment!=null){
@@ -83,6 +87,17 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
            // llApproveRej.isVisible=canTalkeAction
 
+            if (allSelect){
+                cbLeave.isChecked=true
+            }else{
+                cbLeave.isChecked=false
+            }
+
+
+            cbLeave.setOnClickListener {
+                leaveReportFragment.onItemClick(data,3,cbLeave.isChecked)
+            }
+
 
 
             tvApprove.setOnClickListener {
@@ -98,6 +113,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
 
             if (applType==3){
+                cbLeave.isVisible=false
                 tvApplicant.isVisible=false
                 tvApplicantVal.isVisible=false
                 textUserName.text= buildString {
@@ -135,6 +151,11 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
     }
     fun clearData(){
         leaveList.clear()
+        notifyDataSetChanged()
+    }
+
+    fun setAllSelect(allSelect: Boolean){
+       this.allSelect=allSelect
         notifyDataSetChanged()
     }
 
