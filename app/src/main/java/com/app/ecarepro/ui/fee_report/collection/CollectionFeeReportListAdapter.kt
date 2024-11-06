@@ -29,7 +29,7 @@ class CollectionFeeReportListAdapter(private var collectionReports: List<Collect
         val data= collectionReports[position]
 
         binding?.apply {
-            collectionData=data
+           // collectionData=data
         }
 
 

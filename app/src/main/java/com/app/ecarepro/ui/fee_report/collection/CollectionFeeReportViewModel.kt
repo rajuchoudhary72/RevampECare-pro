@@ -39,7 +39,7 @@ class CollectionFeeReportViewModel @Inject constructor(
                 dateFrom,
                 dateTo)
         }.onSuccess {
-            feeCollectionMutableStateFlow.value = NetworkResult.Success(it)
+            feeCollectionMutableStateFlow.value = NetworkResult.Success(NetworkFeeCollection(it))
         }.onFailure {
             feeCollectionMutableStateFlow.value = NetworkResult.Error(it.message)
         }

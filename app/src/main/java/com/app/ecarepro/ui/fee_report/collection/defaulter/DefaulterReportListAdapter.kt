@@ -32,8 +32,6 @@ class DefaulterReportListAdapter(private var defaulterDataLists: List<DefaulterD
         binding?.apply {
             defaulterData=data
         }
-
-
     }
 
 

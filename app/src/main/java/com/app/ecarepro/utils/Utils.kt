@@ -41,6 +41,12 @@ fun stringFormat2String(stringId1: MainActivity, stringId: Int, value1: String?,
         value2
     )
 }
+fun currentDate(): String {
+    val c = Calendar.getInstance().time
+    println("Current time => $c")
+    val df = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+    return df.format(c)
+}
 fun calenderInstance(){
     val calendar = Calendar.getInstance()
     CalenderInstance.currentYear = calendar[Calendar.YEAR]

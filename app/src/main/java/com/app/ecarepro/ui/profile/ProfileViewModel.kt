@@ -67,8 +67,12 @@ class ProfileViewModel @Inject constructor(
             )
 
     init {
-        viewModelScope.launch {
-            userType = userDataStore.getUser()?.userType!!
+        try {
+            viewModelScope.launch {
+                userType = userDataStore.getUser()?.userType!!
+            }
+        }catch (e:RuntimeException){
+            e.stackTrace
         }
     }
 

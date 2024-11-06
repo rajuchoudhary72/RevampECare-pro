@@ -22,6 +22,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Url
+import com.app.ecarepro.model.CollectionReport
 
 interface FomApiService {
 
@@ -34,7 +35,7 @@ interface FomApiService {
     suspend fun feeCollectionReport(
         @Url url: String,
         @Body request: FeeCollectionBody
-    ): NetworkFeeCollection
+    ): List<CollectionReport>
 
     @GET
     suspend fun defaulterFilters(
