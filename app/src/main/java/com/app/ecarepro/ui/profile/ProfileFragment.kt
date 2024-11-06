@@ -164,6 +164,7 @@ class ProfileFragment : Fragment() {
         }
 
         if (uiState is ProfileUiState.Success) {
+            binding.tvEditProfile.isVisible = uiState.canEditProfile
             binding.recyclerView.withModels {
                 profileHeader {
                     id(uiState.profile.username)
@@ -585,11 +586,11 @@ class ProfileFragment : Fragment() {
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
+      /*  viewLifecycleOwner.lifecycleScope.launch {
             userDataStore.getUser()?.run {
                 binding.tvEditProfile.isVisible = Constant.PARENT_TYPE == userType
             }
-        }
+        }*/
 
         binding.tvEditProfile.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)
