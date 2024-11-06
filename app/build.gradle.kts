@@ -31,8 +31,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 247
-        versionName = "2.3.7"
+        versionCode = 249
+        versionName = "2.3.9"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -184,6 +184,11 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.4.0")
     kapt ("com.github.bumptech.glide:compiler:4.4.0")
 
-    implementation("com.google.android.play:app-update-ktx:2.0.1")
+    // This dependency is downloaded from the Google’s Maven repository.
+    // So, make sure you also include that repository in your project's build.gradle file.
+    implementation("com.google.android.play:app-update:2.1.0")
+
+    // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
 }

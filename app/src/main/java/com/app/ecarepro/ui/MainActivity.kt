@@ -107,15 +107,14 @@ class MainActivity : AppCompatActivity() {
     private var listenMenuItemClickEvent = true
     private var isActivityPaused = false
 
-    private val appUpdateManager: AppUpdateManager by lazy {
+   /* private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
-    }
+    }*/
     @Inject
     lateinit var userDataStore: UserDataStore
 
     @Inject
     lateinit var userDatabase: UserDatabase
-
     @Inject
     lateinit var syncManager: SyncManager
     private val topLevelFragments = mutableListOf(
@@ -199,6 +198,7 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.contentMain.rlBottomNavigation.isVisible =
                 topLevelFragments.contains(destination.id)
         }
+
 
         setUpDrawer()
 
@@ -462,20 +462,20 @@ class MainActivity : AppCompatActivity() {
                                         // open  dialog
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
-                                            checkIsUpdateAvailable(false)
-                                          /*  UpdateAppVersionDialog(
+                                          //  checkIsUpdateAvailable(false)
+                                            UpdateAppVersionDialog(
                                                 0,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )*/
+                                            )
                                         } else {
                                             //force update
-                                            checkIsUpdateAvailable(true)
-                                          /*  UpdateAppVersionDialog(
+                                            //checkIsUpdateAvailable(true)
+                                            UpdateAppVersionDialog(
                                                 1,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )*/
+                                            )
                                         }
                                     } else {
                                         // nothing  open  version  dialog
@@ -515,7 +515,9 @@ class MainActivity : AppCompatActivity() {
         }
         systemViewModel.checkAppVersion()
     }
-    private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
+
+    /*in app  update */
+   /* private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
             val isAppUpdateAllowed = if (forceUpdate) {
@@ -576,7 +578,9 @@ class MainActivity : AppCompatActivity() {
                 Log.e("In App Update", "onActivityResult: else")
             }
         }
-    }
+    }*/
+
+
     fun hideKeyBoard() {
         this.currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -1123,7 +1127,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             8 -> {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
@@ -1714,9 +1717,9 @@ class MainActivity : AppCompatActivity() {
             syncData(true)
         }
     }
-    companion object {
+   /* companion object {
         private const val MY_REQUEST_CODE = 123
-    }
+    }*/
 }
 
 fun Fragment.mainActivity(): MainActivity {
