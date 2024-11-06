@@ -78,7 +78,17 @@ import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.delay
-
+import android.app.Activity
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -97,7 +107,9 @@ class MainActivity : AppCompatActivity() {
     private var listenMenuItemClickEvent = true
     private var isActivityPaused = false
 
-
+    private val appUpdateManager: AppUpdateManager by lazy {
+        AppUpdateManagerFactory.create(this)
+    }
     @Inject
     lateinit var userDataStore: UserDataStore
 
@@ -450,18 +462,20 @@ class MainActivity : AppCompatActivity() {
                                         // open  dialog
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
-                                            UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(false)
+                                          /*  UpdateAppVersionDialog(
                                                 0,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )
+                                            )*/
                                         } else {
                                             //force update
-                                            UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(true)
+                                          /*  UpdateAppVersionDialog(
                                                 1,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )
+                                            )*/
                                         }
                                     } else {
                                         // nothing  open  version  dialog
@@ -501,7 +515,68 @@ class MainActivity : AppCompatActivity() {
         }
         systemViewModel.checkAppVersion()
     }
-
+    private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+            val isAppUpdateAllowed = if (forceUpdate) {
+                appUpdateInfo.isImmediateUpdateAllowed
+            } else {
+                appUpdateInfo.isFlexibleUpdateAllowed
+            }
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackbarForCompleteUpdate()
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
+                appUpdateManager.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                    if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    MY_REQUEST_CODE
+                )
+            }
+        }
+        appUpdateManager.registerListener(installStateUpdatedListener)
+    }
+    private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            popupSnackbarForCompleteUpdate()
+        }
+    }
+    private fun isAppUpdateRequired(minRequiredVersion: String): Boolean {
+        return try {
+            val currentAppVersion = BuildConfig.VERSION_NAME.replace(".", "").toInt()
+            val requiredVersion = minRequiredVersion.replace(".", "").toInt()
+            currentAppVersion < requiredVersion
+        } catch (e: Exception) {
+            false
+        }
+    }
+    private fun popupSnackbarForCompleteUpdate() {
+        Snackbar.make(
+            binding.root, "An app update is ready to install.", Snackbar.LENGTH_INDEFINITE
+        ).apply {
+            setAction("INSTAll") { appUpdateManager.completeUpdate() }
+            setActionTextColor(resources.getColor(R.color.brand_color))
+            show()
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == MY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.e("In App Update", "onActivityResult: RESULT_OK")
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
+            } else if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
+                Log.e("In App Update", "onActivityResult: RESULT_IN_APP_UPDATE_FAILED")
+            } else {
+                Log.e("In App Update", "onActivityResult: else")
+            }
+        }
+    }
     fun hideKeyBoard() {
         this.currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -1638,6 +1713,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             syncData(true)
         }
+    }
+    companion object {
+        private const val MY_REQUEST_CODE = 123
     }
 }
 

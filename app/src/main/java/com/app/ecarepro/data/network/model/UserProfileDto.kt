@@ -8,12 +8,12 @@ data class UserProfileDto(
     val errorCode: Int?,
     @SerializedName("message")
     val message: String?,
-    @SerializedName("canEditProfile")
-    val canEditProfile: Boolean?,
     @SerializedName("profile")
     val profile: Profile,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("canEditProfile")
+    val canEditProfile: Boolean?
 )
 
 data class Profile(
@@ -194,7 +194,8 @@ data class Profile(
     @SerializedName("state")
     val state: String?,
     @SerializedName("transport")
-    val transport: String?
+    val transport: String?,
+    val canEditProfile: Boolean?
 )
 
 data class UserImgReq(

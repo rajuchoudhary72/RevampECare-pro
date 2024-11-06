@@ -965,7 +965,7 @@ class UserRepositoryImpl @Inject constructor(
             try {
                 val response = userService.getUserProfile()
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.profile))
+                    emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
                 }
                 else {
                     emit(Result.failure(IllegalArgumentException(response.message)))

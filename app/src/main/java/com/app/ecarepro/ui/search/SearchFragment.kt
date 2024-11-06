@@ -19,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import android.view.inputmethod.InputMethodManager
+import android.content.Context
 
 
 @AndroidEntryPoint
@@ -69,6 +71,11 @@ class SearchFragment : Fragment() {
         }
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
+        }
+        binding.searchView.apply{
+            requestFocus()
+            val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 

@@ -66,7 +66,10 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         mViewModel.attachment = Pair(imageString, imageExt)
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivity().showLoader(false)
+    }
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
