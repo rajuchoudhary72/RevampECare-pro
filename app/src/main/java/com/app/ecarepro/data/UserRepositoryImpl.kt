@@ -362,12 +362,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun leaveAction(
         applType: Int,
-        lvID: Int,
+        lvID: Int?,
+        lvIDs: String?,
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
     ): CommonResponse {
-        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,rejectionReason))
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,lvIDs,rejectionReason))
     }
 
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {

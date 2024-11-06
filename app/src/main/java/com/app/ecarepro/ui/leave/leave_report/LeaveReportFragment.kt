@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.leave.leave_report
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -23,6 +24,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentLeaveReportBinding
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
+    private  var mLeaveList = mutableListOf<Dtl>()
     private lateinit var leaveReportAdapter: LeaveReportAdapter
     private lateinit var binding:  FragmentLeaveReportBinding
     private val leaveReportViewModel : LeaveReportViewModel by viewModels()
@@ -49,9 +52,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     private var isLoading: Boolean = true
     private var isRejectionReasonReq: Boolean = false
     private var toFragment: String= ""
-
-
-
+    private var leaveListIds = mutableListOf<Int>()
 
 
     override fun onCreateView(
@@ -70,13 +71,13 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
             if (toFragment==Constant.FRA_STAFF_LEAVE){
                 order=1
                 applType=3
+                binding.llAllApproveRej.isVisible=false
+                binding.cbAllSelect.isVisible=false
             }
 
         }catch (_:Exception){}
         return binding.root
 
-
-        return binding.root
 
     }
 
@@ -95,12 +96,16 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     status=0
                     pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    binding.cbAllSelect.isVisible=true
+                    binding.llAllApproveRej.isVisible=true
                 }
                 R.id.btn_app -> {
                     leaveReportAdapter.clearData()
                     status=1
                     pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    binding.cbAllSelect.isVisible=false
+                    binding.llAllApproveRej.isVisible=false
                 }
 
                 else -> {
@@ -108,8 +113,56 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     status=2
                     pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    binding.cbAllSelect.isVisible=false
+                    binding.llAllApproveRej.isVisible=false
                 }
             }
+        }
+
+        binding.tvApprove.setOnClickListener {
+            if (leaveListIds.isNotEmpty()){
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Are You Sure")
+                builder.setMessage("Are you sure you want to proceed?")
+                builder.setPositiveButton("Yes") { dialog, _ ->
+                    val leaveIds=leaveListIds.joinToString(",")
+                    leaveReportViewModel.leaveAction(applType,null,leaveIds,Constant.LEAVE_ACTION_APPROVE,0,"").invokeOnCompletion {
+                        leaveReportAdapter.clearData()
+                        status=0
+                        pageIndex=1
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    }
+                    dialog.dismiss()
+                }
+                builder.setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+
+            }else{
+                mainActivity().showMessage("Please select at least one leave by click on Check Box")
+            }
+        }
+        binding.tvReject.setOnClickListener {
+            if (leaveListIds.isNotEmpty()){
+                popUpRemark(null,true)
+            }else{
+            mainActivity().showMessage("Please select at least one leave by click on Check Box")
+        }
+        }
+
+        binding.cbAllSelect.setOnCheckedChangeListener { _, isChecked ->
+          if (isChecked){
+              leaveListIds.clear()
+              leaveReportAdapter.setAllSelect(true)
+              mLeaveList.forEach {
+                  leaveListIds.add(it.lvID)
+              }
+          }else{
+              leaveReportAdapter.setAllSelect(false)
+              leaveListIds.clear()
+          }
         }
 
 
@@ -137,26 +190,30 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         binding.recyclerLeaveReport.isVisible = true
 
                         if (it.data!!.dtl != null) {
-
                             binding.recyclerLeaveReport.isVisible = true
                             binding.tvNoData.isVisible = false
                             isRejectionReasonReq=it.data .isRejectionReasonReq
                             if (pageIndex==1){
+                                mLeaveList.clear()
                                 leaveReportAdapter.clearData()
-                             }
-                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction,applType,status)
 
-                        }else{
+                             }
+                            if (status==0){
+                                binding.llAllApproveRej.isVisible=it.data.canTalkeAction
+                                binding.cbAllSelect.isVisible=it.data.canTalkeAction
+                            }
+                            mLeaveList=it.data.dtl.toMutableList()
+                            leaveReportAdapter.setData(it.data.dtl.toMutableList(),it.data.canTalkeAction,applType,status)
+                        } else{
                             if (pageIndex==1){
                                 binding.recyclerLeaveReport.isVisible = false
                                 binding.tvNoData.isVisible = true
+                                binding.llAllApproveRej.isVisible=false
+                                binding.cbAllSelect.isVisible=false
                             }
-
                         }
 
-
                     }
-
                     else -> {}
                 }
             }
@@ -174,7 +231,8 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 )
             }
             1 -> {
-                leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_APPROVE,0,"").invokeOnCompletion {
+
+                leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_APPROVE,0,"").invokeOnCompletion {
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
@@ -183,15 +241,23 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
             }
             2 -> {
-                popUpRemark(t)
-
+                popUpRemark(t, false)
+            }
+            3 ->{
+                if (boolean){
+                    leaveListIds.add(t.lvID)
+                }else{
+                    leaveListIds.remove(t.lvID)
+                }
             }
         }
      }
 
 
 
-    fun popUpRemark(t: Dtl) {
+
+
+    private fun popUpRemark(t: Dtl?, multiLeave: Boolean) {
              val tv_done: TextView
             val tv_cancel: TextView
             val textInputEditText: TextInputEditText
@@ -212,25 +278,52 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 if (isRejectionReasonReq){
                     if ( textInputEditText.text.toString().isNotEmpty()){
 
-                        leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                        if (multiLeave){
+                            val leaveIds=leaveListIds.joinToString(",")
+                            leaveReportViewModel.leaveAction(applType, null,leaveIds,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                                .invokeOnCompletion {
+                                    leaveReportAdapter.clearData()
+                                    status=0
+                                    pageIndex=1
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                }
+                        }else{
+                            leaveReportViewModel.leaveAction(applType,
+                                t!!.lvID,null,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                                .invokeOnCompletion {
+                                    leaveReportAdapter.clearData()
+                                    status=0
+                                    pageIndex=1
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                }
+                        }
+
+                        dialog.dismiss()
+                    }else{
+                        textInputEditText.error="Rejection Reason is mandatory field"
+                    }
+                }else{
+
+                    if (multiLeave){
+                        val leaveIds=leaveListIds.joinToString(",")
+                        leaveReportViewModel.leaveAction(applType,
+                            null,leaveIds,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
                             .invokeOnCompletion {
                                 leaveReportAdapter.clearData()
                                 status=0
                                 pageIndex=1
                                 leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
                             }
-                        dialog.dismiss()
                     }else{
-                        textInputEditText.error="Rejection Reason is mandatory field"
+                        leaveReportViewModel.leaveAction(applType,
+                            t!!.lvID,null,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                            .invokeOnCompletion {
+                                leaveReportAdapter.clearData()
+                                status=0
+                                pageIndex=1
+                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                            }
                     }
-                }else{
-                    leaveReportViewModel.leaveAction(applType,t.lvID,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
-                        .invokeOnCompletion {
-                            leaveReportAdapter.clearData()
-                            status=0
-                            pageIndex=1
-                            leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
-                        }
 
                     dialog.dismiss()
                 }

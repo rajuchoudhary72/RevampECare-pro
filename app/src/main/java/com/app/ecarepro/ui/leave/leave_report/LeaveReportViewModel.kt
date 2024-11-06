@@ -50,14 +50,15 @@ class LeaveReportViewModel @Inject constructor(
 
     fun leaveAction(
         applType:Int,
-        lvID:Int,
+        lvID:Int?,
+        lvIDs: String?,
         action:Int,
         forwardedTo:Int,
         rejectionReason: String,
     )=viewModelScope.launch {
         runCatching {
             leaveActionMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveAction( applType, lvID, action, forwardedTo,rejectionReason )
+            userRepository.leaveAction( applType, lvID, lvIDs, action, forwardedTo,rejectionReason )
         }.onSuccess {
             leaveActionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

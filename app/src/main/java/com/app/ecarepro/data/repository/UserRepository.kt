@@ -257,7 +257,8 @@ interface UserRepository {
 
     suspend fun leaveAction(
         applType: Int,
-        lvID: Int,
+        lvID: Int?,
+        lvIDs: String?,
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
