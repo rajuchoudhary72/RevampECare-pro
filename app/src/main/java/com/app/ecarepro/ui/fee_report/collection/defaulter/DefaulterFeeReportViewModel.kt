@@ -40,7 +40,7 @@ class DefaulterFeeReportViewModel @Inject constructor(
         runCatching {
             defaultFilterMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.defaulterFilters(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter" )
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter?senderid="+userDataStore.getSchoolData()?.schoolCode)
         }.onSuccess {
             defaultFilterMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

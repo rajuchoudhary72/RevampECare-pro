@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
+import androidx.navigation.fragment.findNavController
 
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.CollectionReportBinding
@@ -48,6 +49,7 @@ class CollectionReportFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
 
         }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         noticeAdapter = CollectionReportAdapter(
             list,
             this@CollectionReportFragment
@@ -106,6 +108,7 @@ class CollectionReportFragment : Fragment() {
 
 
     private fun getFeeCollection() {
+        list.clear()
         lifecycleScope.launch {
             collectionFeeReportViewModel.feeCollectionStateFlow.collectLatest { it ->
                 when (it) {
@@ -126,7 +129,7 @@ class CollectionReportFragment : Fragment() {
                         binding.recyclerCollectionReport.isVisible = true
 
                         if (it.data != null) {
-
+                            list.clear()
                             binding.recyclerCollectionReport.isVisible = true
                             binding.tvNoData.isVisible = false
                             list.addAll(it.data.collectionReportList)
