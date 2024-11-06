@@ -1247,13 +1247,11 @@ class MainActivity : AppCompatActivity() {
                             11 -> {
                                 navController.navigate(R.id.collectionReport)
                             }
-
                             12 -> {
-                                navController.navigate(R.id.collectionReport)
+                                navController.navigate(R.id.defaulterReportFragment)
                             }
-
                             13 -> {
-                                navController.navigate(R.id.collectionReport)
+                                navController.navigate(R.id.defaulterReportFragment)
                             }
                         }
                     }
