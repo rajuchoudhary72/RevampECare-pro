@@ -719,6 +719,10 @@
         android:name="com.app.ecarepro.ui.fee_report.collection.defaulter.DefaulterReportFragment"
         android:label="DefaulterReportFragment" />
     <fragment
+        android:id="@+id/estimateReportFragment"
+        android:name="com.app.ecarepro.ui.fee_report.collection.estimate.EstimateReportFragment"
+        android:label="DefaulterReportFragment" />
+    <fragment
         android:id="@+id/feePaymentFragment"
         android:name="com.app.ecarepro.ui.fee.FeePaymentFragment"
         android:label="FeePaymentFragment" />

@@ -1,4 +1,4 @@
-package com.app.ecarepro.ui.fee_report.collection.defaulter
+package com.app.ecarepro.ui.fee_report.collection.estimate
 
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentDefaulterReportBinding
-import com.app.ecarepro.defaultdata
+
 import com.app.ecarepro.filter
+import com.app.ecarepro.istimatedata
 import com.app.ecarepro.model.defaulter_report_filter.Classess
 import com.app.ecarepro.model.defaulter_report_filter.FeeType
 import com.app.ecarepro.model.defaulter_report_filter.Installment
@@ -35,7 +34,7 @@ import java.util.Locale
 
 
 @AndroidEntryPoint
-class DefaulterReportFragment : Fragment() {
+class EstimateReportFragment : Fragment() {
 
 
     private var classesListData: ArrayList<String> = ArrayList()
@@ -63,7 +62,7 @@ class DefaulterReportFragment : Fragment() {
     private val dateTo: Calendar = Calendar.getInstance()
 
     private lateinit var binding: FragmentDefaulterReportBinding
-    private val defaulterFeeReportViewModel: DefaulterFeeReportViewModel by viewModels()
+    private val defaulterFeeReportViewModel: EstimateFeeReportViewModel by viewModels()
     var shortDescending = false
 
     override fun onCreateView(
@@ -88,6 +87,7 @@ class DefaulterReportFragment : Fragment() {
             binding.recyclerDefaulterReport.isVisible=false
             binding.tvNoData.isVisible=false
         }
+        binding.toolbar.setTitle("Estimate Report")
         binding.ivOrder.setOnClickListener {
             shortDescending = !shortDescending
             binding.recyclerDefaulterReport.clear()
@@ -148,7 +148,7 @@ class DefaulterReportFragment : Fragment() {
         binding.tvSubmit.setOnClickListener {
             binding.groupFilter.isVisible = false
             getDefaultReport()
-        /*    binding.ivFilter.isVisible = true
+           /* binding.ivFilter.isVisible = true
             binding.ivOrder.isVisible = true*/
         }
 
@@ -311,7 +311,7 @@ class DefaulterReportFragment : Fragment() {
 
     private fun getDefaultReport() {
         lifecycleScope.launch {
-            defaulterFeeReportViewModel.defaultersDataStateFlow.collectLatest {
+            defaulterFeeReportViewModel.estimateDataStateFlow.collectLatest {
                 when (it) {
 
                     is NetworkResult.Loading -> {
@@ -338,11 +338,11 @@ class DefaulterReportFragment : Fragment() {
                             binding.recyclerDefaulterReport.withModels {
 
                                 val list =
-                                    if (shortDescending) it.data.sortedByDescending { it.amount } else it.data.sortedBy { it.amount }
+                                    if (shortDescending) it.data.sortedByDescending { it.duesamount } else it.data.sortedBy { it.duesamount }
                                 it.data.forEach {
-                                    defaultdata {
-                                        id(it.admno)
-                                        data(it)
+                                    istimatedata {
+                                        id(it.ActualAmount)
+                                        estimateData(it)
                                     }
                                 }
 
@@ -390,7 +390,7 @@ class DefaulterReportFragment : Fragment() {
 
 
         if (isValidated) {
-            defaulterFeeReportViewModel.getDefaulterReport(
+            defaulterFeeReportViewModel.getEstimateReport(
                 binding.dateFrom.text.toString(),
                 binding.dateTo.text.toString(),
                 schoolid,

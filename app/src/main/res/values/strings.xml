@@ -151,6 +151,9 @@
     <string name="issue_by">Issue by:</string>
     <string name="category">"Category: "</string>
     <string name="admission_no">"Admission No: "</string>
+    <string name="actual_no">"Actual Amount: "</string>
+    <string name="concessionno">"Concession: "</string>
+    <string name="received_amount">"Received Amount: "</string>
     <string name="no_data">No Data</string>
     <string name="reward">Reward:</string>
     <string name="remark">Remark:</string>
@@ -775,5 +778,6 @@
     <string name="grand_total">Grand Total:</string>
     <string name="rs">₹ %1$s</string>
     <string name="clear">Clear</string>
+    <string name="head_name">Head Name</string>
 
 </resources>
