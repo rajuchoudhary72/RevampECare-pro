@@ -10,6 +10,7 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.create_syllabus.BrowsedFile
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
 import com.app.ecarepro.data.repository.UserRepository
@@ -47,6 +48,10 @@ class AddSyllabusViewModel @Inject constructor(
         NetworkResult.Loading())
     val myClassStateFlow: StateFlow<NetworkResult<NetworkMyClass>> = myClassMutableStateFlow
 
+    private val classSectionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkSection>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val classSectionStateFlow: StateFlow<NetworkResult<NetworkSection>> = classSectionMutableStateFlow
+
     private val subjectsMutableStateFlow: MutableStateFlow<NetworkResult<NetworkMySubjects>> = MutableStateFlow(
         NetworkResult.Loading())
     val subjectsStateFlow: StateFlow<NetworkResult<NetworkMySubjects>> = subjectsMutableStateFlow
@@ -66,6 +71,19 @@ class AddSyllabusViewModel @Inject constructor(
         }
     }
 
+    fun getClassSection(
+        classID: Int
+    )=viewModelScope.launch {
+        runCatching {
+            classSectionMutableStateFlow.value =NetworkResult.Loading( )
+            userRepository.getClassSection(classID)
+        }.onSuccess {
+            classSectionMutableStateFlow.value =NetworkResult.Success(it)
+        }.onFailure {
+            classSectionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+    }
+
     fun staffSubjects( classSTD: Int )=viewModelScope.launch {
         runCatching {
             subjectsMutableStateFlow.value =NetworkResult.Loading( )
@@ -79,14 +97,16 @@ class AddSyllabusViewModel @Inject constructor(
 
     fun saveSyllabus(
         classID: Int,
+        classIDs: String?,
         id: String,
         subID: Int,
         title: String,
-        browsedFile: BrowsedFile?
+        browsedFile: BrowsedFile?,
+        fileName: String?
     )=viewModelScope.launch {
         runCatching {
             saveSyllabusMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.saveSyllabus(PostSyllabus(browsedFile ,classID, id, subID, title))
+            userRepository.saveSyllabus(PostSyllabus(browsedFile ,classID,classIDs, id, subID, title,fileName))
         }.onSuccess {
             saveSyllabusMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {
