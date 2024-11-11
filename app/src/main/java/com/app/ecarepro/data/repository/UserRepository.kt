@@ -65,6 +65,7 @@ import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkRouteList
 import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
 import com.app.ecarepro.data.network.model.NetworkSMSConsumption
+import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -194,6 +195,11 @@ interface UserRepository {
          subID: Int,
          onlyClass: Boolean
     ): NetworkMyClass
+
+    suspend fun getClassSection(
+        classID: Int
+    ): NetworkSection
+
     suspend fun getPayslip(): NetworkPaySlip
 
     suspend fun getThoughts(

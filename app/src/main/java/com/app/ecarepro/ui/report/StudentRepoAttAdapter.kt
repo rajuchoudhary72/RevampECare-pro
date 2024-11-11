@@ -3,12 +3,15 @@ package com.app.ecarepro.ui.report
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.AttSummeryListItemBinding
 import com.app.ecarepro.model.ClassSummary
 
-class StudentRepoAttAdapter(private var classSummaryList: List<ClassSummary>,
-                            private var studentAttendanceReportFragment: StudentAttendanceSummeryFragment
+class StudentRepoAttAdapter(
+    private var classSummaryList: List<ClassSummary>,
+    private var studentAttendanceReportFragment: StudentAttendanceSummeryFragment,
+    private var lateEnabled: Boolean
 ) :
     RecyclerView.Adapter<StudentRepoAttAdapter.StudentAttSummeryViewHolder>() {
 
@@ -44,6 +47,7 @@ class StudentRepoAttAdapter(private var classSummaryList: List<ClassSummary>,
                 append("Late : ")
                 append(data.late)
             }
+            tvTotalLateCount.isVisible=lateEnabled
             tvTotalLeaveCount.text= buildString {
                 append("Leave : ")
                 append(data.leave)
@@ -51,6 +55,10 @@ class StudentRepoAttAdapter(private var classSummaryList: List<ClassSummary>,
             tvTotalPresentCount.text= buildString {
                 append("Present : ")
                 append(data.present)
+            }
+            tvTotalNaCount.text= buildString {
+                append("NA : ")
+                append(data.na)
             }
 
             cvMain.setOnClickListener {

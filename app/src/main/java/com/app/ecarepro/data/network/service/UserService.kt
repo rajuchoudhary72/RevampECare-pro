@@ -132,6 +132,7 @@ import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.SendMessageRequest
@@ -222,6 +223,11 @@ interface UserService {
          @Query("SubID") subID: Int,
          @Query("OnlyClass") onlyClass: Boolean
     ): NetworkMyClass
+
+    @GET("Staff/Sections")
+    suspend fun getClassSection(
+        @Query("ClassSTD") classID: Int
+    ): NetworkSection
 
     @GET("Staff/Payslip")
     suspend fun getPayslip(): NetworkPaySlip

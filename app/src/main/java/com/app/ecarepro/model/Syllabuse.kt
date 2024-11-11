@@ -5,6 +5,7 @@ data class Syllabuse(
     val classID: Int,
     val classSTD: String,
     val fileName: String,
+    val sections: String?,
     val filePath: String,
     val fileSize: String,
     val id: String,

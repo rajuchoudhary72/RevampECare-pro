@@ -122,6 +122,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
                     putString(Constant.ID, t.id)
                     putInt("classID", t.classID)
                     putString("classSTD", t.classSTD)
+                    putString("sections", t.sections)
                     putInt("subID", t.subID)
                     putString("subject", t.subject)
                     putString("title", t.title)
