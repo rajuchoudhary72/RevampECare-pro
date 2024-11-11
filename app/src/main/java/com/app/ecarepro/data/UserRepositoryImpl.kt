@@ -142,6 +142,7 @@ import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.SendMessageRequest
@@ -1006,6 +1007,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun staffMyClass(subID: Int, onlyClass: Boolean): NetworkMyClass {
         return userService.staffMyClass(subID, onlyClass)
+    }
+
+    override suspend fun getClassSection(classID: Int): NetworkSection {
+        return userService.getClassSection(classID)
     }
 
     override suspend fun getPayslip(): NetworkPaySlip {

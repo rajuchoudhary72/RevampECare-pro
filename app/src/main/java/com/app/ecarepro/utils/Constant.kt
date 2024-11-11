@@ -21,6 +21,7 @@ import java.util.regex.Pattern
 
 class Constant {
     companion object {
+        val LEAVE_ACTION_FORWARD: Int =4
         const val DEVICE_TYPE: Int = 1
         /*old base url*/
    //    const val BASE_URL = "https://api.franciscanecare.net/"
@@ -69,6 +70,8 @@ class Constant {
         const val GALLERY_TYPE = "galleryType"
         const val GALLERY_TYPE_PHOTO = 1
         const val GALLERY_TYPE_VIDEO = 2
+        const val CLASS_WISE = 1
+        const val SECTION_WISE = 2
         const val GALLERY_ACTION_TYPE = "galleryActionType"
         const val GALLERY_ACTION_ADD = "add"
         const val GALLERY_ACTION_REMOVE = "remove"

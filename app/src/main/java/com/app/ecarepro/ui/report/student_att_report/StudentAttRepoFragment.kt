@@ -16,7 +16,6 @@ import com.app.ecarepro.data.network.model.NetworkStudentAttRepo
 import com.app.ecarepro.databinding.FragmentStudentAttRepoBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.report.StudentRepoAttAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,6 +110,7 @@ class StudentAttRepoFragment : Fragment() {
                                 val studentRepoAttAdapter = StudentAttAdapter(
                                     it.data.attendance,
                                     this@StudentAttRepoFragment
+
                                 )
 
                                 binding.rvAttendanceList.apply {

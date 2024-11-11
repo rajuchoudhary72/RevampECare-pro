@@ -83,9 +83,20 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
             llApplicant.isVisible = data.status != "Pending"
 
-            llApproveRej.isVisible=data.status=="Pending"
+            if (data.status=="Pending"){
+                if (canTalkeAction){
+                    llApproveRej.isVisible=true
+                    cbLeave.isVisible=true
+                }else{
+                    llApproveRej.isVisible=false
+                    cbLeave.isVisible=false
+                }
+            }else{
+                llApproveRej.isVisible=false
+                cbLeave.isVisible=false
+            }
 
-           // llApproveRej.isVisible=canTalkeAction
+
 
             if (allSelect){
                 cbLeave.isChecked=true
@@ -109,13 +120,22 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
             llFile.setOnClickListener {
                 leaveReportFragment.onItemClick(data,0,false)
             }
+            tvForward.setOnClickListener {
+                leaveReportFragment.onItemClick(data,4,false)
+            }
 
 
 
             if (applType==3){
+                if (data.status=="Pending"){
+                    llApproveRej.isVisible=true
+                }
+
                 cbLeave.isVisible=false
                 tvApplicant.isVisible=false
                 tvApplicantVal.isVisible=false
+                view3.isVisible=true
+                tvForward.isVisible=true
                 textUserName.text= buildString {
                      append(data.applicantName)
                 }

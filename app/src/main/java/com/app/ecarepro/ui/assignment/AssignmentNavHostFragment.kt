@@ -79,8 +79,7 @@ class AssignmentNavHostFragment : Fragment() {
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
                                  it.data.subjectAssignments.forEach { assignmentsData ->
-                                    fragmentList.add(AssignmentListFragment(assignmentsData.assignments,
-                                       isClassAssignment ))
+                                     fragmentList.add(AssignmentListFragment.newInstance(assignmentsData.assignments, isClassAssignment))
                                  }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
