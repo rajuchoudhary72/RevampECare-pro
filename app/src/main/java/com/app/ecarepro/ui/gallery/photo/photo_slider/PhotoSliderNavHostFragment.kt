@@ -53,12 +53,7 @@ class PhotoSliderNavHostFragment : Fragment() {
                         val fragmentList : ArrayList<Fragment> = ArrayList()
 
                         photoDetails.photos!!. forEach { itemDat ->
-                            fragmentList.add( PhotoSliderFragment(
-                                itemDat,
-                                null,
-                                photoDetails.setting,
-                                galleryType
-                            ))
+                            fragmentList.add(PhotoSliderFragment.newInstance(itemDat,null,photoDetails.setting,galleryType))
                         }
 
                         val viewPagerAdapter = ViewPagerAdapter(
@@ -82,7 +77,7 @@ class PhotoSliderNavHostFragment : Fragment() {
                         val fragmentList : ArrayList<Fragment> = ArrayList()
 
                         networkVideoAlbumDTL.videos . forEach { itemDat ->
-                            fragmentList.add( PhotoSliderFragment(null,itemDat,networkVideoAlbumDTL.setting,galleryType ))
+                            fragmentList.add(PhotoSliderFragment.newInstance(null,itemDat,networkVideoAlbumDTL.setting,galleryType))
                         }
 
                         val viewPagerAdapter = ViewPagerAdapter(
