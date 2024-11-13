@@ -78,7 +78,7 @@ data class Recipient(
                 "$name Parent of $childName  ($className)"
             }
             1 -> {
-                "$childName  ($className) Child of$name , $className"
+                "$childName  ($className) Child of$name "
             }
             3 -> {
                 "$name  ($designation)"

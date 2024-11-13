@@ -40,6 +40,12 @@ class RecipientsDialog : BottomSheetDialogFragment() {
             recipientDto.recipients.forEach { recipient ->
                 recipients {
                     id(recipient.name)
+                    if (recipient.readAt==null){
+
+                    }else{
+                        message("Read on " +recipient.readAt)
+                    }
+
                   /*  if (recipient.receiverType==2){
                         recipient.name(recipient.name+" "+"Parent of " + recipient.childName+"  ("+ recipient.className+")")
                     }else if (recipient.receiverType==1){
