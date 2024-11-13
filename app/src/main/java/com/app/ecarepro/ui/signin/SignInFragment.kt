@@ -67,7 +67,10 @@ class SignInFragment : Fragment() {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
         binding.btnHelp.setOnClickListener {
-            findNavController().navigate(R.id.helpFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
+            findNavController().navigate(
+                R.id.helpFragment,
+                bundleOf("schoolCode" to mViewModel.schoolCode)
+            )
         }
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
@@ -93,7 +96,11 @@ class SignInFragment : Fragment() {
                             if (arguments?.containsKey("add_account") == true) {
                               //  findNavController().popBackStack()
                                 viewLifecycleOwner.lifecycleScope.launch {
-                                    userDatabase.getUser(it.userID, mViewModel.schoolCode, it.userType)?.id?.let {
+                                    userDatabase.getUser(
+                                        it.userID,
+                                        mViewModel.schoolCode,
+                                        it.userType
+                                    )?.id?.let {
                                         userDataStore.setCurrentUserId(it)
                                     }
                                     restartApp()
@@ -159,9 +166,16 @@ class SignInFragment : Fragment() {
             }
         }
         binding.btnForgotPassword.setOnClickListener {
-          //  findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode,
-                "isStudentLoginBlocked" to mViewModel.isStudentLoginBlocked))
+            try {
+                findNavController().navigate(
+                    R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf(
+                        "schoolCode" to mViewModel.schoolCode,
+                        "isStudentLoginBlocked" to mViewModel.isStudentLoginBlocked
+                    )
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         binding.btnPrevious.setOnClickListener {
             if (userNameValid) {

@@ -113,7 +113,7 @@ class ConversationFragment : Fragment() {
                     }
 
                     is ConversationMessageUiState.Success -> {
-                        setUpToolbar(uiState.sender)
+                        uiState.sender?.let { setUpToolbar(it) }
 
                         uiState.messages.forEach { message: Conversation ->
                             conversation {

@@ -38,35 +38,33 @@ class AddTaskViewModel @Inject constructor(
     val watchers = mutableListOf<Watcher>()
 
     val uiState =
-        combine(
-            flow = schoolRepository.getTasks(),
-            flow2 = schoolRepository.getWatchers()
-        ) { tasks, watchers ->
-            Pair(tasks, watchers)
-        }.map { (tasks, watchers) ->
-            if (tasks.isSuccess && watchers.isSuccess) {
-                watchers.getOrNull()?.let {
-                    this.watchers.clear()
-                    this.watchers.addAll(it)
+        schoolRepository
+            .getWatchers()
+            .map { watchers ->
+                if (watchers.isSuccess) {
+                    val result = watchers.getOrNull()
+                    result?.watchers?.let {
+                        this.watchers.clear()
+                        this.watchers.addAll(it)
+                    }
+                    AddTaskUiState.Success(
+                        title = result?.taskList ?: emptyList(),
+                        watchers = result?.watchers ?: emptyList()
+                    )
+                } else {
+                    val error = watchers.exceptionOrNull()
+                        ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
+                    AddTaskUiState.Error(
+                        error
+                    )
                 }
-                AddTaskUiState.Success(
-                    title = tasks.getOrNull() ?: emptyList(),
-                    watchers = watchers.getOrNull() ?: emptyList()
-                )
-            } else {
-                val error = tasks.exceptionOrNull() ?: watchers.exceptionOrNull()
-                ?: IllegalArgumentException(
-                    UNKNOWN_ERROR_MESSAGE
-                )
-                AddTaskUiState.Error(
-                    error
-                )
-            }
-        }.stateIn(
-            initialValue = AddTaskUiState.Loading,
-            started = SharingStarted.WhileSubscribed(300),
-            scope = viewModelScope
-        )
+            }.stateIn(
+                initialValue = AddTaskUiState.Loading,
+                started = SharingStarted.WhileSubscribed(300),
+                scope = viewModelScope
+            )
 
     fun addTask(response: (Boolean, String) -> Unit) {
         viewModelScope.launch {
@@ -75,7 +73,10 @@ class AddTaskViewModel @Inject constructor(
                     AddTaskDto(
                         assigneesIDs = selectedTitle.value?.assignees?.filter { it.isSelected }
                             ?.map { it.userID }?.joinToString(),
-                        attachment = if(attachment?.first !=null) Attachment(attachment?.first, attachment?.second) else null,
+                        attachment = if (attachment?.first != null) Attachment(
+                            attachment?.first,
+                            attachment?.second
+                        ) else null,
                         description = description.value,
                         dueDate = endDate,
                         isPublic = makePublic.value,
@@ -86,7 +87,8 @@ class AddTaskViewModel @Inject constructor(
                         tskID = 0,
                         startDate = startDate,
                         repeatedBy = 0,
-                        watchersIDs = if(makePublic.value.not()) watchers.filter { it.isSelected }.map { it.userID }
+                        watchersIDs = if (makePublic.value.not()) watchers.filter { it.isSelected }
+                            .map { it.userID }
                             .joinToString() else null
                     )
                 )

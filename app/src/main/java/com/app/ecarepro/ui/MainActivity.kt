@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-
+                if (this::binding.isInitialized.not()) return
                 Snackbar.make(
                     binding.appBarMain.contentMain.bottomNavigationView,
                     "Please Enable Notification Permission",

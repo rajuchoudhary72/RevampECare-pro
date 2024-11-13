@@ -172,7 +172,7 @@ sealed interface ConversationMessageUiState {
     object EmptyInbox : ConversationMessageUiState
 
     data class Success(
-        val sender: Sender,
+        val sender: Sender?,
         val messages: List<Conversation>,
         val showLoadMoreView: Boolean = false,
         val loadMoreError: Throwable? = null

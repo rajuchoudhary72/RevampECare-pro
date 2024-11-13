@@ -220,10 +220,14 @@ class ChatFragment : Fragment() {
         } else if (isAudioUrl(photo)) {
             openPdfFromUrl(photo)
         } else {
-            findNavController().navigate(
-                R.id.photoViewFragmentFragment,
-                bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
-            )
+            try {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
     }

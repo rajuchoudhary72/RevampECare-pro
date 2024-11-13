@@ -26,6 +26,7 @@ import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
+import com.app.ecarepro.model.WatchersDto
 
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
@@ -239,12 +240,12 @@ class SchoolRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getWatchers(): Flow<Result<List<Watcher>>> {
+    override fun getWatchers(): Flow<Result<WatchersDto>> {
         return flow {
             try {
                 val response = schoolService.getWatcher()
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.watchers?: emptyList()))
+                    emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

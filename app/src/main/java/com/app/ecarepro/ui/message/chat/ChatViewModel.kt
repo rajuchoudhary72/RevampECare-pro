@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.filter
 
 
 @HiltViewModel
@@ -44,6 +45,7 @@ class ChatViewModel @Inject constructor(
 
 
     val uiState = id.asFlow()
+        .filter { it.isNullOrEmpty().not() }
         .flatMapLatest {
             messageRepository.getConversationDetails(it, MessageType.getMessageType(messageType))
         }
