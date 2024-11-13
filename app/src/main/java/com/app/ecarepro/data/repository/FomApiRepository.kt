@@ -4,6 +4,7 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.DefaulterDataList
 import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.DefaulterFilters
+import com.app.ecarepro.data.network.model.EstimateModule
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
@@ -48,6 +49,19 @@ interface FomApiRepository {
         sectionid : String,
         installid : String,
     ): List<DefaulterDataList>
+
+    suspend fun getEstimateReport(
+        url: String,
+        senderid : String,
+        DateFrom : String,
+        DateTo : String,
+        schoolid : String,
+        feetypeid : String,
+        classid : String,
+        sectionid : String,
+        installid : String,
+    ): List<EstimateModule>
+
 
     suspend fun getFeeReceipt(
           url: String,

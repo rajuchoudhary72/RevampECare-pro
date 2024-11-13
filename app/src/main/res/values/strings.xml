@@ -151,6 +151,9 @@
     <string name="issue_by">Issue by:</string>
     <string name="category">"Category: "</string>
     <string name="admission_no">"Admission No: "</string>
+    <string name="actual_no">"Actual Amount: "</string>
+    <string name="concessionno">"Concession: "</string>
+    <string name="received_amount">"Received Amount: "</string>
     <string name="no_data">No Data</string>
     <string name="reward">Reward:</string>
     <string name="remark">Remark:</string>
@@ -780,5 +783,6 @@
     <string name="pdf_size">File Size :</string>
     <string name="class_wise_default"><b>Class Wise</b> (Default)</string>
     <string name="section_wise_recommended_only_for_those_classes_where_different_sections_have_different_subjects_or_syllabus"><b>Section Wise</b> \n(Recommended only for those classes where different sections have different subjects or syllabus)</string>
+    <string name="head_name">Head Name</string>
 
 </resources>

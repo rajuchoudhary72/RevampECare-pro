@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -65,6 +66,16 @@ import com.app.ecarepro.utils.slideVisibility
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -86,7 +97,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
     private val systemViewModel: SystemViewModel by viewModels()
-
+    private var isImmediatepopup: Boolean = false
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
@@ -97,9 +108,9 @@ class MainActivity : AppCompatActivity() {
     private var listenMenuItemClickEvent = true
     private var isActivityPaused = false
 
-   /* private val appUpdateManager: AppUpdateManager by lazy {
+   private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
-    }*/
+    }
     @Inject
     lateinit var userDataStore: UserDataStore
 
@@ -446,26 +457,29 @@ class MainActivity : AppCompatActivity() {
                             }
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
+
+                            //   2.4.1
+   /// 2.4.2
                             try {
                                 if (it.data.android.currentVersion != null) {
                                     if (versionName < it.data.android.currentVersion) {
                                         // open  dialog
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
-                                          //  checkIsUpdateAvailable(false)
-                                            UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(false)
+                                          /*  UpdateAppVersionDialog(
                                                 0,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )
+                                            )*/
                                         } else {
                                             //force update
-                                            //checkIsUpdateAvailable(true)
-                                            UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(true)
+                                           /* UpdateAppVersionDialog(
                                                 1,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )
+                                            )*/
                                         }
                                     } else {
                                         // nothing  open  version  dialog
@@ -507,7 +521,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /*in app  update */
-   /* private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
+    private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
+        isImmediatepopup =forceUpdate
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
             val isAppUpdateAllowed = if (forceUpdate) {
@@ -537,15 +552,7 @@ class MainActivity : AppCompatActivity() {
             popupSnackbarForCompleteUpdate()
         }
     }
-    private fun isAppUpdateRequired(minRequiredVersion: String): Boolean {
-        return try {
-            val currentAppVersion = BuildConfig.VERSION_NAME.replace(".", "").toInt()
-            val requiredVersion = minRequiredVersion.replace(".", "").toInt()
-            currentAppVersion < requiredVersion
-        } catch (e: Exception) {
-            false
-        }
-    }
+
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
             binding.root, "An app update is ready to install.", Snackbar.LENGTH_INDEFINITE
@@ -561,6 +568,11 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 Log.e("In App Update", "onActivityResult: RESULT_OK")
             } else if (resultCode == Activity.RESULT_CANCELED) {
+              if (isImmediatepopup){
+                  checkAppVersion()
+              }else{
+                  isImmediatepopup=false
+              }
                 Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
             } else if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
                 Log.e("In App Update", "onActivityResult: RESULT_IN_APP_UPDATE_FAILED")
@@ -568,7 +580,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("In App Update", "onActivityResult: else")
             }
         }
-    }*/
+    }
 
 
     fun hideKeyBoard() {
@@ -1333,7 +1345,7 @@ class MainActivity : AppCompatActivity() {
                                 navController.navigate(R.id.defaulterReportFragment)
                             }
                             13 -> {
-                                navController.navigate(R.id.defaulterReportFragment)
+                                navController.navigate(R.id.estimateReportFragment)
                             }
                         }
                     }
@@ -1721,9 +1733,9 @@ class MainActivity : AppCompatActivity() {
             syncData(true)
         }
     }
-   /* companion object {
+    companion object {
         private const val MY_REQUEST_CODE = 123
-    }*/
+    }
 }
 
 fun Fragment.mainActivity(): MainActivity {

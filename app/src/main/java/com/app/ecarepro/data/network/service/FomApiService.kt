@@ -5,6 +5,7 @@ import com.app.ecarepro.data.network.model.DefaulterDataList
 import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.post_fee_collection.FeeCollectionBody
 import com.app.ecarepro.data.network.model.DefaulterFilters
+import com.app.ecarepro.data.network.model.EstimateModule
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
@@ -23,6 +24,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Url
 import com.app.ecarepro.model.CollectionReport
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 
 interface FomApiService {
 
@@ -42,11 +45,42 @@ interface FomApiService {
         @Url url: String
     ): DefaulterFilters
 
-    @GET
+   /* @GET
     suspend fun getDefaulterReport(
         @Url url: String,
         @Body request: DefaultReportBody
+    ): List<DefaulterDataList>*/
+
+
+    @FormUrlEncoded
+    @POST
+    suspend fun getDefaulterReport(
+        @Url url: String,
+        @Field("senderid") senderid: String?,
+        @Field("DateFrom") DateFrom: String?,
+        @Field("DateTo") DateTo: String?,
+        @Field("schoolid") schoolid: String?,
+        @Field("feetypeid") feetypeid: String?,
+        @Field("classid") classid: String?,
+        @Field("sectionid") sectionid: String?,
+        @Field("installid") installid: String?
     ): List<DefaulterDataList>
+
+
+    @FormUrlEncoded
+    @POST
+    suspend fun getEstiamteReport(
+        @Url url: String,
+        @Field("senderid") senderid: String?,
+        @Field("DateFrom") DateFrom: String?,
+        @Field("DateTo") DateTo: String?,
+        @Field("schoolid") schoolid: String?,
+        @Field("feetypeid") feetypeid: String?,
+        @Field("classid") classid: String?,
+        @Field("sectionid") sectionid: String?,
+        @Field("installid") installid: String?
+    ): List<EstimateModule>
+
 
     @POST
     suspend fun getFeeReceipt(

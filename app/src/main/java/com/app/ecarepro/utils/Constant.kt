@@ -1,13 +1,8 @@
 package com.app.ecarepro.utils
 
 import android.content.Context
-import android.graphics.Typeface
-import android.graphics.Typeface.BOLD
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.widget.Toast
 import java.text.DateFormat
 import java.text.ParseException
@@ -15,8 +10,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 class Constant {
@@ -26,7 +19,7 @@ class Constant {
         /*old base url*/
    //    const val BASE_URL = "https://api.franciscanecare.net/"
         /*New base url*/
-        const val BASE_URL = "https://androidapi.franciscanecare.net/"
+        const val BASE_URL = "https://apiuat.franciscanecare.net/"
         const val BASE_URL_COM = "https://app.franciscanecare.com"
         const val AUTH_BEFORE_LOGIN_NEW = "Kq4IYAuSXLh4EsnexoTSfA=="
         const val PDF_Mime_Type = "application/pdf"
@@ -165,6 +158,17 @@ class Constant {
             return 0
         }
 
+        fun strToApiDate(dt: String): String {
+            val simpleDateFormat = SimpleDateFormat("dd-MMM-yyyy")
+            try {
+                val parse = simpleDateFormat.parse(dt)
+                val formatter = SimpleDateFormat("yyyy-MM-dd")
+                return formatter.format(parse)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            return dt
+        }
         fun dateToShow(inputDateStr: String): String {
             val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
