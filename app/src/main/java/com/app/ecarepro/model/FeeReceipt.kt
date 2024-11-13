@@ -8,5 +8,6 @@ data class FeeReceipt(
     val paymode: String?,
     val paymodekey: String?,
     val paymodevalue: String?,
-    val installment: String?
+    val installment: String?,
+    val feetypeid: String?
 )

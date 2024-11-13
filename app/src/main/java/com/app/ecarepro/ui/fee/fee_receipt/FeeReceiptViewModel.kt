@@ -1,21 +1,16 @@
 package com.app.ecarepro.ui.fee.fee_receipt
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
-import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
-import com.app.ecarepro.data.network.model.NetworkGenerateTokenFeePay
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.repository.FomApiRepository
-import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -87,7 +82,7 @@ class FeeReceiptViewModel @Inject constructor(
     }
 
 
-    fun getFeeReceiptDownload(recid : String ,sessionid:Int)=viewModelScope.launch {
+    fun getFeeReceiptDownload(recid: String, sessionid: Int, feetypeid: String?)=viewModelScope.launch {
         runCatching {
             feeCertificateDownloadMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.getFeeReceiptDownload(
@@ -96,7 +91,7 @@ class FeeReceiptViewModel @Inject constructor(
                 FeeReceiptDownloadRequest(
                     userDataStore.getSchoolData()!!.schoolCode,
                     userDataStore.getUser()?.userId.toString(),
-                    recid,"",sessionid
+                    recid, feetypeid.toString(),sessionid
 
                 ) )
         }.onSuccess {

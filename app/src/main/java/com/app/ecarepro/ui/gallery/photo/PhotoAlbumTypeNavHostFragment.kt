@@ -73,7 +73,7 @@ class PhotoAlbumTypeNavHostFragment : Fragment() {
 
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
                                  albumList.forEach { albumType ->
-                                    fragmentList.add(PhotoAlbumFragment(albumType ))
+                                    fragmentList.add(PhotoAlbumFragment.newInstance(albumType))
                                 }
 
 

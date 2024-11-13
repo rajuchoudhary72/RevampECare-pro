@@ -229,16 +229,16 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     override fun onItemClick(t: FeeReceipt, pos: Int, boolean: Boolean) {
          when(pos){
              1 ->{
-                 getFeeCertificateDownload(t.recid.toString(),1,t.recdate)
+                 getFeeCertificateDownload(t.recid.toString(),1,t.recdate,t.feetypeid)
              }
              2 ->{
-                 getFeeCertificateDownload(t.recid.toString(),2,t.recdate)
+                 getFeeCertificateDownload(t.recid.toString(), 2, t.recdate, t.feetypeid)
              }
          }
          }
 
 
-    fun getFeeCertificateDownload(recid: String, i: Int, recdate: String?){
+    fun getFeeCertificateDownload(recid: String, i: Int, recdate: String?, feetypeid: String?){
         lifecycleScope.launch {
             feeReceiptViewModel.feeCertificateDownloadStateFlow.collectLatest {
                 when (it) {
@@ -253,58 +253,18 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
-                            /*try {
-                                val file: File? =  FileAccess.writeResponseBodyToDisk(
-                                    it.data.bytedata,
-                                    Constant.currentDate()
-                                )
-
-                                if (null != file) {
-
-
-                                        val pdfUri =
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                                FileProvider.getUriForFile(
-                                                    requireContext(),
-                                                    "com.franciscan.ecare_pro.provider",
-                                                    file
-                                                )
-                                            } else {
-                                                Uri.fromFile(file)
-                                            }
-                                        val pdfIntent = Intent(Intent.ACTION_VIEW)
-                                        pdfIntent.setDataAndType(pdfUri, "application/pdf")
-                                        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                        pdfIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                                        try {
-                                            startActivity(pdfIntent)
-                                        } catch (e: ActivityNotFoundException) {
-                                            Toast.makeText(
-                                                context,
-                                                "No Application available to view PDF",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-
-                                }
-
-                            } catch (e: Exception) {
-                                // Handle exception
-                            }*/
                             base64String=it.data.bytedata
                             if (checkStoragePermission()) {
                                 saveAndOpenPdf(it.data.bytedata,"FeeReceipt",i,recdate )
                             } else {
                                 requestStoragePermission()
                             }
-                           // generatePDFFromBase64(it.data.bytedata,"FeeReceipt" )
                         }
                     } }
             }
         }
 
-        feeReceiptViewModel.getFeeReceiptDownload(recid,sessionSelectData.yrid)
+        feeReceiptViewModel.getFeeReceiptDownload(recid,sessionSelectData.yrid,feetypeid)
 
     }
     fun generatePDFFromBase64(base64: String, fileName: String) {

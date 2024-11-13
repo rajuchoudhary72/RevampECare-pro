@@ -48,6 +48,8 @@ class SmsMsgReportFragment : Fragment() {
     private val smsMsgReportViewModel: SmsMsgReportViewModel by viewModels()
     private val dateFrom: Calendar = Calendar.getInstance()
     private var isDateSelected=false
+    private var toFragment: String= ""
+
 
     private val dateTo: Calendar = Calendar.getInstance()
 
@@ -57,6 +59,16 @@ class SmsMsgReportFragment : Fragment() {
     ): View {
         binding = FragmentSmsMsgReportBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            toFragment= requireArguments().getString(Constant.TO).toString()
+            if (toFragment==Constant.FRA_APP_SMS){
+                binding.toolbar.title="SMS Uses"
+                binding.tvType.text= requireContext().getString(R.string.sms_count)
+            }else if (toFragment==Constant.FRA_APP_MESSAGE){
+                binding.toolbar.title="App Message Uses"
+                binding.tvType.text= requireContext().getString(R.string.message_count)
+            }
+        }catch (_:Exception){}
         return binding.root
     }
 
@@ -268,8 +280,11 @@ class SmsMsgReportFragment : Fragment() {
                     }
                 }
             }
-
-            smsMsgReportViewModel.getAppMsgUses(Constant.toSystemDate(fromDate),Constant.toSystemDate(toDate)  , iD)
+            if (toFragment==Constant.FRA_APP_MESSAGE){
+                smsMsgReportViewModel.getAppMsgUses(Constant.toSystemDate(fromDate),Constant.toSystemDate(toDate)  , iD)
+            }else{
+                smsMsgReportViewModel.getSMSUses(Constant.toSystemDate(fromDate),Constant.toSystemDate(toDate)  , iD)
+            }
         }else{
             mainActivity().showMessage("Select Staff")
         }
