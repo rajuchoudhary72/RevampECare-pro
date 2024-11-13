@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
     private val systemViewModel: SystemViewModel by viewModels()
-
+    private var isImmediatepopup: Boolean = false
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
@@ -521,6 +521,7 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
+        isImmediatepopup =forceUpdate
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
             val isAppUpdateAllowed = if (forceUpdate) {
@@ -566,6 +567,11 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 Log.e("In App Update", "onActivityResult: RESULT_OK")
             } else if (resultCode == Activity.RESULT_CANCELED) {
+              if (isImmediatepopup){
+                  checkAppVersion()
+              }else{
+                  isImmediatepopup=false
+              }
                 Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
             } else if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
                 Log.e("In App Update", "onActivityResult: RESULT_IN_APP_UPDATE_FAILED")
