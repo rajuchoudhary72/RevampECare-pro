@@ -458,28 +458,27 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
 
-                            //   2.4.1
-   /// 2.4.2
+
                             try {
                                 if (it.data.android.currentVersion != null) {
                                     if (versionName < it.data.android.currentVersion) {
                                         // open  dialog
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
-                                            checkIsUpdateAvailable(false)
-                                          /*  UpdateAppVersionDialog(
+                                           // checkIsUpdateAvailable(false)
+                                            UpdateAppVersionDialog(
                                                 0,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )*/
+                                            )
                                         } else {
                                             //force update
-                                            checkIsUpdateAvailable(true)
-                                           /* UpdateAppVersionDialog(
+                                          //  checkIsUpdateAvailable(true)
+                                            UpdateAppVersionDialog(
                                                 1,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )*/
+                                            )
                                         }
                                     } else {
                                         // nothing  open  version  dialog
@@ -562,7 +561,7 @@ class MainActivity : AppCompatActivity() {
             show()
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -580,7 +579,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("In App Update", "onActivityResult: else")
             }
         }
-    }
+    }*/
 
 
     fun hideKeyBoard() {
