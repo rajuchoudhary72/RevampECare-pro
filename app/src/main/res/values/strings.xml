@@ -520,6 +520,7 @@
     <string name="msg_ncount">Msg \nCount</string>
     <string name="sms_used_on">SMS used on</string>
     <string name="sms_count">SMS Count</string>
+    <string name="message_count">Message Count</string>
     <string name="low_balance_alert_notification">Low Balance Alert Notification</string>
     <string name="sms_commitment">SMS Commitment :</string>
     <string name="as_on">As On :</string>

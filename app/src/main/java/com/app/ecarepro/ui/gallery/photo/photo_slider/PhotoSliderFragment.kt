@@ -25,6 +25,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
+import com.app.ecarepro.model.AlbumType
+import com.app.ecarepro.ui.gallery.photo.photoAlbum.PhotoAlbumFragment
 import com.app.ecarepro.utils.shareImageFromUrl
 import com.app.ecarepro.utils.shareUrl
 import com.bumptech.glide.Glide
@@ -36,31 +39,47 @@ import java.io.FileOutputStream
 
 @AndroidEntryPoint
 class PhotoSliderFragment(
-    val itemDat: Photo?,
-    val itemVideo: Video?,
-    val setting: AlbumSetting?,
-    var galleryType: Int  = 1
 ) : Fragment() {
 
 
     private lateinit var binding : FragmentPhotoSliderBinding
     private val photoSliderViewModel : PhotoSliderViewModel by viewModels()
 
+    private var itemDat: Photo? = null
+    private var itemVideo: Video? = null
+    private var setting: AlbumSetting? = null
+    private var galleryType: Int = 1
+
     private   var  likes: Int  = 0
     private   var  isFav: Boolean  = false
     private   var  isLike: Boolean  = false
     private var totalLikes = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                itemDat = it.getParcelable(ARG_ITEM_DATA, Photo::class.java)
+                itemVideo = it.getParcelable(ARG_ITEM_VIDEO, Video::class.java)
+                setting = it.getParcelable(ARG_SETTING, AlbumSetting::class.java)
+            }else{
+
+                @Suppress("DEPRECATION")
+                itemDat = it.getParcelable(ARG_ITEM_DATA)
+                @Suppress("DEPRECATION")
+                itemVideo = it.getParcelable(ARG_ITEM_VIDEO)
+                @Suppress("DEPRECATION")
+                setting = it.getParcelable(ARG_SETTING)
+            }
+            galleryType = it.getInt(ARG_GALLERY_TYPE, 1)
+        }
+    }
 
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentPhotoSliderBinding.inflate(inflater,container,false)
-         try {
-              galleryType = requireArguments().getInt(Constant.GALLERY_TYPE)
-
-         }catch (e:Exception){}
-
         return binding.root
     }
 
@@ -71,23 +90,23 @@ class PhotoSliderFragment(
 
             if (galleryType==Constant.GALLERY_TYPE_PHOTO ){
                 if (itemDat!=null){
-                    isFav  = itemDat.isFavourite!!
-                    isLike = itemDat.isLike!!
-                    likes  = itemDat.likes!!
+                    isFav  = itemDat!!.isFavourite!!
+                    isLike = itemDat!!.isLike!!
+                    likes  = itemDat!!.likes!!
 
-                    Picasso.get().load(itemDat.photoPath)
+                    Picasso.get().load(itemDat!!.photoPath)
                         .placeholder(R.drawable.default_profile)
                         .into(binding.photoView)
 
                     binding.rlFav.setOnClickListener {
                         isFav = if (isFav ){
                             binding.tvFav.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.add_to_favourites_blank, 0, 0)
-                            photoSliderViewModel.manageFavorites(itemDat.id!!,galleryType,Constant.GALLERY_ACTION_REMOVE )
+                            photoSliderViewModel.manageFavorites(itemDat!!.id!!,galleryType,Constant.GALLERY_ACTION_REMOVE )
                             false
 
                         }else{
                             binding.tvFav.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.add_to_favourites, 0, 0)
-                            photoSliderViewModel.manageFavorites(itemDat.id!!,galleryType,Constant.GALLERY_ACTION_ADD )
+                            photoSliderViewModel.manageFavorites(itemDat!!.id!!,galleryType,Constant.GALLERY_ACTION_ADD )
                             true
                         }
 
@@ -98,13 +117,13 @@ class PhotoSliderFragment(
                             totalLikes -= 1
                             binding.tvNumberLike.text="$totalLikes Likes "
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
-                            photoSliderViewModel.manageLikes(itemDat.id!!,galleryType,false )
+                            photoSliderViewModel.manageLikes(itemDat!!.id!!,galleryType,false )
                             false
                         }else{
                             totalLikes += 1
                             binding.tvNumberLike.text="$totalLikes Likes "
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
-                            photoSliderViewModel.manageLikes(itemDat.id!!,galleryType,true )
+                            photoSliderViewModel.manageLikes(itemDat!!.id!!,galleryType,true )
                             true
                         }
 
@@ -112,7 +131,7 @@ class PhotoSliderFragment(
 
 
                     binding.rlShare.setOnClickListener {
-                        shareImageFromUrl(requireContext(), itemDat.photoPath.toString())
+                        shareImageFromUrl(requireContext(), itemDat!!.photoPath.toString())
                     }
 
                 }
@@ -123,27 +142,27 @@ class PhotoSliderFragment(
 
             }else if (galleryType==Constant.GALLERY_TYPE_VIDEO ){
                 if (itemVideo!=null){
-                    isFav  = itemVideo.isFavourite!!
-                    isLike = itemVideo.isLike!!
-                    likes  = itemVideo.likes!!
+                    isFav  = itemVideo!!.isFavourite!!
+                    isLike = itemVideo!!.isLike!!
+                    likes  = itemVideo!!.likes!!
 
                     binding.ivVideoPlay.isVisible=true
 
-                    Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(itemVideo.url))
+                    Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(itemVideo!!.url))
                         .placeholder(R.drawable.default_profile)
                         .into(binding.photoView)
 
                     binding.rlShare.setOnClickListener {
-                        shareUrl(requireContext(), itemVideo.url.toString())
+                        shareUrl(requireContext(), itemVideo!!.url.toString())
                     }
 
 
 
                     binding.ivVideoPlay.setOnClickListener {
-                        val id =  YoutubeURL().getIDFromYoutubeURL(itemVideo.url)
+                        val id =  YoutubeURL().getIDFromYoutubeURL(itemVideo!!.url)
                         findNavController().navigate(
                             R.id.youTubeVideoPlayerFragment,
-                            bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(itemVideo.url))
+                            bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(itemVideo!!.url))
                         )
                     }
 
@@ -151,12 +170,12 @@ class PhotoSliderFragment(
                     binding.rlFav.setOnClickListener {
                         isFav = if (isFav ){
                             binding.tvFav.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.add_to_favourites_blank, 0, 0)
-                            photoSliderViewModel.manageFavorites(itemVideo.id!!,galleryType,Constant.GALLERY_ACTION_REMOVE )
+                            photoSliderViewModel.manageFavorites(itemVideo!!.id!!,galleryType,Constant.GALLERY_ACTION_REMOVE )
                             false
 
                         }else{
                             binding.tvFav.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.add_to_favourites, 0, 0)
-                            photoSliderViewModel.manageFavorites(itemVideo.id!!,galleryType,Constant.GALLERY_ACTION_ADD )
+                            photoSliderViewModel.manageFavorites(itemVideo!!.id!!,galleryType,Constant.GALLERY_ACTION_ADD )
                             true
                         }
 
@@ -167,13 +186,13 @@ class PhotoSliderFragment(
                             totalLikes -= 1
                             binding.tvNumberLike.text="$totalLikes Likes "
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
-                            photoSliderViewModel.manageLikes(itemVideo.id!!,galleryType,false )
+                            photoSliderViewModel.manageLikes(itemVideo!!.id!!,galleryType,false )
                             false
                         }else{
                             totalLikes += 1
                             binding.tvNumberLike.text="$totalLikes Likes "
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
-                            photoSliderViewModel.manageLikes(itemVideo.id!!,galleryType,true )
+                            photoSliderViewModel.manageLikes(itemVideo!!.id!!,galleryType,true )
                             true
                         }
 
@@ -188,9 +207,9 @@ class PhotoSliderFragment(
         }
 
             if (setting!=null){
-                binding.rlFav.isVisible= setting.isAddFavouriteEnabled!!
-                binding.rlLikes.isVisible=setting.isLikeEnabled!!
-                binding.rlShare.isVisible=setting.isShareEnabled !!
+                binding.rlFav.isVisible= setting!!.isAddFavouriteEnabled!!
+                binding.rlLikes.isVisible=setting!!.isLikeEnabled!!
+                binding.rlShare.isVisible=setting!!.isShareEnabled !!
             }
 
 
@@ -216,6 +235,22 @@ class PhotoSliderFragment(
     }
 
 
+    companion object {
+        private const val ARG_ITEM_DATA = "item_data"
+        private const val ARG_ITEM_VIDEO = "item_video"
+        private const val ARG_SETTING = "setting"
+        private const val ARG_GALLERY_TYPE = "gallery_type"
+
+        fun newInstance(itemData: Photo?, itemVideo: Video?, setting: AlbumSetting?, galleryType: Int) =
+            PhotoSliderFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_ITEM_DATA, itemData)
+                    putParcelable(ARG_ITEM_VIDEO, itemVideo)
+                    putParcelable(ARG_SETTING, setting)
+                    putInt(ARG_GALLERY_TYPE, galleryType)
+                }
+            }
+    }
 
 
 

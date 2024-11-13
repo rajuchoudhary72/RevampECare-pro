@@ -70,25 +70,15 @@ import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.delay
-import android.app.Activity
-import com.google.android.play.core.appupdate.AppUpdateInfo
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.InstallStateUpdatedListener
-import com.google.android.play.core.install.model.ActivityResult
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
-import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -1164,7 +1154,13 @@ class MainActivity : AppCompatActivity() {
                             })
 
                     }
-
+                    70 -> {
+                        navController.navigate(
+                            R.id.smsMsgReportFragment,
+                            Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_APP_MESSAGE)
+                            })
+                    }
 
                 }
             }
@@ -1316,6 +1312,14 @@ class MainActivity : AppCompatActivity() {
 
                             6 -> {
                                 navController.navigate(R.id.rechargeLogFragment)
+                            }
+
+                            14 -> {
+                                navController.navigate(
+                                    R.id.smsMsgReportFragment,
+                                    Bundle().apply {
+                                        putString(Constant.TO, Constant.FRA_APP_SMS)
+                                    })
                             }
                         }
                     }

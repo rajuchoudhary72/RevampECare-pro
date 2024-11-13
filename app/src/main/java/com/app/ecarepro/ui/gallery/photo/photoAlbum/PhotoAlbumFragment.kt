@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.gallery.photo.photoAlbum
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,19 +17,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentPhotoAlbumBinding
-import com.app.ecarepro.databinding.FragmentPhotoAlbumTypeNavHostBinding
 import com.app.ecarepro.model.Album
 import com.app.ecarepro.model.AlbumType
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.notice.NoticeListAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.coroutines.Continuation
 
 @AndroidEntryPoint
-class PhotoAlbumFragment(private val albumType: AlbumType?) : Fragment() , ItemListener<Album> {
+class PhotoAlbumFragment() : Fragment() , ItemListener<Album> {
+
 
 
     private lateinit var photoAlbumAdapter: PhotoAlbumAdapter
@@ -40,6 +41,32 @@ class PhotoAlbumFragment(private val albumType: AlbumType?) : Fragment() , ItemL
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
+
+    private var albumType: AlbumType? = null
+
+
+    companion object {
+        private const val ARG_ALBUM_TYPE = Constant.ALBUM_TYPE
+
+        fun newInstance(albumType: AlbumType?): PhotoAlbumFragment {
+            return PhotoAlbumFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_ALBUM_TYPE, albumType)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        albumType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_ALBUM_TYPE, AlbumType::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable(ARG_ALBUM_TYPE)
+        }
+    }
+
 
 
     override fun onCreateView(
@@ -124,12 +151,10 @@ class PhotoAlbumFragment(private val albumType: AlbumType?) : Fragment() , ItemL
 
         }
 
-
-            photoAlbumViewModel.getPhotoAlbums(albumType!!.typeID ,pageIndex)
-
-
+        photoAlbumViewModel.getPhotoAlbums(albumType!!.typeID ,pageIndex)
 
         setupRecycleViewPager()
+
     }
 
 
@@ -146,8 +171,8 @@ class PhotoAlbumFragment(private val albumType: AlbumType?) : Fragment() , ItemL
 
                     if (linearLayoutManager != null) {
                         if (dy > 0) {
-                            visibleItemCount = linearLayoutManager.childCount;
-                            totalItemCount = linearLayoutManager.itemCount;
+                            visibleItemCount = linearLayoutManager.childCount
+                            totalItemCount = linearLayoutManager.itemCount
                             pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
 
                             if (isLoading) {
