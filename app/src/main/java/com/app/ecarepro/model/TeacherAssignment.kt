@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class TeacherAssignment(
     val asgDate: String?,
     val asgFile: String?,
-    val asgFiles: List<String>?,
+    val asgFiles: List<String>? ,
     val asgID: Int?,
     val `class`: String?,
     val hasAttachment: Boolean?,

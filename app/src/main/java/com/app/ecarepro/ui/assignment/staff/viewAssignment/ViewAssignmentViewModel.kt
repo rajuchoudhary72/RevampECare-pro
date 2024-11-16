@@ -3,7 +3,6 @@ package com.app.ecarepro.ui.assignment.staff.viewAssignment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
-import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSubmitAssignReport
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
@@ -80,6 +79,7 @@ class ViewAssignmentViewModel @Inject constructor(
         }
 
     }
+
     fun  postAssignmentRemark(
 
         submissitedOn:  List<AssignmentRemarkPost>
