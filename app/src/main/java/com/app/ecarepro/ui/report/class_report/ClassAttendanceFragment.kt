@@ -12,7 +12,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassAttendanceBinding
@@ -21,7 +20,6 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
-import com.app.ecarepro.utils.listener.ItemListener
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -140,9 +138,10 @@ class ClassAttendanceFragment : Fragment()  {
 
                                 val fragmentList = listOf(
                                     ClassAttSubFragment( it.data.attReport ),
-                                    ClassAttSubFragment(getFilterList(it.data.attReport,1) ),
-                                    ClassAttSubFragment(getFilterList(it.data.attReport,2) ),
-                                    ClassAttSubFragment(getFilterList(it.data.attReport,3) )
+                                    ClassAttSubFragment(getFilterList(it.data.attReport,1,false) ),
+                                    ClassAttSubFragment(getFilterList(it.data.attReport, 2, false) ),
+                                    ClassAttSubFragment(getFilterList(it.data.attReport, 3, false) ),
+                                    ClassAttSubFragment(getFilterList(it.data.attReport, 1, true) )
                                 )
 
                                 val viewPagerAdapter = ViewPagerAdapter(
@@ -161,17 +160,17 @@ class ClassAttendanceFragment : Fragment()  {
                                         0 -> {
                                             tab.text = "All"
                                         }
-
                                         1 -> {
                                             tab.text = "Present"
                                         }
-
                                         2 -> {
                                             tab.text = "Absent"
                                         }
-
                                         3 -> {
                                             tab.text = "Leave"
+                                        }
+                                        4 -> {
+                                            tab.text = "Late"
                                         }
                                     }
                                 }.attach()
@@ -189,10 +188,10 @@ class ClassAttendanceFragment : Fragment()  {
         classAttViewModel.getClassAttendance(classId.toString(),Constant.toSystemDate(binding.startDate.text.toString()))
     }
 
-    private fun getFilterList(attReport: List<AttReport>, status: Int ): List<AttReport> {
+    private fun getFilterList(attReport: List<AttReport>, status: Int, isLate: Boolean): List<AttReport> {
         val finalAttReport: ArrayList<AttReport> = ArrayList()
         for ( data in attReport){
-           if (status==data.status){
+           if (status==data.status && isLate==data.isLate){
                finalAttReport.add(data)
            }
         }

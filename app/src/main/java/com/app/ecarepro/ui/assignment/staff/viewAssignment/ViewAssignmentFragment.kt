@@ -45,13 +45,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
-
+import androidx.core.os.bundleOf
+import com.app.ecarepro.model.AssignmentShareModel
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 
 
 @AndroidEntryPoint
 class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
-    private var assignmentDetails: TeacherAssignment? = null
+    private  var assignmentShareModel: AssignmentShareModel? = null
     private var isLateSubmitted: Boolean=false
      private var viewAssignmentData: NetworkViewAssignment? = null
      private var assignmentId: String  = ""
@@ -71,8 +73,8 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
              assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
              isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
              teacherTypeUser = requireArguments().getBoolean(Constant.USER_TEACHER)
-             arguments?.getParcelable<TeacherAssignment>("TeacherAssignment").let { data ->
-                 assignmentDetails= data!!
+             arguments?.getParcelable<AssignmentShareModel>("AssignmentShareModel").let { data ->
+                 assignmentShareModel= data!!
 
              }
 
@@ -86,16 +88,20 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
         if (!teacherTypeUser){
             binding.llSubmitNotSubmit.isVisible=false
+            binding.llAllRemark.isVisible=false
+            binding.tvSaveRemark.isVisible=false
             binding.rvSubmitList.isVisible=false
             binding.tvDetailsAssi.isVisible=false
 
         }
 
         binding.btnLateSubmit.isVisible=isLateSubmitted
-         if (assignmentDetails!=null){
-             binding.llEditDelete.isVisible= assignmentDetails!! .hasAttachment!!
+        if (assignmentShareModel!=null){
+            if (assignmentShareModel!!.hasAttachment!=null){
+                binding.llEditDelete.isVisible= assignmentShareModel!!.hasAttachment!!
 
-         }
+            }
+        }
 
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
@@ -282,9 +288,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
 
         binding.llView.setOnClickListener {
-            if (assignmentDetails!=null){
-                if (assignmentDetails!!.asgFiles !=null){
-                    popUpFileList(assignmentDetails!!.asgFiles!!)
+            if (assignmentShareModel!=null){
+                if (assignmentShareModel!!.asgFiles !=null){
+                    popUpFileList(assignmentShareModel!!.asgFiles!!)
                 }
             }
 
@@ -378,18 +384,20 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 })
             }
             2 -> {
-                findNavController().navigate(R.id.openImageFragment, Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
             }
             3 -> {
                 findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
                     putString(Constant.URL_ARGUMENT, fileSource)
                 })
             }else -> {
-            findNavController().navigate(R.id.openImageFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
             }
         }
 

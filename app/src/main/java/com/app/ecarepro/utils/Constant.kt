@@ -57,6 +57,7 @@ class Constant {
         const val USER_TYPE = "user_type"
         const val USER_STAFF = "user_staff"
         const val USER_TEACHER = "user_teacher"
+        const val HAS_ATTACHMENT = "hasAttachment"
         const val USER_PARENT_STUDENT = "user_parent_student"
 
         const val url = "url"

@@ -15,6 +15,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAssignmentListBinding
 import com.app.ecarepro.model.Assignment
+import com.app.ecarepro.model.AssignmentShareModel
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.TeacherAssignmentViewModel
 import com.app.ecarepro.ui.mainActivity
@@ -87,6 +88,7 @@ class AssignmentListFragment : Fragment(), ItemListener<Assignment> {
                 findNavController().navigate(R.id.viewAssignmentFragment,Bundle().apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                     putBoolean(Constant.USER_TEACHER, false)
+                    putParcelable("AssignmentShareModel", AssignmentShareModel(asgFiles = t.asgFileURLs, hasAttachment = t.hasAttachment))
                 })
             }
             2 -> {
