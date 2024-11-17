@@ -27,6 +27,7 @@ import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.model.WatchersDto
+import com.app.ecarepro.model.Assignee
 
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.ui.assign_home.StudentList
@@ -254,7 +255,20 @@ class SchoolRepositoryImpl @Inject constructor(
             }
         }
     }
-
+    override fun getTaskAssignee(tlId:Int): Flow<Result<List<Assignee>>> {
+        return flow {
+            try {
+                val response = schoolService.getTaskAssignee(tlId)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.assignees?: emptyList()))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun getStudentListToAssignHouse(
         id: String,
         orderBy: String

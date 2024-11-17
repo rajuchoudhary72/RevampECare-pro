@@ -264,7 +264,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/titleHaadharCardNo"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/titleHaadharCardNo"
             tools:text="Raju" />
 
@@ -287,10 +287,10 @@
             android:text="@{studentProfile.peN_Number}"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBaseline_toBaselineOf="@id/titlePermanentEducationNumber"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
             app:layout_constraintStart_toEndOf="@id/titlePermanentEducationNumber"
-            tools:text="1234567891234" />
+            tools:text="1234567891234349" />
         <TextView
             android:id="@+id/titleFatherName"
             android:layout_width="0dp"
@@ -310,10 +310,10 @@
             android:text="@{studentProfile.fatherName}"
             android:textColor="@color/black"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBaseline_toBaselineOf="@id/titleFatherName"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
             app:layout_constraintStart_toEndOf="@id/titleFatherName"
-            tools:text="Raju singh choudhary jat" />
+            tools:text="Raju singh " />
 
         <TextView
             android:id="@+id/titleMotherName"
@@ -335,10 +335,11 @@
             android:text="@{studentProfile.motherName}"
             android:textColor="@color/black"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+
             app:layout_constraintBaseline_toBaselineOf="@id/titleMotherName"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
             app:layout_constraintStart_toEndOf="@id/titleMotherName"
-            tools:text="Raju singh choudhary jat" />
+            tools:text="Raju singh choudhary" />
 
         <TextView
             android:id="@+id/FatherContact"
@@ -360,7 +361,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/FatherContact"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/FatherContact"
             tools:text="918058371330" />
 
@@ -384,7 +385,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/MotherContact"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/MotherContact"
             tools:text="918058371330" />
 
@@ -409,7 +410,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/u_mr_rn"
-            app:layout_constraintEnd_toStartOf="@+id/profileImage"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/u_mr_rn"
             tools:text="1234567891234" />
     </androidx.constraintlayout.widget.ConstraintLayout>

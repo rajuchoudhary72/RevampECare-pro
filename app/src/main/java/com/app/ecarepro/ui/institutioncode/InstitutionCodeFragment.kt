@@ -64,7 +64,7 @@ class InstitutionCodeFragment : Fragment() {
                 binding.carouselSchool.isVisible = schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()
             }
             binding.carouselSchool.withModels {
-                schools.forEach { school ->
+                schools.filterNotNull().forEach { school ->
                     schoolCode {
                         id(school.schoolCode)
                         photo(school.logo)

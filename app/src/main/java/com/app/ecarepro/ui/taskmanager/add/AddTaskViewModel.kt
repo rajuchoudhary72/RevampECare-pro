@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class AddTaskViewModel @Inject constructor(
@@ -36,7 +37,24 @@ class AddTaskViewModel @Inject constructor(
     var selectedTitle = MutableStateFlow<Title?>(null)
 
     val watchers = mutableListOf<Watcher>()
-
+    fun getAssignee(selectedTitle: Title, func: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            schoolRepository
+                .getTaskAssignee(selectedTitle.tlId!!)
+                .collectLatest { result ->
+                    if (result.isSuccess) {
+                        this@AddTaskViewModel.selectedTitle.update {
+                            selectedTitle.copy(
+                                assignees = result.getOrNull()
+                            )
+                        }
+                        func.invoke(true)
+                    } else {
+                        func.invoke(false)
+                    }
+                }
+        }
+    }
     val uiState =
         schoolRepository
             .getWatchers()

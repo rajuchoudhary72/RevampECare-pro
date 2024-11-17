@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModels()
 
-    private lateinit var photoType: PhotoType
+    private var photoType: PhotoType = PhotoType.COVER_PHOTO
 
 
     @Inject
