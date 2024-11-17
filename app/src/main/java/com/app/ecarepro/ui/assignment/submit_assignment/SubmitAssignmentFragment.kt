@@ -40,7 +40,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import android.content.pm.PackageManager
-
+import androidx.core.os.bundleOf
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 
 
 @AndroidEntryPoint
@@ -388,9 +389,10 @@ class SubmitAssignmentFragment : Fragment() {
 
             }
             2 -> {
-                findNavController().navigate(R.id.openImageFragment, Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
             }
             3 -> {
 
@@ -398,9 +400,10 @@ class SubmitAssignmentFragment : Fragment() {
                     putString(Constant.URL_ARGUMENT, fileSource)
                 })
              }else -> {
-            findNavController().navigate(R.id.openImageFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
         }
         }
 

@@ -14,7 +14,8 @@ import com.app.ecarepro.R
 
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStaffAssignmentsListBinding
- import com.app.ecarepro.model.TeacherAssignment
+import com.app.ecarepro.model.AssignmentShareModel
+import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
 
@@ -91,7 +92,7 @@ class StaffAssignmentsListFragment(
                     putString(Constant.ASSIGNMENT_ID, t.id)
                     putBoolean(Constant.IS_LATE_SUBMITTED, t.lateSubmission!!)
                     putBoolean(Constant.USER_TEACHER, teacherTypeUser)
-                    putParcelable("TeacherAssignment", t)
+                    putParcelable("AssignmentShareModel", AssignmentShareModel(asgFiles = t.asgFiles, hasAttachment = t.hasAttachment))
 
 
                 })

@@ -12,6 +12,7 @@ data class NetworkViewAssignment(
     val errorCode: Int,
     val `file`: String,
     val id: String,
+    val asgFileURLs:List<String>?,
     val isActive: Boolean,
     val isFileRemoved: Boolean,
     val message: String,

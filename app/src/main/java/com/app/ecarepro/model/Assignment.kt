@@ -10,6 +10,7 @@ data class Assignment(
     val asgDate: String?,
     val asgFileName: String?,
     val asgFileURL: String?,
+    val asgFileURLs:  List<String>?,
     val asgFileNames: List<String>?,
     val asgID: Int?,
     val classID: Int?,
