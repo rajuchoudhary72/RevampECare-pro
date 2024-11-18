@@ -41,12 +41,14 @@ class SignInFragment : Fragment() {
 
     private var userNameValid = false
     private val systemViewModel: SystemViewModel by activityViewModels()
+
     @Inject
     lateinit var userDataStore: UserDataStore
+
     @Inject
     lateinit var userDatabase: UserDatabase
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSignInBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -83,87 +85,100 @@ class SignInFragment : Fragment() {
         }
 
         binding.btnContinue.setOnClickListener {
-            (requireActivity() as MainActivity).showLoader(true)
-            if (userNameValid) {
-                mViewModel.login(
-                    binding.textUserName.text.toString(),
-                    binding.textPassword.text.toString(),
-                ) {
-                    (requireActivity() as MainActivity).showLoader(false)
-                    if (it.errorCode == 0) {
-                        systemViewModel.refresh.tryEmit(true)
-                        if (it.authenticated == true) {
-                            if (arguments?.containsKey("add_account") == true) {
-                              //  findNavController().popBackStack()
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    userDatabase.getUser(
-                                        it.userID,
-                                        mViewModel.schoolCode,
-                                        it.userType
-                                    )?.id?.let {
-                                        userDataStore.setCurrentUserId(it)
+            try {
+                (requireActivity() as MainActivity).showLoader(true)
+                if (userNameValid) {
+                    mViewModel.login(
+                        binding.textUserName.text.toString(),
+                        binding.textPassword.text.toString(),
+                    ) {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.errorCode == 0) {
+                            systemViewModel.refresh.tryEmit(true)
+                            if (it.authenticated == true) {
+                                if (arguments?.containsKey("add_account") == true) {
+                                    //  findNavController().popBackStack()
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        userDatabase.getUser(
+                                            it.userID,
+                                            mViewModel.schoolCode,
+                                            it.userType
+                                        )?.id?.let {
+                                            userDataStore.setCurrentUserId(it)
+                                        }
+                                        restartApp()
                                     }
-                                    restartApp()
+                                } else {
+                                    FirebaseMessaging.getInstance().token
+                                        .addOnCompleteListener(OnCompleteListener { task ->
+                                            if (!task.isSuccessful) {
+                                                Log.w(
+                                                    "FCM Token",
+                                                    "Fetching FCM registration token failed",
+                                                    task.exception
+                                                )
+                                                return@OnCompleteListener
+                                            }
+
+                                            // Get new FCM registration token
+                                            val token = task.result
+
+                                            // Log and toast
+                                            Log.d("FCM Token", token)
+                                            systemViewModel.registerDeviceToken(token)
+                                        })
+                                        .addOnFailureListener { e ->
+                                            if (e is IOException) {
+                                                Log.e("FCM Token", "Network error", e)
+                                            } else if (e is ExecutionException) {
+                                                Log.e("FCM Token", "Execution error", e)
+                                            } else {
+                                                Log.e("FCM Token", "Unknown error", e)
+                                            }
+                                        }
+                                    try {
+                                        findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                                    } catch (e: IllegalArgumentException) {
+                                        e.printStackTrace()
+                                    }
+
                                 }
+
                             } else {
-                                FirebaseMessaging.getInstance().token
-                                    .addOnCompleteListener(OnCompleteListener { task ->
-                                        if (!task.isSuccessful) {
-                                            Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
-                                            return@OnCompleteListener
-                                        }
+                                mainActivity().showMessage(" " + it.authenticated)
 
-                                        // Get new FCM registration token
-                                        val token = task.result
-
-                                        // Log and toast
-                                        Log.d("FCM Token", token)
-                                        systemViewModel.registerDeviceToken(token)
-                                    })
-                                    .addOnFailureListener { e ->
-                                        if (e is IOException) {
-                                            Log.e("FCM Token", "Network error", e)
-                                        } else if (e is ExecutionException) {
-                                            Log.e("FCM Token", "Execution error", e)
-                                        } else {
-                                            Log.e("FCM Token", "Unknown error", e)
-                                        }
-                                    }
-
-                                findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                             }
 
+                        } else if (it.errorCode == 401) {
+                            mainActivity().showMessage("Invalid password")
+                        }
+
+                        Log.i("Token Aut", it.authToken.toString())
+                    }
+                } else {
+                    mViewModel.verifyUser(binding.textUserName.text.toString()) {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.errorCode == 0) {
+                            if (runBlocking {
+                                    mViewModel.isUserAlreadyLogin(it.userId, it.userType)
+                                }) {
+                                mainActivity().showMessage("User already login!")
+                            } else {
+                                userNameValid = true
+                                binding.textInputLayoutPassword.isVisible = true
+                                binding.textInputLayoutUserName.isEnabled = false
+                                binding.textUserName.isEnabled = false
+                                binding.textUserName.isClickable = false
+                            }
                         } else {
-                            mainActivity().showMessage(" " + it.authenticated)
-
+                            mainActivity().showMessage("Invalid username")
                         }
-
-                    }else    if (it.errorCode == 401) {
-                        mainActivity().showMessage("Invalid password")
-                    }
-
-                    Log.i("Token Aut", it.authToken.toString())
-                }
-            } else {
-                mViewModel.verifyUser(binding.textUserName.text.toString()) {
-                    (requireActivity() as MainActivity).showLoader(false)
-                    if (it.errorCode == 0) {
-                        if(runBlocking {
-                                mViewModel.isUserAlreadyLogin(it.userId, it.userType)
-                            }){
-                            mainActivity().showMessage("User already login!")
-                        }else{
-                            userNameValid = true
-                            binding.textInputLayoutPassword.isVisible = true
-                            binding.textInputLayoutUserName.isEnabled = false
-                            binding.textUserName.isEnabled = false
-                            binding.textUserName.isClickable = false
-                        }
-                    }else{
-                        mainActivity().showMessage("Invalid username")
                     }
                 }
+            } catch (e: IllegalArgumentException) {
+                e.printStackTrace()
             }
+
         }
         binding.btnForgotPassword.setOnClickListener {
             try {

@@ -465,20 +465,20 @@ class MainActivity : AppCompatActivity() {
                                         // open  dialog
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
-                                           // checkIsUpdateAvailable(false)
-                                            UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(false)
+                                        /*    UpdateAppVersionDialog(
                                                 0,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )
+                                            )*/
                                         } else {
                                             //force update
-                                          //  checkIsUpdateAvailable(true)
-                                            UpdateAppVersionDialog(
+                                           checkIsUpdateAvailable(true)
+                                          /*  UpdateAppVersionDialog(
                                                 1,
                                                 it.data.android.title,
                                                 it.data.android.description
-                                            )
+                                            )*/
                                         }
                                     } else {
                                         // nothing  open  version  dialog
@@ -521,7 +521,7 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
-        isImmediatepopup =forceUpdate
+      //  isImmediatepopup =forceUpdate
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
             val isAppUpdateAllowed = if (forceUpdate) {
@@ -561,17 +561,17 @@ class MainActivity : AppCompatActivity() {
             show()
         }
     }
-   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.e("In App Update", "onActivityResult: RESULT_OK")
             } else if (resultCode == Activity.RESULT_CANCELED) {
-              if (isImmediatepopup){
+              /*if (isImmediatepopup){
                   checkAppVersion()
               }else{
                   isImmediatepopup=false
-              }
+              }*/
                 Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
             } else if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
                 Log.e("In App Update", "onActivityResult: RESULT_IN_APP_UPDATE_FAILED")
@@ -579,7 +579,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("In App Update", "onActivityResult: else")
             }
         }
-    }*/
+    }
 
 
     fun hideKeyBoard() {
