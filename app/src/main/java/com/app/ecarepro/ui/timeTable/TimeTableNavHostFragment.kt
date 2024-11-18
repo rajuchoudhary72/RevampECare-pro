@@ -89,7 +89,7 @@ class TimeTableNavHostFragment : Fragment() {
 
 
                                // fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
-                                fragmentList.add( TimeTableDayWiseNavHostFragment(it.data,toFragment))
+                                fragmentList.add(TimeTableDayWiseNavHostFragment.newInstance(it.data,toFragment))
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,
