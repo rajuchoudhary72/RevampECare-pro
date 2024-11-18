@@ -27,7 +27,7 @@ class InstitutionCodeViewModel @Inject constructor(
         schoolDatabase.getSchoolsFlow().map {
             it.map {
                 if (it.schoolCode == schoolCode) {
-                    it.asNetworkSchool().copy(isSelected = true)
+                    it.asNetworkSchool()?.copy(isSelected = true)
                 } else {
                     it.asNetworkSchool()
                 }

@@ -17,6 +17,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import android.Manifest
+import android.content.pm.PackageManager
+
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -43,6 +46,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.content.ContextCompat
 
 
 @AndroidEntryPoint
@@ -53,14 +57,30 @@ class ProfileFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModels()
 
-    private lateinit var photoType: PhotoType
+    private var photoType: PhotoType = PhotoType.COVER_PHOTO
 
 
     @Inject
     lateinit var syncManager: SyncManager
     @Inject
     lateinit var userDataStore: UserDataStore
-
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted. Continue the action or workflow in your
+                // app.
+                openCamera()
+            } else {
+                // Explain to the user that the feature is unavailable because the
+                // features requires a permission that the user has denied. At the
+                // same time, respect the user's decision. Don't link to system
+                // settings in an effort to convince the user to change their
+                // decision.
+                showPermissionDeniedMessage()
+            }
+        }
     private val galleryLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -304,19 +324,52 @@ class ProfileFragment : Fragment() {
         )
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Add Photo!")
-        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+        builder.setItems(items) { dialog, item ->
             FileAccess.checkPermission(this)
             if (items[item] == "Take Photo") {
-                cameraLauncher.launch(FileAccess.cameraIntent())
+                checkCameraPermission()
             } else if (items[item] == "Choose from Library") {
                 galleryLauncher.launch(FileAccess.galleryIntent())
             } else if (items[item] == "Cancel") {
                 dialog.dismiss()
             }
-        })
+        }
         builder.show()
     }
-
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                openCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                // In an educational UI, explain to the user why your app requires this
+                // permission for a specific feature to behave as expected. In this UI,
+                // include a "cancel" or "no thanks" button that allows the user to
+                // continue using your app without granting the permission.
+                showPermissionRationaleDialog()
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+    private fun showPermissionRationaleDialog() {
+        mainActivity().showMessage("Camera permission is required to take photo, go to setting and enable permission for the app.")
+    }
+    private fun openCamera() {
+        cameraLauncher.launch(FileAccess.cameraIntent())
+    }
+    private fun showPermissionDeniedMessage() {
+        mainActivity().showMessage("Camera permission denied")
+    }
     private fun EpoxyController.buildStaffModels(profile: Profile) {
 
         profileItem {
@@ -583,7 +636,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.apply {
+        _binding?.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
       /*  viewLifecycleOwner.lifecycleScope.launch {
@@ -592,7 +645,7 @@ class ProfileFragment : Fragment() {
             }
         }*/
 
-        binding.tvEditProfile.setOnClickListener {
+        _binding?.tvEditProfile?.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)
         }
     }

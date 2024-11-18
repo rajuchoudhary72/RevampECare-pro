@@ -113,7 +113,7 @@ class ConversationFragment : Fragment() {
                     }
 
                     is ConversationMessageUiState.Success -> {
-                        setUpToolbar(uiState.sender)
+                        uiState.sender?.let { setUpToolbar(it) }
 
                         uiState.messages.forEach { message: Conversation ->
                             conversation {
@@ -176,7 +176,7 @@ class ConversationFragment : Fragment() {
     }
 
     private fun setUpToolbar(sender: Sender) {
-        binding.apply {
+        _binding?.apply {
             photo.imageUrl(
                 sender.photo,
                 ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)

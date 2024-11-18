@@ -29,7 +29,8 @@ class FavouritesViewModel @Inject constructor(
                 .getFavourites()
                 .collectLatest { result ->
                     if (result.isSuccess) {
-                        uiState.value = FavouritesUiState.Success(result.getOrNull()?.sortedBy { it.isSelected == false } ?: emptyList())
+                        uiState.value = FavouritesUiState.Success(
+                            result.getOrNull()?.sortedBy { it.isSelected == false } ?: emptyList())
                     } else {
                         uiState.value = FavouritesUiState.Error(result.exceptionOrNull()!!)
                     }
@@ -63,19 +64,23 @@ class FavouritesViewModel @Inject constructor(
 
     fun saveFavourites(func: (Boolean, String) -> Unit) {
         viewModelScope.launch {
-            val maxSl: Int = (uiState.value as FavouritesUiState.Success).favourites.maxByOrNull { it.slNo?:0 }?.slNo?:0
-            appRepository
-                .updateFavourites(updatedItems.mapIndexed { index, favourites ->
-                    favourites.copy(isModified = true, slNo = maxSl)
-                })
-                .collectLatest { result ->
-                    if (result.isSuccess) {
-                        func(true, "Updated")
-                    } else {
-                        func(false, "Failed")
+            if (uiState.value is FavouritesUiState.Success) {
+                val maxSl: Int =
+                    (uiState.value as FavouritesUiState.Success).favourites.maxByOrNull {
+                        it.slNo ?: 0
+                    }?.slNo ?: 0
+                appRepository
+                    .updateFavourites(updatedItems.mapIndexed { index, favourites ->
+                        favourites.copy(isModified = true, slNo = maxSl.plus(index + 1))
+                    })
+                    .collectLatest { result ->
+                        if (result.isSuccess) {
+                            func(true, "Updated")
+                        } else {
+                            func(false, "Failed")
+                        }
                     }
-
-                }
+            }
         }
     }
 }

@@ -37,7 +37,8 @@ data class SchoolEntity(
     val slides: String?,
 )
 
-fun SchoolEntity.asNetworkSchool(): NetworkSchool {
+fun SchoolEntity?.asNetworkSchool(): NetworkSchool? {
+    if (this == null) return null
     return NetworkSchool(
         schoolCode = schoolCode,
         active = active,

@@ -145,7 +145,7 @@ class HomeFragment : Fragment() {
                 systemViewModel.uiState.collectLatest { uiState ->
                     if (uiState is MainActivityUiState.Success) {
                         mViewModel.setFavourite(uiState.favroiteMenus)
-                        uiState.userInfo.let { user ->
+                        uiState.userInfo?.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
                                // txtUserName.text = user.name
