@@ -450,6 +450,7 @@
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
+    <string name="bill_number">Bill Number</string>
     <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
     <string name="alt_email_id">Alternate Email ID</string>

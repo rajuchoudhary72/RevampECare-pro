@@ -609,6 +609,13 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.contactMobile)
         }
+
+        profileItem {
+            id(R.string.bill_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.bill_number))
+            subTitle(profile.billNumber)
+        }
     }
 
     private fun EpoxyController.buildParentModels(profile: Profile) {
@@ -623,6 +630,12 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_contact_no_)
             title(getString(R.string.contact_number))
             subTitle(profile.studentProfile?.contactMobile)
+        }
+        profileItem {
+            id(R.string.bill_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.bill_number))
+            subTitle(profile.studentProfile?.billNumber)
         }
 
         profileWardDetails {

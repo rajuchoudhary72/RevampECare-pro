@@ -102,7 +102,7 @@ data class Profile(
     @SerializedName("admissionNo")
     val admissionNo: String?,
     @SerializedName("billNumber")
-    val billNumber: Any?,
+    val billNumber: String?,
     @SerializedName("birthPlace")
     val birthPlace: String?,
     @SerializedName("bloodGroup")
@@ -218,8 +218,6 @@ data class StudentProfile(
     val admissionDate: String?,
     @SerializedName("admissionNo")
     val admissionNo: String?,
-    @SerializedName("billNumber")
-    val billNumber: Any?,
     @SerializedName("birthPlace")
     val birthPlace: String?,
     @SerializedName("bloodGroup")
@@ -242,6 +240,8 @@ data class StudentProfile(
     val contactEmailID: String?,
     @SerializedName("contactMobile")
     val contactMobile: String?,
+    @SerializedName("billNumber")
+    val billNumber: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("coverImg")

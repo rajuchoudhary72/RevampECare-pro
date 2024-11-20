@@ -97,82 +97,88 @@ class ConversationFragment : Fragment() {
     }
 
     private fun handleUiState(uiState: ConversationMessageUiState) {
-        (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
-        uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
-        }
+        try {
+            (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
-        if (uiState is ConversationMessageUiState.Success || uiState == ConversationMessageUiState.EmptyInbox) {
-            binding.recyclerView.withModels {
-                when (uiState) {
-                    ConversationMessageUiState.EmptyInbox -> {
-                        noDataFoundView {
-                            id(R.id.empty_view)
+            uiState.getErrorOrNull()?.let { error ->
+                mainActivity().showMessage(error.message?:"")
+            }
+
+            if (uiState is ConversationMessageUiState.Success || uiState == ConversationMessageUiState.EmptyInbox) {
+                binding.recyclerView.withModels {
+                    when (uiState) {
+                        ConversationMessageUiState.EmptyInbox -> {
+                            noDataFoundView {
+                                id(R.id.empty_view)
+                            }
                         }
-                    }
 
-                    is ConversationMessageUiState.Success -> {
-                        uiState.sender?.let { setUpToolbar(it) }
+                        is ConversationMessageUiState.Success -> {
+                            uiState.sender?.let { setUpToolbar(it) }
 
-                        uiState.messages.forEach { message: Conversation ->
-                            conversation {
-                                id(message.msgID)
-                                abbreviation(message.abbreviation)
-                                date(message.sentOn)
-                                name(message.subject)
-                                hasRead(message.hasRead)
-                                msgTypeImageRes(
-                                    if (message.msgType == 2) {
-                                        R.drawable.ic_photo
-                                    } else if (message.msgType == 3) {
-                                        R.drawable.ic_audio
-                                    } else if (message.msgType == 4) {
-                                        R.drawable.ic_msg_type_sms
-                                    }  else if (message.msgType == 5) {
-                                        R.drawable.pdf
-                                    } else {
-                                        null
-                                    }
-                                )
-                                msgType(
-                                    if (message.msgType == 2) {
-                                        "Photo"
-                                    } else if (message.msgType == 3) {
-                                        "Audio"
-                                    } else if (message.msgType == 4) {
-                                        "SMS"
-                                    } else if (message.msgType == 5) {
-                                        "PDF"
-                                    } else {
-                                        null
-                                    }
-                                )
-                                clickListener { _ ->
-                                    findNavController().navigate(
-                                        R.id.chatFragment,
-                                        bundleOf("ID" to message.id)
+                            uiState.messages.forEach { message: Conversation ->
+                                conversation {
+                                    id(message.msgID)
+                                    abbreviation(message.abbreviation)
+                                    date(message.sentOn)
+                                    name(message.subject)
+                                    hasRead(message.hasRead)
+                                    msgTypeImageRes(
+                                        if (message.msgType == 2) {
+                                            R.drawable.ic_photo
+                                        } else if (message.msgType == 3) {
+                                            R.drawable.ic_audio
+                                        } else if (message.msgType == 4) {
+                                            R.drawable.ic_msg_type_sms
+                                        }  else if (message.msgType == 5) {
+                                            R.drawable.pdf
+                                        } else {
+                                            null
+                                        }
                                     )
+                                    msgType(
+                                        if (message.msgType == 2) {
+                                            "Photo"
+                                        } else if (message.msgType == 3) {
+                                            "Audio"
+                                        } else if (message.msgType == 4) {
+                                            "SMS"
+                                        } else if (message.msgType == 5) {
+                                            "PDF"
+                                        } else {
+                                            null
+                                        }
+                                    )
+                                    clickListener { _ ->
+                                        findNavController().navigate(
+                                            R.id.chatFragment,
+                                            bundleOf("ID" to message.id)
+                                        )
+                                    }
+                                }
+                            }
+
+                            if (uiState.showLoadMoreView || uiState.loadMoreError != null) {
+                                loadMoreView {
+                                    id(R.id.load_more_view)
+                                    isLoading(uiState.showLoadMoreView)
+                                    errorMessage(uiState.loadMoreError?.message)
+                                    onClickRetry { _ ->
+                                        conversationViewModel.loadNextPage(true)
+                                    }
                                 }
                             }
                         }
 
-                        if (uiState.showLoadMoreView || uiState.loadMoreError != null) {
-                            loadMoreView {
-                                id(R.id.load_more_view)
-                                isLoading(uiState.showLoadMoreView)
-                                errorMessage(uiState.loadMoreError?.message)
-                                onClickRetry { _ ->
-                                    conversationViewModel.loadNextPage(true)
-                                }
-                            }
-                        }
+                        else -> {}
                     }
-
-                    else -> {}
                 }
             }
+        }catch (e:IllegalStateException){
+            e.message
         }
+
     }
 
     private fun setUpToolbar(sender: Sender) {
