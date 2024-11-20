@@ -319,13 +319,13 @@ class StaffApplyLeaveFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         
                         if (it.data !=null) {
-                            leaveTerm=it.data.leaveTerms
-                            termCondition=it.data.termCondition
+                            leaveTerm= it.data.leaveTerms!!
+                            termCondition= it.data.termCondition!!
 
-                            holidayList=it.data.holidayList
+                            holidayList= it.data.holidayList!!
 
                             for (i in it.data.leaveDetails ){
-                                if (i.leaveID==leaveID){
+                                if (i!!.leaveID==leaveID){
                                     selectedLeaveTypeData=i
                                 }
                             }

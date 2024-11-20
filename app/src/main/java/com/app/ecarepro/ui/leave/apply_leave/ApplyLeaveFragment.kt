@@ -170,11 +170,11 @@ class ApplyLeaveFragment : Fragment() {
 
                             }
                             }
-                             leaveTerm=it.data.leaveTerms
-                            termCondition=it.data.termCondition
+                             leaveTerm= it.data.leaveTerms!!
+                            termCondition= it.data.termCondition!!
 
                              if (it.data.leaveTypes!=null){
-                                 leaveTypeList = it.data.leaveTypes
+                                 leaveTypeList = it.data.leaveTypes as List<LeaveTypes>
                                  it.data.leaveTypes.forEach { data ->
                                      leaveTypesDataString.add(data.suggestion)
                                  }
