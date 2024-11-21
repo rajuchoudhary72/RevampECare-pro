@@ -784,5 +784,6 @@
     <string name="class_wise_default"><b>Class Wise</b> (Default)</string>
     <string name="section_wise_recommended_only_for_those_classes_where_different_sections_have_different_subjects_or_syllabus"><b>Section Wise</b> \n(Recommended only for those classes where different sections have different subjects or syllabus)</string>
     <string name="head_name">Head Name</string>
+    <string name="bill_no">Bill No.</string>
 
 </resources>

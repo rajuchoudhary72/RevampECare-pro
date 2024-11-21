@@ -5,9 +5,9 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class TimeTable(
-    val className: String,
-    val period: Int,
-    val subject: String,
-    val time: String,
-    val teachBy: String,
+    val className: String?,
+    val period: Int?,
+    val subject: String?,
+    val time: String?,
+    val teachBy: String?,
 ):Parcelable

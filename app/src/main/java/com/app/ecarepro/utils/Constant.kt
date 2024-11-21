@@ -220,6 +220,38 @@ class Constant {
             return diff
         }
 
+        fun getDateDiffWithSunday(dateString1: String?, dateString2: String?,sandwichEnable:Boolean): Double {
+            var diff = 0.0
+            val df1: DateFormat = SimpleDateFormat("dd MMM yyyy")
+            var date1: Date? = null
+            var date2: Date? = null
+            try {
+                date1 = df1.parse(dateString1)
+                date2 = df1.parse(dateString2)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            val cal1 = Calendar.getInstance()
+            cal1.time = date1
+            val cal2 = Calendar.getInstance()
+            cal2.time = date2
+            while (!cal1.after(cal2)) {
+                if (sandwichEnable){
+                    diff++
+                    cal1.add(Calendar.DATE, 1)
+                }else{
+                    val dayOfWeek = cal1[Calendar.DAY_OF_WEEK]
+                    if (dayOfWeek == Calendar.SUNDAY) {
+                        cal1.add(Calendar.DATE, 1)
+                    } else {
+                        diff++
+                        cal1.add(Calendar.DATE, 1)
+                    }
+                }
+            }
+            return diff
+        }
+
 
         fun isDateInBetweenIncludingEndPoints(
             start_date: String?,

@@ -150,7 +150,9 @@ class StaffApplyLeaveFragment : Fragment() {
 //                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
 //                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble() + 1
 
-                            days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                            days = Constant.getDateDiffWithSunday(binding.tvStartDate.text.toString()
+                                ,binding.tvEndDate.text.toString(),selectedLeaveTypeData.sandwichEnable)
+
                             if (selectedLeaveTypeData.sandwichEnable){
                                 days =  calculateDaysAfterHolidays(days)
                             }
@@ -456,13 +458,14 @@ class StaffApplyLeaveFragment : Fragment() {
                         )
                     ) {
                         val noOfHolidaysInBetween: Double =
-                            Constant.getDateDiff(modelHoliday.fromDate, binding.tvEndDate.text.toString())
+                            Constant.getDateDiffWithSunday(modelHoliday.fromDate, binding.tvEndDate.text.toString(),selectedLeaveTypeData.sandwichEnable)
                         val `val` = noOfHolidaysInBetween.toInt()
                         holiday += `val`
                     } else {
-                        val noOfHolidays: Double = Constant.getDateDiff(
+                        val noOfHolidays: Double = Constant.getDateDiffWithSunday(
                             modelHoliday.fromDate,
-                            modelHoliday.tillDate
+                            modelHoliday.tillDate,
+                            selectedLeaveTypeData.sandwichEnable
                         )
                         val `val` = noOfHolidays.toInt()
                         holiday += `val`
