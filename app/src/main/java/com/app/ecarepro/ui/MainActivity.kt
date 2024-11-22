@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -372,6 +373,7 @@ class MainActivity : AppCompatActivity() {
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
+            val refId = data.getString("refID")
 
             Log.e("Note", "$schCode $userID $menuId $childMenuId")
 
@@ -399,7 +401,7 @@ class MainActivity : AppCompatActivity() {
             if (menuId != null) {
                 if (childMenuId != null) {
                     Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId)
+                    getFragmentId(menuId, childMenuId, refId)
                 }
             }
             showLoader(false)

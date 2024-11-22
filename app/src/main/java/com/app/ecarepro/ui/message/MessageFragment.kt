@@ -79,9 +79,11 @@ class MessageFragment : Fragment() {
                     R.id.chatFragment,
                     bundleOf(
                         "ID" to args.getString("ID"),
-                        "MessageType" to MessageType.SENT.value
+                        "MessageType" to MessageType.INBOX.value
                     )
                 )
+
+                args.remove("ID")
             }
         }
     }
