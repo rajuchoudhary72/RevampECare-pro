@@ -961,7 +961,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId:String? = null) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1014,7 +1014,7 @@ class MainActivity : AppCompatActivity() {
             6 -> {
                 when (childMenuId) {
                     7 -> navController.navigate(R.id.composeFragment)
-                    8 -> navController.navigate(R.id.messageFragment)
+                    8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
                     9 -> navController.navigate(R.id.messageFragment)
                 }
             }
