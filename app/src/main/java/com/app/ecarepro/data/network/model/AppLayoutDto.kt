@@ -27,7 +27,7 @@ data class AppLayoutDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("userInfo")
-    val userInfo: UserInfo,
+    val userInfo: UserInfo?,
     @SerializedName("searchOptions")
     val searchOptions: List<SearchOption>?
 )

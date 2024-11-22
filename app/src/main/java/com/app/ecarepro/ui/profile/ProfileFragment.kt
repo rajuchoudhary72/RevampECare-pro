@@ -1,15 +1,19 @@
 package com.app.ecarepro.ui.profile
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -298,7 +302,12 @@ class ProfileFragment : Fragment() {
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this)
             if (items[item] == "Take Photo") {
-                cameraLauncher.launch(FileAccess.cameraIntent())
+                if (isCameraPermissionGranted(requireContext())) {
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                } else {
+                  mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
+                }
+
             } else if (items[item] == "Choose from Library") {
                 galleryLauncher.launch(FileAccess.galleryIntent())
             } else if (items[item] == "Cancel") {
@@ -306,6 +315,13 @@ class ProfileFragment : Fragment() {
             }
         })
         builder.show()
+    }
+
+    fun isCameraPermissionGranted(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun EpoxyController.buildStaffModels(profile: Profile) {

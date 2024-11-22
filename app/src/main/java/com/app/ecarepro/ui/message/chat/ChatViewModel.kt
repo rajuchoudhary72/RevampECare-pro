@@ -19,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -44,6 +45,7 @@ class ChatViewModel @Inject constructor(
 
 
     val uiState = id.asFlow()
+        .filter { it.isNullOrEmpty().not() }
         .flatMapLatest {
             messageRepository.getConversationDetails(it, MessageType.getMessageType(messageType))
         }

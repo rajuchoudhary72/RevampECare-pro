@@ -256,7 +256,7 @@ sealed interface MainActivityUiState {
     object Loading : MainActivityUiState
 
     data class Success(
-        val userInfo: UserInfo,
+        val userInfo: UserInfo?,
         val menus: List<Menu>,
         val favroiteMenus: List<Menu>,
         val searchOption: List<SearchOption> = emptyList(),
