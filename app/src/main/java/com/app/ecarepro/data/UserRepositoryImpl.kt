@@ -16,7 +16,8 @@ import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Purpose
-
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
@@ -153,6 +154,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
+import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.model.ClassID_StID
@@ -228,6 +230,91 @@ class UserRepositoryImpl @Inject constructor(
             }
 
         }
+    }
+    override suspend fun twoFactorLogin(
+        schoolCode: String,
+        userName: String,
+        password: String
+    ): TwoFactorLoginResponseDto {
+        return userService.twoFactorLogin(
+            UserLoginRequestDto(
+                schCode = schoolCode,
+                username = userName,
+                password = password
+            )
+        ).also {
+            if (it.authenticated == true && it.isOTPEnabled == false) {
+                it.userDTL?.let { userDtl: UserDTL ->
+                    saveUserDtl(userDtl, schoolCode, userName)
+                }
+            }
+        }
+    }
+    override suspend fun resendOtp(
+        schoolCode: String,
+        oTPAuthKey: String,
+    ): Flow<Result<TwoFactorLoginResponseDto>> {
+        return flow {
+            try {
+                val response =
+                    userService.resendOTP(
+                        ValidateOtpRequest(
+                            schCode = schoolCode,
+                            oTPAuthKey = oTPAuthKey
+                        )
+                    )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override suspend fun validateOtp(
+        schoolCode: String,
+        oTPAuthKey: String,
+        otp: String,
+        userName: String
+    ): Flow<Result<TwoFactorLoginResponseDto>> {
+        return flow {
+            try {
+                val response =
+                    userService.validateOTP(
+                        ValidateOtpRequest(
+                            schCode = schoolCode,
+                            oTPAuthKey = oTPAuthKey,
+                            otp = otp
+                        )
+                    )
+                if (response.errorCode == 0) {
+                    response.also {
+                        it.userDTL?.let { userDtl: UserDTL ->
+                            saveUserDtl(userDtl, schoolCode, userName)
+                        }
+                    }
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    private suspend fun saveUserDtl(
+        userDtl: UserDTL,
+        schoolCode: String,
+        userName: String
+    ) {
+        userDataStore.saveUserDetails(userDtl, schoolCode, getCurrentDateTimeAmPm())
+        userDataStore.saveAuthToken(userDtl.authToken ?: "")
+        userDataStore.setAsUserAuthenticated(userDtl.authenticated?:false)
+        userDataStore.saveUserType(userDtl.userType ?: 0)
+        userDataStore.saveRoleName(userDtl.roleName ?: "")
+        userDataStore.saveUserNameID(userName ?: "")
     }
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {

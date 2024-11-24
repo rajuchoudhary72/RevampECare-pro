@@ -16,6 +16,10 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <fragment
+            android:id="@+id/otpVerificationFragment"
+            android:name="com.app.ecarepro.ui.otpverification.OtpVerificationFragment"
+            android:label="OtpVerificationFragment" />
 
         <action
             android:id="@+id/action_splashFragment_to_schoolCodeFragment"

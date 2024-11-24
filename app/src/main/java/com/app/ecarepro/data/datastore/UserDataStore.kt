@@ -9,11 +9,12 @@ import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
     suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String)
-
+    suspend fun saveUserDetails(user: UserDTL, schoolCode: String, time: String)
     suspend fun getUser(): NetworkUserDetailsDto?
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)

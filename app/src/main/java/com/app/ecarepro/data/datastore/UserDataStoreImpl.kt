@@ -20,6 +20,8 @@ import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.asNetworkSchool
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.model.Feed
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
+import com.app.ecarepro.data.network.model.submit_assignment.asUserEntity
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
@@ -60,7 +62,14 @@ class UserDataStoreImpl @Inject constructor(
             setCurrentUserId(id.toInt())
 
     }
-
+    override suspend fun saveUserDetails(user: UserDTL, schoolCode: String, time: String) {
+        val id = userDatabase.insertUser(
+            user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time)
+        )
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0)
+            setCurrentUserId(id.toInt())
+    }
     override suspend fun getUser(): NetworkUserDetailsDto? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null

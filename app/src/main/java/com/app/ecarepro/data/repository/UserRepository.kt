@@ -113,6 +113,7 @@ import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
@@ -140,6 +141,21 @@ interface UserRepository {
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
     suspend fun logout(): Flow<Result<Boolean>>
 
+    suspend fun twoFactorLogin(
+        schoolCode: String,
+        userName: String,
+        password: String
+    ): TwoFactorLoginResponseDto
+    suspend fun resendOtp(
+        schoolCode: String,
+        oTPAuthKey: String
+    ): Flow<Result<TwoFactorLoginResponseDto>>
+    suspend fun validateOtp(
+        schoolCode: String,
+        oTPAuthKey: String,
+        otp: String,
+        userName: String
+    ): Flow<Result<TwoFactorLoginResponseDto>>
     suspend fun getCredentials(
         schoolCode: String,
         userType: Int,

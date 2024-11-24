@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
@@ -62,10 +63,10 @@ class SignInViewModel @Inject constructor(
         return user != null
     }
 
-    fun login(username: String, password: String, onResponse: (LoginResponseDto) -> Unit) {
+    fun login(username: String, password: String, onResponse: (TwoFactorLoginResponseDto) -> Unit) {
         viewModelScope.launch {
             onResponse(
-                userRepository.login(
+                userRepository.twoFactorLogin(
                     schoolCode = schoolCode,
                     userName = username,
                     password = password
