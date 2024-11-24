@@ -35,6 +35,8 @@ data class Profile(
     val designation: String?,
     @SerializedName("doAnniversary")
     val doAnniversary: String?,
+    @SerializedName("uaN_Number")
+    val uaN_Number: String?,
     @SerializedName("dob")
     val dob: String?,
     @SerializedName("doj")

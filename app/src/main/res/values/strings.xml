@@ -447,6 +447,7 @@
     <string name="paNNumber">PAN Card Number</string>
     <string name="cbseid">CBSE ID</string>
     <string name="club">Club</string>
+    <string name="uan_number">UN Number</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>

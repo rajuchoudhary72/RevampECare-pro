@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -383,8 +384,8 @@ class MainActivity : AppCompatActivity() {
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
-
-            Log.e("Note", "$schCode $userID $menuId $childMenuId")
+            val refId = data.getString("refID")
+            Log.e("Note", "$schCode $userID $menuId $childMenuId $refId")
 
             if (userDataStore.getUsersFlow().first()
                     .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
@@ -410,7 +411,7 @@ class MainActivity : AppCompatActivity() {
             if (menuId != null) {
                 if (childMenuId != null) {
                     Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId)
+                    getFragmentId(menuId, childMenuId, refId)
                 }
             }
             showLoader(false)
@@ -1042,7 +1043,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId:String? = null) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1095,7 +1096,7 @@ class MainActivity : AppCompatActivity() {
             6 -> {
                 when (childMenuId) {
                     7 -> navController.navigate(R.id.composeFragment)
-                    8 -> navController.navigate(R.id.messageFragment)
+                    8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
                     9 -> navController.navigate(R.id.messageFragment)
                 }
             }

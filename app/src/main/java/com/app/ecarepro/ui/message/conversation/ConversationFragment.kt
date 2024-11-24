@@ -119,7 +119,7 @@ class ConversationFragment : Fragment() {
 
                             uiState.messages.forEach { message: Conversation ->
                                 conversation {
-                                    id(message.msgID)
+                                    id(message.hashCode())
                                     abbreviation(message.abbreviation)
                                     date(message.sentOn)
                                     name(message.subject)
