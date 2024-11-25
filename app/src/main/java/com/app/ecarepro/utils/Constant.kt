@@ -57,6 +57,7 @@ class Constant {
         const val USER_TYPE = "user_type"
         const val USER_STAFF = "user_staff"
         const val USER_TEACHER = "user_teacher"
+        const val IS_MINE = "isAssignmentIsMine"
         const val HAS_ATTACHMENT = "hasAttachment"
         const val USER_PARENT_STUDENT = "user_parent_student"
 
@@ -127,6 +128,14 @@ class Constant {
         const val UP_TRIP = 1
         const val DOWN_TRIP = 2
         const val DROP_STUDENT_TRIP = 3
+
+
+        const val FILTER_BY = 0
+        const val FILTER_SUBJECT = 1
+        const val FILTER_CLASS = 2
+        const val FILTER_TEACHER = 3
+
+
 
         const val DOWNLOAD = 1
         const val EDIT = 2

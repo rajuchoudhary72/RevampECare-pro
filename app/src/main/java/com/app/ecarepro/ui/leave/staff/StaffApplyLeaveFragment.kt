@@ -119,7 +119,6 @@ class StaffApplyLeaveFragment : Fragment() {
                     days = 1.0
                     if (selectedLeaveTypeData.sandwichEnable) {
                         days = calculateDaysAfterHolidays(days)
-
                     }
 
                     binding.tvDuration.text = buildString {
@@ -230,7 +229,15 @@ class StaffApplyLeaveFragment : Fragment() {
                 }
                if (days>0){
                    if (days<=selectedLeaveTypeData.total-selectedLeaveTypeData.taken){
+                   if (selectedLeaveTypeData.minimumLimit>0){
+                       if ( days>=selectedLeaveTypeData.minimumLimit){
+                           leaveApplicationDialog()
+                       }else{
+                           mainActivity().showMessage("${selectedLeaveTypeData.leaveType} requires a minimum of ${selectedLeaveTypeData.minimumLimit} days. Please select at least ${selectedLeaveTypeData.minimumLimit} consecutive days to proceed.")
+                       }
+                   }else{
                        leaveApplicationDialog()
+                   }
                    }else{
                        mainActivity().showMessage("Sorry, you don't have sufficient leave balance!")
                    }
@@ -420,8 +427,7 @@ class StaffApplyLeaveFragment : Fragment() {
             mainActivity().showMessage("Please Check Term and Condition")
 
         }
-
-         if (selectedLeaveTypeData.attachmentMandatory){
+        if (selectedLeaveTypeData.attachmentMandatory){
              if (imageString==""){
                  validate = false
 
@@ -458,14 +464,13 @@ class StaffApplyLeaveFragment : Fragment() {
                         )
                     ) {
                         val noOfHolidaysInBetween: Double =
-                            Constant.getDateDiffWithSunday(modelHoliday.fromDate, binding.tvEndDate.text.toString(),selectedLeaveTypeData.sandwichEnable)
+                            Constant.getDateDiff(modelHoliday.fromDate, binding.tvEndDate.text.toString())
                         val `val` = noOfHolidaysInBetween.toInt()
                         holiday += `val`
                     } else {
-                        val noOfHolidays: Double = Constant.getDateDiffWithSunday(
+                        val noOfHolidays: Double = Constant.getDateDiff(
                             modelHoliday.fromDate,
                             modelHoliday.tillDate,
-                            selectedLeaveTypeData.sandwichEnable
                         )
                         val `val` = noOfHolidays.toInt()
                         holiday += `val`

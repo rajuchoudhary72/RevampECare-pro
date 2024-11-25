@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="viewModel"
+            type="com.app.ecarepro.ui.assignment.staff.TeacherAssignmentViewModel" />
 
     </data>
 
@@ -12,6 +15,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+        android:background="@color/background_dashboard"
         tools:context=".ui.assignment.staff.StaffAssignmentsListNavHostFragment">
 
         <LinearLayout
@@ -30,24 +34,75 @@
                     app:navigationIcon="@drawable/ic_arrow_back_24px"
                     app:topWindowInsetToPadding="@{true}"/>
 
-
-
-
-
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabGravity="fill"
-                app:tabMode="scrollable"
-                app:tabIndicatorFullWidth="true" />
+                android:weightSum="10"
+                android:background="@color/white"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:padding="@dimen/_5sdp"
+                >
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="3"
+                    android:layout_gravity="center"
+                    android:background="@drawable/edit_text_box_des_log"
+                    >
+                    <Spinner
+                        android:id="@+id/spinner_select_filter_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:dropDownVerticalOffset="50dp"
+                        android:overlapAnchor="true"
+                        android:spinnerMode="dropdown"
+                        android:background="@drawable/spinner_drop_background_white"
+                        android:gravity="center_vertical"
+                        android:visibility="visible"
+                        android:text="Filter By"
+                        android:layout_marginHorizontal="@dimen/_2sdp"
+                        android:layout_marginVertical="@dimen/_2sdp"
+                        />
+
+                </LinearLayout>
+
+
+                <EditText
+                    android:id="@+id/search_bar"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="40dp"
+                    android:drawableStart="@drawable/round_search_24"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/calibri_regular"
+                    android:hint="@string/search"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:paddingHorizontal="10dp"
+                    android:text="@={viewModel.searchQuery}"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="LabelFor"
+                    android:background="@drawable/background_box_rectangle_grey"
+
+                    />
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_assignment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+                tools:listitem="@layout/stu_assignment_item"
+
+                />
+
+
+
+
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -57,7 +112,8 @@
             android:text="@string/post_assignment"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             app:icon="@drawable/rounded_add_24"
 
             />

@@ -20,7 +20,9 @@ data class TeacherAssignment(
     val submitDate: String?,
     val title: String?,
     val updateBy: String?,
+    val assignmentBy: String?,
     val uploadedOn: String?,
     val userID: Int?,
-    val userType: Int?
+    val userType: Int?,
+    val isMine: Boolean?
 ) : Parcelable

@@ -795,20 +795,11 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                if (roleName == "Principal" || roleName == "Management") {
-                                    navController.navigate(
-                                        R.id.classAndTeacherListFragment,
-                                        Bundle().apply {
-                                            putString(Constant.TO, Constant.FRA_ASSI)
-                                        })
-                                } else {
-                                    navController.navigate(R.id.staffAssignmentsListFragment)
-                                }
-
+                                navController.navigate(R.id.staffAssignmentsListFragment)
                             } else {
                                 navController.navigate(R.id.assignmentNavHostFragment)
                             }
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                         }
                     }
                 }

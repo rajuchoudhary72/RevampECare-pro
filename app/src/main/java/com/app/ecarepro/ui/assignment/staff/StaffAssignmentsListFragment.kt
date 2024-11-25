@@ -53,33 +53,33 @@ class StaffAssignmentsListFragment(
 
 
 
-            if (assignments!=null   ) {
-            if (assignments.isNotEmpty()) {
-                val classAssignments = assignments.filter { it.`class` == className }
-                val assignmentListAdapter =
-                    StaffAssignmentListAdapter(classAssignments,
-                        this@StaffAssignmentsListFragment,
-                        teacherTypeUser)
-
-                binding.rvAssignment.apply {
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(activity)
-                    adapter = assignmentListAdapter
-                }
-                binding.rvAssignment.isVisible=true
-                binding.tvNoData.isVisible=false
-
-
-            }else{
-                binding.rvAssignment.isVisible=false
-                binding.tvNoData.isVisible=true
-
-            }
-            }else{
-                binding.rvAssignment.isVisible=false
-                binding.tvNoData.isVisible=true
-
-            }
+//            if (assignments!=null   ) {
+//            if (assignments.isNotEmpty()) {
+//                val classAssignments = assignments.filter { it.`class` == className }
+//                val assignmentListAdapter =
+//                    StaffAssignmentListAdapter(classAssignments,
+//                        this@StaffAssignmentsListFragment,
+//                        teacherTypeUser)
+//
+//                binding.rvAssignment.apply {
+//                    setHasFixedSize(true)
+//                    layoutManager = LinearLayoutManager(activity)
+//                    adapter = assignmentListAdapter
+//                }
+//                binding.rvAssignment.isVisible=true
+//                binding.tvNoData.isVisible=false
+//
+//
+//            }else{
+//                binding.rvAssignment.isVisible=false
+//                binding.tvNoData.isVisible=true
+//
+//            }
+//            }else{
+//                binding.rvAssignment.isVisible=false
+//                binding.tvNoData.isVisible=true
+//
+//            }
 
 
 
