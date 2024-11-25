@@ -88,7 +88,7 @@
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/ubuntu_medium"
                 android:includeFontPadding="false"
-                android:inputType="text"
+                android:inputType="phone"
                 android:itemBackground="@drawable/bg_outline_round_corner_green"
                 android:textAllCaps="true"
                 android:textColor="?attr/colorPrimary"

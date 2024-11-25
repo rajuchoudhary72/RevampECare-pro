@@ -61,6 +61,7 @@ class OtpVerificationFragment : Fragment() {
             binding.btnContinue.isEnabled = it?.length == binding.textOtpView.itemCount
         }
         binding.btnResendOtp.setOnClickListener {
+            binding.textOtpView.text?.clear()
             mainActivity().showLoader(true)
             mViewModel.resendOtp { _, errorMessage ->
                 mainActivity().showLoader(false)

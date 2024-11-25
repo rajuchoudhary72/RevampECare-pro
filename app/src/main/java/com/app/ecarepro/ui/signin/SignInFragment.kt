@@ -98,12 +98,16 @@ class SignInFragment : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
-
                             if (it.isOTPEnabled == true) {
-                                setFragmentResultListener(OtpVerificationFragment.REQUEST_TYPE_OPT_VERIFICATION) { requestKey, bundle ->
-                                    if (bundle.getBoolean(OtpVerificationFragment.IS_OTP_VERIFIED)) {
-                                        launchToNextDesctinationAfterLogin(it)
+                                mainActivity().showMessage(it.message.toString())
+                                try {
+                                    setFragmentResultListener(OtpVerificationFragment.REQUEST_TYPE_OPT_VERIFICATION) { requestKey, bundle ->
+                                        if (bundle.getBoolean(OtpVerificationFragment.IS_OTP_VERIFIED)) {
+                                            launchToNextDesctinationAfterLogin(it)
+                                        }
                                     }
+                                }catch (e:NullPointerException){
+
                                 }
                                 findNavController().navigate(
                                     R.id.otpVerificationFragment,
@@ -118,13 +122,22 @@ class SignInFragment : Fragment() {
                                 launchToNextDesctinationAfterLogin(it)
                             }
 
-                        } else {
+                        }
+                        else {
                             mainActivity().showMessage(" " + it.authenticated)
                         }
+                    }
 
-                    } else if (it.errorCode == 401) {
+                    else if (it.errorCode == 401) {
                         mainActivity().showMessage("Invalid password")
                     }
+                    else if (it.errorCode == 429) {
+                        mainActivity().showMessage(it.message.toString())
+                    }
+                    else if (it.errorCode == 404) {
+                        mainActivity().showMessage(it.message.toString())
+                    }
+
 
                     Log.i("Token Aut", it.userDTL?.authToken.toString())
                 }
