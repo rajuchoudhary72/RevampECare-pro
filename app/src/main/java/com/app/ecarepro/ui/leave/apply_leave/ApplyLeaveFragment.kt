@@ -237,7 +237,7 @@ class ApplyLeaveFragment : Fragment() {
                             Constant.toSystemDate(binding.tvEndDate.text.toString() ),
                             binding.tvNumberDays.text.toString().toDouble(),
                             null,
-                            binding.autoCompleteReason.text.toString(),
+                            if (selectedLeaveTypeID == 0) binding.textFiledReason.text.toString() else  binding.autoCompleteReason.text.toString(),
                             if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
 
                         )
