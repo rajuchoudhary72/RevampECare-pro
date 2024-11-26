@@ -137,7 +137,8 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                 }
                 override fun onNothingSelected(parent: AdapterView<*>) {
                  }
-            }  }
+            }
+        }
         getRouterList()
     }
 

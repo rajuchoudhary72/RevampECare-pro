@@ -119,7 +119,6 @@ class StaffApplyLeaveFragment : Fragment() {
                     days = 1.0
                     if (selectedLeaveTypeData.sandwichEnable) {
                         days = calculateDaysAfterHolidays(days)
-
                     }
 
                     binding.tvDuration.text = buildString {
@@ -150,7 +149,9 @@ class StaffApplyLeaveFragment : Fragment() {
 //                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
 //                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble() + 1
 
-                            days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                            days = Constant.getDateDiffWithSunday(binding.tvStartDate.text.toString()
+                                ,binding.tvEndDate.text.toString(),selectedLeaveTypeData.sandwichEnable)
+
                             if (selectedLeaveTypeData.sandwichEnable){
                                 days =  calculateDaysAfterHolidays(days)
                             }
@@ -228,7 +229,15 @@ class StaffApplyLeaveFragment : Fragment() {
                 }
                if (days>0){
                    if (days<=selectedLeaveTypeData.total-selectedLeaveTypeData.taken){
+                   if (selectedLeaveTypeData.minimumLimit>0){
+                       if ( days>=selectedLeaveTypeData.minimumLimit){
+                           leaveApplicationDialog()
+                       }else{
+                           mainActivity().showMessage("${selectedLeaveTypeData.leaveType} requires a minimum of ${selectedLeaveTypeData.minimumLimit} days. Please select at least ${selectedLeaveTypeData.minimumLimit} consecutive days to proceed.")
+                       }
+                   }else{
                        leaveApplicationDialog()
+                   }
                    }else{
                        mainActivity().showMessage("Sorry, you don't have sufficient leave balance!")
                    }
@@ -319,13 +328,13 @@ class StaffApplyLeaveFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         
                         if (it.data !=null) {
-                            leaveTerm=it.data.leaveTerms
-                            termCondition=it.data.termCondition
+                            leaveTerm= it.data.leaveTerms!!
+                            termCondition= it.data.termCondition!!
 
-                            holidayList=it.data.holidayList
+                            holidayList= it.data.holidayList!!
 
                             for (i in it.data.leaveDetails ){
-                                if (i.leaveID==leaveID){
+                                if (i!!.leaveID==leaveID){
                                     selectedLeaveTypeData=i
                                 }
                             }
@@ -418,8 +427,7 @@ class StaffApplyLeaveFragment : Fragment() {
             mainActivity().showMessage("Please Check Term and Condition")
 
         }
-
-         if (selectedLeaveTypeData.attachmentMandatory){
+        if (selectedLeaveTypeData.attachmentMandatory){
              if (imageString==""){
                  validate = false
 
@@ -462,7 +470,7 @@ class StaffApplyLeaveFragment : Fragment() {
                     } else {
                         val noOfHolidays: Double = Constant.getDateDiff(
                             modelHoliday.fromDate,
-                            modelHoliday.tillDate
+                            modelHoliday.tillDate,
                         )
                         val `val` = noOfHolidays.toInt()
                         holiday += `val`

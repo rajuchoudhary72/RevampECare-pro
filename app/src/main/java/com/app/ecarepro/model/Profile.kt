@@ -6,7 +6,7 @@ data class Profile(
     val address: String,
     val admissionDate: String,
     val admissionNo: String,
-    val billNumber: Any,
+    val billNumber: String?,
     val birthPlace: Any,
     val bloodGroup: String,
     val canChangeCoverImg: Any,
