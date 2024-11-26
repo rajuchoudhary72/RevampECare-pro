@@ -45,6 +45,7 @@ import kotlinx.coroutines.launch
 class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
+    private var editMode: Boolean= false
     private var openPreviousDay: Boolean=false
     private var mIsCurrentDate: Boolean=true
     private lateinit var studentListWithData: NetworkStudentListToMarkAtt
@@ -180,7 +181,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                         }
                     }
                 }
-            })
+            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
         }
 
 
@@ -253,12 +254,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
                                  if (it.data.hasMarked){
-                                     if (it.data.canEdit) {
-                                         binding.btnSave.isVisible = true
-
-                                     } else {
-                                         binding.btnSave.isVisible = false
-                                     }
+                                     binding.btnSave.isVisible = editMode
                                      binding.btnSave.text = "Modify"
                                  }else{
                                      binding.btnSave.text = "Save"
@@ -403,6 +399,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                  binding.rbStudentWise.isChecked=true
                                  from=getString(R.string.subject_attendance)
                              }
+
+                             editMode=it.data.editMode
 
                             if (from==getString(R.string.subject_attendance)){
                                 if (it.data.classesForSubTeach != null) {
@@ -578,7 +576,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 else SuccessAlertPopup(
                     "",
                     String.format(
-                        requireContext().resources.getString(R.string.attendance_locked_alert_for_subject),
+                        requireContext().resources.getString(R.string.attendance__alert_subject),
                         subjectName + ""
                     )
                 )

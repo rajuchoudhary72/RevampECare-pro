@@ -473,6 +473,16 @@
                     android:textColor="@color/grey_40"
                     android:textSize="@dimen/_12sdp" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/bill_no"
+                    android:textColor="@color/grey_40"
+                    android:textSize="@dimen/_12sdp" />
+
+
 
             </LinearLayout>
 
@@ -489,6 +499,16 @@
                     android:text="@{studentData.srN_UMRN_SATSNumber}"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@{studentData.billNumber}"
+                    android:textColor="@color/grey_60"
+                    android:textSize="@dimen/_12sdp" />
+
 
 
             </LinearLayout>

@@ -42,6 +42,7 @@
     <string name="date">Date :</string>
     <string name="update_on">Update On :</string>
     <string name="updated_by">Update By </string>
+    <string name="updated_by_with_colun">Update By: </string>
     <string name="like">Like </string>
     <string name="no_notice_available">No Notice Available</string>
     <string name="no_history_available">No Leave History</string>
@@ -406,6 +407,21 @@
 
     </string-array>
 
+    <string-array name="filterTYPE">
+        <item>Filter By:</item>
+        <item>Subject</item>
+        <item>Class</item>
+
+    </string-array>
+
+    <string-array name="filterTypeReport">
+        <item>Filter By:</item>
+        <item>Subject</item>
+        <item>Class</item>
+        <item>Teacher</item>
+
+    </string-array>
+
     <string name="all">All</string>
     <string name="boarding">Boarding</string>
     <string name="day_scholar">Day Scholar</string>
@@ -703,6 +719,7 @@
     <string name="rules_for_leave"><u>Rules for Leave</u></string>
     <string name="lbl_agree">Agree</string>
     <string name="attendance__alert">Attendance of class (%s) has been marked.</string>
+    <string name="attendance__alert_subject">Attendance of Subject (%s) has been marked.</string>
     <string name="attendance_locked_alert_for_subject">Attendance of subject (%s) has been locked. For any change please contact school/college admin.</string>
     <string name="lbl_saved_successfully">Saved Successfully</string>
     <string name="attendance_locked_alert">Attendance of class (%s) has been locked. For any change please contact school/college admin.</string>
@@ -784,5 +801,7 @@
     <string name="class_wise_default"><b>Class Wise</b> (Default)</string>
     <string name="section_wise_recommended_only_for_those_classes_where_different_sections_have_different_subjects_or_syllabus"><b>Section Wise</b> \n(Recommended only for those classes where different sections have different subjects or syllabus)</string>
     <string name="head_name">Head Name</string>
+    <string name="bill_no">Bill No.</string>
+    <string name="assignment_by">Assignment By :</string>
 
 </resources>

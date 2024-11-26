@@ -11,5 +11,6 @@ data class LeaveDetail(
     val minAcceptableLimit: Double,
     val sandwichEnable: Boolean,
     val taken: Double,
-    val total: Double
+    val total: Double,
+    val minimumLimit: Int
 )

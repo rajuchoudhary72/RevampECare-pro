@@ -8,15 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
- import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.Video
 import com.app.ecarepro.databinding.FragmentDayWiseTimeTableBinding
-import com.app.ecarepro.model.Photo
 import com.app.ecarepro.model.TimeTableData
-import com.app.ecarepro.model.photo_setting.AlbumSetting
-import com.app.ecarepro.ui.assignment.AssignmentListAdapter
-import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment
-import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment.Companion
 
 class DayWiseTimeTableFragment() : Fragment() {
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -143,6 +142,37 @@
 
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llAssignmentBy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/llStatus"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:drawablePadding="4dp"
+                            android:text="@string/updated_by_with_colun"
+                            />
+
+                        <TextView
+                            android:id="@+id/tvAssignmentBy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:paddingTop="3dp"
+                            android:textColor="@color/grey_40"
+                            android:layout_marginStart="5dp"
+                            app:fontFamily="@font/ubuntu_medium   " />
+
+
+                    </LinearLayout>
+
 
                     <RelativeLayout
                         android:id="@+id/date_rel"
