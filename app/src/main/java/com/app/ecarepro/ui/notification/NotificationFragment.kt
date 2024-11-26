@@ -56,11 +56,11 @@ class NotificationFragment : Fragment() {
         }
 
         binding.recyclerView.apply {
-           /* addItemDecoration(
+            addItemDecoration(
                 LinearMarginDecoration.create(
                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
                 )
-            )*/
+            )
         }
     }
 
@@ -87,7 +87,7 @@ class NotificationFragment : Fragment() {
                                 notification.moduleID?.let {
                                     notification.chMenuID?.let { it1 ->
                                         (requireActivity() as MainActivity).getFragmentId(
-                                            it, it1
+                                            it, it1, notification.refID
                                         )
                                     }
                                 }

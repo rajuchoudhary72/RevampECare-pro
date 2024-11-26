@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 
 import androidx.lifecycle.flowWithLifecycle
@@ -327,7 +328,11 @@ class ProfileFragment : Fragment() {
         builder.setItems(items) { dialog, item ->
             FileAccess.checkPermission(this)
             if (items[item] == "Take Photo") {
-                checkCameraPermission()
+                if (isCameraPermissionGranted(requireContext())) {
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                } else {
+                    mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
+                }
             } else if (items[item] == "Choose from Library") {
                 galleryLauncher.launch(FileAccess.galleryIntent())
             } else if (items[item] == "Cancel") {
@@ -335,6 +340,12 @@ class ProfileFragment : Fragment() {
             }
         }
         builder.show()
+    }
+    fun isCameraPermissionGranted(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
     }
     private fun checkCameraPermission() {
         when {
@@ -474,6 +485,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.club))
             subTitle(profile.club)
         }
+        profileItem {
+            id(R.string.uan_number)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.uan_number))
+            subTitle(profile.uaN_Number)
+        }
         /*  profileItem {
               id(R.string.bank_account_number)
               iconRes(R.drawable.ic_bank_account)
@@ -609,6 +626,13 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.contactMobile)
         }
+
+        profileItem {
+            id(R.string.bill_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.bill_number))
+            subTitle(profile.billNumber)
+        }
     }
 
     private fun EpoxyController.buildParentModels(profile: Profile) {
@@ -623,6 +647,12 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_contact_no_)
             title(getString(R.string.contact_number))
             subTitle(profile.studentProfile?.contactMobile)
+        }
+        profileItem {
+            id(R.string.bill_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.bill_number))
+            subTitle(profile.studentProfile?.billNumber)
         }
 
         profileWardDetails {

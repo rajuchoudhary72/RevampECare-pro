@@ -17,6 +17,7 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
 
+
         <action
             android:id="@+id/action_splashFragment_to_schoolCodeFragment"
             app:destination="@id/schoolCodeFragment"
@@ -983,4 +984,8 @@
         android:id="@+id/smsReportFragment"
         android:name="com.app.ecarepro.ui.sms_app_msg_report.sms_report.SmsReportFragment"
         android:label="SmsReportFragment" />
+    <fragment
+        android:id="@+id/otpVerificationFragment"
+        android:name="com.app.ecarepro.ui.otpverification.OtpVerificationFragment"
+        android:label="OtpVerificationFragment" />
 </navigation>

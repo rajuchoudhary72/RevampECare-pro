@@ -70,7 +70,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/startDate"
             app:layout_constraintTop_toTopOf="parent"
-            app:lv_text="Start Date"
+            app:lv_text="End Date"
             tools:lv_sub_text="13 March 2021" />
 
         <ImageView

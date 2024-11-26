@@ -34,5 +34,7 @@ data class Notification(
     @SerializedName("title")
     val title: String?,
     @SerializedName("chMenuID")
-    val chMenuID: Int?
+    val chMenuID: Int?,
+    @SerializedName("refID")
+    val refID: String?
 )

@@ -253,7 +253,7 @@
     <string name="slipage_reason">Slippage Reason</string>
     <string name="from_date">From Date</string>
     <string name="to_date">To Date</string>
-    <string name="topic">Topic :</string>
+    <string name="topic">Topic to be Covered :</string>
     <string name="symbol_special">*</string>
     <string name="please_enter_the_topic_s_for_this_lesson_plan_in_not_more_than_500_characters">Please enter the Topic(s) for this Lesson Plan in not more than 500 characters</string>
     <string name="_0_500">0/500</string>
@@ -463,9 +463,13 @@
     <string name="paNNumber">PAN Card Number</string>
     <string name="cbseid">CBSE ID</string>
     <string name="club">Club</string>
+    <string name="otp_verification">OTP Verification <font color="#FF0000">*</font></string>
+    <string name="resend_otp"><u>Resend OTP</u></string>
+    <string name="uan_number">UN Number</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
+    <string name="bill_number">Bill Number</string>
     <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
     <string name="alt_email_id">Alternate Email ID</string>

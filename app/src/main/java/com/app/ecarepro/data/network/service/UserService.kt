@@ -140,13 +140,27 @@ import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
+import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
 
 interface UserService {
+    @POST("User/ValidateOTP")
+    suspend fun validateOTP(
+        @Body request: ValidateOtpRequest,
+    ): TwoFactorLoginResponseDto
+    @POST("User/ResendOTP")
+    suspend fun resendOTP(
+        @Body request: ValidateOtpRequest,
+    ): TwoFactorLoginResponseDto
+    @POST("User/TwoFactorLogin")
+    suspend fun twoFactorLogin(
+        @Body request: UserLoginRequestDto,
+    ): TwoFactorLoginResponseDto
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,

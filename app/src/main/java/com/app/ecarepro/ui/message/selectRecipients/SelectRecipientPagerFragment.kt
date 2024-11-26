@@ -359,7 +359,7 @@ class SelectRecipientPagerFragment : Fragment() {
                         }
                         .forEach { contact ->
                             selectableRecipient {
-                                id(contact.receiverID)
+                                id(contact.hashCode())
                                 isSelected(selectRecipientsViewModel.isContactSelected(contact))
                                 photo(contact.photo)
                                 name(contact.name)
@@ -445,7 +445,7 @@ class SelectRecipientPagerFragment : Fragment() {
                 }
                 ?.forEach { contact ->
                     selectableRecipient {
-                        id(contact.receiverID)
+                        id(contact.hashCode())
                         isSelected(selectRecipientsViewModel.isContactSelected(contact))
                         photo(contact.photo)
                         name(contact.name)
