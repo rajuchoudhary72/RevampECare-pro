@@ -2,8 +2,6 @@ package com.app.ecarepro.ui.assignment.staff.viewAssignment
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.DownloadManager
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -15,8 +13,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.FileProvider
-import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,10 +26,8 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.databinding.FragmentViewAssignmentBinding
 import com.app.ecarepro.model.AssignSubmitStudent
-import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.ui.studentProfile.PopUpListAdapterLibTrans
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
@@ -41,10 +35,6 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import android.content.Intent
-import android.net.Uri
-import android.os.Environment
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import com.app.ecarepro.model.AssignmentShareModel
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
@@ -60,7 +50,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     private lateinit var binding : FragmentViewAssignmentBinding
     private val viewAssignmentViewModel : ViewAssignmentViewModel by viewModels()
     private var submitType =1
-    private var teacherTypeUser= true
+    private var isMineAssignment= true
     private var submitStudentsList= mutableListOf<AssignSubmitStudent>()
 
     override fun onCreateView(
@@ -72,7 +62,7 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
          try {
              assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
              isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
-             teacherTypeUser = requireArguments().getBoolean(Constant.USER_TEACHER)
+             isMineAssignment = requireArguments().getBoolean(Constant.IS_MINE)
              arguments?.getParcelable<AssignmentShareModel>("AssignmentShareModel").let { data ->
                  assignmentShareModel= data!!
 
@@ -86,13 +76,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!teacherTypeUser){
-            binding.llSubmitNotSubmit.isVisible=false
+        if (!isMineAssignment){
             binding.llAllRemark.isVisible=false
             binding.tvSaveRemark.isVisible=false
-            binding.rvSubmitList.isVisible=false
-            binding.tvDetailsAssi.isVisible=false
-
         }
 
         binding.btnLateSubmit.isVisible=isLateSubmitted
@@ -106,8 +92,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_submit -> {
-                    binding.tvSaveRemark.isVisible=true
-                    binding.llAllRemark.isVisible=true
+                    if (isMineAssignment){
+                        binding.tvSaveRemark.isVisible=true
+                        binding.llAllRemark.isVisible=true
+                    }
                     submitType=1
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false) 
 
@@ -280,9 +268,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             } }
         viewAssignmentViewModel.viewAssignment(assignmentId)
 
-        if ( teacherTypeUser){
+
              viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
-        }
+
 
 
 

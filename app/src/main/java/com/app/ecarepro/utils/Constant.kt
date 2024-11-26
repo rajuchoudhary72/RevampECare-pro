@@ -57,6 +57,7 @@ class Constant {
         const val USER_TYPE = "user_type"
         const val USER_STAFF = "user_staff"
         const val USER_TEACHER = "user_teacher"
+        const val IS_MINE = "isAssignmentIsMine"
         const val HAS_ATTACHMENT = "hasAttachment"
         const val USER_PARENT_STUDENT = "user_parent_student"
 
@@ -127,6 +128,14 @@ class Constant {
         const val UP_TRIP = 1
         const val DOWN_TRIP = 2
         const val DROP_STUDENT_TRIP = 3
+
+
+        const val FILTER_BY = 0
+        const val FILTER_SUBJECT = 1
+        const val FILTER_CLASS = 2
+        const val FILTER_TEACHER = 3
+
+
 
         const val DOWNLOAD = 1
         const val EDIT = 2
@@ -215,6 +224,38 @@ class Constant {
                 } else {
                     diff++
                     cal1.add(Calendar.DATE, 1)
+                }
+            }
+            return diff
+        }
+
+        fun getDateDiffWithSunday(dateString1: String?, dateString2: String?,sandwichEnable:Boolean): Double {
+            var diff = 0.0
+            val df1: DateFormat = SimpleDateFormat("dd MMM yyyy")
+            var date1: Date? = null
+            var date2: Date? = null
+            try {
+                date1 = df1.parse(dateString1)
+                date2 = df1.parse(dateString2)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            val cal1 = Calendar.getInstance()
+            cal1.time = date1
+            val cal2 = Calendar.getInstance()
+            cal2.time = date2
+            while (!cal1.after(cal2)) {
+                if (sandwichEnable){
+                    diff++
+                    cal1.add(Calendar.DATE, 1)
+                }else{
+                    val dayOfWeek = cal1[Calendar.DAY_OF_WEEK]
+                    if (dayOfWeek == Calendar.SUNDAY) {
+                        cal1.add(Calendar.DATE, 1)
+                    } else {
+                        diff++
+                        cal1.add(Calendar.DATE, 1)
+                    }
                 }
             }
             return diff

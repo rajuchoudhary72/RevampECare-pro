@@ -796,20 +796,11 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                if (roleName == "Principal" || roleName == "Management") {
-                                    navController.navigate(
-                                        R.id.classAndTeacherListFragment,
-                                        Bundle().apply {
-                                            putString(Constant.TO, Constant.FRA_ASSI)
-                                        })
-                                } else {
-                                    navController.navigate(R.id.staffAssignmentsListFragment)
-                                }
-
+                                navController.navigate(R.id.staffAssignmentsListFragment)
                             } else {
                                 navController.navigate(R.id.assignmentNavHostFragment)
                             }
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                         }
                     }
                 }
@@ -1042,6 +1033,55 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun webViewCallForPayment(feePaymentURL: String){
+        showLoader(true)
+        systemViewModel.getTokenKey { token ->
+            if (token.isNullOrEmpty()) {
+                showLoader(false)
+                showMessage("Something went wrong")
+            } else {
+                showLoader(false)
+                val tabIntent = CustomTabsIntent.Builder()
+                    .enableUrlBarHiding()
+                    .setToolbarColor( (this).getColor(R.color.green)).build()
+                openCustomTabForPayment(tabIntent, Uri.parse("$feePaymentURL?token=$token"))
+            }
+        }
+    }
+
+    private fun openCustomTabForPayment(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        if (uri == null || uri.scheme.isNullOrEmpty()) {
+            showMessage("Invalid or missing URL")
+            return
+        }
+
+        if (isChromeInstalled(this)) {
+            val packageName = "com.android.chrome"
+            customTabsIntent.intent.setPackage(packageName)
+            try {
+                customTabsIntent.launchUrl(this, uri)
+            } catch (e: ActivityNotFoundException) {
+               showMessage("Chrome cannot open this link")
+            }
+        } else {
+            try {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)
+            } catch (e: ActivityNotFoundException) {
+                showMessage("No browser available to handle the URL")
+            }
+        }
+    }
+
+    private fun isChromeInstalled(context: Context): Boolean {
+        val chromePackageName = "com.android.chrome"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+        intent.setPackage(chromePackageName)
+
+        val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfoList.isNotEmpty()
+    }
+
 
     fun getFragmentId(menuID: Int, childMenuId: Int, refId:String? = null) {
         lifecycleScope.launch {
@@ -1189,7 +1229,20 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     18 -> navController.navigate(R.id.attendanceFragment)
                     20 -> navController.navigate(R.id.paySlipFragment)
-                    43 -> navController.navigate(R.id.feePaymentFragment)
+                    43 -> {
+                        lifecycleScope.launch {
+                            try {
+                                userDataStore.getSchoolData()?.run {
+                                    if (feePayemtURL.isNullOrEmpty()){
+                                        showMessage("Fee Payment URL are currently not unavailable!")
+                                    }else{
+                                        webViewCallForPayment(feePayemtURL!!)
+                                    }
+                                }
+                            } catch (_: Exception) {
+                            }
+                        }
+                    }
                     44 -> navController.navigate(R.id.feeReceiptFragment)
                     69 -> navController.navigate(R.id.feeCertificateFragment)
                 }
