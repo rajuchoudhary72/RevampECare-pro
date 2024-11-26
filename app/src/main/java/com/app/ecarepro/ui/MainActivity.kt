@@ -582,7 +582,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     fun hideKeyBoard() {
         this.currentFocus?.let { view ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
