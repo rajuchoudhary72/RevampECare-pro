@@ -48,6 +48,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -69,22 +76,26 @@ android {
         dataBinding = true
         buildConfig = true
     }
+    flavorDimensions += listOf("apps")
 
-    flavorDimensions += listOf("build")
     productFlavors {
-        create("dev") {
-            dimension = "build"
+        create("Franciscan e-Care") {
+            dimension = "apps"
             resValue("string", "app_name", "e-Care-Dev")
         }
-        create("prod") {
-            dimension = "build"
+        create("Franciscan e-Care 1") {
+            dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
+            applicationId = "com.franciscan.ecare_pro"
+            versionCode = 1
+            versionName = "1.0.0"
         }
-        create("beta") {
-            dimension = "build"
-           // applicationIdSuffix = ".beta"
+        create("Franciscan e-Care 2") {
+            dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
-           // signingConfig = signingConfigs.getByName("beta")
+            applicationId = "com.franciscan.ecare_pro2"
+            versionCode = 1
+            versionName = "1.0.0"
         }
     }
 
