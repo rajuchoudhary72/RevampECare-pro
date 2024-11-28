@@ -395,11 +395,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/horizontal_margin"
             android:fontFamily="@font/calibri_light"
-            android:paddingBottom="15dp"
             android:text="@string/s_r_n_umrn_sats_no"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/MotherContact" />
-
         <TextView
             android:id="@+id/umrn_value"
             android:layout_width="0dp"
@@ -412,6 +410,52 @@
             app:layout_constraintBaseline_toBaselineOf="@id/u_mr_rn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/u_mr_rn"
+            tools:text="1234567891234" />
+        <TextView
+            android:id="@+id/bill_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:text="@string/bill_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/u_mr_rn" />
+        <TextView
+            android:id="@+id/bill_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.billNumber}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/bill_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bill_number"
+            tools:text="1234567891234" />
+
+        <TextView
+            android:id="@+id/apaar_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/horizontal_margin"
+            android:fontFamily="@font/calibri_light"
+            android:paddingBottom="15dp"
+            android:text="@string/apaar_id"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bill_number" />
+        <TextView
+            android:id="@+id/apaar_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:fontFamily="@font/calibri_regular"
+            android:text="@{studentProfile.apaaRID}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/apaar_id"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/apaar_id"
             tools:text="1234567891234" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

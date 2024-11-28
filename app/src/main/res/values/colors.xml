@@ -65,13 +65,15 @@
 
 
     <color name="brand_color">#4DAC3C</color>
+    <color name="green">@color/brand_color</color>
+
     <color name="brand_color_new">#4eac3c</color>
     <color name="brand_color2">#5FA150</color>
     <color name="component_color">#FFD786</color>
     <color name="accent_color">#5570F1</color>
 
 
-    <color name="green">#4DAC3C</color>
+
     <color name="green_80">#CC5FA150</color>
     <color name="green_60">#995FA150</color>
     <color name="green_40">#665FA150</color>
