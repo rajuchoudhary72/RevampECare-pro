@@ -301,7 +301,11 @@ class AppointmentFragment : Fragment() {
                                 viewModel.submitForm { isSuccess, message ->
                                     mainActivity().showMessage(message)
                                     if(isSuccess){
-                                        findNavController().popBackStack()
+                                        if(arguments?.getBoolean("toAppointment") == true){
+                                            findNavController().navigate(R.id.fomGuardFragment)
+                                        }else{
+                                            findNavController().popBackStack()
+                                        }
                                     }
                                 }
                             }
