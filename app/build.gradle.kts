@@ -79,21 +79,21 @@ android {
     flavorDimensions += listOf("apps")
 
     productFlavors {
-        create("Franciscan e-Care") {
+        create("Franciscan e-Care ") {
             dimension = "apps"
             resValue("string", "app_name", "e-Care-Dev")
         }
-        create("Franciscan e-Care 1") {
+        create("MYSFPS ") {
             dimension = "apps"
-            resValue("string", "app_name", "Franciscan e-Care")
-            applicationId = "com.franciscan.ecare_pro"
+            resValue("string", "app_name", "MYSFPS")
+            applicationId = "com.franciscan.strawberry"
             versionCode = 1
             versionName = "1.0.0"
         }
-        create("Franciscan e-Care 2") {
+        create("MYSFPS Play ") {
             dimension = "apps"
-            resValue("string", "app_name", "Franciscan e-Care")
-            applicationId = "com.franciscan.ecare_pro2"
+            resValue("string", "app_name", "MYSFPS")
+            applicationId = "com.franciscan.strawberry_play"
             versionCode = 1
             versionName = "1.0.0"
         }
