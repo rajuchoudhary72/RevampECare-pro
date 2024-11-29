@@ -302,7 +302,7 @@ class AppointmentFragment : Fragment() {
                                     mainActivity().showMessage(message)
                                     if(isSuccess){
                                         if(arguments?.getBoolean("toAppointment") == true){
-                                            findNavController().navigate(R.id.fomGuardFragment)
+                                            findNavController().navigate(R.id.printOutAppointenentFragment)
                                         }else{
                                             findNavController().popBackStack()
                                         }

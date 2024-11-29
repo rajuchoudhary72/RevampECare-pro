@@ -63,7 +63,7 @@ class VerifyPhoneFragment : Fragment() {
                 } is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.data != null) {
-                        if (it.data. status) {
+                        if (!it.data. status) {
                             findNavController().navigate(
                                 R.id.appointmentFragment,
                                 bundleOf("toAppointment" to  true)
