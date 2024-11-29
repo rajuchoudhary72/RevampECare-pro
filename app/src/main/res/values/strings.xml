@@ -815,5 +815,6 @@
     <string name="assignment_by">Assignment By :</string>
     <string name="under_score">-</string>
     <string name="apaar_id">APAAR ID</string>
+    <string name="national_teacher_id">National Teacher ID</string>
 
 </resources>
