@@ -18,11 +18,23 @@ kapt {
 
 android {
     signingConfigs {
-        create("prod") {
+        create("Franciscan e-Care") {
             storeFile = file("eCareBeta.jks")
             storePassword = "eCarePro"
             keyAlias = "ecareProAndroidBeta"
             keyPassword = "eCarePro"
+        }
+        create("MYSFPS") {
+            storeFile = file("strawberry_key")
+            storePassword = "strawberryapp"
+            keyAlias = "strawberryapp"
+            keyPassword = "strawberryapp"
+        }
+        create("MYSFPS Play") {
+            storeFile = file("strawberry_key")
+            storePassword = "strawberryapp"
+            keyAlias = "strawberryapp"
+            keyPassword = "strawberryapp"
         }
     }
     namespace = "com.app.ecarepro"
@@ -82,13 +94,15 @@ android {
         create("Franciscan e-Care ") {
             dimension = "apps"
             resValue("string", "app_name", "e-Care-Dev")
+            signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
         create("MYSFPS ") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry"
-            versionCode = 1
-            versionName = "1.0.0"
+            versionCode = 29
+            versionName = "2.0.4"
+            signingConfig = signingConfigs.getByName("MYSFPS")
         }
         create("MYSFPS Play ") {
             dimension = "apps"
@@ -96,6 +110,7 @@ android {
             applicationId = "com.franciscan.strawberry_play"
             versionCode = 1
             versionName = "1.0.0"
+            signingConfig = signingConfigs.getByName("MYSFPS Play")
         }
     }
 
