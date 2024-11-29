@@ -10,6 +10,7 @@ import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +19,9 @@ import javax.inject.Inject
 class TeacherSyllabusViewModel @Inject constructor(
     private val  userRepository: UserRepository
 ) : ViewModel() {
+
+    val showSearchView = MutableStateFlow(false)
+    val searchQuery = MutableStateFlow("")
 
     private val teacherSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<NetworkTeacherSyllabus>> = MutableStateFlow(
         NetworkResult.Loading())
@@ -53,6 +57,19 @@ class TeacherSyllabusViewModel @Inject constructor(
             deleteSyllabusMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
+    }
+
+    fun showSearchBar() {
+        showSearchView.update { true }
+    }
+
+    fun clearSearchQuery() {
+        if (searchQuery.value.isEmpty()) {
+            showSearchView.update { false }
+        } else
+            searchQuery.update {
+                ""
+            }
     }
 
 }

@@ -20,6 +20,7 @@ data class Details(
     val fatherHusbandMob: String,
     val fatherHusbandName: String,
     val gender: String,
+    val nationalCode: String,
     val isSpouseName: Boolean,
     val lName: String,
     val mName: String,

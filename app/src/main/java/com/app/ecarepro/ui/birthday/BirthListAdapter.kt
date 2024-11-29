@@ -14,8 +14,8 @@ import com.squareup.picasso.Picasso
 
 class BirthListAdapter(
     private var noticeList: List<UsersBirthday>,
-    private var noticeListFragment: BirthdayFragment,
-    private val userType: Int
+    private val userType: Int,
+    private val onItemClick: (UsersBirthday) -> Unit
 ) :
     RecyclerView.Adapter<BirthListAdapter.NoticeViewHolder>() {
 
@@ -40,13 +40,18 @@ class BirthListAdapter(
 
             binding.data=data
 
+            userImg.setOnClickListener {
+                onItemClick(data)
+            }
+
             Picasso.get().
             load(data.photo)
                 .placeholder(R.drawable.default_profile)
                 .  into(binding .userImg)
 
             if (userType==Constant.STUDENT_TYPE){
-
+                llMother.isVisible=false
+                llFatherName.isVisible=false
             } else if (userType==Constant.PARENT_TYPE){
                 tvNameHolder.text= "Student Name"
                 llBirthdayOf.isVisible=true

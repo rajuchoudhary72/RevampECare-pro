@@ -17,7 +17,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentConverReportBinding
@@ -42,7 +43,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -54,7 +54,6 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
 
     private val dateTo: Calendar = Calendar.getInstance()
 
-    private var pg = 1
 
     var query   = ""
      var senderName  = ""
@@ -67,6 +66,14 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
     var mFilterStartDate  = ""
     var mFilterEndDate   = ""
     var mStartDate = ""
+    private var pageIndex: Int = 1
+    private var pastVisiblesItems: Int = 0
+    private var totalItemCount: Int = 0
+    private var visibleItemCount: Int = 0
+    private var isLoading: Boolean = true
+    private lateinit var conversationReportAdapter : ConversationReportAdapter
+    private var mConversationList  = mutableListOf<Conversation>()
+
 
 
     override fun onCreateView(
@@ -83,11 +90,16 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
 
         binding.apply {
 
+            conversationReportAdapter = ConversationReportAdapter( mConversationList , this@ConversationReportFragment,false)
+
+            binding.recyclerSmsUsageReport.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(activity)
+                adapter = conversationReportAdapter
+            }
+
             tvDateFrom.text = Constant.currentDate()
             tvDateTo.text = Constant.currentDate()
-
-            getConversationReport()
-
 
             tvDateFrom.setOnClickListener { pickDateRange() }
             tvDateTo.setOnClickListener { pickDateRange() }
@@ -96,6 +108,9 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
                 showFilterPopUp()
             }
         }
+
+        getConversationReport()
+        setupRecycleViewPager()
 
     }
 
@@ -114,17 +129,20 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
         }
     }
 
-    private fun updateDateFilterText(setAsFilter: Boolean = false) {
-        val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        dateFormat.format(Date(dateFrom.timeInMillis))
-        val from = dateFormat.format(Date(dateFrom.timeInMillis))
-        val to = dateFormat.format(Date(dateTo.timeInMillis))
+    private fun updateDateFilterText(setAsFilter: Boolean ) {
+        if (setAsFilter){
+            val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            dateFormat.format(Date(dateFrom.timeInMillis))
+            val from = dateFormat.format(Date(dateFrom.timeInMillis))
+            val to = dateFormat.format(Date(dateTo.timeInMillis))
 
-        binding.apply {
-            tvDateFrom.text = from
-            tvDateTo.text = to
+            binding.apply {
+                tvDateFrom.text = from
+                tvDateTo.text = to
+            }
+            pageIndex=1
+            getConversationReport()
         }
-        getConversationReport()
 
 
     }
@@ -151,28 +169,31 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
 
                         if (it.data != null) {
 
-                            if (it.data.conversation != null) {
-                                binding.recyclerSmsUsageReport.visibility=View.VISIBLE
-                                binding.tvNoData.visibility=View.GONE
+                            if (it.data.conversation!=null && it.data.conversation.isNotEmpty() ){
 
-                                val leaveHistoryAdapter = ConversationReportAdapter(
-                                    it.data.conversation,
-                                    this@ConversationReportFragment
-                                )
+                                binding.recyclerSmsUsageReport.isVisible=true
+                                binding.tvNoData.isVisible=false
 
-                                binding.recyclerSmsUsageReport.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = leaveHistoryAdapter
+                                //isLoading=true
+                                if (pageIndex==1){
+                                    conversationReportAdapter.clearData()
                                 }
-                            } else {
-                                binding.recyclerSmsUsageReport.visibility=View.GONE
-                                binding.tvNoData.visibility=View.VISIBLE
+                                conversationReportAdapter.setData(it.data.conversation.toMutableList(),it.data.canDeleteConv)
+
+
+                            }else{
+                                if (pageIndex==1){
+                                    binding.recyclerSmsUsageReport.isVisible=false
+                                    binding.tvNoData.isVisible=true
+                                }
+
                             }
                         } else {
                             binding.recyclerSmsUsageReport.visibility=View.GONE
                             binding.tvNoData.visibility=View.VISIBLE
                         }
+
+
 
 
                     }
@@ -184,7 +205,7 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
         }
 
         conversationReportViewModel.getConversationReport(
-            pg,
+            pageIndex,
             Constant.toSystemDate(binding.tvDateFrom.text.toString()),
             Constant.toSystemDate(binding.tvDateTo.text.toString())
         )
@@ -192,13 +213,41 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
     }
 
     override fun onItemClick(t: Conversation, pos: Int, boolean: Boolean) {
-        findNavController().navigate(
-            R.id.chatFragment,
-            bundleOf(
-                "ID" to t.msgID,
-                "MessageType" to MessageType.CONV.value
-            )
-        )
+        when(pos){
+            1->{
+                findNavController().navigate(
+                    R.id.chatFragment,
+                    bundleOf(
+                        "ID" to t.msgID,
+                        "MessageType" to MessageType.CONV.value
+                    )
+                )
+            }
+            2 ->{
+                showDeleteConfirmationDialog(t)
+            }
+        }
+    }
+
+    private fun showDeleteConfirmationDialog(t: Conversation) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Confirm Delete")
+        builder.setMessage("Are you sure you want to delete")
+
+        builder.setPositiveButton("Delete") { dialog, _ ->
+            conversationReportViewModel.deleteConversation(t.msgID,Constant.DEVICE_TYPE).invokeOnCompletion {
+                pageIndex=1
+                getConversationReport()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
 
@@ -392,6 +441,40 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
         }
         dialog.show()
         dialog.window!!.attributes = lp
+    }
+
+
+    private fun setupRecycleViewPager() {
+        conversationReportAdapter.clearData()
+        binding.recyclerSmsUsageReport.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+
+                if (linearLayoutManager != null) {
+                    if (dy > 0) {
+                        visibleItemCount = linearLayoutManager.childCount;
+                        totalItemCount = linearLayoutManager.itemCount;
+                        pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                        if (isLoading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                isLoading = false
+                                pageIndex += 1
+                                getConversationReport()
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
+
+
+
     }
 
 

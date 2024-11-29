@@ -71,6 +71,11 @@ interface MessageRepository {
         tillDate: String? = null,
     ): NetworkConversationReport
 
+    suspend fun deleteConversation(
+        id: String,
+         device: Int
+    ): CommonResponse
+
     suspend fun studentParentComms(
           recipientType: Int,
           classIDs: String,
