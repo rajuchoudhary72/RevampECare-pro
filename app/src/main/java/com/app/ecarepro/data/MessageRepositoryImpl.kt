@@ -258,6 +258,10 @@ class MessageRepositoryImpl @Inject constructor(
         return messageService.getConversationReport(pg, fromDate, tillDate)
     }
 
+    override suspend fun deleteConversation(id: String, device: Int): CommonResponse {
+        return messageService.deleteConversation(id, device)
+    }
+
     override suspend fun studentParentComms(
         recipientType: Int,
         classIDs: String,

@@ -26,6 +26,11 @@ class ConversationReportViewModel @Inject constructor(
         NetworkResult.Loading())
     val convReportStateFlow: StateFlow<NetworkResult<NetworkConversationReport>> = convReportMutableStateFlow
 
+    private val convDeleteMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val convDeleteStateFlow: StateFlow<NetworkResult<CommonResponse>> = convDeleteMutableStateFlow
+
+
 
 
     fun getConversationReport(
@@ -40,6 +45,20 @@ class ConversationReportViewModel @Inject constructor(
             convReportMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             convReportMutableStateFlow .value = NetworkResult.Error(it.message)
+        }
+    }
+
+    fun deleteConversation(
+        id: String,
+        device: Int
+    )=viewModelScope.launch {
+        runCatching {
+            convDeleteMutableStateFlow.value = NetworkResult.Loading( )
+            messageRepository.deleteConversation(id, device)
+        }.onSuccess {
+            convDeleteMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            convDeleteMutableStateFlow .value = NetworkResult.Error(it.message)
         }
     }
 

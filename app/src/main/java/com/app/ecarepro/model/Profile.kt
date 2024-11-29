@@ -67,5 +67,6 @@ data class Profile(
     val rollNo: String,
     val state: Any,
     val transport: String,
+    val apaaR_ID: String,
     val username: Any
 )

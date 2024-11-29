@@ -126,6 +126,13 @@ interface MessageService {
         @Query("MsgID") id: String
     ): ConversationDetailsDto
 
+    @GET("Message/DeleteConversation")
+    suspend fun deleteConversation(
+        @Query("ID") id: String,
+        @Query("Device") device: Int
+    ): CommonResponse
+
+
     @GET("SMS/StudentParent_Comms")
     suspend fun studentParentComms(
         @Query("RecipientType") recipientType: Int,
