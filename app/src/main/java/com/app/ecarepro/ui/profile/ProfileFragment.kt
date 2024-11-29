@@ -491,6 +491,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.uan_number))
             subTitle(profile.uaN_Number)
         }
+        profileItem {
+            id(R.string.nationalnumber)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.nationalnumber))
+            subTitle(profile.nationalCode)
+        }
         /*  profileItem {
               id(R.string.bank_account_number)
               iconRes(R.drawable.ic_bank_account)
@@ -633,6 +639,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.bill_number))
             subTitle(profile.billNumber)
         }
+        profileItem {
+            id(R.string.apaar_id)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.apaar_id))
+            subTitle(profile.apaaR_ID)
+        }
     }
 
     private fun EpoxyController.buildParentModels(profile: Profile) {
@@ -653,6 +665,12 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_contact_no_)
             title(getString(R.string.bill_number))
             subTitle(profile.studentProfile?.billNumber)
+        }
+        profileItem {
+            id(R.string.apaar_id)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.apaar_id))
+            subTitle(profile.studentProfile?.apaaRID)
         }
 
         profileWardDetails {

@@ -472,10 +472,12 @@
     <string name="otp_verification">OTP Verification <font color="#FF0000">*</font></string>
     <string name="resend_otp"><u>Resend OTP</u></string>
     <string name="uan_number">UN Number</string>
+    <string name="nationalnumber">National Teacher ID:</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN Number</string>
     <string name="contact_number">Contact Number</string>
     <string name="bill_number">Bill Number</string>
+    <string name="apaar_id">APAAR ID</string>
     <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
     <string name="alt_email_id">Alternate Email ID</string>

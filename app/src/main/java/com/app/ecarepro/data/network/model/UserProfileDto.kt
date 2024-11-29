@@ -37,6 +37,8 @@ data class Profile(
     val doAnniversary: String?,
     @SerializedName("uaN_Number")
     val uaN_Number: String?,
+    @SerializedName("nationalCode")
+    val nationalCode : String?,
     @SerializedName("dob")
     val dob: String?,
     @SerializedName("doj")
@@ -105,6 +107,8 @@ data class Profile(
     val admissionNo: String?,
     @SerializedName("billNumber")
     val billNumber: String?,
+    @SerializedName("apaaR_ID")
+    val apaaR_ID: String?,
     @SerializedName("birthPlace")
     val birthPlace: String?,
     @SerializedName("bloodGroup")
@@ -244,6 +248,8 @@ data class StudentProfile(
     val contactMobile: String?,
     @SerializedName("billNumber")
     val billNumber: String?,
+    @SerializedName("apaaR_ID")
+    val apaaRID: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("coverImg")

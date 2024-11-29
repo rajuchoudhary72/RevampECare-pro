@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffAssignmentItemBinding
 import com.app.ecarepro.model.TeacherAssignment
 
@@ -59,7 +60,7 @@ class StaffAssignmentListAdapter(
             }
              if (teacherAssignment.isActive!!){
                 bindingm.tvStatus.text="  Active"
-                bindingm.tvStatus.setTextColor(Color.parseColor("#4DAC3C"))
+                bindingm.tvStatus.setTextColor(Color.parseColor(R.color.brand_color.toString()))
 
             }else{
                 bindingm.tvStatus.text="  InActive"

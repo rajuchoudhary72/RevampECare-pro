@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -62,10 +63,11 @@ class VerifyPhoneFragment : Fragment() {
                 } is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.data != null) {
-                        if (it.data. status) {
-                            /*findNavController().navigate(R.id.appointmentFragment, Bundle().apply {
-                                putBoolean("toAppointment", true)
-                            })*/
+                        if (!it.data. status) {
+                            findNavController().navigate(
+                                R.id.appointmentFragment,
+                                bundleOf("toAppointment" to  true)
+                            )
                         }else{
 
                             mainActivity().showMessage(it.data.message)

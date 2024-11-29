@@ -43,7 +43,7 @@
                     android:layout_height="@dimen/_200sdp"
                     android:src="@drawable/guard_avatar"
                     android:layout_marginVertical="@dimen/_10sdp"
-                     />
+                    />
 
 
 
@@ -54,7 +54,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:text="Enter Mobile Number"
                     android:textSize="18sp"
-                    android:drawableStart="@drawable/mobile_icon"
+
                     android:drawablePadding="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
                      />

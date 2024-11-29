@@ -14,12 +14,16 @@ import java.util.Locale
 
 class Constant {
     companion object {
-        val LEAVE_ACTION_FORWARD: Int =4
+        val LEAVE_ACTION_FORWARD: Int = 4
         const val DEVICE_TYPE: Int = 1
+
         /*old base url*/
-   //    const val BASE_URL = "https://api.franciscanecare.net/"
+        //    const val BASE_URL = "https://api.franciscanecare.net/"
         /*New base url*/
-        const val BASE_URL = "https://androidapi.franciscanecare.net/"
+        /*testing  Url */
+        const val BASE_URL = "https://apiuat.franciscanecare.net"
+        /*new  base Url*/
+        // const val BASE_URL = "https://androidapi.franciscanecare.net/"
         const val BASE_URL_COM = "https://app.franciscanecare.com"
         const val AUTH_BEFORE_LOGIN_NEW = "Kq4IYAuSXLh4EsnexoTSfA=="
         const val PDF_Mime_Type = "application/pdf"
@@ -136,7 +140,6 @@ class Constant {
         const val FILTER_TEACHER = 3
 
 
-
         const val DOWNLOAD = 1
         const val EDIT = 2
         const val DELETE = 3
@@ -154,7 +157,6 @@ class Constant {
 
         const val PRINCIPAL = "Principal"
         const val MANAGEMENT = "Management"
-
 
 
         fun getLongTimeDate(sessionStart: String?): Long {
@@ -179,6 +181,7 @@ class Constant {
             }
             return dt
         }
+
         fun dateToShow(inputDateStr: String): String {
             val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
@@ -229,7 +232,11 @@ class Constant {
             return diff
         }
 
-        fun getDateDiffWithSunday(dateString1: String?, dateString2: String?,sandwichEnable:Boolean): Double {
+        fun getDateDiffWithSunday(
+            dateString1: String?,
+            dateString2: String?,
+            sandwichEnable: Boolean,
+        ): Double {
             var diff = 0.0
             val df1: DateFormat = SimpleDateFormat("dd MMM yyyy")
             var date1: Date? = null
@@ -245,10 +252,10 @@ class Constant {
             val cal2 = Calendar.getInstance()
             cal2.time = date2
             while (!cal1.after(cal2)) {
-                if (sandwichEnable){
+                if (sandwichEnable) {
                     diff++
                     cal1.add(Calendar.DATE, 1)
-                }else{
+                } else {
                     val dayOfWeek = cal1[Calendar.DAY_OF_WEEK]
                     if (dayOfWeek == Calendar.SUNDAY) {
                         cal1.add(Calendar.DATE, 1)
@@ -341,6 +348,7 @@ class Constant {
             val currentDate = Date()
             return dateFormat.format(currentDate)
         }
+
         fun getCurrentimeSecond(): String {
             val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm:ss", Locale.ENGLISH)
             val currentDate = Date()
@@ -575,7 +583,7 @@ class Constant {
 
             val extension = url.substringAfterLast(".", "").lowercase()
 
-            return when(extension){
+            return when (extension) {
                 "pdf" -> 1
                 "jpg" -> 2
                 "docx" -> 3
@@ -586,7 +594,7 @@ class Constant {
         }
 
         fun checkApiResponse(errorCode: Int, context: Context): Boolean {
-            if (errorCode==1) {
+            if (errorCode == 1) {
                 Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
                 return true
             } else {
@@ -594,18 +602,16 @@ class Constant {
             }
         }
 
-          fun isNetworkConnected(context: Context): Boolean {
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        fun isNetworkConnected(context: Context): Boolean {
+            val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val capabilities =
+                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             return capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
         }
 
 
     }
-
-
-
-
 
 
 }

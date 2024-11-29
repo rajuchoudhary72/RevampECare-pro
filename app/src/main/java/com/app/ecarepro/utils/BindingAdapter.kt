@@ -42,7 +42,7 @@ fun ImageView.taskPriorityColor(priority: Int) {
         }
 
         2 -> {
-            R.color.red
+            R.color.high_periopty
         }
 
         else -> {
@@ -79,7 +79,53 @@ fun ImageView.taskStatusColor(priority: Int) {
     }
     imageTintList = ContextCompat.getColorStateList(context, colorId)
 }
-
+@BindingAdapter("taskTextPriorityColor")
+fun TextView.taskTextPriorityColor(priority: Int) {
+    val colorId = when (priority) {
+        0 -> {
+            text = "Open"
+            R.color.grey_40
+        }
+        1 -> {
+            text = "In Progress"
+            com.asynctaskcoffee.audiorecorder.R.color.soft_blue
+        }
+        2 -> {
+            text = "Hold"
+            R.color.red
+        }
+        else -> {
+            text = "Closed"
+            com.lassi.R.color.colorAccent
+        }
+    }
+    setTextColor(ContextCompat.getColor(context, colorId))
+}
+@BindingAdapter("taskTextStatusColor")
+fun TextView.taskTextStatusColor(priority: Int) {
+    val colorId = when (priority) {
+        -1 -> {
+            R.color.grey_80
+        }
+        0 -> {
+            text = "Open"
+            R.color.grey_60
+        }
+        1 -> {
+            text = "In Progress"
+            R.color.pending_color
+        }
+        2 -> {
+            text = "Hold"
+            R.color.red
+        }
+        else -> {
+            text = "Closed"
+            R.color.green
+        }
+    }
+    setTextColor(ContextCompat.getColor(context, colorId))
+}
 
 @BindingAdapter("showEditButton")
 fun TextView.showEditButton(show: Boolean) {

@@ -48,12 +48,12 @@ class ClassListAdapter(
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
+           holder. itemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
         if (academicYearList[holder.bindingAdapterPosition].checked == true) {
-            holder.  itemName.setTextColor(Color.parseColor("#4DAC3C"))
+            holder.  itemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
             holder. checkImage.setImageResource(R.drawable.ic_baseline_check_box_24)
         } else {
             holder.  itemName.setTextColor(Color.parseColor("#000000"))

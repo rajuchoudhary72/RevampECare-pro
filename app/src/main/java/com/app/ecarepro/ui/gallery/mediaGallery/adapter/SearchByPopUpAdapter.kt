@@ -44,7 +44,7 @@ class SearchByPopUpAdapter(private var routeLSTList: List<String>,
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
+           holder. itemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }

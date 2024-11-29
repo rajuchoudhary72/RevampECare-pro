@@ -43,7 +43,7 @@ class SubmitAssignListAdapter(
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#000000"))
         }else{
             bindingm.tvSubmittedBy.text= viewAssignmentFragment.getString(R.string.online)
-            bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#4DAC3C"))
+            bindingm.tvSubmittedBy.setTextColor(Color.parseColor(R.color.brand_color.toString()))
 
         }
 

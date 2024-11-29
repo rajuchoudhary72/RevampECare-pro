@@ -70,7 +70,7 @@ class StoppersPopUpListAdapter(
              }
 
              if (data.checked) {
-                 tvItemName.setTextColor(Color.parseColor("#4DAC3C"))
+                 tvItemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
                  checkImage.setImageResource(R.drawable.ic_baseline_check_box_24)
              } else {
                  tvItemName.setTextColor(Color.parseColor("#000000"))
