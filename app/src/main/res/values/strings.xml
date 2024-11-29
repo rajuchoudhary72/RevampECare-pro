@@ -419,7 +419,13 @@
         <item>Subject</item>
         <item>Class</item>
         <item>Teacher</item>
+    </string-array>
 
+    <string-array name="filterTypeSyllabus">
+        <item>All</item>
+        <item>Class</item>
+        <item>Title</item>
+        <item>Subject</item>
     </string-array>
 
     <string name="all">All</string>
@@ -807,5 +813,7 @@
     <string name="head_name">Head Name</string>
     <string name="bill_no">Bill No.</string>
     <string name="assignment_by">Assignment By :</string>
+    <string name="under_score">-</string>
+    <string name="apaar_id">APAAR ID</string>
 
 </resources>

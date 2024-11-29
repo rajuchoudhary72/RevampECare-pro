@@ -6,6 +6,7 @@ data class NetworkConversationReport(
     val conversation: List<Conversation>,
     val errorCode: Int,
     val message: String,
+    val canDeleteConv: Boolean,
     val status: String,
     val total: Int
 )

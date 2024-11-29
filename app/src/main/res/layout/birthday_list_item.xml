@@ -16,13 +16,13 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/user_img"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
             app:strokeColor="?attr/colorOutlineVariant"
             app:strokeWidth="1dp"
             android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             />
 
 
@@ -156,6 +156,7 @@
 
 
             <LinearLayout
+                android:id="@+id/llFatherName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
