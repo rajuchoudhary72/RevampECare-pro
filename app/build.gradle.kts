@@ -24,7 +24,7 @@ android {
             keyAlias = "ecareProAndroidBeta"
             keyPassword = "eCarePro"
         }
-        create("MYSFPS") {
+        create("MYSFHS") {
             storeFile = file("strawberry_key")
             storePassword = "strawberryapp"
             keyAlias = "strawberryapp"
@@ -96,13 +96,13 @@ android {
             resValue("string", "app_name", "e-Care-Dev")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
-        create("MYSFPS") {
+        create("MYSFHS") {
             dimension = "apps"
-            resValue("string", "app_name", "MYSFPS")
+            resValue("string", "app_name", "MYSFHS")
             applicationId = "com.franciscan.strawberry"
             versionCode = 29
             versionName = "2.0.4"
-            signingConfig = signingConfigs.getByName("MYSFPS")
+            signingConfig = signingConfigs.getByName("MYSFHS")
         }
         create("MYSFPS Play") {
             dimension = "apps"
