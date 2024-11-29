@@ -91,12 +91,12 @@ android {
     flavorDimensions += listOf("apps")
 
     productFlavors {
-        create("Franciscan e-Care ") {
+        create("Franciscan e-Care") {
             dimension = "apps"
             resValue("string", "app_name", "e-Care-Dev")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
-        create("MYSFPS ") {
+        create("MYSFPS") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry"
@@ -104,7 +104,7 @@ android {
             versionName = "2.0.4"
             signingConfig = signingConfigs.getByName("MYSFPS")
         }
-        create("MYSFPS Play ") {
+        create("MYSFPS Play") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
