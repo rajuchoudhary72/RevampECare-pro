@@ -39,6 +39,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,6 +47,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var appRepository: AppRepository
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d("remote", "From: ${remoteMessage}")
         Log.d("FCM", "From: ${remoteMessage.from}")
         Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
         remoteMessage.data.isNotEmpty().let {
@@ -146,7 +148,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(123421, notificationBuilder.build())
+        //notificationManager.notify(123421, notificationBuilder.build())
+        notificationManager.notify(UUID.randomUUID().hashCode(), notificationBuilder.build())
     }
     override fun onNewToken(token: String) {
         // Handle new or refreshed FCM registration token
