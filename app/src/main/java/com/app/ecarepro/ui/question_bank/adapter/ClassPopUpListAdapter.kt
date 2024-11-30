@@ -39,7 +39,7 @@ class ClassPopUpListAdapter(private var infractionTypeList: List<MyClasse>,
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
+           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }

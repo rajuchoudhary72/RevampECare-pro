@@ -40,7 +40,7 @@ class SubjectsClassPopUpListAdapter(private var infractionTypeList: List<Subject
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
+           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
