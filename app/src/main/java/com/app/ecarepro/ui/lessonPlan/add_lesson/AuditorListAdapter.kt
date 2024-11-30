@@ -41,7 +41,7 @@ class AuditorListAdapter(private var auditorLsts: List<AuditorLst>,
             }
 
             if (lastIndex == holder.bindingAdapterPosition) {
-                tvItemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
+                tvItemName.setTextColor(Color.parseColor("#4DAC3C"))
             } else {
                 tvItemName.setTextColor(Color.parseColor("#991E1D0E"))
             }

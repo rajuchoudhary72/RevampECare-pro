@@ -60,7 +60,7 @@ class StaffAssignmentListAdapter(
             }
              if (teacherAssignment.isActive!!){
                 bindingm.tvStatus.text="  Active"
-                bindingm.tvStatus.setTextColor(Color.parseColor(R.color.brand_color.toString()))
+                bindingm.tvStatus.setTextColor(Color.parseColor("#4DAC3C"))
 
             }else{
                 bindingm.tvStatus.text="  InActive"

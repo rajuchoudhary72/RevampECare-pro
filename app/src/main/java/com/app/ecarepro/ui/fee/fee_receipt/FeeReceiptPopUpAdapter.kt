@@ -44,7 +44,7 @@ class FeeReceiptPopUpAdapter(private var routeLSTList: List<FeeReceiptSession>,
         }
 
         if (lastIndex == holder.bindingAdapterPosition) {
-           holder. itemName.setTextColor(Color.parseColor(R.color.brand_color.toString()))
+           holder. itemName.setTextColor(Color.parseColor("#4DAC3C"))
         } else {
             holder.itemName.setTextColor(Color.parseColor("#000000"))
         }
