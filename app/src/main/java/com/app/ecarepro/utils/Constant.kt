@@ -17,13 +17,8 @@ class Constant {
         val LEAVE_ACTION_FORWARD: Int = 4
         const val DEVICE_TYPE: Int = 1
 
-        /*old base url*/
-        //    const val BASE_URL = "https://api.franciscanecare.net/"
-        /*New base url*/
-        /*testing  Url */
-        const val BASE_URL = "https://apiuat.franciscanecare.net"
         /*new  base Url*/
-        // const val BASE_URL = "https://androidapi.franciscanecare.net/"
+         const val BASE_URL = "https://androidapi.franciscanecare.net/"
         const val BASE_URL_COM = "https://app.franciscanecare.com"
         const val AUTH_BEFORE_LOGIN_NEW = "Kq4IYAuSXLh4EsnexoTSfA=="
         const val PDF_Mime_Type = "application/pdf"
