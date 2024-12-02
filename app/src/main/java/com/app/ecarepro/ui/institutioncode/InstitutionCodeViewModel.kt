@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.institutioncode
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.model.asNetworkSchool
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -21,6 +22,8 @@ class InstitutionCodeViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val schoolDatabase: SchoolDatabase
 ) : ViewModel() {
+
+    val canEnterSchoolCode = BuildConfig.FLAVOR == "Franciscan e-Care"
 
 
     val schools = userDataStore.getCurrentSchoolCodeAsFlow().flatMapLatest { schoolCode ->

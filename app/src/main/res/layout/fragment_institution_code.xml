@@ -134,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -149,14 +150,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:drawablePadding="8dp"
+                android:paddingBottom="10dp"
                 android:text="Powered by"
                 android:textAppearance="?attr/textAppearanceCaption"
                 android:textColor="@color/grey_40"
-                android:paddingBottom="10dp"
                 app:drawableEndCompat="@drawable/logo_franciscan_gray"
-                app:layout_constraintTop_toBottomOf="@+id/carousel_school"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/carousel_school"
+                app:layout_constraintVertical_bias="0.84000003" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

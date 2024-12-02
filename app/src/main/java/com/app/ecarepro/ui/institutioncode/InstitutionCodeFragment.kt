@@ -61,7 +61,7 @@ class InstitutionCodeFragment : Fragment() {
 
         institutionCodeViewModel.schools.observe(viewLifecycleOwner) { schools ->
             lifecycleScope.launch {
-                binding.carouselSchool.isVisible = schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()
+                binding.carouselSchool.isVisible = (schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.canEnterSchoolCode
             }
             binding.carouselSchool.withModels {
                 schools.forEach { school ->
@@ -88,6 +88,7 @@ class InstitutionCodeFragment : Fragment() {
             binding.btnContinue.isEnabled = true
         }
 
+
         binding.btnContinue.setOnClickListener {
             binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
             (requireActivity() as MainActivity).showLoader(true)
@@ -107,6 +108,9 @@ class InstitutionCodeFragment : Fragment() {
                 }
             }
         }
+
+        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.canEnterSchoolCode
+
         binding.btnFindSchoolCollege.setOnClickListener {
             setFragmentResultListener(SearchInstitutionFragment.REQUEST_KEY_SCHOOL_CODE) { _, data ->
                 data.getString(SearchInstitutionFragment.PRAM_SCHOOL_CODE)?.let {
@@ -119,6 +123,14 @@ class InstitutionCodeFragment : Fragment() {
             findNavController().navigate(R.id.helpFragment)
         }
 
+
+        if(institutionCodeViewModel.canEnterSchoolCode.not()){
+            binding.textInstitutionCode.apply {
+                setText("MYSFHS")
+                isEnabled = false
+                binding.btnContinue.isEnabled = true
+            }
+        }
     }
 
     private fun navigateToSignFragment(schoolCode: String, isStudentLoginBlocked: Boolean) {

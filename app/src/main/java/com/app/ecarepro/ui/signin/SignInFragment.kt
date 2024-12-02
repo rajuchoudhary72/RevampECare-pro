@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.runBlocking
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.databinding.FragmentSignInBinding
@@ -33,6 +34,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
+
+    val canChangeSchoolCode = BuildConfig.FLAVOR == "Franciscan e-Care"
+
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
@@ -69,6 +73,9 @@ class SignInFragment : Fragment() {
         binding.btnHelp.setOnClickListener {
             findNavController().navigate(R.id.helpFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
         }
+
+        binding.btnFindSchoolCollege.isVisible = canChangeSchoolCode
+
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
                 R.id.schoolCodeFragment,
