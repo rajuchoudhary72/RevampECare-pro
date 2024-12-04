@@ -81,10 +81,11 @@ class CustomResponseInterceptor @Inject constructor(
                     .setPositiveButton("Retry") { _, _ ->
                          dialogShown=false
                         continuation.resume(true) // Retry selected
-                    } .setNegativeButton("Cancel") { _, _ ->
-                        dialogShown=false
-                        continuation.resume(false) // Cancel selected
                     }
+//                        .setNegativeButton("Cancel") { _, _ ->
+//                        dialogShown=false
+//                        continuation.resume(false) // Cancel selected
+//                    }
                         .setCancelable(false)
                     .create()
                 dialog.show()
