@@ -74,6 +74,16 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                     append("Rejected On : ")
             }}
 
+            if (status==-1) {
+                llCancel.isVisible=true
+            }else{
+                llCancel.isVisible=false
+            }
+
+            tvCancelBy.text=data.cancelby
+            tvCancelOn.text= data.cancelledOn
+
+
             tvApproveBy.text= buildString {
                  append(data.teacherName)
             }
@@ -123,12 +133,34 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
             tvForward.setOnClickListener {
                 leaveReportFragment.onItemClick(data,4,false)
             }
+            tvCancel.setOnClickListener {
+                leaveReportFragment.onItemClick(data,5,false)
+
+            }
 
 
 
             if (applType==3){
-                if (data.status=="Pending"){
-                    llApproveRej.isVisible=true
+
+                if(canTalkeAction){
+                    when (data.status) {
+                        "Pending" -> {
+                            llApproveRej.isVisible=true
+                            tvCancel.isVisible=false
+                        }
+                        "Approved" -> {
+                            llApproveRej.isVisible=false
+                            tvCancel.isVisible = data.showCancelButton
+                        }
+                        "Cancelled" -> {
+                            llApproveRej.isVisible=false
+                            tvCancel.isVisible=false
+                        }
+                        else -> {
+                            llApproveRej.isVisible=false
+                            tvCancel.isVisible=false
+                        }
+                    }
                 }
 
                 cbLeave.isVisible=false
