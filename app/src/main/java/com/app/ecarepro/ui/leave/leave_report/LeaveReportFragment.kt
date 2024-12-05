@@ -81,6 +81,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 applType=3
                 binding.llAllApproveRej.isVisible=false
                 binding.cbAllSelect.isVisible=false
+                binding.btnCancel.isVisible=true
             }
 
         }catch (_:Exception){}
@@ -104,12 +105,22 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     status=0
                     pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
-                    binding.cbAllSelect.isVisible=true
-                    binding.llAllApproveRej.isVisible=true
+                    if (applType!=3){
+                        binding.cbAllSelect.isVisible=true
+                        binding.llAllApproveRej.isVisible=true
+                    }
                 }
                 R.id.btn_app -> {
                     leaveReportAdapter.clearData()
                     status=1
+                    pageIndex=1
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    binding.cbAllSelect.isVisible=false
+                    binding.llAllApproveRej.isVisible=false
+                }
+                R.id.btn_cancel -> {
+                    leaveReportAdapter.clearData()
+                    status=Constant.LEAVE_ACTION_CANCEL
                     pageIndex=1
                     leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
                     binding.cbAllSelect.isVisible=false
@@ -207,8 +218,10 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
                              }
                             if (status==0){
-                                binding.llAllApproveRej.isVisible=it.data.canTalkeAction
-                                binding.cbAllSelect.isVisible=it.data.canTalkeAction
+                                if (applType!=3){
+                                    binding.cbAllSelect.isVisible=it.data.canTalkeAction
+                                    binding.llAllApproveRej.isVisible=it.data.canTalkeAction
+                                }
                             }
                             mLeaveList=it.data.dtl.toMutableList()
                            if (!it.data.myReporting.isNullOrEmpty()){
@@ -266,6 +279,16 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     popUpForward(t.lvID)
                 }else{
                     mainActivity().showMessage("No Reporting Found")
+                }
+            }
+            5 ->{
+                leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_CANCEL,0,"").invokeOnCompletion {
+                    leaveReportAdapter.clearData()
+                    status=1
+                    pageIndex=1
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    binding.cbAllSelect.isVisible=false
+                    binding.llAllApproveRej.isVisible=false
                 }
             }
         }

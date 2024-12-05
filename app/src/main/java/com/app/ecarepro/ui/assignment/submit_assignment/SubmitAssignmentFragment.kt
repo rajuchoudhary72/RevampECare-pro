@@ -423,9 +423,12 @@ class SubmitAssignmentFragment : Fragment() {
             }
             3 -> {
 
-                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
+//                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+//                    putString(Constant.URL_ARGUMENT, fileSource)
+//                })
             }
             else -> {
                 val androidDownloader = AndroidDownloader(requireContext())
