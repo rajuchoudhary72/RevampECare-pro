@@ -84,10 +84,13 @@ class Constant {
         const val CHECK_OUT = 5
         const val APPROVE = 3
         const val REJECT = 4
-
+        const val LEAVE_APPROVE = "Approved"
+        const val LEAVE_REJECT = "Rejected"
+        const val LEAVE_PENDING = "Pending"
         const val FROM = "from"
         const val LEAVE_ACTION_APPROVE = 1
         const val LEAVE_ACTION_REJECT = 2
+        const val LEAVE_ACTION_CANCEL = -1
 
         const val PROFILE_FRA_STU = "ProfileFragmentStudent"
         const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
