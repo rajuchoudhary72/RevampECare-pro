@@ -51,7 +51,6 @@
                 android:id="@+id/toggleButton_type_leave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="3"
                 android:layout_gravity="center"
                 android:gravity="center"
                 app:checkedButton="@id/btn_pen"
@@ -95,6 +94,19 @@
                     android:text="@string/rejected"
                     app:strokeColor="@color/white"
                     app:rippleColor="@color/white"
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cancel"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="@string/cancel"
+                    app:strokeColor="@color/white"
+                    app:rippleColor="@color/white"
+                    android:visibility="gone"
                     app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
 
 

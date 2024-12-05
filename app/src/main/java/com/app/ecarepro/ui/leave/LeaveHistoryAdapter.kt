@@ -9,6 +9,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffLeaveListItemBinding
 import com.app.ecarepro.databinding.StudentsLeaveListItemBinding
 import com.app.ecarepro.model.Dtl
+import com.app.ecarepro.utils.Constant
 
 class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
                           private var leaveHistoryFragment: LeaveHistoryFragment
@@ -67,10 +68,22 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
 
                 deleteAlert(data)
             }
-            if (data.status=="Approved"){
-                binding.tvStatus.setBackgroundResource(R.drawable.background_box_rectangle_app_color)
-            }else{
-                binding.tvStatus.setBackgroundResource(R.drawable.tv_bg_rounded_status_blue)
+
+            when (data.status) {
+                Constant.LEAVE_APPROVE -> {
+                    binding.tvStatus.setBackgroundResource(R.drawable.background_box_rectangle_app_color)
+                    binding.dot.isVisible=false
+
+                }
+                Constant.LEAVE_REJECT -> {
+                    binding.tvStatus.setBackgroundResource(R.drawable.tv_bg_rounded_status_red)
+                    binding.dot.isVisible=false
+
+                }
+                Constant.LEAVE_PENDING -> {
+                    binding.tvStatus.setBackgroundResource(R.drawable.tv_bg_rounded_status_blue)
+                    binding.dot.isVisible=true
+                }
             }
             binding.tvAppliedOn.text= buildString {
                 append("Applied On : ")

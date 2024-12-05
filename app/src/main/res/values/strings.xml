@@ -818,5 +818,8 @@
     <string name="under_score">-</string>
     <string name="apaar_id">APAAR ID</string>
     <string name="national_teacher_id">National Teacher ID</string>
+    <string name="cancel_leave">Cancel Leave</string>
+    <string name="cancelled_on">Cancelled On:</string>
+    <string name="cancelled_by">Cancelled By:</string>
 
 </resources>

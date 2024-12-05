@@ -140,7 +140,7 @@ class ViewLessonPlanFragment : Fragment() {
         when (Constant.isPdfUrl(fileSource)) {
             1 -> {
                 val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+                androidDownloader.downloadFile(fileSource, getString(R.string.lesson))
             }
 
             2 -> {
@@ -149,9 +149,8 @@ class ViewLessonPlanFragment : Fragment() {
             }
 
             3 -> {
-                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.lesson),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
             }
 

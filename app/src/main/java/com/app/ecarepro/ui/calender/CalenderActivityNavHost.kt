@@ -63,55 +63,18 @@ class CalenderActivityNavHost : Fragment() {
 
                             if (it.data.activityMonth.isNotEmpty()) {
                                 val fragmentList = listOf(
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[0],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[1],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[2],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[3],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[4],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[5],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[6],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[7],
-                                        it.data.session
-                                    ), 
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[8],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[9],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[10],
-                                        it.data.session
-                                    ),
-                                    ActivityCalenderFragment(
-                                        it.data.activityMonth[11],
-                                        it.data.session
-                                    ),
-                                    Fragment()
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[0], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[1], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[2], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[3], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[4], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[5], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[6], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[7], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[8], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[9], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[10], it.data.session),
+                                    ActivityCalenderFragment.newInstance( it.data.activityMonth[11], it.data.session)
                                 )
 
                                 val viewPagerAdapter = ViewPagerAdapter(
