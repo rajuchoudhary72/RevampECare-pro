@@ -25,5 +25,8 @@ data class Dtl(
     val submittedOn: String,
     val teacherID: Int,
     val teacherName: String,
+    val cancelby: String?,
+    val cancelledOn: String?,
+    val showCancelButton: Boolean,
     val tillDate: String
 )
