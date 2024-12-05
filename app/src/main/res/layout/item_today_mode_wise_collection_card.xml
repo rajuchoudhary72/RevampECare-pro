@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="isExpanded"
             type="java.lang.Boolean" />
+
+        <variable
+            name="filterBy"
+            type="java.lang.String" />
 
         <variable
             name="collectionModeWise"
@@ -17,6 +21,10 @@
             name="toggleCardVisibility"
             type="android.view.View.OnClickListener" />
 
+        <variable
+            name="onClickFilter"
+            type="android.view.View.OnClickListener" />
+
     </data>
 
 
@@ -24,96 +32,114 @@
         android:id="@+id/Button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:neumorph_backgroundColor="@color/background_dashboard"
         app:neumorph_lightSource="leftTop"
         app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
-        app:neumorph_backgroundColor="@color/background_dashboard"
-        app:neumorph_strokeWidth="@dimen/_1sdp"
-        >
+        app:neumorph_strokeWidth="@dimen/_1sdp">
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_10sdp"
+            android:animateLayoutChanges="true">
+
+
+            <ImageView
+                android:id="@+id/image_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="@{isExpanded ? 90:0}"
+                android:src="@{isExpanded ? @drawable/ic_arrow_right_black:@drawable/ic_arrow_right_white}"
+                app:layout_constraintBottom_toBottomOf="@+id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title"
+                app:tint="@color/black"
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_arrow_right_white" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:drawablePadding="6dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center_vertical"
+                android:onClick="@{toggleCardVisibility}"
+                android:paddingVertical="5dp"
+                android:text="Daily Mode Wise Collection"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_arrow"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/filterBy"
+                isVisible="@{isExpanded}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/bg_outline_round_corner_green"
+                android:drawableEnd="@drawable/ic_arrow_right_black"
+                android:drawablePadding="6dp"
+                android:fontFamily="@font/calibri_bold"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:onClick="@{onClickFilter}"
+                android:paddingHorizontal="@dimen/_13sdp"
+                android:paddingVertical="10dp"
+                android:text="@{filterBy}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                tools:text="Today's " />
+
+
+            <TextView
+                android:id="@+id/text_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/ubuntu_light"
+                android:text="Total"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <TextView
+                android:id="@+id/text_total_collection"
+                rupeeText="@{collectionModeWise.total()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_medium"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_total"
+                tools:text="₹3,43,90,000" />
+
+
+            <LinearLayout
+                android:id="@+id/layoutCollections"
+                collectionItems="@{collectionModeWise.transactionDetails}"
+                isVisible="@{isExpanded}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:layout_margin="@dimen/_10sdp"
-                >
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/filterBy" />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/groupCollapse"
+                isVisible="@{!isExpanded}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="text_total,text_total_collection" />
 
-                <ImageView
-                    android:id="@+id/image_arrow"
-                    app:layout_constraintTop_toTopOf="@+id/title"
-                    app:layout_constraintBottom_toBottomOf="@+id/title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_width="wrap_content"
-                    android:rotation="@{isExpanded ? 90:0}"
-                    android:src="@{isExpanded ? @drawable/ic_arrow_right_black:@drawable/ic_arrow_right_white}"
-                    app:tint="@color/black"
-                    tools:src="@drawable/ic_arrow_right_white"
-                    android:layout_height="wrap_content"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:drawablePadding="6dp"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="5dp"
-                    android:onClick="@{toggleCardVisibility}"
-                    android:text="Today's Mode Wise Collection"
-
-                    app:layout_constraintStart_toEndOf="@+id/image_arrow"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <TextView
-                    android:id="@+id/text_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:fontFamily="@font/ubuntu_light"
-                    android:text="Total"
-                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title" />
-
-                <TextView
-                    android:id="@+id/text_total_collection"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/ubuntu_medium"
-                    rupeeText="@{collectionModeWise.total()}"
-                    tools:text="₹3,43,90,000"
-                    android:textAppearance="?attr/textAppearanceTitleLarge"
-                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/text_total" />
-
-
-                <LinearLayout
-                    android:id="@+id/layoutCollections"
-                    isVisible="@{isExpanded}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    collectionItems="@{collectionModeWise.transactionDetails}"
-                    android:layout_marginTop="20dp"
-                    android:orientation="vertical"
-                    app:layout_constraintTop_toBottomOf="@+id/title" />
-
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/groupCollapse"
-                    isVisible="@{!isExpanded}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="text_total,text_total_collection" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </soup.neumorphism.NeumorphCardView>
-
-
 
 
 </layout>

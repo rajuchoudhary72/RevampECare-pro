@@ -25,7 +25,9 @@ class UserDatabaseImpl @Inject constructor(
     override suspend fun getUser(userId: Int, schoolCode: String, userType: Int): UserEntity {
         return userDao.getUser(userId, schoolCode, userType)
     }
-
+    override suspend fun updateSchool(schoolEntity: SchoolEntity) {
+        schoolDao.updateSchool(schoolEntity)
+    }
     override fun getUserFlow(userId: Int): Flow<UserEntity?> {
         return getUsersFlow().map { users ->
             users.firstOrNull { it.id == userId } ?: users.firstOrNull()

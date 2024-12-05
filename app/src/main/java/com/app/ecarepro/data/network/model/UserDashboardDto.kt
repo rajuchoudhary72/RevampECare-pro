@@ -64,6 +64,10 @@ data class UserDashboardDto(
     val showLibraryDTL: Boolean?,
     @SerializedName("status")
     val status: String?,
+    @SerializedName("sessionStartDate")
+    val sessionStartDate: String?,
+    @SerializedName("sessionEndDate")
+    val sessionEndDate: String?,
     @SerializedName("timetable")
     val timetable: List<Timetable>?,
     @SerializedName("upcomingActivities")
@@ -263,7 +267,7 @@ data class FeeCollection(
 
 data class FeeType(
     @SerializedName("feeTypeID")
-    val feeTypeID: Int?,
+    val feeTypeID: Int,
     @SerializedName("feeTypeName")
     val feeTypeName: String?
 )

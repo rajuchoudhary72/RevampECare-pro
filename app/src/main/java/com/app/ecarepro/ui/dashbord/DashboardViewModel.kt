@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.CollectionModeWise
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -18,12 +21,27 @@ class DashboardViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
     private val feeCollection = MutableStateFlow<FeeCollection?>(null)
+    private val modelWiseCollection = MutableStateFlow<ModeWiseCollection?>(null)
+
     val dashboard = combine(
         flow = userDataStore.getDashboardData(),
         flow2 = userDataStore.getFeeds(),
-        flow3 = feeCollection
-    ) { dashboardData, feeds, feeCollection ->
-        Triple(dashboardData, feeds, feeCollection)
+        flow3 = feeCollection,
+        flow4 = modelWiseCollection
+    ) { dashboardData, feeds, feeCollection, modelWiseColl ->
+
+        var data = dashboardData
+
+        if (feeCollection != null) {
+            data = dashboardData?.copy(feeCollection = feeCollection)
+        }
+
+        if (modelWiseColl != null) {
+            data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
+        }
+
+
+        data
     }
     fun getFeeCollection(
         feeTypeId: Int,
@@ -33,6 +51,23 @@ class DashboardViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             userRepository.feeCollection(feeTypeId, fromDate, tillDate).collectLatest {
+                if (it.isSuccess) {
+                    feeCollection.value = it.getOrNull()
+                }
+                onResponse.invoke(it.isSuccess, it.exceptionOrNull()?.message)
+            }
+        }
+    }
+
+    fun getTodayModeWiseCollection(
+        date: String,
+        onResponse: (Boolean, String?) -> Unit
+    ) {
+        viewModelScope.launch {
+            userRepository.todayModeWiseCollection(date).collectLatest {
+                if(it.isSuccess){
+                    modelWiseCollection.value = it.getOrNull()
+                }
                 onResponse.invoke(it.isSuccess, it.exceptionOrNull()?.message)
             }
         }
