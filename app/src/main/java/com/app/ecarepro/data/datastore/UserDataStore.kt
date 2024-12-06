@@ -20,7 +20,7 @@ interface UserDataStore {
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)
     suspend fun saveMessageSettings(messageSettings: MessageSettings)
-    suspend fun getMessageSettings(): Flow<MessageSettings?>
+     fun getMessageSettings(): Flow<MessageSettings?>
     suspend fun getCurrentUserId(): Int?
     fun getCurrentUserIdAsFlow(): Flow<Int?>
     suspend fun setCurrentSchoolCode(schoolCode: String)

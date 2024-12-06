@@ -66,9 +66,12 @@ class ComposeViewModel @Inject constructor(
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
     val attachmentVisible = combine(
         flow = composeMessageType,
-        flow2 = userDataStore.getUserAsFlow()
-    ) { messageType, user ->
-        messageType == ComposeMessageType.ONLY_APP_MESSAGE
+        flow2 = userDataStore.getUserAsFlow(),
+        flow3 = userDataStore.getMessageSettings()
+    ) { messageType, user, messageSettings ->
+        val hideMessageAttachment =
+            messageSettings?.media == null || (messageSettings.media.browseAudio == false && messageSettings.media.browsePDF == false && messageSettings.media.browseImg == false)
+        messageType == ComposeMessageType.ONLY_APP_MESSAGE && hideMessageAttachment.not()
     }.asLiveData()
     var currentLocation: Pair<Double, Double>? = null
 
