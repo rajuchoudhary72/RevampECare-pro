@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.assignment.staff.postAssignment
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Base64
 import androidx.core.net.toUri
@@ -179,9 +180,11 @@ class PostAssignmentViewModel @Inject constructor(
                         fileURL = null
                     ))
                 } else {
-                    val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
+
+                    val bitmap = FileAccess.bitmapFromFile(context, attachment.path!!)
                     val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                    val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+                    val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+
                     attList.add(com.app.ecarepro.data.network.model.Attachment(
                         attachment = imageString,
                         fileExt = imageExt,
@@ -194,6 +197,14 @@ class PostAssignmentViewModel @Inject constructor(
         }
     }
 
+    private fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
 
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value

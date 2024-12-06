@@ -9,6 +9,7 @@ import com.app.ecarepro.model.Profile
 import com.app.ecarepro.model.ProfileAttendanceDTL
 import com.app.ecarepro.model.RecentAppreciation
 import com.app.ecarepro.model.RecentInfraction
+import com.app.ecarepro.model.ReportClasse
 import com.app.ecarepro.model.SiblingDetails
 import com.app.ecarepro.model.TransDetails
 
@@ -22,6 +23,7 @@ data class NetworkStudentProfile(
     val feeDues: String,
     val feeSummery: FeeSummery,
     val recentInfractions: List<RecentInfraction>,
+    val reportCardDTLs: List<ReportClasse>,
     val recentAppreciations: List<RecentAppreciation>,
     val medicalCard: MedicalCard,
 

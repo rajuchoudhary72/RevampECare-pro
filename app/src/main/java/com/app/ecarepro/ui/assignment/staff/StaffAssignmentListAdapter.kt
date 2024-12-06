@@ -2,18 +2,17 @@ package com.app.ecarepro.ui.assignment.staff
 
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffAssignmentItemBinding
 import com.app.ecarepro.model.TeacherAssignment
-import com.app.ecarepro.utils.Constant
 
 class StaffAssignmentListAdapter(
     private var activityLST: List<TeacherAssignment>,
-    private var activityCalenderFragment: StaffAssignmentsListFragment,
-    val teacherTypeUser: Boolean
+    private var activityCalenderFragment: StaffAssignmentsListNavHostFragment,
+    val isReportView: Boolean
 ) :
     RecyclerView.Adapter<StaffAssignmentListAdapter.AssignmentListAdapter>() {
 
@@ -21,28 +20,15 @@ class StaffAssignmentListAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListAdapter {
-        bindingm =
-            StaffAssignmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm = StaffAssignmentItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AssignmentListAdapter(bindingm )
     }
 
     override fun getItemCount(): Int = activityLST.size
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
-
-
-
-
         holder.bind(activityLST[position])
-
-
-
-
-
-
-
-
-     }
+    }
 
 
    inner class AssignmentListAdapter(val bindingm: StaffAssignmentItemBinding) : RecyclerView.ViewHolder(bindingm.root) {
@@ -51,9 +37,14 @@ class StaffAssignmentListAdapter(
 
             bindingm.assignmentData = teacherAssignment
 
-            if (!teacherTypeUser) {
+            if (!teacherAssignment.isMine!!) {
                 bindingm.llDelete.isVisible=false
                 bindingm.llEdit.isVisible=false
+            }
+
+            if (isReportView){
+                bindingm.llAssignmentBy.isVisible=true
+                bindingm.tvAssignmentBy.text = teacherAssignment.assignmentBy
             }
 
             bindingm.tvClass.text = teacherAssignment.`class`

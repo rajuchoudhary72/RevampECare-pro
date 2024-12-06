@@ -24,6 +24,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentFeeCertificateBinding
 import com.app.ecarepro.model.FeeCertificateListItem
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +38,8 @@ import java.io.IOException
 class FeeCertificateFragment : Fragment() {
 
 
-     private lateinit var binding: FragmentFeeCertificateBinding
+    private var firstTime: Boolean=true
+    private lateinit var binding: FragmentFeeCertificateBinding
     private val feeCertificateViewModel: FeeCertificateViewModel by viewModels()
     private lateinit var yearData: List<FeeCertificateListItem>
     private   var yearDataString:   ArrayList<String> =  ArrayList( )
@@ -57,14 +59,14 @@ class FeeCertificateFragment : Fragment() {
 
         binding.autoCompleteYear.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-
+                firstTime=true
                 getFeeCertificateDownload(yearData[position].yrid,yearData[position].yearname)
             }
 
         fetchFeeCer()
     }
 
-    fun fetchFeeCer(){
+    private fun fetchFeeCer(){
         lifecycleScope.launch {
             feeCertificateViewModel.feeCertificateStateFlow.collectLatest {
                 when (it) {
@@ -89,7 +91,7 @@ class FeeCertificateFragment : Fragment() {
                                     yearDataString.add(data.yearname.toString())
                                 }
 
-                                val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,yearDataString)
+                                val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,yearDataString)
                                 binding.autoCompleteYear.setAdapter(arrayAdapter)
 
 
@@ -127,49 +129,21 @@ class FeeCertificateFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data!=null){
-                            /*try {
-                                val file: File? =  FileAccess.writeResponseBodyToDisk(
-                                    it.data.bytedata,
-                                    Constant.currentDate()
-                                )
-
-                                if (null != file) {
-
-
-                                        val pdfUri =
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                                FileProvider.getUriForFile(
-                                                    requireContext(),
-                                                    "com.franciscan.ecare_pro.provider",
-                                                    file
-                                                )
-                                            } else {
-                                                Uri.fromFile(file)
-                                            }
-                                        val pdfIntent = Intent(Intent.ACTION_VIEW)
-                                        pdfIntent.setDataAndType(pdfUri, "application/pdf")
-                                        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                                        pdfIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                        pdfIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                                        try {
-                                            startActivity(pdfIntent)
-                                        } catch (e: ActivityNotFoundException) {
-                                            Toast.makeText(
-                                                context,
-                                                "No Application available to view PDF",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-
-                                }
-
-                            } catch (e: Exception) {
-                                // Handle exception
-                            }*/
-
-                            generatePDFFromBase64(it.data.bytedata,"Certificate "+Constant.currentDate())
-                        }
+                         if (it.data!=null){
+                             if (!it.data.bytedata.isNullOrEmpty()){
+                                 val timestamp = System.currentTimeMillis()
+                                 if (firstTime){
+                                     firstTime=false
+                                     generatePDFFromBase64(it.data.bytedata,
+                                         "Certificate$sessionName$timestamp"
+                                     )
+                                 }
+                             }else{
+                                 mainActivity().showMessage("Fee Certificate Not Found")
+                             }
+                         }else{
+                             mainActivity().showMessage("Not Data Found")
+                         }
   } }
             }
         }
@@ -195,6 +169,9 @@ class FeeCertificateFragment : Fragment() {
     }
 
     private fun openDownloadedPDF(fileName: String) {
+
+        mainActivity().showMessage("Fee Certificate Saved Successfully in Download Folder")
+
         val file = File(getFilePath(fileName))
 
         if (file.exists()) {

@@ -2,11 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="itemData"
-            type="com.app.ecarepro.model.ReportCard" />
-    </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,6 +84,7 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/tv_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="5dp"
@@ -111,6 +108,7 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/tv_download"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="5dp"

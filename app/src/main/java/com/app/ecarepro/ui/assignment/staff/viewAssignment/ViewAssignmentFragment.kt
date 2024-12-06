@@ -26,10 +26,8 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.databinding.FragmentViewAssignmentBinding
 import com.app.ecarepro.model.AssignSubmitStudent
-import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.ui.studentProfile.PopUpListAdapterLibTrans
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
@@ -37,19 +35,22 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.core.os.bundleOf
+import com.app.ecarepro.model.AssignmentShareModel
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 
 
 @AndroidEntryPoint
 class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
 
-    private var assignmentDetails: TeacherAssignment? = null
+    private  var assignmentShareModel: AssignmentShareModel? = null
     private var isLateSubmitted: Boolean=false
      private var viewAssignmentData: NetworkViewAssignment? = null
      private var assignmentId: String  = ""
     private lateinit var binding : FragmentViewAssignmentBinding
     private val viewAssignmentViewModel : ViewAssignmentViewModel by viewModels()
     private var submitType =1
-    private var teacherTypeUser= true
+    private var isMineAssignment= true
     private var submitStudentsList= mutableListOf<AssignSubmitStudent>()
 
     override fun onCreateView(
@@ -61,9 +62,9 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
          try {
              assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
              isLateSubmitted = requireArguments().getBoolean(Constant.IS_LATE_SUBMITTED)
-             teacherTypeUser = requireArguments().getBoolean(Constant.USER_TEACHER)
-             arguments?.getParcelable<TeacherAssignment>("TeacherAssignment").let { data ->
-                 assignmentDetails= data!!
+             isMineAssignment = requireArguments().getBoolean(Constant.IS_MINE)
+             arguments?.getParcelable<AssignmentShareModel>("AssignmentShareModel").let { data ->
+                 assignmentShareModel= data!!
 
              }
 
@@ -75,24 +76,26 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!teacherTypeUser){
-            binding.llSubmitNotSubmit.isVisible=false
-            binding.rvSubmitList.isVisible=false
-            binding.tvDetailsAssi.isVisible=false
-
+        if (!isMineAssignment){
+            binding.llAllRemark.isVisible=false
+            binding.tvSaveRemark.isVisible=false
         }
 
         binding.btnLateSubmit.isVisible=isLateSubmitted
-         if (assignmentDetails!=null){
-             binding.llEditDelete.isVisible= assignmentDetails!! .hasAttachment!!
+        if (assignmentShareModel!=null){
+            if (assignmentShareModel!!.hasAttachment!=null){
+                binding.llEditDelete.isVisible= assignmentShareModel!!.hasAttachment!!
 
-         }
+            }
+        }
 
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_submit -> {
-                    binding.tvSaveRemark.isVisible=true
-                    binding.llAllRemark.isVisible=true
+                    if (isMineAssignment){
+                        binding.tvSaveRemark.isVisible=true
+                        binding.llAllRemark.isVisible=true
+                    }
                     submitType=1
                     viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false) 
 
@@ -265,17 +268,17 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             } }
         viewAssignmentViewModel.viewAssignment(assignmentId)
 
-        if ( teacherTypeUser){
+
              viewAssignmentViewModel.assignmnetSubmissionRPT(assignmentId,false)
-        }
+
 
 
 
 
         binding.llView.setOnClickListener {
-            if (assignmentDetails!=null){
-                if (assignmentDetails!!.asgFiles !=null){
-                    popUpFileList(assignmentDetails!!.asgFiles!!)
+            if (assignmentShareModel!=null){
+                if (assignmentShareModel!!.asgFiles !=null){
+                    popUpFileList(assignmentShareModel!!.asgFiles!!)
                 }
             }
 
@@ -362,29 +365,59 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     }
 
     private fun openFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
-        } else {
-            findNavController().navigate(R.id.openImageFragment, Bundle().apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
+            }
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }else -> {
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
+            }
         }
+
+
 
     }
 
     private fun downloadFile(fileSource: String) {
-        if (Constant.isPdfUrl(fileSource)) {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-        } else {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-        }
+
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+            }
+
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+
+            3 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            }
+
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
 
 
-    }
     private fun dateSelctedPoPUp(t: AssignSubmitStudent) {
         val tv_date: TextView
         val btn_canel: Button
@@ -484,5 +517,12 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
             }
 
         }}
+
+
+
+
+
+
+
 
 }

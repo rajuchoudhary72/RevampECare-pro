@@ -187,130 +187,136 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-               <LinearLayout
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical"
-                   app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                   tools:listitem="@layout/item_mark_attendance"
-                   app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                tools:listitem="@layout/item_mark_attendance"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-                   >
+                >
 
-                   <HorizontalScrollView
-                       android:id="@+id/horizontal_scroll_view_sort_by"
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:scrollbars="none"
-                       android:layout_below="@+id/divider_one"
-                       >
-                       <LinearLayout
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:orientation="horizontal"
-                           >
-                           <TextView
-                               android:id="@+id/tv_sort_by_admission"
-                               android:layout_width="wrap_content"
-                               android:layout_height="40dp"
-                               android:layout_marginStart="16dp"
-                               android:layout_marginEnd="@dimen/_4sdp"
-                               android:layout_marginVertical="@dimen/_5sdp"
-                               android:backgroundTint="@color/white"
-                               android:background="@drawable/bg_rounded_corner_green"
-                               android:gravity="center"
-                               android:paddingHorizontal="@dimen/_15sdp"
-                               android:paddingVertical="@dimen/_7sdp"
-                               android:text="@string/admission_number"
-                               android:textColor="@color/black"
-                               android:textSize="13sp"
-                               app:drawableStartCompat="@drawable/descending" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
 
-                           <TextView
-                               android:id="@+id/tv_sort_by_roll_no"
-                               android:layout_width="wrap_content"
-                               android:layout_height="40dp"
-                               android:layout_marginStart="@dimen/_5sdp"
-                               android:layout_marginEnd="@dimen/_4sdp"
-                               android:layout_marginVertical="@dimen/_5sdp"
-                               android:backgroundTint="@color/white"
-                               android:background="@drawable/bg_rounded_corner_green"
-                               android:fontFamily="@font/calibri_regular"
-                               android:gravity="center"
-                               android:paddingHorizontal="@dimen/_15sdp"
-                               android:paddingVertical="@dimen/_7sdp"
-                               android:text="@string/roll_no"
-                               android:textColor="@color/black"
-                               android:textSize="13sp"
-                               app:drawableStartCompat="@drawable/descending" />
+                    >
 
-                           <TextView
-                               android:id="@+id/tv_sort_by_name"
-                               android:layout_width="wrap_content"
-                               android:layout_height="40dp"
-                               android:layout_marginStart="@dimen/_5sdp"
-                               android:layout_marginEnd="@dimen/_4sdp"
-                               android:layout_marginVertical="@dimen/_5sdp"
-                               android:backgroundTint="@color/white"
-                               android:background="@drawable/bg_rounded_corner_green"
-                               android:fontFamily="@font/calibri_regular"
-                               android:gravity="center"
-                               android:paddingHorizontal="@dimen/_15sdp"
-                               android:paddingVertical="@dimen/_7sdp"
-                               android:text="@string/name"
-                               android:textColor="@color/black"
-                               android:textSize="13sp"
-                               app:drawableStartCompat="@drawable/descending" />
+                    <HorizontalScrollView
+                        android:id="@+id/horizontal_scroll_view_sort_by"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
 
-                           <TextView
-                               android:visibility="gone"
-                               android:id="@+id/tv_sort_by_class"
-                               android:layout_width="wrap_content"
-                               android:layout_height="40dp"
-                               android:layout_marginStart="@dimen/_5sdp"
-                               android:layout_marginEnd="@dimen/_4sdp"
-                               android:layout_marginVertical="@dimen/_5sdp"
-                               android:backgroundTint="@color/white"
-                               android:background="@drawable/bg_rounded_corner_green"
-                               android:fontFamily="@font/calibri_regular"
-                               android:gravity="center"
-                               android:paddingHorizontal="@dimen/_15sdp"
-                               android:paddingVertical="@dimen/_7sdp"
-                               android:textColor="@color/black"
-                               android:textSize="13sp"
-                               app:drawableStartCompat="@drawable/descending" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:id="@+id/tv_sort_by_admission"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_marginVertical="@dimen/_5sdp"
+                                android:backgroundTint="@color/white"
+                                android:background="@drawable/bg_rounded_corner_green"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/_15sdp"
+                                android:paddingVertical="@dimen/_7sdp"
+                                android:text="@string/admission_number"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                app:drawableStartCompat="@drawable/descending" />
+
+                            <TextView
+                                android:id="@+id/tv_sort_by_roll_no"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_marginVertical="@dimen/_5sdp"
+                                android:backgroundTint="@color/white"
+                                android:background="@drawable/bg_rounded_corner_green"
+                                android:fontFamily="@font/calibri_regular"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/_15sdp"
+                                android:paddingVertical="@dimen/_7sdp"
+                                android:text="@string/roll_no"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                app:drawableStartCompat="@drawable/descending" />
+
+                            <TextView
+                                android:id="@+id/tv_sort_by_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_marginVertical="@dimen/_5sdp"
+                                android:backgroundTint="@color/white"
+                                android:background="@drawable/bg_rounded_corner_green"
+                                android:fontFamily="@font/calibri_regular"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/_15sdp"
+                                android:paddingVertical="@dimen/_7sdp"
+                                android:text="@string/name"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                app:drawableStartCompat="@drawable/descending" />
+
+                            <TextView
+                                android:visibility="gone"
+                                android:id="@+id/tv_sort_by_class"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_marginVertical="@dimen/_5sdp"
+                                android:backgroundTint="@color/white"
+                                android:background="@drawable/bg_rounded_corner_green"
+                                android:fontFamily="@font/calibri_regular"
+                                android:gravity="center"
+                                android:paddingHorizontal="@dimen/_15sdp"
+                                android:paddingVertical="@dimen/_7sdp"
+                                android:textColor="@color/black"
+                                android:textSize="13sp"
+                                app:drawableStartCompat="@drawable/descending" />
 
 
-                       </LinearLayout>
-                   </HorizontalScrollView>
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
 
-                   <androidx.recyclerview.widget.RecyclerView
-                       android:id="@+id/recycler_notice"
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent"
-                       android:orientation="vertical"
-                       app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                       tools:listitem="@layout/item_mark_attendance"
-                       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_notice"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                        tools:listitem="@layout/item_mark_attendance"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-                       />
+                        />
 
-                   <TextView
-                       android:id="@+id/tv_no_data"
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent"
-                       android:layout_below="@+id/iv_no_item"
-                       android:fontFamily="@font/ubuntu_medium"
-                       android:layout_gravity="center"
-                       android:gravity="center"
-                       android:visibility="gone"
-                       android:text="@string/no_record_found"
-                       android:textSize="16sp"
 
-                       />
+                </LinearLayout>
 
-               </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_no_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:layout_centerInParent="true"
+                    android:text="@string/no_record_found"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    />
+
+
+            </RelativeLayout>
 
 
         </LinearLayout>

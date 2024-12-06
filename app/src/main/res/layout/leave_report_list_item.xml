@@ -42,6 +42,7 @@
                 android:layout_toEndOf="@+id/user_img"
                  android:textSize="12sp"
                 android:fontFamily="@font/ubuntu_bold"
+                android:layout_marginEnd="@dimen/_20sdp"
                 />
 
             <TextView
@@ -51,7 +52,16 @@
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/user_img"
                  android:layout_below="@+id/textUserName"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                />
+
+            <CheckBox
+                android:id="@+id/cb_leave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                />
 
 
         </RelativeLayout>
@@ -227,7 +237,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_applicant"
-            android:visibility="gone"
+            android:visibility="visible"
             android:orientation="vertical"
             >
             <LinearLayout
@@ -293,12 +303,83 @@
             </LinearLayout>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llApplicant"
+            android:visibility="visible"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/tv_holder_cancel_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:padding="@dimen/_2sdp"
+                    android:text="@string/cancelled_by"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/tv_cancel_by"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingRight="@dimen/_2sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:textColor="@color/grey_60"
+                    android:textSize="@dimen/_12sdp" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/tv_holder_cancel_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:padding="@dimen/_2sdp"
+                    android:text="@string/cancelled_on"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/tv_cancel_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:paddingTop="@dimen/_2sdp"
+                    android:paddingRight="@dimen/_2sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:textColor="@color/grey_60"
+                    android:textSize="@dimen/_12sdp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
 
         <LinearLayout
             android:id="@+id/llForwarded"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/llApplicant"
+            android:layout_below="@+id/llCancel"
             android:visibility="gone"
             android:orientation="horizontal">
 
@@ -367,8 +448,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/llFile"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
 
-             >
+
+
+            >
 
             <TextView
                 android:id="@+id/tv_approve"
@@ -429,13 +513,37 @@
                 android:textSize="@dimen/_16sdp"
                 android:visibility="gone"
                 app:fontFamily="@font/ubuntu_bold" />
+
+
+
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:background="@drawable/background_box_rectangle_black"
+            android:gravity="center"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:text="@string/cancel_leave"
+            android:textColor="@color/pending_color"
+            android:textSize="@dimen/_16sdp"
+            android:visibility="gone"
+            app:fontFamily="@font/ubuntu_bold"
+            android:layout_below="@+id/llCancel"
+            android:layout_marginBottom="@dimen/_10sdp"
+
+            />
+
+
+
         <com.google.android.material.divider.MaterialDivider
-            android:layout_below="@+id/ll_approve_rej"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_alignParentBottom="true"
              />
 
     </RelativeLayout>

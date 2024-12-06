@@ -131,8 +131,20 @@
                 app:fontFamily="@font/ubuntu_light" />
 
 
+
+
         </RelativeLayout>
 
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/delete"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            />
 
     </RelativeLayout>
 

@@ -170,9 +170,8 @@ class CalenderActivityModel(val activities: List<Activity>) :
                             val events = getEvents(data.date)
                             dotView.isVisible = events.isNotEmpty()
                             dotView.isClickable = events.isNotEmpty()
-
                             val isWorkingDay = events.all { it.isWorking == true }
-                            dotView.setBackgroundResource(if(isWorkingDay) R.drawable.calender_today_bg_red else R.drawable.calender_today_bg)
+                            dotView.setBackgroundResource(if(isWorkingDay) R.drawable.calender_today_bg else R.drawable.calender_today_bg_red)
                         }
                     }
                 } else {

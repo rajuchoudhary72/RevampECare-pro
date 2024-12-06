@@ -55,15 +55,22 @@ class SplashFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            if (splashViewModel.isUserAuthenticated()) {
-                systemViewModel.refreshAppLayout()
-                delay(2000)
-                findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-            } else {
-                splashViewModel.getSliders()
-                findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+            try {
+                if (splashViewModel.isUserAuthenticated()) {
+                    systemViewModel.refreshAppLayout()
+                    delay(2000)
+                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                } else {
+                    splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        }
+
+
+            }
+
     }
 
     private fun startAnimation() {

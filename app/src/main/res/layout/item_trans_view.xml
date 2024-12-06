@@ -34,6 +34,15 @@
                 android:gravity="center"
                 android:textColor="@color/grey_60" />
 
+            <TextView
+                android:id="@+id/tv_serial_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/_5sdp"
+
+                />
+
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/circleImageViewProfile"

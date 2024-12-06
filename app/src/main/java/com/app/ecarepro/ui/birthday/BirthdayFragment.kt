@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentBirthdayBinding
 import com.app.ecarepro.model.MonthModel
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -178,8 +180,8 @@ class BirthdayFragment : Fragment() {
 
 
         lifecycleScope.launch {
-            birthdayViewModel.birthdayStateFlow.collectLatest {
-                when (it) {
+            birthdayViewModel.birthdayStateFlow.collectLatest { birthdayNetworkResult ->
+                when (birthdayNetworkResult) {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
@@ -189,23 +191,30 @@ class BirthdayFragment : Fragment() {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerNotice.isVisible = false
-                        Log.d("main", "Error$it")
+                        Log.d("main", "Error$birthdayNetworkResult")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerNotice.isVisible = true
 
-                        if (it.data != null) {
+                        if (birthdayNetworkResult.data != null) {
 
-                            if (it.data.usersBirthday != null) {
+                            if (birthdayNetworkResult.data.usersBirthday != null) {
 
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
 
                                 val noticeAdapter = BirthListAdapter(
-                                        it.data.usersBirthday,
-                                        this@BirthdayFragment
+                                        birthdayNetworkResult.data.usersBirthday,
+                                        userType, onItemClick = {
+                                        findNavController().navigate(
+                                            R.id.photoViewFragmentFragment,
+                                            bundleOf(
+                                                PhotoViewFragmentFragment.PHOTO to it.photo
+                                            )
+                                        )
+                                    }
                                 )
 
                                 binding.recyclerNotice.apply {

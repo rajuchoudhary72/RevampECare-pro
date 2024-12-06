@@ -311,7 +311,8 @@ class ComposeViewModel @Inject constructor(
         mutableListOf(
             AttachmentType.PDF.name,
             AttachmentType.AUDIO.name,
-            AttachmentType.RECORDING.name
+            AttachmentType.RECORDING.name,
+            AttachmentType.GALLERY.name,
         ).contains(attachment.name)
 
     private fun getFileExtension(file: File): String {

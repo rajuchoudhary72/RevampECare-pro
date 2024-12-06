@@ -113,10 +113,10 @@ data class Activity(
     val fromDate: String?,
     @SerializedName("id")
     val id: Any?,
-    @SerializedName("title")
-    val title: String?,
     @SerializedName("isWorking")
-    val isWorking: Boolean?
+    val isWorking: Boolean?,
+    @SerializedName("title")
+    val title: String?
 )
 data class AttendanceSummary(
     @SerializedName("classSummary")

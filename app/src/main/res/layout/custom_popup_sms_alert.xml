@@ -30,93 +30,96 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_height="wrap_content"
         android:background="@color/white">
 
-        <LinearLayout
-            android:id="@+id/ll_alert"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_20sdp"
-            android:layout_marginRight="@dimen/_20sdp"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_15sdp"
-                app:srcCompat="@drawable/ic_save_successfully" />
-
-            <TextView
-                android:id="@+id/tv_main_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:fontFamily="@font/ubuntu_medium"
-                android:text="@string/lbl_saved_successfully"
-                android:textColor="@color/module"
-                android:textSize="@dimen/_18sdp" />
-
-            <TextView
-                android:id="@+id/tv_sub_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_19sdp"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="center"
-                android:text="@string/lbl_do_you_also_want_to_send_absentee_notification_sms_push_notification"
-                android:textColor="@color/module"
-                android:textSize="@dimen/_13sdp" />
-            <RadioGroup
-                android:id="@+id/rgSmsApp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/ll_alert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
-                android:visibility="visible">
-                <RadioButton
-                    android:id="@+id/rb1"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:orientation="vertical">
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_3sdp"
-                    android:padding="@dimen/_4sdp"
-                    android:text="SMS and App Message"
-                    android:textSize="@dimen/_14sdp" />
-                <RadioButton
-                    android:id="@+id/rb2"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:contentDescription="TODO"
+                    app:srcCompat="@drawable/ic_save_successfully" />
+
+                <TextView
+                    android:id="@+id/tv_main_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/lbl_saved_successfully"
+                    android:textColor="@color/module"
+                    android:textSize="@dimen/_18sdp" />
+
+                <TextView
+                    android:id="@+id/tv_sub_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_19sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:text="@string/lbl_do_you_also_want_to_send_absentee_notification_sms_push_notification"
+                    android:textColor="@color/module"
+                    android:textSize="@dimen/_13sdp" />
+                <RadioGroup
+                    android:id="@+id/rgSmsApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
+                    android:visibility="visible">
+                    <RadioButton
+                        android:id="@+id/rb1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_3sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="@string/sms_and_app_message"
+                        android:textSize="@dimen/_14sdp" />
+                    <RadioButton
+                        android:id="@+id/rb2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:padding="@dimen/_4sdp"
+                        android:text="@string/only_app_message"
+                        android:textSize="@dimen/_14sdp"
+                        />
+                </RadioGroup>
+                <TextView
+                    android:id="@+id/tv_sub_text_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/_3sdp"
-                    android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:layout_marginTop="@dimen/_3sdp"
                     android:padding="@dimen/_4sdp"
-                    android:text="Only App Message"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:text="@string/only_app_push_notification"
                     android:textSize="@dimen/_14sdp"
-                    android:fontFamily="@font/ubuntu_medium" />
-            </RadioGroup>
-            <TextView
-                android:id="@+id/tv_sub_text_new"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_3sdp"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_marginStart="@dimen/_3sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:padding="@dimen/_4sdp"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="center"
-                android:visibility="gone"
-                android:text="Only App Push Notification"
-                android:textSize="@dimen/_14sdp"
-                android:textColor="@color/module" />
-        </LinearLayout>
+                    android:textColor="@color/module" />
+            </LinearLayout>
 
+        </ScrollView>
 
     </RelativeLayout>
 
@@ -143,10 +146,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_20sdp"
                 android:fontFamily="@font/ubuntu_medium"
                 android:paddingBottom="@dimen/_5sdp"
-                android:paddingLeft="@dimen/_20sdp"
                 android:paddingStart="@dimen/_20sdp"
                 android:paddingTop="@dimen/_5sdp"
                 android:text="@string/lbl_no"
@@ -186,10 +187,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_20sdp"
                 android:fontFamily="@font/ubuntu_medium"
                 android:paddingBottom="@dimen/_5sdp"
-                android:paddingLeft="@dimen/_20sdp"
                 android:paddingStart="@dimen/_20sdp"
                 android:paddingTop="@dimen/_5sdp"
                 android:text="@string/lbl_yes"

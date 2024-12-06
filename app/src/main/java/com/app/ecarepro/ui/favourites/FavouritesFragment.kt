@@ -65,87 +65,90 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun setupDragging(carousels: MutableList<Favourites>) {
-        if (controller == null) return
-        EpoxyTouchHelper.initDragging(controller) // an EpoxyController must be used
-            .withRecyclerView(binding.recyclerView) // The recyclerview the controller is used with
-            .forVerticalList() // Specify the directions that you want to drag in
-            .withTarget(FavouriteBindingModel_::class.java) // Specify the type of model or models that should be draggable
-            .andCallbacks(object : DragCallbacks<FavouriteBindingModel_>() {
+        try {
+            if (controller == null) return
+            EpoxyTouchHelper.initDragging(controller) // an EpoxyController must be used
+                .withRecyclerView(binding.recyclerView) // The recyclerview the controller is used with
+                .forVerticalList() // Specify the directions that you want to drag in
+                .withTarget(FavouriteBindingModel_::class.java) // Specify the type of model or models that should be draggable
+                .andCallbacks(object : DragCallbacks<FavouriteBindingModel_>() {
 
-                @ColorInt
-                val selectedBackgroundColor: Int = Color.argb(200, 200, 200, 200)
-                var backgroundAnimator: ValueAnimator? = null
+                    @ColorInt
+                    val selectedBackgroundColor: Int = Color.argb(200, 200, 200, 200)
+                    var backgroundAnimator: ValueAnimator? = null
 
-                override fun onModelMoved(
-                    fromPosition: Int, toPosition: Int,
-                    modelBeingMoved: FavouriteBindingModel_, itemView: View
-                ) {
-                    Log.e("Hari", "onModelMoved: ${modelBeingMoved.title()} : $fromPosition -> $toPosition" )
-                    val carouselIndex: Int = carousels.indexOfFirst { modelBeingMoved.title() == it.title }
-                    carousels
-                        .add(
-                            carouselIndex + (toPosition - fromPosition),
-                            carousels.removeAt(carouselIndex)
+                    override fun onModelMoved(
+                        fromPosition: Int, toPosition: Int,
+                        modelBeingMoved: FavouriteBindingModel_, itemView: View
+                    )
+                    {
+                        Log.e("Hari", "onModelMoved: ${modelBeingMoved.title()} : $fromPosition -> $toPosition" )
+                        val carouselIndex: Int = carousels.indexOfFirst { modelBeingMoved.title() == it.title }
+                        carousels.add(carouselIndex + (toPosition - fromPosition), carousels.removeAt(carouselIndex)
                         )
-                }
+                    }
 
 
-                override fun onDragStarted(
-                    model: FavouriteBindingModel_,
-                    itemView: View,
-                    adapterPosition: Int
-                ) {
-                    backgroundAnimator = ValueAnimator
-                        .ofObject(ArgbEvaluator(), Color.WHITE, selectedBackgroundColor)
-                    backgroundAnimator?.addUpdateListener(
-                        AnimatorUpdateListener { animator: ValueAnimator ->
+                    override fun onDragStarted(
+                        model: FavouriteBindingModel_,
+                        itemView: View,
+                        adapterPosition: Int
+                    ) {
+                        backgroundAnimator = ValueAnimator
+                            .ofObject(ArgbEvaluator(), Color.WHITE, selectedBackgroundColor)
+                        backgroundAnimator?.addUpdateListener(
+                            AnimatorUpdateListener { animator: ValueAnimator ->
+                                itemView.setBackgroundColor(
+                                    animator.animatedValue as Int
+                                )
+                            }
+                        )
+
+                        backgroundAnimator?.start()
+
+                        itemView
+                            .animate()
+                            .scaleX(1.05f)
+                            .scaleY(1.05f)
+                    }
+
+                    override fun onDragReleased(model: FavouriteBindingModel_, itemView: View) {
+                        if (backgroundAnimator != null) {
+                            backgroundAnimator!!.cancel()
+                        }
+
+                        backgroundAnimator =
+                            ofObject(
+                                ArgbEvaluator(), (itemView.background as ColorDrawable).color,
+                                Color.WHITE
+                            )
+                        backgroundAnimator!!.addUpdateListener { animator: ValueAnimator ->
                             itemView.setBackgroundColor(
                                 animator.animatedValue as Int
                             )
                         }
-                    )
 
-                    backgroundAnimator?.start()
+                        backgroundAnimator!!.start()
 
-                    itemView
-                        .animate()
-                        .scaleX(1.05f)
-                        .scaleY(1.05f)
-                }
-
-                override fun onDragReleased(model: FavouriteBindingModel_, itemView: View) {
-                    if (backgroundAnimator != null) {
-                        backgroundAnimator!!.cancel()
+                        itemView
+                            .animate()
+                            .scaleX(1f)
+                            .scaleY(1f)
                     }
 
-                    backgroundAnimator =
-                        ofObject(
-                            ArgbEvaluator(), (itemView.background as ColorDrawable).color,
-                            Color.WHITE
-                        )
-                    backgroundAnimator!!.addUpdateListener { animator: ValueAnimator ->
-                        itemView.setBackgroundColor(
-                            animator.animatedValue as Int
-                        )
+                    override fun clearView(model: FavouriteBindingModel_, itemView: View) {
+                        onDragReleased(model, itemView);
                     }
 
-                    backgroundAnimator!!.start()
+                    override fun isDragEnabledForModel(model: FavouriteBindingModel_): Boolean {
+                        // Override this to toggle disabling dragging for a model
+                        return model.isChecked
+                    }
+                })
+        }catch (e:IndexOutOfBoundsException){
 
-                    itemView
-                        .animate()
-                        .scaleX(1f)
-                        .scaleY(1f)
-                }
+        }
 
-                override fun clearView(model: FavouriteBindingModel_, itemView: View) {
-                    onDragReleased(model, itemView);
-                }
-
-                override fun isDragEnabledForModel(model: FavouriteBindingModel_): Boolean {
-                    // Override this to toggle disabling dragging for a model
-                    return model.isChecked
-                }
-            })
     }
 
     private fun buildModels(uiState: FavouritesUiState) {

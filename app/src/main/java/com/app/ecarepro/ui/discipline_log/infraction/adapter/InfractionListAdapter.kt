@@ -34,6 +34,8 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
         val binding = DataBindingUtil.getBinding<DisciplineViewListItemBinding>(holder.itemView)
 
          if (binding!=null){
+
+             var isMaxLineOne=true
              val data=recentInfractions[position]
 
              binding.ivDelete.isVisible=data.canDelete
@@ -56,6 +58,17 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
              binding.tvDiagnosis.text= data.consequences
              binding.tvRemark.text= data.correctiveAction
              binding.tvAttdentName.text= data.staffName
+
+             binding.tvRemark.setOnClickListener {
+
+                 if (isMaxLineOne) {
+                     binding.tvRemark.maxLines = Int.MAX_VALUE
+                     isMaxLineOne=false
+                 } else {
+                     binding.tvRemark.maxLines = 1
+                     isMaxLineOne=true
+                 }
+             }
 
              binding.ivDelete.setOnClickListener {
                  val builder = AlertDialog.Builder(infractionListFragment.requireContext())

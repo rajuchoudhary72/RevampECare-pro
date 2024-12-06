@@ -71,7 +71,23 @@ data class Recipient(
     val receiverType: Int?,
     @SerializedName("rollNumber")
     val rollNumber: Any?
-) : Serializable
+) : Serializable{
+    fun fullNameDetails():String{
+        return when (receiverType) {
+            2 -> {
+                "$name Parent of $childName  ($className)"
+            }
+            1 -> {
+                "$childName  ($className) Child of$name "
+            }
+            3 -> {
+                "$name  ($designation)"
+            }
+            else -> ""
+        }
+    }
+}
+
 
 data class RecipientDto(
     val recipients: List<Recipient>

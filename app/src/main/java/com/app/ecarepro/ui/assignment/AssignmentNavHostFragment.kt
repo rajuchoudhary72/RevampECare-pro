@@ -70,13 +70,16 @@ class AssignmentNavHostFragment : Fragment() {
 
                         if (it.data != null) {
 
-                            if (it.data.subjectAssignments!=null ) {
+                            if (!it.data.subjectAssignments.isNullOrEmpty()) {
+
+                                binding.tabLayout.visibility=View.VISIBLE
+                                binding.viewPager.visibility=View.VISIBLE
+                                binding.tvNoData.visibility=View.GONE
 
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
                                  it.data.subjectAssignments.forEach { assignmentsData ->
-                                    fragmentList.add(AssignmentListFragment(assignmentsData.assignments,
-                                       isClassAssignment ))
+                                     fragmentList.add(AssignmentListFragment.newInstance(assignmentsData.assignments, isClassAssignment))
                                  }
 
                                 val viewPagerAdapter = ViewPagerAdapter(
@@ -116,6 +119,10 @@ class AssignmentNavHostFragment : Fragment() {
 
 
 
+                            }else{
+                                binding.tabLayout.visibility=View.GONE
+                                binding.viewPager.visibility=View.GONE
+                                binding.tvNoData.visibility=View.VISIBLE
                             }
 
                         }

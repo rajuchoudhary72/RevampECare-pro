@@ -39,13 +39,12 @@ android {
     }
     namespace = "com.app.ecarepro"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 218
-        versionName = "2.1.88"
+        versionCode = 261
+        versionName = "2.5.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -198,8 +197,8 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.github.fornewid:neumorphism:0.3.2")
-     implementation("androidx.browser:browser:1.2.0")
-     implementation("com.android.support:print:28.0.0")
+    implementation("androidx.browser:browser:1.2.0")
+    implementation("com.android.support:print:28.0.0")
     implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
     implementation("com.google.firebase:firebase-analytics")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
@@ -207,4 +206,15 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.2")
     implementation("com.kizitonwose.calendar:view:2.5.4")
-  }
+
+    implementation ("com.github.bumptech.glide:glide:4.4.0")
+    kapt ("com.github.bumptech.glide:compiler:4.4.0")
+
+    // This dependency is downloaded from the Google’s Maven repository.
+    // So, make sure you also include that repository in your project's build.gradle file.
+    implementation("com.google.android.play:app-update:2.1.0")
+
+    // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+}

@@ -16,7 +16,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.core.view.isVisible
+ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +45,7 @@ import kotlinx.coroutines.launch
 class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
+    private var editMode: Boolean= false
     private var openPreviousDay: Boolean=false
     private var mIsCurrentDate: Boolean=true
     private lateinit var studentListWithData: NetworkStudentListToMarkAtt
@@ -74,8 +75,10 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var p  = 0
     private var a  = 0
     private var l  = 0
+    private var approve_leave  = 0
     private var lt  = 0
     private var na  = 0
+    private lateinit var   dialog  : Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -94,6 +97,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+          dialog = Dialog(requireContext())
+
         from=  getString(R.string.class_attendance)
         binding.radioGroupWisesubmission.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
@@ -140,6 +146,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     subID=0
                     binding.autoCompleteSub.setText("Select Subject ",false)
                     classID=classesForClsTeaches[pos].classID
+                    className=classesForClsTeaches[pos].className
                     getStudentListToMarkAtt(classID,subID)
                 }
 
@@ -247,12 +254,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
                                  if (it.data.hasMarked){
-                                     if (it.data.canEdit) {
-                                         binding.btnSave.isVisible = true
-
-                                     } else {
-                                         binding.btnSave.isVisible = false
-                                     }
+                                     binding.btnSave.isVisible = editMode
                                      binding.btnSave.text = "Modify"
                                  }else{
                                      binding.btnSave.text = "Save"
@@ -276,8 +278,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 layoutManager = LinearLayoutManager(activity)
                                 adapter = studentListMarkAttAdapter
                             }
-
+                                if (dialog.isShowing) {
+                                    dialog.dismiss()
+                                }
                             if (it.data.pendingLeave > 0) {
+
                                 showPendingAlertDialog(it.data.pendingLeave)
                             }
 
@@ -301,9 +306,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         val cv_yes: CardView
         val cv_no: CardView
         val cv_skip: CardView
-        val dialog = Dialog(requireContext())
+
+        dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
         if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
             ColorDrawable(Color.TRANSPARENT)
         )
@@ -318,20 +323,31 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         cv_no = dialog.findViewById<CardView>(R.id.cv_no)
         cv_skip = dialog.findViewById<CardView>(R.id.cv_skip)
 
-        dialog.show()
+
 
         cv_no.setOnClickListener { view: View? ->
             dialog.dismiss()
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
             findNavController().popBackStack()
         }
         cv_yes.setOnClickListener { view: View? ->
+            dialog.dismiss()
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
             findNavController().navigate(R.id.leaveReportFragment, Bundle().apply {
                 putString(Constant.TO, Constant.FRA_STU_LEAVE)
             })
         }
         cv_skip.setOnClickListener { view: View? ->
+            if (dialog.isShowing) {
+                dialog.dismiss()
+            }
             dialog.dismiss()
         }
+        dialog.show()
     }
 
     private fun getSubjectList(classID: Int) {
@@ -384,6 +400,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                  from=getString(R.string.subject_attendance)
                              }
 
+                             editMode=it.data.editMode
+
                             if (from==getString(R.string.subject_attendance)){
                                 if (it.data.classesForSubTeach != null) {
                                     classesForSubTeaches = it.data.classesForSubTeach
@@ -430,10 +448,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
     }
 
-
-
     private fun popUpDetailsMarkAttendance() {
-
 
         val tv_cancel: TextView
         val tv_ok: TextView
@@ -463,6 +478,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         p  = 0
         a  = 0
         l  = 0
+        approve_leave=0
         lt  = 0
         na  = 0
         for (i in   studentListArrayList) {
@@ -471,9 +487,12 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 p++
             else if (i.status == 2)
                 a++
-            else if (i.status == 3)
+            else if (i.status == 3) {
                 l++
-            else if (i.status == 1 && i.isLate == 1)
+                if (i.isConstant == 1) {
+                    approve_leave += 1
+                }
+            }else if (i.status == 1 && i.isLate == 1)
                 lt++
             else if (i.status == 4)
                 na++
@@ -482,7 +501,23 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         }
         tv_present_count.text = p.toString() + ""
         tv_absent_count.text = a.toString() + ""
-        tv_leave_count.text = l.toString() + ""
+        if (approve_leave>0 && (l-approve_leave)>0){
+        tv_leave_count.text = buildString {
+        append(l)
+        append(" (")
+        append(l-approve_leave)
+        append(" Marked, ")
+        append(approve_leave)
+        append(" Pre-Approved)")
+       } } else if (approve_leave>0){
+            tv_leave_count.text = buildString {
+                append(approve_leave)
+                append(" (Pre-Approved)")
+            }
+        }else{
+            tv_leave_count.text = l.toString() + ""
+        }
+
         tvLateCount.text = lt.toString() + ""
         na_day.text = na.toString() + ""
         if (isLateEnable) llLate.visibility = View.VISIBLE else llLate.visibility =  View.GONE
@@ -499,14 +534,15 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private fun saveMarkAttendance(){
         var mode : Int = 1
         mode = if (from==getString(R.string.subject_attendance)){
-            1
-        }else{
             2
+        }else{
+            1
         }
          uploadStudentList.clear()
         for (i in studentListArrayList) {
-            uploadStudentList.add(StudentAtt(i.isLate,i.stID,i.status))
-
+            if (i.isConstant==0){
+                uploadStudentList.add(StudentAtt(i.isLate,i.stID,i.status))
+            }
         }
 
         stuMarkAttendanceViewModel.postMarkAttendance(
@@ -540,14 +576,22 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 else SuccessAlertPopup(
                     "",
                     String.format(
-                        requireContext().resources.getString(R.string.attendance__alert),
+                        requireContext().resources.getString(R.string.attendance__alert_subject),
                         subjectName + ""
                     )
                 )
             }
         }
 
-
+        lifecycleScope.launch {
+            stuMarkAttendanceViewModel.postMarkAttendanceStateFlow.collectLatest {  when (it) {
+                is NetworkResult.Loading -> {
+                    (requireActivity() as MainActivity).showLoader(true)
+                } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                      } }  } }
     }
 
     override fun onItemClick(t: StudentAtt, pos: Int, boolean: Boolean) {
@@ -661,14 +705,34 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 Toast.makeText(context, "Please select Notification type", Toast.LENGTH_SHORT)
                     .show()
              } else   {
-                dialog.dismiss()
-                stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
-                    (requireActivity() as MainActivity).showLoader(false)
-                    mainActivity().showMessage(message)
-//                    if (isSuccess) {
-//                        findNavController().popBackStack()
-//                    }
-                }
+                 if (rbType==1){
+                     if (studentListWithData.templateID!=null){
+                         dialog.dismiss()
+                         (requireActivity() as MainActivity).showLoader(true)
+                         stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
+                             (requireActivity() as MainActivity).showLoader(false)
+                             if (isSuccess){
+                                 mainActivity().showMessage("SMS Sent Successfully")
+                             }else{
+                                 mainActivity().showMessage(message)
+                             }
+                         }
+                     }else{
+                         Toast.makeText(context, "Sms Template not defined", Toast.LENGTH_SHORT).show()
+                     }
+                 }else{
+                     dialog.dismiss()
+                     (requireActivity() as MainActivity).showLoader(true)
+                     stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
+                         (requireActivity() as MainActivity).showLoader(false)
+                         if (isSuccess){
+                             mainActivity().showMessage(message)
+                         }else{
+                             mainActivity().showMessage(message)
+                         }
+                     }
+                 }
+
 
             }
             })

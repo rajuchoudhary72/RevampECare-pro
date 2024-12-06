@@ -70,8 +70,12 @@ class StudentProfileFeeSummaryFragment(
                     break
                 }}}
 
+        if (feeSummery  != null){
+            setupUi(feeSummery )
+        }
 
-        getAtt()
+
+
 
     }
 

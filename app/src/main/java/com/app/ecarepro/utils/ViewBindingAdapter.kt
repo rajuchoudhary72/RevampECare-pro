@@ -178,12 +178,10 @@ interface FileClickListener {
 fun TextView.htmlText(html: String?) {
     text = Html.fromHtml(html)
 }
-
 @BindingAdapter("isBold")
 fun TextView.isBold(isBold:Boolean) {
-    typeface = ResourcesCompat.getFont(context, if(isBold) R.font.calibri_bold else R.font.calibri_regular)
+    typeface = ResourcesCompat.getFont(context, if(isBold) R.font.calibri_regular else R.font.calibri_bold)
 }
-
 @BindingAdapter("styledText")
 fun TextView.setStyledText(text: String?) {
     if (text != "") {

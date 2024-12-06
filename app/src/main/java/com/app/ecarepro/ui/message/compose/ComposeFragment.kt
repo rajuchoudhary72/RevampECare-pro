@@ -67,6 +67,7 @@ import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
 import com.lassi.domain.media.LassiOption
 import com.lassi.domain.media.MediaType
+import com.lassi.domain.media.SortingOption
 import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -100,7 +101,9 @@ class ComposeFragment : Fragment() {
             if (it.resultCode == RESULT_OK) {
                 val selectedMedia =
                     it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
-                composeViewModel.setAttachments(selectedMedia)
+                if (selectedMedia.isNotEmpty()) {
+                    composeViewModel.setAttachments(selectedMedia)
+                }
             }
         }
 
@@ -511,7 +514,7 @@ class ComposeFragment : Fragment() {
             lastClickAttachmentType = AttachmentType.AUDIO
             openAudioRecorder()
         }
-       FileAccess.checkPermission(this@ComposeFragment)
+        FileAccess.checkPermission(this@ComposeFragment)
         binding.btnCamera.setOnClickListener {
             try {
                 hideAttachmentCard()
@@ -665,24 +668,56 @@ class ComposeFragment : Fragment() {
             }
         }
 
-    private fun openGallery() {
-        // Intent to open the gallery and select multiple images
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedImages = mutableListOf<Uri>()
+                result.data?.let { data ->
+                    val clipData = data.clipData
+                    if (clipData != null) {
+                        for (i in 0 until clipData.itemCount) {
+                            if (selectedImages.size < 7) {
+                                val imageUri = clipData.getItemAt(i).uri
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                    } else {
+                        data.data?.let { imageUri ->
+                            if (selectedImages.size < 7) {
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                    }
+                    composeViewModel.setAttachments(selectedImages.map {
+                        MiMedia(
+                            path = it.toString(),
+                            name = lastClickAttachmentType?.name
+                        )
+                    })
+                }
+            }
         }
-        selectImagesLauncher.launch(Intent.createChooser(intent, "Select Images"))
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
     }
+
 
     private fun launchPicker() {
         when (lastClickAttachmentType) {
             AttachmentType.GALLERY -> {
+                openGallery()
+            }
+           /* AttachmentType.GALLERY -> {
                 // Request necessary permissions and open the gallery
                 if (checkAndRequestPermissions()) {
                     launchPhotoPicker()
                 }
                 //  launchPhotoPicker()
-            }
+            }*/
 
             AttachmentType.AUDIO -> {
                 launchAudioPicker()
@@ -698,16 +733,23 @@ class ComposeFragment : Fragment() {
 
     private fun launchPhotoPicker() {
         /*    val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
-            receiveData.launch(intent)*/
+           receiveData.launch(intent)*/
         val intent = Lassi(requireContext())
             .with(LassiOption.CAMERA_AND_GALLERY)
             .setMediaType(MediaType.IMAGE)
             .setMaxCount(7)
+            .setAscSort(SortingOption.DESCENDING)
+            .setPlaceHolder(R.drawable.img_placeholder)
+            .setErrorDrawable(R.drawable.img_placeholder)
             .setGridSize(3)
             .setMinFileSize(0) // Restrict by minimum file size
-            .setMaxFileSize(65535) // Restrict by maximum file size
-            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
+            .setMaxFileSize(12000) // Restrict by maximum file size
+            .setCompressionRatio(65) // compress image for single item selection (can be 0 to 100)
             .setAlertDialogNegativeButtonColor(R.color.black)
+            .setSupportedFileTypes(
+                "jpg", "jpeg", "png", "webp", "gif", "mp4", "mkv", "webm", "avi", "flv", "3gp",
+                "pdf", "odt", "doc", "docs", "docx", "txt", "ppt", "pptx", "rtf", "xlsx", "xls"
+            )
             .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
             .setStatusBarColor(R.color.md_theme_light_primary)
             .setToolbarColor(R.color.md_theme_light_primary)
@@ -716,7 +758,56 @@ class ComposeFragment : Fragment() {
             .setGalleryBackgroundColor(R.color.white)
             .build()
         receiveData.launch(intent)
+        /*openGallery()*/
+
     }
+
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val attachments = mutableListOf<MiMedia>()
+//   val data= result.data
+                val clipData = result.data?.clipData
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        val imageUri: Uri = clipData.getItemAt(i).uri
+                        // Process each image URI here
+                        println("Selected Image URI: $imageUri")
+                        val miMedia = MiMedia(
+                            id = 0,
+                            name = imageUri.lastPathSegment,
+                            path = imageUri.toString(),
+                        )
+                        attachments.add(miMedia)
+                    }
+                    composeViewModel.setAttachments(attachments)
+                    /*  //val count = data.clipData!!.itemCount
+                      for (i in 0 until count){
+                          val imageUri = data.clipData!!.getItemAt(i).uri
+                          val miMedia = MiMedia(
+                              id = 0,
+                              name = imageUri.lastPathSegment,
+                              path = imageUri.toString(),
+                          )
+                          attachments.add(miMedia)
+                      }
+                      composeViewModel.setAttachments(attachments)*/
+                } else {
+                    // Single image selected
+                    val imageUri: Uri? = result.data?.data
+                    imageUri?.let {
+                        println("Selected Single Image URI: $it")
+                        val miMedia = MiMedia(
+                            id = 0,
+                            name = it.lastPathSegment,
+                            path = it.toString(),
+                        )
+                        attachments.add(miMedia)
+                    }
+                    composeViewModel.setAttachments(attachments)
+                }
+            }
+        }
 
     private fun launchAudioPicker() {
         val intent = Intent()

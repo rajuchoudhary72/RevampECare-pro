@@ -8,10 +8,12 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ConversationReportItemBinding
 import com.app.ecarepro.model.Conversation
+import com.app.ecarepro.model.Notice
 import com.app.ecarepro.utils.Constant
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
@@ -22,11 +24,11 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 class ConversationReportAdapter(
-    private var conversationList: List<Conversation>,
-    private val conversationReportFragment: ConversationReportFragment
+    private var conversationList: MutableList<Conversation>,
+    private val conversationReportFragment: ConversationReportFragment,
+    private var canDeleteConv: Boolean
 ) :
     RecyclerView.Adapter<ConversationReportAdapter.MedicineIssueViewHolder>() {
-
 
 
 
@@ -42,6 +44,19 @@ class ConversationReportAdapter(
     override fun onBindViewHolder(holder: MedicineIssueViewHolder, position: Int) {
          holder.bind(conversationList[position]) }
 
+
+    fun setData(conversationList: MutableList<Conversation>,canDeleteConv:Boolean ){
+        this.conversationList.addAll(conversationList)
+        this.canDeleteConv=canDeleteConv
+
+        notifyDataSetChanged()
+
+    }
+    fun clearData(){
+        conversationList.clear()
+        notifyDataSetChanged()
+    }
+
    inner class MedicineIssueViewHolder(private val binding:   ConversationReportItemBinding) :
         RecyclerView.ViewHolder(binding.root){
         fun bind(conversation: Conversation) {
@@ -51,7 +66,13 @@ class ConversationReportAdapter(
                     conversationReportFragment.onItemClick(conversation,1,false)
                 }
 
+                ivDelete.isVisible=canDeleteConv
+                ivDelete.setOnClickListener {
+                    conversationReportFragment.onItemClick(conversation,2,false)
 
+                }
+
+                tvTimeAgo.text=conversation.sentOn
                 tvSubject.text = conversation.subject
                 var s = ""
                 s = when (conversation.senderDTL.senderType) {

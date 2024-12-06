@@ -51,9 +51,9 @@ class ApplyLeaveFragment : Fragment() {
     private var isAttachamentMandetoy: Boolean=false
     private lateinit var termCondition: TermCondition
     private lateinit var leaveTerm: LeaveTerms
-    private var selectedLeaveTypeID: Int = 0
+    private var selectedLeaveTypeID: Int = -1
     private var leaveTypesDataString: ArrayList<String> = ArrayList()
-    private lateinit var leaveTypeList: List<LeaveTypes>
+    private  var leaveTypeList = mutableListOf<LeaveTypes>()
     private lateinit var binding: FragmentApplyLeaveBinding
     private val leaveApplyLeaveViewModel: ApplyLeaveViewModel by viewModels()
     private var imageExt = ""
@@ -129,8 +129,6 @@ class ApplyLeaveFragment : Fragment() {
                             }
                         }
                     },timestampBack,timestampforward)
-
-
             } else
                 mainActivity().showMessage("Select To Date")
         }
@@ -170,14 +168,17 @@ class ApplyLeaveFragment : Fragment() {
 
                             }
                             }
-                             leaveTerm=it.data.leaveTerms
-                            termCondition=it.data.termCondition
+                             leaveTerm= it.data.leaveTerms!!
+                            termCondition= it.data.termCondition!!
 
                              if (it.data.leaveTypes!=null){
-                                 leaveTypeList = it.data.leaveTypes
+                                 leaveTypeList = it.data.leaveTypes as MutableList<LeaveTypes>
+                                 leaveTypeList.add(LeaveTypes(false,0,"Other"))
                                  it.data.leaveTypes.forEach { data ->
                                      leaveTypesDataString.add(data.suggestion)
                                  }
+
+
                                  val arrayAdapter = ArrayAdapter(
                                      requireContext(),
                                      android.R.layout.simple_list_item_1,
@@ -223,12 +224,11 @@ class ApplyLeaveFragment : Fragment() {
             binding.autoCompleteReason.onItemClickListener =
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     selectedLeaveTypeID = leaveTypeList[position].lvSgID
-
                     isAttachamentMandetoy=leaveTypeList[position].attachmentMandatory
+                    binding.TextInputLayoutReason.isVisible = position==leaveTypeList.size-1
                 }
 
             binding.btnSubmit.setOnClickListener {
-
                 if (validateData()) {
                     if ( binding.tvNumberDays.text.toString().toDouble().toInt()>0){
                         leaveApplyLeaveViewModel.leaveApply(
@@ -237,7 +237,7 @@ class ApplyLeaveFragment : Fragment() {
                             Constant.toSystemDate(binding.tvEndDate.text.toString() ),
                             binding.tvNumberDays.text.toString().toDouble(),
                             null,
-                            binding.autoCompleteReason.text.toString(),
+                            if (selectedLeaveTypeID == 0) binding.textFiledReason.text.toString() else  binding.autoCompleteReason.text.toString(),
                             if (imageString.isNotEmpty()) FileAttachment(imageString, imageExt, "") else null
 
                         )
@@ -400,7 +400,7 @@ class ApplyLeaveFragment : Fragment() {
 
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                    imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                    imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
 
                     binding.imageViewCancel.isVisible = true
                     binding.attachmentImage.isVisible = true
@@ -417,7 +417,7 @@ class ApplyLeaveFragment : Fragment() {
 
                         imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                        imageExt =  FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                        imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
                         binding.imageViewCancel.isVisible = true
                         binding.attachmentImage.isVisible = true
 
@@ -436,11 +436,14 @@ class ApplyLeaveFragment : Fragment() {
                 mainActivity().showMessage("Select To Date")
 
             }else
-            if (selectedLeaveTypeID == 0) {
+            if (selectedLeaveTypeID == -1) {
                 validate = false
                 mainActivity().showMessage("Select Reason")
 
-            }else
+            }else if (selectedLeaveTypeID == 0 && binding.textFiledReason.text.toString().isEmpty()) {
+                validate = false
+                mainActivity().showMessage("Enter Reason")
+            } else
              if (!binding.cbLeaveTc.isChecked) {
                 validate = false
                 mainActivity().showMessage("Please Check Term and Condition")

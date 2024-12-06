@@ -5,17 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentDefaulterReportBinding
+import com.app.ecarepro.defaultdata
+import com.app.ecarepro.filter
 import com.app.ecarepro.model.defaulter_report_filter.Classess
 import com.app.ecarepro.model.defaulter_report_filter.FeeType
 import com.app.ecarepro.model.defaulter_report_filter.Installment
@@ -23,6 +23,7 @@ import com.app.ecarepro.model.defaulter_report_filter.School
 import com.app.ecarepro.model.defaulter_report_filter.Section
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.currentDate
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -37,11 +38,11 @@ import java.util.Locale
 class DefaulterReportFragment : Fragment() {
 
 
-    private   var classesListData:   ArrayList<String> =  ArrayList( )
-    private   var schoolListData:   ArrayList<String> =  ArrayList( )
-    private   var feeTypeListData:   ArrayList<String> =  ArrayList( )
-    private   var installmentListData:   ArrayList<String> =  ArrayList( )
-    private   var sectionListData:   ArrayList<String> =  ArrayList( )
+    private var classesListData: ArrayList<String> = ArrayList()
+    private var schoolListData: ArrayList<String> = ArrayList()
+    private var feeTypeListData: ArrayList<String> = ArrayList()
+    private var installmentListData: ArrayList<String> = ArrayList()
+    private var sectionListData: ArrayList<String> = ArrayList()
 
     private lateinit var classes: List<Classess>
     private lateinit var schoolsLists: List<School>
@@ -49,59 +50,107 @@ class DefaulterReportFragment : Fragment() {
     private lateinit var installmentLists: List<Installment>
     private lateinit var sectionsLists: List<Section>
 
-    private var DateFrom : String = ""
-    private var DateTo : String = ""
-    private var schoolid : String = ""
-    private var feetypeid : String = ""
-    private var classid : String = ""
-    private var sectionid : String = ""
-    private var installid : String = ""
+    private var DateFrom: String = ""
+    private var DateTo: String = ""
+    private var schoolid: String = "0"
+    private var feetypeid: String = "0"
+    private var classid: String = "0"
+    private var sectionid: String = "0"
+    private var installid: String = "0"
 
-    private val dateFrom: Calendar = Calendar.getInstance()
+    private var dateFrom: Calendar = Calendar.getInstance()
 
     private val dateTo: Calendar = Calendar.getInstance()
 
-    private lateinit var binding : FragmentDefaulterReportBinding
-    private val defaulterFeeReportViewModel : DefaulterFeeReportViewModel by viewModels()
+    private lateinit var binding: FragmentDefaulterReportBinding
+    private val defaulterFeeReportViewModel: DefaulterFeeReportViewModel by viewModels()
+    var shortDescending = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDefaulterReportBinding.inflate(inflater,container,false)
-         return binding.root
+        binding = FragmentDefaulterReportBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        DateFrom = currentDate()
+        DateTo = currentDate()
+        binding.dateFrom.text = DateFrom
+        binding.dateTo.text = DateTo
+        binding.ivFilter.setOnClickListener {
+            binding.ivFilter.isVisible = false
+            binding.groupFilter.isVisible = true
+            binding.recyclerDefaulterReport.isVisible=false
+            binding.tvNoData.isVisible=false
+        }
+        binding.ivOrder.setOnClickListener {
+            shortDescending = !shortDescending
+            binding.recyclerDefaulterReport.clear()
+            getDefaultReport()
+        }
         binding.apply {
             dateFrom.setOnClickListener { pickDateRange() }
             dateTo.setOnClickListener { pickDateRange() }
         }
 
-        binding.autoCompleteClass.onItemClickListener=
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                classid = classes[pos].classid
-            }
-        binding.autoCompleteSelectSchool.onItemClickListener=
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                schoolid = schoolsLists[pos].schoolid
-            }
-        binding.autoCompleteFeeType.onItemClickListener=
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                feetypeid = feetTypeLists[pos].feetypeid
-            }
-        binding.autoCompleteSelectInstallment.onItemClickListener=
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                installid = installmentLists[pos].installid
-            }
-        binding.autoCompleteClass.onItemClickListener=
-            AdapterView.OnItemClickListener { parent, view, pos, id ->
-                sectionid = schoolsLists[pos].schoolid
-            }
-
+        binding.cardView.setOnClickListener {
+            binding.rvSelectClass.isVisible = !binding.rvSelectClass.isVisible
+            binding.ivClass.animate().rotation(if (!binding.rvSelectClass.isVisible) 180f else 270f)
+        }
+        binding.cardViewSelectSchool.setOnClickListener {
+            binding.rvSelectSchool.isVisible = !binding.rvSelectSchool.isVisible
+            binding.ivSelectSchool.animate()
+                .rotation(if (!binding.rvSelectSchool.isVisible) 180f else 270f)
+        }
+        binding.cardViewSelectSection.setOnClickListener {
+            binding.rvSelectSection.isVisible = !binding.rvSelectSection.isVisible
+            binding.ivSelectSection.animate()
+                .rotation(if (!binding.rvSelectSection.isVisible) 180f else 270f)
+        }
+        binding.cardViewSelectFeeType.setOnClickListener {
+            binding.rvSelectFeeType.isVisible = !binding.rvSelectFeeType.isVisible
+            binding.ivfeeType.animate()
+                .rotation(if (!binding.rvSelectFeeType.isVisible) 180f else 270f)
+        }
+        binding.cardViewSelectInstallment.setOnClickListener {
+            binding.rvSelectInstallment.isVisible = !binding.rvSelectInstallment.isVisible
+            binding.ivSelectInstallment.animate()
+                .rotation(if (!binding.rvSelectInstallment.isVisible) 180f else 270f)
+        }
+        /*  binding.autoCompleteClass.onItemClickListener=
+              AdapterView.OnItemClickListener { parent, view, pos, id ->
+                  classid = classes[pos].classid
+              }*/
+        /* binding.autoCompleteSelectSchool.onItemClickListener =
+             AdapterView.OnItemClickListener { parent, view, pos, id ->
+                 schoolid = schoolsLists[pos].schoolid
+             }
+         binding.autoCompleteFeeType.onItemClickListener =
+             AdapterView.OnItemClickListener { parent, view, pos, id ->
+                 feetypeid = feetTypeLists[pos].feetypeid
+             }
+         binding.autoCompleteSelectInstallment.onItemClickListener =
+             AdapterView.OnItemClickListener { parent, view, pos, id ->
+                 installid = installmentLists[pos].installid
+             }*/
+        /* binding.autoCompleteClass.onItemClickListener=
+             AdapterView.OnItemClickListener { parent, view, pos, id ->
+                 sectionid = schoolsLists[pos].schoolid
+             }*/
+        defaulterFilters()
+        defaulterFeeReportViewModel.defaulterFilters()
+        binding.tvCancel.setOnClickListener { }
+        binding.tvSubmit.setOnClickListener {
+            binding.groupFilter.isVisible = false
+            getDefaultReport()
+        /*    binding.ivFilter.isVisible = true
+            binding.ivOrder.isVisible = true*/
+        }
 
     }
 
@@ -135,8 +184,7 @@ class DefaulterReportFragment : Fragment() {
     }
 
 
-
-    private fun getFeeCollection(){
+    private fun defaulterFilters() {
         lifecycleScope.launch {
             defaulterFeeReportViewModel.defaultFilterStateFlow.collectLatest {
                 when (it) {
@@ -156,56 +204,97 @@ class DefaulterReportFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerDefaulterReport.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data !=null){
+                            classes = it.data.classes
 
-                                if(it.data.classes!=null){
-                                    classes=it.data.classes
 
-                                    it.data.classes.forEach { data ->
-                                        classesListData.add(data.classname)
+                            binding.rvSelectClass.withModels {
+                                it.data.classes.forEachIndexed { position, data ->
+                                    classesListData.add(data.classname)
+                                    filter {
+                                        id(data.classid)
+                                        value(data.classname)
+                                        selected(classid == data.classid)
+                                        onClickContent { _ ->
+                                            classid = data.classid
+                                            binding.rvSelectClass.requestModelBuild()
+                                        }
                                     }
-                                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,classesListData)
-                                    binding.autoCompleteClass.setAdapter(arrayAdapter)
                                 }
-                                if(it.data.schools!=null){
-                                    schoolsLists=it.data.schools
+                            }
 
-                                    it.data.schools.forEach { data ->
-                                        schoolListData.add(data.schoolname)
+                            schoolsLists = it.data.schools
+                            binding.rvSelectSchool.withModels {
+                                it.data.schools.forEach { data ->
+                                    schoolListData.add(data.schoolname)
+                                    filter {
+                                        id(data.schoolid)
+                                        value(data.schoolname)
+                                        selected(schoolid == data.schoolid)
+                                        onClickContent { _ ->
+
+                                            schoolid = data.schoolid
+                                            binding.rvSelectSchool.requestModelBuild()
+                                        }
                                     }
-                                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,schoolListData)
-                                    binding.autoCompleteSelectSchool.setAdapter(arrayAdapter)
-                                }
-                                if(it.data.feetype!=null){
-                                    feetTypeLists=it.data.feetype
 
-                                    it.data.feetype.forEach { data ->
-                                        feeTypeListData.add(data.feetypename)
+
+                                }
+                            }
+
+                            feetTypeLists = it.data.feetype
+
+                            binding.rvSelectFeeType.withModels {
+                                it.data.feetype.forEach { data ->
+                                    feeTypeListData.add(data.feetypename)
+                                    filter {
+                                        id(data.feetypeid)
+                                        value(data.feetypename)
+                                        selected(feetypeid == data.feetypeid)
+                                        onClickContent { _ ->
+
+                                            feetypeid = data.feetypeid
+                                            binding.rvSelectFeeType.requestModelBuild()
+                                        }
                                     }
-                                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,feeTypeListData)
-                                    binding.autoCompleteFeeType.setAdapter(arrayAdapter)
                                 }
-                                if(it.data.installment!=null){
-                                    installmentLists=it.data.installment
+                            }
+                            installmentLists = it.data.installment
+                            if (installmentLists.isNotEmpty())
+                                installid = installmentLists[0].installid
+                            binding.rvSelectInstallment.withModels {
+                                it.data.installment.forEach { data ->
+                                    installmentListData.add(data.installmentname)
+                                    filter {
+                                        id(data.installid)
+                                        value(data.installmentname)
+                                        selected(installid == data.installid)
+                                        onClickContent { _ ->
 
-                                    it.data.installment.forEach { data ->
-                                        installmentListData.add(data.installmentname)
+                                            installid = data.installid
+                                            binding.rvSelectInstallment.requestModelBuild()
+                                        }
                                     }
-                                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,installmentListData)
-                                    binding.autoCompleteSelectInstallment.setAdapter(arrayAdapter)
                                 }
-                                if(it.data.sections!=null){
-                                    sectionsLists=it.data.sections
+                            }
+                            sectionsLists = it.data.sections
 
-                                    it.data.sections.forEach { data ->
-                                        sectionListData.add(data.sectionname)
+
+                            binding.rvSelectSection.withModels {
+                                it.data.sections.forEach { data ->
+                                    sectionListData.add(data.sectionname)
+                                    filter {
+                                        id(data.sectionid)
+                                        value(data.sectionname)
+                                        selected(sectionid == data.sectionid)
+                                        onClickContent { _ ->
+
+                                            sectionid = data.sectionid
+                                            binding.rvSelectSection.requestModelBuild()
+                                        }
                                     }
-                                    val arrayAdapter= ArrayAdapter(requireContext(), R.layout.view_drop_down_menu,sectionListData )
-                                    binding.autoCompleteSelectSection.setAdapter(arrayAdapter)
                                 }
-
                             }
 
                         }
@@ -216,11 +305,11 @@ class DefaulterReportFragment : Fragment() {
                 }
             }
         }
-        defaulterFeeReportViewModel.defaulterFilters( )
+
     }
 
 
-    private fun getDefaultReport(){
+    private fun getDefaultReport() {
         lifecycleScope.launch {
             defaulterFeeReportViewModel.defaultersDataStateFlow.collectLatest {
                 when (it) {
@@ -240,24 +329,23 @@ class DefaulterReportFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerDefaulterReport.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data!=null){
 
-                                binding.recyclerDefaulterReport.isVisible=true
-                                binding.tvNoData.isVisible=false
+                            binding.recyclerDefaulterReport.isVisible = it.data.isNotEmpty()
+                            binding.tvNoData.isVisible = it.data.isEmpty()
 
-                                val defaulterReportListAdapter = DefaulterReportListAdapter(it.data  ,
-                                    this@DefaulterReportFragment)
+                            binding.recyclerDefaulterReport.withModels {
 
-                                binding.recyclerDefaulterReport.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = defaulterReportListAdapter
+                                val list =
+                                    if (shortDescending) it.data.sortedByDescending { it.amount } else it.data.sortedBy { it.amount }
+                                it.data.forEach {
+                                    defaultdata {
+                                        id(it.admno)
+                                        data(it)
+                                    }
                                 }
-                            }else{
-                                binding.recyclerDefaulterReport.isVisible=false
-                                binding.tvNoData.isVisible=true
+
                             }
 
                         }
@@ -270,48 +358,47 @@ class DefaulterReportFragment : Fragment() {
         }
 
 
+        var isValidated = true
+        if (binding.dateFrom.text.toString() == "From Date") {
+            isValidated = false
+            mainActivity().showMessage("Select From Date")
+        }
+        if (binding.dateTo.text.toString() == "To Date") {
+            isValidated = false
+            mainActivity().showMessage("Select To Date")
+        }
+        if (sectionid == "") {
+            isValidated = false
+            mainActivity().showMessage("Please Select Section")
+        }
+        if (installid == "") {
+            isValidated = false
+            mainActivity().showMessage("Please Select Installment")
+        }
+        if (feetypeid == "") {
+            isValidated = false
+            mainActivity().showMessage("Please Select Fee Type")
+        }
+        if (schoolid == "") {
+            isValidated = false
+            mainActivity().showMessage("Please Select School")
+        }
+        if (classid == "") {
+            isValidated = false
+            mainActivity().showMessage("Please Select Class")
+        }
 
-            var isValidated = true
-            if (binding.dateFrom.text.toString() == "From Date") {
-                isValidated = false
-                mainActivity().showMessage("Select From Date")
-            }
-            if (binding.dateTo.text.toString() == "To Date") {
-                isValidated = false
-                mainActivity().showMessage("Select To Date")
-            }
-            if (sectionid == "") {
-                isValidated = false
-                mainActivity().showMessage("Please Select Section")
-            }
-            if (installid == "") {
-                isValidated = false
-                mainActivity().showMessage("Please Select Installment")
-            }
-            if (feetypeid == "") {
-                isValidated = false
-                mainActivity().showMessage("Please Select Fee Type")
-            }
-            if (schoolid == "") {
-                isValidated = false
-                mainActivity().showMessage("Please Select School")
-            }
-            if (classid == "") {
-                isValidated = false
-                mainActivity().showMessage("Please Select Class")
-            }
 
-
-        if (isValidated){
+        if (isValidated) {
             defaulterFeeReportViewModel.getDefaulterReport(
-
                 binding.dateFrom.text.toString(),
                 binding.dateTo.text.toString(),
                 schoolid,
                 feetypeid,
                 classid,
                 sectionid,
-                installid )
+                installid
+            )
         }
 
     }

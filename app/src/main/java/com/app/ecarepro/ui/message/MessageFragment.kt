@@ -82,7 +82,6 @@ class MessageFragment : Fragment() {
                         "MessageType" to MessageType.INBOX.value
                     )
                 )
-
                 args.remove("ID")
             }
         }

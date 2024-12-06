@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.runBlocking
@@ -30,13 +31,13 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.ui.otpverification.OtpVerificationFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
-
     val canChangeSchoolCode = BuildConfig.FLAVOR == "Franciscan e-Care"
-
 
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
@@ -45,12 +46,14 @@ class SignInFragment : Fragment() {
 
     private var userNameValid = false
     private val systemViewModel: SystemViewModel by activityViewModels()
+
     @Inject
     lateinit var userDataStore: UserDataStore
+
     @Inject
     lateinit var userDatabase: UserDatabase
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentSignInBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
@@ -71,11 +74,12 @@ class SignInFragment : Fragment() {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
         binding.btnHelp.setOnClickListener {
-            findNavController().navigate(R.id.helpFragment, bundleOf("schoolCode" to mViewModel.schoolCode))
+            findNavController().navigate(
+                R.id.helpFragment,
+                bundleOf("schoolCode" to mViewModel.schoolCode)
+            )
         }
-
         binding.btnFindSchoolCollege.isVisible = canChangeSchoolCode
-
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
                 R.id.schoolCodeFragment,
@@ -97,76 +101,81 @@ class SignInFragment : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
-                            if (arguments?.containsKey("add_account") == true) {
-                              //  findNavController().popBackStack()
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    userDatabase.getUser(it.userID, mViewModel.schoolCode, it.userType)?.id?.let {
-                                        userDataStore.setCurrentUserId(it)
+                            if (it.isOTPEnabled == true) {
+                                mainActivity().showMessage(it.message.toString())
+                                try {
+                                    setFragmentResultListener(OtpVerificationFragment.REQUEST_TYPE_OPT_VERIFICATION) { requestKey, bundle ->
+                                        if (bundle.getBoolean(OtpVerificationFragment.IS_OTP_VERIFIED)) {
+                                            launchToNextDesctinationAfterLogin(it)
+                                        }
                                     }
-                                    restartApp()
+                                }catch (e:NullPointerException){
+
                                 }
+                                findNavController().navigate(
+                                    R.id.otpVerificationFragment,
+                                    bundleOf(
+                                        "message" to it.message,
+                                        "userName" to binding.textUserName.text.toString(),
+                                        "schoolCode" to mViewModel.schoolCode,
+                                        "oTPAuthKey" to it.otpAuthKey,
+                                    )
+                                )
                             } else {
-                                FirebaseMessaging.getInstance().token
-                                    .addOnCompleteListener(OnCompleteListener { task ->
-                                        if (!task.isSuccessful) {
-                                            Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
-                                            return@OnCompleteListener
-                                        }
-
-                                        // Get new FCM registration token
-                                        val token = task.result
-
-                                        // Log and toast
-                                        Log.d("FCM Token", token)
-                                        systemViewModel.registerDeviceToken(token)
-                                    })
-                                    .addOnFailureListener { e ->
-                                        if (e is IOException) {
-                                            Log.e("FCM Token", "Network error", e)
-                                        } else if (e is ExecutionException) {
-                                            Log.e("FCM Token", "Execution error", e)
-                                        } else {
-                                            Log.e("FCM Token", "Unknown error", e)
-                                        }
-                                    }
-
-                                findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                                launchToNextDesctinationAfterLogin(it)
                             }
 
-                        } else {
-                            mainActivity().showMessage(" " + it.authenticated)
-
                         }
-
-                    }else    if (it.errorCode == 401) {
-                        mainActivity().showMessage("Invalid password")
+                        else {
+                            mainActivity().showMessage(" " + it.authenticated)
+                        }
                     }
 
-                    Log.i("Token Aut", it.authToken.toString())
+                    else if (it.errorCode == 401) {
+                        mainActivity().showMessage("Invalid password")
+                    }
+                    else if (it.errorCode == 429) {
+                        mainActivity().showMessage(it.message.toString())
+                    }
+                    else if (it.errorCode == 404) {
+                        mainActivity().showMessage(it.message.toString())
+                    }
+
+
+                    Log.i("Token Aut", it.userDTL?.authToken.toString())
                 }
             } else {
                 mViewModel.verifyUser(binding.textUserName.text.toString()) {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        if(runBlocking {
+                        if (runBlocking {
                                 mViewModel.isUserAlreadyLogin(it.userId, it.userType)
-                            }){
+                            }) {
                             mainActivity().showMessage("User already login!")
-                        }else{
+                        } else {
                             userNameValid = true
                             binding.textInputLayoutPassword.isVisible = true
                             binding.textInputLayoutUserName.isEnabled = false
                             binding.textUserName.isEnabled = false
                             binding.textUserName.isClickable = false
                         }
-                    }else{
+                    } else {
                         mainActivity().showMessage("Invalid username")
                     }
                 }
             }
         }
         binding.btnForgotPassword.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf("schoolCode" to mViewModel.schoolCode, "isStudentLoginBlocked" to mViewModel.isStudentLoginBlocked))
+            try {
+                findNavController().navigate(
+                    R.id.action_signInFragment_to_forgotPasswordFragment, bundleOf(
+                        "schoolCode" to mViewModel.schoolCode,
+                        "isStudentLoginBlocked" to mViewModel.isStudentLoginBlocked
+                    )
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         binding.btnPrevious.setOnClickListener {
             if (userNameValid) {
@@ -184,7 +193,50 @@ class SignInFragment : Fragment() {
         }
 
     }
+    private fun launchToNextDesctinationAfterLogin(it: TwoFactorLoginResponseDto) {
+        if (arguments?.containsKey("add_account") == true) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                userDatabase.getUser(
+                    it.userDTL?.userID ?: 0,
+                    mViewModel.schoolCode,
+                    it.userDTL?.userType ?: 0
+                )?.id?.let {
+                    userDataStore.setCurrentUserId(it)
+                }
+                restartApp()
+            }
+        } else {
+            FirebaseMessaging.getInstance().token
+                .addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w(
+                            "FCM Token",
+                            "Fetching FCM registration token failed",
+                            task.exception
+                        )
+                        return@OnCompleteListener
+                    }
 
+                    // Get new FCM registration token
+                    val token = task.result
+
+                    // Log and toast
+                    Log.d("FCM Token", token)
+                    systemViewModel.registerDeviceToken(token)
+                })
+                .addOnFailureListener { e ->
+                    if (e is IOException) {
+                        Log.e("FCM Token", "Network error", e)
+                    } else if (e is ExecutionException) {
+                        Log.e("FCM Token", "Execution error", e)
+                    } else {
+                        Log.e("FCM Token", "Unknown error", e)
+                    }
+                }
+
+            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+        }
+    }
     private fun restartApp() {
         val intent = Intent(requireContext(), MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

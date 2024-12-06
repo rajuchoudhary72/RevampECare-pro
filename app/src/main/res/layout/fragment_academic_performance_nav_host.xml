@@ -41,8 +41,7 @@
                         android:id="@+id/ll_toole"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/md_theme_light_primary"
-                        android:gravity="center"
+                         android:gravity="center"
                         android:fitsSystemWindows="true"
                         android:orientation="vertical"
                         app:layout_collapseMode="parallax"
@@ -63,7 +62,7 @@
                                 android:fontFamily="@font/ubuntu_medium"
                                 android:text="@string/academic_year"
                                  android:textSize="@dimen/_12sdp"
-                                android:textColor="@color/white"
+                                android:textColor="@color/black"
                                 />
 
                             <TextView
@@ -114,11 +113,7 @@
                             android:layout_height="wrap_content"
                             app:tabGravity="fill"
                             app:tabMode="scrollable"
-                            android:background="@color/brand_color"
-                            app:tabIndicatorFullWidth="true"
-                            app:tabIndicatorColor="@color/white"
-                            app:tabTextColor="@color/grey"
-                            app:tabSelectedTextColor="@color/white" />
+                             app:tabIndicatorFullWidth="true"/>
 
 
                     </LinearLayout>
@@ -137,6 +132,21 @@
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_200sdp"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+
+            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

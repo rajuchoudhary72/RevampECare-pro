@@ -39,9 +39,9 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
         // Handle FCM messages here.
         // Handle message
-        Log.d("FCM", "From: ${remoteMessage.from}")
-        Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
-        remoteMessage.data.isNotEmpty().let {
+      //  Log.d("FCM", "From: ${remoteMessage.from}")
+      //  Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
+     /*   remoteMessage.data.isNotEmpty().let {
             Log.d("FCM", "Message data payload: " + remoteMessage.data)
         }
 
@@ -59,7 +59,7 @@ class ECareProMessagingService : FirebaseMessagingService() {
             var dataMap: Map<String?, String?>
             val title = ""
             val body = ""
-        }
+        }*/
 
     }
 

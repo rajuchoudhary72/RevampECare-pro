@@ -19,13 +19,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.flow.filter
 
 
 @HiltViewModel
@@ -37,7 +37,7 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val id = savedStateHandle.getLiveData("ID", initialValue = "")
-    private val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
+     val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
 
     val messageBody = MutableStateFlow("")
 
@@ -64,7 +64,8 @@ class ChatViewModel @Inject constructor(
                             receiverType = response.receiverType,
                             canReply = response.canReply,
                             recipients = response.recipients ?: emptyList(),
-                            subject = response.subject
+                            subject = response.subject,
+                            senderDTL =  response.senderDTL
 
                         )
                     }
@@ -154,7 +155,8 @@ sealed interface ChatUiState {
         val receiverID: Int?,
         val receiverType: Int?,
         val subject: String?,
-        val canReply: Boolean?
+        val canReply: Boolean?,
+        val senderDTL: Sender?
     ) : ChatUiState
 
     data class Error(
@@ -169,7 +171,8 @@ sealed interface ChatUiState {
 enum class MessageType(val value: String) {
     INBOX("inbox"),
     SENT("sent"),
-    CONV("conv");
+    CONV("conv")
+    ;
 
     companion object {
         fun getMessageType(value: String): MessageType {

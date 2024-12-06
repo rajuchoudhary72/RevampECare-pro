@@ -10,6 +10,7 @@
     <color name="md_theme_light_onSecondaryContainer">#261A00</color>
     <color name="md_theme_light_tertiary">#3451D2</color>
     <color name="md_theme_light_onTertiary">#FFFFFF</color>
+    <color name="app_color">#56B54B</color>
     <color name="md_theme_light_tertiaryContainer">#DEE1FF</color>
     <color name="md_theme_light_onTertiaryContainer">#001258</color>
     <color name="md_theme_light_error">#BA1A1A</color>
@@ -64,13 +65,13 @@
 
 
     <color name="brand_color">#4DAC3C</color>
+    <color name="green">@color/brand_color</color>
     <color name="brand_color_new">#4eac3c</color>
     <color name="brand_color2">#5FA150</color>
     <color name="component_color">#FFD786</color>
     <color name="accent_color">#5570F1</color>
 
 
-    <color name="green">#4DAC3C</color>
     <color name="green_80">#CC5FA150</color>
     <color name="green_60">#995FA150</color>
     <color name="green_40">#665FA150</color>
@@ -100,6 +101,7 @@
 
     <color name="light_green">#F5FBF2</color>
     <color name="red">#FF352F</color>
+    <color name="high_periopty">#ffc107</color>
     <color name="light_background_color">#F4F4FC</color>
 
 
@@ -163,6 +165,7 @@
     <color name="light_gray_gallerytext">#757575</color>
     <color name="absent_red">#FB4E4E</color>
     <color name="shimmer_color">#a2878787</color>
+    <color name="leave_color">#009efb</color>
     <color name="background_dashboard">#f0f0f0</color>
     <color name="deep_black">#2b2b2b</color>
     <color name="holiday_color">#44A8EB</color>

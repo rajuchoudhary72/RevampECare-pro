@@ -91,6 +91,7 @@ class PostAssignmentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
        binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
        try {
            assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
            isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
@@ -622,9 +623,9 @@ class PostAssignmentFragment : Fragment() {
                             name.append(",").append(student.recipientName)
                         }
 
-                        classID_StID.add(ClassID_StID(student.classID ,student.stID.toString()  ))
                     }
                 }
+                classID_StID= groupStudentsByClass(students.filter { it.isSelected }).toMutableList()
 
 
                 binding.tvSelectstudent.text= name
@@ -677,6 +678,18 @@ class PostAssignmentFragment : Fragment() {
         builder.show()
     }
 
+    private fun groupStudentsByClass(students: List<Student>): List<ClassID_StID> {
+        // Group by classID and collect student IDs
+        val classIDMap = students.groupBy { it.classID }.mapValues { entry ->
+            // Join the list of stIDs with commas
+            entry.value.joinToString(", ") { it.stID.toString() }
+        }
+
+        // Convert map to a list of ClassIDStID
+        return classIDMap.map { (classID, stIDs) ->
+            ClassID_StID(classID, stIDs)
+        }
+    }
 
     private fun setUpViewAssignment(){
 

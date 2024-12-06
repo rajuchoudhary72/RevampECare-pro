@@ -11,7 +11,7 @@ data class MessageFormDto(
     @SerializedName("message")
     val message: String?,
     @SerializedName("senderDTL")
-    val senderDTL: Sender,
+    val senderDTL: Sender?,
     @SerializedName("status")
     val status: String?,
     @SerializedName("total")

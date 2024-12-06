@@ -64,7 +64,7 @@ class InstitutionCodeFragment : Fragment() {
                 binding.carouselSchool.isVisible = (schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.canEnterSchoolCode
             }
             binding.carouselSchool.withModels {
-                schools.forEach { school ->
+                schools.filterNotNull().forEach { school ->
                     schoolCode {
                         id(school.schoolCode)
                         photo(school.logo)
@@ -88,7 +88,6 @@ class InstitutionCodeFragment : Fragment() {
             binding.btnContinue.isEnabled = true
         }
 
-
         binding.btnContinue.setOnClickListener {
             binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
             (requireActivity() as MainActivity).showLoader(true)
@@ -108,7 +107,6 @@ class InstitutionCodeFragment : Fragment() {
                 }
             }
         }
-
         binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.canEnterSchoolCode
 
         binding.btnFindSchoolCollege.setOnClickListener {
@@ -122,8 +120,6 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnHelp.setOnClickListener {
             findNavController().navigate(R.id.helpFragment)
         }
-
-
         if(institutionCodeViewModel.canEnterSchoolCode.not()){
             binding.textInstitutionCode.apply {
                 setText("MYSFHS")
@@ -131,6 +127,7 @@ class InstitutionCodeFragment : Fragment() {
                 binding.btnContinue.isEnabled = true
             }
         }
+
     }
 
     private fun navigateToSignFragment(schoolCode: String, isStudentLoginBlocked: Boolean) {
@@ -149,7 +146,6 @@ class InstitutionCodeFragment : Fragment() {
                 .build()
         )
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

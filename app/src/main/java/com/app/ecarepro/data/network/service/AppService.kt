@@ -42,7 +42,6 @@ interface AppService {
     suspend fun notificationSeen(
         @Query("ID") id: String
     ): CommonResponse
-
     @GET("App/Sync")
     suspend fun syncData(): SyncDataDto
 }

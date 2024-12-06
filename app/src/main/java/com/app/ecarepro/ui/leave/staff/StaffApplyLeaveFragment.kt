@@ -71,7 +71,7 @@ class StaffApplyLeaveFragment : Fragment() {
     private   var imageExt: String =""
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
-    private val sessionList = listOf<String> ("Session 1","Session 2")
+    private val sessionList = listOf<String> ("First Half","Second Half")
     var timestampBack: Long = System.currentTimeMillis()
     var timestampforward: Long = 0
 
@@ -115,9 +115,10 @@ class StaffApplyLeaveFragment : Fragment() {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
-                    days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
-                    if (selectedLeaveTypeData.sandwichEnable){
-                        days =  calculateDaysAfterHolidays(days)
+                    binding.tvEndDate.text = Constant.dateToShow(date.toString())
+                    days = 1.0
+                    if (selectedLeaveTypeData.sandwichEnable) {
+                        days = calculateDaysAfterHolidays(days)
                     }
 
                     binding.tvDuration.text = buildString {
@@ -130,11 +131,12 @@ class StaffApplyLeaveFragment : Fragment() {
         }
 
 
-
         binding.llEndDate.setOnClickListener {
             if (binding.tvStartDate.text.toString().isNotEmpty()) {
 
-                val timestampforward = Constant.getLongTimeDate(binding.tvStartDate.text.toString()) + timestampOneDay * leaveTerm.daysLimit
+                val timestampforward = Constant.getLongTimeDate(binding.tvStartDate.text.toString()) +
+                        timestampOneDay * leaveTerm.daysLimit-timestampOneDay
+
                 val timestampBack = Constant.getLongTimeDate(binding.tvStartDate.text.toString())
                 ECareDataPicker(
                     requireActivity(),
@@ -147,11 +149,12 @@ class StaffApplyLeaveFragment : Fragment() {
 //                                    Constant.getLongTimeDate(binding.tvStartDate.text.toString())
 //                            days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS).toDouble() + 1
 
-                            days = Constant.getDateDiff(binding.tvStartDate.text.toString(),binding.tvEndDate.text.toString())
+                            days = Constant.getDateDiffWithSunday(binding.tvStartDate.text.toString()
+                                ,binding.tvEndDate.text.toString(),selectedLeaveTypeData.sandwichEnable)
+
                             if (selectedLeaveTypeData.sandwichEnable){
                                 days =  calculateDaysAfterHolidays(days)
                             }
-
                             binding.tvDuration.text = buildString {
                                 append(days)
                                 append(" ")
@@ -180,7 +183,8 @@ class StaffApplyLeaveFragment : Fragment() {
             val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             if (selectedLeaveTypeData.applyBeforeHours <currentHour) {
             if (validateData()) {
-
+                filterDays=days
+                halfdayDTL.clear()
                 if (sessionFromPos == 0 && sessionToPos == 1) {
                     halfdayDTL.clear()
                 } else
@@ -224,7 +228,20 @@ class StaffApplyLeaveFragment : Fragment() {
                     append(getString(R.string.day_s))
                 }
                if (days>0){
-                   leaveApplicationDialog()
+                   if (days<=selectedLeaveTypeData.total-selectedLeaveTypeData.taken){
+                   if (selectedLeaveTypeData.minimumLimit>0){
+                       if ( days>=selectedLeaveTypeData.minimumLimit){
+                           leaveApplicationDialog()
+                       }else{
+                           mainActivity().showMessage("${selectedLeaveTypeData.leaveType} requires a minimum of ${selectedLeaveTypeData.minimumLimit} days. Please select at least ${selectedLeaveTypeData.minimumLimit} consecutive days to proceed.")
+                       }
+                   }else{
+                       leaveApplicationDialog()
+                   }
+                   }else{
+                       mainActivity().showMessage("Sorry, you don't have sufficient leave balance!")
+                   }
+
                }else{
                    mainActivity().showMessage("Please Select Valid Date")
                }
@@ -311,13 +328,13 @@ class StaffApplyLeaveFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         
                         if (it.data !=null) {
-                            leaveTerm=it.data.leaveTerms
-                            termCondition=it.data.termCondition
+                            leaveTerm= it.data.leaveTerms!!
+                            termCondition= it.data.termCondition!!
 
-                            holidayList=it.data.holidayList
+                            holidayList= it.data.holidayList!!
 
                             for (i in it.data.leaveDetails ){
-                                if (i.leaveID==leaveID){
+                                if (i!!.leaveID==leaveID){
                                     selectedLeaveTypeData=i
                                 }
                             }
@@ -364,7 +381,7 @@ class StaffApplyLeaveFragment : Fragment() {
 
                 imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                 imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
 
                 binding.imageViewCancel.isVisible = true
                 binding.attachmentImage.isVisible = true
@@ -381,7 +398,7 @@ class StaffApplyLeaveFragment : Fragment() {
 
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
 
-                    imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                    imageExt = FileAccess.getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
                     binding.imageViewCancel.isVisible = true
                     binding.attachmentImage.isVisible = true
 
@@ -410,8 +427,7 @@ class StaffApplyLeaveFragment : Fragment() {
             mainActivity().showMessage("Please Check Term and Condition")
 
         }
-
-         if (selectedLeaveTypeData.attachmentMandatory){
+        if (selectedLeaveTypeData.attachmentMandatory){
              if (imageString==""){
                  validate = false
 
@@ -454,7 +470,7 @@ class StaffApplyLeaveFragment : Fragment() {
                     } else {
                         val noOfHolidays: Double = Constant.getDateDiff(
                             modelHoliday.fromDate,
-                            modelHoliday.tillDate
+                            modelHoliday.tillDate,
                         )
                         val `val` = noOfHolidays.toInt()
                         holiday += `val`
@@ -477,6 +493,8 @@ class StaffApplyLeaveFragment : Fragment() {
         val tv_reason: TextView
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
         if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
             ColorDrawable(Color.TRANSPARENT)
         )
@@ -492,8 +510,9 @@ class StaffApplyLeaveFragment : Fragment() {
         tv_reason.text = "Reason: " +  binding.textFiledReason.text.toString()
         tv_submit = dialog.findViewById<TextView>(R.id.tv_submit)
         tv_cancel = dialog.findViewById(R.id.tv_cancel)
-         tv_submit.setOnClickListener {
-             leaveApplyLeaveViewModel.leaveApply(
+
+        tv_submit.setOnClickListener {
+              leaveApplyLeaveViewModel.leaveApply(
                  leaveID,
                  toSystemDate(binding.tvStartDate.text.toString()),
                  toSystemDate(binding.tvEndDate.text.toString()),
@@ -538,7 +557,11 @@ class StaffApplyLeaveFragment : Fragment() {
              }
              dialog.dismiss()
         }
-        tv_cancel.setOnClickListener { dialog.dismiss() }
+        tv_cancel.setOnClickListener {
+            days=filterDays
+            dialog.dismiss()
+
+        }
         dialog.show()
     }
 

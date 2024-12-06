@@ -56,16 +56,19 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
                      } else {
                           tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_present,null)
                      }
-                 }  2 -> {
-                 tvStatus.text = "A"
-                 tvStatus.background =  ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.absent_circle2,null)
-             }
+                 }
+                 2 -> {
+                       tvStatus.text = "A"
+                       tvStatus.background =  ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.absent_circle2,null)
+                 }
                  3 -> {
                       tvStatus.text = "L"
                       tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_leave,null)
                  }
-
-                 4 ->  tvStatus.text = ""
+                 4 ->  {
+                     tvStatus.text = "NA"
+                     tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_na,null)
+                 }
              }
          }
 

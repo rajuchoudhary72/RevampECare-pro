@@ -7,7 +7,7 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -28,132 +28,196 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_below="@+id/toolbar"
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
+            >
+        <LinearLayout
+            android:id="@+id/ll_leave_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_theme_light_primary"
+            android:gravity="center"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
+            app:layout_collapseMode="parallax"
+            app:layout_scrollFlags="scroll|enterAlways"
+            >
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton_type_leave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
-
-
-                >
-
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:contentScrim="@android:color/transparent"
-                    app:expandedTitleTextAppearance="@android:color/transparent"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:statusBarScrim="@android:color/transparent">
-
-
-                    <LinearLayout
-                        android:id="@+id/ll_toole"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="?actionBarSize"
-                        android:background="@color/md_theme_light_primary"
-                        android:gravity="center"
-                        android:fitsSystemWindows="true"
-                        android:orientation="vertical"
-                        app:layout_collapseMode="parallax"
-                        app:layout_scrollFlags="scroll|enterAlways">
-
-                        <com.google.android.material.button.MaterialButtonToggleGroup
-                            android:id="@+id/toggleButton_type_leave"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="3"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            app:checkedButton="@id/btn_pen"
-                            android:layout_marginHorizontal="10dp"
-                            android:layout_marginVertical="5dp"
-                            app:selectionRequired="true"
-                            app:singleSelection="true">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_pen"
-                                style="?attr/materialButtonOutlinedStyle"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_regular"
-                                android:text="@string/pending"
-                                app:strokeColor="@color/white"
-                                app:rippleColor="@color/white"
-
-                                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_app"
-                                style="?attr/materialButtonOutlinedStyle"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_regular"
-                                android:text="@string/approved"
-                                app:strokeColor="@color/white"
-                                app:rippleColor="@color/white"
-                                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_rej"
-                                style="?attr/materialButtonOutlinedStyle"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_regular"
-                                android:text="@string/rejected"
-                                app:strokeColor="@color/white"
-                                app:rippleColor="@color/white"
-                                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
-
-
-                        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-
-                    </LinearLayout>
-
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            </com.google.android.material.appbar.AppBarLayout>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_leave_report"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                tools:listitem="@layout/leave_report_list_item"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
-                />
-
-            <TextView
-                android:id="@+id/tv_no_data"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/iv_no_item"
-                android:fontFamily="@font/ubuntu_medium"
                 android:layout_gravity="center"
                 android:gravity="center"
- android:visibility="gone"
-                android:text="@string/no_data_found"
-                android:textSize="16sp"
+                app:checkedButton="@id/btn_pen"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="5dp"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-                />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_pen"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="@string/pending"
+                    app:strokeColor="@color/white"
+                    app:rippleColor="@color/white"
+
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_app"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="@string/approved"
+                    app:strokeColor="@color/white"
+                    app:rippleColor="@color/white"
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_rej"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="@string/rejected"
+                    app:strokeColor="@color/white"
+                    app:rippleColor="@color/white"
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cancel"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ubuntu_regular"
+                    android:text="@string/cancel"
+                    app:strokeColor="@color/white"
+                    app:rippleColor="@color/white"
+                    android:visibility="gone"
+                    app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
 
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/cb_all_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/select_all"
+            />
+
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_leave_report"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                        tools:listitem="@layout/leave_report_list_item"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_50sdp"
+                        />
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_all_approve_rej"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_alignParentBottom="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_approve"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:background="@drawable/background_box_rectangle_green"
+                android:gravity="center"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:text="@string/approve"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_16sdp"
+                app:fontFamily="@font/ubuntu_bold" />
+
+            <View
+                android:id="@+id/view_two"
+                android:layout_width="@dimen/_2sdp"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_reject"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:background="@drawable/background_box_rectangle_red"
+                android:gravity="center"
+                android:paddingTop="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_10sdp"
+                android:text="@string/reject"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_16sdp"
+                app:fontFamily="@font/ubuntu_bold" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+
+            />
+
+
+
+
+    </RelativeLayout>
 </layout>

@@ -67,7 +67,7 @@ class OpenPdfFragment : Fragment() {
         }
 
         if (url.isNotEmpty()){
-            openPdfBinding.wvPdf.loadUrl("https://docs.google.com/gview?embedded=true&url=$url")
+            openPdfBinding.wvPdf.loadUrl("https://docs.google.com/viewer?url=$url&embedded=true")
         }
 
 

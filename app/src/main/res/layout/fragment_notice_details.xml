@@ -187,10 +187,10 @@
                         android:layout_height="wrap_content"
 
                         android:drawablePadding="10dp"
-                         android:text="@string/pdf_details"
+                         android:text="@string/pdf_size"
                         android:textStyle="bold"
                         android:layout_centerVertical="true"
-                         android:layout_marginLeft="@dimen/_10sdp"
+                         android:layout_marginStart="@dimen/_10sdp"
                         tools:ignore="UnknownIdInLayout" />
 
                     <TextView
@@ -217,7 +217,9 @@
                         android:layout_height="wrap_content"
                         android:baselineAligned="false"
                         android:orientation="horizontal"
-                        android:weightSum="2">
+                        android:weightSum="2"
+                        android:layout_marginBottom="@dimen/_150sdp"
+                        >
 
                         <RelativeLayout
                             android:id="@+id/rel_view_"

@@ -49,10 +49,7 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
         if (students!=null) {
         if (students.isNotEmpty()) {
 
-
-
-
-            var studentList = students.filter { it.`class` == className }
+             var studentList = students.filter { it.`class` == className }
             binding.tvTotalCount.text = studentList.size.toString()
             binding.tvBoysCount.text = studentList.filter { it.gender == "Male" }.size.toString()
             binding.tvGirlsCount.text = studentList.filter { it.gender == "Female" }.size.toString()
@@ -71,7 +68,7 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
 
 
                         }
-                       setupRecycleViewStudentList(studentListFilter)
+                        setupRecycleViewStudentList(studentListFilter)
                     } else {
                         setupRecycleViewStudentList(studentList)
                     }
@@ -82,26 +79,28 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
 
 
             binding.tvSortByRollNo.setOnClickListener {
-                rollNoFilterAsc=!rollNoFilterAsc
-                studentList = if (rollNoFilterAsc) studentList.sortedBy  { it.rollNumber }.toMutableList()
-                else  studentList.sortedByDescending { it.rollNumber }.toMutableList()
+                rollNoFilterAsc = !rollNoFilterAsc
+                studentList =
+                    if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
+                    else studentList.sortedByDescending { it.rollNumber }.toMutableList()
                 setupRecycleViewStudentList(studentList)
 
             }
             binding.tvSortByAdmission.setOnClickListener {
-                admissionFilterAsc=!admissionFilterAsc
-                studentList = if (admissionFilterAsc) studentList.sortedBy  { it.admissionNumber }.toMutableList()
-                else  studentList.sortedByDescending { it.admissionNumber }.toMutableList()
+                admissionFilterAsc = !admissionFilterAsc
+                studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
+                    .toMutableList()
+                else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
                 setupRecycleViewStudentList(studentList)
             }
 
             binding.tvSortByName.setOnClickListener {
-                nameFilterAsc=!nameFilterAsc
-                studentList = if (nameFilterAsc) studentList.sortedBy  { it.name.trim().lowercase() }.toMutableList()
-                else  studentList.sortedByDescending { it.name.trim().lowercase()  }.toMutableList()
+                nameFilterAsc = !nameFilterAsc
+                studentList = if (nameFilterAsc) studentList.sortedBy { it.name.trim().lowercase() }
+                    .toMutableList()
+                else studentList.sortedByDescending { it.name.trim().lowercase() }.toMutableList()
                 setupRecycleViewStudentList(studentList)
             }
-
 
 
         } else {

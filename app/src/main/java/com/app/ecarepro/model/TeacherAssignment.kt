@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class TeacherAssignment(
     val asgDate: String?,
     val asgFile: String?,
-    val asgFiles: List<String>?,
+    val asgFiles: List<String>? ,
     val asgID: Int?,
     val `class`: String?,
     val hasAttachment: Boolean?,
@@ -20,7 +20,9 @@ data class TeacherAssignment(
     val submitDate: String?,
     val title: String?,
     val updateBy: String?,
+    val assignmentBy: String?,
     val uploadedOn: String?,
     val userID: Int?,
-    val userType: Int?
+    val userType: Int?,
+    val isMine: Boolean?
 ) : Parcelable

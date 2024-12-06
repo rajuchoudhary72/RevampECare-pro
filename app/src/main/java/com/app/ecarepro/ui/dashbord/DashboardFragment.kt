@@ -4,6 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.app.ecarepro.data.network.model.Activity
+import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
+import com.app.ecarepro.ui.dashbord.model.DateFilterType
+import com.app.ecarepro.ui.mainActivity
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -51,8 +62,7 @@ import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.app.ecarepro.data.network.model.Activity
-import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
+
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -80,15 +90,19 @@ class DashboardFragment : Fragment() {
         initViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            dashboardViewModel.dashboard.collectLatest { (data, feeds) ->
+            dashboardViewModel.dashboard.collectLatest { (data, feeds, feeCollection) ->
                 if (data != null) {
-                    buildModels(data, feeds)
+                    buildModels(data, feeds, feeCollection)
                 }
             }
         }
     }
 
-    private fun buildModels(data: UserDashboardDto, feeds: List<Feed>) {
+    private fun buildModels(
+        data: UserDashboardDto,
+        feeds: List<Feed>,
+        feeCollection: FeeCollection?
+    ) {
         binding.recyclerView.withModels {
             if (data.showProCards == true || data.showCards == true) {
                 val cards = mutableListOf<Card>()
@@ -103,7 +117,7 @@ class DashboardFragment : Fragment() {
             }
 
             if (data.showFeeCollection == true)
-                buildEstimatedCollectionCard(data.feeCollection)
+                buildEstimatedCollectionCard(feeCollection ?: data.feeCollection)
 
             if (data.showCollectionModeWise == true)
                 buildTodayModeWiseCollectionCard(data.collectionModeWise)
@@ -220,10 +234,77 @@ class DashboardFragment : Fragment() {
             }
         }
     }
-
+    private fun updateFeeCollection(feeTypeId: Int, fromDate: String, tillDate: String) {
+        dashboardViewModel.getFeeCollection(
+            feeTypeId,
+            fromDate,
+            tillDate
+        ) { isSuccess, message ->
+            mainActivity().showLoader(false)
+            if (isSuccess.not()) {
+                if (message != null) {
+                    mainActivity().showMessage(message)
+                }
+            }
+        }
+    }
+    private fun showDateRangePicker(callback: (String, String) -> Unit) {
+        val constraintsBuilder =
+            CalendarConstraints.Builder() // You can add constraints here if needed
+        val datePicker = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText("Select Date Range")
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+        datePicker.addOnPositiveButtonClickListener { selection ->
+            val startDate =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.first)
+            val endDate =
+                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.second)
+            callback(startDate, endDate)
+        }
+        datePicker.show(
+            childFragmentManager,
+            datePicker.toString()
+        )
+    }
+    private fun getDateRange(filterType: DateFilterType): Pair<String, String> {
+        val currentDate = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return when (filterType) {
+            DateFilterType.TODAY -> {
+                val formattedDate = currentDate.format(formatter)
+                Pair(formattedDate, formattedDate)
+            }
+            DateFilterType.THIS_MONTH -> {
+                val firstDateOfMonth = currentDate.withDayOfMonth(1)
+                val formattedFirstDate = firstDateOfMonth.format(formatter)
+                val formattedCurrentDate = currentDate.format(formatter)
+                Pair(formattedFirstDate, formattedCurrentDate)
+            }
+            DateFilterType.THIS_YEAR -> {
+                val firstDateOfYear = currentDate.withDayOfYear(1)
+                val formattedFirstDate = firstDateOfYear.format(formatter)
+                val formattedCurrentDate = currentDate.format(formatter)
+                Pair(formattedFirstDate, formattedCurrentDate)
+            }
+        }
+    }
     private fun EpoxyController.buildEstimatedCollectionCard(feeCollection: FeeCollection?) {
         feeCollection ?: return
-        EstimateCollectionModel(feeCollection)
+        EstimateCollectionModel(
+            feeCollection,
+            updateFeeCollectionDate = { feeTypeId, dateFilterType, selectDatefromCalender ->
+                if (selectDatefromCalender) {
+                    showDateRangePicker { fromDate, tillDate ->
+                        updateFeeCollection(feeTypeId, fromDate, tillDate)
+                    }
+                } else {
+                    mainActivity().showLoader(true)
+                    val (fromDate, tillDate) = getDateRange(dateFilterType)
+                    updateFeeCollection(feeTypeId, fromDate, tillDate)
+                }
+            }
+        )
             .id("11")
             .addTo(this)
     }

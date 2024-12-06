@@ -27,6 +27,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         private var canTalkeAction = true
         private var applType: Int=0
         private var status: Int=0
+        private var allSelect: Boolean=false
 
 
 
@@ -43,10 +44,15 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
         binding!!.data=leaveList[position]
 
         with(binding) {
+
+            cbLeave.isVisible = status==0
+
              val data =leaveList[position]
 
              if (data.attachment!=null){
                  llFile.isVisible=data.attachment.isNotEmpty()
+             }else{
+                 llFile.isVisible=false
              }
 
              tvAppliedOn.text= buildString {
@@ -68,6 +74,16 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                     append("Rejected On : ")
             }}
 
+            if (status==-1) {
+                llCancel.isVisible=true
+            }else{
+                llCancel.isVisible=false
+            }
+
+            tvCancelBy.text=data.cancelby
+            tvCancelOn.text= data.cancelledOn
+
+
             tvApproveBy.text= buildString {
                  append(data.teacherName)
             }
@@ -77,9 +93,31 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
 
             llApplicant.isVisible = data.status != "Pending"
 
-            llApproveRej.isVisible=data.status=="Pending"
+            if (data.status=="Pending"){
+                if (canTalkeAction){
+                    llApproveRej.isVisible=true
+                    cbLeave.isVisible=true
+                }else{
+                    llApproveRej.isVisible=false
+                    cbLeave.isVisible=false
+                }
+            }else{
+                llApproveRej.isVisible=false
+                cbLeave.isVisible=false
+            }
 
-           // llApproveRej.isVisible=canTalkeAction
+
+
+            if (allSelect){
+                cbLeave.isChecked=true
+            }else{
+                cbLeave.isChecked=false
+            }
+
+
+            cbLeave.setOnClickListener {
+                leaveReportFragment.onItemClick(data,3,cbLeave.isChecked)
+            }
 
 
 
@@ -92,12 +130,44 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
             llFile.setOnClickListener {
                 leaveReportFragment.onItemClick(data,0,false)
             }
+            tvForward.setOnClickListener {
+                leaveReportFragment.onItemClick(data,4,false)
+            }
+            tvCancel.setOnClickListener {
+                leaveReportFragment.onItemClick(data,5,false)
+
+            }
 
 
 
             if (applType==3){
+
+                if(canTalkeAction){
+                    when (data.status) {
+                        "Pending" -> {
+                            llApproveRej.isVisible=true
+                            tvCancel.isVisible=false
+                        }
+                        "Approved" -> {
+                            llApproveRej.isVisible=false
+                            tvCancel.isVisible = data.showCancelButton
+                        }
+                        "Cancelled" -> {
+                            llApproveRej.isVisible=false
+                            tvCancel.isVisible=false
+                        }
+                        else -> {
+                            llApproveRej.isVisible=false
+                            tvCancel.isVisible=false
+                        }
+                    }
+                }
+
+                cbLeave.isVisible=false
                 tvApplicant.isVisible=false
                 tvApplicantVal.isVisible=false
+                view3.isVisible=true
+                tvForward.isVisible=true
                 textUserName.text= buildString {
                      append(data.applicantName)
                 }
@@ -108,6 +178,8 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 }else{
                 textUserName.text= buildString {
                     append(data.studentName)
+                    append(" - ")
+                    append(data.studentClass)
                 }
                 Picasso.get().
                 load(data.studentPhoto)
@@ -131,6 +203,11 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
     }
     fun clearData(){
         leaveList.clear()
+        notifyDataSetChanged()
+    }
+
+    fun setAllSelect(allSelect: Boolean){
+       this.allSelect=allSelect
         notifyDataSetChanged()
     }
 

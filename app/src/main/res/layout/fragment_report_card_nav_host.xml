@@ -7,88 +7,57 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:orientation="vertical"
         tools:context=".ui.reportCard.ReportCardDetailsNavHostFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Report Card "
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/md_theme_light_primary"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back_24px"
+                app:titleCentered="true"
+                android:elevation="8dp"
+                app:title="Report Card "
+
+                app:titleTextAppearance="?attr/titleTextAppearance"
+                app:titleTextColor="@color/white"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
-        </com.google.android.material.appbar.MaterialToolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
+
+
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
+                app:tabGravity="fill"
+                app:tabMode="scrollable"
+                app:tabIndicatorFullWidth="true"/>
 
 
-                >
-
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:contentScrim="@android:color/transparent"
-                    app:expandedTitleTextAppearance="@android:color/transparent"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:statusBarScrim="@android:color/transparent">
 
 
-                    <LinearLayout
-                        android:id="@+id/ll_toole"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="?actionBarSize"
-                        android:background="@color/md_theme_light_primary"
-                        android:gravity="center"
-                        android:fitsSystemWindows="true"
-                        android:orientation="vertical"
-                        app:layout_collapseMode="parallax"
-
-                        app:layout_scrollFlags="scroll|enterAlways">
 
 
-                        <com.google.android.material.tabs.TabLayout
-                            android:id="@+id/tabLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:tabGravity="fill"
-                            app:tabMode="scrollable"
-                            android:background="@color/brand_color"
-                            app:tabIndicatorFullWidth="true"
-                            app:tabIndicatorColor="@color/white"
-                            app:tabTextColor="@color/grey"
-                            app:tabSelectedTextColor="@color/white" />
-
-
-                    </LinearLayout>
-
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            </com.google.android.material.appbar.AppBarLayout>
 
 
             <androidx.viewpager2.widget.ViewPager2
@@ -98,8 +67,21 @@
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
 
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/ubuntu_medium"
+            android:visibility="gone"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+
+            />
+
+
+    </RelativeLayout>
 </layout>

@@ -34,7 +34,7 @@ class LeaveSettingFragment : Fragment() {
     private val leaveSettingViewModel : LeaveSettingViewModel by viewModels()
     private lateinit var selectedLeaveTypeData: LeaveDetail
     private var leaveTypesDataString: ArrayList<String> = ArrayList()
-    private lateinit var leaveTypeList: List<LeaveDetail>
+    private  var leaveTypeList= mutableListOf<LeaveDetail>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +65,8 @@ class LeaveSettingFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         leaveTypesDataString.clear()
                         if (it.data !=null) {
-                            leaveTypeList=it.data.leaveDetails
+                        if (it.data.leaveDetails != null) {
+                            leaveTypeList= it.data.leaveDetails as MutableList<LeaveDetail>
                             it.data.leaveDetails.forEach { data ->
                                 leaveTypesDataString.add(data.leaveType .toString())
                             }
@@ -86,6 +87,7 @@ class LeaveSettingFragment : Fragment() {
 
 
                         }
+                        }
 
                     }  }  }  }
 
@@ -104,7 +106,7 @@ class LeaveSettingFragment : Fragment() {
                 findNavController().navigate(
                     R.id.action_leaveSettingFragment_to_staffApplyLeaveFragment,
                     Bundle().apply {
-                        putInt(Constant.LEAVE_ID_ARGUMENT, selectedLeaveTypeData.leaveID)
+                        putInt(Constant.LEAVE_ID_ARGUMENT, selectedLeaveTypeData.leaveID!!)
                         putString(Constant.NAME, selectedLeaveTypeData.leaveType)
                     })
             }else{

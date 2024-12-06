@@ -52,7 +52,18 @@ class TaskDetailsViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(300),
             scope = viewModelScope
         )
-
+    fun updateTask(statusId: Int, func: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            schoolRepository
+                .updateTaskStatus(taskId.value, statusId)
+                .collectLatest { result ->
+                    func(result.isSuccess, result.getOrNull()?:result.exceptionOrNull()?.message?: UNKNOWN_ERROR_MESSAGE)
+                    if (result.isSuccess) {
+                        refresh()
+                    }
+                }
+        }
+    }
 
     fun updateTask(
         taskTitle: TaskFiledName,
@@ -96,7 +107,24 @@ class TaskDetailsViewModel @Inject constructor(
             }
         }
     }
-
+    fun sendComment(comment: String, func: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            schoolRepository.sendComment(
+                taskId.value!!,
+                comment
+            ).collectLatest {
+                func(
+                    it.isSuccess,
+                    it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                )
+            }
+        }
+    }
+    fun refresh(){
+        viewModelScope.launch {
+            taskId.value = taskId.value
+        }
+    }
 }
 
 sealed interface TaskDetailsUiState {

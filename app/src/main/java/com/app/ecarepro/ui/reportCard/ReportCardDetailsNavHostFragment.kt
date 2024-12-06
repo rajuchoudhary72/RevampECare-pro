@@ -6,11 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentReportCardNavHostBinding
+import com.app.ecarepro.model.ReportClasse
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
@@ -20,10 +22,14 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class ReportCardDetailsNavHostFragment : Fragment() {
+class ReportCardDetailsNavHostFragment(  ) : Fragment() {
 
     private lateinit var binding:  FragmentReportCardNavHostBinding
     private val reportCardDetailsViewModel: ReportCardDetailsNavHostViewModel by viewModels()
+
+
+
+
 
 
     override fun onCreateView(
@@ -32,6 +38,7 @@ class ReportCardDetailsNavHostFragment : Fragment() {
     ): View  {
         binding = FragmentReportCardNavHostBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+
         return binding.root
     }
 
@@ -40,65 +47,68 @@ class ReportCardDetailsNavHostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        lifecycleScope.launch {
-            reportCardDetailsViewModel.reportCardDetailsStateFlow.collectLatest {
+            lifecycleScope.launch {
+                reportCardDetailsViewModel.reportCardDetailsStateFlow.collectLatest {
 
-                when (it) {
+                    when (it) {
 
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
+                        is NetworkResult.Loading -> {
+                            (requireActivity() as MainActivity).showLoader(true)
+                        }
 
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error$it")
-                    }
+                        is NetworkResult.Error -> {
+                            (requireActivity() as MainActivity).showLoader(false)
+                            Log.d("main", "Error$it")
+                        }
 
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
+                        is NetworkResult.Success -> {
+                            (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data != null) {
+                            if (it.data != null) {
 
-                            if (it.data.classes!=null ) {
+                                if (it.data.classes!=null ) {
 
-                                val fragmentList : ArrayList<Fragment> = ArrayList()
+                                    val fragmentList : ArrayList<Fragment> = ArrayList()
 
-                                it.data.classes.forEach { itemDat ->
-                                    fragmentList.add( ReportCardDetailsFragment(itemDat  ))
+                                    it.data.classes.forEach { itemDat ->
+                                        fragmentList.add( ReportCardDetailsFragment(itemDat  ))
+                                    }
+
+                                    val viewPagerAdapter = ViewPagerAdapter(
+                                        fragmentList,
+                                        activity?.supportFragmentManager!!,
+                                        lifecycle
+                                    )
+                                    binding.viewPager.adapter = viewPagerAdapter
+
+
+                                    TabLayoutMediator(
+                                        binding.tabLayout,
+                                        binding.viewPager
+                                    ) { tab, position ->
+
+                                        tab.text = it.data.classes[position].className
+
+                                    }.attach()
+
+
                                 }
-
-                                val viewPagerAdapter = ViewPagerAdapter(
-                                    fragmentList,
-                                    activity?.supportFragmentManager!!,
-                                    lifecycle
-                                )
-                                binding.viewPager.adapter = viewPagerAdapter
-
-
-                                TabLayoutMediator(
-                                    binding.tabLayout,
-                                    binding.viewPager
-                                ) { tab, position ->
-
-                                    tab.text = it.data.classes[position].className
-
-                                }.attach()
-
 
                             }
 
                         }
 
+
                     }
 
 
                 }
-
-
             }
-        }
 
-        reportCardDetailsViewModel.reportCardDTL(0)
+            reportCardDetailsViewModel.reportCardDTL(0)
+
+
+
 
 
     }

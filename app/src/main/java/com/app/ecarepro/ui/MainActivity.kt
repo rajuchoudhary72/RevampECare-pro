@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui
 
 import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -13,6 +14,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -25,7 +27,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -66,6 +67,16 @@ import com.app.ecarepro.utils.slideVisibility
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.InstallStateUpdatedListener
+import com.google.android.play.core.install.model.ActivityResult
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.InstallStatus
+import com.google.android.play.core.install.model.UpdateAvailability
+import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -86,9 +97,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
-    private lateinit var IMEINumber: String
     private val systemViewModel: SystemViewModel by viewModels()
-
+    private var isImmediatepopup: Boolean = false
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
@@ -97,24 +107,24 @@ class MainActivity : AppCompatActivity() {
 
     private var expandedMenuId: Int = -1
     private var listenMenuItemClickEvent = true
+    private var isActivityPaused = false
 
-
+   private val appUpdateManager: AppUpdateManager by lazy {
+        AppUpdateManagerFactory.create(this)
+    }
     @Inject
     lateinit var userDataStore: UserDataStore
 
     @Inject
     lateinit var userDatabase: UserDatabase
+    @Inject
+    lateinit var syncManager: SyncManager
     private val topLevelFragments = mutableListOf(
         R.id.homeFragment,
         R.id.profileFragment,
         R.id.notificationFragment,
         R.id.messageFragment,
     )
-
-    private var isActivityPaused = false
-
-    @Inject
-    lateinit var syncManager: SyncManager
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun enableNotificationPermission() {
@@ -128,7 +138,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
-
+                if (this::binding.isInitialized.not()) return
                 Snackbar.make(
                     binding.appBarMain.contentMain.bottomNavigationView,
                     "Please Enable Notification Permission",
@@ -168,9 +178,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
-            enableNotificationPermission()
-        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -193,6 +200,7 @@ class MainActivity : AppCompatActivity() {
             binding.appBarMain.contentMain.rlBottomNavigation.isVisible =
                 topLevelFragments.contains(destination.id)
         }
+
 
         setUpDrawer()
 
@@ -292,7 +300,10 @@ class MainActivity : AppCompatActivity() {
         intent?.extras?.let { data ->
             handleNotificationClick(data)
         }
-
+        // throw NullPointerException("Test crash for logging")
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S_V2) {
+            enableNotificationPermission()
+        }
         askNotificationPermission()
 
     }
@@ -374,8 +385,7 @@ class MainActivity : AppCompatActivity() {
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
             val refId = data.getString("refID")
-
-            Log.e("Note", "$schCode $userID $menuId $childMenuId")
+            Log.e("Note", "$schCode $userID $menuId $childMenuId $refId")
 
             if (userDataStore.getUsersFlow().first()
                     .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
@@ -419,7 +429,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }*/
-
     private fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {
@@ -450,28 +459,36 @@ class MainActivity : AppCompatActivity() {
                             Log.v("okhttp", "versionCode $versionCode")
                             Log.v("okhttp", "versionName $versionName")
 
-                            if (BuildConfig.DEBUG) return@collectLatest
 
-                            if (versionName < it.data.android.currentVersion) {
-                                // open  dialog
-                                if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
-                                    //soft  update
-                                    UpdateAppVersionDialog(
-                                        0,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
-                                } else {
-                                    //force update
-                                    UpdateAppVersionDialog(
-                                        1,
-                                        it.data.android.title,
-                                        it.data.android.description
-                                    )
+                            try {
+                                if (it.data.android.currentVersion != null) {
+                                    if (versionName < it.data.android.currentVersion) {
+                                        // open  dialog
+                                        if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
+                                            //soft  update
+                                            checkIsUpdateAvailable(false)
+                                        /*    UpdateAppVersionDialog(
+                                                0,
+                                                it.data.android.title,
+                                                it.data.android.description
+                                            )*/
+                                        } else {
+                                            //force update
+                                           checkIsUpdateAvailable(true)
+                                          /*  UpdateAppVersionDialog(
+                                                1,
+                                                it.data.android.title,
+                                                it.data.android.description
+                                            )*/
+                                        }
+                                    } else {
+                                        // nothing  open  version  dialog
+                                    }
                                 }
-                            } else {
-                                // nothing  open  version  dialog
+                            } catch (e: NullPointerException) {
+                                e.message
                             }
+
 
                             /* if (versionCode < it.data.android.versionCode) {
 
@@ -501,6 +518,68 @@ class MainActivity : AppCompatActivity() {
             }
         }
         systemViewModel.checkAppVersion()
+    }
+
+    /*in app  update */
+    private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
+      //  isImmediatepopup =forceUpdate
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+            val isAppUpdateAllowed = if (forceUpdate) {
+                appUpdateInfo.isImmediateUpdateAllowed
+            } else {
+                appUpdateInfo.isFlexibleUpdateAllowed
+            }
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackbarForCompleteUpdate()
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
+                appUpdateManager.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                    if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    MY_REQUEST_CODE
+                )
+            }
+        }
+        appUpdateManager.registerListener(installStateUpdatedListener)
+    }
+    private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            popupSnackbarForCompleteUpdate()
+        }
+    }
+
+    private fun popupSnackbarForCompleteUpdate() {
+        Snackbar.make(
+            binding.root, "An app update is ready to install.", Snackbar.LENGTH_INDEFINITE
+        ).apply {
+            setAction("INSTAll") { appUpdateManager.completeUpdate() }
+            setActionTextColor(resources.getColor(R.color.brand_color))
+            show()
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == MY_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.e("In App Update", "onActivityResult: RESULT_OK")
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+              /*if (isImmediatepopup){
+                  checkAppVersion()
+              }else{
+                  isImmediatepopup=false
+              }*/
+                Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
+            } else if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
+                Log.e("In App Update", "onActivityResult: RESULT_IN_APP_UPDATE_FAILED")
+            } else {
+                Log.e("In App Update", "onActivityResult: else")
+            }
+        }
     }
 
     fun hideKeyBoard() {
@@ -716,20 +795,11 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         try {
                             if (userType == Constant.STAFF_TYPE) {
-                                if (roleName == "Principal" || roleName == "Management") {
-                                    navController.navigate(
-                                        R.id.classAndTeacherListFragment,
-                                        Bundle().apply {
-                                            putString(Constant.TO, Constant.FRA_ASSI)
-                                        })
-                                } else {
-                                    navController.navigate(R.id.staffAssignmentsListFragment)
-                                }
-
+                                navController.navigate(R.id.staffAssignmentsListFragment)
                             } else {
                                 navController.navigate(R.id.assignmentNavHostFragment)
                             }
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                         }
                     }
                 }
@@ -869,26 +939,26 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-            14 -> {
-                try {
-                    lifecycleScope.launch {
-                        userDataStore.getSchoolData()?.let {
-                            if (it.assessmentMarksURL == null) {
-                                showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
-                            } else {
-                                it.assessmentMarksURL?.let { url ->
-                                    webViewCall(
-                                        url,
-                                        getString(R.string.assessment_headling)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                }
+            /* 14 -> {
+                 try {
+                     lifecycleScope.launch {
+                         userDataStore.getSchoolData()?.let {
+                             if (it.assessmentMarksURL == null) {
+                                 showMessage(getString(R.string.assessments_are_currently_unavailable_for_you))
+                             } else {
+                                 it.assessmentMarksURL?.let { url ->
+                                     webViewCall(
+                                         url,
+                                         getString(R.string.assessment_headling)
+                                     )
+                                 }
+                             }
+                         }
+                     }
+                 } catch (e: Exception) {
+                 }
 
-            }
+             }*/
 
             37 -> {
                 try {
@@ -945,9 +1015,9 @@ class MainActivity : AppCompatActivity() {
                     bundle.putString("title", title)
                     bundle.putString("url", "$url?token=$token")
                     Log.d("WebURL", "$url?token=$token")
-                    navController.navigate(R.id.webViewFragment, bundle)
-                    /*Log.d("WebURL", "$url?token=$token")
-                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))*/
+                    //navController.navigate(R.id.webViewFragment, bundle)
+                    Log.d("WebURL", "$url?token=$token")
+                    openCustomTab(tabIntent, Uri.parse("$url?token=$token"))
                 }
             }
 
@@ -957,9 +1027,58 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("url", url)
             Log.d("WebURL", url)
             navController.navigate(R.id.webViewFragment, bundle)
-            /*  Log.d("WebURL", url)
-              openCustomTab(tabIntent, Uri.parse(url))*/
+            Log.d("WebURL", url)
+            // openCustomTab(tabIntent, Uri.parse(url))
         }
+    }
+
+    private fun webViewCallForPayment(feePaymentURL: String){
+        showLoader(true)
+        systemViewModel.getTokenKey { token ->
+            if (token.isNullOrEmpty()) {
+                showLoader(false)
+                showMessage("Something went wrong")
+            } else {
+                showLoader(false)
+                val tabIntent = CustomTabsIntent.Builder()
+                    .enableUrlBarHiding()
+                    .setToolbarColor( (this).getColor(R.color.green)).build()
+                openCustomTabForPayment(tabIntent, Uri.parse("$feePaymentURL?token=$token"))
+            }
+        }
+    }
+
+    private fun openCustomTabForPayment(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        if (uri == null || uri.scheme.isNullOrEmpty()) {
+            showMessage("Invalid or missing URL")
+            return
+        }
+
+        if (isChromeInstalled(this)) {
+            val packageName = "com.android.chrome"
+            customTabsIntent.intent.setPackage(packageName)
+            try {
+                customTabsIntent.launchUrl(this, uri)
+            } catch (e: ActivityNotFoundException) {
+               showMessage("Chrome cannot open this link")
+            }
+        } else {
+            try {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)
+            } catch (e: ActivityNotFoundException) {
+                showMessage("No browser available to handle the URL")
+            }
+        }
+    }
+
+    private fun isChromeInstalled(context: Context): Boolean {
+        val chromePackageName = "com.android.chrome"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+        intent.setPackage(chromePackageName)
+
+        val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfoList.isNotEmpty()
     }
 
 
@@ -1049,7 +1168,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             8 -> {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
@@ -1087,7 +1205,13 @@ class MainActivity : AppCompatActivity() {
                             })
 
                     }
-
+                    70 -> {
+                        navController.navigate(
+                            R.id.smsMsgReportFragment,
+                            Bundle().apply {
+                                putString(Constant.TO, Constant.FRA_APP_MESSAGE)
+                            })
+                    }
 
                 }
             }
@@ -1104,8 +1228,22 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     18 -> navController.navigate(R.id.attendanceFragment)
                     20 -> navController.navigate(R.id.paySlipFragment)
-                    43 -> navController.navigate(R.id.feePaymentFragment)
+                    43 -> {
+                        lifecycleScope.launch {
+                            try {
+                                userDataStore.getSchoolData()?.run {
+                                    if (feePayemtURL.isNullOrEmpty()){
+                                        showMessage("Fee Payment URL are currently not unavailable!")
+                                    }else{
+                                        webViewCallForPayment(feePayemtURL!!)
+                                    }
+                                }
+                            } catch (_: Exception) {
+                            }
+                        }
+                    }
                     44 -> navController.navigate(R.id.feeReceiptFragment)
+                    69 -> navController.navigate(R.id.feeCertificateFragment)
                 }
             }
 
@@ -1225,10 +1363,11 @@ class MainActivity : AppCompatActivity() {
 
             8 -> {
                 when (childMenuId) {
+                    /*sms report*/
                     42 -> {
                         when (childChildMenuId) {
                             4 -> {
-                                navController.navigate(R.id.smsMsgReportFragment)
+                                navController.navigate(R.id.smsReportFragment)
                             }
 
                             5 -> {
@@ -1237,6 +1376,28 @@ class MainActivity : AppCompatActivity() {
 
                             6 -> {
                                 navController.navigate(R.id.rechargeLogFragment)
+                            }
+
+                            14 -> {
+                                navController.navigate(
+                                    R.id.smsMsgReportFragment,
+                                    Bundle().apply {
+                                        putString(Constant.TO, Constant.FRA_APP_SMS)
+                                    })
+                            }
+                        }
+                    }
+                    /* fee report*/
+                    67 -> {
+                        when (childChildMenuId) {
+                            11 -> {
+                                navController.navigate(R.id.collectionReport)
+                            }
+                            12 -> {
+                                navController.navigate(R.id.defaulterReportFragment)
+                            }
+                            13 -> {
+                                navController.navigate(R.id.estimateReportFragment)
                             }
                         }
                     }
@@ -1339,7 +1500,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpBottomNavigationView() {
 
-        binding.appBarMain.contentMain.searchBar.setOnClickListener {
+        binding.appBarMain.contentMain.rlMainSearch.setOnClickListener {
             navController.navigate(
                 R.id.searchFragment,
                 bundleOf("searchOptions" to systemViewModel.getSearchOptions().filter { it.show })
@@ -1601,7 +1762,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun syncData(forceSync: Boolean) {
         lifecycleScope.launch {
             showLoader(true)
@@ -1624,6 +1784,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             syncData(true)
         }
+    }
+    companion object {
+        private const val MY_REQUEST_CODE = 123
     }
 }
 

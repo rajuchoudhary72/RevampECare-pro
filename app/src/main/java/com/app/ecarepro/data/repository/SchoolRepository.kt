@@ -20,6 +20,9 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.model.Title
+import com.app.ecarepro.model.WatchersDto
+import com.app.ecarepro.model.Assignee
+
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.ui.assign_home.StudentList
@@ -51,11 +54,14 @@ interface SchoolRepository {
     fun addTask(request: AddTaskDto): Flow<Result<String>>
     fun updateTaskImage(request: UpdateTaskAttachmentDto): Flow<Result<String>>
     fun updateTask(request: UpdateTaskDto): Flow<Result<String>>
-    fun getWatchers(): Flow<Result<List<Watcher>>>
+    fun getWatchers(): Flow<Result<WatchersDto>>
+    fun getTaskAssignee(tlId:Int): Flow<Result<List<Assignee>>>
+
     suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
     suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse
     suspend fun getMedicalCard(): MedicalCardResponse
     suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse
     fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>
     suspend fun checkAppVersion( ): NetworkAppVersion
+    suspend fun sendComment(id: String, comment: String): Flow<Result<String>>
 }

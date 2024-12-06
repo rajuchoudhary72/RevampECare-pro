@@ -22,7 +22,6 @@ class InstitutionCodeViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val schoolDatabase: SchoolDatabase
 ) : ViewModel() {
-
     val canEnterSchoolCode = BuildConfig.FLAVOR == "Franciscan e-Care"
 
 
@@ -30,7 +29,7 @@ class InstitutionCodeViewModel @Inject constructor(
         schoolDatabase.getSchoolsFlow().map {
             it.map {
                 if (it.schoolCode == schoolCode) {
-                    it.asNetworkSchool().copy(isSelected = true)
+                    it.asNetworkSchool()?.copy(isSelected = true)
                 } else {
                     it.asNetworkSchool()
                 }

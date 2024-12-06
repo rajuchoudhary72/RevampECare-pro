@@ -22,23 +22,25 @@ class DefaulterFeeReportViewModel @Inject constructor(
 
 
 
-    private val defaultFilterMutableStateFlow: MutableStateFlow<NetworkResult<DefaulterFilters>> = MutableStateFlow(
+    private val defaultFilterMutableStateFlow: MutableStateFlow<NetworkResult<DefaulterFilters>> =
+        MutableStateFlow(
         NetworkResult.Loading())
-    val defaultFilterStateFlow: StateFlow<NetworkResult<DefaulterFilters>> = defaultFilterMutableStateFlow
+    val defaultFilterStateFlow: StateFlow<NetworkResult<DefaulterFilters>> =
+        defaultFilterMutableStateFlow
 
-    private val defaultersDataMutableStateFlow: MutableStateFlow<NetworkResult<List<DefaulterDataList>>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val defaultersDataStateFlow: StateFlow<NetworkResult<List<DefaulterDataList>>> = defaultersDataMutableStateFlow
+    private val defaultersDataMutableStateFlow: MutableStateFlow<NetworkResult<List<DefaulterDataList>>> =
+        MutableStateFlow(NetworkResult.Loading())
+    val defaultersDataStateFlow:
+            StateFlow<NetworkResult<List<DefaulterDataList>>> = defaultersDataMutableStateFlow
 
 
 
     fun defaulterFilters(
-
     )=viewModelScope.launch {
         runCatching {
             defaultFilterMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.defaulterFilters(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter" )
+                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter?senderid="+userDataStore.getSchoolData()?.schoolCode)
         }.onSuccess {
             defaultFilterMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -49,7 +51,6 @@ class DefaulterFeeReportViewModel @Inject constructor(
 
 
     fun getDefaulterReport(
-
         DateFrom : String,
         DateTo : String,
         schoolid : String,
@@ -71,7 +72,5 @@ class DefaulterFeeReportViewModel @Inject constructor(
         }
 
     }
-
-
 
 }

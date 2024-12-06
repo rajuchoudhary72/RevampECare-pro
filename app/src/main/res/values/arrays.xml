@@ -6,4 +6,13 @@
         <item>High</item>
         <item>Urgent</item>
     </string-array>
+    <string-array name="filter_item">
+        <item>Today</item>
+        <item>This Month</item>
+        <item>This Year</item>
+    </string-array>
+    <string-array name="filter_item1">
+        <item>All Fee Type</item>
+        <item>School</item>
+    </string-array>
 </resources>

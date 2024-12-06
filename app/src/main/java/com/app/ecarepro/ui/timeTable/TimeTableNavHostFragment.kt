@@ -46,9 +46,9 @@ class TimeTableNavHostFragment : Fragment() {
             name= requireArguments().getString(Constant.NAME).toString()
 
              if (name.isEmpty() || name=="null"){
-                 binding.toolbar.title="TimeTable"
+                 binding.toolbar.title="Timetable"
              }else{
-                 binding.toolbar.title= "TimeTable of $name"
+                 binding.toolbar.title= "Timetable of $name"
              }
 
         }catch (_:Exception){}
@@ -80,12 +80,16 @@ class TimeTableNavHostFragment : Fragment() {
 
                             if (it.data.data!=null ) {
 
+                                binding.tabLayout.visibility=View.VISIBLE
+                                binding.viewPager.visibility=View.VISIBLE
+                                binding.tvNoData.visibility=View.GONE
+
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
 
 
                                // fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
-                                fragmentList.add( TimeTableDayWiseNavHostFragment(it.data,toFragment))
+                                fragmentList.add(TimeTableDayWiseNavHostFragment.newInstance(it.data,toFragment))
 
                                 val viewPagerAdapter = ViewPagerAdapter(
                                     fragmentList,
@@ -112,8 +116,16 @@ class TimeTableNavHostFragment : Fragment() {
                                 }.attach()
 
 
+                            }else{
+                                binding.tabLayout.visibility=View.GONE
+                                binding.viewPager.visibility=View.GONE
+                                binding.tvNoData.visibility=View.VISIBLE
                             }
 
+                        }else{
+                            binding.tabLayout.visibility=View.GONE
+                            binding.viewPager.visibility=View.GONE
+                            binding.tvNoData.visibility=View.VISIBLE
                         }
 
                     }

@@ -17,6 +17,7 @@
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
 
+
         <action
             android:id="@+id/action_splashFragment_to_schoolCodeFragment"
             app:destination="@id/schoolCodeFragment"
@@ -60,6 +61,10 @@
         android:id="@+id/staticalReport"
         android:name="com.app.ecarepro.ui.statical.StaticalReport"
         tools:layout="@layout/fragment_statical_report" />
+    <fragment
+        android:id="@+id/collectionReport"
+        android:name="com.app.ecarepro.ui.collection_report.CollectionReportFragment"
+        tools:layout="@layout/collection_report" />
     <fragment
         android:id="@+id/appUserReportFragment"
         android:name="com.app.ecarepro.ui.appuserreport.AppUserReportFragment"
@@ -460,14 +465,9 @@
         android:label="AssignmentNavHostFragment" />
     <fragment
         android:id="@+id/staffAssignmentsListFragment"
-        android:name="com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListFragment"
+        android:name="com.app.ecarepro.ui.assignment.staff.StaffAssignmentsListNavHostFragment"
         android:label="StaffAssignmentsListFragment" >
-        <action
-            android:id="@+id/action_staffAssignmentsListFragment_to_viewAssignmentFragment"
-            app:destination="@id/viewAssignmentFragment" />
-        <action
-            android:id="@+id/action_staffAssignmentsListFragment_to_editAssignmentFragment"
-            app:destination="@id/editAssignmentFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/viewAssignmentFragment"
@@ -718,6 +718,10 @@
     <fragment
         android:id="@+id/defaulterReportFragment"
         android:name="com.app.ecarepro.ui.fee_report.collection.defaulter.DefaulterReportFragment"
+        android:label="DefaulterReportFragment" />
+    <fragment
+        android:id="@+id/estimateReportFragment"
+        android:name="com.app.ecarepro.ui.fee_report.collection.estimate.EstimateReportFragment"
         android:label="DefaulterReportFragment" />
     <fragment
         android:id="@+id/feePaymentFragment"
@@ -976,4 +980,12 @@
         android:id="@+id/updateStudentsProfileFragment"
         android:name="com.app.ecarepro.ui.update_students_profile.UpdateStudentsProfileFragment"
         android:label="UpdateStudentsProfileFragment" />
+    <fragment
+        android:id="@+id/smsReportFragment"
+        android:name="com.app.ecarepro.ui.sms_app_msg_report.sms_report.SmsReportFragment"
+        android:label="SmsReportFragment" />
+    <fragment
+        android:id="@+id/otpVerificationFragment"
+        android:name="com.app.ecarepro.ui.otpverification.OtpVerificationFragment"
+        android:label="OtpVerificationFragment" />
 </navigation>

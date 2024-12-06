@@ -20,6 +20,8 @@ import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.asNetworkSchool
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.model.Feed
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
+import com.app.ecarepro.data.network.model.submit_assignment.asUserEntity
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
@@ -60,7 +62,14 @@ class UserDataStoreImpl @Inject constructor(
             setCurrentUserId(id.toInt())
 
     }
-
+    override suspend fun saveUserDetails(user: UserDTL, schoolCode: String, time: String) {
+        val id = userDatabase.insertUser(
+            user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time)
+        )
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0)
+            setCurrentUserId(id.toInt())
+    }
     override suspend fun getUser(): NetworkUserDetailsDto? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null
@@ -291,17 +300,17 @@ class UserDataStoreImpl @Inject constructor(
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
         private val currentSchoolCode = stringPreferencesKey("currentSchoolCode")
-        private val schoolDataKey = stringPreferencesKey("schoolData")
+        //private val schoolDataKey = stringPreferencesKey("schoolData")
         private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")
-        private val userPreferenceKey = stringPreferencesKey("user")
+       // private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
         private val generalSettingsKey = stringPreferencesKey("generalSettings")
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
-        private val classIDKey = intPreferencesKey("classID")
+      //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }

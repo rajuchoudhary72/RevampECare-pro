@@ -32,9 +32,7 @@ class AssignmentListAdapter(
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
 
         holder.bind(activityLST[position])
-
-
-     }
+    }
 
 
    inner class AssignmentListAdapter(val bindingm: StuAssignmentItemBinding) : RecyclerView.ViewHolder(bindingm.root) {

@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-dontwarn com.bumptech.glide.**
+# Prevent R8 from leaving Data object members always null
+-keepclassmembers,allowobfuscation class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+  }
+-keep,allowobfuscation @interface com.google.gson.annotations.SerializedName

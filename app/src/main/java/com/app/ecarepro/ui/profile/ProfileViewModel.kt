@@ -10,6 +10,7 @@ import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -38,9 +39,9 @@ class ProfileViewModel @Inject constructor(
     val uiState =
         refresh.flatMapLatest {
             combine(
-                flow = userDataStore.getUsersFlow(),
-                flow2 = userRepository.getUserProfile(),
-                flow3 = userDataStore.getCurrentUserIdAsFlow()
+                flow = userDataStore.getUsersFlow(),  // get  data  base to fetch user  detail
+                flow2 = userRepository.getUserProfile(),   // api
+                flow3 = userDataStore.getCurrentUserIdAsFlow()   // selected user
             ) { users, profile, userId ->
                 Triple(users, profile, userId)
             }
@@ -50,7 +51,8 @@ class ProfileViewModel @Inject constructor(
                     ProfileUiState.Success(
                         profile = profile.getOrNull()!!,
                         users = users,
-                        currentUserId = userId!!
+                        currentUserId = userId!!,
+                        canEditProfile = profile.getOrNull()?.canEditProfile ?: false && users.find { it.id == userId }?.userType == Constant.PARENT_TYPE
                     )
                 } else {
                     ProfileUiState.Error(
@@ -67,8 +69,16 @@ class ProfileViewModel @Inject constructor(
             )
 
     init {
-        viewModelScope.launch {
-            userType = userDataStore.getUser()?.userType!!
+        try {
+            viewModelScope.launch {
+                try {
+                    userType = userDataStore.getUser()?.userType!!
+                }catch (e:NullPointerException){
+                    e.stackTrace
+                }
+            }
+        }catch (e:RuntimeException){
+            e.stackTrace
         }
     }
 
@@ -133,7 +143,8 @@ sealed interface ProfileUiState {
     data class Success(
         val profile: Profile,
         val users: List<NetworkUserDetailsDto>,
-        val currentUserId: Int
+        val currentUserId: Int,
+        val canEditProfile: Boolean = false
     ) : ProfileUiState
 
     data class Error(

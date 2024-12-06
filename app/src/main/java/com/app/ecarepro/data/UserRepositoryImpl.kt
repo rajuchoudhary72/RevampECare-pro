@@ -16,7 +16,8 @@ import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Purpose
-
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.network.model.NetworkAssignments
 import com.app.ecarepro.data.network.model.NetworkAttedanceSummary
 import com.app.ecarepro.data.network.model.NetworkBirthday
@@ -140,14 +141,20 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSection
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
+import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.model.ClassID_StID
@@ -224,6 +231,91 @@ class UserRepositoryImpl @Inject constructor(
 
         }
     }
+    override suspend fun twoFactorLogin(
+        schoolCode: String,
+        userName: String,
+        password: String
+    ): TwoFactorLoginResponseDto {
+        return userService.twoFactorLogin(
+            UserLoginRequestDto(
+                schCode = schoolCode,
+                username = userName,
+                password = password
+            )
+        ).also {
+            if (it.authenticated == true && it.isOTPEnabled == false) {
+                it.userDTL?.let { userDtl: UserDTL ->
+                    saveUserDtl(userDtl, schoolCode, userName)
+                }
+            }
+        }
+    }
+    override suspend fun resendOtp(
+        schoolCode: String,
+        oTPAuthKey: String,
+    ): Flow<Result<TwoFactorLoginResponseDto>> {
+        return flow {
+            try {
+                val response =
+                    userService.resendOTP(
+                        ValidateOtpRequest(
+                            schCode = schoolCode,
+                            oTPAuthKey = oTPAuthKey
+                        )
+                    )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    override suspend fun validateOtp(
+        schoolCode: String,
+        oTPAuthKey: String,
+        otp: String,
+        userName: String
+    ): Flow<Result<TwoFactorLoginResponseDto>> {
+        return flow {
+            try {
+                val response =
+                    userService.validateOTP(
+                        ValidateOtpRequest(
+                            schCode = schoolCode,
+                            oTPAuthKey = oTPAuthKey,
+                            otp = otp
+                        )
+                    )
+                if (response.errorCode == 0) {
+                    response.also {
+                        it.userDTL?.let { userDtl: UserDTL ->
+                            saveUserDtl(userDtl, schoolCode, userName)
+                        }
+                    }
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    private suspend fun saveUserDtl(
+        userDtl: UserDTL,
+        schoolCode: String,
+        userName: String
+    ) {
+        userDataStore.saveUserDetails(userDtl, schoolCode, getCurrentDateTimeAmPm())
+        userDataStore.saveAuthToken(userDtl.authToken ?: "")
+        userDataStore.setAsUserAuthenticated(userDtl.authenticated?:false)
+        userDataStore.saveUserType(userDtl.userType ?: 0)
+        userDataStore.saveRoleName(userDtl.roleName ?: "")
+        userDataStore.saveUserNameID(userName ?: "")
+    }
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {
             try {
@@ -270,7 +362,7 @@ class UserRepositoryImpl @Inject constructor(
                     ChangeUserNameRequestDto(
                         newPassword = password,
                         newUsername = confirmPassword,
-                        currentUsername = "SF129"
+                        currentUsername = ""
                     )
                 )
                 if (response.errorCode == 0) {
@@ -358,12 +450,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun leaveAction(
         applType: Int,
-        lvID: Int,
+        lvID: Int?,
+        lvIDs: String?,
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
     ): CommonResponse {
-        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,rejectionReason))
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,lvIDs,rejectionReason))
     }
 
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {
@@ -412,9 +505,9 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun infractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        InfrTypeID: Int
+        stID: Int
     ): NetworkInfractionInstance {
-        return userService.infractionInstance(infrTypeID, InfrSubTypeID, InfrTypeID)
+        return userService.infractionInstance(infrTypeID, InfrSubTypeID, stID)
     }
 
     override suspend fun addInfraction(stID: Int): NetworkAddInfraction {
@@ -695,7 +788,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getStudents(): Flow<Result<List<Student>>> {
         return flow {
             try {
-                val response = userService.getStudentList(2, true)
+                val response = userService.getStudentListSerch(2)
                 if (response.errorCode == 0) {
                     emit(Result.success(response.students))
                 } else {
@@ -848,6 +941,20 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getSMSUses(fromDate, toDate, iD)
     }
 
+    override suspend fun getSMSType(): NetworkSmsReportModel {
+        return userService.getSMSType()
+    }
+
+    override suspend fun getSMSReport(
+        fromDate: String,
+        toDate: String,
+        sMSTypeD: Int,
+        page: Int
+    ): NetworkSmsReportDetails {
+        return userService.getSMSReport(fromDate, toDate, sMSTypeD, page)
+    }
+
+
     override suspend fun getSMSConsumption(fromDate: String, toDate: String): NetworkSMSConsumption {
         return userService.getSMSConsumption(fromDate, toDate)
     }
@@ -947,8 +1054,9 @@ class UserRepositoryImpl @Inject constructor(
             try {
                 val response = userService.getUserProfile()
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.profile))
-                } else {
+                    emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
+                }
+                else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
             } catch (error: Throwable) {
@@ -986,6 +1094,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun staffMyClass(subID: Int, onlyClass: Boolean): NetworkMyClass {
         return userService.staffMyClass(subID, onlyClass)
+    }
+
+    override suspend fun getClassSection(classID: Int): NetworkSection {
+        return userService.getClassSection(classID)
     }
 
     override suspend fun getPayslip(): NetworkPaySlip {
@@ -1204,7 +1316,20 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun uploadStudentPhoto(request: StudentPhotoUploadModel): CommonResponse {
         return userService.uploadStudentPhoto(request)
     }
-
+    override suspend fun feeCollection(
+        feeTypeID: Int,
+        fromDate: String,
+        tillDate: String
+    ): Flow<Result<FeeCollection>> {
+        return flow {
+            try {
+                val response = userService.feeCollection(feeTypeID, fromDate, tillDate)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override suspend fun surveyList(pg: Int, isReport: Boolean): SurveyListResponse {
         return userService.surveyList(pg, isReport)
     }

@@ -13,5 +13,7 @@ data class WatchersDto(
     @SerializedName("status")
     val status: String?,
     @SerializedName("watchers")
-    val watchers: List<Watcher>?
+    val watchers: List<Watcher>?,
+    @SerializedName("taskList")
+    val taskList: List<Title>?
 )

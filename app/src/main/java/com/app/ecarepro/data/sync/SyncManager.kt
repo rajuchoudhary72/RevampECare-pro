@@ -16,15 +16,17 @@ import javax.inject.Inject
 class SyncManager @Inject constructor(
     private val appRepository: AppRepository,
     private val userDataStore: UserDataStore,
-    private val userDatabase: UserDatabase
+    private val userDatabase: UserDatabase,
 ) {
-
+    /*call this function  from where  you need sync  to user and school data  for current active user */
     suspend fun sync(
         forceSync: Boolean = true,
-        resultListener: ((success: Boolean, message: String) -> Unit)? = null
+        resultListener: ((success: Boolean, message: String) -> Unit)? = null,
     ) {
+        /*get  user data  from DB */
         val userToUpdate = userDataStore.getUser()
         when {
+            /*if user not authenticated  return false */
             userDataStore.isUserAuthenticated().not() -> {
                 resultListener?.invoke(false, "User not authenticated")
             }
@@ -32,7 +34,7 @@ class SyncManager @Inject constructor(
             forceSync -> {
                 startSyncing(userToUpdate, resultListener)
             }
-
+            /*check  from background to  foreground  if not  24 hours from last sync then  ignore api  else hit api  */
             isLastSyncMoreThan24HoursFromNow(userToUpdate?.loginTime) -> {
                 startSyncing(userToUpdate, resultListener)
             }
@@ -43,9 +45,10 @@ class SyncManager @Inject constructor(
         }
     }
 
+    /*Api calling to sync data  */
     private suspend fun startSyncing(
         userToUpdate: NetworkUserDetailsDto?,
-        resultListener: ((success: Boolean, message: String) -> Unit)?
+        resultListener: ((success: Boolean, message: String) -> Unit)?,
     ) {
         appRepository.syncData().collect { result ->
             if (result.isSuccess) {
@@ -68,16 +71,17 @@ class SyncManager @Inject constructor(
         }
     }
 
+    /* update local DB  after sync  api success */
     private suspend fun updateDataToDatabase(
         data: LoginResponseDto,
-        userToUpdate: NetworkUserDetailsDto?
+        userToUpdate: NetworkUserDetailsDto?,
     ) {
         val user = data.asUserEntity()
         userToUpdate?.let { currentUserInDatabase ->
             userDatabase.deleteUserById(currentUserInDatabase.id)
             val id = userDatabase.insertUser(
                 user.copy(
-                    schoolCode = userDataStore.getCurrentSchoolCode(),
+                    schoolCode = data.schoolCode,
                     loginTime = getCurrentSyncTime()
                 )
             )

@@ -1,5 +1,6 @@
 package com.app.ecarepro.firebase_messaging
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -18,6 +19,7 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import com.app.ecarepro.ECateProApp
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -45,6 +47,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var appRepository: AppRepository
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d("remote", "From: ${remoteMessage}")
         Log.d("FCM", "From: ${remoteMessage.from}")
         Log.v("MyFirebaseMessagingService","message received ---> ${remoteMessage.data} notif--> ${remoteMessage.notification}")
         remoteMessage.data.isNotEmpty().let {
@@ -81,7 +84,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        //End
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
+        )
+       /* val sounduri = Uri.parse(
+            "android.resource://" + ECateProApp.instance!!.getContext().packageName
+                .toString() + "/" + R.raw.notification
+        )*/
+      /*  //End
         val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE)
         } else {
@@ -89,25 +106,33 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
             )
-        }
+        }*/
 
 
         val channelId = "e-Care"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_luncher)
+            .setColor(ContextCompat.getColor(this, R.color.md_theme_dark_primary))
             .setContentTitle(title)
             .setContentText(getFormatedString(messageBody))
             .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
+            .setDefaults(Notification.DEFAULT_VIBRATE)
             .setContentIntent(pendingIntent)
+
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             notificationBuilder.setSmallIcon(R.drawable.ic_luncher)
             notificationBuilder.setColor(resources.getColor(R.color.md_theme_light_primary))
         } else {
             notificationBuilder.setSmallIcon(R.drawable.ic_launcher)
         }
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val channelName = "Channel human readable title"
@@ -118,15 +143,14 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                 .build()
             channel.setSound(defaultSoundUri, audioAttributes)
-            val notificationManager = getSystemService(NotificationManager::class.java)
+            channel.enableLights(true)
+            channel.enableVibration(true)
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        //notificationManager.notify(123421, notificationBuilder.build())
         notificationManager.notify(UUID.randomUUID().hashCode(), notificationBuilder.build())
     }
-
     override fun onNewToken(token: String) {
         // Handle new or refreshed FCM registration token
         Log.d(TAG, "Refreshed token: $token")

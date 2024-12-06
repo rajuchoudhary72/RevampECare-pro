@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="estimateData"
+            type="com.app.ecarepro.data.network.model.EstimateModule" />
+
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <soup.neumorphism.NeumorphCardView
+            android:id="@+id/Button1"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            app:neumorph_backgroundColor="@color/background_dashboard"
+            app:neumorph_lightSource="leftTop"
+            app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
+            app:neumorph_strokeWidth="@dimen/_1sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="13sp"
+                    android:text="@string/head_name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/brand_color"
+                    android:fontFamily="@font/calibri_bold"
+                    android:text="@{estimateData.headName}"
+                    android:textSize="12sp"
+                    tools:text="Annual charges" />
+            </LinearLayout>
+
+
+        </soup.neumorphism.NeumorphCardView>
+
+        <soup.neumorphism.NeumorphCardView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:neumorph_backgroundColor="@color/background_dashboard"
+            app:neumorph_lightSource="leftTop"
+            app:neumorph_shapeAppearance="@style/CustomShapeAppearanceButton"
+            app:neumorph_strokeWidth="@dimen/_1sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/_10sdp"
+                android:paddingHorizontal="@dimen/dp_20">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{@string/actual_no+": "+estimateData.actualAmount}'
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        tools:text="Actual Amount:1234567.00" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{@string/concessionno+": "+estimateData.concession}'
+                        android:textSize="12sp"
+                        tools:text="Actual Amount:1234567.00" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{@string/received_amount+": "+estimateData.receivedAmount}'
+                        android:textSize="12sp"
+                        tools:text="Received Amount:1234567.00" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/light_grey"
+                    android:paddingVertical="@dimen/_8sdp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:paddingStart="@dimen/_8sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dues Amount"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfprodisplay_bold"
+                        android:text='@{"₹"+estimateData.duesamount}'
+                        android:textColor="@color/brand_color"
+                        tools:text="Rs 3.5" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </soup.neumorphism.NeumorphCardView>
+
+
+    </LinearLayout>
+
+
+</layout>

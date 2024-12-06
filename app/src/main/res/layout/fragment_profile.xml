@@ -20,21 +20,21 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/profile"
-            app:titleTextColor="@color/white">
-
+             app:title="@string/profile"
+             app:titleTextColor="@color/white"  >
             <TextView
                 android:id="@+id/tv_edit_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="end"
                 android:text="@string/edit_profile"
-                android:textAllCaps="true"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:layout_marginEnd="@dimen/_15sdp"
                 android:textColor="@color/white"
-                android:visibility="gone" />
+                android:fontFamily="@font/ubuntu_medium"
+                android:visibility="gone"
+                android:textAllCaps="true"
+                 />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

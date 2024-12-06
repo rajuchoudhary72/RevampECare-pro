@@ -1,9 +1,11 @@
 package com.app.ecarepro
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.os.Bundle
 import android.provider.Settings.Secure
 import androidx.appcompat.app.AppCompatDelegate
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -16,11 +18,14 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
 
 @HiltAndroidApp
-class ECateProApp : Application() {
+class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
+
+    private var currentActivity: WeakReference<Activity>? = null
 
     @Inject
     lateinit var appRepository: AppRepository
@@ -31,32 +36,17 @@ class ECateProApp : Application() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         FirebaseApp.initializeApp(this)
        // registerToken()
+        // Set the custom crash handler
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
+
+        // Register the activity lifecycle callbacks
+        registerActivityLifecycleCallbacks(this)
     }
 
-    private fun registerToken() {
-        Firebase.messaging.token.addOnSuccessListener { token ->
-            GlobalScope.launch {
-                val wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
-                val wInfo = wifiManager.connectionInfo
-                val macAddress = wInfo.macAddress
-                appRepository
-                        .registerDevice(
-                                RegisterDevice(
-                                        fcmToken = token,
-                                        osVersion = "OS " + Build.VERSION.SDK_INT,
-                                        deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
-                                        deviceType = 1,
-                                        imeI1 = macAddress,
-                                        imeI2 = macAddress,
-                                        deviceID = Secure.getString(contentResolver, Secure.ANDROID_ID)
-                                )
-                        )
-                        .collectLatest {
-                            println(it)
-                        }
-            }
-        }
+    fun getCurrentActivity(): Activity? {
+        return currentActivity?.get()
     }
+
     fun getContext(): Context {
         return applicationContext
     }
@@ -65,5 +55,27 @@ class ECateProApp : Application() {
         var instance: ECateProApp? = null
             private set
     }
+
+    override fun onActivityCreated(p0: Activity, p1: Bundle?) {
+     }
+
+    override fun onActivityStarted(p0: Activity) {
+     }
+
+    override fun onActivityResumed(activity: Activity) {
+        currentActivity = WeakReference(activity)
+    }
+
+    override fun onActivityPaused(p0: Activity) {
+     }
+
+    override fun onActivityStopped(p0: Activity) {
+     }
+
+    override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {
+     }
+
+    override fun onActivityDestroyed(p0: Activity) {
+     }
 
 }

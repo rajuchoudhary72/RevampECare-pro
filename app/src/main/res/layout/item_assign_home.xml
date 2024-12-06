@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -13,16 +14,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/_5sdp"
-            android:weightSum="2">
+            android:padding="@dimen/_5sdp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.1"
+                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/_3sdp">
-
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_stu_img"
@@ -43,8 +42,10 @@
                         android:id="@+id/tv_stu_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@font/ubuntu_medium"
                         android:lines="1"
+                        android:singleLine="true"
                         android:textColor="@color/module"
                         android:textSize="@dimen/_11sdp"
                         android:visibility="visible" />
@@ -74,16 +75,13 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:textColor="@color/sub_text_color"
                         android:textSize="@dimen/_8sdp" />
-
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/_3sdp"
-                android:layout_weight="0.9"
-                android:layout_gravity="center"
+                android:layout_gravity="end"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -104,20 +102,15 @@
                     android:gravity="center"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp"
-                    android:textColor="@color/sub_text_color"
                     android:text="No House Assign"
+                    android:textColor="@color/sub_text_color"
                     android:textColorHint="@color/sub_text_color" />
-
-
             </LinearLayout>
-
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="#e5e5e5" />
-
     </LinearLayout>
-
 </layout>

@@ -1,29 +1,31 @@
 package com.app.ecarepro.ui.profile
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.app.ecarepro.BuildConfig
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
-import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -45,6 +47,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.core.content.ContextCompat
 
 
 @AndroidEntryPoint
@@ -55,15 +58,30 @@ class ProfileFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModels()
 
-    private lateinit var photoType: PhotoType
+    private var photoType: PhotoType = PhotoType.COVER_PHOTO
 
-
-    @Inject
-    lateinit var userDataStore: UserDataStore
 
     @Inject
     lateinit var syncManager: SyncManager
-
+    @Inject
+    lateinit var userDataStore: UserDataStore
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted. Continue the action or workflow in your
+                // app.
+                openCamera()
+            } else {
+                // Explain to the user that the feature is unavailable because the
+                // features requires a permission that the user has denied. At the
+                // same time, respect the user's decision. Don't link to system
+                // settings in an effort to convince the user to change their
+                // decision.
+                showPermissionDeniedMessage()
+            }
+        }
     private val galleryLauncher =
         registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -167,6 +185,7 @@ class ProfileFragment : Fragment() {
         }
 
         if (uiState is ProfileUiState.Success) {
+            binding.tvEditProfile.isVisible = uiState.canEditProfile
             binding.recyclerView.withModels {
                 profileHeader {
                     id(uiState.profile.username)
@@ -219,27 +238,34 @@ class ProfileFragment : Fragment() {
                             if (it.name.isNullOrEmpty()) {
                                 "N/A (${it.roleName})"
                             } else {
+                                it.name + "(${it.roleName})"
                                 /* if (it.userType==3){
                                      it.name + "(${it.designation})"
                                  }else{
                                      it.name + "(${it.roleName})"
                                  }*/
-                                it.name + "(${it.roleName})"
                             }
 
                         )
-
-                        if (it.stName.isNullOrEmpty().not()) {
+                        /*show  child info  if  user is parent*/
+                        if (it.stName.isNullOrEmpty().not()){
                             childName("${it.stName ?: ""} (${it.className ?: ""})")
-                        } else {
+                        }else{
                             childName(null)
                         }
+
                         photo(it.photo)
                         school(it.school)
                         isCurrentUser(it.id == uiState.currentUserId)
                         changeUser { _ ->
                             lifecycleScope.launch {
                                 userDataStore.setCurrentUserId(it.id)
+                                restartApp()
+                            }
+
+                            /*lifecycleScope.launch {
+                                userDataStore.setCurrentUserId(it.id)
+                             //   sync  data on Local DB when user switch account
                                 mainActivity().showLoader(true)
                                 syncManager.sync { isSuccess, message ->
                                     mainActivity().showLoader(false)
@@ -247,7 +273,7 @@ class ProfileFragment : Fragment() {
                                         restartApp()
                                     mainActivity().showMessage(message)
                                 }
-                            }
+                            }*/
                         }
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())
@@ -299,31 +325,62 @@ class ProfileFragment : Fragment() {
         )
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Add Photo!")
-        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+        builder.setItems(items) { dialog, item ->
             FileAccess.checkPermission(this)
             if (items[item] == "Take Photo") {
                 if (isCameraPermissionGranted(requireContext())) {
                     cameraLauncher.launch(FileAccess.cameraIntent())
                 } else {
-                  mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
+                    mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
                 }
-
             } else if (items[item] == "Choose from Library") {
                 galleryLauncher.launch(FileAccess.galleryIntent())
             } else if (items[item] == "Cancel") {
                 dialog.dismiss()
             }
-        })
+        }
         builder.show()
     }
-
     fun isCameraPermissionGranted(context: Context): Boolean {
         return ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
-
+    private fun checkCameraPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // You can use the API that requires the permission.
+                openCamera()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                // In an educational UI, explain to the user why your app requires this
+                // permission for a specific feature to behave as expected. In this UI,
+                // include a "cancel" or "no thanks" button that allows the user to
+                // continue using your app without granting the permission.
+                showPermissionRationaleDialog()
+            }
+            else -> {
+                // You can directly ask for the permission.
+                // The registered ActivityResultCallback gets the result of this request.
+                requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+    private fun showPermissionRationaleDialog() {
+        mainActivity().showMessage("Camera permission is required to take photo, go to setting and enable permission for the app.")
+    }
+    private fun openCamera() {
+        cameraLauncher.launch(FileAccess.cameraIntent())
+    }
+    private fun showPermissionDeniedMessage() {
+        mainActivity().showMessage("Camera permission denied")
+    }
     private fun EpoxyController.buildStaffModels(profile: Profile) {
 
         profileItem {
@@ -429,15 +486,29 @@ class ProfileFragment : Fragment() {
             subTitle(profile.club)
         }
         profileItem {
-            id(R.string.bank_account_number)
-            iconRes(R.drawable.ic_bank_account)
-            title(getString(R.string.bank_account_number))
+            id(R.string.uan_number)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.uan_number))
+            subTitle(profile.uaN_Number)
         }
         profileItem {
-            id(R.string.uan_account_number)
-            iconRes(R.drawable.ic_uan)
-            title(getString(R.string.uan_account_number))
+            id(R.string.nationalnumber)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.nationalnumber))
+            subTitle(profile.nationalCode)
         }
+        /*  profileItem {
+              id(R.string.bank_account_number)
+              iconRes(R.drawable.ic_bank_account)
+              title(getString(R.string.bank_account_number))
+
+          }
+          profileItem {
+              id(R.string.uan_account_number)
+              iconRes(R.drawable.ic_uan)
+              title(getString(R.string.uan_account_number))
+
+          }*/
         profileItem {
             id(R.string.emergencyContactNo)
             iconRes(R.drawable.ic_contact_no_)
@@ -538,6 +609,12 @@ class ProfileFragment : Fragment() {
             subTitle(profile.club)
         }
         profileItem {
+            id(R.string.s_r_n_umrn_sats_no)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.s_r_n_umrn_sats_no))
+            subTitle(profile.srN_UMRN_SATSNumber)
+        }
+        profileItem {
             id(R.string.house_name)
             iconRes(R.drawable.outline_help_outline_24)
             title(getString(R.string.house_name))
@@ -555,6 +632,19 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.contactMobile)
         }
+
+        profileItem {
+            id(R.string.bill_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.bill_number))
+            subTitle(profile.billNumber)
+        }
+        profileItem {
+            id(R.string.apaar_id)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.apaar_id))
+            subTitle(profile.apaaR_ID)
+        }
     }
 
     private fun EpoxyController.buildParentModels(profile: Profile) {
@@ -570,6 +660,18 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.studentProfile?.contactMobile)
         }
+        profileItem {
+            id(R.string.bill_number)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.bill_number))
+            subTitle(profile.studentProfile?.billNumber)
+        }
+        profileItem {
+            id(R.string.apaar_id)
+            iconRes(R.drawable.ic_contact_no_)
+            title(getString(R.string.apaar_id))
+            subTitle(profile.studentProfile?.apaaRID)
+        }
 
         profileWardDetails {
             id(profile.name)
@@ -582,16 +684,16 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.apply {
+        _binding?.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
+      /*  viewLifecycleOwner.lifecycleScope.launch {
             userDataStore.getUser()?.run {
                 binding.tvEditProfile.isVisible = Constant.PARENT_TYPE == userType
             }
-        }
+        }*/
 
-        binding.tvEditProfile.setOnClickListener {
+        _binding?.tvEditProfile?.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)
         }
     }

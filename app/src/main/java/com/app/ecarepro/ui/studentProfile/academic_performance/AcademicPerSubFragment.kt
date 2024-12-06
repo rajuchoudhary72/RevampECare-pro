@@ -9,10 +9,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.databinding.FragmentAcademicPerSubBinding
 import com.app.ecarepro.model.Subject
-import com.app.ecarepro.ui.timeTable.DayWiseListAdapter
 
 
-class AcademicPerSubFragment( val itemDat: Subject) : Fragment() {
+class AcademicPerSubFragment(val itemDat: List<Subject>?) : Fragment() {
 
     private lateinit var binding: FragmentAcademicPerSubBinding
 
@@ -28,12 +27,12 @@ class AcademicPerSubFragment( val itemDat: Subject) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (itemDat!=null){
+        if (!itemDat.isNullOrEmpty()){
 
 
 
             val assignmentListAdapter =
-                AcademicPerfListAdapter(itemDat.marks)
+                AcademicPerfListAdapter(itemDat )
 
             binding.rvExamList.apply {
                 setHasFixedSize(true)

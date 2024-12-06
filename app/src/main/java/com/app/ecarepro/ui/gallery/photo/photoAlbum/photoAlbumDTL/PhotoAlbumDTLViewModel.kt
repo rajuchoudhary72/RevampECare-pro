@@ -1,5 +1,7 @@
 package com.app.ecarepro.ui.gallery.photo.photoAlbum.photoAlbumDTL
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
@@ -19,9 +21,9 @@ class PhotoAlbumDTLViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val photoAlbumMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAlbumPhotoDetails>> = MutableStateFlow(
+    private val photoAlbumMutableStateFlow: MutableLiveData<NetworkResult<NetworkAlbumPhotoDetails>> = MutableLiveData(
         NetworkResult.Loading())
-    val  photoAlbumStateFlow: StateFlow<NetworkResult<NetworkAlbumPhotoDetails>> = photoAlbumMutableStateFlow
+    val  photoAlbumStateFlow: LiveData<NetworkResult<NetworkAlbumPhotoDetails>> = photoAlbumMutableStateFlow
 
 
 

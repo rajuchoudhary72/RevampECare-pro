@@ -16,6 +16,6 @@ interface AppRepository {
     fun registerDevice(registerDevice: RegisterDevice): Flow<Result<String>>
     fun getFavourites(): Flow<Result<List<Favourites>>>
     fun updateFavourites(items:List<Favourites>): Flow<Result<String>>
-    fun syncData(): Flow<Result<LoginResponseDto>>
     suspend fun notificationSeen(  id: String ): CommonResponse
+    fun syncData(): Flow<Result<LoginResponseDto>>
 }

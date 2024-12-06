@@ -15,6 +15,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAssignmentListBinding
 import com.app.ecarepro.model.Assignment
+import com.app.ecarepro.model.AssignmentShareModel
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.TeacherAssignmentViewModel
 import com.app.ecarepro.ui.mainActivity
@@ -25,18 +26,14 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AssignmentListFragment(
-    private val assignments: List<Assignment>?,
-
-    val isClassAssignment: Boolean,
-
-) : Fragment(), ItemListener<Assignment> {
+class AssignmentListFragment : Fragment(), ItemListener<Assignment> {
 
     private lateinit var binding : FragmentAssignmentListBinding
     private val teacherAssignmentViewModel : TeacherAssignmentViewModel by viewModels()
     private val assignmentNavHostViewModel : AssignmentNavHostViewModel by viewModels()
 
-
+    private var assignments: List<Assignment>? = null
+    private var isClassAssignment: Boolean = false
 
 
     override fun onCreateView(
@@ -44,6 +41,10 @@ class AssignmentListFragment(
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentAssignmentListBinding.inflate(inflater,container,false)
+        arguments?.let { bundle ->
+            assignments = bundle.getParcelableArrayList(ASSIGNMENTS)
+            isClassAssignment = bundle.getBoolean(IS_CLASS_ASSIGNMENT, false)
+        }
         return binding.root
     }
 
@@ -55,7 +56,8 @@ class AssignmentListFragment(
 
 
             val assignmentListAdapter =
-                AssignmentListAdapter(assignments,
+                AssignmentListAdapter(
+                    assignments!!,
                     this@AssignmentListFragment,isClassAssignment)
 
             binding.rvAssignment.apply {
@@ -86,6 +88,7 @@ class AssignmentListFragment(
                 findNavController().navigate(R.id.viewAssignmentFragment,Bundle().apply {
                     putString(Constant.ASSIGNMENT_ID, t.id)
                     putBoolean(Constant.USER_TEACHER, false)
+                    putParcelable("AssignmentShareModel", AssignmentShareModel(asgFiles = t.asgFileURLs, hasAttachment = t.hasAttachment))
                 })
             }
             2 -> {
@@ -129,5 +132,22 @@ class AssignmentListFragment(
         }
 
 
+    }
+
+    companion object {
+        private const val ASSIGNMENTS = "assignments"
+        private const val IS_CLASS_ASSIGNMENT = "isClassAssignment"
+
+        // Use this factory method to create a new instance of this fragment using the provided parameters.
+        fun newInstance(assignments: List<Assignment>?, isClassAssignment: Boolean): AssignmentListFragment {
+            return AssignmentListFragment().apply {
+                arguments = Bundle().apply {
+                    if (assignments!=null){
+                        putParcelableArrayList(ASSIGNMENTS, ArrayList(assignments))
+                    }
+                    putBoolean(IS_CLASS_ASSIGNMENT, isClassAssignment)
+                }
+            }
+        }
     }
 }

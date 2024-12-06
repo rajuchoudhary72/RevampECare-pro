@@ -9,14 +9,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerformanceNavHostFragment
 import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciationFragment
 import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
 import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
+import com.app.ecarepro.ui.studentProfile.report_card.StudentProfileReportCardFragment
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,6 +81,13 @@ class StudentProfileNavHostFragment : Fragment() {
 
                             if (it.data.profile!=null){
                                 binding.userData = it.data.profile
+                                binding.civStuPic.setOnClickListener { _ ->
+                                    try {
+                                        findNavController().navigate(R.id.openImageFragment, Bundle().apply {
+                                            putString(Constant.URL_ARGUMENT, it.data.profile.photo)
+                                        })
+                                    } catch (_: Exception) { }
+                                }
                             }
 
 
@@ -102,12 +112,24 @@ class StudentProfileNavHostFragment : Fragment() {
                                                     fragmentName.add("Attendance")
                                                 }
                                             }
-                                            "PersonalDetails" -> {
+                                            "AcademicPerformance" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
-                                                    fragmentName.add("Personal Details")
+                                                    fragmentList.add(
+                                                        AcademicPerformanceNavHostFragment( it.data.academicYears,studentID )
+                                                    )
+                                                    fragmentName.add("Academic Performance")
                                                 }
                                             }
+                                            "ReportCard" -> {
+                                                if (i.isShow){
+
+                                                    fragmentList.add(
+                                                        StudentProfileReportCardFragment(it.data.reportCardDTLs   )
+                                                    )
+                                                    fragmentName.add("Report Card")
+                                                }
+                                            }
+
                                             "FeeDetails" -> {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileFeeSummaryFragment(it.data.feeSummery,it.data.academicYears,studentID))
@@ -174,6 +196,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
 
                                     }.attach()
+                                    binding.viewPager.offscreenPageLimit = 6 // Adjust based on your tab count
                                 }catch (e:Exception){ }
                             }
                                 }

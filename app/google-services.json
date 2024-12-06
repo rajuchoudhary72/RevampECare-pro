@@ -33,13 +33,6 @@
             {
               "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "71010075382-8ur0op8gbcdu6mt6uf2nquk92p2fknqp.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.franciscan.eCareProNew"
-              }
             }
           ]
         }
@@ -88,13 +81,6 @@
             {
               "client_id": "71010075382-b873bk30o2fjacsm1hqu27376bo9i1e0.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "71010075382-8ur0op8gbcdu6mt6uf2nquk92p2fknqp.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.franciscan.eCareProNew"
-              }
             }
           ]
         }

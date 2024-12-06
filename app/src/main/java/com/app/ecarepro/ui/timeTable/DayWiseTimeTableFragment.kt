@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.timeTable
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,16 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
- import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentDayWiseTimeTableBinding
 import com.app.ecarepro.model.TimeTableData
-import com.app.ecarepro.ui.assignment.AssignmentListAdapter
 
-
-class DayWiseTimeTableFragment(private val timeTableData: TimeTableData, val toFragment: String) : Fragment() {
+class DayWiseTimeTableFragment() : Fragment() {
 
 
     private lateinit var binding : FragmentDayWiseTimeTableBinding
+    private var timeTableData: TimeTableData? = null
+    private var toFragment: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                timeTableData = it.getParcelable(ARG_ITEM_DATA, TimeTableData::class.java)
+            }else{
+                @Suppress("DEPRECATION")
+                timeTableData = it.getParcelable(ARG_ITEM_DATA)
+            }
+            toFragment = it.getString(ARG_ITEM_TO_FRAGMENT, "")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +48,8 @@ class DayWiseTimeTableFragment(private val timeTableData: TimeTableData, val toF
 
 
             val assignmentListAdapter =
-                DayWiseListAdapter(timeTableData.timeTable,
+                DayWiseListAdapter(
+                    timeTableData!!.timeTable,
                     this@DayWiseTimeTableFragment,toFragment)
 
             binding.rvTimeTable.apply {
@@ -54,4 +68,21 @@ class DayWiseTimeTableFragment(private val timeTableData: TimeTableData, val toF
         }
 
     }
+
+    companion object {
+        private const val ARG_ITEM_DATA = "item_timeTableData"
+        private const val ARG_ITEM_TO_FRAGMENT = "item_toFragment"
+
+        fun newInstance( timeTableData: TimeTableData,  toFragment: String)= DayWiseTimeTableFragment().apply {
+            arguments= Bundle().apply {
+                putParcelable(ARG_ITEM_DATA,timeTableData)
+                putString(ARG_ITEM_TO_FRAGMENT,toFragment)
+
+            }
+        }
+
+    }
+
+
+
 }

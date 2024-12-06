@@ -30,6 +30,7 @@ class PhotoAlbumTypeNavHostFragment : Fragment() {
     private lateinit var binding: FragmentPhotoAlbumTypeNavHostBinding
     private val photoAlbumViewModel : PhotoAlbumTypeNavHostViewModel by viewModels()
     val albumList=   mutableListOf<AlbumType>()
+    private var isDataLoaded: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +73,7 @@ class PhotoAlbumTypeNavHostFragment : Fragment() {
 
                                 val fragmentList : ArrayList<Fragment> = ArrayList()
                                  albumList.forEach { albumType ->
-                                    fragmentList.add(PhotoAlbumFragment(albumType ))
+                                    fragmentList.add(PhotoAlbumFragment.newInstance(albumType))
                                 }
 
 
@@ -94,7 +95,7 @@ class PhotoAlbumTypeNavHostFragment : Fragment() {
                                     tab.text=  albumList[position].typeName
 
                                 }.attach()
-
+                                isDataLoaded=true
 
                             }
 
@@ -109,7 +110,9 @@ class PhotoAlbumTypeNavHostFragment : Fragment() {
             }
         }
 
-        photoAlbumViewModel.getPhotoAlbumTypes()
+       if (!isDataLoaded){
+           photoAlbumViewModel.getPhotoAlbumTypes()
+       }
 
 
     }

@@ -40,6 +40,7 @@ import com.app.ecarepro.data.network.model.NetworkInfractions
 import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.Purpose
 
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -64,7 +65,10 @@ import com.app.ecarepro.data.network.model.NetworkReportCardDetails
 import com.app.ecarepro.data.network.model.NetworkRouteList
 import com.app.ecarepro.data.network.model.NetworkSMSBalnceInfo
 import com.app.ecarepro.data.network.model.NetworkSMSConsumption
+import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsMsgReport
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.NetworkStaffAttendence
 import com.app.ecarepro.data.network.model.NetworkStaffList
 import com.app.ecarepro.data.network.model.NetworkStaffProfile
@@ -91,6 +95,7 @@ import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
@@ -108,6 +113,7 @@ import com.app.ecarepro.data.network.model.post_trans_att.StuAtt
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChapters
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
@@ -135,6 +141,21 @@ interface UserRepository {
     suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto
     suspend fun logout(): Flow<Result<Boolean>>
 
+    suspend fun twoFactorLogin(
+        schoolCode: String,
+        userName: String,
+        password: String
+    ): TwoFactorLoginResponseDto
+    suspend fun resendOtp(
+        schoolCode: String,
+        oTPAuthKey: String
+    ): Flow<Result<TwoFactorLoginResponseDto>>
+    suspend fun validateOtp(
+        schoolCode: String,
+        oTPAuthKey: String,
+        otp: String,
+        userName: String
+    ): Flow<Result<TwoFactorLoginResponseDto>>
     suspend fun getCredentials(
         schoolCode: String,
         userType: Int,
@@ -154,6 +175,9 @@ interface UserRepository {
         password: String
     ): LoginResponseDto
 
+    suspend fun feeCollection(
+        feeTypeID: Int, fromDate: String, tillDate: String
+    ): Flow<Result<FeeCollection>>
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
     ): Flow<Result<CommonResponse>>
@@ -187,6 +211,11 @@ interface UserRepository {
          subID: Int,
          onlyClass: Boolean
     ): NetworkMyClass
+
+    suspend fun getClassSection(
+        classID: Int
+    ): NetworkSection
+
     suspend fun getPayslip(): NetworkPaySlip
 
     suspend fun getThoughts(
@@ -250,7 +279,8 @@ interface UserRepository {
 
     suspend fun leaveAction(
         applType: Int,
-        lvID: Int,
+        lvID: Int?,
+        lvIDs: String?,
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
@@ -662,6 +692,13 @@ interface UserRepository {
         toDate: String,
         iD: String,
     ): NetworkSmsMsgReport
+
+    suspend fun getSMSType ( ): NetworkSmsReportModel
+
+    suspend fun getSMSReport ( fromDate : String,
+                               toDate: String,
+                               sMSTypeD: Int,
+                               page: Int  ): NetworkSmsReportDetails
 
     suspend fun getSMSConsumption(
         fromDate : String,

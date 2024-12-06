@@ -16,7 +16,7 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 
 
-class ClassAttSubFragment(val attReport: List<AttReport>) : Fragment() , ItemListener<AttReport> {
+class ClassAttSubFragment(val attReport: List<AttReport>?) : Fragment() , ItemListener<AttReport> {
 
     private lateinit var binding : FragmentClassAttSubBinding
 
@@ -33,7 +33,8 @@ class ClassAttSubFragment(val attReport: List<AttReport>) : Fragment() , ItemLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (attReport.isNotEmpty() || attReport!= null){
+        if ( attReport!= null){
+            if (attReport.isNotEmpty()){
 
 
 
@@ -50,6 +51,11 @@ class ClassAttSubFragment(val attReport: List<AttReport>) : Fragment() , ItemLis
             binding.tvNoData.isVisible=false
 
 
+        }else{
+            binding.rvClassAtt.isVisible=false
+            binding.tvNoData.isVisible=true
+
+        }
         }else{
             binding.rvClassAtt.isVisible=false
             binding.tvNoData.isVisible=true

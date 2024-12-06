@@ -1,5 +1,8 @@
 package com.app.ecarepro.ui.circuler
 
+ import android.content.ClipData
+ import android.content.ClipboardManager
+ import android.content.Context
  import android.os.Build
  import android.os.Bundle
  import android.text.Html
@@ -9,7 +12,8 @@ package com.app.ecarepro.ui.circuler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-  import androidx.core.text.HtmlCompat
+ import androidx.core.content.getSystemService
+ import androidx.core.text.HtmlCompat
  import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -52,6 +56,10 @@ class CircularDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvCopyHolder.setOnClickListener {
+            copyToClipboard(requireContext(), binding.tvNoticeDetails.text.toString(),getString(R.string.circular)  )
+        }
+
         binding.relView.setOnClickListener {
             findNavController().navigate(R.id.action_circularDetailsFragment_to_openPdfFragment,Bundle( ).apply {
                 putString(Constant.URL_ARGUMENT, fileSource)
@@ -79,16 +87,23 @@ class CircularDetailsFragment : Fragment() {
                             binding.circularDetails=it.data.circuler
                             fileSource=it.data.circuler.filePath
 
-                            val spanned = HtmlCompat.fromHtml(it.data.circuler.message, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
+                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
+                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
                             binding.tvNoticeDetails.text = spanned
 
                             binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
                         }
                     }
-
-
                 }
             }
         }
     }
+
+    private fun copyToClipboard(context: Context, text: String, label: String ) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, text)
+        clipboard.setPrimaryClip(clip)
+    }
+
 }

@@ -4,6 +4,7 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.DefaulterDataList
 import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.DefaulterFilters
+import com.app.ecarepro.data.network.model.EstimateModule
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
@@ -18,6 +19,7 @@ import com.app.ecarepro.ui.fom_guard.model.verify_code.NetworkVerifyCode
 import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.Url
+import com.app.ecarepro.model.CollectionReport
 
 interface FomApiRepository {
     suspend   fun approveAppointment(
@@ -29,7 +31,8 @@ interface FomApiRepository {
          senderId : String,
          dateFrom : String,
          dateTo : String,
-    ): NetworkFeeCollection
+    ): List<CollectionReport>
+
 
     suspend fun defaulterFilters(
          url: String
@@ -46,6 +49,19 @@ interface FomApiRepository {
         sectionid : String,
         installid : String,
     ): List<DefaulterDataList>
+
+    suspend fun getEstimateReport(
+        url: String,
+        senderid : String,
+        DateFrom : String,
+        DateTo : String,
+        schoolid : String,
+        feetypeid : String,
+        classid : String,
+        sectionid : String,
+        installid : String,
+    ): List<EstimateModule>
+
 
     suspend fun getFeeReceipt(
           url: String,

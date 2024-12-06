@@ -7,8 +7,11 @@ import com.app.ecarepro.data.network.model.post_fee_collection.FeeCollectionBody
 import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.network.model.DefaulterFilters
+import com.app.ecarepro.data.network.model.EstimateModule
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
+import com.app.ecarepro.model.CollectionReport
+
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
 import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
@@ -33,7 +36,7 @@ class FomApiRepositoryImpl @Inject constructor(
         senderId: String,
         dateFrom: String,
         dateTo: String
-    ): NetworkFeeCollection {
+    ): List<CollectionReport> {
         return fomApiService.feeCollectionReport(url, FeeCollectionBody(senderId,dateFrom,dateTo))
     }
 
@@ -52,7 +55,21 @@ class FomApiRepositoryImpl @Inject constructor(
         sectionid: String,
         installid: String
     ): List<DefaulterDataList> {
-        return fomApiService.getDefaulterReport(url, DefaultReportBody(senderid, DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid))
+        return fomApiService.getDefaulterReport(url, senderid, DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid)
+    }
+
+    override suspend fun getEstimateReport(
+        url: String,
+        senderid: String,
+        DateFrom: String,
+        DateTo: String,
+        schoolid: String,
+        feetypeid: String,
+        classid: String,
+        sectionid: String,
+        installid: String
+    ): List<EstimateModule> {
+        return fomApiService.getEstiamteReport(url, senderid, DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid)
     }
 
     override suspend fun getFeeReceipt(url: String,request: FeeReceiptRequest): NetworkFeeReceipt {

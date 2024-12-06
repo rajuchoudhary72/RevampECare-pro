@@ -130,18 +130,37 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
+import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSection
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
+import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
 
 interface UserService {
+    @POST("User/ValidateOTP")
+    suspend fun validateOTP(
+        @Body request: ValidateOtpRequest,
+    ): TwoFactorLoginResponseDto
+    @POST("User/ResendOTP")
+    suspend fun resendOTP(
+        @Body request: ValidateOtpRequest,
+    ): TwoFactorLoginResponseDto
+    @POST("User/TwoFactorLogin")
+    suspend fun twoFactorLogin(
+        @Body request: UserLoginRequestDto,
+    ): TwoFactorLoginResponseDto
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,
@@ -152,7 +171,12 @@ interface UserService {
         @Query("DeviceType") deviceType: Int = 1,
         @Query("deviceID") deviceID: String ,
     ): CommonResponse
-
+    @GET("Report/FeeCollection")
+    suspend fun feeCollection(
+        @Query("FeeTypeId") feeTypeId: Int,
+        @Query("FromDate") fromDate: String,
+        @Query("TillDate") tillDate: String,
+    ): FeeCollection
     @POST("User/GetCredentials")
     suspend fun getCredentials(
         @Body request: GetCredentialsRequest,
@@ -213,6 +237,11 @@ interface UserService {
          @Query("SubID") subID: Int,
          @Query("OnlyClass") onlyClass: Boolean
     ): NetworkMyClass
+
+    @GET("Staff/Sections")
+    suspend fun getClassSection(
+        @Query("ClassSTD") classID: Int
+    ): NetworkSection
 
     @GET("Staff/Payslip")
     suspend fun getPayslip(): NetworkPaySlip
@@ -322,7 +351,7 @@ interface UserService {
     suspend fun infractionInstance(
         @Query("InfrTypeID") infrTypeID: Int,
         @Query("InfrSubTypeID") InfrSubTypeID: Int,
-        @Query("InfrTypeID") InfrTypeID: Int
+        @Query("StID") stID: Int
     ): NetworkInfractionInstance
 
 
@@ -352,6 +381,11 @@ interface UserService {
     suspend fun getStudentList(
         @Query("ScholarType") scholarType: Int,
         @Query("ShowAll") showAll: Boolean
+    ): NetworkStudentList
+
+    @GET("Report/StudentList")
+    suspend fun getStudentListSerch(
+        @Query("ScholarType") scholarType: Int
     ): NetworkStudentList
 
 
@@ -632,7 +666,7 @@ interface UserService {
 
     @GET("User/MyProfile")
     suspend fun getUserProfile(
-        @Query("Edit") edit: Boolean = true
+        @Query("Edit") edit: Boolean = false
     ): UserProfileDto
 
     @GET("User/MyProfile")
@@ -768,6 +802,17 @@ interface UserService {
         @Query("ToDate") toDate: String,
         @Query("ID") iD: String,
     ): NetworkSmsMsgReport
+
+    @GET("Report/SMSType")
+    suspend fun getSMSType ( ): NetworkSmsReportModel
+
+    @GET("Report/SMSReport")
+    suspend fun getSMSReport (
+        @Query("FromDate") fromDate : String,
+        @Query("TillDate") toDate: String,
+        @Query("SMSType")  sMSTypeD: Int,
+        @Query("Page")     page: Int,
+    ): NetworkSmsReportDetails
 
 
 

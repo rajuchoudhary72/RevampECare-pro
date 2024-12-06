@@ -38,11 +38,6 @@ class UserDatabaseImpl @Inject constructor(
     override suspend fun deleteUser(userId: Int) {
         return userDao.deleteUser(userId)
     }
-
-    override suspend fun deleteUserById(id: Int) {
-        userDao.deleteUserById(id)
-    }
-
     override suspend fun deleteUser(userEntity: UserEntity) {
         return userDao.deleteUser(userEntity)
     }
@@ -66,7 +61,9 @@ class UserDatabaseImpl @Inject constructor(
     override fun getSchoolsFlow(): Flow<List<SchoolEntity>> {
         return schoolDao.getSchoolsFlow()
     }
-
+    override suspend fun deleteUserById(id: Int) {
+        userDao.deleteUserById(id)
+    }
     override suspend fun deleteSchool(schoolEntity: SchoolEntity) {
         schoolDao.deleteSchool(schoolEntity)
     }

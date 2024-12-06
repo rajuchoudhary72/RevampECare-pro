@@ -28,6 +28,7 @@ data class AppLayoutDto(
     val status: String?,
     @SerializedName("userInfo")
     val userInfo: UserInfo?,
+
     @SerializedName("searchOptions")
     val searchOptions: List<SearchOption>?
 )
@@ -60,6 +61,8 @@ data class Menu(
 data class UserInfo(
     @SerializedName("name")
     val name: String?,
+    @SerializedName("childName")
+    val childName: String?,
     @SerializedName("otherInfo")
     val otherInfo: String?,
     @SerializedName("photo")
@@ -68,7 +71,21 @@ data class UserInfo(
     val userID: Int?,
     @SerializedName("userType")
     val userType: Int?
-)
+){
+    fun getFullName(): String? {
+        return if (childName.isNullOrEmpty())
+            name
+        else
+            "$name  \nP/O  $childName"
+    }
+
+    fun getFullHomeScreenName(): String? {
+        return if (childName.isNullOrEmpty())
+            name
+        else
+            "$name  \nP/O  $childName ($otherInfo)"
+    }
+}
 
 data class ChildMenu(
     @SerializedName("chMenuID")

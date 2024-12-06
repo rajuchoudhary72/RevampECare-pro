@@ -16,7 +16,9 @@
         <variable
             name="priority"
             type="java.lang.Integer" />
-
+        <variable
+            name="status"
+            type="java.lang.Integer" />
         <variable
             name="canEdit"
             type="java.lang.Boolean" />
@@ -27,7 +29,9 @@
         <variable
             name="editEndDate"
             type="android.view.View.OnClickListener" />
-
+        <variable
+            name="updateStatusListener"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,14 +52,14 @@
             tools:lv_sub_text="13 March 2021" />
 
         <ImageView
-            app:layout_constraintTop_toTopOf="@id/startDate"
-            app:layout_constraintStart_toEndOf="@+id/startDate"
-            android:src="@drawable/ic_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             isVisible="@{canEdit}"
             android:onClick="@{editStartDate}"
             android:padding="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:src="@drawable/ic_edit"
+            app:layout_constraintStart_toEndOf="@+id/startDate"
+            app:layout_constraintTop_toTopOf="@id/startDate" />
 
         <com.app.ecarepro.ui.views.LegendView
             android:id="@+id/endDate"
@@ -66,7 +70,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/startDate"
             app:layout_constraintTop_toTopOf="parent"
-            app:lv_text="Start Date"
+            app:lv_text="End Date"
             tools:lv_sub_text="13 March 2021" />
 
         <ImageView
@@ -84,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:animateLayoutChanges="true"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayoutStatus"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/endDate"
             app:layout_constraintTop_toTopOf="parent">
@@ -109,7 +113,40 @@
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayoutStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:onClick="@{updateStatusListener}"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            android:animateLayoutChanges="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/status_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/calibri_regular"
+                android:text="Status"
+                android:textColor="@color/grey_40"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:layout_marginTop="@dimen/_4sdp"
+                android:id="@+id/status_sub_title"
+                taskStatusColor="@{status}"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@{status == -1 ?  @drawable/outline_remove_red_eye_24: @drawable/tv_bg_rounded}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/status_title"
+                tools:src="@drawable/tv_bg_rounded"
+                tools:ignore="ContentDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -12,6 +12,7 @@ data class Dtl(
     val fromDate: String,
     val studentName: String,
     val studentPhoto: String,
+    val studentClass: String,
 
     val halfdayDTL: Any,
     val leaveAbbr: String,
@@ -24,5 +25,8 @@ data class Dtl(
     val submittedOn: String,
     val teacherID: Int,
     val teacherName: String,
+    val cancelby: String?,
+    val cancelledOn: String?,
+    val showCancelButton: Boolean,
     val tillDate: String
 )

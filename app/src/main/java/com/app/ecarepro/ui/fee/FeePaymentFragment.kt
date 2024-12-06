@@ -1,32 +1,33 @@
 package com.app.ecarepro.ui.fee
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentFeePaymentBinding
-import com.app.ecarepro.databinding.SmsRechargeLogItemBinding
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.fee_report.collection.CollectionFeeReportListAdapter
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -58,7 +59,6 @@ class FeePaymentFragment : Fragment() {
 
     }
 
-
     private fun getGenToken(){
         lifecycleScope.launch {
             feePaymentViewModel.genTokenStateFlow.collectLatest {
@@ -87,77 +87,95 @@ class FeePaymentFragment : Fragment() {
         }
         feePaymentViewModel.getGenerateToken(Constant.DEVICE_TYPE)
     }
-    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        val packageName = "com.android.chrome"
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
-        } else {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+    private fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        if (isChromeInstalled(requireContext())){
+            val packageName = "com.android.chrome"
+            if (packageName != null) {
+                customTabsIntent.intent.setPackage(packageName)
+                customTabsIntent.launchUrl((requireActivity() as MainActivity), uri!!)
+            } else {
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+        }else{
+            mainActivity().showMessage("Chrome is not installed")
         }
+
     }
+
+    private fun isChromeInstalled(context: Context): Boolean {
+        val chromePackageName = "com.android.chrome"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+        intent.setPackage(chromePackageName)
+
+        val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfoList.isNotEmpty()
+    }
+
+
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun setUpFeePayWebView(tokenKey: String) {
 
 // https://payment.lfconventschoolsangrur.com/mlogin.aspx
-         /*  val tabIntent = CustomTabsIntent.Builder()
-               .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
-           openCustomTab(tabIntent, Uri.parse(feePaymentViewModel.feePayemtURL + "?token=" + tokenKey))*/
 
-         lifecycleScope.launch {
-             userDataStore.getSchoolData()?.run {
-                 binding.apply {
-                     (requireActivity() as MainActivity).showLoader(true)
-                     wvFeePayment.settings.javaScriptEnabled = true
-                     wvFeePayment.settings.setSupportZoom(true)
-                     wvFeePayment.webViewClient= object  : WebViewClient(){
-
-                         override fun shouldOverrideUrlLoading(
-                             view: WebView?,
-                             request: WebResourceRequest?
-                         ): Boolean {
-                             val uri = request!!.url
-                             if (uri.scheme == "upi") {
-
-                                 val intent = Intent(Intent.ACTION_VIEW, uri)
-                                 startActivity(intent)
-                                 return true
-                             }
-                             return super.shouldOverrideUrlLoading(view, request)
-                         }
-
-                         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-
-                             super.onPageStarted(view, url, favicon)
-
-                         }
-
-                         override fun onPageFinished(view: WebView?, url: String?) {
-
-                             super.onPageFinished(view, url)
-                             (requireActivity() as MainActivity).showLoader(false)
-                         }
-                     }
-
-
-
-                     if (! feePayemtURL.isNullOrEmpty()){
-                         wvFeePayment.loadUrl("$feePayemtURL?token=$tokenKey")
-                      }else{
-                 Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
-             }
-
-                 }
-             }
-         }
 
 //         lifecycleScope.launch {
 //             userDataStore.getSchoolData()?.run {
-//                 val tabIntent = CustomTabsIntent.Builder()
-//                     .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
-//                 openCustomTab(tabIntent, Uri.parse(feePayemtURL + "?token=" + tokenKey))
+//                 binding.apply {
+//                     (requireActivity() as MainActivity).showLoader(true)
+//                     wvFeePayment.settings.javaScriptEnabled = true
+//                     wvFeePayment.settings.setSupportZoom(true)
+//                     wvFeePayment.webViewClient= object  : WebViewClient(){
 //
-//             }}
+//                         override fun shouldOverrideUrlLoading(
+//                             view: WebView?,
+//                             request: WebResourceRequest?
+//                         ): Boolean {
+//                             val uri = request!!.url
+//                             if (uri.scheme == "upi") {
+//
+//                                 val intent = Intent(Intent.ACTION_VIEW, uri)
+//                                 startActivity(intent)
+//                                 return true
+//                             }
+//                             return super.shouldOverrideUrlLoading(view, request)
+//                         }
+//
+//                         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+//
+//                             super.onPageStarted(view, url, favicon)
+//
+//                         }
+//
+//                         override fun onPageFinished(view: WebView?, url: String?) {
+//
+//                             super.onPageFinished(view, url)
+//                             (requireActivity() as MainActivity).showLoader(false)
+//                         }
+//                     }
+//                      wvFeePayment.webChromeClient = WebChromeClient()
+//
+//
+//                     if (! feePayemtURL.isNullOrEmpty()){
+//                         wvFeePayment.loadUrl("$feePayemtURL?token=$tokenKey")
+//                      }else{
+//                 Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
+//             }
+//
+//                 }
+//             }
+//         }
+
+         lifecycleScope.launch {
+             userDataStore.getSchoolData()?.run {
+                 Log.v("feePayemtURL", "$feePayemtURL?token=$tokenKey")
+                 val tabIntent = CustomTabsIntent.Builder()
+                     .enableUrlBarHiding()
+
+                     .setToolbarColor( (requireActivity() as MainActivity).getColor(R.color.green)).build()
+                 openCustomTab(tabIntent, Uri.parse(feePayemtURL + "?token=" + tokenKey))
+
+             }}
 
            }
 

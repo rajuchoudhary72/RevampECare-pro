@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -127,14 +128,19 @@ class ChatFragment : Fragment() {
                     ChatUiState.EmptyInbox -> {
                         noDataFoundView {
                             id(R.id.empty_view)
+                            binding.toolbar.title = "Message"
                         }
                     }
                     is ChatUiState.Success -> {
-                       // setUpToolbar(uiState.senderDTL)
+                        uiState.senderDTL?.let {
+                            setUpToolbar(it)
+                        }
+                        binding.toolbar.title = "Message"
                         binding.tvSubject.text = "Sub: ${uiState.subject}"
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
                         binding.btnRecipient.isVisible = uiState.recipients.isNullOrEmpty().not()
+
                         uiState.messages.forEach { message ->
                             if (message.isMine) {
                                 senderChatMessage {
@@ -183,23 +189,30 @@ class ChatFragment : Fragment() {
             }
         }
     }
-  /*  private fun setUpToolbar(sender: Sender) {
-        binding.apply {
-            photo.imageUrl(
-                sender.photo,
-                ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
-            )
-            name.text = sender.name
-            if (sender.senderType==3){
-                designation.text = sender.designation
-            }else  if (sender.senderType==1){
-                designation.text = "Class :- "+ sender.className
-            } else  if (sender.senderType==2){
-                designation.text = "P/O  " + sender.childName+" , "+ sender.className
-            }
+    private fun setUpToolbar(sender: Sender) {
+        if (chatViewModel.messageType==MessageType.INBOX.value){
+            binding.apply {
+                headerView.isVisible = true
+                photo.imageUrl(
+                    sender.photo,
+                    ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
+                )
+                name.text = sender.name
+                if (sender.senderType==3){
+                    designation.text = sender.designation
+                }else  if (sender.senderType==1){
+                    designation.text = "Class :- "+ sender.className
+                } else  if (sender.senderType==2){
+                    designation.text = "P/O  " + sender.childName+" , "+ sender.className
+                }
 
+            }
+        }else{
+            binding.headerView.isVisible =false
+            binding.toolbar.setTitle("Message")
         }
-    }*/
+
+    }
     private fun openPhoto(photo: String?) {
         if (photo.isNullOrEmpty()) return
         if (isPdfUrl(photo)) {
@@ -207,10 +220,14 @@ class ChatFragment : Fragment() {
         } else if (isAudioUrl(photo)) {
             openPdfFromUrl(photo)
         } else {
-            findNavController().navigate(
-                R.id.photoViewFragmentFragment,
-                bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
-            )
+            try {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
     }

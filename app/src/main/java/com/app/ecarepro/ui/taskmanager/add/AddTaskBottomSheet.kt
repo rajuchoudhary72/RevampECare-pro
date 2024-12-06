@@ -66,7 +66,10 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         mViewModel.attachment = Pair(imageString, imageExt)
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivity().showLoader(false)
+    }
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -172,7 +175,10 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         binding.taskList.setAdapter(adapter)
 
         binding.taskList.setOnItemClickListener { _, _, position, _ ->
-            mViewModel.selectedTitle.value = title[position]
+            mainActivity().showLoader(true)
+            mViewModel.getAssignee( title[position]){
+                mainActivity().showLoader(false)
+            }
             binding.assigneeCarousel.isVisible = false
         }
     }
@@ -250,7 +256,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         binding.assigneeCarousel.withModels {
             assignees?.forEach {
                 taskAssigneeCarouselItem {
-                    id(it.id)
+                    id(it.toString())
                     photo(it.photo)
                     name(it.name)
                     designation(it.designation)

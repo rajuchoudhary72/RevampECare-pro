@@ -11,7 +11,9 @@ data class UserProfileDto(
     @SerializedName("profile")
     val profile: Profile,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("canEditProfile")
+    val canEditProfile: Boolean?
 )
 
 data class Profile(
@@ -33,6 +35,10 @@ data class Profile(
     val designation: String?,
     @SerializedName("doAnniversary")
     val doAnniversary: String?,
+    @SerializedName("uaN_Number")
+    val uaN_Number: String?,
+    @SerializedName("nationalCode")
+    val nationalCode : String?,
     @SerializedName("dob")
     val dob: String?,
     @SerializedName("doj")
@@ -71,6 +77,8 @@ data class Profile(
     val cbseID: String?,
     @SerializedName("club")
     val club: String?,
+    @SerializedName("srN_UMRN_SATSNumber")
+    val srN_UMRN_SATSNumber: String?,
     @SerializedName("photo")
     val photo: String?,
     @SerializedName("qualification")
@@ -98,7 +106,9 @@ data class Profile(
     @SerializedName("admissionNo")
     val admissionNo: String?,
     @SerializedName("billNumber")
-    val billNumber: Any?,
+    val billNumber: String?,
+    @SerializedName("apaaR_ID")
+    val apaaR_ID: String?,
     @SerializedName("birthPlace")
     val birthPlace: String?,
     @SerializedName("bloodGroup")
@@ -190,7 +200,8 @@ data class Profile(
     @SerializedName("state")
     val state: String?,
     @SerializedName("transport")
-    val transport: String?
+    val transport: String?,
+    val canEditProfile: Boolean?
 )
 
 data class UserImgReq(
@@ -213,8 +224,6 @@ data class StudentProfile(
     val admissionDate: String?,
     @SerializedName("admissionNo")
     val admissionNo: String?,
-    @SerializedName("billNumber")
-    val billNumber: Any?,
     @SerializedName("birthPlace")
     val birthPlace: String?,
     @SerializedName("bloodGroup")
@@ -237,6 +246,10 @@ data class StudentProfile(
     val contactEmailID: String?,
     @SerializedName("contactMobile")
     val contactMobile: String?,
+    @SerializedName("billNumber")
+    val billNumber: String?,
+    @SerializedName("apaaR_ID")
+    val apaaRID: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("coverImg")
@@ -291,6 +304,8 @@ data class StudentProfile(
     val motherEmail2: String?,
     @SerializedName("motherMob_1")
     val motherMob1: String?,
+    @SerializedName("srN_UMRN_SATSNumber")
+    val srN_UMRN_SATSNumber: String?,
     @SerializedName("motherMob_2")
     val motherMob2: String?,
     @SerializedName("motherName")

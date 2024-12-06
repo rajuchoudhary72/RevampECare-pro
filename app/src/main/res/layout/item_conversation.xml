@@ -14,13 +14,11 @@
             type="java.lang.String" />
 
         <variable
-            name="hasRead"
-            type="java.lang.Boolean" />
-
-        <variable
             name="date"
             type="java.lang.String" />
-
+        <variable
+            name="hasRead"
+            type="java.lang.Boolean" />
         <variable
             name="msgType"
             type="java.lang.String" />
@@ -81,8 +79,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="@{name}"
                 isBold="@{hasRead}"
+                android:text="@{name}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image"
@@ -97,7 +95,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/calibri_regular"
                 android:maxLines="1"
-                android:text="@{abbreviation}"
+                app:formattedText="@{abbreviation}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="@color/grey_60"
                 app:layout_constraintEnd_toEndOf="parent"
