@@ -18,6 +18,8 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.Html
 import android.text.Spannable
+import com.app.ecarepro.data.network.model.MessageSettings
+
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.CharacterStyle
@@ -362,12 +364,21 @@ class ComposeFragment : Fragment() {
         }
 
         if (uiState is ComposeUiState.Success) {
+            handleAttachmentTypes(uiState.messageSettings)
             buildAttachmentModels(uiState.attachments)
             buildChipGroup(uiState.contacts)
             setUpSmsTypes(uiState.smsTypes)
         }
     }
-
+    private fun handleAttachmentTypes(messageSettings: MessageSettings?) {
+        messageSettings?.let { settings ->
+            binding.btnCamera.isVisible = settings.media?.browseImg == true
+            binding.btnGallery.isVisible = settings.media?.browseImg == true
+            binding.btnRecord.isVisible = settings.media?.browseAudio == true
+            binding.btnBrowseAudio.isVisible = settings.media?.browseAudio == true
+            binding.btnBrowsePdf.isVisible = settings.media?.browsePDF == true
+        }
+    }
     private fun setUpSmsTypes(smsTypes: List<SmsType>) {
         binding.spinnerSmsTypeLayout.isVisible = smsTypes.isNotEmpty()
         if (smsTypes.isEmpty()) return

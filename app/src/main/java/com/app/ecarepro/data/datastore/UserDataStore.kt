@@ -10,6 +10,7 @@ import com.app.ecarepro.model.Slide
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
+import com.app.ecarepro.data.network.model.MessageSettings
 
 interface UserDataStore {
     suspend fun saveUser(user: NetworkUserDetailsDto)
@@ -18,6 +19,8 @@ interface UserDataStore {
     suspend fun getUser(): NetworkUserDetailsDto?
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)
+    suspend fun saveMessageSettings(messageSettings: MessageSettings)
+    suspend fun getMessageSettings(): Flow<MessageSettings?>
     suspend fun getCurrentUserId(): Int?
     fun getCurrentUserIdAsFlow(): Flow<Int?>
     suspend fun setCurrentSchoolCode(schoolCode: String)

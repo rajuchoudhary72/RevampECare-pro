@@ -16,6 +16,8 @@ import com.app.ecarepro.data.database.model.asNetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.MessageSettings
+
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.asNetworkSchool
 import com.app.ecarepro.data.network.model.asUserEntity
@@ -52,7 +54,17 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun saveUser(user: NetworkUserDetailsDto) {
         //userDatabase.insertUser(user.asUserEntity())
     }
-
+    override suspend fun saveMessageSettings(messageSettings: MessageSettings) {
+        context.dataStore.edit { preferences ->
+            preferences[messageSettingsKey] = gson.toJson(messageSettings)
+        }
+    }
+    override suspend fun getMessageSettings(): Flow<MessageSettings?> {
+        return context.dataStore.data.map { preferences ->
+            val itemType = object : TypeToken<MessageSettings>() {}.type
+            gson.fromJson(preferences[messageSettingsKey], itemType)
+        }
+    }
     override suspend fun saveUserDetails(user: LoginResponseDto, schoolCode: String, time: String) {
         val id = userDatabase.insertUser(
             user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time)
@@ -307,6 +319,8 @@ class UserDataStoreImpl @Inject constructor(
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
         private val generalSettingsKey = stringPreferencesKey("generalSettings")
+        private val messageSettingsKey = stringPreferencesKey("messageSettings")
+
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
