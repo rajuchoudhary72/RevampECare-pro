@@ -109,7 +109,7 @@ class UserDataStoreImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMessageSettings(): Flow<MessageSettings?> {
+    override fun getMessageSettings(): Flow<MessageSettings?> {
         return context.dataStore.data.map { preferences ->
             val itemType = object : TypeToken<MessageSettings>() {}.type
             gson.fromJson(preferences[messageSettingsKey], itemType)

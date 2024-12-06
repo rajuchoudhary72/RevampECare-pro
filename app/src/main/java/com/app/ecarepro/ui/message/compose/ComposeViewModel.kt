@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.util.Base64
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -66,9 +65,12 @@ class ComposeViewModel @Inject constructor(
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
     val attachmentVisible = combine(
         flow = composeMessageType,
-        flow2 = userDataStore.getUserAsFlow()
-    ) { messageType, user ->
-        messageType == ComposeMessageType.ONLY_APP_MESSAGE && user?.userType == 3
+        flow2 = userDataStore.getUserAsFlow(),
+        flow3 = userDataStore.getMessageSettings()
+    ) { messageType, user, messageSettings ->
+        val hideMessageAttachment =
+            messageSettings?.media == null || (messageSettings.media.browseAudio == false && messageSettings.media.browsePDF == false && messageSettings.media.browseImg == false)
+        messageType == ComposeMessageType.ONLY_APP_MESSAGE && hideMessageAttachment.not()
     }.asLiveData()
     var currentLocation: Pair<Double, Double>? = null
 
@@ -165,12 +167,12 @@ class ComposeViewModel @Inject constructor(
                         }
 
                     }
-            }
-            else {
-                if (contacts.value.isEmpty()){
-                    result(false,"Please Select recipient")
-                }else{
-                    val wifiManager = context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
+            } else {
+                if (contacts.value.isEmpty()) {
+                    result(false, "Please Select recipient")
+                } else {
+                    val wifiManager =
+                        context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
                     val wInfo = wifiManager.connectionInfo
                     val macAddress = wInfo.macAddress
                     messageRepository.sendMessage(
@@ -210,6 +212,7 @@ class ComposeViewModel @Inject constructor(
         }
 
     }
+
     private fun getMessageType(): Int {
         val attachments = attachments.value
         return if (attachments.isEmpty()) {
@@ -220,10 +223,11 @@ class ComposeViewModel @Inject constructor(
             3
         } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
             3
-        }else {
+        } else {
             2
         }
     }
+
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value
         if (attachments.isEmpty() || attachments.size == 1)
@@ -276,9 +280,9 @@ class ComposeViewModel @Inject constructor(
             } else {
                 val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-              //  saveBitmapAndGetExtension(bitmap)
+                //  saveBitmapAndGetExtension(bitmap)
                 val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
-          //      val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+                //      val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
                 Attachment(
                     attachment = imageString,
                     fileExt = imageExt,
@@ -289,6 +293,7 @@ class ComposeViewModel @Inject constructor(
             null
         }
     }
+
     fun saveBitmapAndGetExtension(bitmap: Bitmap): String {
         val file = File(context.cacheDir, "image_${System.currentTimeMillis()}.png")
 
@@ -302,6 +307,7 @@ class ComposeViewModel @Inject constructor(
         // Get the file extension
         return getImageExtension(bitmap, compressFormat)
     }
+
     fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
         return when (compressFormat) {
             Bitmap.CompressFormat.JPEG -> "jpg"
@@ -310,6 +316,7 @@ class ComposeViewModel @Inject constructor(
             else -> "unknown"
         }
     }
+
     private fun isPdf(attachment: MiMedia) =
         mutableListOf(
             AttachmentType.PDF.name,
@@ -340,6 +347,7 @@ class ComposeViewModel @Inject constructor(
             null
         }
     }
+
     private fun getBase64StringFromUri(file: File): String? {
         val imageStream: InputStream
         return try {
@@ -353,6 +361,7 @@ class ComposeViewModel @Inject constructor(
             null
         }
     }
+
     @Throws(IOException::class)
     private fun readBytes(inputStream: InputStream): ByteArray {
         val byteBuffer = ByteArrayOutputStream()
@@ -378,19 +387,19 @@ class ComposeViewModel @Inject constructor(
                     rCPTType = contact.receiverType,
                     templateID = template?.templateID,
                     sMS =
-                    if (contact.isParent()) {
-                        template?.template?.replace("R____", contact.name)
-                            ?.replace("S____", contact.childName ?: "")
-                            ?.replace("C____", contact.className ?: "")
-                            ?.replace("ADNo____", contact.admissionNo ?: "")
-                    } else if (contact.isStaff()) {
-                        template?.template?.replace("R____", "")?.replace("S____", contact.name)
-                            ?.replace("C____", contact.className ?: "")
-                            ?.replace("ADNo____", contact.admissionNo ?: "")
+                        if (contact.isParent()) {
+                            template?.template?.replace("R____", contact.name)
+                                ?.replace("S____", contact.childName ?: "")
+                                ?.replace("C____", contact.className ?: "")
+                                ?.replace("ADNo____", contact.admissionNo ?: "")
+                        } else if (contact.isStaff()) {
+                            template?.template?.replace("R____", "")?.replace("S____", contact.name)
+                                ?.replace("C____", contact.className ?: "")
+                                ?.replace("ADNo____", contact.admissionNo ?: "")
 
-                    } else {
-                        template?.template?.replace("R____", contact.name)
-                    }
+                        } else {
+                            template?.template?.replace("R____", contact.name)
+                        }
                 )
             )
         }

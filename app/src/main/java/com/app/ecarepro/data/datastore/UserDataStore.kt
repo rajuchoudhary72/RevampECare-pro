@@ -32,7 +32,7 @@ interface UserDataStore {
     fun getFeeds(): Flow<List<Feed>>
     suspend fun saveGeneralSettings(settings: List<Setting>)
     suspend fun saveMessageSettings(messageSettings: MessageSettings)
-    suspend fun getMessageSettings(): Flow<MessageSettings?>
+    fun getMessageSettings(): Flow<MessageSettings?>
     suspend fun isGeneralSettingEnabled(key: String): Boolean
     suspend fun saveDashboardData(school: UserDashboardDto)
     fun getDashboardData(): Flow<UserDashboardDto?>
