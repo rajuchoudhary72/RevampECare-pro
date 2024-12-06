@@ -92,7 +92,7 @@ android {
     productFlavors {
         create("Franciscan e-Care") {
             dimension = "apps"
-            resValue("string", "app_name", "e-Care-Dev")
+            resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
         create("MYSFHS") {
