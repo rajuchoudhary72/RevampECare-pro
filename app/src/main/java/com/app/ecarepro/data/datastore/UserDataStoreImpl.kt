@@ -13,19 +13,20 @@ import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.database.model.asNetworkSchool
 import com.app.ecarepro.data.database.model.asNetworkUserDetailsDto
+import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.asNetworkSchool
 import com.app.ecarepro.data.network.model.asUserEntity
-import com.app.ecarepro.model.Feed
 import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.network.model.submit_assignment.asUserEntity
+import com.app.ecarepro.model.Feed
 import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.Slide
 import com.google.gson.Gson
-import com.app.ecarepro.data.network.Setting
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
@@ -62,6 +63,7 @@ class UserDataStoreImpl @Inject constructor(
             setCurrentUserId(id.toInt())
 
     }
+
     override suspend fun saveUserDetails(user: UserDTL, schoolCode: String, time: String) {
         val id = userDatabase.insertUser(
             user.asUserEntity().copy(schoolCode = schoolCode, loginTime = time)
@@ -70,6 +72,7 @@ class UserDataStoreImpl @Inject constructor(
         if (userId == null || userId == 0)
             setCurrentUserId(id.toInt())
     }
+
     override suspend fun getUser(): NetworkUserDetailsDto? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null
@@ -84,7 +87,7 @@ class UserDataStoreImpl @Inject constructor(
                     it.asNetworkUserDetailsDto().copy(
                         school = schoolDatabase.getSchool(it.schoolCode ?: "").asNetworkSchool()
                     )
-                }?: emptyList()
+                } ?: emptyList()
             }
     }
 
@@ -93,9 +96,23 @@ class UserDataStoreImpl @Inject constructor(
             preferences[currentUserId] = userId
         }
     }
+
     override suspend fun saveGeneralSettings(settings: List<Setting>) {
         context.dataStore.edit { preferences ->
             preferences[generalSettingsKey] = gson.toJson(settings)
+        }
+    }
+
+    override suspend fun saveMessageSettings(messageSettings: MessageSettings) {
+        context.dataStore.edit { preferences ->
+            preferences[messageSettingsKey] = gson.toJson(messageSettings)
+        }
+    }
+
+    override suspend fun getMessageSettings(): Flow<MessageSettings?> {
+        return context.dataStore.data.map { preferences ->
+            val itemType = object : TypeToken<MessageSettings>() {}.type
+            gson.fromJson(preferences[messageSettingsKey], itemType)
         }
     }
 
@@ -144,7 +161,8 @@ class UserDataStoreImpl @Inject constructor(
                     null
                 )
             }
-            else userDatabase.getUserFlow(getCurrentUserId()!!).map { it?.asNetworkUserDetailsDto() }
+            else userDatabase.getUserFlow(getCurrentUserId()!!)
+                .map { it?.asNetworkUserDetailsDto() }
         }
     }
 
@@ -201,7 +219,7 @@ class UserDataStoreImpl @Inject constructor(
             } else {
                 try {
                     gson.fromJson(json, UserDashboardDto::class.java)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                     null
                 }
@@ -221,7 +239,6 @@ class UserDataStoreImpl @Inject constructor(
             preferences[userTypeKey] = userType
         }
     }
-
 
 
     override suspend fun saveRoleName(roleName: String) {
@@ -247,7 +264,6 @@ class UserDataStoreImpl @Inject constructor(
             preferences[userTypeKey]
         }.first()
     }
-
 
 
     override suspend fun getRoleName(): String? {
@@ -300,17 +316,21 @@ class UserDataStoreImpl @Inject constructor(
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
         private val currentSchoolCode = stringPreferencesKey("currentSchoolCode")
+
         //private val schoolDataKey = stringPreferencesKey("schoolData")
         private val feedsKey = stringPreferencesKey("feeds")
         private val dashboardData = stringPreferencesKey("dashboardData")
-       // private val userPreferenceKey = stringPreferencesKey("user")
+
+        // private val userPreferenceKey = stringPreferencesKey("user")
         private val authTokenKey = stringPreferencesKey("auth_token")
         private val slidesKey = stringPreferencesKey("slides")
         private val generalSettingsKey = stringPreferencesKey("generalSettings")
+        private val messageSettingsKey = stringPreferencesKey("messageSettings")
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
-      //  private val classIDKey = intPreferencesKey("classID")
+
+        //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
     }
 }

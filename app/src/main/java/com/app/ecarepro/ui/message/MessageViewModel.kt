@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.message
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.repository.MessageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MessageViewModel @Inject constructor(
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
+    private val userDataStore: UserDataStore
 ) : ViewModel() {
     private val _showChatOption = MutableStateFlow(false)
     val showChatOption = _showChatOption
@@ -36,6 +38,7 @@ class MessageViewModel @Inject constructor(
                 .getMessageSettings()
                 .collectLatest { result ->
                     result.onSuccess { settings ->
+                        userDataStore.saveMessageSettings(settings)
                         messageSettings.update { settings }
                     }
                 }

@@ -16,6 +16,7 @@ import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.BulkMessageRequestDto
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.Data
+import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.Recipients
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -107,7 +109,8 @@ class ComposeViewModel @Inject constructor(
                     contacts = it.first,
                     attachments = it.second,
                     composeMessageType = it.third.first,
-                    smsTypes = it.third.second
+                    smsTypes = it.third.second,
+                    messageSettings = userDataStore.getMessageSettings().firstOrNull()
                 )
             }
             .stateIn(
@@ -404,7 +407,8 @@ sealed interface ComposeUiState {
         val composeMessageType: ComposeMessageType,
         val attachments: List<MiMedia>,
         val contacts: List<Contact>,
-        val smsTypes: List<SmsType>
+        val smsTypes: List<SmsType>,
+        val messageSettings: MessageSettings?
     ) : ComposeUiState
 
     data class Error(
