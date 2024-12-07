@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -32,6 +33,7 @@ import com.app.ecarepro.ui.leave.leave_report.adapter.MyReportingListAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
@@ -145,7 +147,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 builder.setMessage("Are you sure you want to proceed?")
                 builder.setPositiveButton("Yes") { dialog, _ ->
                     val leaveIds=leaveListIds.joinToString(",")
-                    leaveReportViewModel.leaveAction(applType,null,leaveIds,Constant.LEAVE_ACTION_APPROVE,0,"").invokeOnCompletion {
+                    leaveReportViewModel.leaveAction(applType,null,leaveIds,Constant.LEAVE_ACTION_APPROVE,0,"",null,null,null).invokeOnCompletion {
                         leaveReportAdapter.clearData()
                         status=0
                         pageIndex=1
@@ -256,7 +258,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
             }
             1 -> {
 
-                leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_APPROVE,0,"").invokeOnCompletion {
+                leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_APPROVE,0,"",null,null,null).invokeOnCompletion {
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
@@ -282,7 +284,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 }
             }
             5 ->{
-                leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_CANCEL,0,"").invokeOnCompletion {
+                leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_CANCEL,0,"",null,null,null).invokeOnCompletion {
                     leaveReportAdapter.clearData()
                     status=1
                     pageIndex=1
@@ -291,8 +293,69 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     binding.llAllApproveRej.isVisible=false
                 }
             }
+            6 -> {
+                popUpPartialLeaveApprove(t)
+            }
         }
      }
+
+    private fun popUpPartialLeaveApprove(t: Dtl) {
+        val tvFromDate: TextView
+        val tvTODate: TextView
+        val btn_canel: Button
+        val btn_submit: Button
+        val llStartDate: LinearLayout
+        val llEndDate: LinearLayout
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        dialog.setContentView(R.layout.pop_up_partial_leave_approve)
+        tvFromDate = dialog.findViewById(R.id.tv_from_date)
+        tvTODate = dialog.findViewById(R.id.tv_to_date)
+        btn_canel = dialog.findViewById<Button>(R.id.btn_canel)
+        btn_submit = dialog.findViewById(R.id.btn_submit)
+        llStartDate = dialog.findViewById(R.id.ll_start_date)
+        llEndDate = dialog.findViewById(R.id.ll_end_date)
+
+        tvFromDate.text=t.fromDate
+        tvTODate.text=t.tillDate
+
+        llStartDate.setOnClickListener {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                    tvFromDate.text = Constant.dateToShowSec(date!!)
+                }
+            },Constant.getLongTimeDateSec(t.fromDate),Constant.getLongTimeDateSec(t.tillDate))
+        }
+        llEndDate.setOnClickListener {
+            val timestampBack = Constant.getLongTimeDateSec(tvFromDate.text.toString())
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                    tvTODate.text = Constant.dateToShowSec(date!!)
+                }
+
+            },timestampBack,Constant.getLongTimeDateSec(t.tillDate))
+        }
+        btn_canel.setOnClickListener { dialog.dismiss() }
+
+        btn_submit.setOnClickListener {
+            leaveReportViewModel.leaveAction(applType,t.lvID,null,Constant.LEAVE_ACTION_APPROVE,0,"",
+                true,
+                Constant.strToApiDate( tvFromDate.text.toString()),
+                Constant.strToApiDate( tvTODate.text.toString())
+            )
+                .invokeOnCompletion {
+                leaveReportAdapter.clearData()
+                status=0
+                pageIndex=1
+                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+            }
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
 
     private fun popUpForward(lvID: Int) {
             val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
@@ -315,7 +378,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         null,
                         Constant.LEAVE_ACTION_FORWARD,
                         selectedReporter.teacherID,
-                        ""
+                        "",null,null,null
                     ).invokeOnCompletion {
                         leaveReportAdapter.clearData()
                         status=0
@@ -401,7 +464,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
                         if (multiLeave){
                             val leaveIds=leaveListIds.joinToString(",")
-                            leaveReportViewModel.leaveAction(applType, null,leaveIds,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                            leaveReportViewModel.leaveAction(applType, null,leaveIds,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString(),null,null,null)
                                 .invokeOnCompletion {
                                     leaveReportAdapter.clearData()
                                     status=0
@@ -410,7 +473,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 }
                         }else{
                             leaveReportViewModel.leaveAction(applType,
-                                t!!.lvID,null,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                                t!!.lvID,null,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString(),null,null,null)
                                 .invokeOnCompletion {
                                     leaveReportAdapter.clearData()
                                     status=0
@@ -428,7 +491,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     if (multiLeave){
                         val leaveIds=leaveListIds.joinToString(",")
                         leaveReportViewModel.leaveAction(applType,
-                            null,leaveIds,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                            null,leaveIds,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString(),null,null,null)
                             .invokeOnCompletion {
                                 leaveReportAdapter.clearData()
                                 status=0
@@ -437,7 +500,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                             }
                     }else{
                         leaveReportViewModel.leaveAction(applType,
-                            t!!.lvID,null,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString())
+                            t!!.lvID,null,Constant.LEAVE_ACTION_REJECT,0,textInputEditText.text.toString(),null,null,null)
                             .invokeOnCompletion {
                                 leaveReportAdapter.clearData()
                                 status=0

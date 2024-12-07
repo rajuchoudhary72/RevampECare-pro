@@ -7,4 +7,7 @@ data class PostLeaveAction(
     val lvID: Int?,
     val lvIDs: String?,
     val rejectionReason: String,
+    val isPartialApproved: Boolean?,
+    val partialFromDate: String?,
+    val partialTillDate: String?,
 )

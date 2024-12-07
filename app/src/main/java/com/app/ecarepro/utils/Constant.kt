@@ -170,6 +170,17 @@ class Constant {
             return 0
         }
 
+        fun getLongTimeDateSec(sessionStart: String?): Long {
+            val simpleDateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+            try {
+                val parse = simpleDateFormat.parse(sessionStart.toString())
+                return parse!!.time
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            return 0
+        }
+
         fun strToApiDate(dt: String): String {
             val simpleDateFormat = SimpleDateFormat("dd-MMM-yyyy")
             try {
@@ -185,6 +196,13 @@ class Constant {
         fun dateToShow(inputDateStr: String): String {
             val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return outputFormat.format(date!!)
+        }
+
+        fun dateToShowSec(inputDateStr: String): String {
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }

@@ -447,72 +447,95 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/llFile"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginBottom="@dimen/_10sdp"
-
-
+            android:orientation="vertical"
 
             >
 
-            <TextView
-                android:id="@+id/tv_approve"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_weight="1"
-                android:background="@drawable/background_box_rectangle_black"
-                android:gravity="center"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
-                android:text="@string/approve"
-                android:textColor="@color/green"
-                android:textSize="@dimen/_16sdp"
-                app:fontFamily="@font/ubuntu_bold" />
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:orientation="horizontal"
+                >
 
-            <View
-                android:id="@+id/view_two"
-                android:layout_width="@dimen/_2sdp"
-                android:layout_height="match_parent"
-                android:background="@color/transparent"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_approve"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_box_rectangle_black"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/approve"
+                    android:textColor="@color/green"
+                    app:fontFamily="@font/ubuntu_bold" />
 
-            <TextView
-                android:id="@+id/tv_reject"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_weight="1"
-                android:background="@drawable/background_box_rectangle_black"
-                android:gravity="center"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
-                android:text="@string/reject"
-                android:textColor="@color/red"
-                android:textSize="@dimen/_16sdp"
-                app:fontFamily="@font/ubuntu_bold" />
+                <View
+                    android:id="@+id/view_two"
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:visibility="gone" />
 
-            <View
-                android:id="@+id/view3"
-                android:layout_width="@dimen/_2sdp"
-                android:layout_height="match_parent"
-                android:background="@color/transparent"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tv_partial_approve"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_box_rectangle_black"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/partial_approval"
+                    android:textColor="@color/green"
+                    android:visibility="gone"
+                    app:fontFamily="@font/ubuntu_bold" />
 
-            <TextView
-                android:id="@+id/tv_forward"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
-                android:layout_weight="1"
-                android:background="@drawable/background_box_rectangle_black"
-                android:gravity="center"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
-                android:text="@string/forward"
-                android:textColor="@color/pending_color"
-                android:textSize="@dimen/_16sdp"
-                android:visibility="gone"
-                app:fontFamily="@font/ubuntu_bold" />
+                <View
+                    android:id="@+id/view_three"
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:visibility="gone" />
+
+
+                <TextView
+                    android:id="@+id/tv_reject"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_box_rectangle_black"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/reject"
+                    android:textColor="@color/red"
+                    app:fontFamily="@font/ubuntu_bold" />
+
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="@dimen/_2sdp"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_forward"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/background_box_rectangle_black"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/forward"
+                    android:textColor="@color/pending_color"
+                    android:visibility="gone"
+                    app:fontFamily="@font/ubuntu_bold" />
+
+
+            </LinearLayout>
 
 
 
@@ -520,19 +543,19 @@
 
         <TextView
             android:id="@+id/tv_cancel"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_2sdp"
             android:background="@drawable/background_box_rectangle_black"
-            android:gravity="center"
-            android:paddingTop="@dimen/_10sdp"
-            android:paddingBottom="@dimen/_10sdp"
+            android:gravity="end"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_5sdp"
             android:text="@string/cancel_leave"
             android:textColor="@color/pending_color"
-            android:textSize="@dimen/_16sdp"
             android:visibility="gone"
             app:fontFamily="@font/ubuntu_bold"
             android:layout_below="@+id/llCancel"
+            android:layout_alignParentEnd="true"
             android:layout_marginBottom="@dimen/_10sdp"
 
             />
