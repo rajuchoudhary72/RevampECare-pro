@@ -522,7 +522,7 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
-      //  isImmediatepopup =forceUpdate
+      // isImmediatepopup =forceUpdate
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
             val isAppUpdateAllowed = if (forceUpdate) {
@@ -568,9 +568,11 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 Log.e("In App Update", "onActivityResult: RESULT_OK")
             } else if (resultCode == Activity.RESULT_CANCELED) {
-              /*if (isImmediatepopup){
+             /* if (isImmediatepopup){
+                  Log.e("In force  App Update", "onActivityResult: RESULT_CANCELED")
                   checkAppVersion()
               }else{
+                  Log.e("In soft   App Update", "onActivityResult: RESULT_CANCELED")
                   isImmediatepopup=false
               }*/
                 Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
