@@ -288,6 +288,9 @@ interface UserRepository {
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
+         isPartialApproved: Boolean?,
+         partialFromDate: String?,
+         partialTillDate: String?,
     ): CommonResponse
 
     suspend fun leaveApply(

@@ -457,8 +457,11 @@ class UserRepositoryImpl @Inject constructor(
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
+        isPartialApproved: Boolean?,
+        partialFromDate: String?,
+        partialTillDate: String?,
     ): CommonResponse {
-        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,lvIDs,rejectionReason))
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,lvIDs,rejectionReason,isPartialApproved, partialFromDate, partialTillDate))
     }
 
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {

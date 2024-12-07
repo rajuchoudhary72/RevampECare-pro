@@ -821,5 +821,7 @@
     <string name="cancel_leave">Cancel Leave</string>
     <string name="cancelled_on">Cancelled On:</string>
     <string name="cancelled_by">Cancelled By:</string>
+    <string name="partial_approval">Partial Approval</string>
+    <string name="are_you_sure_you_want_to_partial_approve_this_leave">Are you sure you want to partial approve this leave?</string>
 
 </resources>
