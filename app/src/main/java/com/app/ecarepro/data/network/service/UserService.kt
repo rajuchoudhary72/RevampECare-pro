@@ -12,6 +12,8 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import retrofit2.http.Url
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+
 import com.app.ecarepro.data.network.model.AppointmentFormData
 import com.app.ecarepro.data.network.model.FormDataDepartmentResponseDto
 import com.app.ecarepro.data.network.model.FormDataDesignationResponseDto
@@ -1035,7 +1037,10 @@ interface UserService {
     suspend fun postAssignmentRemark(
         @Body request:  List<AssignmentRemarkPost>,
     ): CommonResponse
-
+    @GET("Report/ModeWiseCollection")
+    suspend fun modeWiseCollection(
+        @Query("CollectionDate") fromDate: String,
+    ): ModeWiseCollection
     @POST("Admin/UploadStudentPhoto ")
     suspend fun uploadStudentPhoto(
         @Body request: StudentPhotoUploadModel,

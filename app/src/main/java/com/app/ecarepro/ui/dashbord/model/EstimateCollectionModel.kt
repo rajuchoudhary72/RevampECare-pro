@@ -1,8 +1,10 @@
 package com.app.ecarepro.ui.dashbord.model
 
-import androidx.core.view.isVisible
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.FeeType
 import com.app.ecarepro.databinding.ItemEstimateCollectionCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.app.ecarepro.utils.rupeeText
@@ -12,17 +14,24 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 
 class EstimateCollectionModel(
     private val feeCollection: FeeCollection,
+    private val isExpanded: Boolean = false,
+    private val toggleCardVisibility: ((Boolean) -> Unit)? = null,
     private val updateFeeCollectionDate: ((feeTypeId: Int, dateFilterType: DateFilterType, isCalenderClick: Boolean) -> Unit)? = null,
 ) :
     ViewBindingKotlinModel<ItemEstimateCollectionCardBinding>(R.layout.item_estimate_collection_card) {
-    private var isExpanded = false
+
+    override fun equals(other: Any?): Boolean {
+        return false
+    }
+
     override fun ItemEstimateCollectionCardBinding.bind() {
-        isExpanded = this@EstimateCollectionModel.isExpanded
+        setIsExpanded(this@EstimateCollectionModel.isExpanded)
         title.setOnClickListener {
-            this@EstimateCollectionModel.isExpanded = this@EstimateCollectionModel.isExpanded.not()
-            groupExpanded.isVisible = this@EstimateCollectionModel.isExpanded
-            groupCollapsed.isVisible = this@EstimateCollectionModel.isExpanded.not()
+            toggleCardVisibility?.invoke(this@EstimateCollectionModel.isExpanded.not())
         }
+
+        /*groupExpanded.isVisible = this@EstimateCollectionModel.isExpanded
+        groupCollapsed.isVisible = this@EstimateCollectionModel.isExpanded.not()*/
 
         textEstimatedAmount.rupeeText(feeCollection.estimate)
         textReceivedAmount.rupeeText(feeCollection.received)
@@ -36,31 +45,68 @@ class EstimateCollectionModel(
 
         barChart.isClearBackgroundColor = true
         lineChart.isClearBackgroundColor = true
+
         btnCalender.setOnClickListener {
             updateFeeCollectionDate?.invoke(
-                FeeFilterType.fromString(editTextFeeType.text.toString()).id,
+                feeCollection.feeTypes?.firstOrNull { it.feeTypeName == editTextFeeType.text.toString() }?.feeTypeID!!,
                 DateFilterType.fromString(editTextDate.text.toString()),
                 true
             )
         }
-        editTextFeeType.setOnItemClickListener { parent, view, position, id ->
-            val selectedItem = parent.getItemAtPosition(position) as String // Assuming your items are strings
+
+        setupAutoCompleteTextView(editTextFeeType, feeCollection.feeTypes) {
             updateFeeCollectionDate?.invoke(
-                FeeFilterType.fromString(selectedItem).id,
+                it.feeTypeID,
                 DateFilterType.fromString(editTextDate.text.toString()),
                 false
             )
         }
+
+        /*  editTextFeeType.setOnItemClickListener { parent, view, position, id ->
+              val selectedItem =
+                  parent.getItemAtPosition(position) as String // Assuming your items are strings
+              updateFeeCollectionDate?.invoke(
+                  FeeFilterType.fromString(selectedItem).id,
+                  DateFilterType.fromString(editTextDate.text.toString()),
+                  false
+              )
+          }*/
         editTextDate.setOnItemClickListener { parent, view, position, id ->
-            val selectedItem = parent.getItemAtPosition(position) as String // Assuming your items are strings
             updateFeeCollectionDate?.invoke(
-                FeeFilterType.fromString(selectedItem ).id,
+                feeCollection.feeTypes?.firstOrNull { it.feeTypeName == editTextFeeType.text.toString() }?.feeTypeID!!,
                 DateFilterType.fromString(editTextDate.text.toString()),
                 false
             )
         }
+
+
         barChart.aa_drawChartWithChartModel(getBarChartModel(feeCollection))
         lineChart.aa_drawChartWithChartModel(getLineChartModel(feeCollection))
+    }
+
+    private fun setupAutoCompleteTextView(
+        autoCompleteTextView: AutoCompleteTextView,
+        items: List<FeeType>?,
+        onItemSelect: (FeeType) -> Unit
+    ) {
+        val adapter = ArrayAdapter(
+            autoCompleteTextView.context,
+            android.R.layout.simple_dropdown_item_1line,
+            items?.map { it.feeTypeName ?: "" } ?: emptyList()
+        )
+        autoCompleteTextView.setAdapter(adapter)
+
+        if (autoCompleteTextView.text.isNullOrEmpty()) {
+            autoCompleteTextView.setText(items?.firstOrNull()?.feeTypeName, false)
+        }
+
+        autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
+            val selectedItem = parent.getItemAtPosition(position) as String
+            val selectedFeeType = items?.firstOrNull { it.feeTypeName == selectedItem }
+            if (selectedFeeType != null) {
+                onItemSelect.invoke(selectedFeeType)
+            }
+        }
     }
 
     private fun getBarChartModel(feeCollection: FeeCollection) = AAChartModel()
@@ -69,7 +115,7 @@ class EstimateCollectionModel(
         .margin(arrayOf(0, 0, 0, 0))
         .legendEnabled(false)
         .tooltipEnabled(false)
-         .series(
+        .series(
             arrayOf(
                 AASeriesElement()
                     .borderRadius(10)
@@ -133,20 +179,23 @@ class EstimateCollectionModel(
                     )
             }?.toTypedArray() ?: emptyArray()
         )
-}
-enum class FeeFilterType(val text: String, val id: Int) {
-    ALL_FEE_TYPE("All Fee Type", 0),
-    SCHOOL("School", 8);
-    companion object {
-        fun fromString(text: String): FeeFilterType {
-            return (values().firstOrNull { it.text == text } ?: ALL_FEE_TYPE)
-        }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + feeCollection.hashCode()
+        result = 31 * result + isExpanded.hashCode()
+        result = 31 * result + (toggleCardVisibility?.hashCode() ?: 0)
+        result = 31 * result + (updateFeeCollectionDate?.hashCode() ?: 0)
+        return result
     }
+
+
 }
+
 enum class DateFilterType(val text: String) {
-    TODAY("Today"),
-    THIS_MONTH("This Month"),
+    TODAY("Till Today"),
     THIS_YEAR("This Year");
+
     companion object {
         fun fromString(text: String): DateFilterType {
             return values().firstOrNull { it.text == text } ?: TODAY

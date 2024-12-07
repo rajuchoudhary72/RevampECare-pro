@@ -16,6 +16,7 @@ import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.data.network.model.Form
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
 
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -157,6 +158,9 @@ interface UserRepository {
         otp: String,
         userName: String
     ): Flow<Result<TwoFactorLoginResponseDto>>
+    suspend fun todayModeWiseCollection(
+        date: String
+    ): Flow<Result<ModeWiseCollection>>
     suspend fun getCredentials(
         schoolCode: String,
         userType: Int,

@@ -233,9 +233,11 @@ class ChatFragment : Fragment() {
     }
 
     private fun openPdfFromUrl(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        val chooser = Intent.createChooser(intent, "Choose an app to open with")
-        startActivity(chooser)
+        if(isAdded){
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val chooser = Intent.createChooser(intent, "Choose an app to open with")
+            startActivity(chooser)
+        }
     }
 
     fun isPdfUrl(url: String): Boolean {

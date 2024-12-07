@@ -11,10 +11,13 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.datastore.UserDataStore
+
 
 @HiltViewModel
 class MessageViewModel @Inject constructor(
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
+    private val userDataStore: UserDataStore
 ) : ViewModel() {
     private val _showChatOption = MutableStateFlow(false)
     val showChatOption = _showChatOption
@@ -36,6 +39,7 @@ class MessageViewModel @Inject constructor(
                 .getMessageSettings()
                 .collectLatest { result ->
                     result.onSuccess { settings ->
+                        userDataStore.saveMessageSettings(settings)
                         messageSettings.update { settings }
                     }
                 }

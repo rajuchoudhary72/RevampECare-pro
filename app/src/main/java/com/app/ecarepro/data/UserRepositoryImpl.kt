@@ -124,6 +124,8 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
@@ -1410,7 +1412,16 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
-
+    override suspend fun todayModeWiseCollection(date: String): Flow<Result<ModeWiseCollection>> {
+        return flow {
+            try {
+                val response = userService.modeWiseCollection(date)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override fun getFormDataEmployee(
         departmentId: String,
         designation: String

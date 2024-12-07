@@ -37,9 +37,7 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
-/*,
-        connectivityInterceptor: ConnectivityInterceptor,
-        customResponseInterceptor: CustomResponseInterceptor*/
+
     @Provides
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
