@@ -857,6 +857,7 @@ class MainActivity : AppCompatActivity() {
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
             12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
+            14 -> navController.navigate(R.id.academicPerformanceHostFragment)
             15 -> navController.navigate(R.id.questionPaperFragment)
             16 -> navController.navigate(R.id.calenderActivityNavHost)
 

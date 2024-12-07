@@ -142,6 +142,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
@@ -1319,6 +1320,11 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun uploadStudentPhoto(request: StudentPhotoUploadModel): CommonResponse {
         return userService.uploadStudentPhoto(request)
     }
+
+    override suspend fun academicYears(): NetworkAcademicYear {
+        return userService.academicYears()
+    }
+
     override suspend fun feeCollection(
         feeTypeID: Int,
         fromDate: String,

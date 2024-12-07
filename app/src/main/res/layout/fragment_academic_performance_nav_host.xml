@@ -10,6 +10,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".ui.studentProfile.academic_performance.AcademicPerformanceNavHostFragment">
 
 
@@ -26,6 +27,25 @@
 
 
                 >
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/md_theme_light_primary"
+                    app:navigationIcon="@drawable/ic_arrow_back_24px"
+                    app:titleCentered="true"
+                    android:elevation="8dp"
+                    app:title="@string/academic_performance"
+                    android:visibility="gone"
+                    app:titleTextAppearance="?attr/titleTextAppearance"
+                    app:titleTextColor="@color/white"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+                </com.google.android.material.appbar.MaterialToolbar>
+
+
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
                     android:id="@+id/collapsing_toolbar"
@@ -54,6 +74,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
                             android:gravity="center">
 
                             <TextView
