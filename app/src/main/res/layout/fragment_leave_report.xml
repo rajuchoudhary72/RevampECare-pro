@@ -169,11 +169,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/background_box_rectangle_green"
                 android:gravity="center"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_8sdp"
                 android:text="@string/approve"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp"
                 app:fontFamily="@font/ubuntu_bold" />
 
             <View
@@ -191,11 +189,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/background_box_rectangle_red"
                 android:gravity="center"
-                android:paddingTop="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_10sdp"
+                android:paddingVertical="@dimen/_8sdp"
                 android:text="@string/reject"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp"
                 app:fontFamily="@font/ubuntu_bold" />
 
 
