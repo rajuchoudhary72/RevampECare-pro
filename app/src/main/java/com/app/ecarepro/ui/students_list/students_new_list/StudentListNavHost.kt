@@ -22,6 +22,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -128,27 +129,24 @@ class StudentListNavHost : Fragment() {
 
         }
 
-
-        if (!isDataLoaded) {
-            studentListViewModel.getStudentList(schoolType,toFragment)
-        }
-
-
         binding.toggleButtonSchoolType.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonSchoolType.checkedButtonId) {
                 R.id.btn_all -> {
-                    schoolType = 2
-                    studentListViewModel.getStudentList(schoolType,toFragment)
+                    studentListViewModel.schoolType.update { 2 }
+                   /* schoolType = 2
+                    studentListViewModel.getStudentList(schoolType,toFragment)*/
                 }
                 R.id.btn_boarding -> {
-                    schoolType = 1
-                    studentListViewModel.getStudentList(schoolType,toFragment)
+                    studentListViewModel.schoolType.update { 1 }
+                  /*  schoolType = 1
+                    studentListViewModel.getStudentList(schoolType,toFragment)*/
 
                 }
 
                 else -> {
-                    schoolType = 0
-                    studentListViewModel.getStudentList(schoolType,toFragment)
+                    studentListViewModel.schoolType.update { 0 }
+                  /*  schoolType = 0
+                    studentListViewModel.getStudentList(schoolType,toFragment)*/
                 }
             }
         }

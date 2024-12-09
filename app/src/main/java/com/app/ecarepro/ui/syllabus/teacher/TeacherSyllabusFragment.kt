@@ -154,10 +154,6 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
 
             }
         }
-
-        teacherSyllabusViewModel.getTeacherSyllabuses()
-
-
     }
 
     override fun onItemClick(t: Syllabuse, pos: Int, boolean: Boolean) {

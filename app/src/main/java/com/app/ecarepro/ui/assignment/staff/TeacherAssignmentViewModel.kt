@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.assignment.staff
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -7,6 +8,7 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,9 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class TeacherAssignmentViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val staffId = savedStateHandle.get<String>(Constant.STAFF_ID_ARGUMENT)?:""
 
     var userType : String = ""
 
@@ -41,6 +45,10 @@ class TeacherAssignmentViewModel @Inject constructor(
     private val deleteAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
     val deleteAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAssignmentMutableStateFlow
+
+    init {
+        teachersAssignment(staffId)
+    }
 
 
     fun teachersAssignment(iD: String )=viewModelScope.launch {

@@ -106,9 +106,6 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
             }
 
         }
-
-        staffListViewModel.getStaffList()
-
     }
 
     override fun onItemClick(t: Staff, pos: Int, boolean: Boolean) {

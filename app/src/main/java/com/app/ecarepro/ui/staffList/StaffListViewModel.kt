@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkStaffList
-import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,20 +17,26 @@ class StaffListViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+
     val showSearchView = MutableStateFlow(false)
     val searchQuery = MutableStateFlow("")
 
 
-    private val staffListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStaffList>> = MutableStateFlow(
-        NetworkResult.Loading())
+    private val staffListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStaffList>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
     val staffListStateFlow: StateFlow<NetworkResult<NetworkStaffList>> = staffListMutableStateFlow
 
-    fun  getStaffList(
+    init {
+        getStaffList()
+    }
 
-    )=viewModelScope.launch {
+
+    private fun getStaffList() = viewModelScope.launch {
         runCatching {
             staffListMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getStaffList( )
+            userRepository.getStaffList()
         }.onSuccess {
             staffListMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -47,10 +52,9 @@ class StaffListViewModel @Inject constructor(
     fun clearSearchQuery() {
         if (searchQuery.value.isEmpty()) {
             showSearchView.update { false }
-        } else
-            searchQuery.update {
-                ""
-            }
+        } else searchQuery.update {
+            ""
+        }
     }
 
 }
