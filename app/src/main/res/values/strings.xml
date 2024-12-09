@@ -483,7 +483,7 @@
     <string name="alt_email_id">Alternate Email ID</string>
     <string name="ward_details">Ward Details</string>
     <string name="admission_number">Admission Number</string>
-    <string name="permanent_education_number">Permanent Education Number</string>
+    <string name="permanent_education_number">Permanent Education Number(PEN)</string>
     <string name="fathers_name">Father\'s Name</string>
     <string name="mothers_name">Mother\'s Name</string>
     <string name="blood_group">Blood Group</string>
@@ -821,5 +821,8 @@
     <string name="cancel_leave">Cancel Leave</string>
     <string name="cancelled_on">Cancelled On:</string>
     <string name="cancelled_by">Cancelled By:</string>
+    <string name="partial_approval">Partial Approval</string>
+    <string name="are_you_sure_you_want_to_partial_approve_this_leave">Are you sure you want to partial approve this leave?</string>
+    <string name="academic_performance">Academic Performance</string>
 
 </resources>

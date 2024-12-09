@@ -10,6 +10,9 @@ import com.app.ecarepro.ui.dashbord.model.DateFilterType
 import com.app.ecarepro.ui.mainActivity
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import java.util.Calendar
+import android.content.Context
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -59,6 +62,7 @@ import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
 import com.app.ecarepro.utils.Constant
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -75,6 +79,7 @@ class DashboardFragment : Fragment() {
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     var isExpanded = false
+    private var modeByCollectionFilter: String = "Today"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,18 +95,16 @@ class DashboardFragment : Fragment() {
         initViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            dashboardViewModel.dashboard.collectLatest { (data, feeds, feeCollection) ->
+            dashboardViewModel.dashboard.collectLatest { data ->
                 if (data != null) {
-                    buildModels(data, feeds, feeCollection)
+                    buildModels(data)
                 }
             }
         }
     }
 
     private fun buildModels(
-        data: UserDashboardDto,
-        feeds: List<Feed>,
-        feeCollection: FeeCollection?
+        data: UserDashboardDto
     ) {
         binding.recyclerView.withModels {
             if (data.showProCards == true || data.showCards == true) {
@@ -117,10 +120,15 @@ class DashboardFragment : Fragment() {
             }
 
             if (data.showFeeCollection == true)
-                buildEstimatedCollectionCard(feeCollection ?: data.feeCollection)
+                buildEstimatedCollectionCard(
+                    data.feeCollection,
+                    data.sessionStartDate,
+                    data.sessionEndDate
+                )
+
 
             if (data.showCollectionModeWise == true)
-                buildTodayModeWiseCollectionCard(data.collectionModeWise)
+                buildTodayModeWiseCollectionCard(data.collectionModeWise, data.sessionStartDate)
             if (data.showActivities == true)
                 buildActivitiesCard(data.upcomingActivities)
             if (data.showTeacherWorkLoad == true)
@@ -222,17 +230,139 @@ class DashboardFragment : Fragment() {
             .addTo(this)
     }
 
-    private fun EpoxyController.buildTodayModeWiseCollectionCard(collectionModeWise: CollectionModeWise?) {
+    private fun EpoxyController.buildTodayModeWiseCollectionCard(
+        collectionModeWise: CollectionModeWise?,
+        sessionStartDate: String?
+    ) {
         collectionModeWise ?: return
         todayModeWiseCollectionCard {
             id(R.id.today_mode_collection)
             isExpanded(isExpanded)
             collectionModeWise(collectionModeWise)
+            filterBy(modeByCollectionFilter)
+            onClickFilter { _ ->
+                showDatePickerDialog(requireContext(), sessionStartDate) { date ->
+                    mainActivity().showLoader(true)
+                    dashboardViewModel.getTodayModeWiseCollection(date) { isSuccess, message ->
+                        mainActivity().showLoader(false)
+                        if (isSuccess.not()) {
+                            if (message != null) {
+                                mainActivity().showMessage(message)
+                            }
+                        } else {
+                            // this@buildTodayModeWiseCollectionCard.requestModelBuild()
+                        }
+                    }
+                }
+            }
             toggleCardVisibility { _ ->
                 isExpanded = isExpanded.not()
                 this@buildTodayModeWiseCollectionCard.requestModelBuild()
             }
         }
+    }
+    private fun showDatePickerDialog(
+        context: Context,
+        minDateString: String?,
+        onDateSelected: (String) -> Unit
+    ) {
+        val options = arrayOf("Today", "Yesterday", "Select Date")
+        val dateFormat = "yyyy-MM-dd"
+
+        // Parse the minDateString to a Long value
+        val minDate = try {
+            val formatter = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+            formatter.parse(minDateString)?.time ?: MaterialDatePicker.todayInUtcMilliseconds()
+        } catch (e: Exception) {
+            MaterialDatePicker.todayInUtcMilliseconds()
+        }
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle("Select Date")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> { // Today
+                        modeByCollectionFilter = "Today"
+                        val today = Calendar.getInstance().time
+                        val formattedDate =
+                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(today)
+                        onDateSelected(formattedDate)
+                    }
+
+                    1 -> { // Yesterday
+                        modeByCollectionFilter = "Yesterday"
+                        val calendar = Calendar.getInstance()
+                        calendar.add(Calendar.DAY_OF_YEAR, -1)
+                        val yesterday = calendar.time
+                        val formattedDate =
+                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(yesterday)
+                        onDateSelected(formattedDate)
+                    }
+
+                    2 -> { // Select Date
+
+                        val constraintsBuilder = CalendarConstraints.Builder()
+                            .setStart(minDate)
+                            .setEnd(MaterialDatePicker.todayInUtcMilliseconds())
+                            .setValidator(DateValidatorPointBackward.now())
+                            .build()
+
+                        val datePicker = MaterialDatePicker.Builder.datePicker()
+                            .setTitleText("Select date")
+                            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                            .setCalendarConstraints(constraintsBuilder)
+                            .build()
+
+                        datePicker.addOnPositiveButtonClickListener {
+                            val selectedDate =
+                                SimpleDateFormat(dateFormat, Locale.getDefault()).format(it)
+                            modeByCollectionFilter = selectedDate
+                            onDateSelected(selectedDate)
+                        }
+
+                        datePicker.show(
+                            childFragmentManager,
+                            datePicker.toString()
+                        )
+                    }
+                }
+            }
+            .show()
+    }
+
+    private var estimatedCollectionCardExpended = false
+
+    private fun EpoxyController.buildEstimatedCollectionCard(
+        feeCollection: FeeCollection?,
+        sessionStartDate: String?,
+        sessionEndDate: String?
+    ) {
+        feeCollection ?: return
+        EstimateCollectionModel(
+            feeCollection,
+            isExpanded = estimatedCollectionCardExpended,
+            toggleCardVisibility = { isExpanded ->
+                estimatedCollectionCardExpended = isExpanded
+                this.requestModelBuild()
+            },
+            updateFeeCollectionDate = { feeTypeId, dateFilterType, selectDatefromCalender ->
+                if (selectDatefromCalender) {
+                    showDateRangePicker { fromDate, tillDate ->
+                        updateFeeCollection(feeTypeId, fromDate, tillDate)
+                    }
+                } else {
+                    mainActivity().showLoader(true)
+                    val (fromDate, tillDate) = getDateRange(
+                        dateFilterType,
+                        sessionStartDate,
+                        sessionEndDate
+                    )
+                    updateFeeCollection(feeTypeId, fromDate, tillDate)
+                }
+            }
+        )
+            .id("11")
+            .addTo(this)
     }
     private fun updateFeeCollection(feeTypeId: Int, fromDate: String, tillDate: String) {
         dashboardViewModel.getFeeCollection(
@@ -251,10 +381,14 @@ class DashboardFragment : Fragment() {
     private fun showDateRangePicker(callback: (String, String) -> Unit) {
         val constraintsBuilder =
             CalendarConstraints.Builder() // You can add constraints here if needed
+
         val datePicker = MaterialDatePicker.Builder.dateRangePicker()
             .setTitleText("Select Date Range")
-            .setCalendarConstraints(constraintsBuilder.build())
+            .setCalendarConstraints(
+                constraintsBuilder.setValidator(DateValidatorPointBackward.now()).build()
+            )
             .build()
+
         datePicker.addOnPositiveButtonClickListener { selection ->
             val startDate =
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.first)
@@ -262,51 +396,37 @@ class DashboardFragment : Fragment() {
                 SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.second)
             callback(startDate, endDate)
         }
+
         datePicker.show(
             childFragmentManager,
             datePicker.toString()
         )
     }
-    private fun getDateRange(filterType: DateFilterType): Pair<String, String> {
+    private fun getDateRange(
+        filterType: DateFilterType,
+        sessionStartDate: String?,
+        sessionEndDate: String?
+    ): Pair<String, String> {
         val currentDate = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
         return when (filterType) {
             DateFilterType.TODAY -> {
                 val formattedDate = currentDate.format(formatter)
-                Pair(formattedDate, formattedDate)
-            }
-            DateFilterType.THIS_MONTH -> {
-                val firstDateOfMonth = currentDate.withDayOfMonth(1)
-                val formattedFirstDate = firstDateOfMonth.format(formatter)
-                val formattedCurrentDate = currentDate.format(formatter)
-                Pair(formattedFirstDate, formattedCurrentDate)
+                Pair(formatDate(sessionStartDate!!), formattedDate)
             }
             DateFilterType.THIS_YEAR -> {
-                val firstDateOfYear = currentDate.withDayOfYear(1)
-                val formattedFirstDate = firstDateOfYear.format(formatter)
-                val formattedCurrentDate = currentDate.format(formatter)
-                Pair(formattedFirstDate, formattedCurrentDate)
+                Pair(formatDate(sessionStartDate!!), formatDate(sessionEndDate!!))
             }
         }
     }
-    private fun EpoxyController.buildEstimatedCollectionCard(feeCollection: FeeCollection?) {
-        feeCollection ?: return
-        EstimateCollectionModel(
-            feeCollection,
-            updateFeeCollectionDate = { feeTypeId, dateFilterType, selectDatefromCalender ->
-                if (selectDatefromCalender) {
-                    showDateRangePicker { fromDate, tillDate ->
-                        updateFeeCollection(feeTypeId, fromDate, tillDate)
-                    }
-                } else {
-                    mainActivity().showLoader(true)
-                    val (fromDate, tillDate) = getDateRange(dateFilterType)
-                    updateFeeCollection(feeTypeId, fromDate, tillDate)
-                }
-            }
-        )
-            .id("11")
-            .addTo(this)
+
+    private fun formatDate(inputDate: String): String {
+        val inputFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date)
     }
 
     private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: FeeDefaulter?) {

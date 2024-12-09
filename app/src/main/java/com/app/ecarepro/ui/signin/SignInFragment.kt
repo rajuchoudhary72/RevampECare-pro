@@ -234,7 +234,11 @@ class SignInFragment : Fragment() {
                     }
                 }
 
-            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+            try {
+                findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
     private fun restartApp() {

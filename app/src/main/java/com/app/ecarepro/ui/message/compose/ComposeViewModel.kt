@@ -45,6 +45,8 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
 import javax.inject.Inject
+import kotlinx.coroutines.flow.firstOrNull
+import com.app.ecarepro.data.network.model.MessageSettings
 
 
 @HiltViewModel
@@ -64,9 +66,12 @@ class ComposeViewModel @Inject constructor(
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
     val attachmentVisible = combine(
         flow = composeMessageType,
-        flow2 = userDataStore.getUserAsFlow()
-    ) { messageType, user ->
-        messageType == ComposeMessageType.ONLY_APP_MESSAGE && user?.userType == 3
+        flow2 = userDataStore.getUserAsFlow(),
+        flow3 = userDataStore.getMessageSettings()
+    ) { messageType, user, messageSettings ->
+        val hideMessageAttachment =
+            messageSettings?.media == null || (messageSettings.media.browseAudio == false && messageSettings.media.browsePDF == false && messageSettings.media.browseImg == false)
+        messageType == ComposeMessageType.ONLY_APP_MESSAGE && hideMessageAttachment.not()
     }.asLiveData()
     var currentLocation: Pair<Double, Double>? = null
 
@@ -107,7 +112,8 @@ class ComposeViewModel @Inject constructor(
                     contacts = it.first,
                     attachments = it.second,
                     composeMessageType = it.third.first,
-                    smsTypes = it.third.second
+                    smsTypes = it.third.second,
+                    messageSettings = userDataStore.getMessageSettings().firstOrNull()
                 )
             }
             .stateIn(
@@ -404,7 +410,8 @@ sealed interface ComposeUiState {
         val composeMessageType: ComposeMessageType,
         val attachments: List<MiMedia>,
         val contacts: List<Contact>,
-        val smsTypes: List<SmsType>
+        val smsTypes: List<SmsType>,
+        val messageSettings: MessageSettings?
     ) : ComposeUiState
 
     data class Error(

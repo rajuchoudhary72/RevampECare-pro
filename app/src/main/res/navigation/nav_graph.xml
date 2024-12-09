@@ -988,4 +988,8 @@
         android:id="@+id/otpVerificationFragment"
         android:name="com.app.ecarepro.ui.otpverification.OtpVerificationFragment"
         android:label="OtpVerificationFragment" />
+    <fragment
+        android:id="@+id/academicPerformanceHostFragment"
+        android:name="com.app.ecarepro.ui.academic_performance.AcademicPerformanceHostFragment"
+        android:label="AcademicPerformanceHostFragment" />
 </navigation>

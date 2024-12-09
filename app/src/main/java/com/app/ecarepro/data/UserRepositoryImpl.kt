@@ -124,6 +124,8 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.PostLeaveAction
 import kotlinx.coroutines.flow.flow
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
@@ -142,6 +144,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
@@ -455,8 +458,11 @@ class UserRepositoryImpl @Inject constructor(
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
+        isPartialApproved: Boolean?,
+        partialFromDate: String?,
+        partialTillDate: String?,
     ): CommonResponse {
-        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,lvIDs,rejectionReason))
+        return    userService.leaveAction(PostLeaveAction(action, applType, forwardedTo, lvID,lvIDs,rejectionReason,isPartialApproved, partialFromDate, partialTillDate))
     }
 
     override suspend fun medicineIsuueModel(): MedicineIsuueModel {
@@ -1316,6 +1322,11 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun uploadStudentPhoto(request: StudentPhotoUploadModel): CommonResponse {
         return userService.uploadStudentPhoto(request)
     }
+
+    override suspend fun academicYears(): NetworkAcademicYear {
+        return userService.academicYears()
+    }
+
     override suspend fun feeCollection(
         feeTypeID: Int,
         fromDate: String,
@@ -1401,7 +1412,16 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
-
+    override suspend fun todayModeWiseCollection(date: String): Flow<Result<ModeWiseCollection>> {
+        return flow {
+            try {
+                val response = userService.modeWiseCollection(date)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
     override fun getFormDataEmployee(
         departmentId: String,
         designation: String

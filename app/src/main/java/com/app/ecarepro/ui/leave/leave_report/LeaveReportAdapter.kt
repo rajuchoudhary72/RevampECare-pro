@@ -137,6 +137,10 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 leaveReportFragment.onItemClick(data,5,false)
 
             }
+            tvPartialApprove.setOnClickListener {
+                leaveReportFragment.onItemClick(data,6,false)
+
+            }
 
 
 
@@ -168,6 +172,7 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 tvApplicantVal.isVisible=false
                 view3.isVisible=true
                 tvForward.isVisible=true
+
                 textUserName.text= buildString {
                      append(data.applicantName)
                 }
@@ -176,6 +181,13 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                     .placeholder(R.drawable.default_profile)
                     .  into(binding .userImg)
                 }else{
+
+                if (data.duration>1){
+                    tvPartialApprove.isVisible=true
+                }else{
+                    tvPartialApprove.isVisible=false
+                }
+
                 textUserName.text= buildString {
                     append(data.studentName)
                     append(" - ")

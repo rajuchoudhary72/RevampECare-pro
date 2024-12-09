@@ -309,3 +309,16 @@ enum class TaskStatus(val value: String, val id: Int) {
         }
     }
 }
+enum class TaskPriority(val value: String, val id: Int) {
+    LOW("Low", 0),
+    HIGH("High", 2),
+    NORMAL("Normal", 1),
+    URGENT("Urgent", 3);
+
+
+    companion object {
+        fun getTaskPriorityFromThis(id: Int): List<TaskPriority> {
+            return values().filterNot { it.id == id }
+        }
+    }
+}
