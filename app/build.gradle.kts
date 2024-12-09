@@ -31,10 +31,10 @@ android {
             keyPassword = "strawberryapp"
         }
         create("MYSFPS Play") {
-            storeFile = file("strawberry_key")
-            storePassword = "strawberryapp"
-            keyAlias = "strawberryapp"
-            keyPassword = "strawberryapp"
+            storeFile = file("strawberry_play_key")
+            storePassword = "strawberryplay"
+            keyAlias = "strawberryplay"
+            keyPassword = "strawberryplay"
         }
     }
     namespace = "com.app.ecarepro"
@@ -107,8 +107,8 @@ android {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
-            versionCode = 1
-            versionName = "1.0.0"
+            versionCode = 4
+            versionName = "1.0.3"
             signingConfig = signingConfigs.getByName("MYSFPS Play")
         }
     }
