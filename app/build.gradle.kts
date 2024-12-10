@@ -19,9 +19,9 @@ kapt {
 android {
     signingConfigs {
         create("Franciscan e-Care") {
-            storeFile = file("eCareBeta.jks")
+            storeFile = file("eCarePro.jks")
             storePassword = "eCarePro"
-            keyAlias = "ecareProAndroidBeta"
+            keyAlias = "ecareProAndroid"
             keyPassword = "eCarePro"
         }
         create("MYSFHS") {
@@ -99,16 +99,16 @@ android {
             dimension = "apps"
             resValue("string", "app_name", "MYSFHS")
             applicationId = "com.franciscan.strawberry"
-            versionCode = 29
-            versionName = "2.0.4"
+            versionCode = 40
+            versionName = "2.0.15"
             signingConfig = signingConfigs.getByName("MYSFHS")
         }
         create("MYSFPS Play") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
-            versionCode = 4
-            versionName = "1.0.3"
+            versionCode = 5
+            versionName = "1.0.4"
             signingConfig = signingConfigs.getByName("MYSFPS Play")
         }
     }

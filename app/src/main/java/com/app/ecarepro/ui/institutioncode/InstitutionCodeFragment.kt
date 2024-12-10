@@ -122,7 +122,7 @@ class InstitutionCodeFragment : Fragment() {
         }
         if(institutionCodeViewModel.canEnterSchoolCode.not()){
             binding.textInstitutionCode.apply {
-                setText("MYSFHS")
+                setText("MYSFPS")
                 isEnabled = false
                 binding.btnContinue.isEnabled = true
             }
