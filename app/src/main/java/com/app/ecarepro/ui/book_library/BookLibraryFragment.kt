@@ -80,11 +80,6 @@ class BookLibraryFragment : Fragment() {
             }
         }
 
-        latestBookViewModel.getLibraryDTL()
-
-
-
-
         bookLibraryBinding.ivSearch.setOnClickListener {
              findNavController().navigate(R.id.librarySearchFragment)
         }

@@ -2,6 +2,8 @@ package com.app.ecarepro.ui.students_list
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -15,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -38,7 +41,7 @@ class StudentListViewModel @Inject constructor(
     val searchQuery = MutableStateFlow("")
 
     val studentListStateFlow: Flow<NetworkResult<NetworkStudentList>> = combine(
-        flow = schoolType,
+        flow = schoolType.asLiveData().asFlow().distinctUntilChanged(),
         flow2 = toFragment
     ) { scholarType, toFragment ->
         var showAll = false

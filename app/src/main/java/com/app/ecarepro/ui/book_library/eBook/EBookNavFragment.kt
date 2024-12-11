@@ -73,10 +73,6 @@ class EBookNavFragment : Fragment() {
                 }
             }
         }
-
-        eBookViewModel.getEBook("%27%27", 0)
-
-
     }
 
     private fun setUpViewPager(data: List<Book>?, megaBookLink: String) {

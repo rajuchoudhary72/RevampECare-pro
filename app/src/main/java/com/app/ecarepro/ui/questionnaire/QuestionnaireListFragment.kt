@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
     private lateinit var noticeAdapter: QuestionnaireAdapter
-    private var isLoading:Boolean = true
+    private var isLoading: Boolean = true
     private var myQues: Boolean = false
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
@@ -54,7 +54,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
             layoutManager = LinearLayoutManager(activity)
             adapter = noticeAdapter
         }
-          return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,15 +63,15 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
         binding.toggleButtonTypeQuestion.addOnButtonCheckedListener { _, checkedId, isChecked ->
             myQues = when (binding.toggleButtonTypeQuestion.checkedButtonId) {
                 R.id.btn_all_ques -> {
-                    noticeAdapter.clearData( )
-
-                    pageIndex=1
+                    noticeAdapter.clearData()
+                    pageIndex = 1
                     questionnaireViewModel.getQuestionnaireList(pageIndex, false)
                     false
                 }
+
                 else -> {
-                    pageIndex=1
-                    noticeAdapter.clearData( )
+                    pageIndex = 1
+                    noticeAdapter.clearData()
                     questionnaireViewModel.getQuestionnaireList(pageIndex, true)
                     true
                 }
@@ -83,33 +83,33 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
                 when (it) {
 
                     is NetworkResult.Loading -> {
-                         (requireActivity() as MainActivity).showLoader(true)
+                        (requireActivity() as MainActivity).showLoader(true)
                     }
 
                     is NetworkResult.Error -> {
-                        isLoading=true
-                         (requireActivity() as MainActivity).showLoader(false)
+                        isLoading = true
+                        (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = false
                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
-                         (requireActivity() as MainActivity).showLoader(false)
+                        (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerQuestionnaire.isVisible = true
 
                         if (it.data != null) {
 
-                            isLoading=true
+                            isLoading = true
                             if (it.data.questions != null) {
-                                if (pageIndex==1){
+                                if (pageIndex == 1) {
                                     noticeAdapter.clearData()
                                 }
                                 binding.recyclerQuestionnaire.isVisible = true
                                 binding.tvNoData.isVisible = false
-                                noticeAdapter.setData(it.data.questions,myQues)
+                                noticeAdapter.setData(it.data.questions, myQues)
 
                             } else {
-                                if (pageIndex==1){
+                                if (pageIndex == 1) {
                                     binding.recyclerQuestionnaire.isVisible = false
                                     binding.tvNoData.isVisible = true
                                 }
@@ -130,7 +130,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
         }
 
-        questionnaireViewModel.getQuestionnaireList(pageIndex, false)
+       // questionnaireViewModel.getQuestionnaireList(pageIndex, false)
 
         binding.recyclerQuestionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -144,13 +144,13 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
                         totalItemCount = linearLayoutManager.itemCount;
                         pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
 
-                         if ( isLoading){
-                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                 isLoading=false
-                                 pageIndex += 1
-                                 questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
-                              }
-                         }
+                        if (isLoading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                isLoading = false
+                                pageIndex += 1
+                                questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
+                            }
+                        }
 
                     }
                 }
@@ -164,23 +164,32 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
             1 -> {
                 questionnaireViewModel.questionnaireLike(t.qid, boolean)
             }
+
             3 -> {
-                questionnaireViewModel.deleteAnswer(t.qid )
+                questionnaireViewModel.deleteAnswer(t.qid)
                 lifecycleScope.launch {
                     questionnaireViewModel.deleteAnswerStateFlow.collectLatest {
-                        when (it) { is NetworkResult.Loading -> {
+                        when (it) {
+                            is NetworkResult.Loading -> {
                                 (requireActivity() as MainActivity).showLoader(true)
-                            } is NetworkResult.Error -> {
+                            }
+
+                            is NetworkResult.Error -> {
                                 (requireActivity() as MainActivity).showLoader(false)
-                            }  is NetworkResult.Success -> {
+                            }
+
+                            is NetworkResult.Success -> {
                                 (requireActivity() as MainActivity).showLoader(false)
-                            mainActivity().showMessage(it.data!!.message.toString())
-                            questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
-                            } }  } }
+                                mainActivity().showMessage(it.data!!.message.toString())
+                                questionnaireViewModel.getQuestionnaireList(pageIndex, myQues)
+                            }
+                        }
+                    }
+                }
             }
 
             4 -> {
-                if (t.isVerified){
+                if (t.isVerified) {
                     findNavController().navigate(
                         R.id.action_questionnaireListFragment_to_answerDetailsFragment,
                         Bundle().apply {
