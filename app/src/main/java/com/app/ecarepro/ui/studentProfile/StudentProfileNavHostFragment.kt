@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciatio
 import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
 import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
 import com.app.ecarepro.ui.studentProfile.report_card.StudentProfileReportCardFragment
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileNavHostBinding
     private val studentProfileNavHostViewModel: StudentProfileNavHostViewModel by viewModels()
+    private val sharedViewModel: SharedViewModelProfile  by activityViewModels()
     private var studentID: Int = 0
 
     override fun onCreateView(
@@ -88,6 +91,10 @@ class StudentProfileNavHostFragment : Fragment() {
                                         })
                                     } catch (_: Exception) { }
                                 }
+
+                                sharedViewModel.setProfile(it.data.profile)
+                                sharedViewModel.setSiblingDetails(it.data.siblingDetails)
+
                             }
 
 
@@ -102,7 +109,7 @@ class StudentProfileNavHostFragment : Fragment() {
                                         when(i.name){
                                             "PersonalDetails" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
+                                                    fragmentList.add(StudentProfileDetailsFragment())
                                                     fragmentName.add("Personal Details")
                                                 }
                                             }

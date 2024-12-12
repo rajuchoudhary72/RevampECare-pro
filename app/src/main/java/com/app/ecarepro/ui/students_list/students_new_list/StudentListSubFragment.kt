@@ -1,11 +1,11 @@
 package com.app.ecarepro.ui.students_list.students_new_list
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentStudentListSubBinding
 import com.app.ecarepro.model.Student
-import com.app.ecarepro.ui.students_list.StudentListAdapter
 import com.app.ecarepro.ui.students_list.StudentListViewModel
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
@@ -23,8 +22,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class StudentListSubFragment(val students: List<Student>?,val className: String,val toFragment: String) : Fragment(),
+class StudentListSubFragment() : Fragment(),
     ItemListener<Student> {
+
+    var students: List<Student>?= null
+    var className: String = ""
+    var toFragment: String= ""
 
     private lateinit var binding: FragmentStudentListSubBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
@@ -43,13 +46,27 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
         return binding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                students = it.getParcelableArrayList(ARG_ITEM_DATA, Student::class.java)
+            }else{
+                @Suppress("DEPRECATION")
+                students = it.getParcelableArrayList(ARG_ITEM_DATA)
+            }
+            className = it.getString(ARG_ITEM_CLASS_NAME, "")
+            toFragment = it.getString(TO_FRAGMENT, "")
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         if (students!=null) {
-        if (students.isNotEmpty()) {
+        if (students!!.isNotEmpty()) {
 
-             var studentList = students.filter { it.`class` == className }
+             var studentList = students!!.filter { it.`class` == className }
             binding.tvTotalCount.text = studentList.size.toString()
             binding.tvBoysCount.text = studentList.filter { it.gender == "Male" }.size.toString()
             binding.tvGirlsCount.text = studentList.filter { it.gender == "Female" }.size.toString()
@@ -59,12 +76,12 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
 
                     if (it.isNotEmpty() && studentList != null) {
                         studentListFilter = studentList .filter { s ->
-                            s.name.lowercase().contains(it.lowercase())
+                            s.name!!.lowercase().contains(it.lowercase())
                                     || s.name.lowercase().contains(it.lowercase())
-                                    || s.admissionNumber.lowercase().contains(it.lowercase())
-                                    || s.`class`.lowercase().contains(it.lowercase())
-                                    || s.fatherName.lowercase().contains(it.lowercase())
-                                    || s.contactMob.lowercase().contains(it.lowercase())
+                                    || s.admissionNumber!!.lowercase().contains(it.lowercase())
+                                    || s.`class`!!.lowercase().contains(it.lowercase())
+                                    || s.fatherName!!.lowercase().contains(it.lowercase())
+                                    || s.contactMob!!.lowercase().contains(it.lowercase())
 
 
                         }
@@ -96,9 +113,9 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
 
             binding.tvSortByName.setOnClickListener {
                 nameFilterAsc = !nameFilterAsc
-                studentList = if (nameFilterAsc) studentList.sortedBy { it.name.trim().lowercase() }
+                studentList = if (nameFilterAsc) studentList.sortedBy { it.name!!.trim().lowercase() }
                     .toMutableList()
-                else studentList.sortedByDescending { it.name.trim().lowercase() }.toMutableList()
+                else studentList.sortedByDescending { it.name!!.trim().lowercase() }.toMutableList()
                 setupRecycleViewStudentList(studentList)
             }
 
@@ -144,7 +161,7 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_addAppreciationFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -152,7 +169,7 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_appreciationListFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -160,7 +177,7 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_addInfractionFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -168,7 +185,7 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_infractionListFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -176,11 +193,29 @@ class StudentListSubFragment(val students: List<Student>?,val className: String,
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_studentProfileNavHostFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
         }
 
     }
+
+    companion object {
+        private const val ARG_ITEM_DATA = "item_students_data"
+        private const val ARG_ITEM_CLASS_NAME = "item_class_name"
+        private const val TO_FRAGMENT = "item_session"
+
+        fun newInstance(students: ArrayList<Student>, className: String, toFragment: String)= StudentListSubFragment().apply {
+            arguments= Bundle().apply {
+                putParcelableArrayList(ARG_ITEM_DATA,students)
+                putString(ARG_ITEM_CLASS_NAME,className)
+                putString(TO_FRAGMENT,toFragment)
+
+            }
+        }
+
+    }
+
+
 
 }
