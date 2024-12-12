@@ -122,8 +122,5 @@ class ClassAndTeacherListFragment : Fragment() {
 
             }
         }
-
-        timeTableViewerViewModel.getTimetableViewer( )
-
     }
 }
