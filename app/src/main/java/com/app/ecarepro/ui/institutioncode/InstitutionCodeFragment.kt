@@ -38,8 +38,7 @@ class InstitutionCodeFragment : Fragment() {
     lateinit var userDataStore: UserDataStore
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentInstitutionCodeBinding.inflate(inflater, container, false)
         return binding.root
@@ -73,8 +72,7 @@ class InstitutionCodeFragment : Fragment() {
                             lifecycleScope.launch {
                                 userDataStore.setCurrentSchoolCode(school.schoolCode)
                                 navigateToSignFragment(
-                                    school.schoolCode,
-                                    school.isStudentLoginBlocked ?: false
+                                    school.schoolCode, school.isStudentLoginBlocked ?: false
                                 )
                             }
                         }
@@ -104,7 +102,7 @@ class InstitutionCodeFragment : Fragment() {
             findNavController().navigate(R.id.helpFragment)
         }
 
-        if (institutionCodeViewModel.isMYSFHS.not()) {
+        if (institutionCodeViewModel.isMYSFHS) {
             binding.textInstitutionCode.apply {
                 setText("MYSFHS")
                 isEnabled = false
@@ -113,7 +111,7 @@ class InstitutionCodeFragment : Fragment() {
             }
         }
 
-        if (institutionCodeViewModel.isMYSFPSPlay.not()) {
+        if (institutionCodeViewModel.isMYSFPSPlay) {
             binding.textInstitutionCode.apply {
                 setText("MYSFPS")
                 isEnabled = false
@@ -129,8 +127,7 @@ class InstitutionCodeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(true)
         institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
             (requireActivity() as MainActivity).showLoader(false)
-            if (it?.errorCode == 0) {
-                /* if(it.isStudentLoginBlocked == true){
+            if (it?.errorCode == 0) {/* if(it.isStudentLoginBlocked == true){
                          mainActivity().showMessage("you are block by admin by this school so please co-coordinate to this school admin!")
                      }else{
                          navigateToSignFragment(it.schoolCode)
@@ -146,22 +143,16 @@ class InstitutionCodeFragment : Fragment() {
 
     private fun navigateToSignFragment(schoolCode: String, isStudentLoginBlocked: Boolean) {
         findNavController().navigate(
-            resId = R.id.signInFragment,
-            args = if (arguments == null) {
-                bundleOf(
-                    "schoolCode" to schoolCode,
-                    "isStudentLoginBlocked" to isStudentLoginBlocked
-                )
-            } else {
-                arguments?.apply {
-                    putString("schoolCode", schoolCode)
-                    putBoolean("isStudentLoginBlocked", isStudentLoginBlocked)
-                }
-            },
-            navOptions = NavOptions.Builder()
-                .setPopUpTo(R.id.schoolCodeFragment, true)
-                .build()
-        )
+            resId = R.id.signInFragment, args = if (arguments == null) {
+            bundleOf(
+                "schoolCode" to schoolCode, "isStudentLoginBlocked" to isStudentLoginBlocked
+            )
+        } else {
+            arguments?.apply {
+                putString("schoolCode", schoolCode)
+                putBoolean("isStudentLoginBlocked", isStudentLoginBlocked)
+            }
+        }, navOptions = NavOptions.Builder().setPopUpTo(R.id.schoolCodeFragment, true).build())
     }
 
     override fun onDestroyView() {
