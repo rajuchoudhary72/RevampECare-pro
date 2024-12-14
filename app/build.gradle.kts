@@ -174,7 +174,7 @@ dependencies {
      implementation("androidx.browser:browser:1.2.0")
      implementation("com.android.support:print:28.0.0")
     implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics-ktx:21.3.0")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))

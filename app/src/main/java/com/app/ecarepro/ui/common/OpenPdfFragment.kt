@@ -50,22 +50,22 @@ class OpenPdfFragment : Fragment() {
 
         openPdfBinding.wvPdf.settings.builtInZoomControls=true
 
-        openPdfBinding.wvPdf.webViewClient= object  : WebViewClient(){
+        try {
+            openPdfBinding.wvPdf.webViewClient= object  : WebViewClient(){
 
+                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                    (requireActivity() as MainActivity).showLoader(true)
+                    super.onPageStarted(view, url, favicon)
+                }
 
-
-
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                (requireActivity() as MainActivity).showLoader(true)
-                super.onPageStarted(view, url, favicon)
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    super.onPageFinished(view, url)
+                }
             }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                (requireActivity() as MainActivity).showLoader(false)
-                super.onPageFinished(view, url)
-            }
+        }catch (e:IllegalStateException ){
+            e.printStackTrace()
         }
-
         if (url.isNotEmpty()){
             openPdfBinding.wvPdf.loadUrl("https://docs.google.com/viewer?url=$url&embedded=true")
         }

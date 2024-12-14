@@ -27,3 +27,8 @@
 -keep,allowobfuscation @interface com.google.gson.annotations.SerializedName
 -keep class okhttp3.** { *; }
 -keep class okio.** { *; }
+-keepattributes Annotation
+-keepattributes InnerClasses
+-keepattributes SourceFile,LineNumberTable
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }

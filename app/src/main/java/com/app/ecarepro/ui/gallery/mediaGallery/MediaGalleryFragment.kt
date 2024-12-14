@@ -38,16 +38,16 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MediaGalleryFragment : Fragment() , ItemListener<Album> {
+class MediaGalleryFragment : Fragment(), ItemListener<Album> {
 
 
-    private var searchByPostition: Int= 0
-     private var yearPosition: Int= 0
-    private var isSearchBySelected: Boolean=false
-    private var isYearSelected: Boolean=false
+    private var searchByPostition: Int = 0
+    private var yearPosition: Int = 0
+    private var isSearchBySelected: Boolean = false
+    private var isYearSelected: Boolean = false
     private lateinit var mediaGalleryAdapter: MediaGalleryAdapter
     private lateinit var binding: FragmentMediaGalleryBinding
-    private val mediaGalleryViewModel : MediaGalleryViewModel by viewModels()
+    private val mediaGalleryViewModel: MediaGalleryViewModel by viewModels()
 
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
@@ -55,27 +55,27 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
 
-    private val searchByList  = mutableListOf<String>("All Search", "NewsPaper","Headline", "Publish Date","Year")
+    private val searchByList =
+        mutableListOf<String>("All Search", "NewsPaper", "Headline", "Publish Date", "Year")
 
-    private var yearList= mutableListOf<String>()
+    private var yearList = mutableListOf<String>()
 
     private var queryType = 0
-
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentMediaGalleryBinding.inflate(inflater,container,false)
+        binding = FragmentMediaGalleryBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title= "Media Gallery"
-        binding.toolbar.isVisible=true
-        mediaGalleryAdapter =    MediaGalleryAdapter(this@MediaGalleryFragment)
+        binding.toolbar.title = "Media Gallery"
+        binding.toolbar.isVisible = true
+        mediaGalleryAdapter = MediaGalleryAdapter(this@MediaGalleryFragment)
 
         binding.rvPhotoAlbum.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(activity,2)
+            layoutManager = GridLayoutManager(activity, 2)
             adapter = mediaGalleryAdapter
         }
 
@@ -90,28 +90,35 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
             mediaGalleryViewModel.getMediaGallery(
                 pageIndex,
                 queryType,
-                yearList[yearPosition].toInt()   ,
+                yearList[yearPosition].toInt(),
                 binding.tvPubDate.text.toString(),
-                binding.edSearch.text.toString())
+                binding.edSearch.text.toString()
+            )
         }
 
-        binding.tvPubDate.text=Constant.currentDate()
-        binding.tvPubDate.setOnClickListener {
-            ECareDataPicker(
-                requireActivity(),
-                false,
-                object : ECareDataPicker.PickerCallback {
-                    override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                        binding.tvPubDate.text = date
-                        mediaGalleryViewModel.getMediaGallery(
-                            pageIndex,
-                            queryType,
-                            yearList[yearPosition].toInt(),
-                            binding.tvPubDate.text.toString(),
-                            binding.edSearch.text.toString())
-                    }
-                }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+        binding.tvPubDate.text = Constant.currentDate()
+        try {
+            binding.tvPubDate.setOnClickListener {
+                ECareDataPicker(
+                    requireActivity(),
+                    false,
+                    object : ECareDataPicker.PickerCallback {
+                        override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                            binding.tvPubDate.text = date
+                            mediaGalleryViewModel.getMediaGallery(
+                                pageIndex,
+                                queryType,
+                                yearList[yearPosition].toInt(),
+                                binding.tvPubDate.text.toString(),
+                                binding.edSearch.text.toString()
+                            )
+                        }
+                    }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
         }
+
 
         lifecycleScope.launch {
             mediaGalleryViewModel.mediaGalleryStateFlow.collectLatest {
@@ -132,29 +139,29 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.rvPhotoAlbum.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data.years!=null){
-                                yearList= it.data.years as MutableList<String>
+                            if (it.data.years != null) {
+                                yearList = it.data.years as MutableList<String>
 
                             }
 
-                            if (it.data.albums!=null){
+                            if (it.data.albums != null) {
 
-                                if (pageIndex==1){
+                                if (pageIndex == 1) {
                                     mediaGalleryAdapter.clearData()
                                 }
 
-                                binding.rvPhotoAlbum.isVisible=true
-                                binding.tvNoData.isVisible=false
-                                isLoading=true
+                                binding.rvPhotoAlbum.isVisible = true
+                                binding.tvNoData.isVisible = false
+                                isLoading = true
 
                                 mediaGalleryAdapter.setData(it.data.albums.toMutableList())
 
-                            }else{
-                                if (pageIndex==1){
-                                    binding.rvPhotoAlbum.isVisible=false
-                                    binding.tvNoData.isVisible=true
+                            } else {
+                                if (pageIndex == 1) {
+                                    binding.rvPhotoAlbum.isVisible = false
+                                    binding.tvNoData.isVisible = true
                                 }
 
                             }
@@ -187,7 +194,8 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
             queryType,
             0,
             binding.tvPubDate.text.toString(),
-            binding.edSearch.text.toString())
+            binding.edSearch.text.toString()
+        )
 
     }
 
@@ -195,38 +203,37 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
     private fun setupRecycleViewPager() {
 
 
+        binding.rvPhotoAlbum.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
 
-            binding.rvPhotoAlbum.addOnScrollListener(object :
-                RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
 
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+                if (linearLayoutManager != null) {
+                    if (dy > 0) {
+                        visibleItemCount = linearLayoutManager.childCount;
+                        totalItemCount = linearLayoutManager.itemCount;
+                        pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
 
-                    if (linearLayoutManager != null) {
-                        if (dy > 0) {
-                            visibleItemCount = linearLayoutManager.childCount;
-                            totalItemCount = linearLayoutManager.itemCount;
-                            pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
-
-                            if (isLoading) {
-                                if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-                                    isLoading = false
-                                    pageIndex += 1
-                                    mediaGalleryViewModel.getMediaGallery(
-                                        pageIndex,
-                                        queryType,
-                                        yearList[yearPosition].toInt(),
-                                        binding.tvPubDate.text.toString(),
-                                        binding.edSearch.text.toString())
-                                }
+                        if (isLoading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                isLoading = false
+                                pageIndex += 1
+                                mediaGalleryViewModel.getMediaGallery(
+                                    pageIndex,
+                                    queryType,
+                                    yearList[yearPosition].toInt(),
+                                    binding.tvPubDate.text.toString(),
+                                    binding.edSearch.text.toString()
+                                )
                             }
-
                         }
+
                     }
                 }
-            })
-
+            }
+        })
 
 
     }
@@ -244,8 +251,9 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
                 MediaDetailsFragment.updatedOn to t.updatedOn,
             )
         )
-        }
-  private fun popUpSearchBy() {
+    }
+
+    private fun popUpSearchBy() {
 
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
@@ -261,10 +269,10 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
         relOk.setOnClickListener {
 
             if (isSearchBySelected) {
-                pageIndex=1
+                pageIndex = 1
                 binding.tvSearchBy.text = searchByList[searchByPostition]
-                queryType=searchByPostition
-                 setupSearchByDropDown(searchByPostition)
+                queryType = searchByPostition
+                setupSearchByDropDown(searchByPostition)
 
                 builder.dismiss()
             }
@@ -312,14 +320,15 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
 
             if (isYearSelected) {
                 binding.tvYear.text = yearList[yearPosition]
-                pageIndex=1
+                pageIndex = 1
                 mediaGalleryViewModel.getMediaGallery(
                     pageIndex,
                     queryType,
                     yearList[yearPosition].toInt(),
                     binding.tvPubDate.text.toString(),
-                    binding.edSearch.text.toString())
-                 builder.dismiss()
+                    binding.edSearch.text.toString()
+                )
+                builder.dismiss()
             }
 
 
@@ -349,47 +358,52 @@ class MediaGalleryFragment : Fragment() , ItemListener<Album> {
 
     private fun setupSearchByDropDown(searchByPostition: Int) {
 
-        when(searchByPostition){
+        when (searchByPostition) {
             0 -> {
-                binding.tvYear.isVisible=false
-                binding.edSearch.isVisible=false
-                binding.tvPubDate.isVisible=false
+                binding.tvYear.isVisible = false
+                binding.edSearch.isVisible = false
+                binding.tvPubDate.isVisible = false
 
                 mediaGalleryViewModel.getMediaGallery(
                     pageIndex,
                     queryType,
                     yearList[yearPosition].toInt(),
                     binding.tvPubDate.text.toString(),
-                    binding.edSearch.text.toString())
+                    binding.edSearch.text.toString()
+                )
 
 
-             }
+            }
+
             1 -> {
-                binding.tvYear.isVisible=false
-                binding.edSearch.isVisible=true
-                binding.edSearch.hint="Enter Newspaper"
-                binding.edSearch.setText( "")
+                binding.tvYear.isVisible = false
+                binding.edSearch.isVisible = true
+                binding.edSearch.hint = "Enter Newspaper"
+                binding.edSearch.setText("")
 
-                binding.tvPubDate.isVisible=false
+                binding.tvPubDate.isVisible = false
             }
+
             2 -> {
-                binding.tvYear.isVisible=false
-                binding.edSearch.isVisible=true
-                binding.edSearch.hint="Enter Headline"
-                binding.tvPubDate.isVisible=false
-                binding.edSearch.setText( "")
+                binding.tvYear.isVisible = false
+                binding.edSearch.isVisible = true
+                binding.edSearch.hint = "Enter Headline"
+                binding.tvPubDate.isVisible = false
+                binding.edSearch.setText("")
             }
+
             3 -> {
-                binding.tvYear.isVisible=false
-                binding.edSearch.isVisible=false
-                 binding.tvPubDate.isVisible=true
-                binding.edSearch.setText( "")
+                binding.tvYear.isVisible = false
+                binding.edSearch.isVisible = false
+                binding.tvPubDate.isVisible = true
+                binding.edSearch.setText("")
             }
+
             4 -> {
-                binding.tvYear.isVisible=true
-                binding.edSearch.isVisible=false
-                binding.tvPubDate.isVisible=false
-                binding.edSearch.setText( "")
+                binding.tvYear.isVisible = true
+                binding.edSearch.isVisible = false
+                binding.tvPubDate.isVisible = false
+                binding.edSearch.setText("")
             }
         }
 

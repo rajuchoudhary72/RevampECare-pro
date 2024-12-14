@@ -49,13 +49,12 @@ class SyllabusListAdapter(
         }
 
         bindingm.relDownload.setOnClickListener {
-
-            classSyllabus.onItemClick(syllabusLST[position], 2, true)
-
-
+            try {
+                classSyllabus.onItemClick(syllabusLST[position], 2, true)
+            }catch (e:SecurityException){
+                e.printStackTrace()
+            }
         }
-
-
     }
 
 
