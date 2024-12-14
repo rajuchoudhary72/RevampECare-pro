@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.studentProfile
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,10 +26,12 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentStudentProfileAttendanceBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.model.ProfileAttendanceDTL
+import com.app.ecarepro.model.Subject
 import com.app.ecarepro.model.SummaryAttendance
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.TryAttendanceTest2
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -43,18 +47,26 @@ import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class StudentProfileAttendanceFragment(
-    private val attendanceDTL: ProfileAttendanceDTL?,
-    private val academicYears: List<AcademicYear>?,
-    private val studentID: Int,
-    private val  id: String
+
 ) : Fragment() ,ItemListener<SummaryAttendance> {
 
     private lateinit var selectedYearData: AcademicYear
     private lateinit var binding: FragmentStudentProfileAttendanceBinding
     private val studentProfileAttendanceViewModel: StudentProfileAttendanceViewModel by viewModels()
+    private val sharedViewModel: SharedViewModelProfile by activityViewModels()
+
+    private var attendanceDTL: ProfileAttendanceDTL?=null
+    private var academicYears: List<AcademicYear>?=null
+    private var studentID: Int=0
+    private var  id: String=""
 
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            studentID=it.getInt(STUDENT_ID)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,20 +79,30 @@ class StudentProfileAttendanceFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (attendanceDTL!=null){
-            setupUi(attendanceDTL)
+        sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
 
-        }
-        if (academicYears!=null){
-            if (academicYears.isNotEmpty()) {
-                for (i in academicYears ) {
-                    if (i.isCur) {
-                        binding.ctvSelectYear.text = i.session
-                        break
+            attendanceDTL = it.attendanceDTL
+            academicYears = it.academicYears
+            id = it.id
+
+
+            if (attendanceDTL!=null){
+                setupUi(attendanceDTL!!)
+
+            }
+            if (academicYears!=null){
+                if (academicYears!!.isNotEmpty()) {
+                    for (i in academicYears!!) {
+                        if (i.isCur) {
+                            binding.ctvSelectYear.text = i.session
+                            break
+                        }
                     }
                 }
             }
         }
+
+
 
 
 
@@ -369,6 +391,18 @@ class StudentProfileAttendanceFragment(
         binding.pieChart.setCenterTextColor(resources.getColor(R.color.deep_black))
         binding.pieChart.holeRadius = 70f
         binding.pieChart.description = null
+    }
+
+
+    companion object {
+        private const val STUDENT_ID = "student_id_int"
+
+        fun newInstance(   studentID: Int)= StudentProfileAttendanceFragment().apply {
+            arguments= Bundle().apply {
+                putInt(STUDENT_ID,studentID)
+            }
+        }
+
     }
 
 

@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.reportCard
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,16 +14,32 @@ import com.app.ecarepro.databinding.FragmentReportCardDetailsBinding
 import com.app.ecarepro.model.ReportCard
 import com.app.ecarepro.model.ReportClasse
 import com.app.ecarepro.model.Student
+import com.app.ecarepro.model.Subject
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerSubFragment
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerSubFragment.Companion
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 
 
-class ReportCardDetailsFragment(private val itemDat: ReportClasse?) : Fragment(),
+class ReportCardDetailsFragment : Fragment(),
         ItemListener<ReportCard> {
 
     private lateinit var binding: FragmentReportCardDetailsBinding
+    private var itemDat: ReportClasse? =null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                itemDat = it.getParcelable(ARG_ITEM_DATA, ReportClasse::class.java)
+            }else{
+                @Suppress("DEPRECATION")
+                itemDat = it.getParcelable(ARG_ITEM_DATA)
+            }
+
+        }
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -37,11 +54,12 @@ class ReportCardDetailsFragment(private val itemDat: ReportClasse?) : Fragment()
 
 
         if (itemDat?.reportCards != null) {
-        if (itemDat.reportCards.isNotEmpty()) {
+        if (itemDat!!.reportCards!!.isNotEmpty()) {
 
 
             val reportCardListAdapter =
-                    ReportCardListAdapter(itemDat.reportCards, itemDat.academicYear,
+                    ReportCardListAdapter(
+                        itemDat!!.reportCards!!, itemDat!!.academicYear!!,
                             this@ReportCardDetailsFragment)
 
             binding.rvTimeReportCard.apply {
@@ -127,4 +145,16 @@ class ReportCardDetailsFragment(private val itemDat: ReportClasse?) : Fragment()
             }
         }
     }
+
+    companion object {
+        private const val ARG_ITEM_DATA = "arg_item_data"
+
+        fun newInstance( itemDat: ReportClasse?)= ReportCardDetailsFragment().apply {
+            arguments= Bundle().apply {
+                putParcelable(ARG_ITEM_DATA,itemDat)
+            }
+        }
+
+    }
+
 }

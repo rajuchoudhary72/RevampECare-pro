@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,12 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.FavList
 import com.app.ecarepro.databinding.FragmentPhotoSliderBinding
+import com.app.ecarepro.model.Subject
 import com.app.ecarepro.ui.gallery.favorites.FavoritesViewModel
 import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderViewModel
 import com.app.ecarepro.ui.gallery.videoPlay.YouTubeVideoPlayerFragment
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerSubFragment
+import com.app.ecarepro.ui.studentProfile.academic_performance.AcademicPerSubFragment.Companion
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.shareImageFromUrl
@@ -35,10 +39,11 @@ import java.io.FileOutputStream
 
 @AndroidEntryPoint
 class FavoriteSliderFragment(
-    val favList: FavList?,
+
 
     ) : Fragment() {
 
+    private var favList: FavList?= null
 
     private lateinit var binding : FragmentPhotoSliderBinding
     private val photoSliderViewModel : PhotoSliderViewModel by viewModels()
@@ -47,6 +52,20 @@ class FavoriteSliderFragment(
     private   var  isFav: Boolean  = false
     private   var  isLike: Boolean  = false
     private var totalLikes = 0
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                favList = it.getParcelable(FavoriteSliderFragment.ARG_ITEM_DATA, FavList::class.java)
+            }else{
+                @Suppress("DEPRECATION")
+                favList = it.getParcelable(FavoriteSliderFragment.ARG_ITEM_DATA)
+            }
+
+        }
+    }
 
    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,43 +84,43 @@ class FavoriteSliderFragment(
 
 
                 if (favList!=null){
-                    isFav  = favList.isFavourite!!
-                    isLike = favList.islLike==1
-                    likes  = favList.totalLike!!
+                    isFav  = favList!!.isFavourite!!
+                    isLike = favList!!.islLike==1
+                    likes  = favList!!.totalLike!!
 
 
 
-                     if (favList.galleryType==Constant.GALLERY_TYPE_PHOTO){
+                     if (favList!!.galleryType==Constant.GALLERY_TYPE_PHOTO){
                          binding.ivVideoPlay.isVisible=false
-                         Picasso.get().load(favList.fileName)
+                         Picasso.get().load(favList!!.fileName)
                              .placeholder(R.drawable.default_profile)
                              .into(binding.photoView)
 
                          binding.ivVideoPlay.setOnClickListener {
-                             val id =  YoutubeURL().getIDFromYoutubeURL(favList.fileName)
+                             val id =  YoutubeURL().getIDFromYoutubeURL(favList!!.fileName)
                              findNavController().navigate(
                                  R.id.youTubeVideoPlayerFragment,
-                                 bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList.fileName))
+                                 bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList!!.fileName))
                              )
                          }
                          binding.rlShare.setOnClickListener {
-                             shareImageFromUrl(requireContext(), favList.fileName.toString())
+                             shareImageFromUrl(requireContext(), favList!!.fileName.toString())
                          }
                      }else{
                          binding.ivVideoPlay.isVisible=true
-                         Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(favList.fileName))
+                         Picasso.get().load(YoutubeURL().getTIURLFromYoutubeURL(favList!!.fileName))
                              .placeholder(R.drawable.default_profile)
                              .into(binding.photoView)
 
                            binding.ivVideoPlay.setOnClickListener {
-                             val id =  YoutubeURL().getIDFromYoutubeURL(favList.fileName)
+                             val id =  YoutubeURL().getIDFromYoutubeURL(favList!!.fileName)
                              findNavController().navigate(
                                  R.id.youTubeVideoPlayerFragment,
-                                 bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList.fileName))
+                                 bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList!!.fileName))
                              )
                          }
                          binding.rlShare.setOnClickListener {
-                             shareUrl(requireContext(), favList.fileName.toString())
+                             shareUrl(requireContext(), favList!!.fileName.toString())
                          }
                      }
 
@@ -109,14 +128,14 @@ class FavoriteSliderFragment(
                     binding.rlFav.setOnClickListener {
                         isFav = if (isFav ){
                             binding.tvFav.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.add_to_favourites_blank, 0, 0)
-                            photoSliderViewModel.manageFavorites(favList.id!!,
-                                favList.galleryType!!,Constant.GALLERY_ACTION_REMOVE )
+                            photoSliderViewModel.manageFavorites(favList!!.id!!,
+                                favList!!.galleryType!!,Constant.GALLERY_ACTION_REMOVE )
                             false
 
                         }else{
                             binding.tvFav.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.add_to_favourites, 0, 0)
-                            photoSliderViewModel.manageFavorites(favList.id!!,
-                                favList.galleryType!!,Constant.GALLERY_ACTION_ADD )
+                            photoSliderViewModel.manageFavorites(favList!!.id!!,
+                                favList!!.galleryType!!,Constant.GALLERY_ACTION_ADD )
                             true
                         }
                         favoritesViewModel.getFavorites( 1)
@@ -127,13 +146,13 @@ class FavoriteSliderFragment(
                             totalLikes -= 1
                             binding.tvNumberLike.text="$totalLikes Likes "
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_hover, 0, 0, 0);
-                            photoSliderViewModel.manageLikes(favList.id!!,favList.galleryType!!,false )
+                            photoSliderViewModel.manageLikes(favList!!.id!!,favList!!.galleryType!!,false )
                             false
                         }else{
                             totalLikes += 1
                             binding.tvNumberLike.text="$totalLikes Likes "
                             binding.tvLikeimage.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like, 0, 0, 0);
-                            photoSliderViewModel.manageLikes(favList.id!!,favList.galleryType!!,true )
+                            photoSliderViewModel.manageLikes(favList!!.id!!,favList!!.galleryType!!,true )
                             true
                         }
 
@@ -179,7 +198,16 @@ class FavoriteSliderFragment(
     }
 
 
+    companion object {
+        private const val ARG_ITEM_DATA = "arg_item_data"
 
+        fun newInstance(   favList: FavList?)= FavoriteSliderFragment().apply {
+            arguments= Bundle().apply {
+                putParcelable(ARG_ITEM_DATA,favList)
+            }
+        }
+
+    }
 
 
 
