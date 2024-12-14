@@ -60,6 +60,8 @@ import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.menuCard
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import com.app.ecarepro.ui.firebaseAnalytics.GoogleAnalyticsService
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
@@ -77,6 +79,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -102,13 +105,13 @@ class MainActivity : AppCompatActivity() {
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
     private var listenMenuItemClickEvent = true
     private var isActivityPaused = false
-
+    val googleAnalytics = GoogleAnalyticsService()
    private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
@@ -186,13 +189,22 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.profileFragment)
             systemViewModel.openDrawer(false)
         }
+// Initialize AnalyticsManager with providers
+        AnalyticsManager.shared.initialize(listOf(googleAnalytics))
 
-
+        // Track a screen
+        AnalyticsManager.shared.trackScreen("HomeScreen")
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        val bundle = Bundle().apply {
+            putString("ScreenName", "HomeScreen")
+        }
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.appBarMain.contentMain.bottomNavigationView.isVisible =

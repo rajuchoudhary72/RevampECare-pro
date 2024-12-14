@@ -31,6 +31,9 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsEvent
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsParameters
 import com.app.ecarepro.ui.otpverification.OtpVerificationFragment
 import javax.inject.Inject
 
@@ -98,6 +101,11 @@ class SignInFragment : Fragment() {
                     if (it.errorCode == 0) {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
+                            // Track an event
+                            AnalyticsManager.shared.trackEvent(
+                                AnalyticsEvent.LOGIN,
+                                mapOf(AnalyticsParameters.USER_NAME to  binding.textUserName.text.toString())
+                            )
                             if (it.isOTPEnabled == true) {
                                 mainActivity().showMessage(it.message.toString())
                                 try {
