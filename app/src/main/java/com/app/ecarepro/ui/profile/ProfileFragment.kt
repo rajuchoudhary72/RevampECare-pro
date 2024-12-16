@@ -702,6 +702,11 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onResume() {
+        super.onResume()
+        profileViewModel.sendScreenEvent()
+    }
 }
 
 enum class PhotoType(val type: Int) {

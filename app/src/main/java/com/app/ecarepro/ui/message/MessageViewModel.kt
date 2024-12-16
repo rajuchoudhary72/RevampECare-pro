@@ -12,12 +12,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 
 
 @HiltViewModel
 class MessageViewModel @Inject constructor(
     private val messageRepository: MessageRepository,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private val _showChatOption = MutableStateFlow(false)
     val showChatOption = _showChatOption
@@ -63,5 +66,9 @@ class MessageViewModel @Inject constructor(
         viewModelScope.launch {
             _clearFilter.emit(true)
         }
+    }
+
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.MESSAGE_LIST)
     }
 }

@@ -123,6 +123,10 @@ class MessageFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        messageViewModel.sendScreenEvent()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

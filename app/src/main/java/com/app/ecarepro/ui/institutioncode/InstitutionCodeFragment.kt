@@ -138,6 +138,11 @@ class InstitutionCodeFragment : Fragment() {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        institutionCodeViewModel.sendScreenEvent()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
