@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.studentProfile.academic_performance
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,11 @@ class AcademicPerViewModel @Inject constructor(
         NetworkResult.Loading())
     val studentProfileStateFlow: StateFlow<NetworkResult<NetworkAcademicPerformance>> = studentProfileMutableStateFlow
 
+    private val academicYearMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAcademicYear>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val academicYearStateFlow: StateFlow<NetworkResult<NetworkAcademicYear>> = academicYearMutableStateFlow
+
+
     fun getAcademicPerformance(
         sId: Int,
         yrID: Int
@@ -31,6 +37,19 @@ class AcademicPerViewModel @Inject constructor(
             studentProfileMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
             studentProfileMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
+
+    fun academicYears()=viewModelScope.launch {
+        runCatching {
+            academicYearMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.academicYears()
+        }.onSuccess {
+            academicYearMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            academicYearMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }

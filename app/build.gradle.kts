@@ -14,30 +14,15 @@ plugins {
 
 kapt {
     correctErrorTypes = true
-    javacOptions {
-        option("-Adagger.fastInit=ENABLED")
-    }
 }
 
 android {
     signingConfigs {
-        create("Franciscan e-Care") {
+        create("prod") {
             storeFile = file("eCareBeta.jks")
             storePassword = "eCarePro"
             keyAlias = "ecareProAndroidBeta"
             keyPassword = "eCarePro"
-        }
-        create("MYSFHS") {
-            storeFile = file("strawberry_key")
-            storePassword = "strawberryapp"
-            keyAlias = "strawberryapp"
-            keyPassword = "strawberryapp"
-        }
-        create("MYSFPS Play") {
-            storeFile = file("strawberry_key")
-            storePassword = "strawberryapp"
-            keyAlias = "strawberryapp"
-            keyPassword = "strawberryapp"
         }
     }
     namespace = "com.app.ecarepro"
@@ -46,8 +31,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 261
-        versionName = "2.5.0"
+        versionCode = 267
+        versionName = "2.5.6"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -62,13 +47,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -82,35 +60,30 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     buildFeatures {
         viewBinding = true
         dataBinding = true
         buildConfig = true
     }
-    flavorDimensions += listOf("apps")
 
+    flavorDimensions += listOf("build")
     productFlavors {
-        create("Franciscan e-Care") {
-            dimension = "apps"
+        create("dev") {
+            dimension = "build"
             resValue("string", "app_name", "e-Care-Dev")
-            signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
-        create("MYSFHS") {
-            dimension = "apps"
-            resValue("string", "app_name", "MYSFHS")
-            applicationId = "com.franciscan.strawberry"
-            versionCode = 29
-            versionName = "2.0.4"
-            signingConfig = signingConfigs.getByName("MYSFHS")
+        create("prod") {
+            dimension = "build"
+            resValue("string", "app_name", "Franciscan e-Care")
         }
-        create("MYSFPS Play") {
-            dimension = "apps"
-            resValue("string", "app_name", "MYSFPS")
-            applicationId = "com.franciscan.strawberry_play"
-            versionCode = 1
-            versionName = "1.0.0"
-            signingConfig = signingConfigs.getByName("MYSFPS Play")
+        create("beta") {
+            dimension = "build"
+           // applicationIdSuffix = ".beta"
+            resValue("string", "app_name", "Franciscan e-Care")
+           // signingConfig = signingConfigs.getByName("beta")
         }
     }
 
@@ -170,7 +143,7 @@ dependencies {
     implementation(libs.decorator)
 
     /*AAChartCore-Kotlin is a Kotlin library typically used in User Interface*/
-    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
+    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.0")
 
     /* Page indicator */
     implementation(libs.scrollingpagerindicator)
@@ -192,16 +165,16 @@ dependencies {
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.intuit.sdp:sdp-android:1.0.5")
     implementation("de.hdodenhof:circleimageview:2.2.0")
-    implementation("com.github.Mindinventory:Lassi:1.3.0")
+    implementation("com.github.Mindinventory:Lassi:1.4.1")
     implementation("com.github.AsynctaskCoffee:VoiceRecorder:beta-0.5")
     implementation("com.github.dhaval2404:imagepicker:2.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation("com.github.fornewid:neumorphism:0.3.2")
-    implementation("androidx.browser:browser:1.2.0")
-    implementation("com.android.support:print:28.0.0")
+     implementation("androidx.browser:browser:1.2.0")
+     implementation("com.android.support:print:28.0.0")
     implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics-ktx:21.3.0")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))

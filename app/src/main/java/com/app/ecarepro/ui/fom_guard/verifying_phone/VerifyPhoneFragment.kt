@@ -63,7 +63,12 @@ class VerifyPhoneFragment : Fragment() {
                 } is NetworkResult.Success -> {
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.data != null) {
-                        if (!it.data. status) {
+                        mainActivity().showMessage(it.data.message)
+                        findNavController().navigate(
+                            R.id.appointmentFragment,
+                            bundleOf("toAppointment" to  true)
+                        )
+                     /*   if (!it.data. status) {
                             findNavController().navigate(
                                 R.id.appointmentFragment,
                                 bundleOf("toAppointment" to  true)
@@ -71,7 +76,7 @@ class VerifyPhoneFragment : Fragment() {
                         }else{
 
                             mainActivity().showMessage(it.data.message)
-                        }
+                        }*/
                     }  } } }  }
         viewModel.getuserdetailsfrommobile(binding.textUserName.text.toString())
     }

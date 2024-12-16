@@ -1,62 +1,45 @@
 {
   "project_info": {
-    "project_number": "546577104298",
-    "firebase_url": "https://strawberry-fields-high-school.firebaseio.com",
-    "project_id": "strawberry-fields-high-school",
-    "storage_bucket": "strawberry-fields-high-school.appspot.com"
+    "project_number": "809649159132",
+    "project_id": "strawberry-fields-play-school",
+    "storage_bucket": "strawberry-fields-play-school.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:546577104298:android:4415371dddd7c2a8",
+        "mobilesdk_app_id": "1:809649159132:android:953a7d3ba7ccffb5b6ad19",
         "android_client_info": {
-          "package_name": "com.franciscan.strawberry"
+          "package_name": "com.franciscan.strawberry_play"
         }
       },
       "oauth_client": [
         {
-          "client_id": "546577104298-dn01c49i906nphq40l90iufpa60ehl1g.apps.googleusercontent.com",
+          "client_id": "809649159132-bj8hiohp80e9u0konguaov8rgudamajo.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.franciscan.strawberry",
+            "package_name": "com.franciscan.strawberry_play",
             "certificate_hash": "50f88243e83b460baa35fdfbe1a57d8f47768b68"
           }
         },
         {
-          "client_id": "546577104298-iepavqf1an6a9pnh9hiickohvbsub909.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.franciscan.strawberry",
-            "certificate_hash": "a93801c56874376ea894356f79ef82b5d98bb097"
-          }
-        },
-        {
-          "client_id": "546577104298-m57gqc5sh5c4u775bs1ll8csq5fbabak.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.franciscan.strawberry",
-            "certificate_hash": "4b05d2b59e80c1d5d92c4c80a5741b741e11946a"
-          }
-        },
-        {
-          "client_id": "546577104298-gr0fphe5t3hvgtijq26rrrrmu23umlkm.apps.googleusercontent.com",
+          "client_id": "809649159132-4s91rl45u12391tj9o7hki4pbe08es7a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAc_QD0kZ7ZahEEokByeHN0HAaBVu8RupY"
+          "current_key": "AIzaSyC5zYI3XvdnkpueJjSxshqboYYwKTaha5c"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "546577104298-gr0fphe5t3hvgtijq26rrrrmu23umlkm.apps.googleusercontent.com",
+              "client_id": "809649159132-4s91rl45u12391tj9o7hki4pbe08es7a.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "546577104298-ccnqauqaat2kkntcb4nempvlsnc0ghqv.apps.googleusercontent.com",
+              "client_id": "809649159132-e0kuo0n4ifen4lk3euhuhj33ih62po4q.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.franciscan.MYSFPS",

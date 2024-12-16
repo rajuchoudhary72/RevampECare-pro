@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.FrameLayout
+import com.app.ecarepro.ui.taskmanager.TaskPriority
+
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.setMargins
@@ -203,6 +205,9 @@ class TaskDetailsFragment : Fragment() {
                         priority(uiState.taskDetails.task?.priority)
                         status(uiState.taskDetails.task?.status)
                         canEdit(uiState.taskDetails.task?.imOwner)
+                        updatePriority { _ ->
+                            updatePriority(uiState.taskDetails.task?.priority!!)
+                        }
                         editStartDate { _ ->
                             selectDate("Start Date") {
                                 (requireActivity() as MainActivity).showLoader(true)
@@ -328,7 +333,22 @@ class TaskDetailsFragment : Fragment() {
             }
 
         }
-
+    }
+    private fun updatePriority(priority: Int) {
+        val items = TaskPriority.getTaskPriorityFromThis(priority)
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Update Status")
+            .setItems(items.map { it.value }.toTypedArray()) { dialog, which ->
+                mViewModel.updateTask(
+                    TaskFiledName.PRIORITY,
+                    priority.toString(),
+                    items[which].id.toString()
+                ) { isSuccess, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    mainActivity().showMessage(message ?: "")
+                }
+            }
+            .show()
     }
 
     private fun selectImageOptionDialog() {

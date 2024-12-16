@@ -214,7 +214,6 @@
                       android:layout_height="wrap_content"
                       android:baselineAligned="false"
                       android:orientation="horizontal"
-                      android:layout_marginBottom="@dimen/_150sdp"
                       android:weightSum="2">
 
                       <RelativeLayout
@@ -276,6 +275,13 @@
               </RelativeLayout>
           </RelativeLayout>
 
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/_200sdp"
+              app:layout_constraintTop_toBottomOf="@+id/notice_pdf"
+
+              />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 

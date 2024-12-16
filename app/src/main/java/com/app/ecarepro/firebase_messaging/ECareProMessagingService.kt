@@ -78,16 +78,16 @@ class ECareProMessagingService : FirebaseMessagingService() {
 
         val channelId = "99999"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher_round)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("Test")
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher_round)
+            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
             notificationBuilder.setColor(resources.getColor(R.color.md_theme_light_primary))
         } else {
-            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher_round)
+            notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 

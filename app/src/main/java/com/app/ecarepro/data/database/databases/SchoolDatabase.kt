@@ -10,4 +10,6 @@ interface SchoolDatabase {
     fun getSchoolFlow(schoolCode: String): Flow<SchoolEntity>
     fun getSchoolsFlow(): Flow<List<SchoolEntity>>
     suspend fun deleteSchool(schoolEntity: SchoolEntity)
+    suspend fun updateSchool(schoolEntity: SchoolEntity)
+
 }

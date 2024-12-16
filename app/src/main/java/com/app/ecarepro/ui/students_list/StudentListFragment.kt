@@ -24,7 +24,6 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -76,23 +75,21 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
             RadioGroup.OnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
                     R.id.rb_all -> {
-                        /*schoolType = 2
+                        schoolType = 2
                         studentListViewModel.getStudentList(schoolType,toFragment)
-*/
-                        studentListViewModel.schoolType.update { 2 }
+
                     }
 
                     R.id.rb_boarding -> {
-                        /*schoolType = 1
-                        studentListViewModel.getStudentList(schoolType,toFragment)*/
-                        studentListViewModel.schoolType.update { 1 }
+                        schoolType = 1
+                        studentListViewModel.getStudentList(schoolType,toFragment)
 
                     }
 
                     R.id.rb_day_scolar -> {
-                       /* schoolType = 0
-                        studentListViewModel.getStudentList(schoolType,toFragment)*/
-                        studentListViewModel.schoolType.update { 0 }
+                        schoolType = 0
+                        studentListViewModel.getStudentList(schoolType,toFragment)
+
                     }
 
                 }
@@ -187,7 +184,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
 
         /* now we  pass  this  boolean  from setting */
 
-       // studentListViewModel.getStudentList(schoolType,toFragment)
+        studentListViewModel.getStudentList(schoolType,toFragment)
         checkIsBoarding()
 
 

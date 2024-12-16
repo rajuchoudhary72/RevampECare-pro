@@ -19,6 +19,7 @@ import com.app.ecarepro.data.network.model.asUserEntity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.app.ecarepro.data.network.model.SyncData
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
@@ -108,7 +109,7 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
-    override fun syncData(): Flow<Result<LoginResponseDto>> {
+    override fun syncData(): Flow<Result<SyncData>> {
         return flow {
             try {
                 val response = appService.syncData()

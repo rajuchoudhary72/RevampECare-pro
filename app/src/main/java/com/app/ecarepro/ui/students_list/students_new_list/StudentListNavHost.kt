@@ -2,14 +2,12 @@ package com.app.ecarepro.ui.students_list.students_new_list
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
@@ -24,7 +22,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -44,7 +41,7 @@ class StudentListNavHost : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View  {
         binding = FragmentStudentListNavHostBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = studentListViewModel
@@ -56,109 +53,102 @@ class StudentListNavHost : Fragment() {
         }
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            studentListViewModel
-                .studentListStateFlow
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED)
-                .collectLatest { listNetworkResult ->
-                    when (listNetworkResult) {
+        lifecycleScope.launch {
+            studentListViewModel.studentListStateFlow.collectLatest { listNetworkResult ->
+                when (listNetworkResult) {
 
-                        is NetworkResult.Loading -> {
-                            (requireActivity() as MainActivity).showLoader(true)
-                        }
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                     }
 
-                        is NetworkResult.Error -> {
-                            (requireActivity() as MainActivity).showLoader(false)
-                            Log.d("main", "Error$listNetworkResult")
-                        }
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                         Log.d("main", "Error$listNetworkResult")
+                    }
 
-                        is NetworkResult.Success -> {
-                            (requireActivity() as MainActivity).showLoader(false)
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
 
-                            if (listNetworkResult.data != null) {
-                                if (listNetworkResult.data.students != null) {
+                        if (listNetworkResult.data != null) {
+                        if (listNetworkResult.data.students != null) {
 
 
-                                    try {
-                                        viewLifecycleOwner.lifecycleScope.launch {
-                                            val classList = mutableListOf<String>()
-                                            val fragmentList: ArrayList<Fragment> = ArrayList()
 
-                                            withContext(Dispatchers.Default) {
-                                                listNetworkResult.data.students.forEach {
-                                                    if (!classList.contains(it.`class`)) {
-                                                        classList.add(it.`class`)
-                                                    }
-                                                }
-                                                classList.forEach { itemDat ->
-                                                    fragmentList.add(
-                                                        StudentListSubFragment(
-                                                            listNetworkResult.data.students,
-                                                            itemDat,
-                                                            toFragment
-                                                        )
-                                                    )
-                                                }
+                            try {
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val classList = mutableListOf<String> ()
+                                    val fragmentList : ArrayList<Fragment> = ArrayList()
+
+                                    withContext(Dispatchers.Default) {
+                                        listNetworkResult.data.students.forEach {
+                                            if (!classList.contains(it.`class`)) {
+                                                classList.add(it.`class`)
                                             }
-                                            val viewPagerAdapter = ViewPagerAdapter(
-                                                fragmentList,
-                                                activity?.supportFragmentManager!!,
-                                                lifecycle
-                                            )
-                                            binding.viewPager.adapter = viewPagerAdapter
-
-                                            TabLayoutMediator(
-                                                binding.tabLayout,
-                                                binding.viewPager
-                                            ) { tab, position ->
-                                                tab.text = classList[position]
-                                            }.attach()
-
-                                            isDataLoaded = true
-
                                         }
-                                    } catch (_: Exception) {
+                                        classList. forEach { itemDat ->
+                                            fragmentList.add( StudentListSubFragment(listNetworkResult.data.students, itemDat ,toFragment ))
+                                        }
                                     }
+                                    val viewPagerAdapter = ViewPagerAdapter(
+                                        fragmentList,
+                                        activity?.supportFragmentManager!!,
+                                        lifecycle
+                                    )
+                                    binding.viewPager.adapter = viewPagerAdapter
 
+                                    TabLayoutMediator(
+                                        binding.tabLayout,
+                                        binding.viewPager
+                                    ) { tab, position ->
+                                        tab.text = classList[position]
+                                    }.attach()
+
+                                    isDataLoaded=true
 
                                 }
-                            }
+                            }catch (_:Exception){ }
+
+
 
                         }
+                        }
 
-
-                        else -> {}
                     }
 
 
+                    else -> {}
                 }
 
+
+            }
+
         }
+
+
+        if (!isDataLoaded) {
+            studentListViewModel.getStudentList(schoolType,toFragment)
+        }
+
 
         binding.toggleButtonSchoolType.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonSchoolType.checkedButtonId) {
                 R.id.btn_all -> {
-                    studentListViewModel.schoolType.update { 2 }
-                    /* schoolType = 2
-                     studentListViewModel.getStudentList(schoolType,toFragment)*/
+                    schoolType = 2
+                    studentListViewModel.getStudentList(schoolType,toFragment)
                 }
-
                 R.id.btn_boarding -> {
-                    studentListViewModel.schoolType.update { 1 }
-                    /*  schoolType = 1
-                      studentListViewModel.getStudentList(schoolType,toFragment)*/
+                    schoolType = 1
+                    studentListViewModel.getStudentList(schoolType,toFragment)
 
                 }
 
                 else -> {
-                    studentListViewModel.schoolType.update { 0 }
-                    /*  schoolType = 0
-                      studentListViewModel.getStudentList(schoolType,toFragment)*/
+                    schoolType = 0
+                    studentListViewModel.getStudentList(schoolType,toFragment)
                 }
             }
         }
@@ -166,10 +156,20 @@ class StudentListNavHost : Fragment() {
     }
 
     private fun checkIsBoarding() {
+        (requireActivity() as MainActivity).showLoader(true)
         lifecycleScope.launch {
             userDataStore.getSchoolData()?.let {
-                binding.toggleButtonSchoolType.isVisible = it.isBoardingSchool ?: false
+                it.schoolCode.let { schoolCode ->
+                    studentListViewModel.validateSchoolCode(schoolCode) { it1 ->
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it1?.errorCode == 0) {
+                            binding.toggleButtonSchoolType.isVisible = it1.isBoardingSchool!!
+                        }
+                    }
+                }
             }
         }
+
+
     }
 }

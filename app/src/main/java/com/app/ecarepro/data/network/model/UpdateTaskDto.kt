@@ -18,5 +18,6 @@ enum class TaskFiledName(val value: String) {
     TASK_TITLE("taskTitle"),
     START_DATE("startDate"),
     DUE_DATE("dueDate"),
+    PRIORITY("priority"),
     DESCRIPTION("description");
 }

@@ -14,57 +14,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionnaireViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
-    private val questionnaireStateFlow: MutableStateFlow<NetworkResult<NetworkQuestionnaire>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val _questionnaireStateFlow: StateFlow<NetworkResult<NetworkQuestionnaire>> =
-        questionnaireStateFlow
+    private val questionnaireStateFlow: MutableStateFlow<NetworkResult<NetworkQuestionnaire>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val _questionnaireStateFlow: StateFlow<NetworkResult<NetworkQuestionnaire>> = questionnaireStateFlow
 
-    private val deleteAnswerMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val deleteAnswerStateFlow: StateFlow<NetworkResult<CommonResponse>> =
-        deleteAnswerMutableStateFlow
+    private val deleteAnswerMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val deleteAnswerStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAnswerMutableStateFlow
 
-    init {
-        getQuestionnaireList()
-    }
 
-    fun getQuestionnaireList(pg: Int = 1, myque: Boolean = false) = viewModelScope.launch {
+    fun getQuestionnaireList( pg: Int, myque: Boolean )=viewModelScope.launch {
         runCatching {
-            questionnaireStateFlow.value = NetworkResult.Loading()
-            userRepository.getQuestionnaireList(pg, myque)
+            questionnaireStateFlow.value = NetworkResult.Loading( )
+            userRepository.getQuestionnaireList( pg, myque)
         }.onSuccess {
             questionnaireStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            questionnaireStateFlow.value = NetworkResult.Error(it.message)
+            questionnaireStateFlow .value = NetworkResult.Error(it.message)
         }
     }
 
-    fun questionnaireLike(qID: Int, like: Boolean) = viewModelScope.launch {
+    fun questionnaireLike(qID: Int, like: Boolean)=viewModelScope.launch {
         runCatching {
-            userRepository.questionnaireLike(qID, like)
+             userRepository.questionnaireLike( qID, like)
         }.onSuccess {
-        }.onFailure {
-        }
+         }.onFailure {
+         }
     }
 
-    fun deleteAnswer(ansID: Int) = viewModelScope.launch {
+    fun deleteAnswer(ansID: Int )=viewModelScope.launch {
         runCatching {
-            deleteAnswerMutableStateFlow.value = NetworkResult.Loading()
+            deleteAnswerMutableStateFlow.value= NetworkResult.Loading( )
 
             userRepository.deleteQID(ansID)
         }.onSuccess {
-            deleteAnswerMutableStateFlow.value = NetworkResult.Success(it)
+            deleteAnswerMutableStateFlow.value= NetworkResult.Success(it)
         }.onFailure {
-            deleteAnswerMutableStateFlow.value = NetworkResult.Error(it.message)
+            deleteAnswerMutableStateFlow.value= NetworkResult.Error(it.message)
         }
     }
+
 
 
 }

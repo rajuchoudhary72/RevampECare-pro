@@ -53,7 +53,28 @@ fun ImageView.taskPriorityColor(priority: Int) {
     imageTintList = ContextCompat.getColorStateList(context, colorId)
 
 }
-
+@BindingAdapter("taskPriorityTextColor")
+fun TextView.taskPriorityTextColor(priority: Int) {
+    val colorId = when (priority) {
+        0 -> {
+            text = "Low"
+            R.color.grey_40
+        }
+        1 -> {
+            text = "Normal"
+            com.asynctaskcoffee.audiorecorder.R.color.soft_blue
+        }
+        2 -> {
+            text = "High"
+            R.color.red
+        }
+        else -> {
+            text = "Urgent"
+            com.lassi.R.color.colorAccent
+        }
+    }
+    setTextColor(ContextCompat.getColor(context, colorId))
+}
 @BindingAdapter("taskStatusColor")
 fun ImageView.taskStatusColor(priority: Int) {
     val colorId = when (priority) {

@@ -12,6 +12,8 @@ import com.app.ecarepro.data.network.model.NetworkAddInfraction
 import com.app.ecarepro.data.network.model.NetworkAnswerDetails
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import retrofit2.http.Url
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+
 import com.app.ecarepro.data.network.model.AppointmentFormData
 import com.app.ecarepro.data.network.model.FormDataDepartmentResponseDto
 import com.app.ecarepro.data.network.model.FormDataDesignationResponseDto
@@ -131,6 +133,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
@@ -1034,9 +1037,15 @@ interface UserService {
     suspend fun postAssignmentRemark(
         @Body request:  List<AssignmentRemarkPost>,
     ): CommonResponse
-
+    @GET("Report/ModeWiseCollection")
+    suspend fun modeWiseCollection(
+        @Query("CollectionDate") fromDate: String,
+    ): ModeWiseCollection
     @POST("Admin/UploadStudentPhoto ")
     suspend fun uploadStudentPhoto(
         @Body request: StudentPhotoUploadModel,
     ): CommonResponse
+
+    @GET("Academic/AcademicYears")
+    suspend fun academicYears(): NetworkAcademicYear
 }

@@ -13,23 +13,17 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class BookLibraryViewModel @Inject constructor(
-    private val userRepository: UserRepository
+class BookLibraryViewModel  @Inject constructor(
+    private val  userRepository: UserRepository
+
 ) : ViewModel() {
 
 
-    private val libraryDTLMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLibraryDTL>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
-    val libraryDTLStateFlow: StateFlow<NetworkResult<NetworkLibraryDTL>> =
-        libraryDTLMutableStateFlow
+    private val libraryDTLMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLibraryDTL>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val libraryDTLStateFlow: StateFlow<NetworkResult<NetworkLibraryDTL>> = libraryDTLMutableStateFlow
 
-    init {
-        getLibraryDTL()
-    }
-
-    private fun getLibraryDTL() = viewModelScope.launch {
+    fun getLibraryDTL()=viewModelScope.launch {
         runCatching {
             libraryDTLMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getLibraryDTL()

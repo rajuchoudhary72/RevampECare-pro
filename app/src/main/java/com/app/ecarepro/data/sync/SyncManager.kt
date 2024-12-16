@@ -1,12 +1,17 @@
 package com.app.ecarepro.data.sync
 
+import com.app.ecarepro.data.database.databases.SchoolDatabase
 import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.database.model.UserEntity
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -17,6 +22,7 @@ class SyncManager @Inject constructor(
     private val appRepository: AppRepository,
     private val userDataStore: UserDataStore,
     private val userDatabase: UserDatabase,
+    private val schoolDatabase: SchoolDatabase,
 ) {
     /*call this function  from where  you need sync  to user and school data  for current active user */
     suspend fun sync(
@@ -50,38 +56,60 @@ class SyncManager @Inject constructor(
         userToUpdate: NetworkUserDetailsDto?,
         resultListener: ((success: Boolean, message: String) -> Unit)?,
     ) {
-        appRepository.syncData().collect { result ->
-            if (result.isSuccess) {
-                val data = result.getOrNull()
-                if (data != null) {
-                    updateDataToDatabase(data, userToUpdate)
-                    resultListener?.invoke(true, "Sync successful")
+        GlobalScope.launch(Dispatchers.IO) {
+            appRepository.syncData().collect { result ->
+                if (result.isSuccess) {
+                    val data = result.getOrNull()
+                    if (data != null) {
+                        /*update local DB  after sync  api success */
+                        val userData = data.asUserEntity()
+                        updateUserDataToDatabase(userData, userToUpdate)
+
+                        updateSchoolData(data)
+
+
+                        resultListener?.invoke(true, "Sync successful")
+                    } else {
+                        resultListener?.invoke(
+                            false,
+                            result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                        )
+                    }
                 } else {
                     resultListener?.invoke(
                         false,
                         result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
                     )
                 }
-            } else {
-                resultListener?.invoke(
-                    false,
-                    result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
-                )
             }
         }
     }
 
+    private suspend fun updateSchoolData(data: SyncData) {
+        val existingSchoolData = schoolDatabase.getSchool(data.schoolCode)
+        schoolDatabase.updateSchool(
+            schoolEntity = existingSchoolData.copy(
+                webSite = data.website,
+                feePaymentURL = data.feePaymentURL,
+                logo = data.logo,
+                logoScName = data.logoScName,
+                marksEntryURL = data.marksEntryURL,
+                schAdd1 = data.schAdd1,
+                schAdd2 = data.sChAdd2,
+                schUpdatedOn = getCurrentSyncTime()
+            )
+        )
+    }
+
     /* update local DB  after sync  api success */
-    private suspend fun updateDataToDatabase(
-        data: LoginResponseDto,
+    private suspend fun updateUserDataToDatabase(
+        user: UserEntity,
         userToUpdate: NetworkUserDetailsDto?,
     ) {
-        val user = data.asUserEntity()
         userToUpdate?.let { currentUserInDatabase ->
             userDatabase.deleteUserById(currentUserInDatabase.id)
             val id = userDatabase.insertUser(
                 user.copy(
-                    schoolCode = data.schoolCode,
                     loginTime = getCurrentSyncTime()
                 )
             )

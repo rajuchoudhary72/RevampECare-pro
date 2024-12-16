@@ -19,10 +19,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import org.json.JSONObject
 import retrofit2.HttpException
-import javax.inject.Inject
-
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
     private val userRepository: UserRepository
@@ -68,23 +67,18 @@ class AppointmentViewModel @Inject constructor(
                                             "Name" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.name)
                                             }
-
                                             "Mobile" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.mobile)
                                             }
-
                                             "Email" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.email)
                                             }
-
                                             "Address" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.address)
                                             }
-
                                             "Company" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.company)
                                             }
-
                                             else -> {
                                                 form
                                             }
@@ -200,11 +194,11 @@ class AppointmentViewModel @Inject constructor(
                 uiState.formData.forEach { form: Form ->
                     when (form.columnName) {
                         "Photo" -> {
-                            data["photo"] = form.base64Image ?: ""
+                            data["photo"] = form.base64Image?:""
                         }
 
                         "IdproofImage" -> {
-                            data["VisitorPhotoInbyte"] = form.base64Image ?: ""
+                            data["VisitorPhotoInbyte"] = form.base64Image?:""
                         }
 
                         "IdType" -> {
@@ -253,31 +247,29 @@ class AppointmentViewModel @Inject constructor(
                                 ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
                         )
                     } else {
-                        val error = result.exceptionOrNull() ?: IllegalArgumentException(
-                            UNKNOWN_ERROR_MESSAGE
-                        )
-
+                        val error = result.exceptionOrNull() ?: IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)
                         if (error is HttpException) {
                             if (error.code() == 400) {
                                 func(
                                     false,
                                     "One or more validation errors occurred."
                                 )
-                            } else {
+                            }
+                            else {
                                 func(
                                     false,
                                     error.message ?: UNKNOWN_ERROR_MESSAGE
                                 )
                             }
 
-                        } else {
+                        }
+                        else {
                             func(
                                 false,
                                 error.message ?: UNKNOWN_ERROR_MESSAGE
                             )
                         }
                     }
-
                 }
             }
         }

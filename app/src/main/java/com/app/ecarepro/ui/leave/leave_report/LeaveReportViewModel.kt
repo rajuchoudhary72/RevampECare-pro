@@ -55,10 +55,13 @@ class LeaveReportViewModel @Inject constructor(
         action:Int,
         forwardedTo:Int,
         rejectionReason: String,
+         isPartialApproved: Boolean?,
+         partialFromDate: String?,
+         partialTillDate: String?,
     )=viewModelScope.launch {
         runCatching {
             leaveActionMutableStateFlow.value = NetworkResult.Loading( )
-            userRepository.leaveAction( applType, lvID, lvIDs, action, forwardedTo,rejectionReason )
+            userRepository.leaveAction( applType, lvID, lvIDs, action, forwardedTo,rejectionReason , isPartialApproved, partialFromDate, partialTillDate)
         }.onSuccess {
             leaveActionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

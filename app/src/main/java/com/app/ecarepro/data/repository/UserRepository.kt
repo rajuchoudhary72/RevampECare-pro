@@ -16,6 +16,7 @@ import com.app.ecarepro.data.network.model.NetworkAppointments
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.data.network.model.Form
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
 
 import com.app.ecarepro.data.network.model.NetworkAppreciationInstance
 import com.app.ecarepro.data.network.model.NetworkAppreciations
@@ -41,6 +42,7 @@ import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.Purpose
 
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -156,6 +158,9 @@ interface UserRepository {
         otp: String,
         userName: String
     ): Flow<Result<TwoFactorLoginResponseDto>>
+    suspend fun todayModeWiseCollection(
+        date: String
+    ): Flow<Result<ModeWiseCollection>>
     suspend fun getCredentials(
         schoolCode: String,
         userType: Int,
@@ -284,6 +289,9 @@ interface UserRepository {
         action: Int,
         forwardedTo: Int,
         rejectionReason: String,
+         isPartialApproved: Boolean?,
+         partialFromDate: String?,
+         partialTillDate: String?,
     ): CommonResponse
 
     suspend fun leaveApply(
@@ -832,5 +840,7 @@ interface UserRepository {
     suspend fun uploadStudentPhoto(
          request: StudentPhotoUploadModel,
     ): CommonResponse
+
+    suspend fun academicYears(): NetworkAcademicYear
 
 }

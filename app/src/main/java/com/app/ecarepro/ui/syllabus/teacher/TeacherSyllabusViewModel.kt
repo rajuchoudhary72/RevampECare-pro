@@ -33,10 +33,6 @@ class TeacherSyllabusViewModel @Inject constructor(
     val deleteSyllabusStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteSyllabusMutableStateFlow
 
 
-    init {
-        getTeacherSyllabuses()
-    }
-
     fun getTeacherSyllabuses( )=viewModelScope.launch {
         runCatching {
             teacherSyllabusMutableStateFlow.value = NetworkResult.Loading()
