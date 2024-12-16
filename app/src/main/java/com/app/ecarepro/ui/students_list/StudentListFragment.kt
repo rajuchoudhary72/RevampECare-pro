@@ -101,43 +101,43 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 if (it.isNotEmpty() && studentList != null) {
                     when (filterPos) {
                         0 -> {
-                            studentListFilter = studentList!!.filter { s ->
-                                s.name.lowercase().contains(it.lowercase())
+                            studentListFilter = studentList.filter { s ->
+                                s.name!!.lowercase().contains(it.lowercase())
                             }
 
                         }
 
                         1 -> {
-                            studentListFilter = studentList!!.filter { s ->
-                                s.admissionNumber.lowercase().contains(it.lowercase())
+                            studentListFilter = studentList.filter { s ->
+                                s.admissionNumber!!.lowercase().contains(it.lowercase())
                             }
 
                         }
 
                         2 -> {
-                            studentListFilter = studentList!!.filter { s ->
-                                s.`class`.lowercase().contains(it.lowercase())
+                            studentListFilter = studentList.filter { s ->
+                                s.`class`!!.lowercase().contains(it.lowercase())
                             }
 
                         }
 
                         3 -> {
-                            studentListFilter = studentList!!.filter { s ->
-                                s.fatherName.lowercase().contains(it.lowercase())
+                            studentListFilter = studentList.filter { s ->
+                                s.fatherName!!.lowercase().contains(it.lowercase())
                             }
 
                         }
 
                         4 -> {
-                            studentListFilter = studentList!!.filter { s ->
-                                s.contactMob.lowercase().contains(it.lowercase())
+                            studentListFilter = studentList.filter { s ->
+                                s.contactMob!!.lowercase().contains(it.lowercase())
                             }
 
                         }
                     }
                     setupRecycleViewStudentList(studentListFilter)
                 } else {
-                    studentList?.let { it1 -> setupRecycleViewStudentList(it1) }
+                    studentList.let { it1 -> setupRecycleViewStudentList(it1) }
                 }
 
 
@@ -214,8 +214,8 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
         binding.tvSortByName.setOnClickListener {
             nameFilterAsc=!nameFilterAsc
             if (studentList!=null){
-                studentList = if (nameFilterAsc) studentList.sortedBy  { it.name.trim().lowercase() }.toMutableList()
-                else  studentList.sortedByDescending { it.name.trim().lowercase()  }.toMutableList()
+                studentList = if (nameFilterAsc) studentList.sortedBy  { it.name!!.trim().lowercase() }.toMutableList()
+                else  studentList.sortedByDescending { it.name!!.trim().lowercase()  }.toMutableList()
                 setupRecycleViewStudentList(studentList)
             }
         }
@@ -282,7 +282,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_addAppreciationFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -290,7 +290,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_appreciationListFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -298,7 +298,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_addInfractionFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -306,7 +306,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_infractionListFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
 
@@ -314,7 +314,7 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_studentProfileNavHostFragment,
                     Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
                     })
             }
         }

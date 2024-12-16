@@ -56,9 +56,9 @@ class CircularDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvCopyHolder.setOnClickListener {
-            copyToClipboard(requireContext(), binding.tvNoticeDetails.text.toString(),getString(R.string.circular)  )
-        }
+//        binding.tvCopyHolder.setOnClickListener {
+//            copyToClipboard(requireContext(), binding.tvNoticeDetails.text.toString(),getString(R.string.circular)  )
+//        }
 
         binding.relView.setOnClickListener {
             findNavController().navigate(R.id.action_circularDetailsFragment_to_openPdfFragment,Bundle( ).apply {
@@ -87,12 +87,14 @@ class CircularDetailsFragment : Fragment() {
                             binding.circularDetails=it.data.circuler
                             fileSource=it.data.circuler.filePath
 
-                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
-                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
-                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                            binding.tvNoticeDetails.text = spanned
+//                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
+//                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
+//                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
+//                            binding.tvNoticeDetails.text = spanned
+//
+//                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
 
-                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
+                            binding.tvNoticeDetails.loadDataWithBaseURL(null, it.data.circuler.message, "text/html", "UTF-8", null)
                         }
                     }
                 }

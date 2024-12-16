@@ -52,9 +52,7 @@ class FavoriteSliderNavHostFragment : Fragment() {
                         val fragmentList : ArrayList<Fragment> = ArrayList()
 
                         networkFavorites.list!!. forEach { itemDat ->
-                            fragmentList.add( FavoriteSliderFragment(
-                                itemDat  )
-                            )
+                            fragmentList.add( FavoriteSliderFragment.newInstance(itemDat))
                         }
 
                         val viewPagerAdapter = ViewPagerAdapter(

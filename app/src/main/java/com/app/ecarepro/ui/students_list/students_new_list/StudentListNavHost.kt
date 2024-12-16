@@ -86,11 +86,12 @@ class StudentListNavHost : Fragment() {
                                     withContext(Dispatchers.Default) {
                                         listNetworkResult.data.students.forEach {
                                             if (!classList.contains(it.`class`)) {
-                                                classList.add(it.`class`)
+                                                classList.add(it.`class`!!)
                                             }
                                         }
                                         classList. forEach { itemDat ->
-                                            fragmentList.add( StudentListSubFragment(listNetworkResult.data.students, itemDat ,toFragment ))
+                                            fragmentList.add( StudentListSubFragment.newInstance(listNetworkResult.data.students, itemDat ,toFragment ))
+
                                         }
                                     }
                                     val viewPagerAdapter = ViewPagerAdapter(

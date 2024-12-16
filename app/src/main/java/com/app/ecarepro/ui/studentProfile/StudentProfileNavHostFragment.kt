@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import com.app.ecarepro.ui.studentProfile.appreciation.StudentProfileAppreciatio
 import com.app.ecarepro.ui.studentProfile.infraction.StudentProfileInfractionFragment
 import com.app.ecarepro.ui.studentProfile.medical_card.MedicalCardFragment
 import com.app.ecarepro.ui.studentProfile.report_card.StudentProfileReportCardFragment
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,7 @@ class StudentProfileNavHostFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileNavHostBinding
     private val studentProfileNavHostViewModel: StudentProfileNavHostViewModel by viewModels()
+    private val sharedViewModel: SharedViewModelProfile  by activityViewModels()
     private var studentID: Int = 0
 
     override fun onCreateView(
@@ -88,6 +91,12 @@ class StudentProfileNavHostFragment : Fragment() {
                                         })
                                     } catch (_: Exception) { }
                                 }
+
+                                sharedViewModel.setNetworkStudentProfile(it.data)
+
+                                sharedViewModel.setProfile(it.data.profile)
+                                sharedViewModel.setSiblingDetails(it.data.siblingDetails)
+
                             }
 
 
@@ -102,13 +111,13 @@ class StudentProfileNavHostFragment : Fragment() {
                                         when(i.name){
                                             "PersonalDetails" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileDetailsFragment(it.data.profile,it.data.siblingDetails,))
+                                                    fragmentList.add(StudentProfileDetailsFragment())
                                                     fragmentName.add("Personal Details")
                                                 }
                                             }
                                             "Attendance" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileAttendanceFragment(it.data.attendanceDTL,it.data.academicYears,studentID,it.data.id))
+                                                    fragmentList.add(StudentProfileAttendanceFragment.newInstance(studentID))
                                                     fragmentName.add("Attendance")
                                                 }
                                             }
@@ -122,7 +131,6 @@ class StudentProfileNavHostFragment : Fragment() {
                                             }
                                             "ReportCard" -> {
                                                 if (i.isShow){
-
                                                     fragmentList.add(
                                                         StudentProfileReportCardFragment(it.data.reportCardDTLs   )
                                                     )
@@ -144,13 +152,13 @@ class StudentProfileNavHostFragment : Fragment() {
                                             }
                                             "Library" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileLibraryTransFragment(it.data.library))
+                                                    fragmentList.add(StudentProfileLibraryTransFragment())
                                                     fragmentName.add("Library")
                                                 }
                                             }
                                             "Transport" -> {
                                                 if (i.isShow){
-                                                    fragmentList.add(StudentProfileTransportDetailsFragment(it.data.transDetails))
+                                                    fragmentList.add(StudentProfileTransportDetailsFragment.newInstance(it.data.transDetails))
                                                     fragmentName.add("Transport Details")
                                                 }
                                             }

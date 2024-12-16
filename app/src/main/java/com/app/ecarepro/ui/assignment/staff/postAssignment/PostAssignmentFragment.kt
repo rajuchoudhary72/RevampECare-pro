@@ -614,7 +614,7 @@ class PostAssignmentFragment : Fragment() {
                 val name = StringBuilder()
 
                 for (student in students) {
-                    if (student.isSelected) {
+                    if (student.isSelected!!) {
                         if (studentIds.toString().isEmpty()) {
                             studentIds.append(student.stID)
                             name.append(student.recipientName)
@@ -625,7 +625,7 @@ class PostAssignmentFragment : Fragment() {
 
                     }
                 }
-                classID_StID= groupStudentsByClass(students.filter { it.isSelected }).toMutableList()
+                classID_StID= groupStudentsByClass(students.filter { it.isSelected!! }).toMutableList()
 
 
                 binding.tvSelectstudent.text= name
@@ -687,7 +687,7 @@ class PostAssignmentFragment : Fragment() {
 
         // Convert map to a list of ClassIDStID
         return classIDMap.map { (classID, stIDs) ->
-            ClassID_StID(classID, stIDs)
+            ClassID_StID(classID!!, stIDs)
         }
     }
 

@@ -6,5 +6,5 @@ data class NetworkStudentList(
     val errorCode: Int,
     val message: String,
     val status: String,
-    val students: List<Student>
+    val students: ArrayList<Student>
 )
