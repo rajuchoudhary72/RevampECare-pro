@@ -25,6 +25,7 @@ android {
             keyPassword = "eCarePro"
         }
     }
+
     namespace = "com.app.ecarepro"
     compileSdk = 34
     defaultConfig {
