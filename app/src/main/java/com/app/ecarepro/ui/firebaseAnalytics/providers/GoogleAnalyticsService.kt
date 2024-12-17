@@ -23,7 +23,9 @@ class GoogleAnalyticsService @Inject constructor(
 
     private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
-    private val BLOCKED_TRACKED_EVENTS = emptySet<String>()
+    private val BLOCKED_TRACKED_EVENTS = emptySet<String>(
+
+    )
 
     override fun shouldTrackEvent(event: String): Boolean {
         return BLOCKED_TRACKED_EVENTS.contains(event).not()
