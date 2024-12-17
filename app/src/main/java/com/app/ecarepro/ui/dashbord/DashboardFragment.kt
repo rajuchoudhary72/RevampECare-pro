@@ -122,8 +122,8 @@ class DashboardFragment : Fragment() {
             if (data.showFeeCollection == true)
                 buildEstimatedCollectionCard(
                     data.feeCollection,
-                    data.sessionStartDate,
-                    data.sessionEndDate
+                    data.feeCollection?.collectionStartDate,
+                    data.feeCollection?.collectionEndDate
                 )
 
 

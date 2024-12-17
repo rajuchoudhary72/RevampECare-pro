@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.InboxMessage
 import com.app.ecarepro.data.repository.MessageRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.DEFAULT_PAGE
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.message.sent.calculateTotalPages
@@ -17,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InboxMessageViewModel @Inject constructor(
-    private val messageRepository: MessageRepository
+    private val messageRepository: MessageRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private var page = DEFAULT_PAGE
     private var isLoading: Boolean = false
@@ -112,6 +115,9 @@ class InboxMessageViewModel @Inject constructor(
         fetchInboxMessages(true)
     }
 
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.INBOX_MESSAGE_LIST)
+    }
 }
 
 sealed interface InboxMessageUiState {

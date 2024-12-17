@@ -1,31 +1,28 @@
 package com.app.ecarepro.ui.profile
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.app.ecarepro.BuildConfig
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -40,14 +37,12 @@ import com.app.ecarepro.profileWardDetails
 import com.app.ecarepro.space
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FileAccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.core.content.ContextCompat
 
 
 @AndroidEntryPoint
@@ -63,6 +58,7 @@ class ProfileFragment : Fragment() {
 
     @Inject
     lateinit var syncManager: SyncManager
+
     @Inject
     lateinit var userDataStore: UserDataStore
     private val requestPermissionLauncher =
@@ -248,9 +244,9 @@ class ProfileFragment : Fragment() {
 
                         )
                         /*show  child info  if  user is parent*/
-                        if (it.stName.isNullOrEmpty().not()){
+                        if (it.stName.isNullOrEmpty().not()) {
                             childName("${it.stName ?: ""} (${it.className ?: ""})")
-                        }else{
+                        } else {
                             childName(null)
                         }
 
@@ -341,12 +337,14 @@ class ProfileFragment : Fragment() {
         }
         builder.show()
     }
+
     fun isCameraPermissionGranted(context: Context): Boolean {
         return ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
+
     private fun checkCameraPermission() {
         when {
             ContextCompat.checkSelfPermission(
@@ -356,6 +354,7 @@ class ProfileFragment : Fragment() {
                 // You can use the API that requires the permission.
                 openCamera()
             }
+
             shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
                 // In an educational UI, explain to the user why your app requires this
                 // permission for a specific feature to behave as expected. In this UI,
@@ -363,6 +362,7 @@ class ProfileFragment : Fragment() {
                 // continue using your app without granting the permission.
                 showPermissionRationaleDialog()
             }
+
             else -> {
                 // You can directly ask for the permission.
                 // The registered ActivityResultCallback gets the result of this request.
@@ -372,15 +372,19 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+
     private fun showPermissionRationaleDialog() {
         mainActivity().showMessage("Camera permission is required to take photo, go to setting and enable permission for the app.")
     }
+
     private fun openCamera() {
         cameraLauncher.launch(FileAccess.cameraIntent())
     }
+
     private fun showPermissionDeniedMessage() {
         mainActivity().showMessage("Camera permission denied")
     }
+
     private fun EpoxyController.buildStaffModels(profile: Profile) {
 
         profileItem {
@@ -687,11 +691,11 @@ class ProfileFragment : Fragment() {
         _binding?.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-      /*  viewLifecycleOwner.lifecycleScope.launch {
-            userDataStore.getUser()?.run {
-                binding.tvEditProfile.isVisible = Constant.PARENT_TYPE == userType
-            }
-        }*/
+        /*  viewLifecycleOwner.lifecycleScope.launch {
+              userDataStore.getUser()?.run {
+                  binding.tvEditProfile.isVisible = Constant.PARENT_TYPE == userType
+              }
+          }*/
 
         _binding?.tvEditProfile?.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)

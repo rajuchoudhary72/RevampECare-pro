@@ -8,18 +8,21 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMessageBinding
 import com.app.ecarepro.model.ComposeMessageType
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.message.chat.MessageType
 import com.app.ecarepro.ui.message.inbox.InboxMessageFragment
 import com.app.ecarepro.ui.message.sent.SentMessageFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
-import com.app.ecarepro.ui.message.chat.MessageType
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -52,6 +55,17 @@ class MessageFragment : Fragment() {
         }
 
         binding.btnSendSmsAppMessage.setOnClickListener {
+            lifecycleScope.launch {
+                messageViewModel.sendAnalyticEvent(
+                    AnalyticsConstants.Events.SEND_SMS_APP_MESSAGE,
+                    mapOf(
+                        AnalyticsConstants.Attributes.USER_ID to messageViewModel.userDataStore.getUser()?.userId.toString(),
+                        AnalyticsConstants.Attributes.USER_TYPE to messageViewModel.userDataStore.getUser()?.userType.toString(),
+                        AnalyticsConstants.Attributes.SCHOOL_CODE to messageViewModel.userDataStore.getSchoolData()?.schoolCode.toString(),
+                    )
+                )
+            }
+
             findNavController().navigate(
                 R.id.composeFragment,
                 bundleOf("composeMessageType" to ComposeMessageType.SMS_AND_APP_MESSAGE)
@@ -59,6 +73,16 @@ class MessageFragment : Fragment() {
         }
 
         binding.btnOnlyAppMessage.setOnClickListener {
+            lifecycleScope.launch {
+                messageViewModel.sendAnalyticEvent(
+                    AnalyticsConstants.Events.ONLY_APP_MESSAGE,
+                    mapOf(
+                        AnalyticsConstants.Attributes.USER_ID to messageViewModel.userDataStore.getUser()?.userId.toString(),
+                        AnalyticsConstants.Attributes.USER_TYPE to messageViewModel.userDataStore.getUser()?.userType.toString(),
+                        AnalyticsConstants.Attributes.SCHOOL_CODE to messageViewModel.userDataStore.getSchoolData()?.schoolCode.toString(),
+                    )
+                )
+            }
             findNavController().navigate(
                 R.id.composeFragment,
                 bundleOf("composeMessageType" to ComposeMessageType.ONLY_APP_MESSAGE)
@@ -73,8 +97,8 @@ class MessageFragment : Fragment() {
             messageViewModel.clearFilter()
             messageViewModel.isFilterApplied.update { false }
         }
-        arguments?.let {args ->
-            if(args.getString("ID").isNullOrEmpty().not()){
+        arguments?.let { args ->
+            if (args.getString("ID").isNullOrEmpty().not()) {
                 findNavController().navigate(
                     R.id.chatFragment,
                     bundleOf(

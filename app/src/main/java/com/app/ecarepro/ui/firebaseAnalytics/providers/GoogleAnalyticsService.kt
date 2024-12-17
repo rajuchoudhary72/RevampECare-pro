@@ -23,9 +23,9 @@ class GoogleAnalyticsService @Inject constructor(
 
     private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
-    private val BLOCKED_TRACKED_EVENTS = emptySet<String>(
+    private val BLOCKED_TRACKED_EVENTS = mutableMapOf<String, String>()
 
-    )
+    private var commonEventAttributes: Map<String, String> = emptyMap()
 
     override fun shouldTrackEvent(event: String): Boolean {
         return BLOCKED_TRACKED_EVENTS.contains(event).not()
@@ -35,6 +35,11 @@ class GoogleAnalyticsService @Inject constructor(
     override fun initialize() {
         firebaseAnalytics.setAnalyticsCollectionEnabled(true)
         GlobalScope.launch {
+            commonEventAttributes = mapOf(
+                AnalyticsConstants.Attributes.USER_ID to userDataStore.getUser()?.userId.toString(),
+                AnalyticsConstants.Attributes.USER_TYPE to userDataStore.getUser()?.userType.toString(),
+                AnalyticsConstants.Attributes.SCHOOL_CODE to userDataStore.getSchoolData()?.schoolCode.toString()
+            )
             setUserProperties()
         }
     }
@@ -65,13 +70,15 @@ class GoogleAnalyticsService @Inject constructor(
     }
 
     override fun trackEvent(event: String, parameters: Map<String, Any>) {
+        val attributes = mutableMapOf<String, Any>()
+        attributes.putAll(parameters)
+        attributes.putAll(commonEventAttributes)
         val bundle = Bundle().apply {
-            parameters.forEach { (key, value) ->
+            attributes.forEach { (key, value) ->
                 when (value) {
                     is String -> putString(key, value)
                     is Int -> putInt(key, value)
                     is Double -> putDouble(key, value)
-                    // ... add other types as needed
                     else -> Log.w(
                         TAG,
                         "Unsupported parameter type for key ${key}: ${value::class.java.simpleName}"

@@ -254,7 +254,7 @@ class SystemViewModel @Inject constructor(
 
     }
 
-    private suspend fun sendLogoutEvent() {
+    suspend fun sendLogoutEvent() {
         analyticsManager.trackEvent(
             AnalyticsConstants.Events.LOGOUT,
             mapOf(
@@ -262,6 +262,16 @@ class SystemViewModel @Inject constructor(
                 AnalyticsConstants.Attributes.USER_TYPE to userDataStore.getUser()?.userType.toString(),
                 AnalyticsConstants.Attributes.SCHOOL_CODE to userDataStore.getSchoolData()?.schoolCode.toString(),
             )
+        )
+    }
+
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
         )
     }
 

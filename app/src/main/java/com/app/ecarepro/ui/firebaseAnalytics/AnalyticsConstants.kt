@@ -14,6 +14,11 @@ object AnalyticsConstants {
         const val LOGOUT = "logout"
         const val VALIDATE_SCHOOL_CODE = "validate_school_code"
         const val FORGOT_PASSWORD = "forgot_password"
+        const val SYNC_SUCCESS = "sync_success"
+        const val PROFILE_PHOTO_UPDATED  = "profile_photo_updated"
+        const val RATE_US = "rate_us"
+        const val SEND_SMS_APP_MESSAGE = "send_sms_app_message"
+        const val ONLY_APP_MESSAGE = "only_app_message"
     }
 
     // Attribute Keys
@@ -33,6 +38,7 @@ object AnalyticsConstants {
         const val SCHOOL_CODE = "school_code"
         const val USER_TYPE = "user_type"
         const val RCV_ON = "rcv_on"
+        const val PROFILE_PHOTO_TYPE = "profile_photo_type"
         const val SESSION_ID = "session_id"
         const val AGE_GROUP = "age_group"
         const val GENDER = "gender"
@@ -68,6 +74,8 @@ object AnalyticsConstants {
         const val HOME_SCREEN = "HomeScreen"
         const val USER_PROFILE = "UserProfile"
         const val NOTIFICATION_LIST = "NotificationList"
+        const val INBOX_MESSAGE_LIST = "InboxMessageList"
+        const val SENT_MESSAGE_LIST = "SentMessageList"
         const val MESSAGE_LIST = "MessageList"
         const val GLOBAL_SEARCH = "GlobalSearch"
         const val DASH_BOARD_SCREEN = "DashBoardScreen"
