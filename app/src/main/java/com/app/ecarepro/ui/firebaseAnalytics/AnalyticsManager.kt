@@ -1,33 +1,45 @@
 package com.app.ecarepro.ui.firebaseAnalytics
 
-class AnalyticsManager private constructor() {
+import android.util.Log
+import com.app.ecarepro.ui.firebaseAnalytics.providers.AnalyticsProvider
+import java.util.concurrent.atomic.AtomicReference
 
-    private val providers: MutableList<AnalyticsProvider> = mutableListOf()
+interface AnalyticsManager {
+    fun trackScreen(screenName: String)
+    fun trackEvent(event: String, parameters: Map<String, Any>)
+}
+
+class AppAnalyticsManager : AnalyticsManager {
+
+    private var providers: AtomicReference<Set<AnalyticsProvider>> = AtomicReference(emptySet())
+
+
+    fun initialize(vararg providers: AnalyticsProvider) {
+        this.providers.set(providers.toSet())
+        this@AppAnalyticsManager.providers.get().forEach { it.initialize() }
+    }
+
+    override fun trackScreen(screenName: String) {
+        if (providers.get().isEmpty()) {
+            // Log a warning or handle uninitialized state
+            Log.w(TAG, "Analytics providers not initialized")
+            return
+        }
+        providers.get().forEach { it.trackScreen(screenName) }
+    }
+
+    override fun trackEvent(event: String, parameters: Map<String, Any>) {
+        if (providers.get().isEmpty()) {
+            // Log a warning or handle uninitialized state
+            Log.w(TAG, "Analytics providers not initialized")
+            return
+        }
+        providers.get()
+            .filter { it.shouldTrackEvent(event) }
+            .forEach { it.trackEvent(event, parameters) }
+    }
 
     companion object {
-        val shared: AnalyticsManager by lazy { AnalyticsManager() }
-    }
-
-    fun initialize(providers: List<AnalyticsProvider>) {
-        this.providers.clear()
-        this.providers.addAll(providers)
-
-        for (provider in providers) {
-            provider.initialize()
-        }
-    }
-
-    fun trackScreen(screenName: String) {
-        for (provider in providers) {
-            provider.trackScreen(screenName)
-        }
-    }
-
-    fun trackEvent(event: AnalyticsEvent, parameters: Map<AnalyticsParameters, Any>) {
-        for (provider in providers) {
-            if (provider.shouldTrackEvent(event)) {
-                provider.trackEvent(event, parameters)
-            }
-        }
+        private const val TAG = "AnalyticsManager"
     }
 }

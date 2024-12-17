@@ -9,6 +9,8 @@ import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
 import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +32,8 @@ import kotlin.math.truncate
 class ProfileViewModel @Inject constructor(
     private val userRepository: UserRepository,
     userDataStore: UserDataStore,
-    private val userDatabase: UserDatabase
+    private val userDatabase: UserDatabase,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val refresh = MutableStateFlow(true)
 
@@ -134,6 +137,10 @@ class ProfileViewModel @Inject constructor(
     fun removeUser(user: NetworkUserDetailsDto) {
         viewModelScope.launch(Dispatchers.IO) {
             userDatabase.deleteUser(user.userId)        }
+    }
+
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.USER_PROFILE)
     }
 }
 

@@ -215,4 +215,8 @@ class StudentProfileNavHostFragment : Fragment() {
         studentProfileNavHostViewModel.getStudentProfile(sId)
     }
 
+    override fun onResume() {
+        super.onResume()
+        studentProfileNavHostViewModel.sendScreenEvent()
+    }
 }
