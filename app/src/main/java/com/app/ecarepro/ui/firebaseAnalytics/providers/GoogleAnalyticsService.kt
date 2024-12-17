@@ -23,12 +23,10 @@ class GoogleAnalyticsService @Inject constructor(
 
     private val firebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
-    private val TRACKED_EVENTS = setOf(
-        AnalyticsConstants.Events.LOGIN
-    )
+    private val BLOCKED_TRACKED_EVENTS = emptySet<String>()
 
     override fun shouldTrackEvent(event: String): Boolean {
-        return TRACKED_EVENTS.contains(event)
+        return BLOCKED_TRACKED_EVENTS.contains(event).not()
     }
 
     @OptIn(DelicateCoroutinesApi::class)
