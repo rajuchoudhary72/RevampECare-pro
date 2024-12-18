@@ -61,6 +61,8 @@ fun getImagePlaceholder(url: String?): Int {
         R.drawable.baseline_file_present_24
     } else if (isAudioUrl(url)) {
         R.drawable.baseline_audio_file_24
+    } else if (url?.contains("doc") == true || url?.contains("docx") == true) {
+        R.drawable.doc
     } else {
         R.drawable.img_placeholder
     }
