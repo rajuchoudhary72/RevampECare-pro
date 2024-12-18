@@ -378,6 +378,7 @@ class DashboardFragment : Fragment() {
             }
         }
     }
+
     private fun showDateRangePicker(callback: (String, String) -> Unit) {
         val constraintsBuilder =
             CalendarConstraints.Builder() // You can add constraints here if needed
@@ -416,7 +417,7 @@ class DashboardFragment : Fragment() {
                 Pair(formatDate(sessionStartDate!!), formattedDate)
             }
             DateFilterType.THIS_YEAR -> {
-                Pair(formatDate(sessionStartDate!!), formatDate(sessionEndDate!!))
+                    Pair(formatDate(sessionStartDate!!), formatDate(sessionEndDate!!))
             }
         }
     }

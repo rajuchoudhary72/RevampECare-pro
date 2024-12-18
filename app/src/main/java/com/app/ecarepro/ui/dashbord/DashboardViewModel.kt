@@ -3,19 +3,18 @@ package com.app.ecarepro.ui.dashbord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.app.ecarepro.data.network.model.CollectionModeWise
-import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
-import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -36,16 +35,23 @@ class DashboardViewModel @Inject constructor(
         var data = dashboardData
 
         if (feeCollection != null) {
-            data = dashboardData?.copy(feeCollection = feeCollection)
+            data = dashboardData?.copy(
+                feeCollection = feeCollection.copy(
+                    collectionStartDate = dashboardData.feeCollection?.collectionStartDate,
+                    collectionEndDate = dashboardData.feeCollection?.collectionEndDate
+                )
+            )
         }
 
         if (modelWiseColl != null) {
-            data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
+            data =
+                dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
         }
 
 
         data
     }
+
     fun getFeeCollection(
         feeTypeId: Int,
         fromDate: String,
@@ -68,7 +74,7 @@ class DashboardViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             userRepository.todayModeWiseCollection(date).collectLatest {
-                if(it.isSuccess){
+                if (it.isSuccess) {
                     modelWiseCollection.value = it.getOrNull()
                 }
                 onResponse.invoke(it.isSuccess, it.exceptionOrNull()?.message)
@@ -76,7 +82,7 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    fun sendScreenEvent(){
+    fun sendScreenEvent() {
         analyticsManager.trackScreen(AnalyticsConstants.Screens.DASH_BOARD_SCREEN)
     }
 }
