@@ -9,7 +9,6 @@ object AnalyticsConstants {
         const val API_ERROR = "api_error"
         const val LOGIN_SUCCESS = "login_success"
         const val SIGNUP_COMPLETE = "signup_complete"
-        const val PURCHASE_MADE = "purchase_made"
         const val LOGIN = "login"
         const val LOGOUT = "logout"
         const val VALIDATE_SCHOOL_CODE = "validate_school_code"
@@ -64,8 +63,6 @@ object AnalyticsConstants {
     }
 
     object Screens {
-        const val SCHOOL_CODE = "SchoolCode"
-        const val HOME_SCREEN = "HomeScreen"
         const val USER_PROFILE = "UserProfile"
         const val NOTIFICATION_LIST = "NotificationList"
         const val MESSAGE_LIST = "MessageList"
@@ -73,8 +70,15 @@ object AnalyticsConstants {
         const val DASH_BOARD_SCREEN = "DashBoardScreen"
         const val CHANGE_USER_NAME = "ChangeUserName"
         const val CHANGE_USER_PASSWORD = "ChangeUserPassword"
+        const val SCHOOL_CODE = "SchoolCode"
+        const val HOME_SCREEN = "HomeScreen"
+
         const val STUDENT_PROFILE_LIST = "StudentProfileList"
         const val STUDENT_DETAIL_SCREEN = "StudentDetailScreen"
+        const val STUDENT_ATTENDANCE_SCREEN = "StudentAttendanceMonthWise"
+        const val STUDENT_ACADEMIC_SCREEN = "StudentAcademicStatus"
+        const val STUDENT_FEE_SCREEN = "StudentFeeStatus"
+
         const val STUDENT_REPORT_CARD = "StudentReportCard"
 
     }

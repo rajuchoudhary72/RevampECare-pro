@@ -38,7 +38,7 @@ class GoogleAnalyticsService @Inject constructor(
             setUserProperties()
         }
     }
-
+/* maitain outside  key  ,value  fromoutside */
     override suspend fun setUserProperties() {
         userDataStore.getUser()?.let { user ->
             firebaseAnalytics.setUserId(user.userId.toString())

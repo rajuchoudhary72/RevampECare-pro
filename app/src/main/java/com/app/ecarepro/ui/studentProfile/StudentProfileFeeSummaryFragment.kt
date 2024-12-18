@@ -47,7 +47,10 @@ class StudentProfileFeeSummaryFragment(
 
     private lateinit var binding: FragmentStudentProfileFeeSummaryBinding
     private val studentProfileFeeSummaryViewModel: StudentProfileFeeSummaryViewModel by viewModels()
-
+    override fun onResume() {
+        super.onResume()
+        studentProfileFeeSummaryViewModel.sendScreenEvent()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -182,7 +182,11 @@ import kotlinx.coroutines.launch
          academicPerViewModel.getAcademicPerformance(studentID,selectedYearData.yrID)
 
 
+     }
 
+     override fun onResume() {
+         super.onResume()
+         academicPerViewModel.sendScreenEvent()
      }
 
  }
