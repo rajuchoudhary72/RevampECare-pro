@@ -74,16 +74,11 @@ android {
         create("dev") {
             dimension = "build"
             resValue("string", "app_name", "e-Care-Dev")
+            applicationIdSuffix = ".dev"
         }
         create("prod") {
             dimension = "build"
             resValue("string", "app_name", "Franciscan e-Care")
-        }
-        create("beta") {
-            dimension = "build"
-           // applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "Franciscan e-Care")
-           // signingConfig = signingConfigs.getByName("beta")
         }
     }
 

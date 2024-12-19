@@ -6,6 +6,8 @@ import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.search.SearchPagerFragment.Companion.SEARCH_TYPE
 import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_MODULE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +17,14 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchPagerViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle, private val userRepository: UserRepository
+    savedStateHandle: SavedStateHandle,
+    private val userRepository: UserRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private val searchType = savedStateHandle.getStateFlow(SEARCH_TYPE, SEARCH_TYPE_MODULE)
     private val searchQuery = MutableStateFlow("")
@@ -45,6 +50,16 @@ class SearchPagerViewModel @Inject constructor(
             else -> {
                 searchStaff(query, type)
             }
+        }
+    }.onEach {
+        if(it is SearchUiState.Success){
+            sendAnalyticEvent(
+                event = AnalyticsConstants.Events.GLOBAL_SEARCH,
+                attributes = mapOf(
+                    AnalyticsConstants.Attributes.SEARCH_QUERY to (it as? SearchUiState.Success)?.searchQuery.orEmpty(),
+                    AnalyticsConstants.Attributes.SEARCH_TYPE to (it as? SearchUiState.Success)?.searchType.orEmpty()
+                )
+            )
         }
     }
 
@@ -211,6 +226,16 @@ class SearchPagerViewModel @Inject constructor(
         const val SEARCH_TYPE_MODULE = "Module"
         const val SEARCH_TYPE_STUDENT = "Student"
         const val SEARCH_TYPE_STAFF = "Staff"
+    }
+
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
     }
 }
 

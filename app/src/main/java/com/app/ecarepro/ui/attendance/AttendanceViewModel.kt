@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -14,7 +16,8 @@ import kotlin.math.log
 
 @HiltViewModel
 class AttendanceViewModel @Inject constructor(
-    userDataStore: UserDataStore
+    userDataStore: UserDataStore,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
 
     private val sortBy = MutableStateFlow<SortBy>(SortBy.AllClasses)
@@ -64,6 +67,9 @@ class AttendanceViewModel @Inject constructor(
         this.sortBy.update { sortBy }
     }
 
+    fun sendScreenEvent() {
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.ATTENDANCE_TAB)
+    }
 }
 
 infix fun Int.percentOf(value: Int): String {

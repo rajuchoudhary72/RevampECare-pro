@@ -145,6 +145,10 @@ class FeedsFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        feedsViewModel.sendScreenEvent()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -42,6 +42,13 @@ class ChangePasswordViewModel @Inject constructor(
                 .collectLatest { result ->
                     if (result.isSuccess) {
                         result(true, result.getOrNull()?.message ?: "Success")
+                        sendAnalyticEvent(
+                            event = AnalyticsConstants.Events.CHANGE_USER_PASSWORD_DETAIL,
+                            attributes = mapOf(
+                                AnalyticsConstants.Attributes.OLD_PASSWORD to currentPassword.value,
+                                AnalyticsConstants.Attributes.NEW_PASSWORD to newPassword.value
+                            )
+                        )
                     } else {
                         result(false, result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE)
                     }
@@ -51,5 +58,15 @@ class ChangePasswordViewModel @Inject constructor(
 
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.CHANGE_USER_PASSWORD)
+    }
+
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
     }
 }

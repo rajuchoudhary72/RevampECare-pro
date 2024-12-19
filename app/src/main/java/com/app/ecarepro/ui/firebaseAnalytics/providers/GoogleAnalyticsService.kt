@@ -35,11 +35,6 @@ class GoogleAnalyticsService @Inject constructor(
     override fun initialize() {
         firebaseAnalytics.setAnalyticsCollectionEnabled(true)
         GlobalScope.launch {
-            commonEventAttributes = mapOf(
-                AnalyticsConstants.Attributes.USER_ID to userDataStore.getUser()?.userId.toString(),
-                AnalyticsConstants.Attributes.USER_TYPE to userDataStore.getUser()?.userType.toString(),
-                AnalyticsConstants.Attributes.SCHOOL_CODE to userDataStore.getSchoolData()?.schoolCode.toString()
-            )
             setUserProperties()
         }
     }
@@ -67,6 +62,14 @@ class GoogleAnalyticsService @Inject constructor(
             AnalyticsConstants.Attributes.OS_VERSION,
             "${Build.VERSION.SDK_INT} (${Build.VERSION.RELEASE})"
         )
+
+        if (userDataStore.isUserAuthenticated()) {
+            commonEventAttributes = mapOf(
+                AnalyticsConstants.Attributes.USER_ID to userDataStore.getUser()?.userId.toString(),
+                AnalyticsConstants.Attributes.USER_TYPE to userDataStore.getUser()?.userType.toString(),
+                AnalyticsConstants.Attributes.SCHOOL_CODE to userDataStore.getSchoolData()?.schoolCode.toString()
+            )
+        }
     }
 
     override fun trackEvent(event: String, parameters: Map<String, Any>) {

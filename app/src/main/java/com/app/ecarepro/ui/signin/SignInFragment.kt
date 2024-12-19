@@ -104,13 +104,6 @@ class SignInFragment : Fragment() {
                         systemViewModel.refresh.tryEmit(true)
                         if (it.authenticated == true) {
                             // Track an event
-                            analyticsManager.trackEvent(
-                                AnalyticsConstants.Events.LOGIN,
-                                mapOf(
-                                    AnalyticsConstants.Attributes.USER_NAME to binding.textUserName.text.toString(),
-                                    AnalyticsConstants.Attributes.SCHOOL_CODE to mViewModel.schoolCode,
-                                )
-                            )
                             if (it.isOTPEnabled == true) {
                                 mainActivity().showMessage(it.message.toString())
                                 try {
@@ -200,7 +193,16 @@ class SignInFragment : Fragment() {
     }
 
     private fun launchToNextDesctinationAfterLogin(it: TwoFactorLoginResponseDto) {
-        if (arguments?.containsKey("add_account") == true) {
+        val isAddAccount = arguments?.containsKey("add_account") == true
+        analyticsManager.setUserProperties()
+        analyticsManager.trackEvent(
+            AnalyticsConstants.Events.LOGIN,
+            mapOf(
+                AnalyticsConstants.Attributes.USER_NAME to binding.textUserName.text.toString(),
+                AnalyticsConstants.Attributes.SIGN_IN_TYPE to if (isAddAccount) AnalyticsConstants.Attributes.ADD_ACCOUNT else AnalyticsConstants.Attributes.NORMAL_LOGIN,
+            )
+        )
+        if (isAddAccount) {
             viewLifecycleOwner.lifecycleScope.launch {
                 userDatabase.getUser(
                     it.userDTL?.userID ?: 0,

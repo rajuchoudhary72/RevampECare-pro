@@ -36,6 +36,7 @@ import com.app.ecarepro.profileLogout
 import com.app.ecarepro.profileWardDetails
 import com.app.ecarepro.space
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.FileAccess
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -235,11 +236,6 @@ class ProfileFragment : Fragment() {
                                 "N/A (${it.roleName})"
                             } else {
                                 it.name + "(${it.roleName})"
-                                /* if (it.userType==3){
-                                     it.name + "(${it.designation})"
-                                 }else{
-                                     it.name + "(${it.roleName})"
-                                 }*/
                             }
 
                         )
@@ -255,21 +251,18 @@ class ProfileFragment : Fragment() {
                         isCurrentUser(it.id == uiState.currentUserId)
                         changeUser { _ ->
                             lifecycleScope.launch {
+                                profileViewModel.sendAnalyticEvent(
+                                    event = AnalyticsConstants.Events.SWITCH_ACCOUNT,
+                                    attributes = mapOf(
+                                        AnalyticsConstants.Attributes.NEW_USER_NAME to it.name.toString(),
+                                        AnalyticsConstants.Attributes.NEW_USER_ID to it.userId.toString(),
+                                        AnalyticsConstants.Attributes.NEW_USER_TYPE to it.userType.toString(),
+                                        AnalyticsConstants.Attributes.NEW_SCHOOL_CODE to it.school?.schoolCode.toString(),
+                                    )
+                                )
                                 userDataStore.setCurrentUserId(it.id)
                                 restartApp()
                             }
-
-                            /*lifecycleScope.launch {
-                                userDataStore.setCurrentUserId(it.id)
-                             //   sync  data on Local DB when user switch account
-                                mainActivity().showLoader(true)
-                                syncManager.sync { isSuccess, message ->
-                                    mainActivity().showLoader(false)
-                                    if (isSuccess)
-                                        restartApp()
-                                    mainActivity().showMessage(message)
-                                }
-                            }*/
                         }
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())

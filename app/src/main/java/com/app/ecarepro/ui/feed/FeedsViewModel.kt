@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.model.Feed
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.DEFAULT_PAGE
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.message.sent.calculateTotalPages
@@ -17,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
-    private val schoolRepository: SchoolRepository
+    private val schoolRepository: SchoolRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private var page = DEFAULT_PAGE
     private var isLoading: Boolean = false
@@ -110,6 +113,10 @@ class FeedsViewModel @Inject constructor(
         isLastPage = false
         totalPageCount = DEFAULT_PAGE
         fetchInboxMessages(true)
+    }
+
+    fun sendScreenEvent() {
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.ATTENDANCE_TAB)
     }
 
 }

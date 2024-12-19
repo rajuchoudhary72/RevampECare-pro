@@ -207,7 +207,6 @@ class MainActivity : AppCompatActivity() {
                 topLevelFragments.contains(destination.id)
         }
 
-
         setUpDrawer()
 
         setUpBottomNavigationView()

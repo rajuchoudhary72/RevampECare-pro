@@ -2,8 +2,10 @@ package com.app.ecarepro.utils
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.style.CharacterStyle
@@ -18,6 +20,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.net.toUri
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -51,22 +54,45 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(placeholder)
             error(placeholder)
         } else {
-            placeholder(getImagePlaceholder(url))
-            error(getImagePlaceholder(url))
+            placeholder(getImagePlaceholder(context, url))
+            error(getImagePlaceholder(context, url))
         }
     }
 }
 
-fun getImagePlaceholder(url: String?): Int {
-    return if (url?.contains("pdf") == true) {
-        R.drawable.baseline_file_present_24
-    } else if (isAudioUrl(url)) {
-        R.drawable.baseline_audio_file_24
-    } else if (url?.contains("doc") == true || url?.contains("docx") == true) {
-        R.drawable.doc
-    } else {
-        R.drawable.img_placeholder
+fun getImagePlaceholder(context: Context, url: String?): Int {
+
+    val mimeType = url?.toUri()?.let { getFileType(context, it) }
+
+    return when {
+        mimeType == "application/pdf" -> {
+            R.drawable.baseline_file_present_24
+        }
+
+        mimeType == "application/msword" -> {
+            R.drawable.doc
+        }
+
+        mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> {
+            R.drawable.doc
+        }
+
+        mimeType?.startsWith("image/") == true -> {
+            R.drawable.img_placeholder
+        }
+
+        mimeType?.startsWith("audio/") == true -> {
+            R.drawable.baseline_audio_file_24
+        }
+
+        else -> {
+            R.drawable.img_placeholder
+        }
     }
+}
+
+fun getFileType(context: Context, fileUri: Uri): String? {
+    return context.contentResolver.getType(fileUri)
 }
 
 fun isAudioUrl(url: String?): Boolean {
@@ -204,8 +230,10 @@ fun TextView.setStyledText(text: String?) {
 
             val sentence: String? = text
 
-            val boldStartIndexes: List<Int>? = sentence?.let { Constant.boldFindStartIndexes(it) }
-            val boldEndIndexes: List<Int>? = sentence?.let { Constant.boldFindEndStarIndexes(it) }
+            val boldStartIndexes: List<Int>? =
+                sentence?.let { Constant.boldFindStartIndexes(it) }
+            val boldEndIndexes: List<Int>? =
+                sentence?.let { Constant.boldFindEndStarIndexes(it) }
 
 
             Log.v("Okkkkk", "Word Start Indexes BOLD : $boldStartIndexes")

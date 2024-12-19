@@ -1,9 +1,8 @@
 package com.app.ecarepro.di
 
 import android.content.Context
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
-import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
-import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
 import com.app.ecarepro.data.network.service.AppService
 import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.network.service.MessageService
@@ -54,14 +53,22 @@ object NetworkModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-/* .addInterceptor(connectivityInterceptor)
-            .addInterceptor(customResponseInterceptor)*/
+
+    /* .addInterceptor(connectivityInterceptor)
+                .addInterceptor(customResponseInterceptor)*/
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
+            .baseUrl(
+                if (BuildConfig.FLAVOR == "dev") {
+                    Constant.BASE_URL
+                } else {
+                    Constant.BASE_DEV_URL
+                }
+
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
