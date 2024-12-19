@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentHelpBinding
 import dagger.hilt.android.AndroidEntryPoint
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 @AndroidEntryPoint
 class HelpFragment : Fragment() {
@@ -37,15 +38,25 @@ class HelpFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.btnFaq.setOnClickListener {
+            val url = "https://www.franciscansolutions.com/Default.aspx#faqBox"
             val bundle = Bundle()
             bundle.putString("title", "F&Q")
-            bundle.putString("url", "https://www.franciscansolutions.com/Default.aspx#faqBox")
-            findNavController().navigate(R.id.webViewFragment,bundle)
+            bundle.putString("url", url)
+            findNavController().navigate(R.id.webViewFragment, bundle)
+            mViewModel.sentAnalyticEvent(
+                event = AnalyticsConstants.Events.FAQ_CLICK,
+                attributes = mapOf(
+                    AnalyticsConstants.Attributes.URL to url
+                )
+            )
         }
 
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        mViewModel.sendScreenEvent()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

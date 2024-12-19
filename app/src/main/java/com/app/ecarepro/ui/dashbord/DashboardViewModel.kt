@@ -79,4 +79,13 @@ class DashboardViewModel @Inject constructor(
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.DASH_BOARD_SCREEN)
     }
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
+    }
 }

@@ -20,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -264,6 +265,15 @@ class ProfileFragment : Fragment() {
                         isCurrentUser(it.id == uiState.currentUserId)
                         changeUser { _ ->
                             lifecycleScope.launch {
+                                profileViewModel.sendAnalyticEvent(
+                                    event = AnalyticsConstants.Events.SWITCH_ACCOUNT,
+                                    attributes = mapOf(
+                                        AnalyticsConstants.Attributes.NEW_USER_NAME to it.name.toString(),
+                                        AnalyticsConstants.Attributes.NEW_USER_ID to it.userId.toString(),
+                                        AnalyticsConstants.Attributes.NEW_USER_TYPE to it.userType.toString(),
+                                        AnalyticsConstants.Attributes.NEW_SCHOOL_CODE to it.school?.schoolCode.toString(),
+                                    )
+                                )
                                 userDataStore.setCurrentUserId(it.id)
                                 restartApp()
                             }

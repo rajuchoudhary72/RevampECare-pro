@@ -3,10 +3,13 @@ package com.app.ecarepro.ui.firebaseAnalytics
 import android.util.Log
 import com.app.ecarepro.ui.firebaseAnalytics.providers.AnalyticsProvider
 import java.util.concurrent.atomic.AtomicReference
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 interface AnalyticsManager {
     fun trackScreen(screenName: String)
     fun trackEvent(event: String, parameters: Map<String, Any>)
+    fun setUserProperties()
 }
 
 class AppAnalyticsManager : AnalyticsManager {
@@ -37,6 +40,16 @@ class AppAnalyticsManager : AnalyticsManager {
         providers.get()
             .filter { it.shouldTrackEvent(event) }
             .forEach { it.trackEvent(event, parameters) }
+    }
+    override fun setUserProperties() {
+        if (providers.get().isEmpty()) {
+            Log.w(TAG, "Analytics providers not initialized")
+        }
+        GlobalScope.launch {
+            providers.get().forEach {
+                it.setUserProperties()
+            }
+        }
     }
 
     companion object {
