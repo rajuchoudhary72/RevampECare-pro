@@ -155,7 +155,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
             }
         }
 
-        teacherSyllabusViewModel.getTeacherSyllabuses()
+      //  teacherSyllabusViewModel.getTeacherSyllabuses()
 
 
     }
