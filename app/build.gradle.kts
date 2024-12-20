@@ -43,8 +43,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 266
-        versionName = "2.5.5"
+        versionCode = 270
+        versionName = "2.5.9"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -94,6 +94,11 @@ android {
             dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
+        }
+        create("dev") {
+            dimension = "apps"
+            resValue("string", "app_name", "e-Care-Dev")
+            applicationIdSuffix = ".dev"
         }
         create("MYSFHS") {
             dimension = "apps"
@@ -200,7 +205,7 @@ dependencies {
     implementation("androidx.browser:browser:1.2.0")
     implementation("com.android.support:print:28.0.0")
     implementation("uk.co.samuelwall:material-tap-target-prompt:3.3.2")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics-ktx:21.3.0")
     implementation  ( "com.google.firebase:firebase-messaging-ktx")
 
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))

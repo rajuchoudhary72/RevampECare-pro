@@ -100,15 +100,20 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
     }
 
     override fun onItemClick(t: SyllabusLST, pos: Int, boolean: Boolean) {
-        if (pos == 1) {
-            findNavController().navigate(R.id.action_classSyllabus_to_openPdfFragment,
-                Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, t.filePath)
-                })
-        } else if (pos == 2) {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
+        try {
+            if (pos == 1) {
+                findNavController().navigate(R.id.action_classSyllabus_to_openPdfFragment,
+                    Bundle().apply {
+                        putString(Constant.URL_ARGUMENT, t.filePath)
+                    })
+            } else if (pos == 2) {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
+
+            }
+        }catch (e:SecurityException){
 
         }
+
     }
 }

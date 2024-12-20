@@ -1,6 +1,7 @@
 package com.app.ecarepro.di
 
 import android.content.Context
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
 import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
@@ -42,13 +43,17 @@ object NetworkModule {
     fun provideOkHttpClient(
         @ApplicationContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        connectivityInterceptor: ConnectivityInterceptor,
+        customResponseInterceptor: CustomResponseInterceptor
 
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
+            .addInterceptor(connectivityInterceptor)
+            .addInterceptor(customResponseInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -56,16 +61,22 @@ object NetworkModule {
     }
 /* .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)*/
-    @Provides
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
+@Provides
+fun provideRetrofit(
+    okHttpClient: OkHttpClient,
+): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(
+            if (BuildConfig.FLAVOR == "dev") {
+                Constant.BASE_DEV_URL
+            } else {
+                Constant.BASE_URL
+            }
+        )
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build()
+}
 
     @Provides
     fun provideUserService(

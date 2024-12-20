@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,7 +34,7 @@ class AppointmentReportFragment : Fragment() {
 
     private var showFilter: Boolean = false
     private lateinit var binding: FragmentAppointmentReportBinding
-    private val appointmentViewModel: AppointmentViewModel by viewModels()
+    private val appointmentViewModel: AppointmentViewModel by activityViewModels()
     private var all = true
     private var  appointType = Constant.TODAY
     private val dateFrom: Calendar = Calendar.getInstance()

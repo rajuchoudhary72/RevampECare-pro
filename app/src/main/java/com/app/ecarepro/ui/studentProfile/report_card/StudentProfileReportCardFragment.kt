@@ -40,7 +40,7 @@ class StudentProfileReportCardFragment(val reportCardDTLs: List<ReportClasse>?) 
                     val fragmentList : ArrayList<Fragment> = ArrayList()
 
                     reportCardDTLs. forEach { itemDat ->
-                        fragmentList.add( ReportCardDetailsFragment(itemDat  ))
+                        fragmentList.add( ReportCardDetailsFragment.newInstance(itemDat))
                     }
 
                     val viewPagerAdapter = ViewPagerAdapter(

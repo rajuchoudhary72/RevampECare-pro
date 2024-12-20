@@ -21,7 +21,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import org.json.JSONObject
+import retrofit2.HttpException
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
     private val userRepository: UserRepository
@@ -238,13 +239,40 @@ class AppointmentViewModel @Inject constructor(
                     }
                 }
                 Log.d("FCM", "nultipart: " +data)
-                userRepository.submitForm(data).collectLatest {
+
+
+                userRepository.submitForm(data).collectLatest { result ->
                     loadingState.update { LoadingState.Success }
-                    func(
-                        it.isSuccess,
-                        it.getOrNull()
-                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
-                    )
+                    if (result.isSuccess) {
+                        func(
+                            true,
+                            result.getOrNull()
+                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
+                        )
+                    } else {
+                        val error = result.exceptionOrNull() ?: IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)
+                        if (error is HttpException) {
+                            if (error.code() == 400) {
+                                func(
+                                    false,
+                                    "One or more validation errors occurred."
+                                )
+                            }
+                            else {
+                                func(
+                                    false,
+                                    error.message ?: UNKNOWN_ERROR_MESSAGE
+                                )
+                            }
+
+                        }
+                        else {
+                            func(
+                                false,
+                                error.message ?: UNKNOWN_ERROR_MESSAGE
+                            )
+                        }
+                    }
                 }
             }
         }

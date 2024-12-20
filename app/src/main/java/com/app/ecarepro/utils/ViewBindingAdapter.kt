@@ -29,6 +29,9 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.util.Log
 import androidx.core.content.res.ResourcesCompat
+import android.content.Context
+import android.net.Uri
+import androidx.core.net.toUri
 
 
 @BindingAdapter("isVisible")
@@ -52,18 +55,54 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
         } else {
             placeholder(getImagePlaceholder(url))
             error(getImagePlaceholder(url))
+           /* placeholder(getImagePlaceholder(context, url))
+            error(getImagePlaceholder(context, url))*/
         }
     }
 }
+/*fun getImagePlaceholder(context: Context, url: String?): Int {
 
+    val mimeType = url?.toUri()?.let { getFileType(context, it) }
+
+    return when {
+        mimeType == "application/pdf" -> {
+            R.drawable.baseline_file_present_24
+        }
+
+        mimeType == "application/msword" -> {
+            R.drawable.doc
+        }
+
+        mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> {
+            R.drawable.doc
+        }
+
+        mimeType?.startsWith("image/") == true -> {
+            R.drawable.img_placeholder
+        }
+
+        mimeType?.startsWith("audio/") == true -> {
+            R.drawable.baseline_audio_file_24
+        }
+
+        else -> {
+            R.drawable.img_placeholder
+        }
+    }
+}*/
 fun getImagePlaceholder(url: String?): Int {
     return if (url?.contains("pdf") == true) {
         R.drawable.baseline_file_present_24
     } else if (isAudioUrl(url)) {
         R.drawable.baseline_audio_file_24
+    } else if (url?.contains("doc") == true || url?.contains("docx") == true) {
+        R.drawable.doc
     } else {
         R.drawable.img_placeholder
     }
+}
+fun getFileType(context: Context, fileUri: Uri): String? {
+    return context.contentResolver.getType(fileUri)
 }
 
 fun isAudioUrl(url: String?): Boolean {

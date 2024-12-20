@@ -45,7 +45,8 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStudentAttedanceReportBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.attendance_summary)
         return binding.root
     }
 
