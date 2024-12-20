@@ -350,6 +350,26 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkNa.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
+
+                binding.tvMarkPresent.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                binding.tvMarkAbsent.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkLeave.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkNa.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkPresent.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_present)
+                binding.tvMarkAbsent.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkLeave.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+
                 data.status=1
                 data.isLate=1
                 studentListArrayList[absoluteAdapterPosition] = data

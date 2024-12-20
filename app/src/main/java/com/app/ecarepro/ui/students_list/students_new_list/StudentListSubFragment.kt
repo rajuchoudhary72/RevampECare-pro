@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,9 +26,11 @@ import kotlinx.coroutines.launch
 class StudentListSubFragment() : Fragment(),
     ItemListener<Student> {
 
-    var students: List<Student>?= null
     var className: String = ""
     var toFragment: String= ""
+
+    private val studentsListShareViewModel : StudentsListShareViewModel by activityViewModels()
+
 
     private lateinit var binding: FragmentStudentListSubBinding
     private val studentListViewModel: StudentListViewModel by viewModels()
@@ -49,12 +52,6 @@ class StudentListSubFragment() : Fragment(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                students = it.getParcelableArrayList(ARG_ITEM_DATA, Student::class.java)
-            }else{
-                @Suppress("DEPRECATION")
-                students = it.getParcelableArrayList(ARG_ITEM_DATA)
-            }
             className = it.getString(ARG_ITEM_CLASS_NAME, "")
             toFragment = it.getString(TO_FRAGMENT, "")
         }
@@ -63,71 +60,80 @@ class StudentListSubFragment() : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (students!=null) {
-        if (students!!.isNotEmpty()) {
+        lifecycleScope.launch {
+            studentsListShareViewModel.getStudentMutableLiveData().observe(viewLifecycleOwner){ studentList ->
+                studentList.let { students->
 
-             var studentList = students!!.filter { it.`class` == className }
-            binding.tvTotalCount.text = studentList.size.toString()
-            binding.tvBoysCount.text = studentList.filter { it.gender == "Male" }.size.toString()
-            binding.tvGirlsCount.text = studentList.filter { it.gender == "Female" }.size.toString()
+                   if (students!=null) {
+                       if (students.isNotEmpty()) {
 
-            lifecycleScope.launch {
-                studentListViewModel.searchQuery.collectLatest {
+                           var studentList: List<Student> = students.filter { it.`class` == className }
+                           binding.tvTotalCount.text = studentList.size.toString()
+                           binding.tvBoysCount.text = studentList.filter { it.gender == "Male" }.size.toString()
+                           binding.tvGirlsCount.text = studentList.filter { it.gender == "Female" }.size.toString()
 
-                    if (it.isNotEmpty() && studentList != null) {
-                        studentListFilter = studentList .filter { s ->
-                            s.name!!.lowercase().contains(it.lowercase())
-                                    || s.name.lowercase().contains(it.lowercase())
-                                    || s.admissionNumber!!.lowercase().contains(it.lowercase())
-                                    || s.`class`!!.lowercase().contains(it.lowercase())
-                                    || s.fatherName!!.lowercase().contains(it.lowercase())
-                                    || s.contactMob!!.lowercase().contains(it.lowercase())
+                           lifecycleScope.launch {
+                               studentListViewModel.searchQuery.collectLatest {
 
-
-                        }
-                        setupRecycleViewStudentList(studentListFilter)
-                    } else {
-                        setupRecycleViewStudentList(studentList)
-                    }
+                                   if (it.isNotEmpty() && studentList != null) {
+                                       studentListFilter = studentList .filter { s ->
+                                           s.name!!.lowercase().contains(it.lowercase())
+                                                   || s.name.lowercase().contains(it.lowercase())
+                                                   || s.admissionNumber!!.lowercase().contains(it.lowercase())
+                                                   || s.`class`!!.lowercase().contains(it.lowercase())
+                                                   || s.fatherName!!.lowercase().contains(it.lowercase())
+                                                   || s.contactMob!!.lowercase().contains(it.lowercase())
 
 
-                }
+                                       }
+                                       setupRecycleViewStudentList(studentListFilter)
+                                   } else {
+                                       setupRecycleViewStudentList(studentList)
+                                   }
+
+
+                               }
+                           }
+
+
+                           binding.tvSortByRollNo.setOnClickListener {
+                               rollNoFilterAsc = !rollNoFilterAsc
+                               studentList =
+                                   if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
+                                   else studentList.sortedByDescending { it.rollNumber }.toMutableList()
+                               setupRecycleViewStudentList(studentList)
+
+                           }
+                           binding.tvSortByAdmission.setOnClickListener {
+                               admissionFilterAsc = !admissionFilterAsc
+                               studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
+                                   .toMutableList()
+                               else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
+                               setupRecycleViewStudentList(studentList)
+                           }
+
+                           binding.tvSortByName.setOnClickListener {
+                               nameFilterAsc = !nameFilterAsc
+                               studentList = if (nameFilterAsc) studentList.sortedBy { it.name!!.trim().lowercase() }
+                                   .toMutableList()
+                               else studentList.sortedByDescending { it.name!!.trim().lowercase() }.toMutableList()
+                               setupRecycleViewStudentList(studentList)
+                           }
+
+
+                       } else {
+                           binding.rvStudentList.isVisible = false
+                           binding.tvNoData.isVisible = true
+                       }
+                   } else {
+                       binding.rvStudentList.isVisible = false
+                       binding.tvNoData.isVisible = true
+                   }
+               }
+
             }
-
-
-            binding.tvSortByRollNo.setOnClickListener {
-                rollNoFilterAsc = !rollNoFilterAsc
-                studentList =
-                    if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
-                    else studentList.sortedByDescending { it.rollNumber }.toMutableList()
-                setupRecycleViewStudentList(studentList)
-
-            }
-            binding.tvSortByAdmission.setOnClickListener {
-                admissionFilterAsc = !admissionFilterAsc
-                studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
-                    .toMutableList()
-                else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
-                setupRecycleViewStudentList(studentList)
-            }
-
-            binding.tvSortByName.setOnClickListener {
-                nameFilterAsc = !nameFilterAsc
-                studentList = if (nameFilterAsc) studentList.sortedBy { it.name!!.trim().lowercase() }
-                    .toMutableList()
-                else studentList.sortedByDescending { it.name!!.trim().lowercase() }.toMutableList()
-                setupRecycleViewStudentList(studentList)
-            }
-
-
-        } else {
-            binding.rvStudentList.isVisible = false
-            binding.tvNoData.isVisible = true
         }
-        } else {
-            binding.rvStudentList.isVisible = false
-            binding.tvNoData.isVisible = true
-        }
+
 
     }
 
@@ -201,13 +207,11 @@ class StudentListSubFragment() : Fragment(),
     }
 
     companion object {
-        private const val ARG_ITEM_DATA = "item_students_data"
         private const val ARG_ITEM_CLASS_NAME = "item_class_name"
         private const val TO_FRAGMENT = "item_session"
 
-        fun newInstance(students: ArrayList<Student>, className: String, toFragment: String)= StudentListSubFragment().apply {
+        fun newInstance( className: String, toFragment: String)= StudentListSubFragment().apply {
             arguments= Bundle().apply {
-                putParcelableArrayList(ARG_ITEM_DATA,students)
                 putString(ARG_ITEM_CLASS_NAME,className)
                 putString(TO_FRAGMENT,toFragment)
 

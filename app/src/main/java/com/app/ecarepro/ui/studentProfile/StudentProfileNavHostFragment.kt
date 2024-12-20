@@ -42,7 +42,8 @@ class StudentProfileNavHostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentStudentProfileNavHostBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.students_profile)
 
         try {
             studentID = requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
