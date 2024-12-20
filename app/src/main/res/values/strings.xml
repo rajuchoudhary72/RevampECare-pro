@@ -824,5 +824,8 @@
     <string name="partial_approval">Partial Approval</string>
     <string name="are_you_sure_you_want_to_partial_approve_this_leave">Are you sure you want to partial approve this leave?</string>
     <string name="academic_performance">Academic Performance</string>
+    <string name="leave_report">Leave Report</string>
+    <string name="students_profile">Students Profile</string>
+    <string name="attendance_summary">Attendance Summary</string>
 
 </resources>
