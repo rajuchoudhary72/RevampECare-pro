@@ -7,9 +7,12 @@ import android.widget.Toast
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.text.format
 
 
 class Constant {
@@ -220,6 +223,20 @@ class Constant {
             val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
+        }
+
+        fun getCurrentTimeFormatted(): String {
+            val currentTime = LocalTime.now()
+            val formatter = DateTimeFormatter.ofPattern("HH:mm")
+            return currentTime.format(formatter)
+        }
+
+        fun compareTimes(apiTime: String): Boolean {
+            val currentTime = LocalTime.now()
+            val formatter = DateTimeFormatter.ofPattern("HH:mm")
+
+            val apiLocalTime = LocalTime.parse(apiTime, formatter)
+            return currentTime.isBefore(apiLocalTime)
         }
 
 
