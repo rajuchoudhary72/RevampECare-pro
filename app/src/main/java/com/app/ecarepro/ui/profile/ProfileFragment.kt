@@ -60,6 +60,7 @@ class ProfileFragment : Fragment() {
 
     private var photoType: PhotoType = PhotoType.COVER_PHOTO
 
+    private var UserTypeApp: Int = 0
 
     @Inject
     lateinit var syncManager: SyncManager
@@ -199,7 +200,11 @@ class ProfileFragment : Fragment() {
                         canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)*/
 
                     canEditBannerImage(uiState.profile.canChangeCoverImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.coverImg != 1))
-                    canEditProfileImage(uiState.profile.canChangeProfileImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.profileImg != 1))
+                    if (UserTypeApp==1){
+
+                    }else{
+                        canEditProfileImage(uiState.profile.canChangeProfileImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.profileImg != 1))
+                    }
 
                     profileImageStatus(uiState.profile.userImgReq?.profileImg)
                     bannerImageStatus(uiState.profile.userImgReq?.coverImg)
@@ -687,11 +692,11 @@ class ProfileFragment : Fragment() {
         _binding?.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         }
-      /*  viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             userDataStore.getUser()?.run {
-                binding.tvEditProfile.isVisible = Constant.PARENT_TYPE == userType
+                UserTypeApp =userType
             }
-        }*/
+        }
 
         _binding?.tvEditProfile?.setOnClickListener {
             findNavController().navigate(R.id.editProfileFragment)
