@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,92 +29,68 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LibrarySearchFragment : Fragment(), ItemListener<BookDTL> {
 
+    private lateinit var binding: FragmentLibrarySearchBinding
+    private val bookSearchViewModel: BookSearchViewModel by viewModels()
 
-    private lateinit var fragmentLibrarySearchBinding: FragmentLibrarySearchBinding
-    private val bookSearchViewModel : BookSearchViewModel  by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-
-        fragmentLibrarySearchBinding=FragmentLibrarySearchBinding.inflate(inflater,container,false)
-        fragmentLibrarySearchBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
-        return fragmentLibrarySearchBinding.root
+    ): View {
+        binding = FragmentLibrarySearchBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-        fragmentLibrarySearchBinding.edSearch.doAfterTextChanged {
-            getSearchData()
-        }
-
-
-
-
+        setupSearchInputListener()
+        observeSearchResults()
     }
 
-    private fun getSearchData(){
+    private fun setupSearchInputListener() {
+        binding.edSearch.doOnTextChanged { text, _, _, _ ->
+            bookSearchViewModel.setSearchQuery(text.toString().trim().replace(Regex("\\s+"), " "))
+        }
+    }
+
+    private fun observeSearchResults() {
+//        lifecycleScope.launch {
+//            bookSearchViewModel.searchQuery.collectLatest { query ->
+//                // Show loader only if query is not empty, and results are still loading
+//                val shouldShowLoader = query.isNotEmpty() && bookSearchViewModel.searchResults.value.isEmpty()
+//                (requireActivity() as MainActivity).showLoader(shouldShowLoader)
+//            }
+//        }
+
         lifecycleScope.launch {
-            bookSearchViewModel._bookSearchStateFlow.collectLatest {
-                when (it) {
-
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                        fragmentLibrarySearchBinding.recyclerBooks.isVisible = false
+            bookSearchViewModel.searchResults.collectLatest { bookList ->
+                // If the book list is empty, show the "no data" view
+                if (bookList.isNotEmpty()) {
+                    binding.recyclerBooks.isVisible = true
+                    binding.tvNoData.isVisible = false
+                    val bookAdapter = SearchBookAdapter(bookList, this@LibrarySearchFragment)
+                    binding.recyclerBooks.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(activity)
+                        adapter = bookAdapter
                     }
-
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        fragmentLibrarySearchBinding.recyclerBooks.isVisible = false
-                        Log.d("main", "Error$it")
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        fragmentLibrarySearchBinding.recyclerBooks.isVisible = true
-
-                        if (it.data!=null){
-
-                            if (it.data.bookDTL!=null){
-
-                                fragmentLibrarySearchBinding.recyclerBooks.isVisible=true
-                                fragmentLibrarySearchBinding.tvNoData.isVisible=false
-
-                                val noticeAdapter = SearchBookAdapter(it.data.bookDTL , this@LibrarySearchFragment)
-
-                                fragmentLibrarySearchBinding.recyclerBooks.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = noticeAdapter
-                                }
-                            }else{
-                                fragmentLibrarySearchBinding.recyclerBooks.isVisible=false
-                                fragmentLibrarySearchBinding.tvNoData.isVisible=true
-                            }
-
-                        }
-
-                    }
-
-
+                } else {
+                    // Show "No Data" when the list is empty
+                    binding.recyclerBooks.isVisible = false
+                    binding.tvNoData.isVisible = true
                 }
             }
         }
-        if (fragmentLibrarySearchBinding.edSearch.text.isNotEmpty()){
-            bookSearchViewModel.getLibrarySearch(fragmentLibrarySearchBinding.edSearch.text.toString(),Constant.PAGE_INDEX)
-        }else{
-            bookSearchViewModel.getLibrarySearch( "",Constant.PAGE_INDEX)
-
-        }
     }
 
+
     override fun onItemClick(t: BookDTL, pos: Int, boolean: Boolean) {
-        findNavController().navigate(R.id.action_librarySearchFragment_to_bookDetailsFragment,Bundle( ).apply {
-            putInt(Constant.BOOK_ID_ARGUMENT, t.bookID)
-        })
-     }
+        findNavController().navigate(
+            R.id.action_librarySearchFragment_to_bookDetailsFragment,
+            Bundle().apply {
+                putInt(Constant.BOOK_ID_ARGUMENT, t.bookID)
+            }
+        )
+    }
 }
