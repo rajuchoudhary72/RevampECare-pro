@@ -112,6 +112,7 @@ class InstitutionCodeFragment : Fragment() {
                 validateSchoolCode()
             }
         }
+
         else if (institutionCodeViewModel.isMYSFPSPlay.not()) {
             binding.textInstitutionCode.apply {
                 setText("MYSFPS")
