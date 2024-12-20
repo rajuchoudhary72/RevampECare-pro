@@ -19,6 +19,7 @@ class Constant {
 
         /*new  base Url*/
          const val BASE_URL = "https://androidapi.franciscanecare.net/"
+        const val BASE_DEV_URL = "https://apiuat.franciscanecare.net/"
         const val BASE_URL_COM = "https://app.franciscanecare.com"
         const val AUTH_BEFORE_LOGIN_NEW = "Kq4IYAuSXLh4EsnexoTSfA=="
         const val PDF_Mime_Type = "application/pdf"
