@@ -17,6 +17,7 @@ data class NetworkStudentListToMarkAtt(
     val smsAlertEnable: Boolean,
     val smsType: Int,
     val status: String,
+    val freezingTime: String?,
     val studentList: List<StudentListMarkAtt>,
     val templateID: String?
 )
