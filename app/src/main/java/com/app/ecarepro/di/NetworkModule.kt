@@ -1,6 +1,7 @@
 package com.app.ecarepro.di
 
 import android.content.Context
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
 import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
@@ -60,16 +61,22 @@ object NetworkModule {
     }
 /* .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)*/
-    @Provides
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(Constant.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
+@Provides
+fun provideRetrofit(
+    okHttpClient: OkHttpClient,
+): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(
+            if (BuildConfig.FLAVOR == "dev") {
+                Constant.BASE_DEV_URL
+            } else {
+                Constant.BASE_URL
+            }
+        )
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build()
+}
 
     @Provides
     fun provideUserService(
