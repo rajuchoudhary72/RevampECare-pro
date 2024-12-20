@@ -87,9 +87,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         _binding  = FragmentStuMarkAttendenceBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
-        binding.toolbar.title=from
+        
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = from
 
 
         return binding.root
@@ -107,31 +107,31 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     classID=0
                     subID=0
                     binding.recyclerNotice.isVisible = false
-                    binding.btnSave.isVisible=false
+                    binding.includeToolbar.btnSave.isVisible=false
                     binding.autoCompleteSub.setText("Select Subject ",false)
                     binding.autoCompleteClass.setText("Select Class ",false)
                     from=getString(R.string.class_attendance)
                     getClassList()
-                    binding.toolbar.title = from
+                    binding.includeToolbar.toolbarTitle.text = from
                 }
                 R.id.rbStudentWise -> {
                     classID=0
                     subID=0
                     binding.recyclerNotice.isVisible = false
-                    binding.btnSave.isVisible=false
+                    binding.includeToolbar.btnSave.isVisible=false
                     binding.autoCompleteSub.setText("Select Subject ",false)
                     binding.autoCompleteClass.setText("Select Class ",false)
                     from=getString(R.string.subject_attendance)
                     getClassList()
-                    binding.toolbar.title = from
+                    binding.includeToolbar.toolbarTitle.text = from
                 }
             }
             binding.autoInputSubInputLayout.isVisible=from==getString(R.string.subject_attendance)
         }
 
-        binding.toolbar.title = from
+        binding.includeToolbar.toolbarTitle.text = from
 
-        binding.btnSave.setOnClickListener {
+        binding.includeToolbar.btnSave.setOnClickListener {
             popUpDetailsMarkAttendance()
         }
 
@@ -250,14 +250,14 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     if (it.data != null) {
 
                             if (it.data.studentList != null) {
-                                binding.btnSave.isVisible = true
+                                binding.includeToolbar.btnSave.isVisible = true
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
                                  if (it.data.hasMarked){
-                                     binding.btnSave.isVisible = editMode
-                                     binding.btnSave.text = "Modify"
+                                     binding.includeToolbar.btnSave.isVisible = editMode
+                                     binding.includeToolbar.btnSave.text = "Modify"
                                  }else{
-                                     binding.btnSave.text = "Save"
+                                     binding.includeToolbar.btnSave.text = "Save"
                                  }
                                 isLateEnable = it.data.isLateEnable
                                 studentListWithData = it.data

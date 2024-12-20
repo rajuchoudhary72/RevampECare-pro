@@ -50,6 +50,7 @@ class StudentProfileAttendanceFragment(
 
 ) : Fragment() ,ItemListener<SummaryAttendance> {
 
+    private var isYearSelected: Boolean=false
     private lateinit var selectedYearData: AcademicYear
     private lateinit var binding: FragmentStudentProfileAttendanceBinding
     private val studentProfileAttendanceViewModel: StudentProfileAttendanceViewModel by viewModels()
@@ -162,14 +163,17 @@ class StudentProfileAttendanceFragment(
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.ctvSelectYear.text = selectedYearData.session
-            getAtt()
-            builder.dismiss()
+            if(isYearSelected){
+                binding.ctvSelectYear.text = selectedYearData.session
+                getAtt()
+                builder.dismiss()
+            }
 
         }
 
         val yearAdapter = PopUpListAdapter(academicYears, object : ItemListener<AcademicYear> {
             override fun onItemClick(t: AcademicYear, pos: Int, boolean: Boolean) {
+                isYearSelected=true
                 selectedYearData = t
             }
 
@@ -281,6 +285,7 @@ class StudentProfileAttendanceFragment(
             tvTotalAbsent.text = buildString { append(attendanceDTL.absent) }
             tvTotalPresent.text = buildString { append(attendanceDTL.present) }
             tvTotalLate.text = buildString { append(attendanceDTL.late) }
+            tvTotalLeave.text = buildString { append(attendanceDTL.leave) }
 
             if (attendanceDTL.summaryAttendance != null) {
                 val assignmentListAdapter =

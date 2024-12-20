@@ -70,7 +70,8 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentLeaveReportBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.leave_report)
         leaveReportAdapter = LeaveReportAdapter(leaveReportList, this)
         with(binding) {
             recyclerLeaveReport.adapter = leaveReportAdapter
