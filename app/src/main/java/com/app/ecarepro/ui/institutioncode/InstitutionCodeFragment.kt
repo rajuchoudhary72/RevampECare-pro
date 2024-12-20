@@ -61,7 +61,7 @@ class InstitutionCodeFragment : Fragment() {
 
         institutionCodeViewModel.schools.observe(viewLifecycleOwner) { schools ->
             lifecycleScope.launch {
-                binding.carouselSchool.isVisible = (schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.canEnterSchoolCode
+                binding.carouselSchool.isVisible = (schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.isMainApp && institutionCodeViewModel.isMainDevApp
             }
             binding.carouselSchool.withModels {
                 schools.filterNotNull().forEach { school ->
@@ -89,25 +89,9 @@ class InstitutionCodeFragment : Fragment() {
         }
 
         binding.btnContinue.setOnClickListener {
-            binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
-            (requireActivity() as MainActivity).showLoader(true)
-            institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
-                (requireActivity() as MainActivity).showLoader(false)
-                if (it?.errorCode == 0) {
-                   /* if(it.isStudentLoginBlocked == true){
-                        mainActivity().showMessage("you are block by admin by this school so please co-coordinate to this school admin!")
-                    }else{
-                        navigateToSignFragment(it.schoolCode)
-                    }*/
-
-                    navigateToSignFragment(it.schoolCode, it.isStudentLoginBlocked?:false)
-                } else {
-                    binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
-                    mainActivity().showMessage("Please enter a valid school code.")
-                }
-            }
+            validateSchoolCode()
         }
-        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.canEnterSchoolCode
+        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.isMainApp &&institutionCodeViewModel.isMainDevApp
 
         binding.btnFindSchoolCollege.setOnClickListener {
             setFragmentResultListener(SearchInstitutionFragment.REQUEST_KEY_SCHOOL_CODE) { _, data ->
@@ -120,14 +104,45 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnHelp.setOnClickListener {
             findNavController().navigate(R.id.helpFragment)
         }
-        if(institutionCodeViewModel.canEnterSchoolCode.not()){
+        if (institutionCodeViewModel.isMYSFHS.not()) {
             binding.textInstitutionCode.apply {
                 setText("MYSFHS")
                 isEnabled = false
                 binding.btnContinue.isEnabled = true
+                validateSchoolCode()
+            }
+        }
+        else if (institutionCodeViewModel.isMYSFPSPlay.not()) {
+            binding.textInstitutionCode.apply {
+                setText("MYSFPS")
+                isEnabled = false
+                binding.btnContinue.isEnabled = true
+                validateSchoolCode()
+            }
+        }else{
+            binding.textInstitutionCode.apply {
+                setText("")
             }
         }
 
+    }
+    private fun validateSchoolCode() {
+        binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
+        (requireActivity() as MainActivity).showLoader(true)
+        institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
+            (requireActivity() as MainActivity).showLoader(false)
+            if (it?.errorCode == 0) {
+                /* if(it.isStudentLoginBlocked == true){
+                         mainActivity().showMessage("you are block by admin by this school so please co-coordinate to this school admin!")
+                     }else{
+                         navigateToSignFragment(it.schoolCode)
+                     }*/
+                navigateToSignFragment(it.schoolCode, it.isStudentLoginBlocked ?: false)
+            } else {
+                binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
+                mainActivity().showMessage("Please enter a valid school code.")
+            }
+        }
     }
 
     private fun navigateToSignFragment(schoolCode: String, isStudentLoginBlocked: Boolean) {

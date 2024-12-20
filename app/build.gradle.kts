@@ -98,6 +98,7 @@ android {
         create("dev") {
             dimension = "apps"
             resValue("string", "app_name", "e-Care-Dev")
+            signingConfig = signingConfigs.getByName("Franciscan e-Care")
             applicationIdSuffix = ".dev"
         }
         create("MYSFHS") {

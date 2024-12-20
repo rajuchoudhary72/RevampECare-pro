@@ -22,8 +22,10 @@ class InstitutionCodeViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
     private val schoolDatabase: SchoolDatabase
 ) : ViewModel() {
-    val canEnterSchoolCode = BuildConfig.FLAVOR == "Franciscan e-Care"
-
+    val isMainApp = BuildConfig.FLAVOR == "Franciscan e-Care"
+    val isMainDevApp = BuildConfig.FLAVOR == "dev"
+    val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
+    val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
 
     val schools = userDataStore.getCurrentSchoolCodeAsFlow().flatMapLatest { schoolCode ->
         schoolDatabase.getSchoolsFlow().map {
