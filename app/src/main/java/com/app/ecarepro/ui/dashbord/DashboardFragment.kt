@@ -224,6 +224,17 @@ class DashboardFragment : Fragment() {
                     favouriteSlider.menuID
                 )
             }
+
+            systemViewModel.sendAnalyticEvent(
+                AnalyticsConstants.Events.SHOW_CARD_CLICK,
+                mapOf(
+                    AnalyticsConstants.Attributes.SCREEN_NAME to AnalyticsConstants.Screens.DASH_BOARD_SCREEN,
+                    AnalyticsConstants.Attributes.HEADLINE to favouriteSlider.link.toString(),
+                    AnalyticsConstants.Attributes.MENU_ID to favouriteSlider.menuID.toString(),
+                    AnalyticsConstants.Attributes.CH_MENU_ID to favouriteSlider.chMenuID.toString(),
+                    AnalyticsConstants.Attributes.SB_CH_MENU_ID to favouriteSlider.sbChMenuID.toString(),
+                )
+            )
         }
             .id("pro")
             .addTo(this)

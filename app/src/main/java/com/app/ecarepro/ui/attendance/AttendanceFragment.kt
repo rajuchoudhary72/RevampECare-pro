@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.classAttendanceCard
 import com.app.ecarepro.databinding.FragmentAttendancesBinding
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -63,6 +64,14 @@ class AttendanceFragment : Fragment() {
                                             putString(Constant.NAME, classSummary.className)
                                             putString(Constant.DATE, Constant.currentDate())
                                         })
+                                    mViewModel.sendAnalyticEvent(
+                                        AnalyticsConstants.Events.VIEW_CLASS_ATTENDANCE,
+                                        mapOf(
+                                            AnalyticsConstants.Attributes.CLASS_ID to classSummary.id.toString(),
+                                            AnalyticsConstants.Attributes.CLASS_NAME to classSummary.className.toString(),
+                                            AnalyticsConstants.Attributes.DATE to classSummary.className.toString(),
+                                        )
+                                    )
                                 }
                             }
                         }
@@ -72,7 +81,8 @@ class AttendanceFragment : Fragment() {
 
             launch {
                 mViewModel.sortOptions.collectLatest { sortOptions ->
-                    val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
+                    val arrayAdapter = ArrayAdapter(
+                        requireContext(), android.R.layout.simple_list_item_1,
                         sortOptions.map { it.second })
                     binding.filters.setAdapter(arrayAdapter)
                     binding.filters.setText(sortOptions[0].second, false)

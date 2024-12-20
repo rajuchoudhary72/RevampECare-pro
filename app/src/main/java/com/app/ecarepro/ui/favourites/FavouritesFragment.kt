@@ -201,6 +201,10 @@ class FavouritesFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mViewModel.sendScreenEvent()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

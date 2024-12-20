@@ -3,8 +3,9 @@ package com.app.ecarepro.ui.favourites
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Favourites
-import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavouritesViewModel @Inject constructor(
-    private val appRepository: AppRepository
+    private val appRepository: AppRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val uiState = MutableStateFlow<FavouritesUiState>(FavouritesUiState.Loading)
     private val updatedItems = mutableListOf<Favourites>()
@@ -69,6 +71,10 @@ class FavouritesViewModel @Inject constructor(
                     (uiState.value as FavouritesUiState.Success).favourites.maxByOrNull {
                         it.slNo ?: 0
                     }?.slNo ?: 0
+
+                val favourites: List<Favourites> = updatedItems.mapIndexed { index, favourites ->
+                    favourites.copy(isModified = true, slNo = maxSl.plus(index + 1))
+                }
                 appRepository
                     .updateFavourites(updatedItems.mapIndexed { index, favourites ->
                         favourites.copy(isModified = true, slNo = maxSl.plus(index + 1))
@@ -76,12 +82,34 @@ class FavouritesViewModel @Inject constructor(
                     .collectLatest { result ->
                         if (result.isSuccess) {
                             func(true, "Updated")
+                            sendAnalyticEvent(
+                                AnalyticsConstants.Events.UPDATE_FAVOURITES,
+                                mapOf(
+                                    AnalyticsConstants.Attributes.FAVOURITES to favourites.toString()
+                                )
+                            )
                         } else {
                             func(false, "Failed")
                         }
                     }
             }
         }
+    }
+
+    fun sendScreenEvent() {
+        analyticsManager.trackScreen(
+            AnalyticsConstants.Screens.FAVOURITES
+        )
+    }
+
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
     }
 }
 

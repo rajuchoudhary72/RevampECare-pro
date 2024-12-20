@@ -116,7 +116,7 @@ class FeedsViewModel @Inject constructor(
     }
 
     fun sendScreenEvent() {
-        analyticsManager.trackScreen(AnalyticsConstants.Screens.ATTENDANCE_TAB)
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.FEEDS_TAB)
     }
 
 }

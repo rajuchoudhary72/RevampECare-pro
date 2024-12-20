@@ -4,6 +4,9 @@ object AnalyticsConstants {
 
     // Event Names
     object Events {
+        const val EMAIL_CLICK: String = "email_click"
+        const val CONTACT_CLICK: String = "contact_click"
+        const val MODULE_OPEN: String = "module_open"
         const val FAQ_CLICK: String = "faq_click"
         const val ESTIMATE_COLLECTION_FILTER: String = "estimate_collection_filter"
         const val DAILY_MODE_WISE_FILTER: String = "daily_mode_wise_filter"
@@ -29,10 +32,22 @@ object AnalyticsConstants {
         const val RATE_US = "rate_us"
         const val SEND_SMS_APP_MESSAGE = "send_sms_app_message"
         const val ONLY_APP_MESSAGE = "only_app_message"
+        const val VIEW_CLASS_ATTENDANCE = "view_class_attendance"
+        const val SHOW_CARD_CLICK = "show_card_click"
+        const val UPDATE_FAVOURITES = "update_favourites"
     }
 
     // Attribute Keys
     object Attributes {
+        const val EMAIL: String = "email"
+        const val FAVOURITES: String = "favourites"
+        const val PHONE_NUMBER: String = "phone_number"
+        const val FROM: String = "from"
+        const val HEADLINE: String = "headline"
+        const val MENU_ID: String = "menu_id"
+        const val CH_MENU_ID: String = "ch_menu_id"
+        const val SB_CH_MENU_ID: String = "sb_ch_menu_id"
+        const val HOME: String = "Home"
         const val URL: String = "url"
         const val SEARCH_TYPE: String = "search_type"
         const val R_TYPE: String = "r_type"
@@ -48,6 +63,8 @@ object AnalyticsConstants {
         const val NEW_USER_ID: String = "new_user_id"
         const val NEW_USER_TYPE: String = "new_user_type"
         const val NEW_SCHOOL_CODE: String = "new_school_code"
+        const val CLASS_ID: String = "class_id"
+        const val CLASS_NAME: String = "class_name"
 
         // Contextual Attributes
         const val SCREEN_NAME = "screen_name"
@@ -103,6 +120,7 @@ object AnalyticsConstants {
     }
 
     object Screens {
+        const val FAVOURITES: String = "Favourites"
         const val SCHOOL_CODE = "SchoolCode"
         const val HOME_SCREEN = "HomeScreen"
         const val USER_PROFILE = "UserProfile"
