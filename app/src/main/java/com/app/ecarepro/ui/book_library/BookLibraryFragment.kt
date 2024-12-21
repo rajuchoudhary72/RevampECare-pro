@@ -80,7 +80,7 @@ class BookLibraryFragment : Fragment() {
             }
         }
 
-        latestBookViewModel.getLibraryDTL()
+        //latestBookViewModel.getLibraryDTL()
 
 
 

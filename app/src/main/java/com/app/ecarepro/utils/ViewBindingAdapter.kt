@@ -53,44 +53,54 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
             placeholder(placeholder)
             error(placeholder)
         } else {
-            placeholder(getImagePlaceholder(url))
-            error(getImagePlaceholder(url))
-           /* placeholder(getImagePlaceholder(context, url))
-            error(getImagePlaceholder(context, url))*/
+           /* placeholder(getImagePlaceholder(url))
+            error(getImagePlaceholder(url))*/
+            placeholder(getResourcePlaceholder(context, url))
+            error(getResourcePlaceholder(context, url))
         }
     }
 }
-/*fun getImagePlaceholder(context: Context, url: String?): Int {
-
-    val mimeType = url?.toUri()?.let { getFileType(context, it) }
-
-    return when {
-        mimeType == "application/pdf" -> {
-            R.drawable.baseline_file_present_24
-        }
-
-        mimeType == "application/msword" -> {
-            R.drawable.doc
-        }
-
-        mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> {
-            R.drawable.doc
-        }
-
-        mimeType?.startsWith("image/") == true -> {
-            R.drawable.img_placeholder
-        }
-
-        mimeType?.startsWith("audio/") == true -> {
-            R.drawable.baseline_audio_file_24
-        }
-
-        else -> {
-            R.drawable.img_placeholder
-        }
+const val MIME_TYPE_PDF = "application/pdf"
+const val MIME_TYPE_MSWORD = "application/msword"
+fun getResourcePlaceholder(context: Context, url: String?): Int {
+    if (url == null) {
+        return R.drawable.img_placeholder
     }
-}*/
-fun getImagePlaceholder(url: String?): Int {
+
+    val mimeType = if (isValidUrl(url)) {
+        when (url.substringAfterLast(".", "").lowercase()) {
+            "pdf" -> MIME_TYPE_PDF
+            "doc", "docx" -> MIME_TYPE_MSWORD
+            "mp3", "wav", "ogg", "flac", "aac", "m4a", "m4b", "m4p", "alac", "aiff",
+            "ape", "wv", "mpc", "tak", "opus", "spx", "gsm", "dts", "wma", "au", "aiff", "audio" -> "audio/*"
+
+            else -> null
+        }
+    } else {
+        url.toUri().let { getFileType(context, it) }
+    }
+
+    return when (mimeType) {
+        MIME_TYPE_PDF -> R.drawable.baseline_file_present_24
+        MIME_TYPE_MSWORD -> R.drawable.doc
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> R.drawable.doc
+        "image/*" -> R.drawable.img_placeholder
+        "audio/*" -> R.drawable.baseline_audio_file_24
+        else -> R.drawable.img_placeholder // Placeholder for unknown types
+    }
+}
+
+fun isValidUrl(url: String): Boolean {
+    return url.startsWith("http://") || url.startsWith("https://")
+}
+
+fun getFileType(context: Context, fileUri: Uri): String? {
+    return context.contentResolver.getType(fileUri)
+}
+
+
+
+/*fun getImagePlaceholder(url: String?): Int {
     return if (url?.contains("pdf") == true) {
         R.drawable.baseline_file_present_24
     } else if (isAudioUrl(url)) {
@@ -100,10 +110,8 @@ fun getImagePlaceholder(url: String?): Int {
     } else {
         R.drawable.img_placeholder
     }
-}
-fun getFileType(context: Context, fileUri: Uri): String? {
-    return context.contentResolver.getType(fileUri)
-}
+}*/
+
 
 fun isAudioUrl(url: String?): Boolean {
     val audioExtensions = setOf(

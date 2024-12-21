@@ -19,11 +19,17 @@ class BookLibraryViewModel  @Inject constructor(
 ) : ViewModel() {
 
 
-    private val libraryDTLMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLibraryDTL>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val libraryDTLStateFlow: StateFlow<NetworkResult<NetworkLibraryDTL>> = libraryDTLMutableStateFlow
+    private val libraryDTLMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLibraryDTL>> =
+        MutableStateFlow(
+            NetworkResult.Loading()
+        )
+    val libraryDTLStateFlow: StateFlow<NetworkResult<NetworkLibraryDTL>> =
+        libraryDTLMutableStateFlow
+    init {
+        getLibraryDTL()
+    }
 
-    fun getLibraryDTL()=viewModelScope.launch {
+    private fun getLibraryDTL() = viewModelScope.launch {
         runCatching {
             libraryDTLMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getLibraryDTL()

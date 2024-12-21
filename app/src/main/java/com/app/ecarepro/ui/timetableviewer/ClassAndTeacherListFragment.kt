@@ -123,7 +123,7 @@ class ClassAndTeacherListFragment : Fragment() {
             }
         }
 
-        timeTableViewerViewModel.getTimetableViewer( )
+       // timeTableViewerViewModel.getTimetableViewer( )
 
     }
 }
