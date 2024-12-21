@@ -39,6 +39,7 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 
 @AndroidEntryPoint
@@ -259,6 +260,12 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                  }else{
                                      binding.includeToolbar.btnSave.text = "Save"
                                  }
+
+                                if (!it.data.freezingTime.isNullOrEmpty()){
+                                    binding.includeToolbar.btnSave.isVisible = Constant.compareTimes(it.data.freezingTime)
+
+                                }
+
                                 isLateEnable = it.data.isLateEnable
                                 studentListWithData = it.data
                                 markAttModel = it.data
