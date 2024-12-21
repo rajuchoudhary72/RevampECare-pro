@@ -130,7 +130,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
         }
 
-        questionnaireViewModel.getQuestionnaireList(pageIndex, false)
+      //  questionnaireViewModel.getQuestionnaireList(pageIndex, false)
 
         binding.recyclerQuestionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 

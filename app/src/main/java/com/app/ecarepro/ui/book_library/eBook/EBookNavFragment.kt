@@ -74,7 +74,7 @@ class EBookNavFragment : Fragment() {
             }
         }
 
-        eBookViewModel.getEBook("%27%27", 0)
+       // eBookViewModel.getEBook("%27%27", 0)
 
 
     }
