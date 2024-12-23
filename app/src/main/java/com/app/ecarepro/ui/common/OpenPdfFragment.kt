@@ -38,10 +38,6 @@ class OpenPdfFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (requireActivity() as MainActivity).showLoader(true)
-
-
         openPdfBinding.wvPdf.zoomIn()
 
         openPdfBinding.wvPdf.settings .loadWithOverviewMode = true
@@ -54,13 +50,14 @@ class OpenPdfFragment : Fragment() {
             openPdfBinding.wvPdf.webViewClient= object  : WebViewClient(){
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    (requireActivity() as MainActivity).showLoader(true)
                     super.onPageStarted(view, url, favicon)
+                    openPdfBinding.progressCircular.show()
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    (requireActivity() as MainActivity).showLoader(false)
                     super.onPageFinished(view, url)
+                    openPdfBinding.progressCircular.hide()
+
                 }
             }
         }catch (e:IllegalStateException ){

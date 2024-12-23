@@ -206,13 +206,18 @@ class SubmitAssignmentFragment : Fragment() {
         builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this@SubmitAssignmentFragment)
-            if (items[item] == getString(R.string.take_photo)) {
-                cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
-                galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
-                dialog.dismiss()
+            try {
+                if (items[item] == getString(R.string.take_photo)) {
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                } else if (items[item] == getString(R.string.choose_library)) {
+                    galleryLauncher.launch(FileAccess.galleryIntent())
+                } else if (items[item] == getString(R.string.cancel)) {
+                    dialog.dismiss()
+                }
+            }catch (e:SecurityException){
+                e.message
             }
+
         })
         builder.show()
     }

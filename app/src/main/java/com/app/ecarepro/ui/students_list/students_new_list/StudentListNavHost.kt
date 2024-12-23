@@ -167,11 +167,9 @@ class StudentListNavHost : Fragment() {
         }
     }
 
-
-    }
-
     override fun onResume() {
         super.onResume()
         studentListViewModel.sendScreenEvent()
     }
+
 }
