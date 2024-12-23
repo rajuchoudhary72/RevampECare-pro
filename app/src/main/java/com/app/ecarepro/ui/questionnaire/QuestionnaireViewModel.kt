@@ -26,7 +26,10 @@ class QuestionnaireViewModel @Inject constructor(
     val deleteAnswerStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAnswerMutableStateFlow
 
 
-    fun getQuestionnaireList( pg: Int, myque: Boolean )=viewModelScope.launch {
+    init {
+        getQuestionnaireList()
+    }
+    fun getQuestionnaireList(pg: Int = 1, myque: Boolean = false) = viewModelScope.launch {
         runCatching {
             questionnaireStateFlow.value = NetworkResult.Loading( )
             userRepository.getQuestionnaireList( pg, myque)

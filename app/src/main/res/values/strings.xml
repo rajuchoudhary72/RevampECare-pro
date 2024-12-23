@@ -293,8 +293,8 @@
     <string name="deduction">Deduction</string>
     <string name="allowance">Allowance</string>
     <string name="basic">Basic</string>
-    <string name="pan_number">PAN Number</string>
-    <string name="peen_number">PEN Number</string>
+    <string name="pan_number">PAN</string>
+    <string name="peen_number">PEN</string>
     <string name="admissio_n_no">Admission No.</string>
     <string name="house">House</string>
     <string name="bloodgroup">BloodGroup</string>
@@ -474,7 +474,7 @@
     <string name="uan_number">UN Number</string>
     <string name="nationalnumber">National Teacher ID:</string>
     <string name="bank_account_number">Bank Account Number</string>
-    <string name="uan_account_number">UAN Number</string>
+    <string name="uan_account_number">UAN</string>
     <string name="contact_number">Contact Number</string>
     <string name="bill_number">Bill Number</string>
 
@@ -824,5 +824,8 @@
     <string name="partial_approval">Partial Approval</string>
     <string name="are_you_sure_you_want_to_partial_approve_this_leave">Are you sure you want to partial approve this leave?</string>
     <string name="academic_performance">Academic Performance</string>
+    <string name="leave_report">Leave Report</string>
+    <string name="students_profile">Students Profile</string>
+    <string name="attendance_summary">Attendance Summary</string>
 
 </resources>

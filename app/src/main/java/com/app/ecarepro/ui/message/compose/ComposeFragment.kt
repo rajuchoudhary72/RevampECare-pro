@@ -830,11 +830,12 @@ class ComposeFragment : Fragment() {
     }
 
     private fun launchPdfPicker() {
-        val intent = Intent()
-        intent.type = "application/pdf"
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*" // Allow any file type
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
         pdfLauncher.launch(intent)
     }
 

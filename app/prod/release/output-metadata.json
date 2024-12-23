@@ -5,15 +5,15 @@
     "kind": "Directory"
   },
   "applicationId": "com.franciscan.ecare_pro",
-  "variantName": "betaRelease",
+  "variantName": "prodRelease",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 266,
-      "versionName": "2.5.5",
-      "outputFile": "app-beta-release.apk"
+      "versionCode": 270,
+      "versionName": "2.5.9",
+      "outputFile": "app-prod-release.apk"
     }
   ],
   "elementType": "File",
@@ -22,14 +22,14 @@
       "minApi": 28,
       "maxApi": 30,
       "baselineProfiles": [
-        "baselineProfiles/1/app-beta-release.dm"
+        "baselineProfiles/1/app-prod-release.dm"
       ]
     },
     {
       "minApi": 31,
       "maxApi": 2147483647,
       "baselineProfiles": [
-        "baselineProfiles/0/app-beta-release.dm"
+        "baselineProfiles/0/app-prod-release.dm"
       ]
     }
   ],

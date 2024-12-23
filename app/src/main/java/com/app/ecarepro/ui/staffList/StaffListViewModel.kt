@@ -26,9 +26,11 @@ class StaffListViewModel @Inject constructor(
         NetworkResult.Loading())
     val staffListStateFlow: StateFlow<NetworkResult<NetworkStaffList>> = staffListMutableStateFlow
 
-    fun  getStaffList(
+    init {
+        getStaffList()
+    }
 
-    )=viewModelScope.launch {
+    private fun getStaffList() = viewModelScope.launch {
         runCatching {
             staffListMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStaffList( )

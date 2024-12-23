@@ -25,14 +25,15 @@ android {
             keyPassword = "eCarePro"
         }
     }
+
     namespace = "com.app.ecarepro"
     compileSdk = 34
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 267
-        versionName = "2.5.6"
+        versionCode = 271
+        versionName = "2.6.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -74,16 +75,11 @@ android {
         create("dev") {
             dimension = "build"
             resValue("string", "app_name", "e-Care-Dev")
+            applicationIdSuffix = ".dev"
         }
         create("prod") {
             dimension = "build"
             resValue("string", "app_name", "Franciscan e-Care")
-        }
-        create("beta") {
-            dimension = "build"
-           // applicationIdSuffix = ".beta"
-            resValue("string", "app_name", "Franciscan e-Care")
-           // signingConfig = signingConfigs.getByName("beta")
         }
     }
 

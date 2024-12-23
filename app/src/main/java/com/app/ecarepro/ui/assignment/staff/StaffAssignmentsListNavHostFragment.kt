@@ -174,7 +174,7 @@ class StaffAssignmentsListNavHostFragment : Fragment() , ItemListener<TeacherAss
             }
         }
 
-        teacherAssignmentViewModel.teachersAssignment(staffId )
+      //  teacherAssignmentViewModel.teachersAssignment(staffId )
 
 
     }

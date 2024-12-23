@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -34,6 +35,7 @@ class StudentListNavHost : Fragment() {
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
     private var isDataLoaded = false
+    private val studentsListShareViewModel : StudentsListShareViewModel by activityViewModels()
 
     @Inject
     lateinit var userDataStore: UserDataStore
@@ -44,9 +46,9 @@ class StudentListNavHost : Fragment() {
     ): View  {
         binding = FragmentStudentListNavHostBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = studentListViewModel
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.students_profile)
         try {
             toFragment = requireArguments().getString(Constant.TO).toString()
         } catch (_: Exception) {
@@ -83,14 +85,17 @@ class StudentListNavHost : Fragment() {
                                     val classList = mutableListOf<String> ()
                                     val fragmentList : ArrayList<Fragment> = ArrayList()
 
+                                    studentsListShareViewModel.setStudentMutableLiveData(listNetworkResult.data.students)
+
                                     withContext(Dispatchers.Default) {
                                         listNetworkResult.data.students.forEach {
                                             if (!classList.contains(it.`class`)) {
-                                                classList.add(it.`class`)
+                                                classList.add(it.`class`!!)
                                             }
                                         }
                                         classList. forEach { itemDat ->
-                                            fragmentList.add( StudentListSubFragment(listNetworkResult.data.students, itemDat ,toFragment ))
+                                            fragmentList.add( StudentListSubFragment.newInstance(itemDat ,toFragment ))
+
                                         }
                                     }
                                     val viewPagerAdapter = ViewPagerAdapter(
@@ -154,21 +159,13 @@ class StudentListNavHost : Fragment() {
         }
         checkIsBoarding()
     }
-
     private fun checkIsBoarding() {
-        (requireActivity() as MainActivity).showLoader(true)
         lifecycleScope.launch {
             userDataStore.getSchoolData()?.let {
-                it.schoolCode.let { schoolCode ->
-                    studentListViewModel.validateSchoolCode(schoolCode) { it1 ->
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it1?.errorCode == 0) {
-                            binding.toggleButtonSchoolType.isVisible = it1.isBoardingSchool!!
-                        }
-                    }
-                }
+                binding.toggleButtonSchoolType.isVisible = it.isBoardingSchool ?: false
             }
         }
+    }
 
 
     }

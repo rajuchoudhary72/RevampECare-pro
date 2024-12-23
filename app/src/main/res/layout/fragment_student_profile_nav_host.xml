@@ -16,22 +16,10 @@
         android:orientation="vertical"
         tools:context=".ui.studentProfile.StudentProfileNavHostFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Students Profile"
-
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
 
 
         <LinearLayout
@@ -162,26 +150,36 @@
 
                         </LinearLayout>
 
-                        <com.google.android.material.tabs.TabLayout
-                            android:id="@+id/tabLayout"
+                        <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:tabGravity="fill"
-                            app:tabMode="scrollable"
-                            android:background="@color/brand_color"
-                            app:tabIndicatorFullWidth="true"
-                            app:tabIndicatorColor="@color/white"
-                            app:tabTextColor="@color/grey"
-                            app:tabSelectedTextColor="@color/white" />
+                            android:layout_height="1dp"/>
 
-
-                        <androidx.viewpager2.widget.ViewPager2
-                            android:id="@+id/view_pager"
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+                            android:layout_height="wrap_content">
 
 
+
+                            <androidx.viewpager2.widget.ViewPager2
+                                android:id="@+id/view_pager"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_above="@+id/tabLayout"
+                                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+                            <com.google.android.material.tabs.TabLayout
+                                android:id="@+id/tabLayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:tabGravity="fill"
+                                app:tabMode="scrollable"
+                                app:tabIndicatorFullWidth="true"
+                                android:layout_alignParentBottom="true"
+                                />
+
+
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 

@@ -36,7 +36,12 @@ class DashboardViewModel @Inject constructor(
         var data = dashboardData
 
         if (feeCollection != null) {
-            data = dashboardData?.copy(feeCollection = feeCollection)
+            data = dashboardData?.copy(
+                feeCollection = feeCollection.copy(
+                    collectionStartDate = dashboardData.feeCollection?.collectionStartDate,
+                    collectionEndDate = dashboardData.feeCollection?.collectionEndDate
+                )
+            )
         }
 
         if (modelWiseColl != null) {

@@ -251,6 +251,10 @@ data class TransactionDetail(
 }
 
 data class FeeCollection(
+    @SerializedName("collectionStartDate")
+    val collectionStartDate: String?,
+    @SerializedName("collectionEndDate")
+    val collectionEndDate: String?,
     @SerializedName("concession")
     val concession: String?,
     @SerializedName("due")

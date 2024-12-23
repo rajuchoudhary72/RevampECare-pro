@@ -193,7 +193,7 @@ class ComposeViewModel @Inject constructor(
                             },
                             recipientType = contacts.value.firstOrNull()?.receiverType,
                             msgType = getMessageType(),
-                            attachment = getAttachment(),
+                            attachment = null,
                             multipleAttachments = getMultipleAttachment()
                         )
                     )
@@ -229,8 +229,8 @@ class ComposeViewModel @Inject constructor(
     }
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value
-        if (attachments.isEmpty() || attachments.size == 1)
-            return null
+      /*  if (attachments.isEmpty() || attachments.size == 1)
+            return null*/
 
         return attachments.map { attachment ->
             if (isPdf(attachment)) {

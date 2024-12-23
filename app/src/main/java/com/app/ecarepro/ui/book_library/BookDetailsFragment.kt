@@ -71,11 +71,10 @@ class BookDetailsFragment : Fragment() {
                             placeholder(R.drawable.ic_library_big_image)
                                 .into(binding.ivCoverPic)
 
-
                             if (data.isIssuable==Constant.TRUE_VALUE){
-                                binding.tvIssuable.text=  R.string.true_value.toString()
+                                binding.tvIssuable.text=  getString(R.string.true_value)
                             }else{
-                                binding.tvIssuable.text=  R.string.false_value.toString()
+                                binding.tvIssuable.text=  getString( R.string.false_value)
                             }
                         }
 
