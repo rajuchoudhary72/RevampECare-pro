@@ -138,6 +138,7 @@ import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
@@ -796,14 +797,14 @@ interface UserService {
     suspend fun getAppMsgUses(
         @Query("FromDate") fromDate : String,
         @Query("ToDate") toDate: String,
-        @Query("ID") iD: String,
+        @Query("WingIds") iD: String,
     ): NetworkSmsMsgReport
 
     @GET("Report/SMSUses")
     suspend fun getSMSUses(
         @Query("FromDate") fromDate : String,
         @Query("ToDate") toDate: String,
-        @Query("ID") iD: String,
+        @Query("WingIds") iD: String,
     ): NetworkSmsMsgReport
 
     @GET("Report/SMSType")
@@ -1048,4 +1049,7 @@ interface UserService {
 
     @GET("Academic/AcademicYears")
     suspend fun academicYears(): NetworkAcademicYear
+
+    @GET("School/Wings")
+    suspend fun wingsList(): NetworkWingReport
 }
