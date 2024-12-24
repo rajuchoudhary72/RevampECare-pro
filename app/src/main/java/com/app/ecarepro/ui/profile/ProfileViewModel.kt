@@ -1,6 +1,8 @@
 package com.app.ecarepro.ui.profile
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -31,15 +33,15 @@ class ProfileViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val userDataStore: UserDataStore
 ) : ViewModel() {
-    val refresh = MutableStateFlow(true)
+    private val refresh = MutableLiveData(false)
 
     var userType: Int = 0
 
     val uiState =
-        refresh.flatMapLatest {
+        refresh.asFlow().flatMapLatest {refresh ->
             combine(
                 flow = userDataStore.getUsersFlow(),  // get  data  base to fetch user  detail
-                flow2 = userRepository.getUserProfile(),   // api
+                flow2 = userRepository.getUserProfile(refresh),   // api
                 flow3 = userDataStore.getCurrentUserIdAsFlow()   // selected user
             ) { users, profile, userId ->
                 Triple(users, profile, userId)
@@ -144,6 +146,10 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             userDatabase.deleteUser(user.userId)
         }
+    }
+
+    fun refresh() {
+        refresh.value = true
     }
 
     fun sendScreenEvent() {

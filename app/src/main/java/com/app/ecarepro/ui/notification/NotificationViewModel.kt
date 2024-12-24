@@ -1,6 +1,8 @@
 package com.app.ecarepro.ui.notification
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.repository.AppRepository
@@ -9,6 +11,7 @@ import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -20,25 +23,29 @@ class NotificationViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
 
-    val uiState = appRepository
-        .getNotifications()
-        .map { result ->
-            if (result.isSuccess) {
-                val notifications = result.getOrNull() ?: emptyList()
-                NotificationUiState.Success(notifications)
-            } else {
-                NotificationUiState.Error(
-                    result.exceptionOrNull() ?: IllegalArgumentException(
-                        UNKNOWN_ERROR_MESSAGE
-                    )
-                )
-            }
+    private val refresh = MutableLiveData(false)
+
+    val uiState =
+        refresh.asFlow().flatMapLatest { refresh ->
+            appRepository.getNotifications(refresh)
         }
-        .stateIn(
-            scope = viewModelScope,
-            initialValue = NotificationUiState.Loading,
-            started = SharingStarted.WhileSubscribed(400)
-        )
+            .map { result ->
+                if (result.isSuccess) {
+                    val notifications = result.getOrNull() ?: emptyList()
+                    NotificationUiState.Success(notifications)
+                } else {
+                    NotificationUiState.Error(
+                        result.exceptionOrNull() ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
+                    )
+                }
+            }
+            .stateIn(
+                scope = viewModelScope,
+                initialValue = NotificationUiState.Loading,
+                started = SharingStarted.WhileSubscribed(400)
+            )
 
     fun markNotificationAsSeen(id: String) {
         viewModelScope.launch {
@@ -46,8 +53,12 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
-    fun sendScreenEvent(){
+    fun sendScreenEvent() {
         analyticsManager.trackScreen(AnalyticsConstants.Screens.NOTIFICATION_LIST)
+    }
+
+    fun refresh() {
+        refresh.postValue(true)
     }
 }
 

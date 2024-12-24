@@ -127,16 +127,26 @@
                 app:strokeWidth="@dimen/_1sdp" />
 
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
-                android:id="@+id/recycler_view"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_50sdp"
-                android:background="@color/background_dashboard"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="4"
-                tools:listitem="@layout/item_card_option" />
+                android:layout_height="match_parent">
+
+                <com.airbnb.epoxy.EpoxyRecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_dashboard"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="4"
+                    tools:listitem="@layout/item_card_option" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
 
 
         </FrameLayout>

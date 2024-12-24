@@ -172,6 +172,10 @@ class ProfileFragment : Fragment() {
         setUpViews()
 
 
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            profileViewModel.refresh()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun handleUiState(uiState: ProfileUiState) {

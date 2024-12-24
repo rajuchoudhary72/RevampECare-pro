@@ -62,7 +62,8 @@ class AppointmentViewModel @Inject constructor(
                                 AppointmentUiState.NoDataFound
                             } else {
                                 AppointmentUiState.Success(
-                                    formData = response.map { form ->
+                                    formData = response
+                                        .map { form ->
                                         when (form.columnName) {
                                             "Name" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.name)

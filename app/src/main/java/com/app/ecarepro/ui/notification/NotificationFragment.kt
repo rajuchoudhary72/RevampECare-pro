@@ -67,6 +67,11 @@ class NotificationFragment : Fragment() {
                 )
             )
         }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            mViewModel.refresh()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun handleUiState(uiState: NotificationUiState) {

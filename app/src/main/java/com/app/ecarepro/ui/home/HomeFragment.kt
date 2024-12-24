@@ -92,6 +92,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
+
+        binding.swipeRefresh.setOnRefreshListener {
+            mViewModel.refresh()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
