@@ -120,23 +120,28 @@ class StudentIDFragment : Fragment() {
     }
 
     private fun selectImageOptionDialog() {
-        val items = arrayOf<CharSequence>(
-            "Take Photo", "Choose from Library",
-            "Cancel"
-        )
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Photo!")
-        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
-            FileAccess.checkPermission(this)
-            if (items[item] == "Take Photo") {
-                cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == "Choose from Library") {
-                galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == "Cancel") {
-                dialog.dismiss()
-            }
-        })
-        builder.show()
+        try {
+            val items = arrayOf<CharSequence>(
+                "Take Photo", "Choose from Library",
+                "Cancel"
+            )
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Add Photo!")
+            builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+                FileAccess.checkPermission(this)
+                if (items[item] == "Take Photo") {
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                } else if (items[item] == "Choose from Library") {
+                    galleryLauncher.launch(FileAccess.galleryIntent())
+                } else if (items[item] == "Cancel") {
+                    dialog.dismiss()
+                }
+            })
+            builder.show()
+        }catch (e:SecurityException){
+            e.printStackTrace()
+        }
+
     }
 
     private val galleryLauncher =

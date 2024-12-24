@@ -193,12 +193,17 @@ class PhotoAlbumFragment() : Fragment() , ItemListener<Album> {
     }
 
     override fun onItemClick(t: Album, pos: Int, boolean: Boolean) {
-        this@PhotoAlbumFragment. findNavController().
-        navigate(R.id.action_photoAlbumTypeNavHostFragment_to_photoAlbumDTLFragment, Bundle().apply {
-            putString(Constant.ID, t.id)
+        try {
+            this@PhotoAlbumFragment. findNavController().
+            navigate(R.id.action_photoAlbumTypeNavHostFragment_to_photoAlbumDTLFragment, Bundle().apply {
+                putString(Constant.ID, t.id)
 
 
-        })
+            })
+        }catch (e:IllegalArgumentException){
+            e.printStackTrace()
+        }
+
     }
 
 }
