@@ -93,6 +93,10 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
 
+        binding.imgSync.setOnClickListener {
+            mViewModel.refresh()
+        }
+
         binding.swipeRefresh.setOnRefreshListener {
             mViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
@@ -472,6 +476,7 @@ class HomeFragment : Fragment() {
                         setFragmentResultListener("favourites") { _, bundle ->
                             if (bundle.containsKey("isUpdate")) {
                                 systemViewModel.refreshAppLayout()
+                                mViewModel.refresh()
                             }
                         }
                         findNavController().navigate(R.id.favouritesFragment)
