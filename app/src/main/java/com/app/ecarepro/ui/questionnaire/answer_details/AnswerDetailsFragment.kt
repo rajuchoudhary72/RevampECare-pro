@@ -37,9 +37,8 @@ class AnswerDetailsFragment : Fragment() , ItemListener<Answer> {
     ): View  {
 
         binding=FragmentQuestionnaireDetailsBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.questionnaire)
 
 
         return binding.root

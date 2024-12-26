@@ -7,90 +7,30 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".ui.timeTable.TimeTableNavHostFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Timetable"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <include
+                android:id="@+id/include_toolbar"
+                layout="@layout/common_toolbar"
+                />
 
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
-
-
-                >
-
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:contentScrim="@android:color/transparent"
-                    app:expandedTitleTextAppearance="@android:color/transparent"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:statusBarScrim="@android:color/transparent">
-
-
-                    <LinearLayout
-                        android:id="@+id/ll_toole"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="?actionBarSize"
-                        android:background="@color/md_theme_light_primary"
-                        android:gravity="center"
-                        android:fitsSystemWindows="true"
-                        android:orientation="vertical"
-                        app:layout_collapseMode="parallax"
-
-                        app:layout_scrollFlags="scroll|enterAlways">
-
-
-                        <com.google.android.material.tabs.TabLayout
-                            android:id="@+id/tabLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:tabGravity="fill"
-                            app:tabMode="scrollable"
-                            android:background="@color/brand_color"
-                            app:tabIndicatorFullWidth="true"
-                           app:tabIndicatorColor="@color/white"
-                            app:tabTextColor="@color/grey"
-                            app:tabSelectedTextColor="@color/white"
-                            />
-
-
-                    </LinearLayout>
-
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            </com.google.android.material.appbar.AppBarLayout>
-
+                app:tabGravity="fill"
+                app:tabMode="scrollable"
+                app:tabIndicatorFullWidth="true"
+                />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
@@ -98,22 +38,21 @@
                 android:layout_height="match_parent"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/iv_no_item"
             android:fontFamily="@font/ubuntu_medium"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/no_record_found"
             android:visibility="gone"
             android:textSize="16sp"
-
             />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </RelativeLayout>
 </layout>

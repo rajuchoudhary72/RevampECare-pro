@@ -6,14 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.databinding.FragmentStudentProfileMedicineIssuedBinding
 import com.app.ecarepro.model.MedicineIssued
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 
 
-class StudentProfileMedicineIssuedFragment(private val medicineIssued: List<MedicineIssued>) : Fragment() {
+class StudentProfileMedicineIssuedFragment : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileMedicineIssuedBinding
+    private val sharedViewModel: SharedViewModelProfile by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,30 +31,33 @@ class StudentProfileMedicineIssuedFragment(private val medicineIssued: List<Medi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
+        sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+            val medicineIssued=it.medicineIssued
             if (medicineIssued!=null) {
-            if (medicineIssued.isNotEmpty()) {
+                if (medicineIssued.isNotEmpty()) {
 
-                binding.rvMedicineIssue.isVisible = true
-                binding.tvNoData.isVisible = false
+                    binding.rvMedicineIssue.isVisible = true
+                    binding.tvNoData.isVisible = false
 
-                val profileMedicineListAdapter =
-                    StudentProfileMedicineListAdapter(medicineIssued, this@StudentProfileMedicineIssuedFragment)
+                    val profileMedicineListAdapter =
+                        StudentProfileMedicineListAdapter(medicineIssued, this@StudentProfileMedicineIssuedFragment)
 
-                binding.rvMedicineIssue.apply {
-                    setHasFixedSize(true)
-                    layoutManager = LinearLayoutManager(activity)
-                    adapter = profileMedicineListAdapter
+                    binding.rvMedicineIssue.apply {
+                        setHasFixedSize(true)
+                        layoutManager = LinearLayoutManager(activity)
+                        adapter = profileMedicineListAdapter
+                    }
+                } else {
+                    binding.rvMedicineIssue.isVisible = false
+                    binding.tvNoData.isVisible = true
                 }
             } else {
                 binding.rvMedicineIssue.isVisible = false
                 binding.tvNoData.isVisible = true
             }
-            } else {
-                binding.rvMedicineIssue.isVisible = false
-                binding.tvNoData.isVisible = true
-            }
+        }
+
+
 
     }
 }

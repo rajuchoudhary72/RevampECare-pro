@@ -41,7 +41,8 @@ class BookLibraryFragment : Fragment() {
     ): View {
 
         bookLibraryBinding=FragmentBookLibraryBinding.inflate(inflater,container,false)
-        bookLibraryBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        bookLibraryBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        bookLibraryBinding.includeToolbar.toolbarTitle.text = getString(R.string.library)
 
         return bookLibraryBinding.root
     }
@@ -85,7 +86,9 @@ class BookLibraryFragment : Fragment() {
 
 
 
-        bookLibraryBinding.ivSearch.setOnClickListener {
+        bookLibraryBinding.includeToolbar.ibAction.isVisible=true
+        bookLibraryBinding.includeToolbar.ibAction.setImageResource(R.drawable.ic_search)
+        bookLibraryBinding.includeToolbar.ibAction.setOnClickListener {
              findNavController().navigate(R.id.librarySearchFragment)
         }
 

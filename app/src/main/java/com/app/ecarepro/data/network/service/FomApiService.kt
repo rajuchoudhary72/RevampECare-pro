@@ -6,6 +6,9 @@ import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.post_fee_collection.FeeCollectionBody
 import com.app.ecarepro.data.network.model.DefaulterFilters
 import com.app.ecarepro.data.network.model.EstimateModule
+import com.app.ecarepro.data.network.model.FeeBookDownloadRequestModel
+import com.app.ecarepro.data.network.model.FeeBookModel
+import com.app.ecarepro.data.network.model.NetworkFeeBook
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
@@ -26,6 +29,7 @@ import retrofit2.http.Url
 import com.app.ecarepro.model.CollectionReport
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Query
 
 interface FomApiService {
 
@@ -125,6 +129,26 @@ interface FomApiService {
     suspend fun getuserdetailsfrommobile (
         @Url url: String
     ): VerifyPhone
+
+
+
+    @POST
+    suspend fun getFeeBookReportList(
+        @Url url: String,
+        @Query("ParentName") ParentName: String?,
+        @Query("stid") stid: String?,
+        @Query("schoolcode") schoolcode: String
+    ): NetworkFeeBook
+
+    @POST
+    suspend fun getFeeBookDownload (
+        @Url url: String,
+        @Query("Billsetting") Billsetting: String?,
+        @Query("schoolcode") schoolcode: String,
+        @Query("installid") installid: String,
+        @Query("stid") stid: String,
+        @Query("yrid") yrid: String,
+    ): NetworkFeeCerDownload
 
 
 }

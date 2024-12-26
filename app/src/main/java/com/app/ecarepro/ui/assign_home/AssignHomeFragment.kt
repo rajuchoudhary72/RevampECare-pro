@@ -80,7 +80,9 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
         }
 
         binding = FragmentAssignHomeBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.assign_house)
+
         with(binding) {
             spClass.adapter = classAdapter
             spOrder.adapter = selectedAdapter

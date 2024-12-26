@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +22,9 @@ import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
+import com.app.ecarepro.ui.studentProfile.StudentProfileAttendanceFragment
+import com.app.ecarepro.ui.studentProfile.StudentProfileAttendanceFragment.Companion
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.listener.ItemListener
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,16 +33,23 @@ import kotlinx.coroutines.launch
 
 
  @AndroidEntryPoint
- class AcademicPerformanceNavHostFragment(
-     private val academicYears: List<AcademicYear>,
-     private val studentID: Int) : Fragment() {
+ class AcademicPerformanceNavHostFragment : Fragment() {
 
     private lateinit var binding: FragmentAcademicPerformanceNavHostBinding
     private val academicPerViewModel : AcademicPerViewModel by viewModels()
      private lateinit var selectedYearData: AcademicYear
+     private var academicYears: List<AcademicYear>? = null
+     private val sharedViewModel: SharedViewModelProfile by activityViewModels()
+     private var studentID: Int=0
 
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         arguments?.let {
+             studentID=it.getInt(STUDENT_ID)
+         }
+     }
 
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -54,15 +65,19 @@ import kotlinx.coroutines.launch
              popUpSelectAcademicYears()
          }
 
-         if (academicYears!=null){
-             academicYears.forEach { a->
-                 if (a.isCur){
-                     selectedYearData=a
-                    binding.ctvSelectYear.text=a.session
+         sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+             academicYears=it.academicYears
+             if (academicYears!=null){
+                 academicYears!!.forEach { a->
+                     if (a.isCur){
+                         selectedYearData=a
+                         binding.ctvSelectYear.text=a.session
+                     }
                  }
+                 getAcademicPerf()
              }
-             getAcademicPerf()
          }
+
 
 
 
@@ -182,6 +197,17 @@ import kotlinx.coroutines.launch
          academicPerViewModel.getAcademicPerformance(studentID,selectedYearData.yrID)
 
 
+
+     }
+
+     companion object {
+         private const val STUDENT_ID = "student_id_int"
+
+         fun newInstance(   studentID: Int)= AcademicPerformanceNavHostFragment().apply {
+             arguments= Bundle().apply {
+                 putInt(STUDENT_ID,studentID)
+             }
+         }
 
      }
 

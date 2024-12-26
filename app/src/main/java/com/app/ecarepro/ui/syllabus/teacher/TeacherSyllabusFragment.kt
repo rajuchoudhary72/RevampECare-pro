@@ -45,7 +45,8 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
             viewModel = teacherSyllabusViewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.syllabus)
 
         return binding.root
     }

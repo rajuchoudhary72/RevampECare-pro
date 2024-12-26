@@ -49,7 +49,8 @@ class FeeCertificateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding= FragmentFeeCertificateBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.fee_certificate)
         return binding.root
     }
 

@@ -36,7 +36,8 @@ class AddThoughtsBlankFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentAddThoughtsBlankBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.add_thoughts)
 
         return binding.root
     }

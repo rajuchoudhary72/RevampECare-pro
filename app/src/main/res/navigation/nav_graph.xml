@@ -992,4 +992,8 @@
         android:id="@+id/academicPerformanceHostFragment"
         android:name="com.app.ecarepro.ui.academic_performance.AcademicPerformanceHostFragment"
         android:label="AcademicPerformanceHostFragment" />
+    <fragment
+        android:id="@+id/feeBookFragment"
+        android:name="com.app.ecarepro.ui.fee.fee_book.FeeBookFragment"
+        android:label="FeeBookFragment" />
 </navigation>
