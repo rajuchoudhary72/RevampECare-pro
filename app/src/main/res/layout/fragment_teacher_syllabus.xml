@@ -16,24 +16,16 @@
         android:fitsSystemWindows="true"
         tools:context=".ui.syllabus.teacher.TeacherSyllabusFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Syllabus"
-            android:layout_alignParentTop="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
+
 
         <LinearLayout
             android:id="@+id/ll_filter_by"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/include_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="10"

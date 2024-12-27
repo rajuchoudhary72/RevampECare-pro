@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentCollectionFeeReportBinding
 import com.app.ecarepro.ui.MainActivity
@@ -36,6 +38,8 @@ class CollectionFeeReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentCollectionFeeReportBinding.inflate(inflater,container,false)
+         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+         binding.includeToolbar.toolbarTitle.text = getString(R.string.fee_collection)
          return binding.root
     }
 

@@ -8,6 +8,9 @@ import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.network.model.DefaulterFilters
 import com.app.ecarepro.data.network.model.EstimateModule
+import com.app.ecarepro.data.network.model.FeeBookDownloadRequestModel
+import com.app.ecarepro.data.network.model.FeeBookModel
+import com.app.ecarepro.data.network.model.NetworkFeeBook
 import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.model.CollectionReport
@@ -110,6 +113,26 @@ class FomApiRepositoryImpl @Inject constructor(
 
     override suspend fun getuserdetailsfrommobile(url: String): VerifyPhone {
         return fomApiService.getuserdetailsfrommobile(url)
+    }
+
+    override suspend fun getFeeBookReportList(
+        url: String,
+        ParentName: String?,
+        stid: String?,
+        schoolcode: String
+    ): NetworkFeeBook {
+        return fomApiService.getFeeBookReportList(url, ParentName,stid, schoolcode)
+    }
+
+    override suspend fun getFeeBookDownload(
+        url: String,
+        Billsetting: String?,
+        schoolcode: String,
+        installid: String,
+        stid: String,
+        yrid: String
+    ): NetworkFeeCerDownload {
+        return fomApiService.getFeeBookDownload(url, Billsetting, schoolcode, installid, stid, yrid)
     }
 
 

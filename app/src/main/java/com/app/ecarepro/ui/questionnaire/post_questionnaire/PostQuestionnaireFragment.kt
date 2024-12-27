@@ -35,9 +35,8 @@ class PostQuestionnaireFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostQustionnaireBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.add_question)
         return binding.root
     }
 

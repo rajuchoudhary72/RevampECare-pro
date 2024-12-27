@@ -5,14 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMedicalCard2Binding
 import com.app.ecarepro.model.MedicalCard
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
+import dagger.hilt.android.AndroidEntryPoint
 
 
-class MedicalCardFragment( val medicalCard: MedicalCard) : Fragment() {
+@AndroidEntryPoint
+class MedicalCardFragment : Fragment() {
 
     private lateinit var binding: FragmentMedicalCard2Binding
+    private val sharedViewModel: SharedViewModelProfile by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +30,11 @@ class MedicalCardFragment( val medicalCard: MedicalCard) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.medicalCard=medicalCard
+
+        sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+            binding.medicalCard=it.medicalCard
+
+        }
+
     }
 }

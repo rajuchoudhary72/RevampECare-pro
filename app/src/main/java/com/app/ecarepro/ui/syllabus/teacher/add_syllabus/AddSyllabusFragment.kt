@@ -80,7 +80,8 @@ class AddSyllabusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAddSyllabusBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.add_syllabus)
         try {
             edit=  requireArguments().getBoolean("edit", false)
             id=  requireArguments().getString(Constant.ID,"")
