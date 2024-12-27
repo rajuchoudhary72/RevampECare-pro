@@ -45,38 +45,38 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
+class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
 
 
-     private lateinit var studentListToMarkAtt: List<StuLst>
+    private lateinit var studentListToMarkAtt: List<StuLst>
     private lateinit var stoppersSelectData: StopLST
     private var routeSelected: Boolean = false
     private var stoppersSelected: Boolean = false
     private lateinit var routerSelectData: RouteLST
-    private lateinit var binding : FragmentTransportAttendanceBinding
-    private val transportAttendanceViewModel : TransportAttendanceViewModel by viewModels()
+    private lateinit var binding: FragmentTransportAttendanceBinding
+    private val transportAttendanceViewModel: TransportAttendanceViewModel by viewModels()
 
     private lateinit var routeLSTList: List<RouteLST>
-    private   var stopLSTList = mutableListOf<StopLST>()
+    private var stopLSTList = mutableListOf<StopLST>()
 
     private var tripType = 0
-    private var p  = 0
-    private var a  = 0
-    private var l  = 0
+    private var p = 0
+    private var a = 0
+    private var l = 0
     var selectAll: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentTransportAttendanceBinding.inflate(inflater,container,false)
+        binding = FragmentTransportAttendanceBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-       // from= requireArguments().getString(Constant.TO).toString()
-       // binding.toolbar.title=from
-        if(activity is AppCompatActivity){
+        // from= requireArguments().getString(Constant.TO).toString()
+        // binding.toolbar.title=from
+        if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         }
 
-         return binding.root
+        return binding.root
     }
 
 
@@ -94,50 +94,61 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
             }
 
             tvSelectRoute.setOnClickListener {
-                if (routeLSTList.isNotEmpty()){
+                if (routeLSTList.isNotEmpty()) {
                     popUpRouter()
-                }else{
-                    Toast.makeText(requireContext(),"No Route Data",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "No Route Data", Toast.LENGTH_LONG).show()
                 }
 
             }
             tvSelectStoppage.setOnClickListener {
-                if (stopLSTList.isNotEmpty()){
+                if (stopLSTList.isNotEmpty()) {
                     popUpStoppers()
-                }else{
-                    Toast.makeText(requireContext(),"No Stoppers Data",Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "No Stoppers Data", Toast.LENGTH_LONG).show()
                 }
             }
 
-             val spinnerTripTypeAdapter = ArrayAdapter(requireActivity(),
-                 android.R.layout.simple_list_item_1,resources.getStringArray(R.array.tripType))
-            spinnerSelectTrip.adapter=spinnerTripTypeAdapter
+            val spinnerTripTypeAdapter = ArrayAdapter(
+                requireActivity(),
+                android.R.layout.simple_list_item_1, resources.getStringArray(R.array.tripType)
+            )
+            spinnerSelectTrip.adapter = spinnerTripTypeAdapter
+            try {
+                spinnerSelectTrip.onItemSelectedListener = object :
+                    AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View, position: Int, id: Long
+                    ) {
+                        when (position) {
+                            1 -> {
+                                tripType = Constant.UP_TRIP
+                                getStoppersList()
+                                binding.tvSave.isVisible = true
 
-            spinnerSelectTrip.onItemSelectedListener = object :
-                AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>,
-                                            view: View, position: Int, id: Long) {
-                     when(position){
-                         1 -> {
-                          tripType=Constant.UP_TRIP
-                             getStoppersList()
-                             binding.tvSave.isVisible=true
+                            }
 
-                         }
-                         2 -> {
-                             tripType=Constant.DOWN_TRIP
-                             getStoppersList()
-                             binding.tvSave.isVisible=true
-                         }
-                         3 -> {
-                             tripType=Constant.DROP_STUDENT_TRIP
-                             binding.tvSave.isVisible=false
-                         }
-                     }
+                            2 -> {
+                                tripType = Constant.DOWN_TRIP
+                                getStoppersList()
+                                binding.tvSave.isVisible = true
+                            }
+
+                            3 -> {
+                                tripType = Constant.DROP_STUDENT_TRIP
+                                binding.tvSave.isVisible = false
+                            }
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                    }
                 }
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                 }
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
             }
+
         }
         getRouterList()
     }
@@ -149,14 +160,16 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Log.d("main", "Error$it")
                     }
+
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            routeLSTList=it.data.routeLST
+                            routeLSTList = it.data.routeLST
                         }
                     }
                 }
@@ -172,10 +185,12 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Log.d("main", "Error$it")
                     }
+
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
@@ -183,12 +198,12 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                             stopLSTList.clear()
 
                             stopLSTList.addAll(it.data.stopLST)
-                         }
+                        }
                     }
                 }
             }
         }
-        transportAttendanceViewModel.getStoppageList(routerSelectData.routeID.toString(),tripType)
+        transportAttendanceViewModel.getStoppageList(routerSelectData.routeID.toString(), tripType)
     }
 
     private fun getStudentToMarkTransAttendance(ids: StringBuilder) {
@@ -198,26 +213,28 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Log.d("main", "Error$it")
-                        binding.tvSave.isVisible=false
-                        binding.recyclerStudentAttMark.visibility=View.GONE
-                        binding.tvNoData.visibility=View.VISIBLE
+                        binding.tvSave.isVisible = false
+                        binding.recyclerStudentAttMark.visibility = View.GONE
+                        binding.tvNoData.visibility = View.VISIBLE
                     }
+
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data.stuLst != null  &&  it.data.stuLst.isNotEmpty()   ){
+                            if (it.data.stuLst != null && it.data.stuLst.isNotEmpty()) {
 
-                                binding.recyclerStudentAttMark.isVisible=true
-                                binding.tvNoData.isVisible=false
+                                binding.recyclerStudentAttMark.isVisible = true
+                                binding.tvNoData.isVisible = false
 
-                                binding.tvSave.isVisible= it.data.stuLst.isNotEmpty()
+                                binding.tvSave.isVisible = it.data.stuLst.isNotEmpty()
 
-                                val studentListToMarkAttAdapter =  StudentListToMarkAttAdapter(
-                                    it.data.stuLst  ,
+                                val studentListToMarkAttAdapter = StudentListToMarkAttAdapter(
+                                    it.data.stuLst,
                                     tripType,
                                     this@TransportAttendanceFragment,
                                     it.data.freezDrop,
@@ -230,50 +247,50 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
                                     adapter = studentListToMarkAttAdapter
                                 }
 
-                                studentListToMarkAtt=it.data.stuLst
+                                studentListToMarkAtt = it.data.stuLst
 
-                            }else{
-                                binding.tvSave.isVisible=false
-                                binding.recyclerStudentAttMark.visibility=View.GONE
-                                binding.tvNoData.visibility=View.VISIBLE
+                            } else {
+                                binding.tvSave.isVisible = false
+                                binding.recyclerStudentAttMark.visibility = View.GONE
+                                binding.tvNoData.visibility = View.VISIBLE
                             }
 
-                        }else{
-                            binding.tvSave.isVisible=false
-                            binding.recyclerStudentAttMark.visibility=View.GONE
-                            binding.tvNoData.visibility=View.VISIBLE
+                        } else {
+                            binding.tvSave.isVisible = false
+                            binding.recyclerStudentAttMark.visibility = View.GONE
+                            binding.tvNoData.visibility = View.VISIBLE
                         }
                     }
                 }
             }
         }
-        var isValidate= true
-        if (!routeSelected ){
-            Toast.makeText(requireContext(),"Please Select Route",Toast.LENGTH_SHORT).show()
-            isValidate= false
+        var isValidate = true
+        if (!routeSelected) {
+            Toast.makeText(requireContext(), "Please Select Route", Toast.LENGTH_SHORT).show()
+            isValidate = false
         }
-        if (!stoppersSelected ){
-            Toast.makeText(requireContext(),"Please Select Stoppers",Toast.LENGTH_SHORT).show()
-            isValidate= false
+        if (!stoppersSelected) {
+            Toast.makeText(requireContext(), "Please Select Stoppers", Toast.LENGTH_SHORT).show()
+            isValidate = false
         }
-        if (tripType==0 ){
-            Toast.makeText(requireContext(),"Please Select Trip Type",Toast.LENGTH_SHORT).show()
-            isValidate= false
+        if (tripType == 0) {
+            Toast.makeText(requireContext(), "Please Select Trip Type", Toast.LENGTH_SHORT).show()
+            isValidate = false
         }
-        if (isValidate){
-            if (tripType==Constant.DROP_STUDENT_TRIP){
+        if (isValidate) {
+            if (tripType == Constant.DROP_STUDENT_TRIP) {
                 transportAttendanceViewModel.getStudentToDrop(
                     routeID = routerSelectData.routeID,
                     stopID = stoppersSelectData.stopID,
                     attDate = Constant.toSystemDate(Constant.currentDate().toString())
                 )
-            }else{
+            } else {
                 transportAttendanceViewModel.getStudentToMarkTransAttendance(
-                    routeIDs =   routerSelectData.routeID.toString(),
-                    stopID= 0,
+                    routeIDs = routerSelectData.routeID.toString(),
+                    stopID = 0,
                     trip = tripType,
                     attDate = Constant.toSystemDate(Constant.currentDate()),
-                    stopIDs =ids.toString()
+                    stopIDs = ids.toString()
 
                 )
             }
@@ -282,28 +299,30 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
 
     }
 
-    private fun popUpRouter(){
+    private fun popUpRouter() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
-        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text=getString(R.string.select_route)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
+        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text = getString(R.string.select_route)
         builder.setView(view)
 
         relOk.setOnClickListener {
-            binding.tvSelectRoute.text= routerSelectData.routeName
-            routeSelected=true
+            binding.tvSelectRoute.text = routerSelectData.routeName
+            routeSelected = true
             getStoppersList()
             builder.dismiss()
         }
 
-        val routerPopUpListAdapter= RouterPopUpListAdapter(routeLSTList, object : ItemListener<RouteLST> {
-            override fun onItemClick(t: RouteLST, pos: Int, boolean: Boolean) {
-                routerSelectData = t
-            }  })
+        val routerPopUpListAdapter =
+            RouterPopUpListAdapter(routeLSTList, object : ItemListener<RouteLST> {
+                override fun onItemClick(t: RouteLST, pos: Int, boolean: Boolean) {
+                    routerSelectData = t
+                }
+            })
 
         rvYears.apply {
             setHasFixedSize(true)
@@ -319,26 +338,31 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
         builder.show()
     }
 
-    private fun popUpStoppers(){
+    private fun popUpStoppers() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
-        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
-        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
+        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        val llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val checkImage = view.findViewById<ImageView>(R.id.checkImage)
 
-        llSelectAll.isVisible=tripType== Constant.UP_TRIP || tripType==Constant.DOWN_TRIP
-        tvHeading.text=getString(R.string.select_stoppae)
+        llSelectAll.isVisible = tripType == Constant.UP_TRIP || tripType == Constant.DOWN_TRIP
+        tvHeading.text = getString(R.string.select_stoppae)
         builder.setView(view)
 
-        val stoppersPopUpListAdapter= StoppersPopUpListAdapter(stopLSTList,tripType,selectAll, object : ItemListener<StopLST> {
-            override fun onItemClick(t: StopLST, pos: Int, boolean: Boolean) {
-                stoppersSelected=true
-                stoppersSelectData=t
-            }  })
+        val stoppersPopUpListAdapter = StoppersPopUpListAdapter(
+            stopLSTList,
+            tripType,
+            selectAll,
+            object : ItemListener<StopLST> {
+                override fun onItemClick(t: StopLST, pos: Int, boolean: Boolean) {
+                    stoppersSelected = true
+                    stoppersSelectData = t
+                }
+            })
 
         rvYears.apply {
             setHasFixedSize(true)
@@ -348,41 +372,41 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
 
         llSelectAll.setOnClickListener {
             selectAll = !selectAll
-            stoppersSelected=selectAll
+            stoppersSelected = selectAll
             for (i in stopLSTList) {
-                 i .checked=selectAll
+                i.checked = selectAll
             }
             stoppersPopUpListAdapter.notifyDataSetChanged()
             checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
         }
 
         relOk.setOnClickListener {
-             if (stoppersSelected) {
-                 val ids = StringBuilder()
-                 val name = StringBuilder()
+            if (stoppersSelected) {
+                val ids = StringBuilder()
+                val name = StringBuilder()
 
-                 if (tripType== Constant.UP_TRIP || tripType==Constant.DOWN_TRIP) {
+                if (tripType == Constant.UP_TRIP || tripType == Constant.DOWN_TRIP) {
 
-                     for (stopLST in stopLSTList) {
-                         if (stopLST.checked) {
-                             if (ids.toString().isEmpty()) {
-                                 ids.append(stopLST.stopID)
-                                 name.append(stopLST.stopName)
-                             } else {
-                                 ids.append(",").append(stopLST.stopID)
-                                 name.append(",").append(stopLST.stopName)
-                             }
-                         }
-                     }
+                    for (stopLST in stopLSTList) {
+                        if (stopLST.checked) {
+                            if (ids.toString().isEmpty()) {
+                                ids.append(stopLST.stopID)
+                                name.append(stopLST.stopName)
+                            } else {
+                                ids.append(",").append(stopLST.stopID)
+                                name.append(",").append(stopLST.stopName)
+                            }
+                        }
+                    }
 
-                     binding.tvSelectStoppage.text= name
-                 }else{
-                     binding.tvSelectStoppage.text= stoppersSelectData.stopName
-                 }
+                    binding.tvSelectStoppage.text = name
+                } else {
+                    binding.tvSelectStoppage.text = stoppersSelectData.stopName
+                }
 
-                 getStudentToMarkTransAttendance(ids)
-                 builder.dismiss()
-             }
+                getStudentToMarkTransAttendance(ids)
+                builder.dismiss()
+            }
 
         }
 
@@ -397,31 +421,34 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
     }
 
 
-
-
     override fun onItemClick(t: StuLst, pos: Int, action: Int) {
-        if (action==Constant.DROP_CONFORM){
-            transportAttendanceViewModel.dropToStudent(t.stID,Constant.toSystemDate(Constant.currentDate()),true).invokeOnCompletion {
-                Toast.makeText(requireContext(),"Updated Successfully!!!",Toast.LENGTH_SHORT).show()
+        if (action == Constant.DROP_CONFORM) {
+            transportAttendanceViewModel.dropToStudent(
+                t.stID,
+                Constant.toSystemDate(Constant.currentDate()),
+                true
+            ).invokeOnCompletion {
+                Toast.makeText(requireContext(), "Updated Successfully!!!", Toast.LENGTH_SHORT)
+                    .show()
             }
-        }else{
+        } else {
 
-            studentListToMarkAtt[pos].isSelected=true
-            if (tripType==Constant.UP_TRIP){
-                studentListToMarkAtt[pos].pickupStatus=action
-            }else if (tripType==Constant.DOWN_TRIP){
-                studentListToMarkAtt[pos].dropStatus=action
+            studentListToMarkAtt[pos].isSelected = true
+            if (tripType == Constant.UP_TRIP) {
+                studentListToMarkAtt[pos].pickupStatus = action
+            } else if (tripType == Constant.DOWN_TRIP) {
+                studentListToMarkAtt[pos].dropStatus = action
             }
 
         }
 
-     }
+    }
 
 
     private fun popUpDetailsMarkAttendance() {
-        p  = 0
-        a  = 0
-        l  = 0
+        p = 0
+        a = 0
+        l = 0
 
         val tv_cancel: TextView
         val tv_ok: TextView
@@ -450,37 +477,40 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
         tv_leave_count = dialog.findViewById(R.id.leave_day)
         ll_leave = dialog.findViewById(R.id.ll_leave)
         NALL = dialog.findViewById(R.id.NALL)
-        if (tripType==Constant.UP_TRIP){
-            ll_leave.visibility=View.GONE
-            NALL.visibility=View.GONE
-        }else{
-            NALL.visibility=View.GONE
+        if (tripType == Constant.UP_TRIP) {
+            ll_leave.visibility = View.GONE
+            NALL.visibility = View.GONE
+        } else {
+            NALL.visibility = View.GONE
         }
 
         na_day = dialog.findViewById(R.id.na_day)
         tvLateCount = dialog.findViewById(R.id.late_day)
-        for (i in   studentListToMarkAtt) {
+        for (i in studentListToMarkAtt) {
 
-            if (tripType==Constant.UP_TRIP){
+            if (tripType == Constant.UP_TRIP) {
                 when (i.pickupStatus) {
                     1 -> {
                         p++
                     }
+
                     0 -> {
                         a++
                     }
                 }
 
-            }else if (tripType==Constant.DOWN_TRIP){
+            } else if (tripType == Constant.DOWN_TRIP) {
                 when (i.dropStatus) {
                     1 -> {
                         p++
                     }
+
                     0 -> {
                         a++
                     }
+
                     2 -> {
-                        l ++
+                        l++
                     }
                 }
             }
@@ -490,7 +520,7 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
         tv_present_count.text = p.toString() + ""
         tv_absent_count.text = a.toString() + ""
         tv_leave_count.text = l.toString() + ""
-         dialog.show()
+        dialog.show()
         tv_cancel.setOnClickListener { dialog.dismiss() }
         tv_ok.setOnClickListener {
             saveMarkAttendance()
@@ -503,13 +533,13 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
     private fun saveMarkAttendance() {
 
         val requestList = mutableListOf<StuAtt>()
-        if (tripType==Constant.UP_TRIP){
+        if (tripType == Constant.UP_TRIP) {
             studentListToMarkAtt.forEach { d ->
-                requestList.add(StuAtt(d.stID,d.pickupStatus,d.stopID))
+                requestList.add(StuAtt(d.stID, d.pickupStatus, d.stopID))
             }
-        }else if (tripType==Constant.DOWN_TRIP){
+        } else if (tripType == Constant.DOWN_TRIP) {
             studentListToMarkAtt.forEach { d ->
-                requestList.add(StuAtt(d.stID,d.dropStatus,d.stopID))
+                requestList.add(StuAtt(d.stID, d.dropStatus, d.stopID))
             }
         }
 
@@ -521,7 +551,8 @@ class TransportAttendanceFragment : Fragment() , OnClickItemValue<StuLst>   {
             requestList,
             tripType
         ).invokeOnCompletion {
-            Toast.makeText(requireContext(),"Attendance Marked Successfully",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Attendance Marked Successfully", Toast.LENGTH_SHORT)
+                .show()
         }
 
 

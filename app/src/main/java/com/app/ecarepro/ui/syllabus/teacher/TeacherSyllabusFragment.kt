@@ -35,6 +35,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
     private var filterType= 0
     private lateinit var syllabusListFilter: List<Syllabuse>
     private   var syllabustList: List<Syllabuse>? = null
+    private var shouldRefresh = false
 
 
     override fun onCreateView(
@@ -45,7 +46,8 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
             viewModel = teacherSyllabusViewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.syllabus)
 
         return binding.root
     }
@@ -155,7 +157,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
             }
         }
 
-        teacherSyllabusViewModel.getTeacherSyllabuses()
+        //teacherSyllabusViewModel.getTeacherSyllabuses()
 
 
     }
@@ -173,6 +175,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
                 androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
             }
             3 -> {
+                shouldRefresh = true
                 findNavController().navigate(R.id.addSyllabusFragment,Bundle( ).apply {
                     putBoolean("edit", true)
                     putString(Constant.ID, t.id)
@@ -217,6 +220,13 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
 
             }
 
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        if (shouldRefresh) {
+            teacherSyllabusViewModel.getTeacherSyllabuses()
+            shouldRefresh = false
         }
     }
 }

@@ -14,25 +14,27 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.runBlocking
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
 import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.databinding.FragmentSignInBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.otpverification.OtpVerificationFragment
 import com.google.android.gms.tasks.OnCompleteListener
-import dagger.hilt.android.AndroidEntryPoint
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.util.concurrent.ExecutionException
-import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
-import com.app.ecarepro.ui.otpverification.OtpVerificationFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,6 +54,9 @@ class SignInFragment : Fragment() {
 
     @Inject
     lateinit var userDatabase: UserDatabase
+
+    @Inject
+    lateinit var analyticsManager: AnalyticsManager
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View? {
@@ -109,7 +114,7 @@ class SignInFragment : Fragment() {
                                             launchToNextDesctinationAfterLogin(it)
                                         }
                                     }
-                                }catch (e:NullPointerException){
+                                } catch (e: NullPointerException) {
 
                                 }
                                 findNavController().navigate(
@@ -125,19 +130,14 @@ class SignInFragment : Fragment() {
                                 launchToNextDesctinationAfterLogin(it)
                             }
 
-                        }
-                        else {
+                        } else {
                             mainActivity().showMessage(" " + it.authenticated)
                         }
-                    }
-
-                    else if (it.errorCode == 401) {
+                    } else if (it.errorCode == 401) {
                         mainActivity().showMessage("Invalid password")
-                    }
-                    else if (it.errorCode == 429) {
+                    } else if (it.errorCode == 429) {
                         mainActivity().showMessage(it.message.toString())
-                    }
-                    else if (it.errorCode == 404) {
+                    } else if (it.errorCode == 404) {
                         mainActivity().showMessage(it.message.toString())
                     }
 
@@ -193,8 +193,18 @@ class SignInFragment : Fragment() {
         }
 
     }
+
     private fun launchToNextDesctinationAfterLogin(it: TwoFactorLoginResponseDto) {
-        if (arguments?.containsKey("add_account") == true) {
+        val isAddAccount = arguments?.containsKey("add_account") == true
+        analyticsManager.setUserProperties()
+        analyticsManager.trackEvent(
+            AnalyticsConstants.Events.LOGIN,
+            mapOf(
+                AnalyticsConstants.Attributes.USER_NAME to binding.textUserName.text.toString(),
+                AnalyticsConstants.Attributes.SIGN_IN_TYPE to if (isAddAccount) AnalyticsConstants.Attributes.ADD_ACCOUNT else AnalyticsConstants.Attributes.NORMAL_LOGIN,
+            )
+        )
+        if (isAddAccount) {
             viewLifecycleOwner.lifecycleScope.launch {
                 userDatabase.getUser(
                     it.userDTL?.userID ?: 0,
@@ -241,6 +251,7 @@ class SignInFragment : Fragment() {
             }
         }
     }
+
     private fun restartApp() {
         val intent = Intent(requireContext(), MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

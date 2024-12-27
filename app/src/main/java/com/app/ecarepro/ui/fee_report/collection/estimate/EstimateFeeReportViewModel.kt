@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.network.model.DefaulterFilters
 import com.app.ecarepro.data.network.model.EstimateModule
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +35,8 @@ class EstimateFeeReportViewModel @Inject constructor(
         runCatching {
             defaultFilterMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.defaulterFilters(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter?senderid="+userDataStore.getSchoolData()?.schoolCode)
+                Constant.REPORT_BASE_URL+"api/estimated?senderid="+userDataStore.getSchoolData()?.schoolCode)
+              //  userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/estimated?senderid="+userDataStore.getSchoolData()?.schoolCode)
         }.onSuccess {
             defaultFilterMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -58,7 +60,8 @@ class EstimateFeeReportViewModel @Inject constructor(
         runCatching {
             estimateDataMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.getEstimateReport(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/estimated",
+               // userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/estimated",
+                "https://pay.franciscanwebsolutions.com/api/estimated",
                 userDataStore.getSchoolData()!!.schoolCode,
                 DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid )
         }.onSuccess {

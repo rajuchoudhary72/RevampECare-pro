@@ -49,8 +49,10 @@ class UpdateStudentsProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentUpdateStudentsProfileBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-          return binding.root
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.upload_student_photo)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

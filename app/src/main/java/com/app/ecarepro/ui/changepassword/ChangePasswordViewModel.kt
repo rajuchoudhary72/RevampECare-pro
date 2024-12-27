@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangePasswordViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val currentPassword = MutableStateFlow("")
     val newPassword = MutableStateFlow("")
@@ -39,10 +42,30 @@ class ChangePasswordViewModel @Inject constructor(
                 .collectLatest { result ->
                     if (result.isSuccess) {
                         result(true, result.getOrNull()?.message ?: "Success")
+                        sendAnalyticEvent(
+                            event = AnalyticsConstants.Events.CHANGE_USER_PASSWORD_DETAIL,
+                            attributes = mapOf(
+                                AnalyticsConstants.Attributes.OLD_PASSWORD to currentPassword.value,
+                                AnalyticsConstants.Attributes.NEW_PASSWORD to newPassword.value
+                            )
+                        )
                     } else {
                         result(false, result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE)
                     }
                 }
         }
+    }
+
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.CHANGE_USER_PASSWORD)
+    }
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
     }
 }

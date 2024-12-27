@@ -85,16 +85,20 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.edSearch.doAfterTextChanged {
-            mediaGalleryViewModel.getMediaGallery(
-                pageIndex,
-                queryType,
-                yearList[yearPosition].toInt(),
-                binding.tvPubDate.text.toString(),
-                binding.edSearch.text.toString()
-            )
+        try {
+            binding.edSearch.doAfterTextChanged {
+                mediaGalleryViewModel.getMediaGallery(
+                    pageIndex,
+                    queryType,
+                    yearList[yearPosition].toInt(),
+                    binding.tvPubDate.text.toString(),
+                    binding.edSearch.text.toString()
+                )
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
         }
+
 
         binding.tvPubDate.text = Constant.currentDate()
         try {
@@ -357,56 +361,57 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     }
 
     private fun setupSearchByDropDown(searchByPostition: Int) {
+        try {
+            when (searchByPostition) {
+                0 -> {
+                    binding.tvYear.isVisible = false
+                    binding.edSearch.isVisible = false
+                    binding.tvPubDate.isVisible = false
 
-        when (searchByPostition) {
-            0 -> {
-                binding.tvYear.isVisible = false
-                binding.edSearch.isVisible = false
-                binding.tvPubDate.isVisible = false
-
-                mediaGalleryViewModel.getMediaGallery(
-                    pageIndex,
-                    queryType,
-                    yearList[yearPosition].toInt(),
-                    binding.tvPubDate.text.toString(),
-                    binding.edSearch.text.toString()
-                )
+                    mediaGalleryViewModel.getMediaGallery(
+                        pageIndex,
+                        queryType,
+                        yearList[yearPosition].toInt(),
+                        binding.tvPubDate.text.toString(),
+                        binding.edSearch.text.toString()
+                    )
 
 
+                }
+
+                1 -> {
+                    binding.tvYear.isVisible = false
+                    binding.edSearch.isVisible = true
+                    binding.edSearch.hint = "Enter Newspaper"
+                    binding.edSearch.setText("")
+
+                    binding.tvPubDate.isVisible = false
+                }
+
+                2 -> {
+                    binding.tvYear.isVisible = false
+                    binding.edSearch.isVisible = true
+                    binding.edSearch.hint = "Enter Headline"
+                    binding.tvPubDate.isVisible = false
+                    binding.edSearch.setText("")
+                }
+
+                3 -> {
+                    binding.tvYear.isVisible = false
+                    binding.edSearch.isVisible = false
+                    binding.tvPubDate.isVisible = true
+                    binding.edSearch.setText("")
+                }
+
+                4 -> {
+                    binding.tvYear.isVisible = true
+                    binding.edSearch.isVisible = false
+                    binding.tvPubDate.isVisible = false
+                    binding.edSearch.setText("")
+                }
             }
-
-            1 -> {
-                binding.tvYear.isVisible = false
-                binding.edSearch.isVisible = true
-                binding.edSearch.hint = "Enter Newspaper"
-                binding.edSearch.setText("")
-
-                binding.tvPubDate.isVisible = false
-            }
-
-            2 -> {
-                binding.tvYear.isVisible = false
-                binding.edSearch.isVisible = true
-                binding.edSearch.hint = "Enter Headline"
-                binding.tvPubDate.isVisible = false
-                binding.edSearch.setText("")
-            }
-
-            3 -> {
-                binding.tvYear.isVisible = false
-                binding.edSearch.isVisible = false
-                binding.tvPubDate.isVisible = true
-                binding.edSearch.setText("")
-            }
-
-            4 -> {
-                binding.tvYear.isVisible = true
-                binding.edSearch.isVisible = false
-                binding.tvPubDate.isVisible = false
-                binding.edSearch.setText("")
-            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
         }
-
     }
-
 }

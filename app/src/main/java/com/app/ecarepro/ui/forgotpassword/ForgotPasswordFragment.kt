@@ -9,8 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.view.isGone
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,8 +22,6 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.addSystemWindowInsetToMargin
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -47,7 +43,7 @@ class ForgotPasswordFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnStudent.isGone = mViewModel.isStudentLoginBlocked?:false.not()
+        binding.btnStudent.isGone = mViewModel.isStudentLoginBlocked ?: false.not()
         binding.img.addSystemWindowInsetToMargin(topWindowInsetToMargin = true)
 
         binding.toggleButtonPasswordRecoverFor.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -140,12 +136,15 @@ class ForgotPasswordFragment : Fragment() {
             ) { it ->
                 (requireActivity() as MainActivity).showLoader(false)
                 it.message?.let { it1 -> mainActivity().showMessage(it1) }
-                if (it.status == "ok")
+                if (it.status == "ok") {
+                    mViewModel.sentPasswordChangeEvent(list.get(adapter.selected))
                     findNavController().popBackStack()
+                }
             }
         }
         bottomSheetDialog.show()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

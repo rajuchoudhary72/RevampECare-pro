@@ -107,7 +107,7 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
 
         }
 
-        staffListViewModel.getStaffList()
+       // staffListViewModel.getStaffList()
 
     }
 

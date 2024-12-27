@@ -13,12 +13,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     userDataStore: UserDataStore,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private val feeCollection = MutableStateFlow<FeeCollection?>(null)
     private val modelWiseCollection = MutableStateFlow<ModeWiseCollection?>(null)
@@ -76,5 +79,18 @@ class DashboardViewModel @Inject constructor(
                 onResponse.invoke(it.isSuccess, it.exceptionOrNull()?.message)
             }
         }
+    }
+
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.DASH_BOARD_SCREEN)
+    }
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
     }
 }

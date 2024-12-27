@@ -84,8 +84,9 @@ class CircularDetailsFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
-                            binding.circularDetails=it.data.circuler
-                            fileSource=it.data.circuler.filePath
+                            try {
+                                binding.circularDetails=it.data.circuler
+                                fileSource=it.data.circuler.filePath
 
 //                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
 //                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
@@ -94,7 +95,11 @@ class CircularDetailsFragment : Fragment() {
 //
 //                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
 
-                            binding.tvNoticeDetails.loadDataWithBaseURL(null, it.data.circuler.message, "text/html", "UTF-8", null)
+                                binding.tvNoticeDetails.loadDataWithBaseURL(null, it.data.circuler.message, "text/html", "UTF-8", null)
+                            }catch (e:NullPointerException){
+                                e.message
+                            }
+
                         }
                     }
                 }

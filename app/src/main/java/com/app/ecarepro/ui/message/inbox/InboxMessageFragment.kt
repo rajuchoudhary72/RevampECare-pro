@@ -159,7 +159,10 @@ class InboxMessageFragment : Fragment() {
         }
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        inboxMessageViewModel.sendScreenEvent()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

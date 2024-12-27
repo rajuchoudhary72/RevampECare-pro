@@ -9,6 +9,8 @@ import com.app.ecarepro.data.database.model.asNetworkSchool
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.repository.SchoolRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
@@ -20,7 +22,8 @@ import javax.inject.Inject
 class InstitutionCodeViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
     private val userDataStore: UserDataStore,
-    private val schoolDatabase: SchoolDatabase
+    private val schoolDatabase: SchoolDatabase,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val isMainApp = BuildConfig.FLAVOR == "Franciscan e-Care"
     val isMainDevApp = BuildConfig.FLAVOR == "dev"
@@ -43,11 +46,25 @@ class InstitutionCodeViewModel @Inject constructor(
     fun validateSchoolCode(schoolCode: String, onResponse: (NetworkSchool?) -> Unit) {
         viewModelScope.launch {
             schoolRepository.validateSchoolCode(schoolCode.toUpperCase()).collectLatest {
+                sentSchoolCodeValidateEvent(schoolCode)
                 onResponse(it)
             }
         }
     }
 
     suspend fun isUserAuthenticated() = userDataStore.isUserAuthenticated()
+
+    fun sendScreenEvent() {
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.SCHOOL_CODE)
+    }
+
+    private fun sentSchoolCodeValidateEvent(schoolCode: String) {
+        analyticsManager.trackEvent(
+            AnalyticsConstants.Events.VALIDATE_SCHOOL_CODE,
+            mapOf(
+                AnalyticsConstants.Attributes.SCHOOL_CODE to schoolCode
+            )
+        )
+    }
 
 }

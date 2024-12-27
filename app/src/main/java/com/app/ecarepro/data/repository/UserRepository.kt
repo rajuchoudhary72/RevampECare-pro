@@ -95,6 +95,7 @@ import com.app.ecarepro.data.network.model.NetworkVideoAlbum
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.NetworkViewAssignment
 import com.app.ecarepro.data.network.model.NetworkWhoLike
+import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
@@ -842,5 +843,7 @@ interface UserRepository {
     ): CommonResponse
 
     suspend fun academicYears(): NetworkAcademicYear
+
+    suspend fun wingsList(): NetworkWingReport
 
 }

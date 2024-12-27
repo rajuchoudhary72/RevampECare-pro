@@ -320,24 +320,14 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
         }
 
     }
-
     private fun checkIsBoarding() {
-        (requireActivity() as MainActivity).showLoader(true)
         lifecycleScope.launch {
             userDataStore.getSchoolData()?.let {
-                it.schoolCode.let { schoolCode ->
-                    studentListViewModel.validateSchoolCode(schoolCode) { it1 ->
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it1?.errorCode == 0) {
-                            binding.rbGroupSchoolType.isVisible = it1.isBoardingSchool!!
-                        }
-                    }
-                }
+                binding.rbGroupSchoolType.isVisible = it.isBoardingSchool ?: false
             }
         }
-
-
     }
+
 
 
 

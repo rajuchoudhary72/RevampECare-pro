@@ -159,22 +159,17 @@ class StudentListNavHost : Fragment() {
         }
         checkIsBoarding()
     }
-
     private fun checkIsBoarding() {
-        (requireActivity() as MainActivity).showLoader(true)
         lifecycleScope.launch {
             userDataStore.getSchoolData()?.let {
-                it.schoolCode.let { schoolCode ->
-                    studentListViewModel.validateSchoolCode(schoolCode) { it1 ->
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it1?.errorCode == 0) {
-                            binding.toggleButtonSchoolType.isVisible = it1.isBoardingSchool!!
-                        }
-                    }
-                }
+                binding.toggleButtonSchoolType.isVisible = it.isBoardingSchool ?: false
             }
         }
-
-
     }
+
+    override fun onResume() {
+        super.onResume()
+        studentListViewModel.sendScreenEvent()
+    }
+
 }

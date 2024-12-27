@@ -8,6 +8,8 @@ import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkStudentList
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +25,7 @@ class StudentListViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val schoolRepository: SchoolRepository,
     private val userDataStore: UserDataStore,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
 
     var schoolCode : String = ""
@@ -79,6 +82,10 @@ class StudentListViewModel @Inject constructor(
                 onResponse(it)
             }
         }
+    }
+
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.STUDENT_PROFILE_LIST)
     }
 
 }

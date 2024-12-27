@@ -14,7 +14,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -60,6 +59,8 @@ import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
 import com.app.ecarepro.menuCard
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.progressDialog
@@ -77,6 +78,7 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -102,21 +104,25 @@ class MainActivity : AppCompatActivity() {
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
     private var listenMenuItemClickEvent = true
     private var isActivityPaused = false
-
-   private val appUpdateManager: AppUpdateManager by lazy {
+    private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
+
+    @Inject
+    lateinit var analyticsManager: AnalyticsManager
+
     @Inject
     lateinit var userDataStore: UserDataStore
 
     @Inject
     lateinit var userDatabase: UserDatabase
+
     @Inject
     lateinit var syncManager: SyncManager
     private val topLevelFragments = mutableListOf(
@@ -187,12 +193,12 @@ class MainActivity : AppCompatActivity() {
             systemViewModel.openDrawer(false)
         }
 
-
-
         setSupportActionBar(binding.appBarMain.toolbar)
 
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.HOME_SCREEN)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             binding.appBarMain.contentMain.bottomNavigationView.isVisible =
@@ -467,19 +473,19 @@ class MainActivity : AppCompatActivity() {
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
                                             checkIsUpdateAvailable(false)
-                                        /*    UpdateAppVersionDialog(
-                                                0,
-                                                it.data.android.title,
-                                                it.data.android.description
-                                            )*/
+                                            /*    UpdateAppVersionDialog(
+                                                    0,
+                                                    it.data.android.title,
+                                                    it.data.android.description
+                                                )*/
                                         } else {
                                             //force update
-                                           checkIsUpdateAvailable(true)
-                                          /*  UpdateAppVersionDialog(
-                                                1,
-                                                it.data.android.title,
-                                                it.data.android.description
-                                            )*/
+                                            checkIsUpdateAvailable(true)
+                                            /*  UpdateAppVersionDialog(
+                                                  1,
+                                                  it.data.android.title,
+                                                  it.data.android.description
+                                              )*/
                                         }
                                     } else {
                                         // nothing  open  version  dialog
@@ -522,7 +528,7 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
-      // isImmediatepopup =forceUpdate
+        // isImmediatepopup =forceUpdate
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
             val isAppUpdateAllowed = if (forceUpdate) {
@@ -547,6 +553,7 @@ class MainActivity : AppCompatActivity() {
         }
         appUpdateManager.registerListener(installStateUpdatedListener)
     }
+
     private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
             popupSnackbarForCompleteUpdate()
@@ -562,19 +569,20 @@ class MainActivity : AppCompatActivity() {
             show()
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.e("In App Update", "onActivityResult: RESULT_OK")
             } else if (resultCode == Activity.RESULT_CANCELED) {
-             /* if (isImmediatepopup){
-                  Log.e("In force  App Update", "onActivityResult: RESULT_CANCELED")
-                  checkAppVersion()
-              }else{
-                  Log.e("In soft   App Update", "onActivityResult: RESULT_CANCELED")
-                  isImmediatepopup=false
-              }*/
+                /* if (isImmediatepopup){
+                     Log.e("In force  App Update", "onActivityResult: RESULT_CANCELED")
+                     checkAppVersion()
+                 }else{
+                     Log.e("In soft   App Update", "onActivityResult: RESULT_CANCELED")
+                     isImmediatepopup=false
+                 }*/
                 Log.e("In App Update", "onActivityResult: RESULT_CANCELED")
             } else if (resultCode == ActivityResult.RESULT_IN_APP_UPDATE_FAILED) {
                 Log.e("In App Update", "onActivityResult: RESULT_IN_APP_UPDATE_FAILED")
@@ -744,7 +752,7 @@ class MainActivity : AppCompatActivity() {
                             this@withModels.requestModelBuild()
                         } else {
                             systemViewModel.openDrawer(false)
-                            getFragmentId(parentMenu.menuID)
+                            getFragmentId(parentMenu.menuID, "Menu")
                         }
                     }
                 }
@@ -757,10 +765,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(
-                                    parentMenu.menuID,
-                                    menu.chMenuID
-                                )
+                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
                             }
                         }
 
@@ -771,11 +776,7 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(
-                                        parentMenu.menuID,
-                                        menu.chMenuID,
-                                        childChildMenu.sbChMenuID
-                                    )
+                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
                                 }
                             }
                         }
@@ -785,12 +786,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(menuID: Int) {
+    fun getFragmentId(menuID: Int, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
+        systemViewModel.sendAnalyticEvent(
+            AnalyticsConstants.Events.MODULE_OPEN, mapOf(
+                AnalyticsConstants.Attributes.FROM to from.orEmpty(),
+                AnalyticsConstants.Attributes.MENU_ID to menuID.toString()
+            )
+        )
         when (menuID) {
             3 -> {
                 lifecycleScope.launch {
@@ -1035,7 +1042,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun webViewCallForPayment(feePaymentURL: String){
+    private fun webViewCallForPayment(feePaymentURL: String) {
         showLoader(true)
         systemViewModel.getTokenKey { token ->
             if (token.isNullOrEmpty()) {
@@ -1045,7 +1052,7 @@ class MainActivity : AppCompatActivity() {
                 showLoader(false)
                 val tabIntent = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
-                    .setToolbarColor( (this).getColor(R.color.green)).build()
+                    .setToolbarColor((this).getColor(R.color.green)).build()
                 openCustomTabForPayment(tabIntent, Uri.parse("$feePaymentURL?token=$token"))
             }
         }
@@ -1063,7 +1070,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 customTabsIntent.launchUrl(this, uri)
             } catch (e: ActivityNotFoundException) {
-               showMessage("Chrome cannot open this link")
+                showMessage("Chrome cannot open this link")
             }
         } else {
             try {
@@ -1080,17 +1087,25 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
         intent.setPackage(chromePackageName)
 
-        val resolveInfoList = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        val resolveInfoList =
+            context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
         return resolveInfoList.isNotEmpty()
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, refId:String? = null) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
+        systemViewModel.sendAnalyticEvent(
+            AnalyticsConstants.Events.MODULE_OPEN, mapOf(
+                AnalyticsConstants.Attributes.FROM to from.orEmpty(),
+                AnalyticsConstants.Attributes.MENU_ID to menuID.toString(),
+                AnalyticsConstants.Attributes.CH_MENU_ID to childMenuId.toString()
+            )
+        )
         when (menuID) {
             1 -> {
                 when (childMenuId) {
@@ -1171,6 +1186,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
             8 -> {
                 when (childMenuId) {
                     13 -> navController.navigate(R.id.studentAttendanceReportFragment)
@@ -1208,6 +1224,7 @@ class MainActivity : AppCompatActivity() {
                             })
 
                     }
+
                     70 -> {
                         navController.navigate(
                             R.id.smsMsgReportFragment,
@@ -1235,9 +1252,9 @@ class MainActivity : AppCompatActivity() {
                         lifecycleScope.launch {
                             try {
                                 userDataStore.getSchoolData()?.run {
-                                    if (feePayemtURL.isNullOrEmpty()){
+                                    if (feePayemtURL.isNullOrEmpty()) {
                                         showMessage("Fee Payment URL are currently not unavailable!")
-                                    }else{
+                                    } else {
                                         webViewCallForPayment(feePayemtURL!!)
                                     }
                                 }
@@ -1245,8 +1262,10 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+
                     44 -> navController.navigate(R.id.feeReceiptFragment)
                     69 -> navController.navigate(R.id.feeCertificateFragment)
+                    72 -> navController.navigate(R.id.feeBookFragment)
                 }
             }
 
@@ -1316,7 +1335,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
+        systemViewModel.sendAnalyticEvent(
+            AnalyticsConstants.Events.MODULE_OPEN, mapOf(
+                AnalyticsConstants.Attributes.FROM to from.orEmpty(),
+                AnalyticsConstants.Attributes.MENU_ID to menuID.toString(),
+                AnalyticsConstants.Attributes.CH_MENU_ID to childMenuId.toString(),
+                AnalyticsConstants.Attributes.SB_CH_MENU_ID to childChildMenuId.toString(),
+            )
+        )
         when (menuID) {
             6 -> {
                 when (childMenuId) {
@@ -1396,9 +1423,11 @@ class MainActivity : AppCompatActivity() {
                             11 -> {
                                 navController.navigate(R.id.collectionReport)
                             }
+
                             12 -> {
                                 navController.navigate(R.id.defaulterReportFragment)
                             }
+
                             13 -> {
                                 navController.navigate(R.id.estimateReportFragment)
                             }
@@ -1788,6 +1817,7 @@ class MainActivity : AppCompatActivity() {
             syncData(true)
         }
     }
+
     companion object {
         private const val MY_REQUEST_CODE = 123
     }

@@ -43,7 +43,8 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
     ): View {
 
         binding = FragmentQuestionnaireListBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.questionnaire)
         noticeAdapter = QuestionnaireAdapter(
             ArrayList(),
             this@QuestionnaireListFragment
@@ -130,7 +131,7 @@ class QuestionnaireListFragment : Fragment(), ItemListener<Question> {
 
         }
 
-        questionnaireViewModel.getQuestionnaireList(pageIndex, false)
+      //  questionnaireViewModel.getQuestionnaireList(pageIndex, false)
 
         binding.recyclerQuestionnaire.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 

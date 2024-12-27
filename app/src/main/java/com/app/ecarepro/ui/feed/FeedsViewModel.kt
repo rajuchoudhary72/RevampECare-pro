@@ -14,10 +14,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
-    private val schoolRepository: SchoolRepository
+    private val schoolRepository: SchoolRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private var page = DEFAULT_PAGE
     private var isLoading: Boolean = false
@@ -111,7 +113,9 @@ class FeedsViewModel @Inject constructor(
         totalPageCount = DEFAULT_PAGE
         fetchInboxMessages(true)
     }
-
+    fun sendScreenEvent() {
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.FEEDS_TAB)
+    }
 }
 
 sealed interface FeedsUiState {

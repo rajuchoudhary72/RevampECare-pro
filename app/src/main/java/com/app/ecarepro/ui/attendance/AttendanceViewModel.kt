@@ -11,10 +11,12 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import kotlin.math.log
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 @HiltViewModel
 class AttendanceViewModel @Inject constructor(
-    userDataStore: UserDataStore
+    userDataStore: UserDataStore,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
 
     private val sortBy = MutableStateFlow<SortBy>(SortBy.AllClasses)
@@ -63,7 +65,18 @@ class AttendanceViewModel @Inject constructor(
     fun sortBy(sortBy: SortBy) {
         this.sortBy.update { sortBy }
     }
-
+    fun sendScreenEvent() {
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.ATTENDANCE_TAB)
+    }
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
+    }
 }
 
 infix fun Int.percentOf(value: Int): String {

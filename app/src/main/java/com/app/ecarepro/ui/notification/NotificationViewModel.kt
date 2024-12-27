@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-    val appRepository: AppRepository
+    val appRepository: AppRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
 
     val uiState = appRepository
@@ -43,6 +46,9 @@ class NotificationViewModel @Inject constructor(
         }
     }
 
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.NOTIFICATION_LIST)
+    }
 }
 
 sealed interface NotificationUiState {

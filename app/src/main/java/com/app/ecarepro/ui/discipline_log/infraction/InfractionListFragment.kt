@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 
@@ -43,15 +44,10 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
             studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
 
         }catch (e:Exception){}
-         if(activity is AppCompatActivity){
-            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-            (activity as AppCompatActivity).supportActionBar?.apply {
-                title = " Infractions"
 
-                setDisplayHomeAsUpEnabled(true)
-                setDisplayShowHomeEnabled(true)
-            }
-        }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.infractions)
+
         return binding.root
     }
 

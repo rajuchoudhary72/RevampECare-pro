@@ -2,13 +2,13 @@ package com.app.ecarepro.ui.notice
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,10 +19,8 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentNoticeListBinding
-import com.app.ecarepro.model.Circular
 import com.app.ecarepro.model.Notice
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.circuler.CircularListAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,17 +30,16 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class NoticeListFragment : Fragment() , ItemListener<Notice> {
-
-
+class NoticeListFragment : Fragment(), ItemListener<Notice> {
 
 
     private val noticeViewModel: NoticeViewModel by viewModels()
-    private lateinit var binding :  FragmentNoticeListBinding
-    private   var mMyClass= mutableListOf<MyClasseItem>()
+    private lateinit var binding: FragmentNoticeListBinding
+    private var mMyClass = mutableListOf<MyClasseItem>()
     private var mMyClassDataString: ArrayList<String> = ArrayList()
-    private var noticeType=""
-    private var userType=""
+    private var noticeType = ""
+    private var userType = ""
+
     @Inject
     lateinit var userDataStore: UserDataStore
 
@@ -51,10 +48,9 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
-    private lateinit var   noticeListAdapter: NoticeListAdapter
-    private var noticeList  = mutableListOf<Notice>()
-    private var isFirstTimeCall =true
-
+    private lateinit var noticeListAdapter: NoticeListAdapter
+    private var noticeList = mutableListOf<Notice>()
+    private var isFirstTimeCall = true
 
 
     override fun onCreateView(
@@ -70,17 +66,18 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         try {
-            noticeType= requireArguments().getString(Constant.NOTICE_TYPE).toString()
-            userType= requireArguments().getString(Constant.USER_TYPE).toString()
-        }catch (_:Exception){}
-        pageIndex=1
+            noticeType = requireArguments().getString(Constant.NOTICE_TYPE).toString()
+            userType = requireArguments().getString(Constant.USER_TYPE).toString()
+        } catch (_: Exception) {
+        }
+        pageIndex = 1
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        noticeListAdapter = NoticeListAdapter( noticeList , this@NoticeListFragment,noticeType)
+        noticeListAdapter = NoticeListAdapter(noticeList, this@NoticeListFragment, noticeType)
 
         binding.recyclerNotice.apply {
             setHasFixedSize(true)
@@ -109,26 +106,27 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerNotice.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data.noticeList!=null && it.data.noticeList.isNotEmpty() ){
+                            if (it.data.noticeList != null && it.data.noticeList.isNotEmpty()) {
 
-                                binding.recyclerNotice.isVisible=true
-                                binding.tvNoData.isVisible=false
-                                binding.toolbar.title= "All Notices" + "( " + it.data.totalNotice + "/" + it.data.unreadNotice + ")"
+                                binding.recyclerNotice.isVisible = true
+                                binding.tvNoData.isVisible = false
+                                binding.toolbar.title =
+                                    "All Notices" + "( " + it.data.totalNotice + "/" + it.data.unreadNotice + ")"
 
-                                isLoading=true
-                                if (pageIndex==1){
+                                isLoading = true
+                                if (pageIndex == 1) {
 
                                     noticeListAdapter.clearData()
                                 }
                                 noticeListAdapter.setData(it.data.noticeList.toMutableList())
 
 
-                            }else{
-                                if (pageIndex==1){
-                                    binding.recyclerNotice.isVisible=false
-                                    binding.tvNoData.isVisible=true
+                            } else {
+                                if (pageIndex == 1) {
+                                    binding.recyclerNotice.isVisible = false
+                                    binding.tvNoData.isVisible = true
                                 }
 
                             }
@@ -147,9 +145,9 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
         binding.toggleButtonTypeNoti.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeNoti.checkedButtonId) {
                 R.id.btn_noti -> {
-                    pageIndex=1
+                    pageIndex = 1
                     binding.autoInputClassInputLayout.visibility = View.GONE
-                    fetchNotices(pageIndex, 0,noticeType==Constant.NOTICE_CLASS)
+                    fetchNotices(pageIndex, 0, noticeType == Constant.NOTICE_CLASS)
                 }
 
                 else -> {
@@ -162,27 +160,33 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
 
 
-        binding.autoCompleteClass.onItemClickListener=
+        binding.autoCompleteClass.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, pos, id ->
-                pageIndex=1
-                mMyClass[pos].classID?.let { fetchNotices(pageIndex, it,noticeType==Constant.NOTICE_CLASS) }
-
-            }
-
-
-
-            if (noticeType==Constant.NOTICE_CLASS){
-                if (userType==Constant.USER_STAFF){
-                    binding.autoInputClassInputLayout.isVisible=true
-                    getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
-                }else{
-                    fetchNotices(pageIndex, 0,noticeType==Constant.NOTICE_CLASS)
-
+                pageIndex = 1
+                mMyClass[pos].classID?.let {
+                    fetchNotices(
+                        pageIndex,
+                        it,
+                        noticeType == Constant.NOTICE_CLASS
+                    )
                 }
-            }else{
-                fetchNotices(pageIndex, 0,noticeType==Constant.NOTICE_CLASS)
 
             }
+
+
+
+        if (noticeType == Constant.NOTICE_CLASS) {
+            if (userType == Constant.USER_STAFF) {
+                binding.autoInputClassInputLayout.isVisible = true
+                getMyClass(Constant.SUB_ID, Constant.MY_CLASS_ID)
+            } else {
+                fetchNotices(pageIndex, 0, noticeType == Constant.NOTICE_CLASS)
+
+            }
+        } else {
+            fetchNotices(pageIndex, 0, noticeType == Constant.NOTICE_CLASS)
+
+        }
 
         setupRecycleViewPager()
 
@@ -190,30 +194,29 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
 
     private fun fetchNotices(pg: Int, classid: Int, isClassNotice: Boolean) {
-        if (noticeType==Constant.NOTICE_CLASS){
-            if (userType==Constant.USER_STAFF){
+        if (noticeType == Constant.NOTICE_CLASS) {
+            if (userType == Constant.USER_STAFF) {
 
-                    noticeViewModel.getNotice(pg, classid,isClassNotice)
+                noticeViewModel.getNotice(pg, classid, isClassNotice)
 
-            }else{
+            } else {
                 lifecycleScope.launch {
                     userDataStore.getUser()?.run {
-                        noticeViewModel.getNotice(pg,classID!!.toInt(),isClassNotice)
+                        noticeViewModel.getNotice(pg, classID!!.toInt(), isClassNotice)
                     }
                 }
 
             }
 
 
-        }else{
-            noticeViewModel.getNotice(pg, 0,isClassNotice)
+        } else {
+            noticeViewModel.getNotice(pg, 0, isClassNotice)
         }
-
 
 
     }
 
-    private fun getMyClass(subID: Int, iD: Int  ) {
+    private fun getMyClass(subID: Int, iD: Int) {
 
         noticeViewModel.getMyClass(subID, iD)
 
@@ -224,29 +227,40 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data!=null){
-                            if (it.data.myClasses!=null) {
+                        if (it.data != null) {
+                            if (it.data.myClasses != null) {
 
 
-                                 if (mMyClass.isEmpty()){
-                                     mMyClass= it.data.myClasses as MutableList<MyClasseItem>
+                                if (mMyClass.isEmpty()) {
+                                    mMyClass = it.data.myClasses as MutableList<MyClasseItem>
 
-                                     mMyClass.forEach { data ->
-                                         mMyClassDataString.add(data.className.toString())
-                                     }
-                                 }
+                                    mMyClass.forEach { data ->
+                                        mMyClassDataString.add(data.className.toString())
+                                    }
+                                }
 
-                                val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,mMyClassDataString)
+                                val arrayAdapter = ArrayAdapter(
+                                    requireContext(),
+                                    android.R.layout.simple_list_item_1,
+                                    mMyClassDataString
+                                )
                                 binding.autoCompleteClass.setAdapter(arrayAdapter)
-                                if (!mMyClass.isNullOrEmpty()){
-                                    mMyClass[0].classID?.let { idClass -> fetchNotices(pageIndex, idClass,noticeType==Constant.NOTICE_CLASS) }
-                                    binding.autoCompleteClass.setText(mMyClass[0].className,false)
+                                if (!mMyClass.isNullOrEmpty()) {
+                                    mMyClass[0].classID?.let { idClass ->
+                                        fetchNotices(
+                                            pageIndex,
+                                            idClass,
+                                            noticeType == Constant.NOTICE_CLASS
+                                        )
+                                    }
+                                    binding.autoCompleteClass.setText(mMyClass[0].className, false)
                                 }
                             }
                         }
@@ -262,11 +276,13 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
 
     override fun onItemClick(t: Notice, pos: Int, boolean: Boolean) {
 
-        findNavController().navigate(R.id.action_noticeListFragment_to_noticeDetailsFragment,Bundle( ).apply {
-            t.ntID?.let { putInt(Constant.NOTICE_ID_ARGUMENT, it) }
-        })
+        findNavController().navigate(
+            R.id.action_noticeListFragment_to_noticeDetailsFragment,
+            Bundle().apply {
+                t.ntID?.let { putInt(Constant.NOTICE_ID_ARGUMENT, it) }
+            })
 
-     }
+    }
 
     private fun setupRecycleViewPager() {
         noticeListAdapter.clearData()
@@ -287,7 +303,7 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
-                                fetchNotices(pageIndex, 0,noticeType==Constant.NOTICE_CLASS)
+                                fetchNotices(pageIndex, 0, noticeType == Constant.NOTICE_CLASS)
 
                             }
                         }
@@ -296,7 +312,6 @@ class NoticeListFragment : Fragment() , ItemListener<Notice> {
                 }
             }
         })
-
 
 
     }
