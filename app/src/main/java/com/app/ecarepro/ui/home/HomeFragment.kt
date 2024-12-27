@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -35,7 +33,6 @@ import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkSchool
-import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
 import com.app.ecarepro.emptyFav
@@ -149,8 +146,8 @@ class HomeFragment : Fragment() {
                         uiState.userInfo?.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
-                               // txtUserName.text = user.name
-                                 txtUserName.text = user.getFullHomeScreenName()
+                                // txtUserName.text = user.name
+                                txtUserName.text = user.getFullHomeScreenName()
                                 profilePrompt()
                             }
                         }
@@ -166,7 +163,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun handleUiState(uiState: HomeUiState) {
+    private fun handleUiState(uiState: Any) {
         (requireActivity() as MainActivity).showLoader(uiState is HomeUiState.Loading)
         if (uiState is HomeUiState.Success) {
             handleUndertaking(uiState.underTaking)
