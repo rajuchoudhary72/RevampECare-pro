@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentTimeTableNavHostBinding
 import com.app.ecarepro.model.TimeTableData
@@ -39,16 +40,16 @@ class TimeTableNavHostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
         binding=FragmentTimeTableNavHostBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         try {
             id= requireArguments().getString(Constant.ID).toString()
             toFragment= requireArguments().getString(Constant.TIME_TABLE_TYPE).toString()
             name= requireArguments().getString(Constant.NAME).toString()
 
              if (name.isEmpty() || name=="null"){
-                 binding.toolbar.title="Timetable"
+                 binding.includeToolbar.toolbarTitle.text="Timetable"
              }else{
-                 binding.toolbar.title= "Timetable of $name"
+                 binding.includeToolbar.toolbarTitle.text = "Timetable of $name"
              }
 
         }catch (_:Exception){}

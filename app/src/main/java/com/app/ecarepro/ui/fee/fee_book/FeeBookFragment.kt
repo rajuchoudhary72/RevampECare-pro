@@ -1,4 +1,4 @@
-package com.app.ecarepro.ui.fee.fee_receipt
+package com.app.ecarepro.ui.fee.fee_book
 
 import android.Manifest
 import android.app.AlertDialog
@@ -29,11 +29,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.FeeBookModel
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.databinding.FragmentFeeReceiptBinding
+import com.app.ecarepro.databinding.FragmentFeeBookBinding
 import com.app.ecarepro.model.FeeReceipt
 import com.app.ecarepro.model.FeeReceiptSession
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.fee.fee_receipt.FeeReceiptPopUpAdapter
+import com.app.ecarepro.ui.fee.fee_receipt.FeeReportAdapter
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -44,28 +47,23 @@ import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
+class FeeBookFragment : Fragment() , ItemListener <FeeBookModel> {
 
 
-    private var isSessionSelected: Boolean = false
-    private lateinit var sessionSelectData: FeeReceiptSession
-    private var sessionListData = mutableListOf<FeeReceiptSession>()
-    private lateinit var binding: FragmentFeeReceiptBinding
-    private val feeReceiptViewModel: FeeReceiptViewModel by viewModels()
+    private lateinit var binding: FragmentFeeBookBinding
+    private val feeBookViewModel: FeeBookViewModel by viewModels()
     private var firstTime=true
     private val STORAGE_PERMISSION_REQUEST_CODE = 1001
 
     private var base64String=""
 
-    @Inject
-    lateinit var userDataStore: UserDataStore
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFeeReceiptBinding.inflate(inflater, container, false)
+        binding = FragmentFeeBookBinding.inflate(inflater, container, false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.fee_receipt)
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.fee_book)
         return binding.root
     }
 
@@ -73,12 +71,8 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvSelectSession.setOnClickListener {
-            popUpSessionList()
-        }
-
         lifecycleScope.launch {
-            feeReceiptViewModel.feeReceiptStateFlow.collectLatest {
+            feeBookViewModel.feeBookStateFlow.collectLatest {
                 when (it) {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
@@ -92,52 +86,47 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            try {
+
+//                            if (firstTime){
+//                                if (!it.data.session_data.isNullOrEmpty()){
+//                                    sessionListData = it.data.session_data.toMutableList()
+//                                    if (sessionListData.isNotEmpty()){
+//                                        for (i in sessionListData){
+//                                            if (i.active=="1"){
+//                                                sessionSelectData=i
+//                                            }
+//                                        }
+//
+//                                        binding.tvSelectSession.text=sessionSelectData.yearname
+//                                    }
+//                                    firstTime=false
+//                                }
+//
+//                            }
 
 
-                                if (firstTime){
-                                    if (!it.data.session_data.isNullOrEmpty()){
-                                        sessionListData = it.data.session_data.toMutableList()
-                                        if (sessionListData.isNotEmpty()){
-                                            for (i in sessionListData){
-                                                if (i.active=="1"){
-                                                    sessionSelectData=i
-                                                }
-                                            }
+                            if (  !it.data.fee_data.isNullOrEmpty()) {
 
-                                            binding.tvSelectSession.text=sessionSelectData.yearname
-                                        }
-                                        firstTime=false
-                                    }
+                                binding.recyclerFeeReceipt.isVisible = true
+                                binding.tvNoData.isVisible = false
 
+
+
+                                val feeReportAdapter = FeeBookAdapter(
+                                    it.data.fee_data,
+                                    this@FeeBookFragment
+                                )
+
+                                binding.recyclerFeeReceipt.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = feeReportAdapter
                                 }
 
 
-                                if (  it.data.receipt_data.isNotEmpty()) {
-
-                                    binding.recyclerFeeReceipt.isVisible = true
-                                    binding.tvNoData.isVisible = false
-
-
-
-                                    val feeReportAdapter = FeeReportAdapter(
-                                        it.data.receipt_data,
-                                        this@FeeReceiptFragment
-                                    )
-
-                                    binding.recyclerFeeReceipt.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = feeReportAdapter
-                                    }
-
-
-                                } else {
-                                    binding.recyclerFeeReceipt.isVisible = false
-                                    binding.tvNoData.isVisible = true
-                                }
-                            }catch (e:UninitializedPropertyAccessException){
-
+                            } else {
+                                binding.recyclerFeeReceipt.isVisible = false
+                                binding.tvNoData.isVisible = true
                             }
 
                         }
@@ -148,105 +137,27 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             }
         }
 
-        lifecycleScope.launch {
-            userDataStore.getSchoolData()?.run {
-                if (! feePayemtURL.isNullOrEmpty()){
-                    feeReceiptViewModel.getFeeReceipt(
-                        feePayemtURL.replace("mlogin.aspx", "")+"/api/feereceipt",
-                        0
-                    )
-                }else{
-                    Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-            }
-
-
+        feeBookViewModel.getFeeBookReportList()
 
     }
 
-    private fun popUpSessionList() {
-
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
-        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-
-        tvHeading.text = getString(R.string.select_session)
-        builder.setView(view)
 
 
-        relOk.setOnClickListener {
-
-            if (isSessionSelected) {
-                binding.tvSelectSession.text = sessionSelectData.yearname
-                getFeeReceipt(sessionSelectData.yrid)
-                builder.dismiss()
-            }
-
-
-        }
-
-        val staffPopUpListAdapter =
-            FeeReceiptPopUpAdapter(sessionListData, object : ItemListener<FeeReceiptSession> {
-                override fun onItemClick(t: FeeReceiptSession, pos: Int, boolean: Boolean) {
-                    isSessionSelected = true
-                    sessionSelectData = t
-                }
-            })
-
-        rvYears.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            adapter = staffPopUpListAdapter
-        }
-
-        relCancel.setOnClickListener {
-            builder.dismiss()
-        }
-
-        builder.setCanceledOnTouchOutside(false)
-        builder.show()
-    }
-
-
-    private fun getFeeReceipt( yearID : Int) {
-
-        lifecycleScope.launch {
-            userDataStore.getSchoolData()?.run {
-                if (! feePayemtURL.isNullOrEmpty()){
-                    feeReceiptViewModel.getFeeReceipt(
-                        feePayemtURL.replace("mlogin.aspx", "")+"/api/feereceipt",
-                        yearID
-                    )
-                }else{
-                    Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-        }
-
-
-    }
-
-    override fun onItemClick(t: FeeReceipt, pos: Int, boolean: Boolean) {
+    override fun onItemClick(t: FeeBookModel, pos: Int, boolean: Boolean) {
          when(pos){
              1 ->{
-                 getFeeCertificateDownload(t.recid.toString(),1,t.recdate,t.feetypeid)
+                 getFeeCertificateDownload(t,1)
              }
              2 ->{
-                 getFeeCertificateDownload(t.recid.toString(), 2, t.recdate, t.feetypeid)
+                 getFeeCertificateDownload(t,2)
              }
          }
          }
 
 
-    fun getFeeCertificateDownload(recid: String, i: Int, recdate: String?, feetypeid: String?){
+    private fun getFeeCertificateDownload(feeBookModel: FeeBookModel, i : Int){
         lifecycleScope.launch {
-            feeReceiptViewModel.feeCertificateDownloadStateFlow.collectLatest {
+            feeBookViewModel.feeCertificateDownloadStateFlow.collectLatest {
                 when (it) {
 
                     is NetworkResult.Loading -> {
@@ -261,7 +172,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                         if (it.data!=null){
                             base64String=it.data.bytedata
                             if (checkStoragePermission()) {
-                                saveAndOpenPdf(it.data.bytedata,"FeeReceipt",i,recdate )
+                                saveAndOpenPdf(it.data.bytedata,i,feeBookModel.installname )
                             } else {
                                 requestStoragePermission()
                             }
@@ -270,7 +181,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             }
         }
 
-        feeReceiptViewModel.getFeeReceiptDownload(recid,sessionSelectData.yrid,feetypeid)
+        feeBookViewModel.getFeeReceiptDownload(feeBookModel)
 
     }
     fun generatePDFFromBase64(base64: String, fileName: String) {
@@ -333,7 +244,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
 
 
-    private fun saveAndOpenPdf(base64String: String, s: String, i: Int, recdate: String?) {
+    private fun saveAndOpenPdf(base64String: String, i: Int, recdate: String?) {
 
 
 
@@ -343,7 +254,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
            // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
             val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "FeeReceipt$recdate.pdf"
+                "FeeBook$recdate.pdf"
             )
             try {
 

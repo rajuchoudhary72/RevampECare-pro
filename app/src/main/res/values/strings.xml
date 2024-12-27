@@ -33,6 +33,7 @@
     <string name="report_card">Report Card</string>
     <string name="circular">Circular</string>
     <string name="payslip">PaySlip</string>
+    <string name="pay_slip">Pay Slip</string>
     <string name="syallabus">Syllabus</string>
     <string name="class_notice">Class Notice</string>
     <string name="pdf_details">  PDF Details :</string>
@@ -827,5 +828,25 @@
     <string name="leave_report">Leave Report</string>
     <string name="students_profile">Students Profile</string>
     <string name="attendance_summary">Attendance Summary</string>
+    <string name="select_wing">Select Wing</string>
+    <string name="class_promotion">Class Promotion</string>
+    <string name="manage_roll_number">Manage Roll Number</string>
+    <string name="upload_student_photo">Upload Student Photo</string>
+    <string name="assignment">Assignment</string>
+    <string name="syllabus">Syllabus</string>
+    <string name="my_leave">My Leave</string>
+    <string name="library">Library</string>
+    <string name="e_books">e-Books</string>
+    <string name="calendar">Calendar</string>
+    <string name="questionnaire">Questionnaire</string>
+    <string name="add_question">Add Question</string>
+    <string name="thoughts">Thoughts</string>
+    <string name="appointment">Appointment</string>
+    <string name="infractions">Infractions</string>
+    <string name="fee_collection">Fee Collection</string>
+    <string name="fee_certificate">Fee Certificate</string>
+    <string name="fee_receipt">Fee Receipt</string>
+    <string name="fee_book">Fee Book</string>
+    <string name="due_amount">Due Amount</string>
 
 </resources>

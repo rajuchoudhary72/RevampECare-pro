@@ -7,148 +7,101 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".ui.assign_roll_no.AssignRollNoFragment">
 
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Assign Roll Number"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
-            <TextView
-                android:id="@+id/tv_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 android:fontFamily="@font/ubuntu_medium"
-                android:layout_gravity="end"
-                android:visibility="gone"
-                 android:layout_marginEnd="@dimen/_10sdp"
-                 android:textColor="@color/white"
-                android:text="@string/save_C"
-                android:textSize="16sp"
-
-                />
-
-        </com.google.android.material.appbar.MaterialToolbar>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
+            <LinearLayout
+                android:id="@+id/ll_toole"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
+                android:layout_marginTop="?actionBarSize"
+                android:background="@color/md_theme_light_primary"
+                android:gravity="center"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical"
+                app:layout_collapseMode="parallax"
+                app:layout_scrollFlags="scroll|enterAlways">
 
-
-                >
-
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:contentScrim="@android:color/transparent"
-                    app:expandedTitleTextAppearance="@android:color/transparent"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:statusBarScrim="@android:color/transparent">
+                    android:weightSum="2"
+                    android:orientation="horizontal">
 
-
-                    <LinearLayout
-                        android:id="@+id/ll_toole"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/autoInputClassInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="?actionBarSize"
-                        android:background="@color/md_theme_light_primary"
-                        android:gravity="center"
-                        android:fitsSystemWindows="true"
-                        android:orientation="vertical"
-                        app:layout_collapseMode="parallax"
-                        app:layout_scrollFlags="scroll|enterAlways">
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:theme="@style/TextInputLayoutStyle"
 
-                        <LinearLayout
+                        >
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteClass"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:weightSum="2"
-                            android:orientation="horizontal">
+                            android:inputType="none"
+                            android:text="@string/select_class" />
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/autoInputClassInputLayout"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="10dp"
-                                android:layout_marginBottom="10dp"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                                android:theme="@style/TextInputLayoutStyle"
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                                >
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/autoInputFilterInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:theme="@style/TextInputLayoutStyle"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:visibility="visible"
+                        app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                        android:layout_marginBottom="10dp"
 
-                                <AutoCompleteTextView
-                                    android:id="@+id/autoCompleteClass"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:inputType="none"
-                                    android:text="@string/select_class" />
+                        >
 
-                            </com.google.android.material.textfield.TextInputLayout>
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/autoInputFilterInputLayout"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                                android:theme="@style/TextInputLayoutStyle"
-                                android:layout_marginHorizontal="10dp"
-                                android:visibility="visible"
-                                app:boxStrokeColor="@color/text_input_layout_stroke_color"
-                                android:layout_marginBottom="10dp"
-
-                                >
-
-                                <AutoCompleteTextView
-                                    android:id="@+id/autoCompleteFilter"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:inputType="none"
-                                    android:text="@string/select_filter" />
-
-                            </com.google.android.material.textfield.TextInputLayout>
-
-
-                        </LinearLayout>
-
-                        <Button
-                            android:id="@+id/bt_auto_assign"
-                            android:layout_width="wrap_content"
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteFilter"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/auto_assign"
-                            android:layout_gravity="start"
-                            android:visibility="gone"
-                            />
+                            android:inputType="none"
+                            android:text="@string/select_filter" />
 
-                    </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
+                </LinearLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
+                <Button
+                    android:id="@+id/bt_auto_assign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/auto_assign"
+                    android:layout_gravity="start"
+                    android:visibility="gone"
+                    />
 
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_assign_rollno"
@@ -161,23 +114,24 @@
 
                 />
 
-            <TextView
-                android:id="@+id/tv_no_data"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/iv_no_item"
-                android:fontFamily="@font/ubuntu_medium"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:visibility="gone"
-                android:text="@string/no_data_found"
-                android:textSize="16sp"
 
-                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/ubuntu_medium"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+
+            />
 
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
 </layout>

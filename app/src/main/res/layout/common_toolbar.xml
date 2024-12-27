@@ -21,9 +21,6 @@
             android:layout_height="wrap_content"
             android:background="@color/brand_color"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:title="hgshjgsgdhjgashdghj"
-            app:titleCentered="true"
-            app:titleTextColor="@color/white"
             app:topWindowInsetToPadding="@{true}">
 
             <RelativeLayout
@@ -43,14 +40,14 @@
                     android:layout_centerVertical="true"
                     >
                     <ImageButton
-                        android:id="@+id/toolbar_filter_button"
+                        android:id="@+id/ib_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:src="@drawable/ic_filter"
+                        app:tint="@color/white"
                         android:padding="8dp"
-                        android:visibility="gone"
                         android:backgroundTint="@color/transparent"
+                        android:visibility="gone"
                         />
                     <Button
                         android:id="@+id/btn_save"
@@ -74,7 +71,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/_18sdp"
+            android:textSize="@dimen/_12sdp"
             android:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

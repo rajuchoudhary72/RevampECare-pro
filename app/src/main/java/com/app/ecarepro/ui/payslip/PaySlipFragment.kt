@@ -47,7 +47,8 @@ class PaySlipFragment : Fragment() {
     ): View {
 
         binding=FragmentPaySlipBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.pay_slip)
         return binding.root
     }
 

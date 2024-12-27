@@ -64,15 +64,10 @@ class AddAppreciationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(activity is AppCompatActivity){
-            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-            (activity as AppCompatActivity).supportActionBar?.apply {
-                title = "Add Appreciation"
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.add_appreciation)
 
-                setDisplayHomeAsUpEnabled(true)
-                setDisplayShowHomeEnabled(true)
-            }
-        }
+
 
         binding.tvSelectApprecCate.setOnClickListener {
 

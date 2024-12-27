@@ -33,7 +33,8 @@ class EBookNavFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentENavBookBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener {  findNavController().popBackStack()  }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.e_books)
         return binding.root
     }
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentCalenderActivityNavHostBinding
 import com.app.ecarepro.ui.MainActivity
@@ -32,7 +33,8 @@ class CalenderActivityNavHost : Fragment() {
     ): View {
 
         binding = FragmentCalenderActivityNavHostBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.calendar)
         return binding.root
     }
 

@@ -149,6 +149,7 @@ import com.app.ecarepro.data.network.model.NetworkEditProfile
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.model.Staff
@@ -1325,6 +1326,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun academicYears(): NetworkAcademicYear {
         return userService.academicYears()
+    }
+
+    override suspend fun wingsList(): NetworkWingReport {
+        return userService.wingsList()
     }
 
     override suspend fun feeCollection(

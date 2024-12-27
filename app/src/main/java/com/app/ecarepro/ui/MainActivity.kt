@@ -1265,6 +1265,7 @@ class MainActivity : AppCompatActivity() {
 
                     44 -> navController.navigate(R.id.feeReceiptFragment)
                     69 -> navController.navigate(R.id.feeCertificateFragment)
+                    72 -> navController.navigate(R.id.feeBookFragment)
                 }
             }
 

@@ -7,7 +7,7 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -104,14 +104,14 @@
                         </RelativeLayout>
 
                         <TextView
-                            android:id="@+id/tv_select_staff"
+                            android:id="@+id/tv_select_wing"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/background_box_rectangle_white_round"
                             android:fontFamily="@font/ubuntu_regular"
                             android:gravity="center_vertical"
                             android:padding="13dp"
-                            android:text="@string/select_staff"
+                            android:text="@string/select_wing"
                             android:layout_marginHorizontal="10dp"
                             android:layout_marginBottom="10dp"
                             android:visibility="visible"
@@ -195,23 +195,21 @@
 
                 />
 
-            <TextView
-                android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/ubuntu_medium"
-                android:gravity="center"
-                android:text="@string/no_data_found"
-                android:textSize="16sp"
-                android:visibility="gone"
-
-                />
-
-
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu_medium"
+            android:gravity="center"
+            android:text="@string/no_data_found"
+            android:textSize="16sp"
+            android:visibility="gone"
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            />
+
+    </RelativeLayout>
 </layout>

@@ -51,7 +51,8 @@ class ClassPromotionFragment : Fragment() {
             spClass.adapter = classAdapter
             btnSubmit.setOnClickListener { submitDetails() }
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(com.app.ecarepro.R.string.class_promotion)
         return binding.root
     }
 

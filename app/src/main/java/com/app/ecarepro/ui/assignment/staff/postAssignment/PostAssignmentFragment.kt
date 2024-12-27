@@ -91,7 +91,8 @@ class PostAssignmentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
        binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.post_assignment)
        try {
            assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
            isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
