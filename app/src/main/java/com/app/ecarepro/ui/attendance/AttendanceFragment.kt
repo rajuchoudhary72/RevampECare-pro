@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 @AndroidEntryPoint
 class AttendanceFragment : Fragment() {
@@ -63,6 +64,14 @@ class AttendanceFragment : Fragment() {
                                             putString(Constant.NAME, classSummary.className)
                                             putString(Constant.DATE, Constant.currentDate())
                                         })
+                                    mViewModel.sendAnalyticEvent(
+                                        AnalyticsConstants.Events.VIEW_CLASS_ATTENDANCE,
+                                        mapOf(
+                                            AnalyticsConstants.Attributes.CLASS_ID to classSummary.id.toString(),
+                                            AnalyticsConstants.Attributes.CLASS_NAME to classSummary.className.toString(),
+                                            AnalyticsConstants.Attributes.DATE to classSummary.className.toString(),
+                                        )
+                                    )
                                 }
                             }
                         }

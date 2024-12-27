@@ -752,7 +752,7 @@ class MainActivity : AppCompatActivity() {
                             this@withModels.requestModelBuild()
                         } else {
                             systemViewModel.openDrawer(false)
-                            getFragmentId(parentMenu.menuID)
+                            getFragmentId(parentMenu.menuID, "Menu")
                         }
                     }
                 }
@@ -765,10 +765,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(
-                                    parentMenu.menuID,
-                                    menu.chMenuID
-                                )
+                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
                             }
                         }
 
@@ -779,11 +776,7 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(
-                                        parentMenu.menuID,
-                                        menu.chMenuID,
-                                        childChildMenu.sbChMenuID
-                                    )
+                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
                                 }
                             }
                         }
@@ -793,12 +786,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(menuID: Int) {
+    fun getFragmentId(menuID: Int, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
+        systemViewModel.sendAnalyticEvent(
+            AnalyticsConstants.Events.MODULE_OPEN, mapOf(
+                AnalyticsConstants.Attributes.FROM to from.orEmpty(),
+                AnalyticsConstants.Attributes.MENU_ID to menuID.toString()
+            )
+        )
         when (menuID) {
             3 -> {
                 lifecycleScope.launch {
@@ -1094,12 +1093,19 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
+        systemViewModel.sendAnalyticEvent(
+            AnalyticsConstants.Events.MODULE_OPEN, mapOf(
+                AnalyticsConstants.Attributes.FROM to from.orEmpty(),
+                AnalyticsConstants.Attributes.MENU_ID to menuID.toString(),
+                AnalyticsConstants.Attributes.CH_MENU_ID to childMenuId.toString()
+            )
+        )
         when (menuID) {
             1 -> {
                 when (childMenuId) {
@@ -1328,7 +1334,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
+        systemViewModel.sendAnalyticEvent(
+            AnalyticsConstants.Events.MODULE_OPEN, mapOf(
+                AnalyticsConstants.Attributes.FROM to from.orEmpty(),
+                AnalyticsConstants.Attributes.MENU_ID to menuID.toString(),
+                AnalyticsConstants.Attributes.CH_MENU_ID to childMenuId.toString(),
+                AnalyticsConstants.Attributes.SB_CH_MENU_ID to childChildMenuId.toString(),
+            )
+        )
         when (menuID) {
             6 -> {
                 when (childMenuId) {

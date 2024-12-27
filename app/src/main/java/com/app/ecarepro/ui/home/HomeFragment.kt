@@ -63,6 +63,7 @@ import org.json.JSONObject
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 
 @AndroidEntryPoint
@@ -194,7 +195,7 @@ class HomeFragment : Fragment() {
             binding.btnSubmit.setOnClickListener {
                 if (binding.checkbox.isChecked) {
                     (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID"),) { isSuccess, message ->
+                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
                         (requireActivity() as MainActivity).showLoader(false)
                         mainActivity().showMessage(message)
                         if (isSuccess) {
@@ -322,6 +323,16 @@ class HomeFragment : Fragment() {
                                             favouriteSlider.menuID
                                         )
                                     }
+                                    systemViewModel.sendAnalyticEvent(
+                                        AnalyticsConstants.Events.SHOW_CARD_CLICK,
+                                        mapOf(
+                                            AnalyticsConstants.Attributes.SCREEN_NAME to AnalyticsConstants.Screens.HOME_SCREEN,
+                                            AnalyticsConstants.Attributes.HEADLINE to favouriteSlider.link.toString(),
+                                            AnalyticsConstants.Attributes.MENU_ID to favouriteSlider.menuID.toString(),
+                                            AnalyticsConstants.Attributes.CH_MENU_ID to favouriteSlider.chMenuID.toString(),
+                                            AnalyticsConstants.Attributes.SB_CH_MENU_ID to favouriteSlider.sbChMenuID.toString(),
+                                        )
+                                    )
                                 }
                             }
                         }

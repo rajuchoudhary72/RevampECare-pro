@@ -147,150 +147,153 @@ class AppointmentFragment : Fragment() {
 
                         uiState
                             .formData
+                            .filter { it.active == true }
                             .filterNot { it.columnName == "IdproofImage" }
                             .forEach { form ->
-                                if (isDropDown(form.columnName)) {
-                                    when (form.columnName) {
-                                        "Purpose" -> {
-                                            textFiledDropdown {
-                                                id(form.columnName)
-                                                filedName(form.columnName)
-                                                hintText(form.columnDisplayName)
-                                                text(form.value)
-                                                items(uiState.purpose.map { it.purposeName })
-                                                isMandatory(form.isrequired)
-                                                itemSelectListener(object : ItemSelectListener {
-                                                    override fun onItemSelect(item: String) {
-                                                        viewModel.updateValue(form.columnName, item)
-                                                    }
-                                                })
-                                            }
-                                        }
-
-                                        "Department" -> {
-                                            textFiledDropdown {
-                                                id(form.columnName)
-                                                filedName(form.columnName)
-                                                hintText(form.columnDisplayName)
-                                                text(form.value)
-                                                items(uiState.departments.map { it.departmentName })
-                                                isMandatory(form.isrequired)
-                                                itemSelectListener(object : ItemSelectListener {
-                                                    override fun onItemSelect(item: String) {
-                                                        viewModel.updateValue(form.columnName, item)
-                                                    }
-                                                })
-                                            }
-                                        }
-
-                                        "Designation" -> {
-                                            textFiledDropdown {
-                                                id(form.columnName)
-                                                filedName(form.columnName)
-                                                hintText(form.columnDisplayName)
-                                                text(form.value)
-                                                items(uiState.designation.map { it.designationName })
-                                                isMandatory(form.isrequired)
-                                                itemSelectListener(object : ItemSelectListener {
-                                                    override fun onItemSelect(item: String) {
-                                                        viewModel.updateValue(form.columnName, item)
-                                                    }
-                                                })
-                                            }
-                                        }
-
-                                        "Employee" -> {
-                                            textFiledDropdown {
-                                                id(form.columnName)
-                                                filedName(form.columnName)
-                                                hintText(form.columnDisplayName)
-                                                text(form.value)
-                                                items(uiState.employees.map { it.employeeName })
-                                                isMandatory(form.isrequired)
-                                                itemSelectListener(object : ItemSelectListener {
-                                                    override fun onItemSelect(item: String) {
-                                                        viewModel.updateValue(form.columnName, item)
-                                                    }
-                                                })
-                                            }
-                                        }
-                                        "IdType" -> {
-                                            textFiledDropdown {
-                                                id(form.columnName)
-                                                filedName(form.columnName)
-                                                hintText(form.columnDisplayName)
-                                                text(form.value)
-                                                items(uiState.guestIdType)
-                                                isMandatory(form.isrequired)
-                                                itemSelectListener(object : ItemSelectListener {
-                                                    override fun onItemSelect(item: String) {
-                                                        viewModel.updateValue(form.columnName, item)
-                                                    }
-                                                })
-                                            }
-                                        }
-
-                                        else -> {
-                                            textFiledDropdown {
-                                                id(form.columnName)
-                                                filedName(form.columnName)
-                                                hintText(form.columnDisplayName)
-                                                isMandatory(form.isrequired)
-                                                text(form.value)
-                                                itemSelectListener(object : ItemSelectListener {
-                                                    override fun onItemSelect(item: String) {
-                                                        viewModel.updateValue(form.columnName, item)
-                                                    }
-                                                })
-                                            }
-                                        }
-                                    }
-
-                                } else if (form.columnName == "IdproofImage" || form.columnName == "Photo") {
-                                    val idProof =
-                                        uiState.formData.firstOrNull { it.columnName == "IdproofImage" }
-                                    val photo =
-                                        uiState.formData.firstOrNull { it.columnName == "Photo" }
-                                    appointmentPhotoPicker {
-                                        id("photoPicker")
-                                        filedName1(idProof?.columnDisplayName)
-                                        isPhotoCapture1Mandatory(idProof?.isrequired)
-                                        filedName2(photo?.columnDisplayName)
-                                        image1(idProof?.value)
-                                        image2(photo?.value)
-                                        isPhotoCapture2Mandatory(photo?.isrequired)
-                                        clickListener1 { _ ->
-                                            photoColumName = idProof?.columnName
-                                            selectImageOptionDialog()
-                                        }
-                                        clickListener2 { _ ->
-                                            photoColumName = photo?.columnName
-                                            selectImageOptionDialog()
-                                        }
-                                    }
-                                } else {
-                                    textFiled {
-                                        id(form.columnName)
-                                        filedName(form.columnName)
-                                        hintText(form.columnDisplayName)
-                                        isMandatory(form.isrequired)
-                                        text(form.value)
-                                        if (form.columnName == "VisitingDate") {
-                                            clickListener { _ ->
-                                                selectDate("Select Visiting Date") {
-                                                    viewModel.updateValue(form.columnName, it)
+                                if(form.active == true){
+                                    if (isDropDown(form.columnName)) {
+                                        when (form.columnName) {
+                                            "Purpose" -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    text(form.value)
+                                                    items(uiState.purpose.map { it.purposeName })
+                                                    isMandatory(form.isrequired)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(form.columnName, item)
+                                                        }
+                                                    })
                                                 }
                                             }
-                                        } else if (form.columnName == "Appointmenttime") {
-                                            clickListener { _ ->
-                                                pickTime("Select Appointment Time") {
-                                                    viewModel.updateValue(form.columnName, it)
+
+                                            "Department" -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    text(form.value)
+                                                    items(uiState.departments.map { it.departmentName })
+                                                    isMandatory(form.isrequired)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(form.columnName, item)
+                                                        }
+                                                    })
+                                                }
+                                            }
+
+                                            "Designation" -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    text(form.value)
+                                                    items(uiState.designation.map { it.designationName })
+                                                    isMandatory(form.isrequired)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(form.columnName, item)
+                                                        }
+                                                    })
+                                                }
+                                            }
+
+                                            "Employee" -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    text(form.value)
+                                                    items(uiState.employees.map { it.employeeName })
+                                                    isMandatory(form.isrequired)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(form.columnName, item)
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                            "IdType" -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    text(form.value)
+                                                    items(uiState.guestIdType)
+                                                    isMandatory(form.isrequired)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(form.columnName, item)
+                                                        }
+                                                    })
+                                                }
+                                            }
+
+                                            else -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    isMandatory(form.isrequired)
+                                                    text(form.value)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(form.columnName, item)
+                                                        }
+                                                    })
                                                 }
                                             }
                                         }
-                                        textWatcher(makeTextWatcher {
-                                            viewModel.updateValue(form.columnName, it.toString())
-                                        })
+
+                                    } else if (form.columnName == "IdproofImage" || form.columnName == "Photo") {
+                                        val idProof =
+                                            uiState.formData.firstOrNull { it.columnName == "IdproofImage" }
+                                        val photo =
+                                            uiState.formData.firstOrNull { it.columnName == "Photo" }
+                                        appointmentPhotoPicker {
+                                            id("photoPicker")
+                                            filedName1(idProof?.columnDisplayName)
+                                            isPhotoCapture1Mandatory(idProof?.isrequired)
+                                            filedName2(photo?.columnDisplayName)
+                                            image1(idProof?.value)
+                                            image2(photo?.value)
+                                            isPhotoCapture2Mandatory(photo?.isrequired)
+                                            clickListener1 { _ ->
+                                                photoColumName = idProof?.columnName
+                                                selectImageOptionDialog()
+                                            }
+                                            clickListener2 { _ ->
+                                                photoColumName = photo?.columnName
+                                                selectImageOptionDialog()
+                                            }
+                                        }
+                                    } else {
+                                        textFiled {
+                                            id(form.columnName)
+                                            filedName(form.columnName)
+                                            hintText(form.columnDisplayName)
+                                            isMandatory(form.isrequired)
+                                            text(form.value)
+                                            if (form.columnName == "VisitingDate") {
+                                                clickListener { _ ->
+                                                    selectDate("Select Visiting Date") {
+                                                        viewModel.updateValue(form.columnName, it)
+                                                    }
+                                                }
+                                            } else if (form.columnName == "Appointmenttime") {
+                                                clickListener { _ ->
+                                                    pickTime("Select Appointment Time") {
+                                                        viewModel.updateValue(form.columnName, it)
+                                                    }
+                                                }
+                                            }
+                                            textWatcher(makeTextWatcher {
+                                                viewModel.updateValue(form.columnName, it.toString())
+                                            })
+                                        }
                                     }
                                 }
                             }

@@ -11,7 +11,8 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentHelpBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-
+import android.content.Intent
+import android.net.Uri
 @AndroidEntryPoint
 class HelpFragment : Fragment() {
 
@@ -49,6 +50,35 @@ class HelpFragment : Fragment() {
                     AnalyticsConstants.Attributes.URL to url
                 )
             )
+        }
+        binding.textContactNumber.setOnClickListener {
+            mViewModel.sentAnalyticEvent(
+                event = AnalyticsConstants.Events.CONTACT_CLICK,
+                attributes = mapOf(
+                    AnalyticsConstants.Attributes.PHONE_NUMBER to binding.textContactNumber.text.toString()
+                )
+            )
+
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:${binding.textContactNumber.text}")
+            }
+            requireContext().startActivity(intent)
+        }
+
+        binding.textEmail.setOnClickListener {
+            val email = binding.textEmail.text.toString()
+            mViewModel.sentAnalyticEvent(
+                event = AnalyticsConstants.Events.EMAIL_CLICK,
+                attributes = mapOf(
+                    AnalyticsConstants.Attributes.EMAIL to email
+                )
+            )
+
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, email)
+            }
+            requireContext().startActivity(Intent.createChooser(intent, "Send Email"))
         }
 
     }

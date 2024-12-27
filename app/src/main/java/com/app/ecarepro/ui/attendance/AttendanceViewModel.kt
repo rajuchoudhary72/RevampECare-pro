@@ -68,6 +68,15 @@ class AttendanceViewModel @Inject constructor(
     fun sendScreenEvent() {
         analyticsManager.trackScreen(AnalyticsConstants.Screens.ATTENDANCE_TAB)
     }
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
+    }
 }
 
 infix fun Int.percentOf(value: Int): String {

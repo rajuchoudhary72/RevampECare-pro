@@ -14,6 +14,9 @@ object AnalyticsConstants {
         const val SEND_SMS_APP_MESSAGE = "send_sms_app_message"
         const val ONLY_APP_MESSAGE = "only_app_message"
         const val FAQ_CLICK: String = "faq_click"
+        const val EMAIL_CLICK: String = "email_click"
+        const val CONTACT_CLICK: String = "contact_click"
+        const val MODULE_OPEN: String = "module_open"
         const val ESTIMATE_COLLECTION_FILTER: String = "estimate_collection_filter"
         const val DAILY_MODE_WISE_FILTER: String = "daily_mode_wise_filter"
         const val TEACHER_WORKLOAD: String = "teacher_workload"
@@ -22,11 +25,23 @@ object AnalyticsConstants {
         const val SWITCH_ACCOUNT: String = "switch_account"
         const val CHANGE_USER_NAME_DETAIL = "change_userName_detail"
         const val CHANGE_USER_PASSWORD_DETAIL = "change_userPassword_detail"
+        const val VIEW_CLASS_ATTENDANCE = "view_class_attendance"
+        const val SHOW_CARD_CLICK = "show_card_click"
+        const val UPDATE_FAVOURITES = "update_favourites"
     }
 
     // Attribute Keys
     object Attributes {
         // User-Specific Attributes
+        const val EMAIL: String = "email"
+        const val FAVOURITES: String = "favourites"
+        const val PHONE_NUMBER: String = "phone_number"
+        const val FROM: String = "from"
+        const val HEADLINE: String = "headline"
+        const val MENU_ID: String = "menu_id"
+        const val CH_MENU_ID: String = "ch_menu_id"
+        const val SB_CH_MENU_ID: String = "sb_ch_menu_id"
+        const val HOME: String = "Home"
         const val URL: String = "url"
         const val SEARCH_TYPE: String = "search_type"
         const val R_TYPE: String = "r_type"
@@ -60,9 +75,13 @@ object AnalyticsConstants {
         const val DEVICE_MODEL = "device_model"
         const val OS_VERSION = "os_version"
         const val APP_VERSION = "app_version"
+        const val CLASS_ID: String = "class_id"
+        const val CLASS_NAME: String = "class_name"
+        const val SCREEN_NAME = "screen_name"
     }
 
     object Screens {
+        const val FAVOURITES: String = "Favourites"
         const val USER_PROFILE = "UserProfile"
         const val NOTIFICATION_LIST = "NotificationList"
         const val INBOX_MESSAGE_LIST = "InboxMessageList"
