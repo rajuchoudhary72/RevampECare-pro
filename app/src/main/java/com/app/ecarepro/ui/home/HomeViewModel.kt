@@ -73,11 +73,16 @@ class HomeViewModel @Inject constructor(
                         underTaking = undertaking.getOrNull() ?: ""
                     )
                 } else {
-                    HomeUiState.Error(
-                        dashboard.exceptionOrNull() ?: IllegalStateException(
-                            UNKNOWN_ERROR_MESSAGE
+                    try {
+                        HomeUiState.Error(
+                            dashboard.exceptionOrNull() ?: IllegalStateException(
+                                UNKNOWN_ERROR_MESSAGE
+                            )
                         )
-                    )
+                    } catch (e: NullPointerException) {
+                        e.printStackTrace()
+                    }
+
                 }
             }
             .stateIn(
@@ -104,10 +109,15 @@ class HomeViewModel @Inject constructor(
                     )
                 )
                 .collectLatest {
-                    function(
-                        it.isSuccess,
-                        it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
-                    )
+                    try {
+                        function(
+                            it.isSuccess,
+                            it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                        )
+                    } catch (e: NullPointerException) {
+                        e.printStackTrace()
+                    }
+
                 }
             /*  userRepository.saveUserUndertaking(id,
                 deviceModel = Build.MANUFACTURER + " " + Build.MODEL,

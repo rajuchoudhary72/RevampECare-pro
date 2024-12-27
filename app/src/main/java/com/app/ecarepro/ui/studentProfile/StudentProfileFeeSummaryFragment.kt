@@ -59,7 +59,10 @@ class StudentProfileFeeSummaryFragment(
             studentID=it.getInt(STUDENT_ID)
         }
     }
-
+    override fun onResume() {
+        super.onResume()
+        studentProfileFeeSummaryViewModel.sendScreenEvent()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 
 @HiltViewModel
 class ChangeUsernameViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val currentUsername = MutableStateFlow("")
     val newUsername = MutableStateFlow("")
@@ -44,10 +47,30 @@ class ChangeUsernameViewModel @Inject constructor(
                 .collectLatest { result ->
                     if (result.isSuccess) {
                         result(true, result.getOrNull()?.message ?: "Success")
+                        sendAnalyticEvent(
+                            event = AnalyticsConstants.Events.CHANGE_USER_NAME_DETAIL,
+                            attributes = mapOf(
+                                AnalyticsConstants.Attributes.OLD_USER_NAME to newUsername.value,
+                                AnalyticsConstants.Attributes.USER_NAME to newUsername.value
+                            )
+                        )
                     } else {
                         result(false, result.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE)
                     }
                 }
         }
+    }
+
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.CHANGE_USER_NAME)
+    }
+    fun sendAnalyticEvent(
+        event: String,
+        attributes: Map<String, String>
+    ) {
+        analyticsManager.trackEvent(
+            event,
+            attributes
+        )
     }
 }

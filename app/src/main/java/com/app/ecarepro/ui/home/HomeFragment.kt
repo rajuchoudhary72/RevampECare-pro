@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -35,7 +33,6 @@ import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkSchool
-import com.app.ecarepro.data.network.model.Slider
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
 import com.app.ecarepro.emptyFav
@@ -63,6 +60,7 @@ import org.json.JSONObject
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 
 @AndroidEntryPoint
@@ -148,8 +146,8 @@ class HomeFragment : Fragment() {
                         uiState.userInfo?.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
-                               // txtUserName.text = user.name
-                                 txtUserName.text = user.getFullHomeScreenName()
+                                // txtUserName.text = user.name
+                                txtUserName.text = user.getFullHomeScreenName()
                                 profilePrompt()
                             }
                         }
@@ -165,7 +163,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun handleUiState(uiState: HomeUiState) {
+    private fun handleUiState(uiState: Any) {
         (requireActivity() as MainActivity).showLoader(uiState is HomeUiState.Loading)
         if (uiState is HomeUiState.Success) {
             handleUndertaking(uiState.underTaking)
@@ -194,7 +192,7 @@ class HomeFragment : Fragment() {
             binding.btnSubmit.setOnClickListener {
                 if (binding.checkbox.isChecked) {
                     (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID"),) { isSuccess, message ->
+                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
                         (requireActivity() as MainActivity).showLoader(false)
                         mainActivity().showMessage(message)
                         if (isSuccess) {
@@ -322,6 +320,16 @@ class HomeFragment : Fragment() {
                                             favouriteSlider.menuID
                                         )
                                     }
+                                    systemViewModel.sendAnalyticEvent(
+                                        AnalyticsConstants.Events.SHOW_CARD_CLICK,
+                                        mapOf(
+                                            AnalyticsConstants.Attributes.SCREEN_NAME to AnalyticsConstants.Screens.HOME_SCREEN,
+                                            AnalyticsConstants.Attributes.HEADLINE to favouriteSlider.link.toString(),
+                                            AnalyticsConstants.Attributes.MENU_ID to favouriteSlider.menuID.toString(),
+                                            AnalyticsConstants.Attributes.CH_MENU_ID to favouriteSlider.chMenuID.toString(),
+                                            AnalyticsConstants.Attributes.SB_CH_MENU_ID to favouriteSlider.sbChMenuID.toString(),
+                                        )
+                                    )
                                 }
                             }
                         }

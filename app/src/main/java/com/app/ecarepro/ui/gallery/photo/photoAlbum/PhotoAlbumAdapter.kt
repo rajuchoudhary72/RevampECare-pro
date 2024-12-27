@@ -58,7 +58,12 @@ class PhotoAlbumAdapter(
                 .into(item.ivPhoto)
 
             item.rlPhoto.setOnClickListener {
-                photoAlbumFragment.onItemClick(data,1,false)
+                try {
+                    photoAlbumFragment.onItemClick(data,1,false)
+                }catch (e:IllegalArgumentException){
+                    e.printStackTrace()
+                }
+
             }
 
 

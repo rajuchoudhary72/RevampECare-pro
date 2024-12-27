@@ -22,11 +22,12 @@ import kotlinx.coroutines.launch
 import com.app.ecarepro.data.network.model.Notification
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.noDataFoundView
+import com.google.firebase.analytics.FirebaseAnalytics
 
 
 @AndroidEntryPoint
 class NotificationFragment : Fragment() {
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var _binding: FragmentNotificationBinding? = null
 
     private val binding get() = _binding!!
@@ -54,7 +55,11 @@ class NotificationFragment : Fragment() {
                     handleUiState(uiState)
                 }
         }
-
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        val bundle = Bundle().apply {
+            putString("ScreenName", "NotificationList")
+        }
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         binding.recyclerView.apply {
             addItemDecoration(
                 LinearMarginDecoration.create(
@@ -97,6 +102,11 @@ class NotificationFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mViewModel.sendScreenEvent()
     }
 
 

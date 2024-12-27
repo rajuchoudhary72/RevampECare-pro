@@ -6,6 +6,8 @@ import com.app.ecarepro.data.network.model.NetworkAcademicPerformance
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AcademicPerViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
 
     private val studentProfileMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAcademicPerformance>> = MutableStateFlow(
@@ -25,7 +28,9 @@ class AcademicPerViewModel @Inject constructor(
         NetworkResult.Loading())
     val academicYearStateFlow: StateFlow<NetworkResult<NetworkAcademicYear>> = academicYearMutableStateFlow
 
-
+    fun sendScreenEvent(){
+        analyticsManager.trackScreen(AnalyticsConstants.Screens.STUDENT_ACADEMIC_SCREEN)
+    }
     fun getAcademicPerformance(
         sId: Int,
         yrID: Int

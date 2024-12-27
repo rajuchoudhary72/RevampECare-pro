@@ -26,6 +26,7 @@ import com.app.ecarepro.ui.mainActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -63,14 +64,38 @@ class SettingsFragment : Fragment() {
                     mainActivity().showLoader(true)
                     syncManager.sync { isSuccess, message ->
                         mainActivity().showLoader(false)
-                        if (isSuccess)
+                        if (isSuccess) {
                             setLastSyncTime()
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                viewModel.sendAnalyticEvent(
+                                    AnalyticsConstants.Events.SYNC_SUCCESS,
+                                    mapOf(
+                                        AnalyticsConstants.Attributes.USER_ID to usetDataStore.getUser()?.userId.toString(),
+                                        AnalyticsConstants.Attributes.USER_TYPE to usetDataStore.getUser()?.userType.toString(),
+                                        AnalyticsConstants.Attributes.SCHOOL_CODE to usetDataStore.getSchoolData()?.schoolCode.toString(),
+                                    )
+                                )
+                            }
+                        }
+
                         mainActivity().showMessage(message)
                     }
                 }
             }
 
-            cardRateUs.setOnClickListener { launchPlayStore() }
+            cardRateUs.setOnClickListener {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.sendAnalyticEvent(
+                        AnalyticsConstants.Events.RATE_US,
+                        mapOf(
+                            AnalyticsConstants.Attributes.USER_ID to usetDataStore.getUser()?.userId.toString(),
+                            AnalyticsConstants.Attributes.USER_TYPE to usetDataStore.getUser()?.userType.toString(),
+                            AnalyticsConstants.Attributes.SCHOOL_CODE to usetDataStore.getSchoolData()?.schoolCode.toString(),
+                        )
+                    )
+                }
+                launchPlayStore()
+            }
 
             setLastSyncTime()
         }

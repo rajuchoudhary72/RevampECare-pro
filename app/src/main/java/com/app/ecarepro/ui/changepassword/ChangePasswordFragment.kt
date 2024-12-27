@@ -48,6 +48,11 @@ class ChangePasswordFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        changePasswordViewModel.sendScreenEvent()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

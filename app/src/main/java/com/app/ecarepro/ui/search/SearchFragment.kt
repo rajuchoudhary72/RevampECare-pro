@@ -100,6 +100,11 @@ class SearchFragment : Fragment() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        searchViewModel.sendScreenEvent()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -92,47 +92,52 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
+                            try {
 
-                            if (firstTime){
-                                if (!it.data.session_data.isNullOrEmpty()){
-                                    sessionListData = it.data.session_data.toMutableList()
-                                    if (sessionListData.isNotEmpty()){
-                                        for (i in sessionListData){
-                                            if (i.active=="1"){
-                                                sessionSelectData=i
+
+                                if (firstTime){
+                                    if (!it.data.session_data.isNullOrEmpty()){
+                                        sessionListData = it.data.session_data.toMutableList()
+                                        if (sessionListData.isNotEmpty()){
+                                            for (i in sessionListData){
+                                                if (i.active=="1"){
+                                                    sessionSelectData=i
+                                                }
                                             }
+
+                                            binding.tvSelectSession.text=sessionSelectData.yearname
                                         }
-
-                                        binding.tvSelectSession.text=sessionSelectData.yearname
+                                        firstTime=false
                                     }
-                                    firstTime=false
-                                }
 
-                            }
-
-
-                            if (  it.data.receipt_data.isNotEmpty()) {
-
-                                binding.recyclerFeeReceipt.isVisible = true
-                                binding.tvNoData.isVisible = false
-
-
-
-                                val feeReportAdapter = FeeReportAdapter(
-                                    it.data.receipt_data,
-                                    this@FeeReceiptFragment
-                                )
-
-                                binding.recyclerFeeReceipt.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = feeReportAdapter
                                 }
 
 
-                            } else {
-                                binding.recyclerFeeReceipt.isVisible = false
-                                binding.tvNoData.isVisible = true
+                                if (  it.data.receipt_data.isNotEmpty()) {
+
+                                    binding.recyclerFeeReceipt.isVisible = true
+                                    binding.tvNoData.isVisible = false
+
+
+
+                                    val feeReportAdapter = FeeReportAdapter(
+                                        it.data.receipt_data,
+                                        this@FeeReceiptFragment
+                                    )
+
+                                    binding.recyclerFeeReceipt.apply {
+                                        setHasFixedSize(true)
+                                        layoutManager = LinearLayoutManager(activity)
+                                        adapter = feeReportAdapter
+                                    }
+
+
+                                } else {
+                                    binding.recyclerFeeReceipt.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
+                            }catch (e:UninitializedPropertyAccessException){
+
                             }
 
                         }

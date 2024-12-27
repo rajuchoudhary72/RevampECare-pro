@@ -61,6 +61,7 @@ import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
 import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.utils.Constant
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import dagger.hilt.android.AndroidEntryPoint
@@ -190,7 +191,13 @@ class DashboardFragment : Fragment() {
                         putString(Constant.NAME, workload.teacherName)
                     })
 
-
+                dashboardViewModel.sendAnalyticEvent(
+                    AnalyticsConstants.Events.TEACHER_WORKLOAD,
+                    mapOf(
+                        AnalyticsConstants.Attributes.TEACHER_ID to workload.id.toString(),
+                        AnalyticsConstants.Attributes.USER_NAME to workload.teacherName.toString(),
+                    )
+                )
                 /* findNavController().navigate(
                       R.id.timeTableNavHostFragment,
                       bundleOf(Constant.ID to workload.id)
@@ -225,6 +232,16 @@ class DashboardFragment : Fragment() {
                     favouriteSlider.menuID
                 )
             }
+            systemViewModel.sendAnalyticEvent(
+                AnalyticsConstants.Events.SHOW_CARD_CLICK,
+                mapOf(
+                    AnalyticsConstants.Attributes.SCREEN_NAME to AnalyticsConstants.Screens.DASH_BOARD_SCREEN,
+                    AnalyticsConstants.Attributes.HEADLINE to favouriteSlider.link.toString(),
+                    AnalyticsConstants.Attributes.MENU_ID to favouriteSlider.menuID.toString(),
+                    AnalyticsConstants.Attributes.CH_MENU_ID to favouriteSlider.chMenuID.toString(),
+                    AnalyticsConstants.Attributes.SB_CH_MENU_ID to favouriteSlider.sbChMenuID.toString(),
+                )
+            )
         }
             .id("pro")
             .addTo(this)
@@ -245,6 +262,14 @@ class DashboardFragment : Fragment() {
                     mainActivity().showLoader(true)
                     dashboardViewModel.getTodayModeWiseCollection(date) { isSuccess, message ->
                         mainActivity().showLoader(false)
+                        if (isSuccess) {
+                            dashboardViewModel.sendAnalyticEvent(
+                                AnalyticsConstants.Events.DAILY_MODE_WISE_FILTER,
+                                mapOf(
+                                    AnalyticsConstants.Attributes.DATE to date
+                                )
+                            )
+                        }
                         if (isSuccess.not()) {
                             if (message != null) {
                                 mainActivity().showMessage(message)
@@ -370,6 +395,16 @@ class DashboardFragment : Fragment() {
             fromDate,
             tillDate
         ) { isSuccess, message ->
+            if (isSuccess) {
+                dashboardViewModel.sendAnalyticEvent(
+                    AnalyticsConstants.Events.ESTIMATE_COLLECTION_FILTER,
+                    mapOf(
+                        AnalyticsConstants.Attributes.FEE_TYPE_ID to feeTypeId.toString(),
+                        AnalyticsConstants.Attributes.FROM_DATE to fromDate,
+                        AnalyticsConstants.Attributes.TO_DATE to tillDate
+                    )
+                )
+            }
             mainActivity().showLoader(false)
             if (isSuccess.not()) {
                 if (message != null) {
@@ -510,7 +545,15 @@ class DashboardFragment : Fragment() {
                     putString("dateSelected", it.date)
                     putInt("uType", it.utype)
                 })
-
+            dashboardViewModel.sendAnalyticEvent(
+                AnalyticsConstants.Events.TEACHER_BIRTHDAY,
+                mapOf(
+                    AnalyticsConstants.Attributes.R_TYPE to it.date.toString(),
+                    AnalyticsConstants.Attributes.U_TYPE to it.date.toString(),
+                    AnalyticsConstants.Attributes.BIRTH_DATE to it.date.toString(),
+                    AnalyticsConstants.Attributes.BIRTH_MONTH to it.month.toString(),
+                )
+            )
             /*  findNavController().navigate(
                   R.id.birthdayFragment, bundleOf(
                       "rType" to it.rType,
@@ -609,6 +652,12 @@ class DashboardFragment : Fragment() {
              }*/
         }
 
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        dashboardViewModel.sendScreenEvent()
     }
 
 

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
@@ -29,16 +30,14 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
 
     @Inject
     lateinit var appRepository: AppRepository
-
     override fun onCreate() {
         super.onCreate()
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        /*App level  Firebase  setup*/
         FirebaseApp.initializeApp(this)
-       // registerToken()
         // Set the custom crash handler
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
-
         // Register the activity lifecycle callbacks
         registerActivityLifecycleCallbacks(this)
     }

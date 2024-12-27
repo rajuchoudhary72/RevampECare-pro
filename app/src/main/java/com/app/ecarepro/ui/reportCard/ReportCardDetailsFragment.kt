@@ -111,38 +111,53 @@ class ReportCardDetailsFragment : Fragment(),
                 }
 
             }
-        } else if (pos == 2) {
-            if (boolean) {
-                if (t.viewMode==1) {
-                    if (t.fileName!=null){
-                        val androidDownloader = AndroidDownloader(requireContext())
-                        androidDownloader.downloadFile(t.fileName, getString(R.string.report_card))
-                    }
+        }
 
-                }else{
-                    if (t.frontFileName!=null){
-                        val androidDownloader = AndroidDownloader(requireContext())
-                        androidDownloader.downloadFile(t.frontFileName, getString(R.string.report_card))
-                    }
+        else if (pos == 2) {
+            try {
+                try {
+                    if (boolean) {
 
+                        if (t.viewMode==1) {
+                            if (t.fileName!=null){
+                                val androidDownloader = AndroidDownloader(requireContext())
+                                androidDownloader.downloadFile(t.fileName, getString(R.string.report_card))
+                            }
+
+                        }
+                        else{
+                            if (t.frontFileName!=null){
+                                val androidDownloader = AndroidDownloader(requireContext())
+                                androidDownloader.downloadFile(t.frontFileName, getString(R.string.report_card))
+                            }
+
+                        }
+
+
+                    } else {
+                        if (t.viewMode==1) {
+                            if (t.fileName!=null){
+                                val androidDownloader = AndroidDownloader(requireContext())
+                                androidDownloader.downloadFile(t.fileName, getString(R.string.report_card))
+                            }
+
+                        }else{
+                            if (t.backFileName!=null){
+                                val androidDownloader = AndroidDownloader(requireContext())
+                                androidDownloader.downloadFile(t.backFileName, getString(R.string.report_card))
+                            }
+
+                        }
+
+                    }
+                }catch (e:SecurityException){
+                    e.message
                 }
-
-            } else {
-                if (t.viewMode==1) {
-                    if (t.fileName!=null){
-                        val androidDownloader = AndroidDownloader(requireContext())
-                        androidDownloader.downloadFile(t.fileName, getString(R.string.report_card))
-                    }
-
-                }else{
-                    if (t.backFileName!=null){
-                        val androidDownloader = AndroidDownloader(requireContext())
-                        androidDownloader.downloadFile(t.backFileName, getString(R.string.report_card))
-                    }
-
-                }
-
+            }catch (e:NullPointerException){
+                e.message
             }
+
+
         }
     }
 
@@ -154,7 +169,6 @@ class ReportCardDetailsFragment : Fragment(),
                 putParcelable(ARG_ITEM_DATA,itemDat)
             }
         }
-
     }
 
 }
