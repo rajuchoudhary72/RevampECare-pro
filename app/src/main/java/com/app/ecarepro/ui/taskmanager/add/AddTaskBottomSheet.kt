@@ -5,10 +5,15 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
@@ -140,7 +145,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                     mainActivity().showMessage("Please select task first to select assignee.")
                     return@setOnClickListener
                 }
-                selectAssignee(mViewModel.selectedTitle.value?.assignees)
+                mViewModel.selectedTitle.value?.assignees?.let { it1 -> selectAssignee(it1) }
             }
 
             selectWatcher.setOnClickListener {
@@ -188,26 +193,60 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         _binding = null
     }
 
+    private fun selectAssignee(assignees: List<Assignee> = emptyList()) {
+        val selectedItems = BooleanArray(assignees.size) // Tracks selection
+        val filteredItems = assignees.toMutableList() // For search filtering
 
-    private fun selectAssignee(assignees: List<Assignee>?) {
-        val multiItems = assignees?.map { it.name }?.toTypedArray()
-        val checkedItems = assignees?.map { it.isSelected }?.toBooleanArray()
+        // Inflate custom dialog layout
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_searchable_list, null)
+        val searchEditText = dialogView.findViewById<EditText>(R.id.searchEditText)
+        val listView = dialogView.findViewById<ListView>(R.id.listView)
+        val emptyStateTextView = dialogView.findViewById<TextView>(R.id.emptyStateTextView)
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Select Assignee")
-            .setPositiveButton(resources.getString(R.string.ok)) { dialog, which ->
-                println(which)
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, filteredItems.map { it.name })
+        listView.adapter = adapter
+        listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+
+        // Pre-select items based on `selectedItems`
+        for (i in selectedItems.indices) {
+            if (selectedItems[i]) listView.setItemChecked(i, true)
+        }
+
+        // Search filter
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString().lowercase()
+                filteredItems.clear()
+                filteredItems.addAll(assignees.filter { it.name?.lowercase()?.contains(query) == true })
+                adapter.notifyDataSetChanged()
+
+                // Toggle visibility of the empty state
+                if (filteredItems.isEmpty()) {
+                    listView.visibility = View.GONE
+                    emptyStateTextView.visibility = View.VISIBLE
+                } else {
+                    listView.visibility = View.VISIBLE
+                    emptyStateTextView.visibility = View.GONE
+                }
             }
-            .setMultiChoiceItems(multiItems, checkedItems) { dialog, which, checked ->
-                checkedItems?.set(which, checked)
-                assignees?.forEachIndexed { index, assignee ->
-                    if (index == which) {
-                        assignee.isSelected = checked
-                    }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Show dialog
+        AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                // Capture selected items
+                for (i in assignees.indices) {
+                    selectedItems[i] = listView.isItemChecked(i)
                 }
 
-                buildAssigneeModels(assignees?.filter { it.isSelected })
+                buildAssigneeModels(assignees.filterIndexed { index, _ -> selectedItems[index] })
+
+              //  buildAssigneeModels(assignees.filter { it.isSelected })
             }
+            .setNegativeButton("Cancel", null)
             .show()
     }
 
