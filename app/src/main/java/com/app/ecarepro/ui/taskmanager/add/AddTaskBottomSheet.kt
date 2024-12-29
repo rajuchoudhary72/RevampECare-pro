@@ -5,8 +5,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +12,9 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -75,6 +73,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         super.onDestroy()
         mainActivity().showLoader(false)
     }
+
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -130,7 +129,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                 (requireActivity() as MainActivity).showLoader(true)
                 mViewModel.addTask { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    mainActivity().showMessage(message?:"")
+                    mainActivity().showMessage(message ?: "")
                     if (isSuccess) {
                         findNavController().popBackStack()
                     }
@@ -164,7 +163,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is AddTaskUiState.Success) {
@@ -181,7 +180,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
         binding.taskList.setOnItemClickListener { _, _, position, _ ->
             mainActivity().showLoader(true)
-            mViewModel.getAssignee( title[position]){
+            mViewModel.getAssignee(title[position]) {
                 mainActivity().showLoader(false)
             }
             binding.assigneeCarousel.isVisible = false
@@ -194,8 +193,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun selectAssignee(assignees: List<Assignee> = emptyList()) {
-        val selectedItems = BooleanArray(assignees.size) // Tracks selection
-        val filteredItems = assignees.toMutableList() // For search filtering
+        val filteredItems = assignees.map { it.name }.toMutableList() // For search filtering
 
         // Inflate custom dialog layout
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_searchable_list, null)
@@ -203,48 +201,56 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         val listView = dialogView.findViewById<ListView>(R.id.listView)
         val emptyStateTextView = dialogView.findViewById<TextView>(R.id.emptyStateTextView)
 
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_multiple_choice, filteredItems.map { it.name })
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_multiple_choice,
+            filteredItems
+        )
         listView.adapter = adapter
         listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+        listView.setOnItemClickListener { _, _, i, _ ->
+            // Update the selected state of the item
+            assignees[i].isSelected = listView.isItemChecked(i)
+        }
 
         // Pre-select items based on `selectedItems`
-        for (i in selectedItems.indices) {
-            if (selectedItems[i]) listView.setItemChecked(i, true)
+        assignees.forEachIndexed { i, assignee ->
+            listView.setItemChecked(i, assignee.isSelected)
         }
 
         // Search filter
-        searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s.toString().lowercase()
-                filteredItems.clear()
-                filteredItems.addAll(assignees.filter { it.name?.lowercase()?.contains(query) == true })
-                adapter.notifyDataSetChanged()
+        searchEditText.doAfterTextChanged { s ->
+            val query = s.toString().trim()
+            filteredItems.clear()
+            filteredItems.addAll(assignees.filter { it.name?.contains(query, true) == true }
+                .map { it.name })
 
-                // Toggle visibility of the empty state
-                if (filteredItems.isEmpty()) {
-                    listView.visibility = View.GONE
-                    emptyStateTextView.visibility = View.VISIBLE
-                } else {
-                    listView.visibility = View.VISIBLE
-                    emptyStateTextView.visibility = View.GONE
-                }
+            adapter.notifyDataSetChanged()
+
+            filteredItems.forEachIndexed { i , item ->
+                listView.setItemChecked(i, assignees.firstOrNull { it.name == item }?.isSelected == true)
             }
-            override fun afterTextChanged(s: Editable?) {}
-        })
+
+            // Toggle visibility of the empty state
+            if (filteredItems.isEmpty()) {
+                listView.visibility = View.GONE
+                emptyStateTextView.visibility = View.VISIBLE
+            } else {
+                listView.visibility = View.VISIBLE
+                emptyStateTextView.visibility = View.GONE
+            }
+        }
 
         // Show dialog
         AlertDialog.Builder(context)
             .setView(dialogView)
             .setPositiveButton("OK") { _, _ ->
-                // Capture selected items
-                for (i in assignees.indices) {
-                    selectedItems[i] = listView.isItemChecked(i)
-                }
-
-                buildAssigneeModels(assignees.filterIndexed { index, _ -> selectedItems[index] })
-
-              //  buildAssigneeModels(assignees.filter { it.isSelected })
+                /*buildAssigneeModels(assignees.filterIndexed { index, _ ->
+                    listView.isItemChecked(
+                        index
+                    )
+                }.map { it.copy(isSelected = true) })*/
+                buildAssigneeModels(assignees.filter { it.isSelected })
             }
             .setNegativeButton("Cancel", null)
             .show()
@@ -363,6 +369,7 @@ fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
     }
     datePicker.show(childFragmentManager, "tag");
 }
+
 private fun convertMillisToDateString(millis: Long): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val calendar = Calendar.getInstance()
