@@ -91,9 +91,6 @@ class HomeFragment : Fragment() {
         setUpViews()
         setUpObservers()
 
-
-
-
     }
 
     private fun setUpViews() {

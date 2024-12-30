@@ -848,5 +848,8 @@
     <string name="fee_receipt">Fee Receipt</string>
     <string name="fee_book">Fee Book</string>
     <string name="due_amount">Due Amount</string>
+    <string name="priority">Priority</string>
+    <string name="select_assignee">Select Assignee</string>
+    <string name="remind_before">Remind Before</string>
 
 </resources>
