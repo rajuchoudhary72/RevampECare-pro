@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.appointment.v2
 
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -205,7 +206,7 @@ class AppointmentViewModel @Inject constructor(
                         }
 
                         "IdType" -> {
-                            data["VisitorPhotoInbyte"] =
+                            data["IdType"] =
                                 if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
                         }
 
@@ -242,6 +243,8 @@ class AppointmentViewModel @Inject constructor(
                         }
                     }
                 }
+                Log.d("FCM", "nultipart: " +data)
+
 
                 userRepository.submitForm(data).collectLatest { result ->
                     loadingState.update { LoadingState.Success }
