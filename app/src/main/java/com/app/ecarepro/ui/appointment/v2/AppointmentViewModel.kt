@@ -22,9 +22,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import org.json.JSONObject
 import retrofit2.HttpException
+import com.app.ecarepro.data.datastore.UserDataStore
+
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userDataStore: UserDataStore
 ) : ViewModel() {
 
     val loadingState = MutableStateFlow<LoadingState>(LoadingState.Success)
@@ -231,7 +234,9 @@ class AppointmentViewModel @Inject constructor(
                                 data[form.columnName] = it.employeeID.toString()
                             }
                         }
-
+                        "usertype" -> {
+                            data["usertype"] = userDataStore.getUser()?.userType.toString()
+                        }
                         else -> {
                             data[form.columnName] = form.value ?: ""
                         }
