@@ -45,7 +45,11 @@ class OnboardingFragment : Fragment() {
         binding.dotsIndicator.attachTo(binding.viewPager)
 
         binding.btn.setOnClickListener {
-            findNavController().navigate(R.id.action_onboardingFragment_to_schoolCodeFragment)
+            try {
+                findNavController().navigate(R.id.action_onboardingFragment_to_schoolCodeFragment)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
