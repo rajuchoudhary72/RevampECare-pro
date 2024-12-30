@@ -209,9 +209,9 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         )
         listView.adapter = adapter
         listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
-        listView.setOnItemClickListener { _, _, i, _ ->
+        listView.setOnItemClickListener { _, view, i, _ ->
             // Update the selected state of the item
-            assignees.firstOrNull { (listView[i] as TextView).text == it.name }?.isSelected = listView.isItemChecked(i)
+            assignees.firstOrNull { (view as TextView).text == it.name }?.isSelected = listView.isItemChecked(i)
         }
 
         // Pre-select items based on `selectedItems`

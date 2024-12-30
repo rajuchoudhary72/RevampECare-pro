@@ -4,6 +4,7 @@ import android.text.TextUtils
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
@@ -24,7 +25,8 @@ import org.json.JSONObject
 import retrofit2.HttpException
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userDataStore: UserDataStore
 ) : ViewModel() {
 
     val loadingState = MutableStateFlow<LoadingState>(LoadingState.Success)
@@ -231,6 +233,9 @@ class AppointmentViewModel @Inject constructor(
                             uiState.employees.firstOrNull { it.employeeName == form.value }?.let {
                                 data[form.columnName] = it.employeeID.toString()
                             }
+                        }
+                        "usertype" -> {
+                            data["usertype"] = userDataStore.getUser()?.userType.toString()
                         }
 
                         else -> {
