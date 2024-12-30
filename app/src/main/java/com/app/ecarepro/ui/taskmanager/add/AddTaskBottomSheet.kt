@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -210,7 +211,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         listView.choiceMode = ListView.CHOICE_MODE_MULTIPLE
         listView.setOnItemClickListener { _, _, i, _ ->
             // Update the selected state of the item
-            assignees[i].isSelected = listView.isItemChecked(i)
+            assignees.firstOrNull { (listView[i] as TextView).text == it.name }?.isSelected = listView.isItemChecked(i)
         }
 
         // Pre-select items based on `selectedItems`
