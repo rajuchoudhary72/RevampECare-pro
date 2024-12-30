@@ -91,7 +91,8 @@ class PostAssignmentFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View  {
        binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.post_assignment)
        try {
            assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
            isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
@@ -614,7 +615,7 @@ class PostAssignmentFragment : Fragment() {
                 val name = StringBuilder()
 
                 for (student in students) {
-                    if (student.isSelected) {
+                    if (student.isSelected!!) {
                         if (studentIds.toString().isEmpty()) {
                             studentIds.append(student.stID)
                             name.append(student.recipientName)
@@ -625,7 +626,7 @@ class PostAssignmentFragment : Fragment() {
 
                     }
                 }
-                classID_StID= groupStudentsByClass(students.filter { it.isSelected }).toMutableList()
+                classID_StID= groupStudentsByClass(students.filter { it.isSelected!! }).toMutableList()
 
 
                 binding.tvSelectstudent.text= name
@@ -687,7 +688,7 @@ class PostAssignmentFragment : Fragment() {
 
         // Convert map to a list of ClassIDStID
         return classIDMap.map { (classID, stIDs) ->
-            ClassID_StID(classID, stIDs)
+            ClassID_StID(classID!!, stIDs)
         }
     }
 

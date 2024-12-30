@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,15 +19,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.network.model.NetworkStaffList
+import com.app.ecarepro.data.network.model.WingLST
 import com.app.ecarepro.databinding.FragmentSmsMsgReportBinding
-import com.app.ecarepro.model.RouteLST
-import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.UsesRPT
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.assignment.staff.postAssignment.ClassListAdapter
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.ui.transport_attendance.out_pass.OutPassReportAdapter
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -41,14 +43,17 @@ import java.util.Locale
 class SmsMsgReportFragment : Fragment() {
 
     private var allSelected: Boolean = false
-    private var staffSelected: Boolean = false
-    private lateinit var staffSelectData: UsesRPT
-    private   var staffList= mutableListOf<UsesRPT>()
     private lateinit var binding: FragmentSmsMsgReportBinding
     private val smsMsgReportViewModel: SmsMsgReportViewModel by viewModels()
     private val dateFrom: Calendar = Calendar.getInstance()
     private var isDateSelected=false
     private var toFragment: String= ""
+    private var isWingSelected: Boolean = false
+    private lateinit var wingLSTS: List<WingLST>
+
+    var ids = StringBuilder()
+    var selectAll: Boolean = false
+
 
 
     private val dateTo: Calendar = Calendar.getInstance()
@@ -75,11 +80,15 @@ class SmsMsgReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getStaffList()
+        getWingReport()
 
         binding.apply {
-            tvSelectStaff.setOnClickListener {
-                popUpStaffList()
+            tvSelectWing.setOnClickListener {
+                if (!wingLSTS.isNullOrEmpty()){
+                    popUpSelectWing()
+                }else{
+                    Toast.makeText(requireContext(), "No Wing Data", Toast.LENGTH_SHORT).show()
+                }
             }
             dateFrom.setOnClickListener { pickDateRange() }
             dateTo.setOnClickListener { pickDateRange() }
@@ -122,102 +131,86 @@ class SmsMsgReportFragment : Fragment() {
             )
         } else {
 
-                 if (staffSelected){
+                 if (isWingSelected){
                      getAppMsgUses(
                          binding.dateFrom.text.toString(),
                          binding.dateTo.text.toString(),
-                         staffSelectData.id
+                         ids.toString()
                      )
             }
 
         }
     }
 
-    private fun getStaffList() {
-        lifecycleScope.launch {
-            smsMsgReportViewModel.staffListStateFlow.collectLatest {
-                when (it) {
-
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    }
-
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    }
-
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
-                        if (it.data.usesRPT != null) {
-                            staffList = it.data.usesRPT.toMutableList()
-                        }
-                        }
-
-                    }
-                }
-            }
-        }
-        smsMsgReportViewModel.getAppMsgUsesForStaff(
-           Constant.toSystemDate( Constant.currentDate() ),
-            Constant.toSystemDate( Constant.currentDate() ),
-             ""
-        )
-    }
 
 
-    private fun popUpStaffList() {
 
-        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
-        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
-        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
-        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
-        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
-        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        val tvSelectAll = view.findViewById<TextView>(R.id.tv_select_all)
-        tvSelectAll.isVisible = true
-        tvHeading.text = getString(R.string.select_staff)
+    private fun popUpSelectWing(){
+
+        val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class,null)
+        val  relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+        tvHeading.text= getText(R.string.lbl_select_class)
+        val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
+        val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
+        llSelectAll.isVisible=true
         builder.setView(view)
 
-        tvSelectAll.setOnClickListener {
-            binding.tvSelectStaff.text = "All"
-            staffSelected = true
-            allSelected = true
-
-            getAppMsgUses(
-                binding.dateFrom.text.toString(),
-                binding.dateTo.text.toString(),
-                 ""
-            )
-            builder.dismiss()
-
-        }
-
         relOk.setOnClickListener {
-            binding.tvSelectStaff.text = staffSelectData.name
-            staffSelected = true
-            allSelected = false
+            if (isWingSelected){
 
-            getAppMsgUses(
-                binding.dateFrom.text.toString(),
-                binding.dateTo.text.toString(),
-                  staffSelectData.id
-            )
 
-            builder.dismiss()
+                val name = StringBuilder()
+                ids.clear()
+
+                for (item in wingLSTS) {
+                    if (item.checked == true) {
+                        if (ids.toString().isEmpty()) {
+                            ids.append(item.wingId)
+                            name.append(item.wingName)
+                        } else {
+                            ids.append(",").append(item.wingId)
+                            name.append(",").append(item.wingName)
+                        }
+                    }
+                }
+
+
+
+                binding.tvSelectWing.text= name
+                getAppMsgUses(
+                    binding.dateFrom.text.toString(),
+                    binding.dateTo.text.toString(),
+                    ids.toString()
+                )
+                builder.dismiss()
+            }
+
         }
 
-        val staffPopUpListAdapter =
-            StaffPopUpListAdapter(staffList, object : ItemListener<UsesRPT> {
-                override fun onItemClick(t: UsesRPT, pos: Int, boolean: Boolean) {
-                    staffSelectData = t
-                }
-            })
+        val subjectListAdapter= WingListAdapter(wingLSTS, selectAll, true, object : ItemListener<WingLST> {
+            override fun onItemClick(t: WingLST, pos: Int, boolean: Boolean) {
+                isWingSelected = true
+            }
 
+        })
         rvYears.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
-            adapter = staffPopUpListAdapter
+            adapter = subjectListAdapter
+        }
+
+        llSelectAll.setOnClickListener {
+            selectAll = !selectAll
+            isWingSelected = selectAll
+            for (i in wingLSTS) {
+                i .checked=selectAll
+            }
+            subjectListAdapter.notifyDataSetChanged()
+            checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
         }
 
         relCancel.setOnClickListener {
@@ -229,6 +222,33 @@ class SmsMsgReportFragment : Fragment() {
     }
 
 
+    private fun  getWingReport(){
+        lifecycleScope.launch {
+            smsMsgReportViewModel.wingReportStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error$it")
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            wingLSTS = it.data.wingLST
+
+                        }
+                    }
+
+                }
+            }
+        }
+        smsMsgReportViewModel.wingsList()
+    }
+
     private fun getAppMsgUses(
         fromDate: String,
         toDate: String,
@@ -236,7 +256,7 @@ class SmsMsgReportFragment : Fragment() {
     ) {
 
         if (isDateSelected){
-        if (staffSelected){
+        if (isWingSelected){
             lifecycleScope.launch {
                 smsMsgReportViewModel.smsMsgReportStateFlow.collectLatest {
                     when (it) {
@@ -253,7 +273,8 @@ class SmsMsgReportFragment : Fragment() {
                             (requireActivity() as MainActivity).showLoader(false)
                             if (it.data != null) {
 
-                                if (it.data.usesRPT != null) {
+                                if (it.data.usesRPT!=null) {
+                                if (it.data.usesRPT.isNotEmpty()) {
 
                                     binding.recyclerSmsUsageReport.isVisible = true
                                     binding.tvNoData.isVisible = false
@@ -270,6 +291,10 @@ class SmsMsgReportFragment : Fragment() {
                                     }
 
 
+                                } else {
+                                    binding.recyclerSmsUsageReport.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
                                 } else {
                                     binding.recyclerSmsUsageReport.isVisible = false
                                     binding.tvNoData.isVisible = true

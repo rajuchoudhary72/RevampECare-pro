@@ -62,7 +62,6 @@ class GoogleAnalyticsService @Inject constructor(
             AnalyticsConstants.Attributes.OS_VERSION,
             "${Build.VERSION.SDK_INT} (${Build.VERSION.RELEASE})"
         )
-
         if (userDataStore.isUserAuthenticated()) {
             commonEventAttributes = mapOf(
                 AnalyticsConstants.Attributes.USER_ID to userDataStore.getUser()?.userId.toString(),

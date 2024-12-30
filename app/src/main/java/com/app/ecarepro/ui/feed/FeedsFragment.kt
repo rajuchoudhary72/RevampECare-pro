@@ -149,7 +149,6 @@ class FeedsFragment : Fragment() {
         super.onResume()
         feedsViewModel.sendScreenEvent()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

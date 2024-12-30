@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class xOnboardingFragment : Fragment() {
+class OnboardingFragment : Fragment() {
 
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!

@@ -64,16 +64,9 @@ class AddInfractionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.add_infraction)
 
-        if(activity is AppCompatActivity){
-            (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-            (activity as AppCompatActivity).supportActionBar?.apply {
-                title = "Add Infraction"
-
-                setDisplayHomeAsUpEnabled(true)
-                setDisplayShowHomeEnabled(true)
-            }
-        }
 
         binding.tvSelectInfractionCate.setOnClickListener {
             popUpSelectInfractionCat()

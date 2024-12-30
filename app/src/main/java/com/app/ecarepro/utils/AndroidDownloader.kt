@@ -2,19 +2,19 @@ package com.app.ecarepro.utils
 
 import android.app.DownloadManager
 import android.content.Context
+import android.os.Environment
+import androidx.core.net.toUri
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Environment
 import android.widget.Toast
-import androidx.core.net.toUri
 
 class AndroidDownloader(val context: Context) : Downloader {
+
 
     private var fileName: String? = null
 
     private val _downloadManager = context.getSystemService(DownloadManager::class.java)
     override fun downloadFile(url: String, downloadType: String, mimeType: String): Long {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context.checkSelfPermission(
                 android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
@@ -26,7 +26,6 @@ class AndroidDownloader(val context: Context) : Downloader {
             ).show()
             return -1
         }
-
         fileName = url.substring(url.lastIndexOf('/') + 1, url.length)
         val request = DownloadManager.Request(url.toUri())
             .setMimeType(mimeType)

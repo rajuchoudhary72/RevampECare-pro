@@ -13,14 +13,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import androidx.lifecycle.SavedStateHandle
+import com.app.ecarepro.utils.Constant
 @HiltViewModel
 class TeacherAssignmentViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-
+    private val staffId = savedStateHandle.get<String>(Constant.STAFF_ID_ARGUMENT)?:""
     var userType : String = ""
 
     init {
@@ -42,7 +44,9 @@ class TeacherAssignmentViewModel @Inject constructor(
         NetworkResult.Loading())
     val deleteAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAssignmentMutableStateFlow
 
-
+    init {
+        teachersAssignment(staffId)
+    }
     fun teachersAssignment(iD: String )=viewModelScope.launch {
         runCatching {
             teacAssignmentMutableStateFlow.value = NetworkResult.Loading()

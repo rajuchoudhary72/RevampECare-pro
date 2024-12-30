@@ -1,22 +1,26 @@
 package com.app.ecarepro.model
 
-data class Student(
-    val admissionNumber: String,
-    val `class`: String,
-    val contactMob: String,
-    val contactPerson: String,
-    val dob: String,
-    val fatherName: String,
-    var isSelected: Boolean,
-    val name: String,
-    val recipientName: String,
-    val gender: String,
-    val photo: String,
-    val rollNumber: String,
-    val stID: Int,
-    val classID: Int,
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-) {
+@Parcelize
+data class Student(
+    val admissionNumber: String?,
+    val `class`: String?,
+    val contactMob: String?,
+    val contactPerson: String?,
+    val dob: String?,
+    val fatherName: String?,
+    var isSelected: Boolean?,
+    val name: String?,
+    val recipientName: String?,
+    val gender: String?,
+    val photo: String?,
+    val rollNumber: String?,
+    val stID: Int?,
+    val classID: Int?,
+
+): Parcelable {
     override fun toString(): String {
         return "$name $rollNumber $admissionNumber"
     }

@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentDefaulterReportBinding
 import com.app.ecarepro.defaultdata
@@ -83,8 +85,8 @@ class DefaulterReportFragment : Fragment() {
         binding.ivFilter.setOnClickListener {
             binding.ivFilter.isVisible = false
             binding.groupFilter.isVisible = true
-            binding.recyclerDefaulterReport.isVisible = false
-            binding.tvNoData.isVisible = false
+            binding.recyclerDefaulterReport.isVisible=false
+            binding.tvNoData.isVisible=false
         }
         binding.ivOrder.setOnClickListener {
             shortDescending = !shortDescending
@@ -146,8 +148,8 @@ class DefaulterReportFragment : Fragment() {
         binding.tvSubmit.setOnClickListener {
             binding.groupFilter.isVisible = false
             getDefaultReport()
-            /*    binding.ivFilter.isVisible = true
-                binding.ivOrder.isVisible = true*/
+        /*    binding.ivFilter.isVisible = true
+            binding.ivOrder.isVisible = true*/
         }
 
     }
@@ -269,44 +271,47 @@ class DefaulterReportFragment : Fragment() {
                                         value(data.installmentname)
                                         selected(installid.contains(data.installid))
                                         onClickContent { _ ->
+
                                             if (installid.contains(data.installid)) {
                                                 installid.remove(data.installid)
                                             } else {
                                                 installid.add(data.installid)
                                             }
                                             binding.rvSelectInstallment.requestModelBuild()
-
                                         }
                                     }
                                 }
-                                sectionsLists = it.data.sections
+                            }
+                            sectionsLists = it.data.sections
 
 
-                                binding.rvSelectSection.withModels {
-                                    it.data.sections.forEach { data ->
-                                        sectionListData.add(data.sectionname)
-                                        filter {
-                                            id(data.sectionid)
-                                            value(data.sectionname)
-                                            selected(sectionid == data.sectionid)
-                                            onClickContent { _ ->
+                            binding.rvSelectSection.withModels {
+                                it.data.sections.forEach { data ->
+                                    sectionListData.add(data.sectionname)
+                                    filter {
+                                        id(data.sectionid)
+                                        value(data.sectionname)
+                                        selected(sectionid == data.sectionid)
+                                        onClickContent { _ ->
 
-                                                sectionid = data.sectionid
-                                                binding.rvSelectSection.requestModelBuild()
-                                            }
+                                            sectionid = data.sectionid
+                                            binding.rvSelectSection.requestModelBuild()
                                         }
                                     }
                                 }
-
                             }
 
                         }
+
                     }
+
+                    else -> {}
                 }
             }
-
         }
+
     }
+
 
     private fun getDefaultReport() {
         lifecycleScope.launch {

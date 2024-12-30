@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.InboxMessage
 import com.app.ecarepro.data.repository.MessageRepository
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.DEFAULT_PAGE
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.message.sent.calculateTotalPages
@@ -16,7 +14,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 @HiltViewModel
 class InboxMessageViewModel @Inject constructor(
     private val messageRepository: MessageRepository,
@@ -114,7 +113,6 @@ class InboxMessageViewModel @Inject constructor(
         totalPageCount = DEFAULT_PAGE
         fetchInboxMessages(true)
     }
-
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.INBOX_MESSAGE_LIST)
     }

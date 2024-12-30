@@ -2,9 +2,9 @@ package com.app.ecarepro.ui.firebaseAnalytics
 
 import android.util.Log
 import com.app.ecarepro.ui.firebaseAnalytics.providers.AnalyticsProvider
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.concurrent.atomic.AtomicReference
 
 interface AnalyticsManager {
     fun trackScreen(screenName: String)
@@ -41,7 +41,6 @@ class AppAnalyticsManager : AnalyticsManager {
             .filter { it.shouldTrackEvent(event) }
             .forEach { it.trackEvent(event, parameters) }
     }
-
     override fun setUserProperties() {
         if (providers.get().isEmpty()) {
             Log.w(TAG, "Analytics providers not initialized")

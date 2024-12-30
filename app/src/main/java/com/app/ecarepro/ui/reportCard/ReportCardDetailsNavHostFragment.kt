@@ -71,7 +71,7 @@ class ReportCardDetailsNavHostFragment(  ) : Fragment() {
                                     val fragmentList : ArrayList<Fragment> = ArrayList()
 
                                     it.data.classes.forEach { itemDat ->
-                                        fragmentList.add( ReportCardDetailsFragment(itemDat  ))
+                                        fragmentList.add( ReportCardDetailsFragment.newInstance(itemDat))
                                     }
 
                                     val viewPagerAdapter = ViewPagerAdapter(

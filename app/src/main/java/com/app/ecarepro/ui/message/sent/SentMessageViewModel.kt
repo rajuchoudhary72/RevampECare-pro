@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.SentMessage
 import com.app.ecarepro.data.network.model.SentMessageDto
 import com.app.ecarepro.data.repository.MessageRepository
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.onStart
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 @HiltViewModel
 class SentMessageViewModel @Inject constructor(
     private val messageRepository: MessageRepository,
@@ -150,7 +149,6 @@ class SentMessageViewModel @Inject constructor(
                 }
         }
     }
-
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.SENT_MESSAGE_LIST)
     }

@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.classAttendanceCard
 import com.app.ecarepro.databinding.FragmentAttendancesBinding
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -20,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 @AndroidEntryPoint
 class AttendanceFragment : Fragment() {
@@ -81,8 +81,7 @@ class AttendanceFragment : Fragment() {
 
             launch {
                 mViewModel.sortOptions.collectLatest { sortOptions ->
-                    val arrayAdapter = ArrayAdapter(
-                        requireContext(), android.R.layout.simple_list_item_1,
+                    val arrayAdapter= ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
                         sortOptions.map { it.second })
                     binding.filters.setAdapter(arrayAdapter)
                     binding.filters.setText(sortOptions[0].second, false)
@@ -115,12 +114,10 @@ class AttendanceFragment : Fragment() {
          }*/
     }
 
-
     override fun onResume() {
         super.onResume()
         mViewModel.sendScreenEvent()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

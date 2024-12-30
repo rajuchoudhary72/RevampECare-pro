@@ -8,17 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentStudentProfileLibraryTransBinding
 import com.app.ecarepro.model.Library
 import com.app.ecarepro.model.LibraryTransactionX
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class StudentProfileLibraryTransFragment(val library: Library) : Fragment() {
+@AndroidEntryPoint
+class StudentProfileLibraryTransFragment() : Fragment() {
 
     private lateinit var binding: FragmentStudentProfileLibraryTransBinding
+    private val sharedViewModel: SharedViewModelProfile by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,23 +36,30 @@ class StudentProfileLibraryTransFragment(val library: Library) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.libraryDaata=library
+        sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+            if (it.library!=null){
+               val library=it.library
+                binding.libraryDaata=library
 
-        with(binding) {
-             tvViewPendingBooks.setOnClickListener {
-                 if (library.libraryTransaction!=null){
-                     popUpLibraryTransaction(library.libraryTransaction)
-                 }
+                with(binding) {
+                    tvViewPendingBooks.setOnClickListener {
+                        if (library.libraryTransaction!=null){
+                            popUpLibraryTransaction(library.libraryTransaction)
+                        }
 
-             }
-            tvViewFineDetails.setOnClickListener {
-                if(library.libraryFineDTL!=null){
-                    popUpLibraryFine(library.libraryFineDTL)
+                    }
+                    tvViewFineDetails.setOnClickListener {
+                        if(library.libraryFineDTL!=null){
+                            popUpLibraryFine(library.libraryFineDTL)
+                        }
+
+                    }
+
                 }
-
             }
 
         }
+
 
 
     }

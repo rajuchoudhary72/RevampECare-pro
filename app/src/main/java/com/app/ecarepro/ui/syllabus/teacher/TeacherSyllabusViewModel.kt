@@ -35,7 +35,6 @@ class TeacherSyllabusViewModel @Inject constructor(
     init {
         getTeacherSyllabuses()
     }
-
     fun getTeacherSyllabuses( )=viewModelScope.launch {
         runCatching {
             teacherSyllabusMutableStateFlow.value = NetworkResult.Loading()

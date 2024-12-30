@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,7 +35,7 @@ class AppointmentReportFragment : Fragment() {
 
     private var showFilter: Boolean = false
     private lateinit var binding: FragmentAppointmentReportBinding
-    private val appointmentViewModel: AppointmentViewModel by viewModels()
+    private val appointmentViewModel: AppointmentViewModel by activityViewModels()
     private var all = true
     private var  appointType = Constant.TODAY
     private val dateFrom: Calendar = Calendar.getInstance()
@@ -55,7 +57,8 @@ class AppointmentReportFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAppointmentReportBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.appointment)
         return binding.root
     }
 
@@ -100,7 +103,9 @@ class AppointmentReportFragment : Fragment() {
 
         }
 
-        binding.ivFilter.setOnClickListener {
+        binding.includeToolbar.ibAction.isVisible=true
+        binding.includeToolbar.ibAction.setImageResource(R.drawable.ic_filter)
+        binding.includeToolbar.ibAction.setOnClickListener {
            if (showFilter){
                binding.llToole.visibility=View.GONE
                showFilter=true

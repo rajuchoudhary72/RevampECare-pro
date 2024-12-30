@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.repository.SchoolRepository
 import com.app.ecarepro.model.Feed
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.DEFAULT_PAGE
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.message.sent.calculateTotalPages
@@ -16,7 +14,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
     private val schoolRepository: SchoolRepository,
@@ -114,11 +113,9 @@ class FeedsViewModel @Inject constructor(
         totalPageCount = DEFAULT_PAGE
         fetchInboxMessages(true)
     }
-
     fun sendScreenEvent() {
         analyticsManager.trackScreen(AnalyticsConstants.Screens.FEEDS_TAB)
     }
-
 }
 
 sealed interface FeedsUiState {

@@ -55,7 +55,8 @@ class AssignRollNoFragment : Fragment()  {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAssignRollNoBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.manage_roll_number)
 
 
 
@@ -121,7 +122,7 @@ class AssignRollNoFragment : Fragment()  {
             }
 
 
-binding.tvSave.setOnClickListener {
+binding.includeToolbar.btnSave.setOnClickListener {
     uploadAssignRollNo()
 }
 
@@ -208,7 +209,7 @@ binding.tvSave.setOnClickListener {
 
                             if (it.data.students != null) {
 
-                                binding.tvSave.isVisible=true
+                                binding.includeToolbar.btnSave.isVisible=true
                                 binding.recyclerAssignRollno.isVisible = true
                                 binding.tvNoData.isVisible = false
 
@@ -219,7 +220,7 @@ binding.tvSave.setOnClickListener {
                                 assignRollNoListAdapter.setData(it.data.students.toMutableList())
 
                             } else {
-                                binding.tvSave.isVisible=false
+                                binding.includeToolbar.btnSave.isVisible=false
                                 binding.recyclerAssignRollno.isVisible = false
                                 binding.tvNoData.isVisible = true
                             }
@@ -247,7 +248,7 @@ binding.tvSave.setOnClickListener {
         assignRollNoViewModel.assignRollNumber(requestList).invokeOnCompletion {
             Toast.makeText(requireContext(), "Roll Number Assign Successfully", Toast.LENGTH_SHORT)
                 .show()
-           binding.tvSave.isVisible=false
+            binding.includeToolbar.btnSave.isVisible=false
         }
 
 

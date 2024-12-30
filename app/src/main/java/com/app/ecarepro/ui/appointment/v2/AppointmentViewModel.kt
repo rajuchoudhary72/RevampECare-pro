@@ -1,6 +1,7 @@
 package com.app.ecarepro.ui.appointment.v2
 
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,9 +23,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import org.json.JSONObject
 import retrofit2.HttpException
+import com.app.ecarepro.data.datastore.UserDataStore
+
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userDataStore: UserDataStore
 ) : ViewModel() {
 
     val loadingState = MutableStateFlow<LoadingState>(LoadingState.Success)
@@ -62,8 +66,7 @@ class AppointmentViewModel @Inject constructor(
                                 AppointmentUiState.NoDataFound
                             } else {
                                 AppointmentUiState.Success(
-                                    formData = response
-                                        .map { form ->
+                                    formData = response.map { form ->
                                         when (form.columnName) {
                                             "Name" -> {
                                                 form.copy(value = visitorDetails.getOrNull()?.name)
@@ -203,7 +206,7 @@ class AppointmentViewModel @Inject constructor(
                         }
 
                         "IdType" -> {
-                            data["VisitorPhotoInbyte"] =
+                            data["IdType"] =
                                 if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
                         }
 
@@ -232,12 +235,16 @@ class AppointmentViewModel @Inject constructor(
                                 data[form.columnName] = it.employeeID.toString()
                             }
                         }
-
+                        "usertype" -> {
+                            data["usertype"] = userDataStore.getUser()?.userType.toString()
+                        }
                         else -> {
                             data[form.columnName] = form.value ?: ""
                         }
                     }
                 }
+                Log.d("FCM", "nultipart: " +data)
+
 
                 userRepository.submitForm(data).collectLatest { result ->
                     loadingState.update { LoadingState.Success }

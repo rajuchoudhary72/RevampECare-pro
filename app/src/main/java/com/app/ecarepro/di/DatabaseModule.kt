@@ -2,7 +2,6 @@ package com.app.ecarepro.di
 
 import android.content.Context
 import androidx.room.Room
-import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.database.ECareProDatabase
 import com.app.ecarepro.data.database.MIGRATION_4_5
 import com.app.ecarepro.data.database.MIGRATION_5_6
@@ -13,7 +12,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -45,9 +43,5 @@ object DatabaseModule {
         return database.schoolDao()
     }
 
-    @Provides
-    @Singleton
-    fun provideJsonCache(): JsonCache {
-        return JsonCache()
-    }
+
 }

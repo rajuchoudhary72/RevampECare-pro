@@ -53,7 +53,10 @@ class FavouritesFragment : Fragment() {
         return binding.root
 
     }
-
+    override fun onResume() {
+        super.onResume()
+        mViewModel.sendScreenEvent()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
@@ -201,10 +204,6 @@ class FavouritesFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        mViewModel.sendScreenEvent()
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

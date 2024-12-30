@@ -1,14 +1,13 @@
 package com.app.ecarepro.ui.profile
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Profile
 import com.app.ecarepro.data.network.model.UploadPhotoRequest
+import com.app.ecarepro.data.network.model.asUserEntity
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
@@ -16,15 +15,18 @@ import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.update
+import kotlin.math.truncate
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -33,15 +35,15 @@ class ProfileViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val userDataStore: UserDataStore
 ) : ViewModel() {
-    private val refresh = MutableLiveData(false)
+    val refresh = MutableStateFlow(true)
 
     var userType: Int = 0
 
     val uiState =
-        refresh.asFlow().flatMapLatest {refresh ->
+        refresh.flatMapLatest {
             combine(
                 flow = userDataStore.getUsersFlow(),  // get  data  base to fetch user  detail
-                flow2 = userRepository.getUserProfile(refresh),   // api
+                flow2 = userRepository.getUserProfile(),   // api
                 flow3 = userDataStore.getCurrentUserIdAsFlow()   // selected user
             ) { users, profile, userId ->
                 Triple(users, profile, userId)
@@ -74,11 +76,11 @@ class ProfileViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     userType = userDataStore.getUser()?.userType!!
-                } catch (e: NullPointerException) {
+                }catch (e:NullPointerException){
                     e.stackTrace
                 }
             }
-        } catch (e: RuntimeException) {
+        }catch (e:RuntimeException){
             e.stackTrace
         }
     }
@@ -148,14 +150,9 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun refresh() {
-        refresh.value = true
-    }
-
-    fun sendScreenEvent() {
+    fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.USER_PROFILE)
     }
-
     fun sendAnalyticEvent(
         event: String,
         attributes: Map<String, String>

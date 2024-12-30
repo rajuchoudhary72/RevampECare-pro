@@ -274,7 +274,6 @@ class SystemViewModel @Inject constructor(
             attributes
         )
     }
-
 }
 
 sealed interface MainActivityUiState {
