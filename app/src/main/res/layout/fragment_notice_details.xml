@@ -15,30 +15,21 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".ui.notice.NoticeDetailsFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_notic_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:title="Notice"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleTextColor="@color/white"
-            app:titleCentered="true"
-            android:background="@color/md_theme_light_primary"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </com.google.android.material.appbar.MaterialToolbar>
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
 
 
         <ScrollView
 
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_notic_detail"
+            android:layout_below="@+id/include_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -291,5 +282,5 @@
 
         </ScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

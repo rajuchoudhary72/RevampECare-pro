@@ -91,6 +91,7 @@
     <string name="latest_book">Latest Book</string>
     <string name="my_account">My Account</string>
     <string name="yes">OK</string>
+    <string name="yes_holder">Yes</string>
     <string name="add_image">Add Image</string>
     <string name="pending">Pending</string>
     <string name="add_photo">Add Photo!</string>
@@ -848,5 +849,10 @@
     <string name="fee_receipt">Fee Receipt</string>
     <string name="fee_book">Fee Book</string>
     <string name="due_amount">Due Amount</string>
+    <string name="timetable_of">Timetable of %1$s</string>
+    <string name="circuler_details">Circuler Details</string>
+    <string name="notice_details">Notice Details</string>
+    <string name="must_read">Must Read</string>
+    <string name="do_you_want_to_send_push_notification">Do you want to send push notification?</string>
 
 </resources>

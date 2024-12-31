@@ -13,11 +13,7 @@
         android:fitsSystemWindows="true"
         tools:context=".ui.timeTable.TimeTableNavHostFragment">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+
             <include
                 android:id="@+id/include_toolbar"
                 layout="@layout/common_toolbar"
@@ -30,15 +26,18 @@
                 app:tabGravity="fill"
                 app:tabMode="scrollable"
                 app:tabIndicatorFullWidth="true"
+                android:layout_alignParentBottom="true"
                 />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/include_toolbar"
+                android:layout_above="@+id/tabLayout"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_no_data"
