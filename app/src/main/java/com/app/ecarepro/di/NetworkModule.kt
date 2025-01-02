@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.UserService
+import com.app.ecarepro.di.annotations.SessionReCreate
 import com.app.ecarepro.utils.Constant
 import com.google.gson.Gson
 import dagger.Module
@@ -39,10 +40,8 @@ object NetworkModule {
 
     @Provides
     fun provideOkHttpClient(
-        @ApplicationContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor
-
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
@@ -54,8 +53,6 @@ object NetworkModule {
             .build()
     }
 
-    /* .addInterceptor(connectivityInterceptor)
-                .addInterceptor(customResponseInterceptor)*/
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
@@ -107,6 +104,30 @@ object NetworkModule {
         retrofit: Retrofit
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
+    }
+
+    @Provides
+    @SessionReCreate
+    fun provideSessionUserService(): UserService {
+        val client = OkHttpClient
+            .Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(
+                if (BuildConfig.FLAVOR == "dev") {
+                    Constant.BASE_URL
+                } else {
+                    Constant.BASE_DEV_URL
+                }
+
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(UserService::class.java)
     }
 
 }

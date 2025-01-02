@@ -6,6 +6,8 @@ import android.provider.Settings.Secure
 import com.app.ecarepro.AssignHouseRequest
 import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -218,7 +220,7 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
             )
         ).also {
             if (it.authenticated == true) {
@@ -243,7 +245,14 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
+                deviceInfo = CreateUserSessionRequestDto(
+                    ipAddress = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    locationCity = "N/A",
+                )
             )
         ).also {
             if (it.authenticated == true && it.isOTPEnabled == false) {
@@ -1439,6 +1448,31 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun academicYears(): NetworkAcademicYear {
         return userService.academicYears()
+    }
+
+    override fun createSession(regenerate: Boolean): Flow<Result<UserSessionResponseDto>> {
+        return flow {
+            try {
+                val response = userService.createSession(
+                    CreateUserSessionRequestDto(
+                        ipAddress = Secure.getString(
+                            context.contentResolver,
+                            Secure.ANDROID_ID
+                        ),
+                        locationCity = "N/A",
+                        oldSessionID = if (regenerate) userDataStore.getUserSessionId() else null
+                    )
+                )
+                if (response.errorCode == 0) {
+                    userDataStore.saveSessionId(response.sessionID)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
     }
 
     override suspend fun feeCollection(

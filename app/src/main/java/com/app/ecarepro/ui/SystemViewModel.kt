@@ -275,6 +275,18 @@ class SystemViewModel @Inject constructor(
         )
     }
 
+    fun createUserSession(onResult: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            userRepository.createSession().collectLatest {
+                it.onSuccess {
+                    onResult(true, "")
+                }
+                    .onFailure {
+                        onResult(false, it.message ?: UNKNOWN_ERROR_MESSAGE)
+                    }
+            }
+        }
+    }
 }
 
 sealed interface MainActivityUiState {

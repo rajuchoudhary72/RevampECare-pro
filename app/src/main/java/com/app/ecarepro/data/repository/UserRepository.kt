@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Department
@@ -851,5 +852,8 @@ interface UserRepository {
     ): CommonResponse
 
     suspend fun academicYears(): NetworkAcademicYear
+
+    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
+
 
 }

@@ -28,4 +28,6 @@ class SplashViewModel @Inject constructor(
     }
 
     suspend fun isUserAuthenticated() = userDataStore.isUserAuthenticated()
+
+    suspend fun isUserSessionAvailable() = userDataStore.getUserSessionId().isNullOrEmpty().not()
 }

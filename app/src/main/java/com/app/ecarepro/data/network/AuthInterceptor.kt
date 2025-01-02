@@ -2,6 +2,7 @@ package com.app.ecarepro.data.network
 
 import android.content.Context
 import android.util.Log
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -39,6 +40,9 @@ class AuthInterceptor @Inject constructor(
         }
 
         val authToken = runBlocking {
+            userDataStore.getUserSessionId()?.let {sessionId ->
+                requestBuilder.addHeader(SESSION_ID, sessionId)
+            }
             if (isLoginApi) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else
@@ -48,11 +52,16 @@ class AuthInterceptor @Inject constructor(
         Log.e(AUTH_TOKEN, authToken)
         requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
-        return chain.proceed(requestBuilder.build())
+        return chain.proceed(requestBuilder.build().also {
+            if(BuildConfig.DEBUG){
+               // Log.e("Okhttp", it.toString())
+            }
+        })
     }
 
     companion object {
         const val AUTH_TOKEN = "AuthToken"
+        const val SESSION_ID = "SessionID"
     }
 
 
