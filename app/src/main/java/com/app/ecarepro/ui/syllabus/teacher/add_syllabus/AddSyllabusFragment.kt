@@ -308,7 +308,6 @@ class AddSyllabusFragment : Fragment() {
 
 
     private fun popUpSelectClass() {
-
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
         val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
