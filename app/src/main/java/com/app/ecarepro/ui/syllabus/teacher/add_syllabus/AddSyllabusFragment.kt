@@ -187,6 +187,7 @@ class AddSyllabusFragment : Fragment() {
             }
 
             if (isValidated){
+                mainActivity().showLoader(true)
                 addSyllabusViewModel.saveSyllabus(
                     classID,
                     sectionIDs.toString().ifEmpty { null },
@@ -196,6 +197,7 @@ class AddSyllabusFragment : Fragment() {
                     if (pdfString.isNotEmpty()) BrowsedFile(pdfString,"pdf") else null,
                     if (pdfString.isEmpty()) fileName else null,
                 ).invokeOnCompletion {
+                    mainActivity().showLoader(false)
                     mainActivity().showMessage("Submitted Successfully!!!")
                     popUpSendNotification()
                 }
@@ -550,6 +552,7 @@ class AddSyllabusFragment : Fragment() {
         }
 
         btn_submit.setOnClickListener {
+            mainActivity().showLoader(true)
             val sub = binding.tvSelectSubject.text.toString()
             val classname = binding.tvSelectClass.text.toString()
             if (sylabussType==Constant.CLASS_WISE) {
@@ -566,9 +569,11 @@ class AddSyllabusFragment : Fragment() {
                 ) {  isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
                     if (isSuccess){
+                        mainActivity().showLoader(false)
                         mainActivity().showMessage("Notification Sent Successfully")
                         findNavController().popBackStack()
                     }else{
+                        mainActivity().showLoader(false)
                         mainActivity().showMessage(message)
                     }
                 }
@@ -598,9 +603,11 @@ class AddSyllabusFragment : Fragment() {
                 ) {  isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
                     if (isSuccess){
+                        mainActivity().showLoader(false)
                         mainActivity().showMessage("Notification Sent Successfully")
                         findNavController().popBackStack()
                     }else{
+                        mainActivity().showLoader(false)
                         mainActivity().showMessage(message)
                     }
                 }
