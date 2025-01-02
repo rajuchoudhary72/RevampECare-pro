@@ -854,5 +854,7 @@
     <string name="notice_details">Notice Details</string>
     <string name="must_read">Must Read</string>
     <string name="do_you_want_to_send_push_notification">Do you want to send push notification?</string>
-
+    <string name="priority">Priority</string>
+    <string name="select_assignee">Select Assignee</string>
+    <string name="remind_before">Remind Before</string>
 </resources>

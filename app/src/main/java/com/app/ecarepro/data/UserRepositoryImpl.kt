@@ -143,6 +143,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
@@ -157,6 +158,7 @@ import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
+import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
@@ -173,8 +175,9 @@ class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
     private val userService: UserService,
     private val userDataStore: UserDataStore,
-    private val appRepository: AppRepository
+    private val jsonCache: JsonCache
 ) : UserRepository {
+
 
 
     override suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto {
@@ -1056,15 +1059,21 @@ class UserRepositoryImpl @Inject constructor(
     }
 
 
-    override fun getUserProfile(): Flow<Result<Profile>> {
+    override fun getUserProfile(refresh: Boolean): Flow<Result<Profile>> {
         return flow {
             try {
-                val response = userService.getUserProfile()
-                if (response.errorCode == 0) {
+                val response =
+                    if (refresh.not() && jsonCache.isCacheAvailable(USER_PROFILE_KEY)) {
+                        jsonCache.retrieve(USER_PROFILE_KEY, UserProfileDto::class.java)
+                    } else {
+                        userService.getUserProfile().also {
+                            jsonCache.store(USER_PROFILE_KEY, it)
+                        }
+                    }
+                if (response?.errorCode == 0) {
                     emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
-                }
-                else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response?.message)))
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))
@@ -1135,15 +1144,22 @@ class UserRepositoryImpl @Inject constructor(
         return userService.excellenceAward()
     }
 
-    override fun getUserDashboard(): Flow<Result<UserDashboardDto>> {
+    override fun getUserDashboard(refresh: Boolean): Flow<Result<UserDashboardDto>> {
         return flow {
             try {
-                val response = userService.getUserDashboard()
-                if (response.errorCode == 0) {
+                val response =
+                    if (refresh.not() && jsonCache.isCacheAvailable(USER_DASHBOARD_KEY)) {
+                        jsonCache.retrieve(USER_DASHBOARD_KEY, UserDashboardDto::class.java)
+                    } else {
+                        userService.getUserDashboard().also {
+                            jsonCache.store(USER_DASHBOARD_KEY, it)
+                        }
+                    }
+                if (response?.errorCode == 0) {
                     userDataStore.saveDashboardData(response)
                     emit(Result.success(response))
                 } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+                    emit(Result.failure(IllegalArgumentException(response?.message)))
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))
@@ -1184,11 +1200,18 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserUndertaking(): Flow<Result<String>> {
+    override fun getUserUndertaking(refresh: Boolean): Flow<Result<String>> {
         return flow {
             try {
-                val response = userService.getUserUndertaking()
-                emit(Result.success(response))
+                val response =
+                    if (refresh.not() && jsonCache.isCacheAvailable(USER_UNDERTAKING_KEY)) {
+                        jsonCache.retrieve(USER_UNDERTAKING_KEY, String::class.java)
+                    } else {
+                        userService.getUserUndertaking().also {
+                            jsonCache.store(USER_UNDERTAKING_KEY, it)
+                        }
+                    }
+                emit(Result.success(response ?: ""))
             } catch (error: Throwable) {
                 emit(Result.failure(error))
             }
@@ -1489,5 +1512,10 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+    companion object {
+        private const val USER_PROFILE_KEY = "user_profile"
+        private const val USER_DASHBOARD_KEY = "user_dashboard"
+        private const val USER_UNDERTAKING_KEY = "user_undertaking"
     }
 }

@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Prority"
+                    android:hint="@string/priority"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -100,7 +100,7 @@
                         android:background="@color/transparent"
                         android:focusable="false"
                         android:inputType="none"
-                        android:text="Select assinee"
+                        android:text="@string/select_assignee"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         app:drawableEndCompat="@drawable/ic_arrow_right_black" />
 
@@ -244,7 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Reminde Before"
+                    android:hint="@string/remind_before"
                     app:layout_constraintTop_toBottomOf="@+id/til_attachment">
 
                     <com.google.android.material.textfield.TextInputEditText

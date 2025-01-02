@@ -56,7 +56,7 @@ class DefaulterReportFragment : Fragment() {
     private var feetypeid: String = "0"
     private var classid: String = "0"
     private var sectionid: String = "0"
-    private var installid: String = "0"
+    private var installid = mutableSetOf<String>()
 
     private var dateFrom: Calendar = Calendar.getInstance()
 
@@ -262,17 +262,21 @@ class DefaulterReportFragment : Fragment() {
                             }
                             installmentLists = it.data.installment
                             if (installmentLists.isNotEmpty())
-                                installid = installmentLists[0].installid
+                                installid.add(installmentLists[0].installid)
                             binding.rvSelectInstallment.withModels {
                                 it.data.installment.forEach { data ->
                                     installmentListData.add(data.installmentname)
                                     filter {
                                         id(data.installid)
                                         value(data.installmentname)
-                                        selected(installid == data.installid)
+                                        selected(installid.contains(data.installid))
                                         onClickContent { _ ->
 
-                                            installid = data.installid
+                                            if (installid.contains(data.installid)) {
+                                                installid.remove(data.installid)
+                                            } else {
+                                                installid.add(data.installid)
+                                            }
                                             binding.rvSelectInstallment.requestModelBuild()
                                         }
                                     }
@@ -371,7 +375,7 @@ class DefaulterReportFragment : Fragment() {
             isValidated = false
             mainActivity().showMessage("Please Select Section")
         }
-        if (installid == "") {
+        if (installid.isEmpty()) {
             isValidated = false
             mainActivity().showMessage("Please Select Installment")
         }
@@ -397,7 +401,7 @@ class DefaulterReportFragment : Fragment() {
                 feetypeid,
                 classid,
                 sectionid,
-                installid
+                installid.joinToString { it }
             )
         }
 

@@ -6,6 +6,7 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkFeeCollection
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.FomApiRepository
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +35,8 @@ class CollectionFeeReportViewModel @Inject constructor(
         runCatching {
             feeCollectionMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.feeCollectionReport(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/Collection",
+                //userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/Collection",
+                Constant.REPORT_BASE_URL+"api/Collection",
                 userDataStore.getSchoolData()!!.schoolCode,
                 dateFrom,
                 dateTo)

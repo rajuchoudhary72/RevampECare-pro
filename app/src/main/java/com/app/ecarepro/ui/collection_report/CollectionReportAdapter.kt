@@ -34,7 +34,7 @@ class CollectionReportAdapter(private var collectionReports: List<CollectionRepo
 
         binding?.apply {
            date=data.date.changeDateFormat()
-           amount="₹ ${data.amount} Cr"
+           amount="₹ ${data.amount}"
         }
 
 

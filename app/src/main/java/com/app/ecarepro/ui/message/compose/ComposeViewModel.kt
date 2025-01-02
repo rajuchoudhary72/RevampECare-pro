@@ -229,9 +229,10 @@ class ComposeViewModel @Inject constructor(
     }
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value
-      /*  if (attachments.isEmpty() || attachments.size == 1)
-            return null*/
-
+        if (getMessageType()==1)
+            return null
+        /*  if (attachments.isEmpty() || attachments.size == 1)
+                    return null*/
         return attachments.map { attachment ->
             if (isPdf(attachment)) {
                 if (attachment.name == AttachmentType.RECORDING.name) {
