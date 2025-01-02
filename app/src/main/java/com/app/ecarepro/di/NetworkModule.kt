@@ -22,6 +22,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import com.app.ecarepro.di.annotations.SessionReCreate
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -112,5 +113,26 @@ fun provideRetrofit(
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
     }
-
+    @Provides
+    @SessionReCreate
+    fun provideSessionUserService(): UserService {
+        val client = OkHttpClient
+            .Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(
+                if (BuildConfig.FLAVOR == "dev") {
+                    Constant.BASE_URL
+                } else {
+                    Constant.BASE_DEV_URL
+                }
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(UserService::class.java)
+    }
 }

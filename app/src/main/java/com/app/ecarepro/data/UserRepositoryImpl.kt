@@ -16,6 +16,8 @@ import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Purpose
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.network.model.NetworkAssignments
@@ -223,7 +225,7 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
             )
         ).also {
             if (it.authenticated == true) {
@@ -247,13 +249,44 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
+                deviceInfo = CreateUserSessionRequestDto(
+                    ipAddress = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    locationCity = "N/A",
+                )
             )
         ).also {
             if (it.authenticated == true && it.isOTPEnabled == false) {
                 it.userDTL?.let { userDtl: UserDTL ->
                     saveUserDtl(userDtl, schoolCode, userName)
                 }
+            }
+        }
+    }
+    override fun createSession(regenerate: Boolean): Flow<Result<UserSessionResponseDto>> {
+        return flow {
+            try {
+                val response = userService.createSession(
+                    CreateUserSessionRequestDto(
+                        ipAddress = Secure.getString(
+                            context.contentResolver,
+                            Secure.ANDROID_ID
+                        ),
+                        locationCity = "Jaipur",
+                        oldSessionID = if (regenerate) userDataStore.getUserSessionId() else null
+                    )
+                )
+                if (response.errorCode == 0) {
+                    userDataStore.saveSessionId(response.sessionID)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
             }
         }
     }

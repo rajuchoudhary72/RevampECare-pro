@@ -285,7 +285,16 @@ class UserDataStoreImpl @Inject constructor(
         if (userId == null || userId == 0) return null
         return userDatabase.getUser(userId)?.authToken
     }
-
+    override suspend fun getUserSessionId(): String? {
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0) return null
+        return userDatabase.getUser(userId)?.sessionId
+    }
+    override suspend fun saveSessionId(sessionId: String) {
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0) return
+        userDatabase.insertUser(userDatabase.getUser(userId)!!.copy(sessionId = sessionId))
+    }
     override suspend fun saveSlides(sliders: List<Slide>) {
 
         context.dataStore.edit { preferences ->

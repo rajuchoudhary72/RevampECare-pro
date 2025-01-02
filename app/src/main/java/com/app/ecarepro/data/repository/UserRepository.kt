@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -504,6 +505,7 @@ interface UserRepository {
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(refresh: Boolean): Flow<Result<String>>
     fun saveUserUndertaking(request: UserUndertakingModule): Flow<Result<String>>
+    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
 
     suspend fun reportCardDTL(
         stID: Int
