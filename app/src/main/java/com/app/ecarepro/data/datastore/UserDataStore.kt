@@ -58,4 +58,6 @@ interface UserDataStore {
     suspend fun saveSlides(sliders: List<Slide>)
     fun getSlides(): Flow<List<Slide>>
     suspend fun clear()
+    suspend fun setCityName(city: String)
+    suspend fun getCityName():String
 }

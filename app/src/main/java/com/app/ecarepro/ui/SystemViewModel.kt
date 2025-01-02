@@ -8,6 +8,7 @@ import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.Menu
@@ -41,6 +42,7 @@ import javax.inject.Inject
 class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
+    private val userDatabase: UserDatabase,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
     private val schoolRepository: SchoolRepository,
@@ -77,6 +79,9 @@ class SystemViewModel @Inject constructor(
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
     var UType: Int = -1
+
+    val dataStore = userDataStore
+    val database = userDatabase
 
     init {
         viewModelScope.launch {
@@ -174,6 +179,12 @@ class SystemViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+   suspend fun logoutCurrentUser(onSuccess: suspend () -> Unit) {
+       userRepository.logout().collectLatest {
+           onSuccess()
+       }
     }
 
     fun refreshAppLayout() {

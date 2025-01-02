@@ -49,6 +49,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
+import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -765,7 +766,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
+                                getFragmentId(parentMenu.menuID, menu.chMenuID, "Menu")
                             }
                         }
 
@@ -776,7 +777,12 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
+                                    getFragmentId(
+                                        parentMenu.menuID,
+                                        menu.chMenuID,
+                                        childChildMenu.sbChMenuID,
+                                        "Menu"
+                                    )
                                 }
                             }
                         }
@@ -1093,7 +1099,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
+    fun getFragmentId(
+        menuID: Int,
+        childMenuId: Int,
+        refId: String? = null,
+        from: String = "other"
+    ) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1335,7 +1346,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
+    fun getFragmentId(
+        menuID: Int,
+        childMenuId: Int,
+        childChildMenuId: Int,
+        from: String = "other"
+    ) {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1816,6 +1832,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             syncData(true)
         }
+        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
     }
 
     companion object {

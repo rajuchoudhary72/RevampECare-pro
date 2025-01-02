@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -40,6 +41,7 @@ import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.Constant
@@ -47,7 +49,6 @@ import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.DecorationLookup
@@ -58,9 +59,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 
 
 @AndroidEntryPoint
@@ -69,8 +70,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-
 
 
     private val mViewModel: HomeViewModel by viewModels()
@@ -102,8 +101,8 @@ class HomeFragment : Fragment() {
             mViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
-      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-      binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
@@ -116,7 +115,7 @@ class HomeFragment : Fragment() {
         )
         binding.recyclerView.addItemDecoration(
             GridMarginDecoration.create(
-                margin =  8,
+                margin = 8,
                 columnProvider = object : ColumnProvider {
                     override fun getNumberOfColumns(): Int {
                         return 4
@@ -213,6 +212,7 @@ class HomeFragment : Fragment() {
         }
 
     }
+
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
@@ -248,6 +248,23 @@ class HomeFragment : Fragment() {
                 .addOnSuccessListener { location: Location? ->
                     mViewModel.currentLocation =
                         Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+
+                    val cityName =
+                        if (location != null) {
+                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                            val addresses =
+                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                            if (!addresses.isNullOrEmpty()) {
+                                addresses[0].locality
+                            } else {
+                                Locale.getDefault().displayName
+                            }
+                        } else {
+                            Locale.getDefault().displayName
+                        }
+
+                    mViewModel.setCityName(cityName)
+
                 }
                 .addOnFailureListener {
                     Log.e("MSG", "startLocationFetch: " + it.message)
@@ -258,11 +275,13 @@ class HomeFragment : Fragment() {
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
     }
+
     private fun isGPSEnabled(): Boolean {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
+
     private fun removeUTFCharacters(data: String): StringBuffer {
         val p: Pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})")
         val m: Matcher = p.matcher(data)
@@ -280,7 +299,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is HomeUiState.Success) {
@@ -339,7 +358,7 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
-                }catch (E:IllegalStateException){
+                } catch (E: IllegalStateException) {
 
                 }
 
@@ -353,29 +372,32 @@ class HomeFragment : Fragment() {
                            // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
                         )*/
                         lifecycleScope.launch {
-                            var showDashboard=false
-                            var showAttendance=false
-                            var showFeeds=false
-                            for ( i in mViewModel.dashboardButtons.value!!){
+                            var showDashboard = false
+                            var showAttendance = false
+                            var showFeeds = false
+                            for (i in mViewModel.dashboardButtons.value!!) {
                                 when (i.buttonName) {
                                     "Dashboard" -> {
-                                        showDashboard= i.isShow!!
+                                        showDashboard = i.isShow!!
                                     }
+
                                     "Attendance" -> {
-                                        showAttendance= i.isShow!!
+                                        showAttendance = i.isShow!!
                                     }
+
                                     "Feed" -> {
-                                        showFeeds= i.isShow!!
+                                        showFeeds = i.isShow!!
                                     }
                                 }
                             }
-                            findNavController().navigate(R.id.homeViewPagerFragment,Bundle( ).apply {
-                                putBoolean( "Dashboard",showDashboard)
-                                putBoolean( "Attendance",showAttendance)
-                                putBoolean( "Feed",showFeeds)
-                            })
+                            findNavController().navigate(
+                                R.id.homeViewPagerFragment,
+                                Bundle().apply {
+                                    putBoolean("Dashboard", showDashboard)
+                                    putBoolean("Attendance", showAttendance)
+                                    putBoolean("Feed", showFeeds)
+                                })
                         }
-
 
 
                         //systemViewModel.showDashboard(true)
@@ -478,6 +500,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
         val packageName = "com.android.chrome"
         if (packageName != null) {
@@ -489,12 +512,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        val tabIntent = CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green)).build()
+        val tabIntent =
+            CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green))
+                .build()
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
         openCustomTab(tabIntent, Uri.parse(url))
-      //  findNavController().navigate(R.id.webViewFragment, bundle)
+        //  findNavController().navigate(R.id.webViewFragment, bundle)
     }
 
     override fun onDestroyView() {
@@ -506,9 +531,10 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        //startLocationFetch()
+        startLocationFetch()
 
     }
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -516,52 +542,49 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-               // startLocationFetch()
+                startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
             }
         }
     }
 
-    private fun dashboardPrompt( ) {
+    private fun dashboardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_dashboard_link)
             .setPrimaryText("Dashboard")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setSecondaryText("Click here to access Dashboards")
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     addMorePrompt()
                 }
             }
             .show()
     }
 
-    private fun addMorePrompt( ) {
+    private fun addMorePrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_add_more)
             .setPrimaryText("Favourites")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setSecondaryText("Click here to add your Favourite menus ")
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     systemViewModel.startShowPrompt(true)
                 }
             }
             .show()
     }
 
-    private fun cardPrompt( ) {
+    private fun cardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.cv_dashboard_card)
             .setPrimaryText(" Information Cards")
             .setSecondaryText("Slide left to check out all the cards")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     dashboardPrompt()
                 }
             }
@@ -570,8 +593,10 @@ class HomeFragment : Fragment() {
 
     private fun profilePrompt() {
 
-        val sharedPreference = requireActivity(). getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT,
-            Context.MODE_PRIVATE)
+        val sharedPreference = requireActivity().getSharedPreferences(
+            Constant.SHARED_PREF_NAME_PROMPT,
+            Context.MODE_PRIVATE
+        )
 
         if (!sharedPreference.getBoolean(Constant.SHARED_PREF_SHOW_PROMPT, false)) {
             MaterialTapTargetPrompt.Builder(requireActivity())
@@ -580,8 +605,7 @@ class HomeFragment : Fragment() {
                 .setSecondaryText("Click here to check out your profile and Transport Details")
                 .setBackgroundColour(requireContext().getColor(R.color.brand_color))
                 .setPromptStateChangeListener { prompt, state ->
-                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                    {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                         cardPrompt()
 
                         try {
@@ -589,7 +613,8 @@ class HomeFragment : Fragment() {
                             val editor = sharedPreference.edit()
                             editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
                             editor.apply()
-                        }catch (e: Exception){}
+                        } catch (e: Exception) {
+                        }
 
                     }
                 }
