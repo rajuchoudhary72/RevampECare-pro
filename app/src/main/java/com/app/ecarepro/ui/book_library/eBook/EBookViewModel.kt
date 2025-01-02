@@ -27,7 +27,10 @@ class EBookViewModel  @Inject constructor(
         NetworkResult.Loading())
     val eBookListStateFlow: StateFlow<NetworkResult<NetworkEBook>> = eBookListMutableStateFlow
 
-    fun getEBook(
+    init {
+        getEBook("%27%27", 0)
+    }
+    private fun getEBook(
         query: String,
         mode: Int
     )=viewModelScope.launch {

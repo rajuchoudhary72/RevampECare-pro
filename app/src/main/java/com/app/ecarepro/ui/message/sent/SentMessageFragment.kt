@@ -259,8 +259,6 @@ class SentMessageFragment : Fragment() {
         super.onResume()
         sentMessageViewModel.sendScreenEvent()
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

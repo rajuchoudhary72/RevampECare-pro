@@ -4,8 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -13,7 +11,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import kotlin.math.log
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 @HiltViewModel
 class AttendanceViewModel @Inject constructor(
     userDataStore: UserDataStore,
@@ -66,11 +65,9 @@ class AttendanceViewModel @Inject constructor(
     fun sortBy(sortBy: SortBy) {
         this.sortBy.update { sortBy }
     }
-
     fun sendScreenEvent() {
         analyticsManager.trackScreen(AnalyticsConstants.Screens.ATTENDANCE_TAB)
     }
-
     fun sendAnalyticEvent(
         event: String,
         attributes: Map<String, String>

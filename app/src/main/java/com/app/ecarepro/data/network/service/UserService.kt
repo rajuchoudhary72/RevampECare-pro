@@ -140,6 +140,26 @@ import com.app.ecarepro.ui.studentId.StudentIDRequest
 import com.app.ecarepro.ui.survey.SurveyListResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
+import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.model.AppointmentSavedDto
+import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.NetworkAcademicYear
+import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkSection
+import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
+import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkWingReport
+import com.app.ecarepro.data.network.model.SendMessageRequest
+import com.app.ecarepro.data.network.model.SmsType
+import com.app.ecarepro.data.network.model.StaffAttendanceDto
+import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
+import com.app.ecarepro.data.network.model.UserUndertakingModule
+import com.app.ecarepro.data.network.model.ValidateOtpRequest
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
+import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
+import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.ui.edit_profile.model.Profile
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -445,6 +465,8 @@ interface UserService {
     suspend fun submitAssignment(
         @Body request: PostSubmitAssignment,
     ): CommonResponse
+
+
 
 
     @GET("Academic/DeleteAssignment")
@@ -803,14 +825,14 @@ interface UserService {
     suspend fun getAppMsgUses(
         @Query("FromDate") fromDate: String,
         @Query("ToDate") toDate: String,
-        @Query("ID") iD: String,
+        @Query("WingIds") iD: String,
     ): NetworkSmsMsgReport
 
     @GET("Report/SMSUses")
     suspend fun getSMSUses(
         @Query("FromDate") fromDate: String,
         @Query("ToDate") toDate: String,
-        @Query("ID") iD: String,
+        @Query("WingIds") iD: String,
     ): NetworkSmsMsgReport
 
     @GET("Report/SMSType")
@@ -1062,4 +1084,7 @@ interface UserService {
 
     @GET("Academic/AcademicYears")
     suspend fun academicYears(): NetworkAcademicYear
+
+    @GET("School/Wings")
+    suspend fun wingsList(): NetworkWingReport
 }

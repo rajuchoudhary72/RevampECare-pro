@@ -15,13 +15,13 @@ import androidx.viewpager2.widget.ViewPager2
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentMessageBinding
 import com.app.ecarepro.model.ComposeMessageType
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.message.chat.MessageType
 import com.app.ecarepro.ui.message.inbox.InboxMessageFragment
 import com.app.ecarepro.ui.message.sent.SentMessageFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.update
+import com.app.ecarepro.ui.message.chat.MessageType
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import kotlinx.coroutines.launch
 
 
@@ -65,7 +65,6 @@ class MessageFragment : Fragment() {
                     )
                 )
             }
-
             findNavController().navigate(
                 R.id.composeFragment,
                 bundleOf("composeMessageType" to ComposeMessageType.SMS_AND_APP_MESSAGE)
@@ -97,8 +96,8 @@ class MessageFragment : Fragment() {
             messageViewModel.clearFilter()
             messageViewModel.isFilterApplied.update { false }
         }
-        arguments?.let { args ->
-            if (args.getString("ID").isNullOrEmpty().not()) {
+        arguments?.let {args ->
+            if(args.getString("ID").isNullOrEmpty().not()){
                 findNavController().navigate(
                     R.id.chatFragment,
                     bundleOf(

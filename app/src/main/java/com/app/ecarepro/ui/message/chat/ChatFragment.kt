@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -38,12 +39,12 @@ import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileClickListener
 import com.app.ecarepro.utils.imageUrl
-import com.app.ecarepro.utils.isAudioUrl
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.utils.isAudioUrl
 
 
 @AndroidEntryPoint
@@ -130,7 +131,6 @@ class ChatFragment : Fragment() {
                             binding.toolbar.title = "Message"
                         }
                     }
-
                     is ChatUiState.Success -> {
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
@@ -184,15 +184,13 @@ class ChatFragment : Fragment() {
                         }
 
                     }
-
                     else -> {}
                 }
             }
         }
     }
-
     private fun setUpToolbar(sender: Sender) {
-        if (chatViewModel.messageType == MessageType.INBOX.value) {
+        if (chatViewModel.messageType==MessageType.INBOX.value){
             binding.apply {
                 headerView.isVisible = true
                 photo.imageUrl(
@@ -200,22 +198,21 @@ class ChatFragment : Fragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
                 )
                 name.text = sender.name
-                if (sender.senderType == 3) {
+                if (sender.senderType==3){
                     designation.text = sender.designation
-                } else if (sender.senderType == 1) {
-                    designation.text = "Class :- " + sender.className
-                } else if (sender.senderType == 2) {
-                    designation.text = "P/O  " + sender.childName + " , " + sender.className
+                }else  if (sender.senderType==1){
+                    designation.text = "Class :- "+ sender.className
+                } else  if (sender.senderType==2){
+                    designation.text = "P/O  " + sender.childName+" , "+ sender.className
                 }
 
             }
-        } else {
-            binding.headerView.isVisible = false
+        }else{
+            binding.headerView.isVisible =false
             binding.toolbar.setTitle("Message")
         }
 
     }
-
     private fun openPhoto(photo: String?) {
         if (photo.isNullOrEmpty()) return
         if (isPdfUrl(photo)) {
@@ -236,7 +233,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun openPdfFromUrl(url: String) {
-        if (isAdded) {
+        if(isAdded){
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             val chooser = Intent.createChooser(intent, "Choose an app to open with")
             startActivity(chooser)
@@ -251,12 +248,12 @@ class ChatFragment : Fragment() {
         return pdfExtension == extension || doc == extension || docx == extension
     }
 
-    /* fun isAudioUrl(url: String): Boolean {
-         val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
-         val extension = url.substringAfterLast(".", "").lowercase()
-         return audioExtensions.contains(extension)
-     }
- */
+   /* fun isAudioUrl(url: String): Boolean {
+        val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+        val extension = url.substringAfterLast(".", "").lowercase()
+        return audioExtensions.contains(extension)
+    }
+*/
 
     override fun onDestroyView() {
         super.onDestroyView()

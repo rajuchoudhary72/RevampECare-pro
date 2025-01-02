@@ -59,7 +59,6 @@ class ChangePasswordViewModel @Inject constructor(
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.CHANGE_USER_PASSWORD)
     }
-
     fun sendAnalyticEvent(
         event: String,
         attributes: Map<String, String>

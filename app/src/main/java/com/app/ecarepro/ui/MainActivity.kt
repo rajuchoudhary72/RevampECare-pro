@@ -207,6 +207,7 @@ class MainActivity : AppCompatActivity() {
                 topLevelFragments.contains(destination.id)
         }
 
+
         setUpDrawer()
 
         setUpBottomNavigationView()
@@ -266,20 +267,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // Check for permission
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_PHONE_STATE
-            ) != PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED
         ) {
             // Request the permission
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.READ_PHONE_STATE), 1
+                this,
+                arrayOf(Manifest.permission.READ_PHONE_STATE),
+                1
             )
         } else {
             // Permission is already granted, get the IMEI
             getIMEINumber()
         }
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     Log.w("FCM Token", "Fetching FCM registration token failed", task.exception)
                     return@OnCompleteListener
@@ -291,7 +293,8 @@ class MainActivity : AppCompatActivity() {
                 // Log and toast
                 Log.d("FCM Token", token)
                 systemViewModel.registerDeviceToken(token)
-            }).addOnFailureListener { e ->
+            })
+            .addOnFailureListener { e ->
                 if (e is IOException) {
                     Log.e("FCM Token", "Network error", e)
                 } else if (e is ExecutionException) {
@@ -314,10 +317,8 @@ class MainActivity : AppCompatActivity() {
     private fun askNotificationPermission() {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
             ) {
                 // FCM SDK (and your app) can post notifications.
             } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
@@ -355,7 +356,8 @@ class MainActivity : AppCompatActivity() {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             telephonyManager.imei // For Android 8.0 and above
         } else {
-            @Suppress("DEPRECATION") telephonyManager.deviceId // Deprecated in Android O and above
+            @Suppress("DEPRECATION")
+            telephonyManager.deviceId // Deprecated in Android O and above
         }
 
         imei?.let {
@@ -453,8 +455,8 @@ class MainActivity : AppCompatActivity() {
                             var versionCode = 0
                             var versionName = ""
                             try {
-                                val pInfo: PackageInfo =
-                                    packageManager.getPackageInfo(packageName, 0)
+                                val pInfo: PackageInfo = packageManager
+                                    .getPackageInfo(packageName, 0)
                                 versionName = pInfo.versionName
                                 versionCode = pInfo.versionCode
                             } catch (e: PackageManager.NameNotFoundException) {
@@ -470,14 +472,16 @@ class MainActivity : AppCompatActivity() {
                                         // open  dialog
                                         if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
                                             //soft  update
-                                            checkIsUpdateAvailable(false)/*    UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(false)
+                                            /*    UpdateAppVersionDialog(
                                                     0,
                                                     it.data.android.title,
                                                     it.data.android.description
                                                 )*/
                                         } else {
                                             //force update
-                                            checkIsUpdateAvailable(true)/*  UpdateAppVersionDialog(
+                                            checkIsUpdateAvailable(true)
+                                            /*  UpdateAppVersionDialog(
                                                   1,
                                                   it.data.android.title,
                                                   it.data.android.description
@@ -571,7 +575,8 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == MY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.e("In App Update", "onActivityResult: RESULT_OK")
-            } else if (resultCode == Activity.RESULT_CANCELED) {/* if (isImmediatepopup){
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                /* if (isImmediatepopup){
                      Log.e("In force  App Update", "onActivityResult: RESULT_CANCELED")
                      checkAppVersion()
                  }else{
@@ -611,7 +616,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            systemViewModel.uiState.flowWithLifecycle(lifecycle).collectLatest { uiState ->
+            systemViewModel.uiState
+                .flowWithLifecycle(lifecycle)
+                .collectLatest { uiState ->
                     uiState.getValueOrNull()?.let { data ->
                         buildDrawerModels(data.menus)
                         buildFavoriteMenusModels(data.menus)
@@ -758,9 +765,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(
-                                    parentMenu.menuID, menu.chMenuID,"Menu"
-                                )
+                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
                             }
                         }
 
@@ -771,9 +776,7 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(
-                                        parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu"
-                                    )
+                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
                                 }
                             }
                         }
@@ -789,14 +792,12 @@ class MainActivity : AppCompatActivity() {
                 systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
-
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
                 AnalyticsConstants.Attributes.MENU_ID to menuID.toString()
             )
         )
-
         when (menuID) {
             3 -> {
                 lifecycleScope.launch {
@@ -825,9 +826,11 @@ class MainActivity : AppCompatActivity() {
                                 navController.navigate(R.id.timeTableNavHostFragment)
                             } else {
                                 navController.navigate(
-                                    R.id.timeTableNavHostFragment, Bundle().apply {
+                                    R.id.timeTableNavHostFragment,
+                                    Bundle().apply {
                                         putString(
-                                            Constant.TIME_TABLE_TYPE, Constant.CLASS_TIME_TABLE
+                                            Constant.TIME_TABLE_TYPE,
+                                            Constant.CLASS_TIME_TABLE
                                         )
                                     })
                             }
@@ -930,7 +933,8 @@ class MainActivity : AppCompatActivity() {
                                     userDataStore.getSchoolData()?.let {
                                         it.marksEntryURL?.let { url ->
                                             webViewCall(
-                                                url, getString(R.string.marks_entry_heading)
+                                                url,
+                                                getString(R.string.marks_entry_heading)
                                             )
                                         }
                                     }
@@ -975,7 +979,8 @@ class MainActivity : AppCompatActivity() {
                             } else {
                                 it.webSite?.let { url ->
                                     webViewCall(
-                                        url, getString(R.string.website_txt)
+                                        url,
+                                        getString(R.string.website_txt)
                                     )
                                 }
                             }
@@ -1009,7 +1014,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        val tabIntent = CustomTabsIntent.Builder().setToolbarColor(getColor(R.color.green)).build()
+        val tabIntent = CustomTabsIntent.Builder()
+            .setToolbarColor(getColor(R.color.green)).build()
         if (title.contains("Mark")) {
             systemViewModel.getTokenKey { token ->
                 if (token.isNullOrEmpty()) {
@@ -1044,7 +1050,8 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Something went wrong")
             } else {
                 showLoader(false)
-                val tabIntent = CustomTabsIntent.Builder().enableUrlBarHiding()
+                val tabIntent = CustomTabsIntent.Builder()
+                    .enableUrlBarHiding()
                     .setToolbarColor((this).getColor(R.color.green)).build()
                 openCustomTabForPayment(tabIntent, Uri.parse("$feePaymentURL?token=$token"))
             }
@@ -1092,8 +1099,6 @@ class MainActivity : AppCompatActivity() {
                 systemViewModel.UType = userDataStore.getUserType()!!
             }
         }
-
-
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1193,7 +1198,8 @@ class MainActivity : AppCompatActivity() {
                                 if (userType == Constant.STAFF_TYPE) {
                                     if (roleName == "Principal" || roleName == "Management") {
                                         navController.navigate(
-                                            R.id.classAndTeacherListFragment, Bundle().apply {
+                                            R.id.classAndTeacherListFragment,
+                                            Bundle().apply {
                                                 putString(Constant.TO, Constant.FRA_LESSON_PLAN)
                                             })
                                     } else {
@@ -1212,7 +1218,8 @@ class MainActivity : AppCompatActivity() {
                     64 -> {
 
                         navController.navigate(
-                            R.id.classAndTeacherListFragment, Bundle().apply {
+                            R.id.classAndTeacherListFragment,
+                            Bundle().apply {
                                 putString(Constant.TO, Constant.FRA_TIMETABLE)
                             })
 
@@ -1220,7 +1227,8 @@ class MainActivity : AppCompatActivity() {
 
                     70 -> {
                         navController.navigate(
-                            R.id.smsMsgReportFragment, Bundle().apply {
+                            R.id.smsMsgReportFragment,
+                            Bundle().apply {
                                 putString(Constant.TO, Constant.FRA_APP_MESSAGE)
                             })
                     }
@@ -1257,6 +1265,7 @@ class MainActivity : AppCompatActivity() {
 
                     44 -> navController.navigate(R.id.feeReceiptFragment)
                     69 -> navController.navigate(R.id.feeCertificateFragment)
+                    72 -> navController.navigate(R.id.feeBookFragment)
                 }
             }
 
@@ -1314,7 +1323,8 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     40 -> navController.navigate(R.id.calenderActivityNavHost)
                 }
-            }/*gallery*/
+            }
+            /*gallery*/
             34 -> {
                 when (childMenuId) {
                     48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
@@ -1326,7 +1336,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
-
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1383,7 +1392,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             8 -> {
-                when (childMenuId) {/*sms report*/
+                when (childMenuId) {
+                    /*sms report*/
                     42 -> {
                         when (childChildMenuId) {
                             4 -> {
@@ -1400,12 +1410,14 @@ class MainActivity : AppCompatActivity() {
 
                             14 -> {
                                 navController.navigate(
-                                    R.id.smsMsgReportFragment, Bundle().apply {
+                                    R.id.smsMsgReportFragment,
+                                    Bundle().apply {
                                         putString(Constant.TO, Constant.FRA_APP_SMS)
                                     })
                             }
                         }
-                    }/* fee report*/
+                    }
+                    /* fee report*/
                     67 -> {
                         when (childChildMenuId) {
                             11 -> {
@@ -1475,7 +1487,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         } else {
-            MaterialAlertDialogBuilder(this).setTitle(getString(R.string.logout))
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.logout))
                 .setMessage(getString(R.string.are_you_sure_to_logout))
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     try {
@@ -1484,8 +1497,10 @@ class MainActivity : AppCompatActivity() {
                         }
                     } catch (e: Exception) {
                     }
-                }.setNegativeButton(getString(R.string.no)) { _, _ ->
-                }.show()
+                }
+                .setNegativeButton(getString(R.string.no)) { _, _ ->
+                }
+                .show()
         }
 
     }
@@ -1500,7 +1515,8 @@ class MainActivity : AppCompatActivity() {
                         return 3
                     }
 
-                }))
+                }
+            ))
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
@@ -1535,15 +1551,29 @@ class MainActivity : AppCompatActivity() {
 
         val menuItems = arrayOf(
             CbnMenuItem(
-                R.drawable.ic_home, R.drawable.avd_home, R.id.homeFragment
-            ), CbnMenuItem(
-                R.drawable.ic_settings, R.drawable.avd_settings, R.id.dashboardFragment
-            ), CbnMenuItem(
-                R.drawable.ic_dashboard, R.drawable.avd_dashboard, R.id.searchInstitutionFragment
-            ), CbnMenuItem(
-                R.drawable.ic_notification, R.drawable.avd_notification, R.id.notificationFragment
-            ), CbnMenuItem(
-                R.drawable.ic_profile, R.drawable.avd_profile, R.id.messageFragment
+                R.drawable.ic_home,
+                R.drawable.avd_home,
+                R.id.homeFragment
+            ),
+            CbnMenuItem(
+                R.drawable.ic_settings,
+                R.drawable.avd_settings,
+                R.id.dashboardFragment
+            ),
+            CbnMenuItem(
+                R.drawable.ic_dashboard,
+                R.drawable.avd_dashboard,
+                R.id.searchInstitutionFragment
+            ),
+            CbnMenuItem(
+                R.drawable.ic_notification,
+                R.drawable.avd_notification,
+                R.id.notificationFragment
+            ),
+            CbnMenuItem(
+                R.drawable.ic_profile,
+                R.drawable.avd_profile,
+                R.id.messageFragment
             )
         )
         //   binding.appBarMain.contentMain.bottomNavigationView.setMenuItems(menuItems, 0)
@@ -1616,7 +1646,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration)
+                || super.onSupportNavigateUp()
     }
 
     fun showLoader(show: Boolean) {
@@ -1624,49 +1655,59 @@ class MainActivity : AppCompatActivity() {
             dismiss()
             loader = null
         }
-        if (show) loader = progressDialog()
+        if (show)
+            loader = progressDialog()
     }
 
     fun showMessage(message: String) {
         Snackbar.make(
-            binding.appBarMain.contentMain.bottomNavigationView, message, Snackbar.LENGTH_SHORT
+            binding.appBarMain.contentMain.bottomNavigationView,
+            message,
+            Snackbar.LENGTH_SHORT
         ).show()
     }
 
     private fun SearchPrompt() {
         MaterialTapTargetPrompt.Builder(this@MainActivity)
-            .setTarget(binding.appBarMain.contentMain.searchBar).setPrimaryText("Global Search")
+            .setTarget(binding.appBarMain.contentMain.searchBar)
+            .setPrimaryText("Global Search")
             .setSecondaryText(" Click here to search Globally in Modules/Students/Staff ")
             .setBackgroundColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     settingPrompt()
                 }
-            }.show()
+            }
+            .show()
     }
 
     private fun settingPrompt() {
         MaterialTapTargetPrompt.Builder(this@MainActivity)
-            .setTarget(binding.appBarMain.contentMain.ivSetting).setPrimaryText("Setting")
+            .setTarget(binding.appBarMain.contentMain.ivSetting)
+            .setPrimaryText("Setting")
             .setSecondaryText("Click here to access quick settings ")
             .setBackgroundColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     menuPrompt()
                 }
-            }.show()
+            }
+            .show()
     }
 
     private fun menuPrompt() {
-        MaterialTapTargetPrompt.Builder(this@MainActivity).setTarget(R.id.menu)
-            .setPrimaryText("Menu").setSecondaryText("Click here to access Menu Bar")
+        MaterialTapTargetPrompt.Builder(this@MainActivity)
+            .setTarget(R.id.menu)
+            .setPrimaryText("Menu")
+            .setSecondaryText("Click here to access Menu Bar")
             .setBackgroundColour(getColor(R.color.brand_color))
             .setFocalColour(getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     try {
                         val sharedPreference = getSharedPreferences(
-                            Constant.SHARED_PREF_NAME_PROMPT, Context.MODE_PRIVATE
+                            Constant.SHARED_PREF_NAME_PROMPT,
+                            Context.MODE_PRIVATE
                         )
 
                         val editor = sharedPreference.edit()
@@ -1675,7 +1716,8 @@ class MainActivity : AppCompatActivity() {
                     } catch (e: Exception) {
                     }
                 }
-            }.show()
+            }
+            .show()
     }
 
     private fun UpdateAppVersionDialog(dialog_value: Int, title: String, message: String) {
@@ -1716,12 +1758,14 @@ class MainActivity : AppCompatActivity() {
             try {
                 startActivity(
                     Intent(
-                        Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
                     )
                 )
             } catch (anfe: ActivityNotFoundException) {
                 viewInBrowser(
-                    this@MainActivity, "https://play.google.com/store/apps/details?id=$packageName"
+                    this@MainActivity,
+                    "https://play.google.com/store/apps/details?id=$packageName"
                 )
             }
         }
@@ -1729,12 +1773,14 @@ class MainActivity : AppCompatActivity() {
             try {
                 startActivity(
                     Intent(
-                        Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")
+                        Intent.ACTION_VIEW,
+                        Uri.parse("market://details?id=$packageName")
                     )
                 )
             } catch (anfe: ActivityNotFoundException) {
                 viewInBrowser(
-                    this@MainActivity, "https://play.google.com/store/apps/details?id=$packageName"
+                    this@MainActivity,
+                    "https://play.google.com/store/apps/details?id=$packageName"
                 )
             }
         }

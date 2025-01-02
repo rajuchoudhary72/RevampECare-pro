@@ -15,28 +15,14 @@
         tools:context=".ui.calender.CalenderActivityNavHost">
 
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Calender"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:layout_alignParentTop="true"
-            >
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
 
         <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
-                android:layout_below="@id/toolbar"
+                android:layout_below="@id/include_toolbar"
                 android:layout_above="@id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

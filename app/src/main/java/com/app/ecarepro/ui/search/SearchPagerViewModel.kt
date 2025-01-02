@@ -6,8 +6,6 @@ import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.search.SearchPagerFragment.Companion.SEARCH_TYPE
 import com.app.ecarepro.ui.search.SearchPagerViewModel.Companion.SEARCH_TYPE_MODULE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +15,11 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import kotlinx.coroutines.flow.onEach
+
 
 @HiltViewModel
 class SearchPagerViewModel @Inject constructor(
@@ -110,11 +111,11 @@ class SearchPagerViewModel @Inject constructor(
         type: String
     ): SearchUiState {
         val filteredStudents = students.filter {
-            it.name.contains(query, true) ||
-                    it.admissionNumber.contains(query, true) ||
-                    it.`class`.contains(query, true) ||
-                    it.fatherName.contains(query, true) ||
-                    it.contactMob.contains(query, true)
+            it.name!!.contains(query, true) ||
+                    it.admissionNumber!!.contains(query, true) ||
+                    it.`class`!!.contains(query, true) ||
+                    it.fatherName!!.contains(query, true) ||
+                    it.contactMob!!.contains(query, true)
         }
         return if (filteredStudents.isEmpty()) {
             SearchUiState.NoResultFound
@@ -227,7 +228,6 @@ class SearchPagerViewModel @Inject constructor(
         const val SEARCH_TYPE_STUDENT = "Student"
         const val SEARCH_TYPE_STAFF = "Staff"
     }
-
     fun sendAnalyticEvent(
         event: String,
         attributes: Map<String, String>

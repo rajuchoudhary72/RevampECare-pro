@@ -1,10 +1,24 @@
 package com.app.ecarepro.ui.dashbord
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.app.ecarepro.data.network.model.Activity
+import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
+import com.app.ecarepro.ui.dashbord.model.DateFilterType
+import com.app.ecarepro.ui.mainActivity
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.util.Calendar
+import android.content.Context
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -12,7 +26,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.Activity
 import com.app.ecarepro.data.network.model.AdmissionComparison
 import com.app.ecarepro.data.network.model.BankBalance
 import com.app.ecarepro.data.network.model.BirthDayCard
@@ -35,8 +48,6 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
 import com.app.ecarepro.ui.dashbord.model.AdmissionComparisonModel
 import com.app.ecarepro.ui.dashbord.model.BankBalanceModel
-import com.app.ecarepro.ui.dashbord.model.CalenderActivityModel
-import com.app.ecarepro.ui.dashbord.model.DateFilterType
 import com.app.ecarepro.ui.dashbord.model.EstimateCollectionModel
 import com.app.ecarepro.ui.dashbord.model.FeeDefaulterModel
 import com.app.ecarepro.ui.dashbord.model.FeedsModel
@@ -51,20 +62,11 @@ import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
 import com.app.ecarepro.ui.dashbord.model.TimeTableCarouselModel
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
-import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
-import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -188,6 +190,7 @@ class DashboardFragment : Fragment() {
                         putString(Constant.ID, workload.id)
                         putString(Constant.NAME, workload.teacherName)
                     })
+
                 dashboardViewModel.sendAnalyticEvent(
                     AnalyticsConstants.Events.TEACHER_WORKLOAD,
                     mapOf(
@@ -195,6 +198,11 @@ class DashboardFragment : Fragment() {
                         AnalyticsConstants.Attributes.USER_NAME to workload.teacherName.toString(),
                     )
                 )
+                /* findNavController().navigate(
+                      R.id.timeTableNavHostFragment,
+                      bundleOf(Constant.ID to workload.id)
+
+                  )*/
             }
         )
             .id("workload")
@@ -224,7 +232,6 @@ class DashboardFragment : Fragment() {
                     favouriteSlider.menuID
                 )
             }
-
             systemViewModel.sendAnalyticEvent(
                 AnalyticsConstants.Events.SHOW_CARD_CLICK,
                 mapOf(
@@ -279,7 +286,6 @@ class DashboardFragment : Fragment() {
             }
         }
     }
-
     private fun showDatePickerDialog(
         context: Context,
         minDateString: String?,
@@ -383,7 +389,6 @@ class DashboardFragment : Fragment() {
             .id("11")
             .addTo(this)
     }
-
     private fun updateFeeCollection(feeTypeId: Int, fromDate: String, tillDate: String) {
         dashboardViewModel.getFeeCollection(
             feeTypeId,
@@ -408,7 +413,6 @@ class DashboardFragment : Fragment() {
             }
         }
     }
-
     private fun showDateRangePicker(callback: (String, String) -> Unit) {
         val constraintsBuilder =
             CalendarConstraints.Builder() // You can add constraints here if needed
@@ -433,7 +437,6 @@ class DashboardFragment : Fragment() {
             datePicker.toString()
         )
     }
-
     private fun getDateRange(
         filterType: DateFilterType,
         sessionStartDate: String?,
@@ -447,7 +450,6 @@ class DashboardFragment : Fragment() {
                 val formattedDate = currentDate.format(formatter)
                 Pair(formatDate(sessionStartDate!!), formattedDate)
             }
-
             DateFilterType.THIS_YEAR -> {
                 Pair(formatDate(sessionStartDate!!), formatDate(sessionEndDate!!))
             }
@@ -543,7 +545,6 @@ class DashboardFragment : Fragment() {
                     putString("dateSelected", it.date)
                     putInt("uType", it.utype)
                 })
-
             dashboardViewModel.sendAnalyticEvent(
                 AnalyticsConstants.Events.TEACHER_BIRTHDAY,
                 mapOf(
@@ -553,7 +554,6 @@ class DashboardFragment : Fragment() {
                     AnalyticsConstants.Attributes.BIRTH_MONTH to it.month.toString(),
                 )
             )
-
             /*  findNavController().navigate(
                   R.id.birthdayFragment, bundleOf(
                       "rType" to it.rType,

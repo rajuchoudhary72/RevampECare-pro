@@ -7,6 +7,7 @@ import com.app.ecarepro.data.network.model.DefaulterDataList
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.data.network.model.DefaulterFilters
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +41,8 @@ class DefaulterFeeReportViewModel @Inject constructor(
         runCatching {
             defaultFilterMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.defaulterFilters(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter?senderid="+userDataStore.getSchoolData()?.schoolCode)
+               // userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter?senderid="+userDataStore.getSchoolData()?.schoolCode)
+                Constant.REPORT_BASE_URL+"api/defaulter?senderid="+userDataStore.getSchoolData()?.schoolCode)
         }.onSuccess {
             defaultFilterMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
@@ -62,7 +64,8 @@ class DefaulterFeeReportViewModel @Inject constructor(
         runCatching {
             defaultersDataMutableStateFlow.value = NetworkResult.Loading()
             fomApiRepository.getDefaulterReport(
-                userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter",
+                Constant.REPORT_BASE_URL+"api/defaulter",
+               // userDataStore.getSchoolData()?.feePayemtURL!!.replace("mlogin.aspx", "")+"api/defaulter",
                 userDataStore.getSchoolData()!!.schoolCode,
                 DateFrom, DateTo, schoolid, feetypeid, classid, sectionid, installid )
         }.onSuccess {

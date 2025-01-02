@@ -23,9 +23,11 @@ class TimeTableViewerViewModel @Inject constructor(
         NetworkResult.Loading())
     val timeTableViewerStateFlow: StateFlow<NetworkResult<NetworkTimeTableViewer>> = timeTableViewerMutableStateFlow
 
-    fun getTimetableViewer(
+    init {
+        getTimetableViewer()
+    }
 
-    )=viewModelScope.launch {
+    private fun getTimetableViewer() = viewModelScope.launch {
         runCatching {
             timeTableViewerMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getTimetableViewer(  )

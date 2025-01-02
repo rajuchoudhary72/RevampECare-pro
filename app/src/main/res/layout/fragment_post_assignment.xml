@@ -14,23 +14,10 @@
         android:fitsSystemWindows="true"
         tools:context=".ui.assignment.staff.postAssignment.PostAssignmentFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="Post Assignment"
-
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
 
 
         <ScrollView

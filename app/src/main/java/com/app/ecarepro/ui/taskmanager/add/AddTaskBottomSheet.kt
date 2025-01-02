@@ -9,18 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.get
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.view.get
+
 import com.app.ecarepro.databinding.DialogAddTaskBinding
 import com.app.ecarepro.model.Assignee
 import com.app.ecarepro.model.Title
@@ -40,7 +39,11 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.TextView
 
 @AndroidEntryPoint
 class AddTaskBottomSheet : BottomSheetDialogFragment() {
@@ -74,7 +77,6 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         super.onDestroy()
         mainActivity().showLoader(false)
     }
-
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -130,7 +132,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
                 (requireActivity() as MainActivity).showLoader(true)
                 mViewModel.addTask { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    mainActivity().showMessage(message ?: "")
+                    mainActivity().showMessage(message?:"")
                     if (isSuccess) {
                         findNavController().popBackStack()
                     }
@@ -164,7 +166,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message ?: "")
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is AddTaskUiState.Success) {
@@ -181,7 +183,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
         binding.taskList.setOnItemClickListener { _, _, position, _ ->
             mainActivity().showLoader(true)
-            mViewModel.getAssignee(title[position]) {
+            mViewModel.getAssignee( title[position]){
                 mainActivity().showLoader(false)
             }
             binding.assigneeCarousel.isVisible = false
@@ -192,6 +194,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
     private fun selectAssignee(assignees: List<Assignee> = emptyList()) {
         val filteredItems = assignees.map { it.name }.toMutableList() // For search filtering
@@ -225,13 +228,10 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
             filteredItems.clear()
             filteredItems.addAll(assignees.filter { it.name?.contains(query, true) == true }
                 .map { it.name })
-
             adapter.notifyDataSetChanged()
-
             filteredItems.forEachIndexed { i , item ->
                 listView.setItemChecked(i, assignees.firstOrNull { it.name == item }?.isSelected == true)
             }
-
             // Toggle visibility of the empty state
             if (filteredItems.isEmpty()) {
                 listView.visibility = View.GONE
@@ -247,10 +247,10 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
             .setView(dialogView)
             .setPositiveButton("OK") { _, _ ->
                 /*buildAssigneeModels(assignees.filterIndexed { index, _ ->
-                    listView.isItemChecked(
-                        index
-                    )
-                }.map { it.copy(isSelected = true) })*/
+                       listView.isItemChecked(
+                           index
+                       )
+                   }.map { it.copy(isSelected = true) })*/
                 buildAssigneeModels(assignees.filter { it.isSelected })
             }
             .setNegativeButton("Cancel", null)
@@ -370,7 +370,6 @@ fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
     }
     datePicker.show(childFragmentManager, "tag");
 }
-
 private fun convertMillisToDateString(millis: Long): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val calendar = Calendar.getInstance()

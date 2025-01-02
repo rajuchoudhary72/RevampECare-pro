@@ -30,18 +30,14 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
 
     @Inject
     lateinit var appRepository: AppRepository
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreate() {
         super.onCreate()
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        /*App level  Firebase  setup*/
         FirebaseApp.initializeApp(this)
-       // registerToken()
         // Set the custom crash handler
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
-        // Initialize Firebase Analytics
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        firebaseAnalytics.setAnalyticsCollectionEnabled(true)
         // Register the activity lifecycle callbacks
         registerActivityLifecycleCallbacks(this)
     }

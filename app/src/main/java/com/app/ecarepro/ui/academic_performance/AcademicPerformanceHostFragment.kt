@@ -193,7 +193,7 @@ import kotlinx.coroutines.launch
 
 
                                  for (a in it.data.examSystems ){
-                                     fragmentList.add( AcademicPerSubFragment( a.subjets))
+                                     fragmentList.add( AcademicPerSubFragment.newInstance(a.subjets))
                                  }
 
 

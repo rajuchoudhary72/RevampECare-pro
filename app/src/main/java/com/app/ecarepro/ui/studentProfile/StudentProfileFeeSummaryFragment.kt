@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,8 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.PaidHistory
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.circuler.PopUpListAdapter
+import com.app.ecarepro.ui.studentProfile.StudentProfileAttendanceFragment.Companion
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.listener.ItemListener
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
@@ -38,17 +41,28 @@ import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class StudentProfileFeeSummaryFragment(
-    private val feeSummery: FeeSummery,
-    private val academicYears: List<AcademicYear>,
-    private val studentID: Int
+
 ) : Fragment() {
 
     private lateinit var selectedYearData: AcademicYear
 
     private lateinit var binding: FragmentStudentProfileFeeSummaryBinding
     private val studentProfileFeeSummaryViewModel: StudentProfileFeeSummaryViewModel by viewModels()
+    private val sharedViewModel: SharedViewModelProfile by activityViewModels()
+    private lateinit var academicYears: List<AcademicYear>
+    private lateinit var feeSummery: FeeSummery
+    private var studentID: Int=0
 
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            studentID=it.getInt(STUDENT_ID)
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        studentProfileFeeSummaryViewModel.sendScreenEvent()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,20 +75,22 @@ class StudentProfileFeeSummaryFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
+             feeSummery=it.feeSummery
+             academicYears=it.academicYears
 
-        if (academicYears.isNotEmpty()) {
-            for (i in academicYears) {
-                if (i.isCur) {
-                    selectedYearData=i
-                    binding.ctvSelectYear.text = i.session
-                    break
-                }}}
+            if (academicYears.isNotEmpty()) {
+                for (i in academicYears) {
+                    if (i.isCur) {
+                        selectedYearData=i
+                        binding.ctvSelectYear.text = i.session
+                        break
+                    }}}
 
-        if (feeSummery  != null){
-            setupUi(feeSummery )
+            if (feeSummery  != null){
+                setupUi(feeSummery )
+            }
         }
-
-
 
 
     }
@@ -336,6 +352,17 @@ class StudentProfileFeeSummaryFragment(
 
     private fun setCalculatedPercentageToInt(day: Int, totalDay: Int): Double {
         return ((day * 100.00 / totalDay * 100.00).roundToInt() / 100.00)
+    }
+
+    companion object {
+        private const val STUDENT_ID = "student_id_int"
+
+        fun newInstance(   studentID: Int)= StudentProfileFeeSummaryFragment().apply {
+            arguments= Bundle().apply {
+                putInt(STUDENT_ID,studentID)
+            }
+        }
+
     }
 
 }

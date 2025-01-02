@@ -6,15 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.app.ecarepro.databinding.FragmentStudentProfileDetailsBinding
-import com.app.ecarepro.model.Profile
-import com.app.ecarepro.model.SiblingDetails
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class StudentProfileDetailsFragment(
-    private val profile: Profile,
-    private val  siblingDetails: List<SiblingDetails>?
+
 ) : Fragment() {
+
+    private val sharedViewModel: SharedViewModelProfile by activityViewModels()
 
 
     private lateinit var binding : FragmentStudentProfileDetailsBinding
@@ -29,29 +32,35 @@ class StudentProfileDetailsFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.studentData=profile
-        if (profile.isBoarding){
-            binding.tvBoarding.text = profile.classification
-        }else{
-            binding.tvBoarding.text =""
+
+        sharedViewModel.getProfile().observe(viewLifecycleOwner) { profile ->
+            binding.studentData=profile
+            if (profile.isBoarding){
+                binding.tvBoarding.text = profile.classification
+            }else{
+                binding.tvBoarding.text =""
+            }
         }
 
-        if (siblingDetails!=null){
-            if (siblingDetails.isNotEmpty()){
-                if (siblingDetails.size>0){
+        sharedViewModel.getSiblingDetails().observe(viewLifecycleOwner) { siblingDetails ->
+            if (siblingDetails!=null){
+                if (siblingDetails.isNotEmpty()){
+                    if (siblingDetails.size>0){
 
                         binding.siblingDetails=siblingDetails[0]
                         binding.tvClasses.text=siblingDetails[0].`class`
 
+                    }else{
+                        binding.llSiblingDetails.isVisible=false
+                    }
                 }else{
                     binding.llSiblingDetails.isVisible=false
                 }
             }else{
                 binding.llSiblingDetails.isVisible=false
             }
-        }else{
-            binding.llSiblingDetails.isVisible=false
         }
+
 
     }
 }

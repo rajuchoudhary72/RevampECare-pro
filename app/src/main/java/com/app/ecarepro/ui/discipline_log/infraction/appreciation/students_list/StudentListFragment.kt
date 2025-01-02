@@ -111,7 +111,7 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
 
     override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.action_studentListFragment2_to_addAppreciationFragment,Bundle( ).apply {
-            putInt(Constant.STUDENT_ID_ARGUMENT, t.stID)
+            putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
         })
     }
 }

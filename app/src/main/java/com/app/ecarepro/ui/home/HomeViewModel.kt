@@ -4,29 +4,31 @@ import android.content.Context
 import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.DashboardButtons
-import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkSchool
-import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.network.model.Slider
+import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UserUndertakingModule
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -40,19 +42,16 @@ class HomeViewModel @Inject constructor(
     var currentLocation: Pair<Double, Double>? = null
     private val favouriteData = MutableStateFlow<List<Menu>?>(null)
 
-    private val refresh = MutableLiveData(false)
-
-
     val uiState =
-        refresh.asFlow().flatMapLatest { refresh ->
-            combine(
-                flow = userRepository.getUserDashboard(refresh),
-                flow2 = userRepository.getUserUndertaking(refresh),
-                flow3 = favouriteData
-            ) { dashboard, undertaking, favourite ->
-                Triple(dashboard, undertaking, favourite)
-            }
+
+        combine(
+            flow = userRepository.getUserDashboard(),
+            flow2 = userRepository.getUserUndertaking(),
+            flow3 = favouriteData
+        ) { dashboard, undertaking, favourite ->
+            Triple(dashboard, undertaking, favourite)
         }
+
             .map { (dashboard, undertaking, favourite) ->
                 if (dashboard.isSuccess && undertaking.isSuccess) {
                     val response = dashboard.getOrNull()
@@ -74,11 +73,16 @@ class HomeViewModel @Inject constructor(
                         underTaking = undertaking.getOrNull() ?: ""
                     )
                 } else {
-                    HomeUiState.Error(
-                        dashboard.exceptionOrNull() ?: IllegalStateException(
-                            UNKNOWN_ERROR_MESSAGE
+                    try {
+                        HomeUiState.Error(
+                            dashboard.exceptionOrNull() ?: IllegalStateException(
+                                UNKNOWN_ERROR_MESSAGE
+                            )
                         )
-                    )
+                    } catch (e: NullPointerException) {
+                        e.printStackTrace()
+                    }
+
                 }
             }
             .stateIn(
@@ -105,10 +109,15 @@ class HomeViewModel @Inject constructor(
                     )
                 )
                 .collectLatest {
-                    function(
-                        it.isSuccess,
-                        it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
-                    )
+                    try {
+                        function(
+                            it.isSuccess,
+                            it.getOrNull() ?: it.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
+                        )
+                    } catch (e: NullPointerException) {
+                        e.printStackTrace()
+                    }
+
                 }
             /*  userRepository.saveUserUndertaking(id,
                 deviceModel = Build.MANUFACTURER + " " + Build.MODEL,
@@ -123,10 +132,6 @@ class HomeViewModel @Inject constructor(
 
     fun setFavourite(menu: List<Menu>) {
         favouriteData.update { menu }
-    }
-
-    fun refresh() {
-        refresh.postValue(true)
     }
 
 

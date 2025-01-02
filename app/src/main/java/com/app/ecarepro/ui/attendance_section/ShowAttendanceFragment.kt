@@ -59,7 +59,8 @@ class ShowAttendanceFragment : Fragment() {
     ): View {
 
         binding = FragmentShowAttendanceBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+         binding.includeToolbar.toolbarTitle.text = getString(R.string.attendance)
         binding.autoCompleteYear.setAdapter(sessionAdapter)
          try {
 

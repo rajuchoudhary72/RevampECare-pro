@@ -1,7 +1,5 @@
 package com.app.ecarepro.ui.help
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentHelpBinding
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import dagger.hilt.android.AndroidEntryPoint
-
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import android.content.Intent
+import android.net.Uri
 @AndroidEntryPoint
 class HelpFragment : Fragment() {
 
@@ -52,7 +51,6 @@ class HelpFragment : Fragment() {
                 )
             )
         }
-
         binding.textContactNumber.setOnClickListener {
             mViewModel.sentAnalyticEvent(
                 event = AnalyticsConstants.Events.CONTACT_CLICK,
@@ -85,12 +83,10 @@ class HelpFragment : Fragment() {
 
     }
 
-
     override fun onResume() {
         super.onResume()
         mViewModel.sendScreenEvent()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

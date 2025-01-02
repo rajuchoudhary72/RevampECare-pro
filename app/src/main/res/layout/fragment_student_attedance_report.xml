@@ -14,19 +14,10 @@
         android:fitsSystemWindows="true"
         tools:context=".ui.report.StudentAttendanceSummeryFragment">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            android:elevation="8dp"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Attendance Report"
-            app:titleCentered="true"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white" />
+        <include
+            android:id="@+id/include_toolbar"
+            layout="@layout/common_toolbar"
+            />
 
 
         <TextView
