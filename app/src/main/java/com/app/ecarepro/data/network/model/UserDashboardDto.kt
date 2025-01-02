@@ -168,7 +168,6 @@ data class BirthDayCard(
 ) {
     fun getIconUrl() = BASE_URL_COM + icon
 }
-
 data class Card(
     @SerializedName("color")
     val color: String?,
