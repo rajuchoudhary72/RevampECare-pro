@@ -7,131 +7,98 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".ui.circuler.CircularFragment">
 
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            android:elevation="8dp"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/circular"
-            app:titleCentered="true"
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appbar"
-                style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
+            <include
+                android:id="@+id/include_toolbar"
+                layout="@layout/common_toolbar"
+                />
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent">
+                android:orientation="vertical"
+                android:background="@color/background_dashboard"
+                >
 
-                <com.google.android.material.appbar.CollapsingToolbarLayout
-                    android:id="@+id/collapsing_toolbar"
+                <TextView
+                    android:id="@+id/tv_select_session"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/background_box_rectangle_white_round"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:gravity="center_vertical"
+                    android:padding="10dp"
+                    android:text="@string/select_academic_year"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
+
+
+                <LinearLayout
+                    android:id="@+id/rl_search"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:contentScrim="@android:color/transparent"
-                    app:expandedTitleTextAppearance="@android:color/transparent"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:statusBarScrim="@android:color/transparent">
+                    android:weightSum="6"
+                    android:padding="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="visible">
 
-                    <LinearLayout
-                        android:id="@+id/ll_circular_filter"
+                    <EditText
+                        android:id="@+id/ed_search"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="?actionBarSize"
-                        android:background="@color/md_theme_light_primary"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        app:layout_collapseMode="parallax"
-                        app:layout_scrollFlags="scroll|enterAlways">
+                        android:layout_height="40dp"
+                        android:paddingHorizontal="10dp"
+                        android:background="@drawable/background_box_rectangle_white_round"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:inputType="text"
+                        android:hint="Enter Title"
 
-                        <TextView
-                            android:id="@+id/tv_select_session"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_margin="10dp"
-                            android:background="@drawable/background_box_rectangle_white_round"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:gravity="center_vertical"
-                            android:padding="10dp"
-                            android:text="@string/select_academic_year"
-                            android:textSize="16sp"
-                            android:visibility="visible"
-                            app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
+                        android:visibility="visible"/>
 
 
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        >
 
-                        <LinearLayout
-                            android:id="@+id/rl_search"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                             android:weightSum="6"
-                            android:padding="10dp"
-                            android:orientation="horizontal"
-                            android:visibility="visible">
+                        <ImageView
+                            android:id="@+id/iv_search"
+                            android:layout_width="40sp"
+                            android:layout_height="40sp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/circle_wite_backround"
+                            android:padding="5sp"
 
-                            <EditText
-                                android:id="@+id/ed_search"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"
-                                 android:paddingHorizontal="10dp"
-                                android:background="@drawable/background_box_rectangle_white_round"
-                                android:fontFamily="@font/ubuntu_light"
-                                android:gravity="center_vertical"
-                                android:maxLines="1"
-                                android:inputType="text"
-                                android:hint="Enter Title"
+                            android:src="@drawable/round_search_24"
+                            app:tint="@color/md_theme_light_primary" />
 
-                                android:visibility="visible"/>
+                    </RelativeLayout>
 
 
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:visibility="gone"
-                                android:layout_height="match_parent"
-                                >
-
-                                <ImageView
-                                    android:id="@+id/iv_search"
-                                    android:layout_width="40sp"
-                                    android:layout_height="40sp"
-                                    android:layout_centerInParent="true"
-                                    android:background="@drawable/circle_wite_backround"
-                                    android:padding="5sp"
-
-                                    android:src="@drawable/round_search_24"
-                                    app:tint="@color/md_theme_light_primary" />
-
-                            </RelativeLayout>
+                </LinearLayout>
 
 
-                        </LinearLayout>
-
-
-
-
-
-                    </LinearLayout>
-
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            </com.google.android.material.appbar.AppBarLayout>
+            </LinearLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -141,21 +108,22 @@
                 android:orientation="vertical"
                 tools:listitem="@layout/circular_list_item"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
                 />
 
 
 
+        </LinearLayout>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 
         <TextView
             android:id="@+id/tv_no_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/iv_no_item"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/ubuntu_medium"
             android:layout_gravity="center"
             android:gravity="center"
@@ -166,5 +134,5 @@
 
             />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </RelativeLayout>
 </layout>

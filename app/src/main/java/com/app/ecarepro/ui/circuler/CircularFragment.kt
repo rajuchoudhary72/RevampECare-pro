@@ -29,7 +29,10 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 
@@ -49,6 +52,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     private var isLoading: Boolean = true
     private lateinit var   circularListAdapter: CircularListAdapter
     private var circularList = mutableListOf<Circular>()
+    private val searchQueryStateFlow = MutableStateFlow("")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,24 +60,20 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     ): View {
 
         fragmentCircularBinding= FragmentCirculerBinding.inflate(inflater,container,false)
-        fragmentCircularBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        fragmentCircularBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        fragmentCircularBinding.includeToolbar.toolbarTitle.text = getString(R.string.circular)
         fragmentCircularBinding.tvSelectSession.setOnClickListener {
             popUpSelectAcademicYears()
         }
 
-        fragmentCircularBinding.ivSearch.setOnClickListener {
-            if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
-                circularViewModel.getCirculars(pageIndex,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
-            }else {
-                mainActivity().showMessage("Please enter title!!!")
-            }
-        }
+
         pageIndex=1
         return fragmentCircularBinding.root
 
     }
 
 
+    @OptIn(FlowPreview::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
@@ -83,13 +83,19 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
 
         fragmentCircularBinding.edSearch.doAfterTextChanged {
-            if (fragmentCircularBinding.edSearch.text.isNotEmpty()){
-                circularViewModel.getCirculars(pageIndex,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
-            }else {
-                circularViewModel.getCirculars(pageIndex,selectedYearID,"" )
-
-            }
+            searchQueryStateFlow.value = it.toString()
         }
+
+        // Collect the debounced search query
+        lifecycleScope.launch {
+            searchQueryStateFlow
+                .debounce(300L) // Adjust debounce time (in milliseconds) as needed
+                .collectLatest { query ->
+                    pageIndex=1
+                    circularViewModel.getCirculars(pageIndex, selectedYearID, query)
+                }
+        }
+
 
         lifecycleScope.launch {
             circularViewModel._circularsStateFlowStateFlow.collectLatest {
@@ -130,7 +136,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                                     }
                                     circularListAdapter.setData(it.data.circularList.toMutableList())
 
-                                    fragmentCircularBinding.toolbar.title= "All Circular" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
+                                    fragmentCircularBinding.includeToolbar.toolbarTitle.text= "All Circular" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
 
                                 }else{
                                     if (pageIndex==1){
