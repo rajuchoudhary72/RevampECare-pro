@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkConversationReport
+import com.app.ecarepro.data.network.model.NetworkPushNotificationRequest
 import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
@@ -87,4 +88,7 @@ interface MessageRepository {
     suspend fun sendSpecificMsg(
          request: PostDataSendSpecificMsg
     ): Flow<Result<String>>
+
+
+    suspend fun sendPushNotification(@Body request: NetworkPushNotificationRequest): Flow<Result<String>>
 }

@@ -91,12 +91,17 @@ class HomeFragment : Fragment() {
         setUpViews()
         setUpObservers()
 
-
-
-
     }
 
     private fun setUpViews() {
+
+        binding.imgSync.setOnClickListener {
+            mViewModel.refresh()
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            mViewModel.refresh()
+            binding.swipeRefresh.isRefreshing = false
+        }
       binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
       binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
         binding.recyclerView.addItemDecoration(
@@ -463,6 +468,8 @@ class HomeFragment : Fragment() {
                         setFragmentResultListener("favourites") { _, bundle ->
                             if (bundle.containsKey("isUpdate")) {
                                 systemViewModel.refreshAppLayout()
+                                mViewModel.refresh()
+
                             }
                         }
                         findNavController().navigate(R.id.favouritesFragment)

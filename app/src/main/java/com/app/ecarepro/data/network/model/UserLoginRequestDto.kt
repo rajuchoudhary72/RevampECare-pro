@@ -1,7 +1,7 @@
 package com.app.ecarepro.data.network.model
 
-import com.app.ecarepro.data.network.CreateUserSessionRequestDto
 import com.google.gson.annotations.SerializedName
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
 
 
 data class UserLoginRequestDto(

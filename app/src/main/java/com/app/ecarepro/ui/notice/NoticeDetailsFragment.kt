@@ -49,7 +49,8 @@ class NoticeDetailsFragment : Fragment() {
             lifecycleOwner= viewLifecycleOwner
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
-        noticeDetailsBinding.toolbarNoticDetail.setNavigationOnClickListener { findNavController().popBackStack() }
+        noticeDetailsBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        noticeDetailsBinding.includeToolbar.toolbarTitle.text = getString(R.string.notice_details)
           noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
 
 

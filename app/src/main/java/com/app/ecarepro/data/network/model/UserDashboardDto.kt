@@ -166,9 +166,9 @@ data class BirthDayCard(
     @SerializedName("month")
     val month: String?
 ) {
-
     fun getIconUrl() = BASE_URL_COM + icon
 }
+
 data class Card(
     @SerializedName("color")
     val color: String?,

@@ -262,7 +262,7 @@ interface UserRepository {
         fileExt: String
     ): CommonResponse
 
-    fun getUserProfile(): Flow<Result<Profile>>
+    fun getUserProfile(refresh: Boolean): Flow<Result<Profile>>
     suspend fun getUserProfileEdit(
         edit: Boolean
     ): NetworkEditProfile
@@ -500,11 +500,12 @@ interface UserRepository {
     ): NetworkBirthday
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
-    fun getUserDashboard(): Flow<Result<UserDashboardDto>>
-    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun getUserDashboard(refresh: Boolean): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id: String, orderBy: String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
-    fun getUserUndertaking(): Flow<Result<String>>
+    fun getUserUndertaking(refresh: Boolean): Flow<Result<String>>
     fun saveUserUndertaking(request: UserUndertakingModule): Flow<Result<String>>
+    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
 
     suspend fun reportCardDTL(
         stID: Int
@@ -846,8 +847,5 @@ interface UserRepository {
     suspend fun academicYears(): NetworkAcademicYear
 
     suspend fun wingsList(): NetworkWingReport
-
-    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
-
 
 }

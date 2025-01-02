@@ -61,7 +61,8 @@ class InstitutionCodeFragment : Fragment() {
 
         institutionCodeViewModel.schools.observe(viewLifecycleOwner) { schools ->
             lifecycleScope.launch {
-                binding.carouselSchool.isVisible = (schools.isNullOrEmpty().not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.isMainApp && institutionCodeViewModel.isMainDevApp
+                binding.carouselSchool.isVisible = (schools.isNullOrEmpty()
+                    .not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.isMainApp
             }
             binding.carouselSchool.withModels {
                 schools.filterNotNull().forEach { school ->
@@ -91,7 +92,7 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnContinue.setOnClickListener {
             validateSchoolCode()
         }
-        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.isMainApp &&institutionCodeViewModel.isMainDevApp
+        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.isMainApp
 
         binding.btnFindSchoolCollege.setOnClickListener {
             setFragmentResultListener(SearchInstitutionFragment.REQUEST_KEY_SCHOOL_CODE) { _, data ->
@@ -104,7 +105,7 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnHelp.setOnClickListener {
             findNavController().navigate(R.id.helpFragment)
         }
-        if (institutionCodeViewModel.isMYSFHS.not()) {
+        if (institutionCodeViewModel.isMYSFHS) {
             binding.textInstitutionCode.apply {
                 setText("MYSFHS")
                 isEnabled = false
@@ -113,7 +114,7 @@ class InstitutionCodeFragment : Fragment() {
             }
         }
 
-        else if (institutionCodeViewModel.isMYSFPSPlay.not()) {
+        if (institutionCodeViewModel.isMYSFPSPlay) {
             binding.textInstitutionCode.apply {
                 setText("MYSFPS")
                 isEnabled = false

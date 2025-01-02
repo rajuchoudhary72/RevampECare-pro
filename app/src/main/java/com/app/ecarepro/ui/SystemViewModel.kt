@@ -274,7 +274,6 @@ class SystemViewModel @Inject constructor(
             attributes
         )
     }
-
     fun createUserSession(onResult: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository.createSession().collectLatest {

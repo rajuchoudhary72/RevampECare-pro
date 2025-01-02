@@ -35,6 +35,8 @@ class CircularListAdapter(private var circularList: MutableList<Circular>,
                 circularFragment.onItemClick(circularList[position],1,true)
             }
 
+            cvMustRead.visibility=if (circularList[position].mustRead) View.VISIBLE else View.GONE
+
             if (circularList[position].isRead){
                  cvNotItem.elevation=0f
             }else{

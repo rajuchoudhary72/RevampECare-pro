@@ -39,7 +39,9 @@ class AssignmentNavHostFragment : Fragment() {
     ): View  {
 
         binding=FragmentAssignmentNavHostBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.assignment)
+
         try {
             assignmentType= requireArguments().getString(Constant.ASSIGNMENT_TYPE).toString()
             assignmentID= requireArguments().getString(Constant.ID).toString()

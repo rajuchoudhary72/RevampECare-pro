@@ -63,7 +63,8 @@ class NoticeListFragment : Fragment(), ItemListener<Notice> {
             mnoticeViewModel = noticeViewModel
 
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.notice)
 
         try {
             noticeType = requireArguments().getString(Constant.NOTICE_TYPE).toString()
@@ -112,7 +113,7 @@ class NoticeListFragment : Fragment(), ItemListener<Notice> {
 
                                 binding.recyclerNotice.isVisible = true
                                 binding.tvNoData.isVisible = false
-                                binding.toolbar.title =
+                                binding.includeToolbar.toolbarTitle.text =
                                     "All Notices" + "( " + it.data.totalNotice + "/" + it.data.unreadNotice + ")"
 
                                 isLoading = true

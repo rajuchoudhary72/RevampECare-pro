@@ -89,7 +89,9 @@ class SplashFragment : Fragment() {
         systemViewModel.refreshAppLayout()
         delay(2000)
         findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+
     }
+
 
     private fun startAnimation() {
         val anim: AnimationDrawable = binding.backgroundView.drawable as AnimationDrawable

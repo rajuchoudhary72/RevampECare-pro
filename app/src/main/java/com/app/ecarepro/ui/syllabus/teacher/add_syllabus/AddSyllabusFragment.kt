@@ -2,13 +2,18 @@ package com.app.ecarepro.ui.syllabus.teacher.add_syllabus
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -25,15 +30,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.ClassSection
 import com.app.ecarepro.data.network.model.MyClasseItem
+import com.app.ecarepro.data.network.model.NetworkPushNotificationRequest
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.create_syllabus.BrowsedFile
 import com.app.ecarepro.databinding.FragmentAddSyllabusBinding
+import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.postAssignment.ClassListAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.getFile
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -189,7 +197,7 @@ class AddSyllabusFragment : Fragment() {
                     if (pdfString.isEmpty()) fileName else null,
                 ).invokeOnCompletion {
                     mainActivity().showMessage("Submitted Successfully!!!")
-                    findNavController().popBackStack()
+                    popUpSendNotification()
                 }
 
             }
@@ -360,7 +368,7 @@ class AddSyllabusFragment : Fragment() {
 
         tvSelectAll.setOnClickListener {
 
-            binding.tvSelectSubject.text = "All Subject"
+            binding.tvSelectSubject.text = "All"
             isSubjectSelected=true
             subID=0
 
@@ -521,6 +529,86 @@ class AddSyllabusFragment : Fragment() {
 
         builder.setCanceledOnTouchOutside(false)
         builder.show()
+    }
+
+
+    private fun popUpSendNotification() {
+        val btn_canel: Button
+        val btn_submit: Button
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        if (null != dialog.window) dialog.window!!.setBackgroundDrawable(
+            ColorDrawable(Color.TRANSPARENT)
+        )
+        dialog.setContentView(R.layout.pop_up_alert_send_push_notifaction)
+        btn_canel = dialog.findViewById<Button>(R.id.btn_canel)
+        btn_submit = dialog.findViewById(R.id.btn_submit)
+
+        btn_canel.setOnClickListener {
+            dialog.dismiss()
+            findNavController().popBackStack()
+        }
+
+        btn_submit.setOnClickListener {
+            val sub = binding.tvSelectSubject.text.toString()
+            val classname = binding.tvSelectClass.text.toString()
+            if (sylabussType==Constant.CLASS_WISE) {
+                addSyllabusViewModel.sendPushNotification(
+                    NetworkPushNotificationRequest(
+                        ClassSTD=classID,
+                        chMenuID=0,
+                        classIDs=  null,
+                        menuID=5,
+                        message= "Syllabus has been posted of $sub in Grade $classname",
+                        recipientType=2,
+                        title= "Syllabus",
+                    )
+                ) {  isSuccess, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (isSuccess){
+                        mainActivity().showMessage("Notification Sent Successfully")
+                        findNavController().popBackStack()
+                    }else{
+                        mainActivity().showMessage(message)
+                    }
+                }
+            }else{
+                val classname = binding.tvSelectClass.text.toString()
+                 val classSectionName = StringBuilder()
+                for (item in sectionList) {
+                    if (item.isSelected) {
+                        if (sectionIDs.toString().isEmpty()) {
+                            classSectionName.append(classname).append(item.secName)
+                        } else {
+                            classSectionName.append(",").append(classname).append(item.secName)
+                        }
+                    }
+                }
+
+                addSyllabusViewModel.sendPushNotification(
+                    NetworkPushNotificationRequest(
+                        ClassSTD=null,
+                        chMenuID=0,
+                        classIDs=  sectionIDs.toString().ifEmpty { null },
+                        menuID=5,
+                        message= "Syllabus has been posted of $sub in Grade $classSectionName",
+                        recipientType=2,
+                        title= "Syllabus",
+                    )
+                ) {  isSuccess, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (isSuccess){
+                        mainActivity().showMessage("Notification Sent Successfully")
+                        findNavController().popBackStack()
+                    }else{
+                        mainActivity().showMessage(message)
+                    }
+                }
+            }
+
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     }

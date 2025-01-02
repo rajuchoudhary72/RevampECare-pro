@@ -26,7 +26,6 @@ class InstitutionCodeViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val isMainApp = BuildConfig.FLAVOR == "Franciscan e-Care"
-    val isMainDevApp = BuildConfig.FLAVOR == "dev"
     val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
     val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
 

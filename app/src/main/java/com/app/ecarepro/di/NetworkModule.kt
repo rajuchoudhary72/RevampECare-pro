@@ -10,7 +10,6 @@ import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.UserService
-import com.app.ecarepro.di.annotations.SessionReCreate
 import com.app.ecarepro.utils.Constant
 import com.google.gson.Gson
 import dagger.Module
@@ -23,6 +22,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import com.app.ecarepro.di.annotations.SessionReCreate
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -113,7 +113,6 @@ fun provideRetrofit(
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
     }
-
     @Provides
     @SessionReCreate
     fun provideSessionUserService(): UserService {
@@ -130,12 +129,10 @@ fun provideRetrofit(
                 } else {
                     Constant.BASE_DEV_URL
                 }
-
             )
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
             .create(UserService::class.java)
     }
-
 }
