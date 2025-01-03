@@ -857,4 +857,8 @@
     <string name="priority">Priority</string>
     <string name="select_assignee">Select Assignee</string>
     <string name="remind_before">Remind Before</string>
+    <string name="session_text_info_holder">This is list of device that logged into your device. Revoke/Logout any session that you do not recognize.</string>
+    <string name="your_current_sesssion">Your current sesssion</string>
+    <string name="logout_all_devices">Logout All Devices</string>
+    <string name="active_sessions">Active Sessions</string>
 </resources>
