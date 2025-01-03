@@ -95,12 +95,6 @@ android {
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
-        create("dev") {
-            dimension = "apps"
-            resValue("string", "app_name", "e-Care-Dev")
-            signingConfig = signingConfigs.getByName("Franciscan e-Care")
-            applicationIdSuffix = ".dev"
-        }
         create("MYSFHS") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFHS")
