@@ -150,6 +150,7 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
@@ -1059,4 +1060,13 @@ interface UserService {
 
     @GET("School/Wings")
     suspend fun wingsList(): NetworkWingReport
+
+    @GET("User/ActiveSessions")
+    suspend fun activeSessions(): NetworkUserSessionsResponse
+
+    @GET("User/RemoveSession")
+    suspend fun removeSession(
+        @Query("SessionID") sessionID: String?,
+    ): CommonResponse
+
 }
