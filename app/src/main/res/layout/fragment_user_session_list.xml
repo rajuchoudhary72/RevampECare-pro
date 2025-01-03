@@ -61,6 +61,59 @@
                          android:layout_marginHorizontal="@dimen/_15sdp">
 
                         <ImageView
+                            android:id="@+id/iv_holder_web"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            android:src="@drawable/imac_ic"
+                            android:layout_gravity="center" />
+
+                        <TextView
+                            android:id="@+id/tv_session_in_web"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/_16sdp"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_gravity="center" />
+
+
+                     </LinearLayout>
+
+                     <androidx.recyclerview.widget.RecyclerView
+                         android:id="@+id/recycler_session_web"
+                         android:layout_width="match_parent"
+                         android:layout_height="match_parent"
+                         android:orientation="vertical"
+                         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                         tools:listitem="@layout/session_list_item"
+                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+                         />
+
+
+                  </LinearLayout>
+               </androidx.cardview.widget.CardView>
+
+
+               <androidx.cardview.widget.CardView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   app:cardElevation="0dp"
+                   android:layout_margin="@dimen/_15sdp"
+                   app:cardCornerRadius="@dimen/_15sdp">
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:orientation="horizontal"
+                         android:layout_marginVertical="@dimen/_15sdp"
+                         android:layout_marginHorizontal="@dimen/_15sdp">
+
+                        <ImageView
                             android:id="@+id/iv_holder_mobile"
                             android:layout_width="@dimen/_35sdp"
                             android:layout_height="@dimen/_35sdp"
@@ -93,57 +146,6 @@
                   </LinearLayout>
                </androidx.cardview.widget.CardView>
 
-               <androidx.cardview.widget.CardView
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   app:cardElevation="0dp"
-                   android:layout_margin="@dimen/_15sdp"
-                   app:cardCornerRadius="@dimen/_15sdp">
-
-                  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical">
-
-                     <LinearLayout
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:orientation="horizontal"
-                         android:layout_marginVertical="@dimen/_15sdp"
-                         android:layout_marginHorizontal="@dimen/_15sdp">
-
-                        <ImageView
-                            android:id="@+id/iv_holder_web"
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="@dimen/_35sdp"
-                            android:src="@drawable/imac_ic"
-                            android:layout_gravity="center" />
-
-                        <TextView
-                            android:id="@+id/tv_session_in_web"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/_16sdp"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_gravity="center" />
-
-
-                     </LinearLayout>
-
-                     <androidx.recyclerview.widget.RecyclerView
-                         android:id="@+id/recycler_session_web"
-                         android:layout_width="match_parent"
-                         android:layout_height="match_parent"
-                         android:orientation="vertical"
-                         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                         tools:listitem="@layout/session_list_item"
-                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
-                         />
-
-
-                  </LinearLayout>
-               </androidx.cardview.widget.CardView>
 
 
                <Button

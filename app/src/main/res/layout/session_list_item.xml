@@ -21,7 +21,6 @@
                 android:id="@+id/tv_device_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Iphone 16(OS 3.0)"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold" />
 
@@ -29,7 +28,6 @@
                 android:id="@+id/tv_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Iphone 16(OS 3.0)"
                 android:layout_marginTop="@dimen/_3sdp"
                 />
 
@@ -37,7 +35,6 @@
                 android:id="@+id/tv_last_active"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Iphone 16(OS 3.0)"
                 android:layout_marginTop="@dimen/_3sdp"
 
                 />

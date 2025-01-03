@@ -85,7 +85,7 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
                                 append(" sessions in Mobile")
                             }
 
-                            binding.tvMobileSession.text= buildString {
+                            binding.tvSessionInWeb.text= buildString {
                                 append(it.data.webSessionCount.toString())
                                 append(" sessions in Computer")
                             }
@@ -108,7 +108,7 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
                                     it.data.appSessions,
                                     this@UserSessionListFragment
                                 )
-                                binding.recyclerSessionWeb.apply {
+                                binding.recyclerMobileSession.apply {
                                     setHasFixedSize(true)
                                     layoutManager = LinearLayoutManager(activity)
                                     adapter = sessionsListAdapter
@@ -127,7 +127,7 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
     }
 
     override fun onItemClick(t: String, pos: Int, boolean: Boolean) {
-        binding.btnLogoutDevice.setOnClickListener {
+
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Logout This Devices")
             builder.setMessage("Are you sure, you want to logout from this device?")
@@ -142,7 +142,7 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
 
             val dialog: AlertDialog = builder.create()
             dialog.show()
-        }
+
     }
     private fun removeSession(sessionID: String?){
         lifecycleScope.launch {
@@ -158,6 +158,7 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Toast.makeText(requireContext(), it.data!!.message,Toast.LENGTH_SHORT).show()
+                        setUpActiveSessionList()
                     }
                 }
             }

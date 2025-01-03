@@ -1111,7 +1111,7 @@ class MainActivity : AppCompatActivity() {
             1 -> {
                 when (childMenuId) {
                     1 -> {
-                        navController.navigate(R.id.userSessionListFragment, Bundle().apply {
+                        navController.navigate(R.id.studentListFragment2, Bundle().apply {
                             putString(Constant.TO, Constant.PROFILE_FRA_STU)
                         })
                     }
