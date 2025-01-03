@@ -175,7 +175,7 @@ dependencies {
     implementation(libs.decorator)
 
     /*AAChartCore-Kotlin is a Kotlin library typically used in User Interface*/
-    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.0")
+    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
 
     /* Page indicator */
     implementation(libs.scrollingpagerindicator)
