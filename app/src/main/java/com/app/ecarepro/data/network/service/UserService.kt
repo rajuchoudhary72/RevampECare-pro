@@ -181,6 +181,7 @@ interface UserService {
     suspend fun logout(
         @Query("DeviceType") deviceType: Int = 1,
         @Query("deviceID") deviceID: String ,
+        @Query("SessionID") sessionID: String ,
     ): CommonResponse
     @GET("Report/FeeCollection")
     suspend fun feeCollection(

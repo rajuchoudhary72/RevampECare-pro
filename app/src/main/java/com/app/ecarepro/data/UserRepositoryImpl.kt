@@ -365,7 +365,8 @@ class UserRepositoryImpl @Inject constructor(
                     deviceID = Secure.getString(
                         context.contentResolver,
                         Secure.ANDROID_ID
-                    )
+                    ),
+                    sessionID = userDataStore.getUserSessionId().orEmpty()
                 )
                 if (response.errorCode == 0) {
                     emit(Result.success(true))
