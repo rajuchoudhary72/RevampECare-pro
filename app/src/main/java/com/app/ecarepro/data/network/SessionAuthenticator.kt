@@ -2,6 +2,7 @@ package com.app.ecarepro.data.network
 
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.AuthInterceptor.Companion.SESSION_ID
 import com.app.ecarepro.data.network.service.UserService
@@ -29,7 +30,7 @@ class SessionAuthenticator @Inject constructor(
                             context.contentResolver,
                             Secure.ANDROID_ID
                         ),
-                        locationCity = "N/A",
+                        locationCity = userDataStore.getCityName(),
                         oldSessionID = userDataStore.getUserSessionId()
                     )
                 ).sessionID
@@ -38,6 +39,7 @@ class SessionAuthenticator @Inject constructor(
                     .header(SESSION_ID, sessionID)
                     .build()
             } catch (e: Exception) {
+                AppSessionManager.logoutAndRestartApp(true)
                 null
             }
         }

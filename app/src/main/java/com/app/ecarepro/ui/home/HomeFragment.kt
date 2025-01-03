@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -61,6 +62,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -248,6 +250,23 @@ class HomeFragment : Fragment() {
                 .addOnSuccessListener { location: Location? ->
                     mViewModel.currentLocation =
                         Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+
+                    val cityName =
+                        if (location != null) {
+                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                            val addresses =
+                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                            if (!addresses.isNullOrEmpty()) {
+                                addresses[0].locality
+                            } else {
+                                Locale.getDefault().displayName
+                            }
+                        } else {
+                            Locale.getDefault().displayName
+                        }
+
+                    mViewModel.setCityName(cityName)
+
                 }
                 .addOnFailureListener {
                     Log.e("MSG", "startLocationFetch: " + it.message)
@@ -506,7 +525,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        //startLocationFetch()
+        startLocationFetch()
 
     }
     @Deprecated("Deprecated in Java")
@@ -516,7 +535,7 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-               // startLocationFetch()
+                startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
             }

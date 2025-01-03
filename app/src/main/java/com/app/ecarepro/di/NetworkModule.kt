@@ -23,7 +23,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import com.app.ecarepro.di.annotations.SessionReCreate
-
+import com.app.ecarepro.data.network.InvalidSessionInterceptor
+import com.app.ecarepro.data.network.SessionAuthenticator
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -46,7 +47,9 @@ object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
-        customResponseInterceptor: CustomResponseInterceptor
+        customResponseInterceptor: CustomResponseInterceptor,
+        invalidSessionInterceptor: InvalidSessionInterceptor,
+        sessionAuthenticator: SessionAuthenticator
 
     ): OkHttpClient {
         return OkHttpClient
@@ -55,6 +58,8 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
+            .addInterceptor(invalidSessionInterceptor)
+            .authenticator(sessionAuthenticator)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -115,9 +120,14 @@ fun provideRetrofit(
     }
     @Provides
     @SessionReCreate
-    fun provideSessionUserService(): UserService {
+    fun provideSessionUserService(
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
+    ): UserService {
         val client = OkHttpClient
             .Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -125,9 +135,9 @@ fun provideRetrofit(
         return Retrofit.Builder()
             .baseUrl(
                 if (BuildConfig.FLAVOR == "dev") {
-                    Constant.BASE_URL
-                } else {
                     Constant.BASE_DEV_URL
+                } else {
+                    Constant.BASE_URL
                 }
             )
             .addConverterFactory(GsonConverterFactory.create())

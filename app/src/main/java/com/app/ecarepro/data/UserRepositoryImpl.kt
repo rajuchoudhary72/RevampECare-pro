@@ -255,7 +255,7 @@ class UserRepositoryImpl @Inject constructor(
                         context.contentResolver,
                         Secure.ANDROID_ID
                     ),
-                    locationCity = "N/A",
+                    locationCity = userDataStore.getCityName(),
                 )
             )
         ).also {
@@ -276,7 +276,7 @@ class UserRepositoryImpl @Inject constructor(
                             context.contentResolver,
                             Secure.ANDROID_ID
                         ),
-                        locationCity = "Jaipur",
+                        locationCity = userDataStore.getCityName(),
                         oldSessionID = if (regenerate) userDataStore.getUserSessionId() else null
                     )
                 )
@@ -360,7 +360,13 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {
             try {
-                val response = userService.logout(deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID))
+                val response = userService.logout(
+                    deviceID = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    sessionID = userDataStore.getUserSessionId().orEmpty()
+                )
                 if (response.errorCode == 0) {
                     emit(Result.success(true))
                 } else {

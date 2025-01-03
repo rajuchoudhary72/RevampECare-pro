@@ -40,9 +40,11 @@ class AuthInterceptor @Inject constructor(
         }
 
         val authToken = runBlocking {
-            userDataStore.getUserSessionId()?.let {sessionId ->
-                requestBuilder.addHeader(SESSION_ID, sessionId)
-                Log.e(SESSION_ID, sessionId)
+            if (isLoginApi.not()) {
+                userDataStore.getUserSessionId()?.let { sessionId ->
+                    requestBuilder.addHeader(SESSION_ID, sessionId)
+                    Log.e(SESSION_ID, sessionId)
+                }
             }
             if (isLoginApi) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
@@ -55,11 +57,7 @@ class AuthInterceptor @Inject constructor(
 
         requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
-        return chain.proceed(requestBuilder.build().also {
-            if(BuildConfig.DEBUG){
-                // Log.e("Okhttp", it.toString())
-            }
-        })
+        return chain.proceed(requestBuilder.build())
     }
 
     companion object {

@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.Locale
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_datastore")
@@ -279,7 +280,16 @@ class UserDataStoreImpl @Inject constructor(
             preferences[isAuthenticatedKey] ?: false
         }.first()
     }
-
+    override suspend fun getCityName(): String {
+        return context.dataStore.data.map { preferences ->
+            preferences[cityNameKey]
+        }.first() ?: Locale.getDefault().displayName
+    }
+    override suspend fun setCityName(city: String) {
+        context.dataStore.edit { preferences ->
+            preferences[cityNameKey] = city
+        }
+    }
     override suspend fun getAuthToken(): String? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null
@@ -335,5 +345,6 @@ class UserDataStoreImpl @Inject constructor(
         private val userTypeKey = intPreferencesKey("userType")
       //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
+        private val cityNameKey = stringPreferencesKey("cityNameKey")
     }
 }

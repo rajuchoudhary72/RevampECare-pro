@@ -92,6 +92,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import com.app.ecarepro.data.AppSessionManager
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -1816,6 +1817,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             syncData(true)
         }
+        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
     }
 
     companion object {

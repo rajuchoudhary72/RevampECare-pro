@@ -26,6 +26,8 @@ import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
+import com.app.ecarepro.data.database.databases.UserDatabase
+
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -41,6 +43,7 @@ import javax.inject.Inject
 class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
+    private val userDatabase: UserDatabase,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
     private val schoolRepository: SchoolRepository,
@@ -77,7 +80,8 @@ class SystemViewModel @Inject constructor(
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
     var UType: Int = -1
-
+    val dataStore = userDataStore
+    val database = userDatabase
     init {
         viewModelScope.launch {
             userRoleName = userDataStore.getRoleName().toString()
@@ -175,7 +179,11 @@ class SystemViewModel @Inject constructor(
             }
         }
     }
-
+    suspend fun logoutCurrentUser(onSuccess: suspend () -> Unit) {
+        userRepository.logout().collectLatest {
+            onSuccess()
+        }
+    }
     fun refreshAppLayout() {
         viewModelScope.launch {
             refresh.emit(true)
