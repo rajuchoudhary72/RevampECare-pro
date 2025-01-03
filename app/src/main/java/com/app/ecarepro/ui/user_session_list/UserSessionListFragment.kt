@@ -145,7 +145,6 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
         }
 
     }
-
     private fun removeSession(sessionID: String?){
         lifecycleScope.launch {
             viewModel.removeSessionStateFlow.collectLatest {
