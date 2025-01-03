@@ -6,6 +6,7 @@ import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
@@ -183,10 +184,10 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-    fun submitForm(func: (Boolean, String) -> Unit) {
+    fun submitForm(func: (Boolean, String, AppointmentSavedData?) -> Unit) {
         viewModelScope.launch {
             if (isValid().not()) {
-                func(false, "Please fill all required fields")
+                func(false, "Please fill all required fields", null)
                 return@launch
             }
             val uiState = uiState.value
@@ -261,8 +262,9 @@ class AppointmentViewModel @Inject constructor(
                     if (result.isSuccess) {
                         func(
                             true,
+                            result.getOrNull()?.message
+                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code.",
                             result.getOrNull()
-                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
                         )
                     } else {
                         val error = result.exceptionOrNull() ?: IllegalArgumentException(
@@ -272,19 +274,22 @@ class AppointmentViewModel @Inject constructor(
                             if (error.code() == 400) {
                                 func(
                                     false,
-                                    "One or more validation errors occurred."
+                                    "One or more validation errors occurred.",
+                                    null
                                 )
                             } else {
                                 func(
                                     false,
-                                    error.message ?: UNKNOWN_ERROR_MESSAGE
+                                    error.message ?: UNKNOWN_ERROR_MESSAGE,
+                                    null
                                 )
                             }
 
                         } else {
                             func(
                                 false,
-                                error.message ?: UNKNOWN_ERROR_MESSAGE
+                                error.message ?: UNKNOWN_ERROR_MESSAGE,
+                                null
                             )
                         }
                     }

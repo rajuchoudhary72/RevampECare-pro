@@ -9,6 +9,7 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.CreateUserSessionRequestDto
 import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AddThoughtsPostData
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Department
@@ -1620,7 +1621,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     @SuppressLint("NewApi")
-    override fun submitForm(formData: Map<String, String>): Flow<Result<String>> {
+    override fun submitForm(formData: Map<String, String>): Flow<Result<AppointmentSavedData>> {
         return flow {
             try {
                 val builder = MultipartBody.Builder()
@@ -1636,10 +1637,7 @@ class UserRepositoryImpl @Inject constructor(
                 )
                 if (response.status == true) {
                     emit(
-                        Result.success(
-                            response.data?.message ?: response.message
-                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
-                        )
+                        Result.success(response.data)
                     )
                 } else {
                     emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
