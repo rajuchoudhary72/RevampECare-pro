@@ -158,9 +158,7 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         Toast.makeText(requireContext(), it.data!!.message,Toast.LENGTH_SHORT).show()
-                        if (sessionID!=null){
-                            setUpActiveSessionList()
-                        }
+                        setUpActiveSessionList()
                     }
                 }
             }
