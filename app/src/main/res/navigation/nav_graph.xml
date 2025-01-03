@@ -996,4 +996,8 @@
         android:id="@+id/feeBookFragment"
         android:name="com.app.ecarepro.ui.fee.fee_book.FeeBookFragment"
         android:label="FeeBookFragment" />
+    <fragment
+        android:id="@+id/userSessionListFragment"
+        android:name="com.app.ecarepro.ui.user_session_list.UserSessionListFragment"
+        android:label="UserSessionListFragment" />
 </navigation>
