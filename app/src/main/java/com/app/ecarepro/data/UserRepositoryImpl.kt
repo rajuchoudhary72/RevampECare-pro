@@ -166,6 +166,7 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.model.ClassID_StID
+import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
@@ -1393,6 +1394,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun wingsList(): NetworkWingReport {
         return userService.wingsList()
+    }
+
+    override suspend fun activeSessions(): NetworkUserSessionsResponse {
+        return userService.activeSessions()
+    }
+
+    override suspend fun removeSession(sessionID: String?): CommonResponse {
+        return userService.removeSession(sessionID)
     }
 
     override suspend fun feeCollection(
