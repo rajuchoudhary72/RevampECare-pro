@@ -329,7 +329,7 @@ class ProfileFragment : Fragment() {
                 profileSessionList {
                     id(139)
                     clickListener { _ ->
-                        findNavController().navigate(R.id.editProfileFragment)
+                        findNavController().navigate(R.id.userSessionListFragment)
                     }
                 }
             }
