@@ -143,7 +143,6 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
             val dialog: AlertDialog = builder.create()
             dialog.show()
         }
-
     }
     private fun removeSession(sessionID: String?){
         lifecycleScope.launch {
