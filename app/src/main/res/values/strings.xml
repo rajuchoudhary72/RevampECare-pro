@@ -861,4 +861,5 @@
     <string name="your_current_sesssion">Your current sesssion</string>
     <string name="logout_all_devices">Logout All Devices</string>
     <string name="active_sessions">Active Sessions</string>
+    <string name="check_active_sessions">Check Active Sessions</string>
 </resources>
