@@ -318,7 +318,12 @@ class ProfileFragment : Fragment() {
                         )
                     }
                 }
-
+                profileSessionList {
+                    id(139)
+                    clickListener { _ ->
+                        findNavController().navigate(R.id.userSessionListFragment)
+                    }
+                }
                 profileLogout {
                     id(131)
                     version("v ${BuildConfig.VERSION_NAME}")
@@ -326,12 +331,7 @@ class ProfileFragment : Fragment() {
                         (requireActivity() as MainActivity).logout()
                     }
                 }
-                profileSessionList {
-                    id(139)
-                    clickListener { _ ->
-                        findNavController().navigate(R.id.userSessionListFragment)
-                    }
-                }
+
             }
         }
     }

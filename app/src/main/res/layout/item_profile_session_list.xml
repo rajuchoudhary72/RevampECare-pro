@@ -16,10 +16,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/horizontal_margin"
+        android:layout_marginTop="@dimen/ed_around"
         android:background="@color/white"
         android:onClick="@{clickListener}"
-        android:paddingHorizontal="@dimen/horizontal_margin"
+        android:paddingHorizontal="@dimen/ed_around"
         android:paddingVertical="8dp">
         <TextView
             android:id="@+id/title"
@@ -43,7 +43,7 @@
             android:fontFamily="@font/calibri_light"
             tools:text="v 2.112.1(242)"
             android:text="@{version}"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title" />

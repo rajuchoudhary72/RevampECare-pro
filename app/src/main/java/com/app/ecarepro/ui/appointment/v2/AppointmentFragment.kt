@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.appointmentPhotoPicker
 import com.app.ecarepro.button
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.databinding.FragmentAppointmentBinding
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.textFiled
@@ -301,12 +303,15 @@ class AppointmentFragment : Fragment() {
                         button {
                             id("button")
                             clickListener { _ ->
-                                viewModel.submitForm { isSuccess, message ->
+                                viewModel.submitForm { isSuccess, message, data: AppointmentSavedData? ->
                                     mainActivity().showMessage(message)
-                                    if(isSuccess){
-                                        if(arguments?.getBoolean("toAppointment") == true){
-                                            findNavController().navigate(R.id.printOutAppointenentFragment)
-                                        }else{
+                                    if (isSuccess) {
+                                        if (arguments?.getBoolean("toAppointment") == true) {
+                                            findNavController().navigate(
+                                                R.id.printOutAppointenentFragment,
+                                                bundleOf("appointmentData" to data?.appdetails)
+                                            )
+                                        } else {
                                             findNavController().popBackStack()
                                         }
                                     }

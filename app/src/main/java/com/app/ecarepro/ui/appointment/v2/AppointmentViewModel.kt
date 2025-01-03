@@ -24,6 +24,7 @@ import javax.inject.Inject
 import org.json.JSONObject
 import retrofit2.HttpException
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
@@ -179,10 +180,11 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-    fun submitForm(func: (Boolean, String) -> Unit) {
+    fun submitForm(func: (Boolean, String, AppointmentSavedData?) -> Unit) {
+
         viewModelScope.launch {
             if (isValid().not()) {
-                func(false, "Please fill all required fields")
+                func(false, "Please fill all required fields", null)
                 return@launch
             }
             val uiState = uiState.value
@@ -195,55 +197,61 @@ class AppointmentViewModel @Inject constructor(
                 data["VisitorPhoto"] = "null"
                 data["userfrom"] = "3"
 
-                uiState.formData.forEach { form: Form ->
-                    when (form.columnName) {
-                        "Photo" -> {
-                            data["photo"] = form.base64Image?:""
-                        }
-
-                        "IdproofImage" -> {
-                            data["VisitorPhotoInbyte"] = form.base64Image?:""
-                        }
-
-                        "IdType" -> {
-                            data["IdType"] =
-                                if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
-                        }
-
-                        "Purpose" -> {
-                            uiState.purpose.firstOrNull { it.purposeName == form.value }?.let {
-                                data[form.columnName] = it.purposeID.toString()
+                uiState
+                    .formData
+                    .filter { it.active == true }
+                    .forEach { form: Form ->
+                        when (form.columnName) {
+                            "Photo" -> {
+                                data["photo"] = form.base64Image ?: ""
                             }
-                        }
 
-                        "Department" -> {
-                            uiState.departments.firstOrNull { it.departmentName == form.value }
-                                ?.let {
-                                    data[form.columnName] = it.departmentID.toString()
-                                }
-                        }
-
-                        "Designation" -> {
-                            uiState.designation.firstOrNull { it.designationName == form.value }
-                                ?.let {
-                                    data[form.columnName] = it.designationID.toString()
-                                }
-                        }
-
-                        "Employee" -> {
-                            uiState.employees.firstOrNull { it.employeeName == form.value }?.let {
-                                data[form.columnName] = it.employeeID.toString()
+                            "IdproofImage" -> {
+                                data["VisitorPhotoInbyte"] = form.base64Image ?: ""
                             }
-                        }
-                        "usertype" -> {
-                            data["usertype"] = userDataStore.getUser()?.userType.toString()
-                        }
-                        else -> {
-                            data[form.columnName] = form.value ?: ""
+
+                            "IdType" -> {
+                                data["IdType"] =
+                                    if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
+                            }
+
+                            "Purpose" -> {
+                                uiState.purpose.firstOrNull { it.purposeName == form.value }?.let {
+                                    data[form.columnName] = it.purposeID.toString()
+                                }
+                            }
+
+                            "Department" -> {
+                                uiState.departments.firstOrNull { it.departmentName == form.value }
+                                    ?.let {
+                                        data[form.columnName] = it.departmentID.toString()
+                                    }
+                            }
+
+                            "Designation" -> {
+                                uiState.designation.firstOrNull { it.designationName == form.value }
+                                    ?.let {
+                                        data[form.columnName] = it.designationID.toString()
+                                    }
+                            }
+
+                            "Employee" -> {
+                                uiState.employees.firstOrNull { it.employeeName == form.value }
+                                    ?.let {
+                                        data[form.columnName] = it.employeeID.toString()
+                                    }
+                            }
+
+                            "usertype" -> {
+                                data["usertype"] = userDataStore.getUser()?.userType.toString()
+                            }
+
+                            else -> {
+                                data[form.columnName] = form.value ?: ""
+                            }
                         }
                     }
-                }
-                Log.d("FCM", "nultipart: " +data)
+                Log.d("FCM", "nultipart: " + data)
 
 
                 userRepository.submitForm(data).collectLatest { result ->
@@ -251,30 +259,34 @@ class AppointmentViewModel @Inject constructor(
                     if (result.isSuccess) {
                         func(
                             true,
+                            result.getOrNull()?.message
+                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code.",
                             result.getOrNull()
-                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
                         )
                     } else {
-                        val error = result.exceptionOrNull() ?: IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)
+                        val error = result.exceptionOrNull() ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
                         if (error is HttpException) {
                             if (error.code() == 400) {
                                 func(
                                     false,
-                                    "One or more validation errors occurred."
+                                    "One or more validation errors occurred.",
+                                    null
                                 )
-                            }
-                            else {
+                            } else {
                                 func(
                                     false,
-                                    error.message ?: UNKNOWN_ERROR_MESSAGE
+                                    error.message ?: UNKNOWN_ERROR_MESSAGE,
+                                    null
                                 )
                             }
 
-                        }
-                        else {
+                        } else {
                             func(
                                 false,
-                                error.message ?: UNKNOWN_ERROR_MESSAGE
+                                error.message ?: UNKNOWN_ERROR_MESSAGE,
+                                null
                             )
                         }
                     }

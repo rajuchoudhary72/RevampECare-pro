@@ -146,6 +146,7 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
 import com.app.ecarepro.data.cache.JsonCache
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
@@ -1533,7 +1534,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
     @SuppressLint("NewApi")
-    override fun submitForm(formData: Map<String, String>): Flow<Result<String>> {
+    override fun submitForm(formData: Map<String, String>): Flow<Result<AppointmentSavedData>> {
         return flow {
             try {
                 val builder = MultipartBody.Builder()
@@ -1549,10 +1550,7 @@ class UserRepositoryImpl @Inject constructor(
                 )
                 if (response.status == true) {
                     emit(
-                        Result.success(
-                            response.data?.message ?: response.message
-                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
-                        )
+                        Result.success(response.data)
                     )
                 } else {
                     emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
