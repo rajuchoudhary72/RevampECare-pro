@@ -203,7 +203,7 @@ binding.cbSameAddress.setOnCheckedChangeListener {
 
             //Child's Details
 
-            textStudentName.setText(profile.studentProfile.name)
+            textStudentEmail.setText(profile.studentProfile.studentEmail)
             textClass.setText(profile.studentProfile.className)
             textDOB.setText(profile.studentProfile.dob)
             textAdmissionDate.setText(profile.studentProfile.admissionDate)
@@ -387,7 +387,8 @@ binding.cbSameAddress.setOnCheckedChangeListener {
                         textSchoolAddress.text.toString(),
                         textSchoolBoard.text.toString(),
                         textSchoolName.text.toString()
-                    )
+                    ),
+                    textStudentEmail.text.toString()
                 )
             )
 
