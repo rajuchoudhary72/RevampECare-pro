@@ -857,4 +857,5 @@
     <string name="priority">Priority</string>
     <string name="select_assignee">Select Assignee</string>
     <string name="remind_before">Remind Before</string>
+    <string name="student_email_id">Student Email ID</string>
 </resources>
