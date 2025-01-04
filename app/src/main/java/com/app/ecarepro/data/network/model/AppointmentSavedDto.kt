@@ -1,10 +1,11 @@
 package com.app.ecarepro.data.network.model
 import com.google.gson.annotations.SerializedName
+import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
 
 
 data class AppointmentSavedDto(
     @SerializedName("data")
-    val `data`: AppointmentSavedData?,
+    val `data`: AppointmentSavedData,
     @SerializedName("message")
     val message: String?,
     @SerializedName("status")
