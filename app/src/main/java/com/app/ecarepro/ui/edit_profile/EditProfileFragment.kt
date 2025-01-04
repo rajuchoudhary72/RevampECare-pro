@@ -396,8 +396,7 @@ binding.cbSameAddress.setOnCheckedChangeListener {
 
         }
 
-
-          lifecycleScope.launch {
+        lifecycleScope.launch {
               viewModel.updateParentProfileStateFlow.collectLatest {
                   when (it) {
 
