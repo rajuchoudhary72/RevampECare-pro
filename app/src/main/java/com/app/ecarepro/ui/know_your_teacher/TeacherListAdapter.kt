@@ -33,22 +33,18 @@ class TeacherListAdapter(private var staffList: List<Staff>,
     override fun onBindViewHolder(holder: StaffListViewHolder, position: Int) {
 
         val binding = DataBindingUtil.getBinding<StaffListItemBinding>(holder.itemView)
-         with(binding!!) {
+        val data= staffList[position]
+         binding?.apply {
              staffData=staffList[position]
-            val data= staffList[position]
-
             tvClassName.text= buildString {
                 append("( ")
                 append(data.designation)
                 append(" )")
             }
              tvSubjectName.isVisible=true
-             if (data.teachersSubject.isNotEmpty()){
-                 tvSubjectName.text=buildString {
-                     append("Subject: ")
-                     append(data.teachersSubject)
-                 }
-             }
+
+                 tvSubjectName.text="Subject: ${data.teachersSubject}"
+
 
 
              Picasso.get().
