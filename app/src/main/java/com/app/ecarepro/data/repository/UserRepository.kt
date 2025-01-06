@@ -547,6 +547,8 @@ interface UserRepository {
 
     suspend fun getStaffList(): NetworkStaffList
 
+    suspend fun teachersList(): NetworkStaffList
+
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 
     suspend fun postLessonPlan(
