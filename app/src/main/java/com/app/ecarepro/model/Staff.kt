@@ -8,6 +8,7 @@ data class Staff(
     val isSelected: Boolean,
     val maritialStatus: String,
     val mobile: String,
+    val teachersSubject: String,
     val name: String,
     val pending: Int,
     val photo: String,

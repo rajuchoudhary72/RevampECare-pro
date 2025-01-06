@@ -998,6 +998,8 @@ class MainActivity : AppCompatActivity() {
             33 -> navController.navigate(R.id.surveyListFragment)
             35 -> navController.navigate(R.id.busLocationFragment)
             39 -> navController.navigate(R.id.fomGuardFragment)
+            40 -> navController.navigate(R.id.teacherListFragment)
+
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
