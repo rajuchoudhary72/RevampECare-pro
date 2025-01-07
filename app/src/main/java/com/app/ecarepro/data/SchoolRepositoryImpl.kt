@@ -85,7 +85,7 @@ class SchoolRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSchools(): List<School> {
-        return schoolService.getSchools().list.map { it.asExternalModel() }
+        return schoolService.getSchools().list?.map { it.asExternalModel() }?: emptyList()
     }
 
     override fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool> {

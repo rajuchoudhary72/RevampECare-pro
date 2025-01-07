@@ -200,7 +200,7 @@ class SignInFragment : Fragment() {
         analyticsManager.trackEvent(
             AnalyticsConstants.Events.LOGIN,
             mapOf(
-                AnalyticsConstants.Attributes.USER_NAME to binding.textUserName.text.toString(),
+                AnalyticsConstants.Attributes.USER_NAME to _binding?.textUserName?.text.toString(),
                 AnalyticsConstants.Attributes.SIGN_IN_TYPE to if (isAddAccount) AnalyticsConstants.Attributes.ADD_ACCOUNT else AnalyticsConstants.Attributes.NORMAL_LOGIN,
             )
         )

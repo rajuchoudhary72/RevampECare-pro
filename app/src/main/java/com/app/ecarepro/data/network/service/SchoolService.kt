@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkCircular
 import com.app.ecarepro.data.network.model.NetworkCircularDetails
@@ -9,18 +10,15 @@ import com.app.ecarepro.data.network.model.NetworkNotice
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkSchoolsDto
 import com.app.ecarepro.data.network.model.NetworkWalkThrough
+import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.data.network.model.UpdateTaskDto
 import com.app.ecarepro.model.AddTaskDto
 import com.app.ecarepro.model.AppResponse
+import com.app.ecarepro.model.AssigneeDto
 import com.app.ecarepro.model.ClassPromotionModel
 import com.app.ecarepro.model.FeedsDto
-import com.app.ecarepro.model.PromotionModel
-import kotlinx.coroutines.flow.Flow
-import com.app.ecarepro.data.network.GeneralSettingsDto
-import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
-import com.app.ecarepro.model.AssigneeDto
-
+import com.app.ecarepro.model.PromotionModel
 import com.app.ecarepro.model.RequestClassPromotion
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TaskDto
@@ -44,25 +42,30 @@ interface SchoolService {
 
     @GET("School/List")
     suspend fun getSchools(): NetworkSchoolsDto
+
     @GET("School/GeneralSettings")
     suspend fun getGeneralSettings(): GeneralSettingsDto
 
     @GET("School/GeneralSettings")
     suspend fun appGeneralSettings(): GeneralSettingsDto
+
     @GET("TaskManager/TaskListAssigne")
     suspend fun getTaskAssignee(
         @Query("tlId") tlId: Int,
     ): AssigneeDto
+
     @GET("School/Notices")
     suspend fun getNotices(
         @Query("pg") pg: Int,
         @Query("ClassID") classID: Int,
         @Query("isClassNotice") isClassNotice: Boolean,
     ): NetworkNotice
+
     @POST("TaskManager/CommentOnTask")
     suspend fun sendComment(
         @Body request: SendCommentDto
     ): CommonResponse
+
     @GET("School/Circulars")
     suspend fun getCirculars(
         @Query("pg") pg: Int,
@@ -155,6 +158,6 @@ interface SchoolService {
 
 
     @GET("School/AppVersion")
-    suspend fun checkAppVersion( ): NetworkAppVersion
+    suspend fun checkAppVersion(): NetworkAppVersion
 
 }

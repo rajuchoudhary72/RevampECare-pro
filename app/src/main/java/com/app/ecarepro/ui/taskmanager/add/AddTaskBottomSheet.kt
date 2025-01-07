@@ -335,7 +335,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
 
 fun Fragment.selectDate(title: String, onDateSelection: (String) -> Unit) {
-
+    if (isAdded.not()) return
     val constraintsBuilder =
         CalendarConstraints.Builder()
             .setValidator(DateValidatorPointForward.now())
@@ -375,6 +375,6 @@ fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
 fun convertMillisToDateString(millis: Long? = null): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val calendar = Calendar.getInstance()
-    calendar.timeInMillis = millis?:Date().time
+    calendar.timeInMillis = millis ?: Date().time
     return formatter.format(calendar.time)
 }

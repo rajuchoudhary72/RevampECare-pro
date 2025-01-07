@@ -216,8 +216,7 @@ class AppointmentViewModel @Inject constructor(
             if (uiState is AppointmentUiState.Success) {
                 loadingState.update { LoadingState.Loading }
                 val data = mutableMapOf<String, String>()
-
-                data["VisitorType"] = "2"
+                data["VisitorType"] = visitorDetails.value?.visitorType?.toString()?:"2"
                 data["captureImg"] = "null"
                 data["VisitorPhoto"] = "null"
                 data["userfrom"] = "3"

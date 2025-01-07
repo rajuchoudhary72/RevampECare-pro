@@ -349,6 +349,7 @@ class AppointmentFragment : Fragment() {
     }
 
     private fun pickTime(title: String, onTimeSet: (String) -> Unit) {
+        if (isAdded.not()) return
         val materialTimePicker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setInputMode(INPUT_MODE_CLOCK)
