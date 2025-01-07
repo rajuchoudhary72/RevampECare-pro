@@ -8,6 +8,7 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.ui.fom_guard.model.verifiy_number.VerifyPhone
 import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
@@ -49,9 +50,9 @@ class VerfyPhoneViewModel @Inject constructor(
     }
 
 
-    private val  userdetailsfrommobileMutableStateFlow: MutableStateFlow<NetworkResult<VerifyPhone>> = MutableStateFlow(
+    private val  userdetailsfrommobileMutableStateFlow: MutableStateFlow<NetworkResult<VisitorDetailsDto>> = MutableStateFlow(
         NetworkResult.Loading())
-    val  userdetailsfrommobiletateFlow: StateFlow<NetworkResult<VerifyPhone>> = userdetailsfrommobileMutableStateFlow
+    val  userdetailsfrommobiletateFlow: StateFlow<NetworkResult<VisitorDetailsDto>> = userdetailsfrommobileMutableStateFlow
 
 
 

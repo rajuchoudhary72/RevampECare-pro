@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.appointment.v2
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -12,9 +13,11 @@ import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Form
 import com.app.ecarepro.data.network.model.Purpose
+import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.staff.LoadingState
+import com.app.ecarepro.ui.taskmanager.add.convertMillisToDateString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -23,16 +26,22 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val loadingState = MutableStateFlow<LoadingState>(LoadingState.Success)
     val uiState = MutableStateFlow<AppointmentUiState>(AppointmentUiState.Loading)
+
+    val visitorDetails = savedStateHandle.getStateFlow<VisitorDetails?>("visitorDetails", null)
+    val mobileNumber = savedStateHandle.get<String?>("mobileNumber")
 
 
     init {
@@ -41,7 +50,7 @@ class AppointmentViewModel @Inject constructor(
                 flow = userRepository.getFormData(),
                 flow2 = userRepository.getFormDataPurpose(),
                 flow3 = userRepository.getFormDataDepartment(),
-                flow4 = userRepository.getVisitorDetails()
+                flow4 = visitorDetails
             ) { formData, purpose, departments, visitorDetails ->
                 Pair(
                     Triple(
@@ -57,7 +66,7 @@ class AppointmentViewModel @Inject constructor(
                     val departments = response.first.third
                     val visitorDetails = response.second
 
-                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess && visitorDetails.isSuccess) {
+                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess ) {
                         val formDataResult = formData.getOrNull()
                         val purposeResult = purpose.getOrNull()
                         val departmentResult = departments.getOrNull()
@@ -69,23 +78,30 @@ class AppointmentViewModel @Inject constructor(
                                     formData = response.map { form ->
                                         when (form.columnName) {
                                             "Name" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.name)
+                                                form.copy(value = visitorDetails?.name)
                                             }
 
                                             "Mobile" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.mobile)
+                                                form.copy(value = mobileNumber)
                                             }
 
                                             "Email" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.email)
+                                                form.copy(value = visitorDetails?.email)
                                             }
 
                                             "Address" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.address)
+                                                form.copy(value = visitorDetails?.address)
                                             }
 
                                             "Company" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.company)
+                                                form.copy(value = visitorDetails?.company)
+                                            }
+                                            "VisitingDate" -> {
+                                                form.copy(value = convertMillisToDateString())
+                                            }
+
+                                            "Appointmenttime" -> {
+                                                form.copy(value = getCurrentTime())
                                             }
 
                                             else -> {
@@ -109,6 +125,12 @@ class AppointmentViewModel @Inject constructor(
                     this@AppointmentViewModel.uiState.update { uiState }
                 }
         }
+    }
+
+    private fun getCurrentTime(): String? {
+        val currentTime = LocalTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        return currentTime.format(formatter)
     }
 
 
