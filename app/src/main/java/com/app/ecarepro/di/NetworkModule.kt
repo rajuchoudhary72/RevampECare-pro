@@ -3,6 +3,7 @@ package com.app.ecarepro.di
 import android.content.Context
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.PerformanceMonitorInterceptor
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
 import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
 import com.app.ecarepro.data.network.service.AppService
@@ -45,7 +46,9 @@ object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
-        customResponseInterceptor: CustomResponseInterceptor
+        customResponseInterceptor: CustomResponseInterceptor,
+        performanceMonitorInterceptor: PerformanceMonitorInterceptor
+
 
     ): OkHttpClient {
         return OkHttpClient
@@ -54,6 +57,7 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
+            .addInterceptor(performanceMonitorInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
