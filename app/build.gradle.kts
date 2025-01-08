@@ -9,7 +9,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
-
+    id("com.google.firebase.firebase-perf")
 }
 
 kapt {
@@ -157,6 +157,8 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.cloud.messaging)
     implementation(libs.firebase.messaging)
+    implementation("com.google.firebase:firebase-perf")
+
     /* OTP Pin View */
     implementation(libs.otpview)
 
