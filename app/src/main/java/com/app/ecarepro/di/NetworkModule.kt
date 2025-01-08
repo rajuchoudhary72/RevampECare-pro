@@ -45,7 +45,7 @@ object NetworkModule {
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
-        //customResponseInterceptor: CustomResponseInterceptor
+        customResponseInterceptor: CustomResponseInterceptor
 
     ): OkHttpClient {
         return OkHttpClient
@@ -53,7 +53,7 @@ object NetworkModule {
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .addInterceptor(connectivityInterceptor)
-            //.addInterceptor(customResponseInterceptor)
+            .addInterceptor(customResponseInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
