@@ -25,24 +25,31 @@ import org.json.JSONObject
 import retrofit2.HttpException
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppointmentSavedData
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import com.app.ecarepro.ui.taskmanager.add.convertMillisToDateString
+import androidx.lifecycle.SavedStateHandle
+import com.app.ecarepro.data.network.model.VisitorDetails
 
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val loadingState = MutableStateFlow<LoadingState>(LoadingState.Success)
     val uiState = MutableStateFlow<AppointmentUiState>(AppointmentUiState.Loading)
 
-
+    val visitorDetails = savedStateHandle.getStateFlow<VisitorDetails?>("visitorDetails", null)
+    val mobileNumber = savedStateHandle.get<String?>("mobileNumber")
     init {
         viewModelScope.launch {
             combine(
                 flow = userRepository.getFormData(),
                 flow2 = userRepository.getFormDataPurpose(),
                 flow3 = userRepository.getFormDataDepartment(),
-                flow4 = userRepository.getVisitorDetails()
+                flow4 = visitorDetails
             ) { formData, purpose, departments, visitorDetails ->
                 Pair(
                     Triple(
@@ -58,7 +65,7 @@ class AppointmentViewModel @Inject constructor(
                     val departments = response.first.third
                     val visitorDetails = response.second
 
-                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess && visitorDetails.isSuccess) {
+                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess ) {
                         val formDataResult = formData.getOrNull()
                         val purposeResult = purpose.getOrNull()
                         val departmentResult = departments.getOrNull()
@@ -70,19 +77,25 @@ class AppointmentViewModel @Inject constructor(
                                     formData = response.map { form ->
                                         when (form.columnName) {
                                             "Name" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.name)
+                                                form.copy(value = visitorDetails?.name)
                                             }
                                             "Mobile" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.mobile)
+                                                form.copy(value = mobileNumber)
                                             }
                                             "Email" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.email)
+                                                form.copy(value = visitorDetails?.email)
                                             }
                                             "Address" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.address)
+                                                form.copy(value = visitorDetails?.address)
                                             }
                                             "Company" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.company)
+                                                form.copy(value = visitorDetails?.company)
+                                            }
+                                            "VisitingDate" -> {
+                                                form.copy(value = convertMillisToDateString())
+                                            }
+                                            "Appointmenttime" -> {
+                                                form.copy(value = getCurrentTime())
                                             }
                                             else -> {
                                                 form
@@ -106,7 +119,11 @@ class AppointmentViewModel @Inject constructor(
                 }
         }
     }
-
+    private fun getCurrentTime(): String? {
+        val currentTime = LocalTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        return currentTime.format(formatter)
+    }
 
     fun updateValue(columnName: String?, toString: String, base64Image: String = "") {
         val uiState = uiState.value
@@ -191,10 +208,12 @@ class AppointmentViewModel @Inject constructor(
                 loadingState.update { LoadingState.Loading }
                 val data = mutableMapOf<String, String>()
 
-                data["VisitorType"] = "2"
+               // data["VisitorType"] = "2" //1=visitor , 2=parent , 3=vendor(not in App.)
+
+                data["VisitorType"] = visitorDetails.value?.visitorType?.toString()?:"2"
                 data["captureImg"] = "null"
                 data["VisitorPhoto"] = "null"
-                data["userfrom"] = "3"
+                data["userfrom"] = "2"  // 2 =walk in ,3=e-care,4= invitation form
 
                 uiState
                     .formData

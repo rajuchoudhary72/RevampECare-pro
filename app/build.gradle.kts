@@ -43,8 +43,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 275
-        versionName = "2.6.4"
+        versionCode = 278
+        versionName = "2.6.7"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -94,12 +94,6 @@ android {
             dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
-        }
-        create("dev") {
-            dimension = "apps"
-            resValue("string", "app_name", "e-Care-Dev")
-            signingConfig = signingConfigs.getByName("Franciscan e-Care")
-            applicationIdSuffix = ".dev"
         }
         create("MYSFHS") {
             dimension = "apps"
@@ -175,7 +169,7 @@ dependencies {
     implementation(libs.decorator)
 
     /*AAChartCore-Kotlin is a Kotlin library typically used in User Interface*/
-    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.0")
+    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
 
     /* Page indicator */
     implementation(libs.scrollingpagerindicator)

@@ -67,7 +67,7 @@ fun provideRetrofit(
 ): Retrofit {
     return Retrofit.Builder()
         .baseUrl(
-            if (BuildConfig.FLAVOR == "dev") {
+            if (BuildConfig.DEBUG) {
                 Constant.BASE_DEV_URL
             } else {
                 Constant.BASE_URL
