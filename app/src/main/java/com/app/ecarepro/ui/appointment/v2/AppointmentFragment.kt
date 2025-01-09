@@ -364,12 +364,19 @@ class AppointmentFragment : Fragment() {
 
             // Validate the selected time
             if (isValidTime(selectedHour, selectedMinute)) {
-                onTimeSet("$selectedHour:$selectedMinute")
+                onTimeSet(formatTimeWithAmPm(selectedHour,selectedMinute))
             } else {
                 mainActivity().showMessage("Please select a time between 8:00 AM and 5:00 PM")
             }
         }
         materialTimePicker.show(childFragmentManager, "timePicker")
+    }
+
+    private fun formatTimeWithAmPm(hour: Int, minute: Int): String {
+        val isAfternoon = hour >= 12
+        val formattedHour = if (hour % 12 == 0) 12 else hour % 12
+        val suffix = if (isAfternoon) "PM" else "AM"
+        return String.format("%02d:%02d %s", formattedHour, minute, suffix)
     }
 
     private fun isValidTime(hour: Int, minute: Int): Boolean {
