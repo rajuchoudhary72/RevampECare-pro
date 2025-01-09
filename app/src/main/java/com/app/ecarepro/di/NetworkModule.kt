@@ -59,8 +59,6 @@ object NetworkModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-/* .addInterceptor(connectivityInterceptor)
-            .addInterceptor(customResponseInterceptor)*/
 @Provides
 fun provideRetrofit(
     okHttpClient: OkHttpClient,
