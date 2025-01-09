@@ -128,7 +128,7 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getCurrentUserId(): Int? {
         return context.dataStore.data.map { preferences ->
             preferences[currentUserId]
-        }.first()
+        }.first() ?: getUsersFlow().first().firstOrNull()?.id
     }
 
     override fun getCurrentUserIdAsFlow(): Flow<Int?> {

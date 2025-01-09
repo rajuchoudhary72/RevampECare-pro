@@ -15,6 +15,7 @@ interface UserDao {
 
     @Query("DELETE FROM users WHERE user_id = :userId")
     fun deleteUser(userId: Int)
+
     @Query("SELECT * FROM users WHERE user_id = :userId LIMIT 1")
     suspend fun getUser(userId: Int): UserEntity
 
@@ -32,6 +33,7 @@ interface UserDao {
 
     @Query("DELETE FROM users")
     suspend fun nukeTable()
+
     @Query("DELETE FROM users WHERE id = :id")
     suspend fun deleteUserById(id: Int)
 }
