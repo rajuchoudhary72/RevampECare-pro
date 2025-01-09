@@ -2,6 +2,7 @@ package com.app.ecarepro.data.network
 
 import com.google.firebase.perf.FirebasePerformance
 import com.google.firebase.perf.metrics.HttpMetric
+import com.google.firebase.perf.trace
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -15,22 +16,11 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
         val request: Request = chain.request()
 
         // Start Firebase Performance Monitoring HttpMetric
-        val httpMetric: HttpMetric = FirebasePerformance.getInstance().newHttpMetric(
-            request.url.toString(),
-            when (request.method) {
-                "GET" -> FirebasePerformance.HttpMethod.GET
-                "POST" -> FirebasePerformance.HttpMethod.POST
-                "PUT" -> FirebasePerformance.HttpMethod.PUT
-                "DELETE" -> FirebasePerformance.HttpMethod.DELETE
-                else -> FirebasePerformance.HttpMethod.OPTIONS
-            }
-        )
-        httpMetric.start()
+
 
         val response: Response = try {
             chain.proceed(request)
         } catch (e: Exception) {
-            httpMetric.stop()
             throw e
         }
 
@@ -43,7 +33,23 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                 val errorCode = jsonResponse.optInt("errorCode", 0)
 
                 if (errorCode == 1) {
-                    trackWithFirebase(httpMetric, request, response)
+                    val httpMetric: HttpMetric = FirebasePerformance.getInstance().newHttpMetric(
+                        request.url.toString(),
+                        when (request.method) {
+                            "GET" -> FirebasePerformance.HttpMethod.GET
+                            "POST" -> FirebasePerformance.HttpMethod.POST
+                            "PUT" -> FirebasePerformance.HttpMethod.PUT
+                            "DELETE" -> FirebasePerformance.HttpMethod.DELETE
+                            else -> FirebasePerformance.HttpMethod.OPTIONS
+                        }
+                    )
+                    httpMetric.start()
+                    trackWithFirebase(
+                        httpMetric,
+                        request,
+                        response,
+                        responseBodyString.toByteArray().size
+                    )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -54,30 +60,29 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                 .body(responseBodyString.toResponseBody(response.body?.contentType()))
                 .build()
         }
-
-        httpMetric.stop()
         return response
     }
 
-    private fun trackWithFirebase(httpMetric: HttpMetric, request: Request, response: Response) {
-        // Set HTTP response code
-        httpMetric.setHttpResponseCode(response.code)
+    private fun trackWithFirebase(
+        httpMetric: HttpMetric,
+        request: Request,
+        response: Response,
+        size: Int
+    ) {
+        httpMetric.trace {
+            setHttpResponseCode(response.code)
+            val requestBodySize = request.body?.contentLength() ?: 0L
 
-        // Set request and response payload sizes (if available)
-        val requestBodySize = request.body?.contentLength() ?: 0L
-        val responseBodySize = response.body?.contentLength() ?: 0L
+            setRequestPayloadSize(requestBodySize)
+            setResponsePayloadSize(size.toLong())
 
-        httpMetric.setRequestPayloadSize(requestBodySize)
-        httpMetric.setResponsePayloadSize(responseBodySize)
+            // Add custom attributes if needed
+            putAttribute("errorCode", "1")
+            putAttribute("trackedRequest", "true")
 
-        // Add custom attributes if needed
-        httpMetric.putAttribute("errorCode", "1")
-        httpMetric.putAttribute("trackedRequest", "true")
 
-        // Stop the metric
-        httpMetric.stop()
-
-        println("Tracked request with Firebase Performance Monitoring: ${request.url}")
+            println("Tracked request with Firebase Performance Monitoring: ${request.url}")
+        }
     }
 }
 
