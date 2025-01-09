@@ -351,17 +351,34 @@ class AppointmentFragment : Fragment() {
     private fun pickTime(title: String, onTimeSet: (String) -> Unit) {
         if (isAdded.not()) return
         val materialTimePicker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_24H)
             .setInputMode(INPUT_MODE_CLOCK)
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(8) // Default hour
+            .setMinute(0) // Default minute
             .setTitleText(title)
             .build()
 
         materialTimePicker.addOnPositiveButtonClickListener {
-            val hour = materialTimePicker.hour
-            val minute = materialTimePicker.minute
-            onTimeSet("$hour:$minute")
+            val selectedHour = materialTimePicker.hour
+            val selectedMinute = materialTimePicker.minute
+
+            // Validate the selected time
+            if (isValidTime(selectedHour, selectedMinute)) {
+                onTimeSet("$selectedHour:$selectedMinute")
+            } else {
+                mainActivity().showMessage("Please select a time between 8:00 AM and 5:00 PM")
+            }
         }
         materialTimePicker.show(childFragmentManager, "timePicker")
+    }
+
+    private fun isValidTime(hour: Int, minute: Int): Boolean {
+        // Convert time to minutes since midnight
+        val selectedTimeInMinutes = hour * 60 + minute
+        val startTimeInMinutes = 8 * 60 // 8:00 AM
+        val endTimeInMinutes = 17 * 60 // 5:00 PM
+
+        return selectedTimeInMinutes in startTimeInMinutes until endTimeInMinutes
     }
 
     private fun isDropDown(columnName: String?): Boolean {
