@@ -3,6 +3,7 @@ package com.app.ecarepro.utils
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.CharacterStyle
@@ -169,62 +170,68 @@ fun TextView.showEditButton(show: Boolean) {
 
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
-
     if (text != null) {
-        textView.text = getFormatedString(text)
-    }else{
-        textView.text = text
+        textView.text = formatText(text)
+    } else {
+        textView.text = ""
+    }
+}
+
+
+fun formatText(input: String): SpannableString {
+    val cleanedText = StringBuilder()
+    val spans = mutableListOf<SpanInfo>()
+
+    // Regex patterns for bold, underline, and italic
+    val patterns = listOf(
+        "\\*(.*?)\\*" to { start: Int, end: Int -> StyleSpan(Typeface.BOLD) },
+        "~(.*?)~" to { start: Int, end: Int -> UnderlineSpan() },
+        "_(.*?)_" to { start: Int, end: Int -> StyleSpan(Typeface.ITALIC) }
+    )
+
+    var currentIndex = 0
+
+    while (currentIndex < input.length) {
+        var foundMatch = false
+
+        for ((pattern, spanCreator) in patterns) {
+            val regex = pattern.toRegex()
+            val match = regex.find(input, currentIndex)
+
+            if (match != null && match.range.first == currentIndex) {
+                val content = match.groupValues[1]
+                val start = cleanedText.length
+                cleanedText.append(content)
+                val end = cleanedText.length
+
+                // Ensure spans are within valid bounds
+                if (start < end && end <= cleanedText.length) {
+                    spans.add(SpanInfo(start, end, spanCreator(start, end)))
+                }
+
+                currentIndex = match.range.last + 1
+                foundMatch = true
+                break
+            }
+        }
+
+        if (!foundMatch) {
+            cleanedText.append(input[currentIndex])
+            currentIndex++
+        }
     }
 
-//
-//    if (text != null) {
-//        // Create a SpannableStringBuilder to build the formatted text
-//        val spannableString = SpannableStringBuilder()
-//
-//        // Use regex to find all *...* wrapped text
-//        val pattern = "\\*(.*?)\\*".toRegex()
-//        val matches = pattern.findAll(text)
-//
-//        var lastEnd = 0
-//
-//        // Loop through each match and apply bold formatting
-//        for (match in matches) {
-//            val start = match.range.first
-//            val end = match.range.last + 1 // End should include the trailing '*'
-//
-//            // Append text before the match
-//            spannableString.append(text.substring(lastEnd, start))
-//
-//            // Extract the bold text without * characters
-//            val boldText = match.groups[1]?.value ?: ""
-//            spannableString.append(boldText)
-//
-//            // Apply bold style to the extracted text
-//            val boldStart = spannableString.length - boldText.length
-//            val boldEnd = spannableString.length
-//
-//            spannableString.setSpan(
-//                StyleSpan(Typeface.BOLD),
-//                boldStart,
-//                boldEnd,
-//                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-//            )
-//
-//            // Update lastEnd to the end of the current match
-//            lastEnd = end
-//        }
-//
-//        // Append any remaining text after the last match
-//        if (lastEnd < text.length) {
-//            spannableString.append(text.substring(lastEnd))
-//        }
-//
-//        // Set the formatted text to the TextView
-//        textView.text = spannableString
-//    } else {
-//        textView.text = ""
-//    }
+    val spannable = SpannableString(cleanedText.toString())
+    spans.forEach { span ->
+        if (span.start >= 0 && span.end <= cleanedText.length) {
+            spannable.setSpan(span.style, span.start, span.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+    }
+
+    return spannable
 }
+
+data class SpanInfo(val start: Int, val end: Int, val style: Any)
 
 
 fun getFormatedString(data: String?): SpannableStringBuilder? {

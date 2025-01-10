@@ -329,19 +329,38 @@ class AppointmentFragment : Fragment() {
     private fun pickTime(title: String, onTimeSet: (String) -> Unit) {
         if (isAdded.not()) return
         val materialTimePicker = MaterialTimePicker.Builder()
-            .setTimeFormat(TimeFormat.CLOCK_24H)
             .setInputMode(INPUT_MODE_CLOCK)
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(8) // Default hour
+            .setMinute(0) // Default minute
             .setTitleText(title)
             .build()
 
         materialTimePicker.addOnPositiveButtonClickListener {
-            val hour = materialTimePicker.hour
-            val minute = materialTimePicker.minute
-            onTimeSet("$hour:$minute")
+            val selectedHour = materialTimePicker.hour
+            val selectedMinute = materialTimePicker.minute
+            // Validate the selected time
+            if (isValidTime(selectedHour, selectedMinute)) {
+                onTimeSet(formatTimeWithAmPm(selectedHour,selectedMinute))
+            } else {
+                mainActivity().showMessage(getString(R.string.please_select_a_time_between_8_00_am_and_5_00_pm))
+            }
         }
         materialTimePicker.show(childFragmentManager, "timePicker")
     }
-
+    private fun formatTimeWithAmPm(hour: Int, minute: Int): String {
+        val isAfternoon = hour >= 12
+        val formattedHour = if (hour % 12 == 0) 12 else hour % 12
+        val suffix = if (isAfternoon) "PM" else "AM"
+        return String.format("%02d:%02d %s", formattedHour, minute, suffix)
+    }
+    private fun isValidTime(hour: Int, minute: Int): Boolean {
+        // Convert time to minutes since midnight
+        val selectedTimeInMinutes = hour * 60 + minute
+        val startTimeInMinutes = 8 * 60 // 8:00 AM
+        val endTimeInMinutes = 17 * 60 // 5:00 PM
+        return selectedTimeInMinutes in startTimeInMinutes until endTimeInMinutes
+    }
     private fun isDropDown(columnName: String?): Boolean {
         val dropDownColumns =
             mutableListOf("Purpose", "Department", "Designation", "Employee", "IdType")
