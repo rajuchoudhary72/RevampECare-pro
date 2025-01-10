@@ -8,13 +8,16 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
+import java.net.URI
+import java.net.URL
 import javax.inject.Inject
 
 class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request: Request = chain.request()
-
+        val url : URL = request.url.toUrl()
+        val urlPath = getUrlWithoutQuery(url)
         // Start Firebase Performance Monitoring HttpMetric
 
 
@@ -32,7 +35,7 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                 val jsonResponse = JSONObject(responseBodyString)
                 val errorCode = jsonResponse.optInt("errorCode", 0)
 
-                if (errorCode == 1) {
+                if (errorCode == 0) {
                     val httpMetric: HttpMetric = FirebasePerformance.getInstance().newHttpMetric(
                         request.url.toString(),
                         when (request.method) {
@@ -83,7 +86,10 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
         }
         return response
     }
-
+    private fun getUrlWithoutQuery(url: URL): URL {
+        val uri = URI(url.protocol, url.host, url.path, null)
+        return uri.toURL()
+    }
     private fun trackWithFirebase(
         httpMetric: HttpMetric,
         request: Request,
