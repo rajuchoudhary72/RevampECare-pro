@@ -1,7 +1,6 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
-import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Attachment
