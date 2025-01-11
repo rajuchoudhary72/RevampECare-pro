@@ -3,6 +3,7 @@ package com.app.ecarepro.utils
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -167,13 +168,48 @@ fun TextView.showEditButton(show: Boolean) {
     }
 }
 
+fun formatServerText(input: String): SpannableStringBuilder {
+    val spannableBuilder = SpannableStringBuilder()
+    val regex = "~\\*(.*?)\\*~".toRegex() // Matches ~*text*~
 
+    var lastIndex = 0
+    regex.findAll(input).forEach { matchResult ->
+        // Append text before the matched part
+        spannableBuilder.append(input.substring(lastIndex, matchResult.range.first))
+
+        // Extract the matched text
+        val matchedText = matchResult.groups[1]?.value ?: ""
+
+        // Apply formatting (bold + underline)
+        val spannable = SpannableString(matchedText)
+        spannable.setSpan(StyleSpan(Typeface.BOLD), 0, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable.setSpan(UnderlineSpan(), 0, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        // Add the formatted text to the builder
+        spannableBuilder.append(spannable)
+
+        lastIndex = matchResult.range.last + 1
+    }
+
+    // Append remaining text after the last match
+    spannableBuilder.append(input.substring(lastIndex))
+    return spannableBuilder
+}
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
     if (text != null) {
-        textView.text = formatText(text)
-    } else {
-        textView.text = ""
+        if (text.contains("~*")||text.contains("*~")){
+            val formattedText = formatServerText(text)
+// Set the formatted text to a TextView
+            textView.text = formattedText
+        }else{
+            if (text != null) {
+                textView.text = formatText(text)
+            } else {
+                textView.text = ""
+            }
+        }
+
     }
 }
 
@@ -182,40 +218,48 @@ fun formatText(input: String): SpannableString {
     val cleanedText = StringBuilder()
     val spans = mutableListOf<SpanInfo>()
 
-    // Regex patterns for bold, underline, and italic
-    val patterns = listOf(
-        "\\*(.*?)\\*" to { start: Int, end: Int -> StyleSpan(Typeface.BOLD) },
-        "~(.*?)~" to { start: Int, end: Int -> UnderlineSpan() },
-        "_(.*?)_" to { start: Int, end: Int -> StyleSpan(Typeface.ITALIC) }
-    )
+    // Regex pattern to capture all formatting markers and nested content
+    val regex = "(\\*[^*_~]+\\*|_[^*_~]+_|~[^*_~]+~|\\*[^*_~]+_[^*_~]+_\\*|\\*[^*_~]+~[^*_~]+~\\*|_[^*_~]+~[^*_~]+~_\\*|\\*[^*_~]+_[^*_~]+~[^*_~]+~_\\*)".toRegex()
 
     var currentIndex = 0
 
     while (currentIndex < input.length) {
-        var foundMatch = false
+        val match = regex.find(input, currentIndex)
 
-        for ((pattern, spanCreator) in patterns) {
-            val regex = pattern.toRegex()
-            val match = regex.find(input, currentIndex)
+        if (match != null && match.range.first == currentIndex) {
+            val matchedText = match.value
+            val rawText = matchedText.replace("[*_~]".toRegex(), "") // Remove markers
 
-            if (match != null && match.range.first == currentIndex) {
-                val content = match.groupValues[1]
-                val start = cleanedText.length
-                cleanedText.append(content)
-                val end = cleanedText.length
+            val start = cleanedText.length
+            cleanedText.append(rawText)
+            val end = cleanedText.length
 
-                // Ensure spans are within valid bounds
-                if (start < end && end <= cleanedText.length) {
-                    spans.add(SpanInfo(start, end, spanCreator(start, end)))
-                }
-
-                currentIndex = match.range.last + 1
-                foundMatch = true
-                break
+            // Apply spans based on markers
+            if (matchedText.startsWith("*") && matchedText.endsWith("*")) {
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.BOLD)))
             }
-        }
+            if (matchedText.startsWith("_") && matchedText.endsWith("_")) {
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
+            }
+            if (matchedText.startsWith("~") && matchedText.endsWith("~")) {
+                spans.add(SpanInfo(start, end, UnderlineSpan()))
+            }
+            // Handle combinations
+            if (matchedText.contains("*") && matchedText.contains("_")) {
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.BOLD)))
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
+            }
+            if (matchedText.contains("*") && matchedText.contains("~")) {
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.BOLD)))
+                spans.add(SpanInfo(start, end, UnderlineSpan()))
+            }
+            if (matchedText.contains("_") && matchedText.contains("~")) {
+                spans.add(SpanInfo(start, end, UnderlineSpan()))
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
+            }
 
-        if (!foundMatch) {
+            currentIndex = match.range.last + 1
+        } else {
             cleanedText.append(input[currentIndex])
             currentIndex++
         }
@@ -223,16 +267,46 @@ fun formatText(input: String): SpannableString {
 
     val spannable = SpannableString(cleanedText.toString())
     spans.forEach { span ->
-        if (span.start >= 0 && span.end <= cleanedText.length) {
-            spannable.setSpan(span.style, span.start, span.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
+        spannable.setSpan(span.style, span.start, span.end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
 
     return spannable
 }
 
 data class SpanInfo(val start: Int, val end: Int, val style: Any)
+fun formatTextWithUnderline(text: String): SpannableStringBuilder {
 
+    val spannable = SpannableStringBuilder(text)
+
+
+
+    // Assuming bold is indicated by `*` characters
+
+    var startIndex = text.indexOf("*")
+
+    var endIndex = 0
+
+    while (startIndex != -1) {
+
+        endIndex = text.indexOf("*", startIndex + 1)
+
+        if (endIndex != -1) {
+
+            val boldText = text.substring(startIndex + 1, endIndex)
+
+            spannable.setSpan(UnderlineSpan(), startIndex + 1, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        }
+
+        startIndex = text.indexOf("*", endIndex)
+
+    }
+
+
+
+    return spannable
+
+}
 
 fun getFormatedString(data: String?): SpannableStringBuilder? {
     val ssb = SpannableStringBuilder(data)
