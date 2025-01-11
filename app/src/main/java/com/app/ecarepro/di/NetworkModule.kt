@@ -3,6 +3,7 @@ package com.app.ecarepro.di
 import android.content.Context
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.PerformanceMonitorInterceptor
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
 import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
 import com.app.ecarepro.data.network.service.AppService
@@ -49,7 +50,9 @@ object NetworkModule {
         connectivityInterceptor: ConnectivityInterceptor,
         customResponseInterceptor: CustomResponseInterceptor,
         invalidSessionInterceptor: InvalidSessionInterceptor,
-        sessionAuthenticator: SessionAuthenticator
+        sessionAuthenticator: SessionAuthenticator,
+        performanceMonitorInterceptor: PerformanceMonitorInterceptor
+
 
     ): OkHttpClient {
         return OkHttpClient
@@ -58,6 +61,7 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
+            .addInterceptor(performanceMonitorInterceptor)
             .addInterceptor(invalidSessionInterceptor)
             .authenticator(sessionAuthenticator)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -65,8 +69,6 @@ object NetworkModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-/* .addInterceptor(connectivityInterceptor)
-            .addInterceptor(customResponseInterceptor)*/
 @Provides
 fun provideRetrofit(
     okHttpClient: OkHttpClient,

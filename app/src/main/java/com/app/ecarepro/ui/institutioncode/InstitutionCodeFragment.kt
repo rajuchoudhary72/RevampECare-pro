@@ -129,20 +129,17 @@ class InstitutionCodeFragment : Fragment() {
 
     }
     private fun validateSchoolCode() {
-        binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
-        (requireActivity() as MainActivity).showLoader(true)
-        institutionCodeViewModel.validateSchoolCode(binding.textInstitutionCode.text.toString()) {
-            (requireActivity() as MainActivity).showLoader(false)
-            if (it?.errorCode == 0) {
-                /* if(it.isStudentLoginBlocked == true){
-                         mainActivity().showMessage("you are block by admin by this school so please co-coordinate to this school admin!")
-                     }else{
-                         navigateToSignFragment(it.schoolCode)
-                     }*/
-                navigateToSignFragment(it.schoolCode, it.isStudentLoginBlocked ?: false)
-            } else {
-                binding.textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
-                mainActivity().showMessage("Please enter a valid school code.")
+        _binding?.apply {
+            textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
+            (requireActivity() as MainActivity).showLoader(true)
+            institutionCodeViewModel.validateSchoolCode(textInstitutionCode.text.toString()) {
+                (requireActivity() as MainActivity).showLoader(false)
+                if (it?.errorCode == 0) {
+                    navigateToSignFragment(it.schoolCode, it.isStudentLoginBlocked ?: false)
+                } else {
+                    textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
+                    mainActivity().showMessage("Please enter a valid school code.")
+                }
             }
         }
     }

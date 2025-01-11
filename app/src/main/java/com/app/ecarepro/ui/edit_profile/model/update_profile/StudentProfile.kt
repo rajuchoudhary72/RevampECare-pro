@@ -32,4 +32,5 @@ data class StudentProfile(
 
     var state: String,
     var previousSchoolDTL: PreviousSchoolDTL,
+    var studentEmail: String
 )

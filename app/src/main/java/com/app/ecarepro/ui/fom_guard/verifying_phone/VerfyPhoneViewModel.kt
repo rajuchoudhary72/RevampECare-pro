@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
 
 @HiltViewModel
 class VerfyPhoneViewModel @Inject constructor(
@@ -49,9 +50,9 @@ class VerfyPhoneViewModel @Inject constructor(
     }
 
 
-    private val  userdetailsfrommobileMutableStateFlow: MutableStateFlow<NetworkResult<VerifyPhone>> = MutableStateFlow(
+    private val  userdetailsfrommobileMutableStateFlow: MutableStateFlow<NetworkResult<VisitorDetailsDto>> = MutableStateFlow(
         NetworkResult.Loading())
-    val  userdetailsfrommobiletateFlow: StateFlow<NetworkResult<VerifyPhone>> = userdetailsfrommobileMutableStateFlow
+    val  userdetailsfrommobiletateFlow: StateFlow<NetworkResult<VisitorDetailsDto>> = userdetailsfrommobileMutableStateFlow
 
 
 

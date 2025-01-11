@@ -282,7 +282,7 @@
     <string name="father_spouse_name">Father/Spouse Name</string>
     <string name="father_spouse_mobile_no">Father/Spouse Mobile No</string>
     <string name="aadhar_card_number">Aadhar Card Number</string>
-    <string name="pan_card_number">Pan Card Number</string>
+    <string name="pan_card_number">PAN</string>
     <string name="sp">:</string>
     <string name="early_out">Early Out</string>
     <string name="late_in">Late In</string>
@@ -468,12 +468,12 @@
     <string name="address">Address</string>
     <string name="pAddress">Permanent Address</string>
     <string name="aadharCardNo">Aadhar Card Number</string>
-    <string name="paNNumber">PAN Card Number</string>
+    <string name="paNNumber">PAN</string>
     <string name="cbseid">CBSE ID</string>
     <string name="club">Club</string>
     <string name="otp_verification">OTP Verification <font color="#FF0000">*</font></string>
     <string name="resend_otp"><u>Resend OTP</u></string>
-    <string name="uan_number">UN Number</string>
+    <string name="uan_number">UAN</string>
     <string name="nationalnumber">National Teacher ID:</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN</string>
@@ -857,6 +857,12 @@
     <string name="priority">Priority</string>
     <string name="select_assignee">Select Assignee</string>
     <string name="remind_before">Remind Before</string>
+    <string name="student_email_id">Student Email ID</string>
+    <string name="teachers">Teachers</string>
+    <string name="appointment_time">Appointment Time</string>
+    <string name="purpose">Purpose</string>
+    <string name="form_type">Form Type</string>
+    <string name="please_select_a_time_between_8_00_am_and_5_00_pm">Please select a time between 8:00 AM and 5:00 PM</string>
     <string name="session_text_info_holder">This is list of device that logged into your device. Revoke/Logout any session that you do not recognize.</string>
     <string name="your_current_sesssion">Your current sesssion</string>
     <string name="logout_all_devices">Logout All Devices</string>

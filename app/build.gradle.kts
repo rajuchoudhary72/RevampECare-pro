@@ -9,6 +9,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
+    id("com.google.firebase.firebase-perf")
 
 }
 
@@ -43,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 274
-        versionName = "2.6.3"
+        versionCode = 280
+        versionName = "2.6.8"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -157,6 +158,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.cloud.messaging)
     implementation(libs.firebase.messaging)
+    implementation("com.google.firebase:firebase-perf")
     /* OTP Pin View */
     implementation(libs.otpview)
 

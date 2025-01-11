@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Attachment
@@ -213,6 +214,7 @@ interface UserRepository {
 
     fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
     fun submitForm(formData:Map<String,String>): Flow<Result<AppointmentSavedData>>
+
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 
@@ -548,6 +550,8 @@ interface UserRepository {
     ): NetworkLessonPlanDTL
 
     suspend fun getStaffList(): NetworkStaffList
+
+    suspend fun teachersList(): NetworkStaffList
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 
