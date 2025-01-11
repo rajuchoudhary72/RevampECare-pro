@@ -35,7 +35,7 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                 val jsonResponse = JSONObject(responseBodyString)
                 val errorCode = jsonResponse.optInt("errorCode", 0)
 
-                if (errorCode == 0) {
+                if (errorCode == 1) {
                     val httpMetric: HttpMetric = FirebasePerformance.getInstance().newHttpMetric(
                         request.url.toString(),
                         when (request.method) {
@@ -51,7 +51,8 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                         httpMetric,
                         request,
                         response,
-                        responseBodyString.toByteArray().size
+                        responseBodyString.toByteArray().size,
+                        1
                     )
                 }
 
@@ -72,7 +73,8 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                         httpMetric,
                         request,
                         response,
-                        responseBodyString.toByteArray().size
+                        responseBodyString.toByteArray().size,
+                        2
                     )
                 }
             } catch (e: Exception) {
@@ -94,7 +96,8 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
         httpMetric: HttpMetric,
         request: Request,
         response: Response,
-        size: Int
+        size: Int,
+        errorCode: Int,
     ) {
         httpMetric.trace {
             setHttpResponseCode(response.code)
@@ -104,7 +107,7 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
             setResponsePayloadSize(size.toLong())
 
             // Add custom attributes if needed
-            putAttribute("errorCode", "1")
+            putAttribute("errorCode", errorCode.toString())
             putAttribute("trackedRequest", "true")
 
 
