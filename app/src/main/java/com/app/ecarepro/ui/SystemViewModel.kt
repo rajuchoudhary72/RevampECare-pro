@@ -97,14 +97,15 @@ class SystemViewModel @Inject constructor(
     }
 
     fun checkAppVersion() = viewModelScope.launch {
-        runCatching {
-            appVersionMutableStateFlow.value = NetworkResult.Loading()
-            schoolRepository.checkAppVersion()
-        }.onSuccess {
-            appVersionMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
-        }
+        if (userDataStore.isUserAuthenticated())
+            runCatching {
+                appVersionMutableStateFlow.value = NetworkResult.Loading()
+                schoolRepository.checkAppVersion()
+            }.onSuccess {
+                appVersionMutableStateFlow.value = NetworkResult.Success(it)
+            }.onFailure {
+                appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
+            }
 
     }
 

@@ -436,7 +436,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }*/
-    private fun checkAppVersion() {
+    fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {
                 when (it) {

@@ -14,6 +14,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
+import android.annotation.SuppressLint
 
 class SessionAuthenticator @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -21,26 +22,29 @@ class SessionAuthenticator @Inject constructor(
     @SessionReCreate private val userService: UserService
 ) : Authenticator {
 
+    @SuppressLint("HardwareIds")
     override fun authenticate(route: Route?, response: Response): Request? {
-        return runBlocking {
-            try {
-                val sessionID = userService.createSession(
-                    CreateUserSessionRequestDto(
-                        ipAddress = Secure.getString(
-                            context.contentResolver,
-                            Secure.ANDROID_ID
-                        ),
-                        locationCity = userDataStore.getCityName(),
-                        oldSessionID = userDataStore.getUserSessionId()
-                    )
-                ).sessionID
-                userDataStore.saveSessionId(sessionID)
-                response.request.newBuilder()
-                    .header(SESSION_ID, sessionID)
-                    .build()
-            } catch (e: Exception) {
-                AppSessionManager.logoutAndRestartApp(true)
-                null
+        return synchronized(this) {
+            runBlocking {
+                try {
+                    val sessionID = userService.createSession(
+                        CreateUserSessionRequestDto(
+                            ipAddress = Secure.getString(
+                                context.contentResolver,
+                                Secure.ANDROID_ID
+                            ),
+                            locationCity = userDataStore.getCityName(),
+                            oldSessionID = userDataStore.getUserSessionId()
+                        )
+                    ).sessionID
+                    userDataStore.saveSessionId(sessionID)
+                    response.request.newBuilder()
+                        .header(SESSION_ID, sessionID)
+                        .build()
+                } catch (e: Exception) {
+                    AppSessionManager.logoutAndRestartApp(true)
+                    null
+                }
             }
         }
     }

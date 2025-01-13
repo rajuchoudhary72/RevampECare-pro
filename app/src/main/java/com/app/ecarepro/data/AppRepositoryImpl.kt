@@ -1,7 +1,7 @@
 package com.app.ecarepro.data
 
 import com.app.ecarepro.data.cache.JsonCache
-
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Notification
@@ -19,7 +19,8 @@ import com.app.ecarepro.data.network.model.SyncData
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
-    private val jsonCache: JsonCache
+    private val jsonCache: JsonCache,
+    private val userDataStore: UserDataStore
 
 ) : AppRepository {
     override fun getAppLayout(): Flow<Result<AppLayoutDto>> {
@@ -73,15 +74,17 @@ class AppRepositoryImpl @Inject constructor(
     }
     override fun registerDevice(registerDevice: RegisterDevice): Flow<Result<String>> {
         return flow {
-            try {
-                val response = appService.registerFirebaseToken(registerDevice)
-                if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: ""))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+            if (userDataStore.isUserAuthenticated()) {
+                try {
+                    val response = appService.registerFirebaseToken(registerDevice)
+                    if (response.errorCode == 0) {
+                        emit(Result.success(response.message ?: ""))
+                    } else {
+                        emit(Result.failure(IllegalArgumentException(response.message)))
+                    }
+                } catch (error: Throwable) {
+                    emit(Result.failure(error))
                 }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
             }
         }
     }
