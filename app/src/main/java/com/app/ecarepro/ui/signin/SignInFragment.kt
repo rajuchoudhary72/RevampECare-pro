@@ -216,6 +216,7 @@ class SignInFragment : Fragment() {
                 restartApp()
             }
         } else {
+            mainActivity().checkAppVersion()
             FirebaseMessaging.getInstance().token
                 .addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {

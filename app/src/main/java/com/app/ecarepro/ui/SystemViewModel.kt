@@ -8,6 +8,7 @@ import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.Menu
@@ -26,8 +27,6 @@ import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
-import com.app.ecarepro.data.database.databases.UserDatabase
-
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -82,6 +81,7 @@ class SystemViewModel @Inject constructor(
     var UType: Int = -1
     val dataStore = userDataStore
     val database = userDatabase
+
     init {
         viewModelScope.launch {
             userRoleName = userDataStore.getRoleName().toString()
@@ -97,14 +97,15 @@ class SystemViewModel @Inject constructor(
     }
 
     fun checkAppVersion() = viewModelScope.launch {
-        runCatching {
-            appVersionMutableStateFlow.value = NetworkResult.Loading()
-            schoolRepository.checkAppVersion()
-        }.onSuccess {
-            appVersionMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
-        }
+        if (userDataStore.isUserAuthenticated())
+            runCatching {
+                appVersionMutableStateFlow.value = NetworkResult.Loading()
+                schoolRepository.checkAppVersion()
+            }.onSuccess {
+                appVersionMutableStateFlow.value = NetworkResult.Success(it)
+            }.onFailure {
+                appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
+            }
 
     }
 
@@ -179,11 +180,13 @@ class SystemViewModel @Inject constructor(
             }
         }
     }
+
     suspend fun logoutCurrentUser(onSuccess: suspend () -> Unit) {
         userRepository.logout().collectLatest {
             onSuccess()
         }
     }
+
     fun refreshAppLayout() {
         viewModelScope.launch {
             refresh.emit(true)
@@ -282,6 +285,7 @@ class SystemViewModel @Inject constructor(
             attributes
         )
     }
+
     fun createUserSession(onResult: (Boolean, String) -> Unit) {
         viewModelScope.launch {
             userRepository.createSession().collectLatest {
