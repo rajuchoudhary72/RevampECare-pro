@@ -100,7 +100,7 @@
                     android:padding="@dimen/horizontal_margin"
                     app:layout_constraintEnd_toStartOf="@+id/btn_recipient"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Sub: TEsting meesage" />
 
@@ -121,7 +121,6 @@
                     bottomWindowInsetToMargin="@{true}"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toTopOf="@+id/send_message_layout"

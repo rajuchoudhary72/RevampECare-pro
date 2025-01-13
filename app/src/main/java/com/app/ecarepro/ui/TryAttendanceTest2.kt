@@ -387,9 +387,7 @@ class TryAttendanceTest2 : AppCompatActivity() {
                                         report_attendance.late = it1[i].isLate
                                         report_attendance.duration = 1
                                         FragmentAPI.report_arraylist.add(report_attendance)
-                                        if (Generic.checkCurrentDate(report_attendance.attDate)) today_status =
-                                            report_attendance.status
-                                    }
+                                        if (Generic.checkCurrentDate(report_attendance.attDate)) today_status = report_attendance.status }
 
                                 }
                                 if (session_month_list.size > 0) {

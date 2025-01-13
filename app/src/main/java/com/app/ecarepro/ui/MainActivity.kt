@@ -49,7 +49,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
-import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -93,6 +92,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import com.app.ecarepro.data.AppSessionManager
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -766,7 +766,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(parentMenu.menuID, menu.chMenuID, "Menu")
+                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
                             }
                         }
 
@@ -777,12 +777,7 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(
-                                        parentMenu.menuID,
-                                        menu.chMenuID,
-                                        childChildMenu.sbChMenuID,
-                                        "Menu"
-                                    )
+                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
                                 }
                             }
                         }
@@ -1004,6 +999,8 @@ class MainActivity : AppCompatActivity() {
             33 -> navController.navigate(R.id.surveyListFragment)
             35 -> navController.navigate(R.id.busLocationFragment)
             39 -> navController.navigate(R.id.fomGuardFragment)
+            40 -> navController.navigate(R.id.teacherListFragment)
+
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -1099,12 +1096,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(
-        menuID: Int,
-        childMenuId: Int,
-        refId: String? = null,
-        from: String = "other"
-    ) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1346,12 +1338,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(
-        menuID: Int,
-        childMenuId: Int,
-        childChildMenuId: Int,
-        from: String = "other"
-    ) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),

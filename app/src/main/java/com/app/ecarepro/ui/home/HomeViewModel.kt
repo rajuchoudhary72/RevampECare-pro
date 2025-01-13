@@ -142,7 +142,6 @@ class HomeViewModel @Inject constructor(
     fun refresh() {
         refresh.postValue(true)
     }
-
     fun setCityName(city:String){
         viewModelScope.launch {
             userDataStore.setCityName(city)

@@ -127,7 +127,7 @@ class FomGuardFragment : Fragment() , ItemListener<Data> {
         builder.setMessage("Are you sure, You want to check out")
 
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
-            viewModel.updateappointmentcheckout(t.idNo).invokeOnCompletion {
+            viewModel.updateappointmentcheckout(t.appointmentid.toString()).invokeOnCompletion {
                 getFomGuardAppointments(binding.startDate.text.toString())
             }
         }

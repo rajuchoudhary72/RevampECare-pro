@@ -22,7 +22,6 @@ class DefaulterFeeReportViewModel @Inject constructor(
 
 
 
-
     private val defaultFilterMutableStateFlow: MutableStateFlow<NetworkResult<DefaulterFilters>> =
         MutableStateFlow(
         NetworkResult.Loading())

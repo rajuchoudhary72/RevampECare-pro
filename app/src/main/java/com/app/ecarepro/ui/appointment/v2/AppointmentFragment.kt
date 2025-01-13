@@ -152,7 +152,7 @@ class AppointmentFragment : Fragment() {
                             .filter { it.active == true }
                             .filterNot { it.columnName == "IdproofImage" }
                             .forEach { form ->
-                                if (form.active == true) {
+                                if(form.active == true){
                                     if (isDropDown(form.columnName)) {
                                         when (form.columnName) {
                                             "Purpose" -> {
@@ -165,10 +165,7 @@ class AppointmentFragment : Fragment() {
                                                     isMandatory(form.isrequired)
                                                     itemSelectListener(object : ItemSelectListener {
                                                         override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                item
-                                                            )
+                                                            viewModel.updateValue(form.columnName, item)
                                                         }
                                                     })
                                                 }
@@ -184,10 +181,7 @@ class AppointmentFragment : Fragment() {
                                                     isMandatory(form.isrequired)
                                                     itemSelectListener(object : ItemSelectListener {
                                                         override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                item
-                                                            )
+                                                            viewModel.updateValue(form.columnName, item)
                                                         }
                                                     })
                                                 }
@@ -203,10 +197,7 @@ class AppointmentFragment : Fragment() {
                                                     isMandatory(form.isrequired)
                                                     itemSelectListener(object : ItemSelectListener {
                                                         override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                item
-                                                            )
+                                                            viewModel.updateValue(form.columnName, item)
                                                         }
                                                     })
                                                 }
@@ -222,15 +213,11 @@ class AppointmentFragment : Fragment() {
                                                     isMandatory(form.isrequired)
                                                     itemSelectListener(object : ItemSelectListener {
                                                         override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                item
-                                                            )
+                                                            viewModel.updateValue(form.columnName, item)
                                                         }
                                                     })
                                                 }
                                             }
-
                                             "IdType" -> {
                                                 textFiledDropdown {
                                                     id(form.columnName)
@@ -241,10 +228,7 @@ class AppointmentFragment : Fragment() {
                                                     isMandatory(form.isrequired)
                                                     itemSelectListener(object : ItemSelectListener {
                                                         override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                item
-                                                            )
+                                                            viewModel.updateValue(form.columnName, item)
                                                         }
                                                     })
                                                 }
@@ -259,10 +243,7 @@ class AppointmentFragment : Fragment() {
                                                     text(form.value)
                                                     itemSelectListener(object : ItemSelectListener {
                                                         override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                item
-                                                            )
+                                                            viewModel.updateValue(form.columnName, item)
                                                         }
                                                     })
                                                 }
@@ -312,10 +293,7 @@ class AppointmentFragment : Fragment() {
                                                 }
                                             }
                                             textWatcher(makeTextWatcher {
-                                                viewModel.updateValue(
-                                                    form.columnName,
-                                                    it.toString()
-                                                )
+                                                viewModel.updateValue(form.columnName, it.toString())
                                             })
                                         }
                                     }
@@ -361,33 +339,28 @@ class AppointmentFragment : Fragment() {
         materialTimePicker.addOnPositiveButtonClickListener {
             val selectedHour = materialTimePicker.hour
             val selectedMinute = materialTimePicker.minute
-
             // Validate the selected time
             if (isValidTime(selectedHour, selectedMinute)) {
                 onTimeSet(formatTimeWithAmPm(selectedHour,selectedMinute))
             } else {
-                mainActivity().showMessage("Please select a time between 8:00 AM and 5:00 PM")
+                mainActivity().showMessage(getString(R.string.please_select_a_time_between_8_00_am_and_5_00_pm))
             }
         }
         materialTimePicker.show(childFragmentManager, "timePicker")
     }
-
     private fun formatTimeWithAmPm(hour: Int, minute: Int): String {
         val isAfternoon = hour >= 12
         val formattedHour = if (hour % 12 == 0) 12 else hour % 12
         val suffix = if (isAfternoon) "PM" else "AM"
         return String.format("%02d:%02d %s", formattedHour, minute, suffix)
     }
-
     private fun isValidTime(hour: Int, minute: Int): Boolean {
         // Convert time to minutes since midnight
         val selectedTimeInMinutes = hour * 60 + minute
         val startTimeInMinutes = 8 * 60 // 8:00 AM
         val endTimeInMinutes = 17 * 60 // 5:00 PM
-
         return selectedTimeInMinutes in startTimeInMinutes until endTimeInMinutes
     }
-
     private fun isDropDown(columnName: String?): Boolean {
         val dropDownColumns =
             mutableListOf("Purpose", "Department", "Designation", "Employee", "IdType")

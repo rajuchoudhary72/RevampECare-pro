@@ -2,12 +2,12 @@ package com.app.ecarepro.utils
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.Build
-import android.text.Html
+import android.graphics.drawable.Drawable
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.StrikethroughSpan
+import android.text.style.CharacterStyle
 import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import android.widget.ImageView
@@ -15,6 +15,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import com.app.ecarepro.R
+import com.app.ecarepro.utils.Constant.Companion.boldFindEndStarIndexes
+import com.app.ecarepro.utils.Constant.Companion.boldFindStartIndexes
+import com.app.ecarepro.utils.Constant.Companion.italicFindEndStarIndexes
+import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
+import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
+import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.google.android.material.card.MaterialCardView
 import com.squareup.picasso.Picasso
 
@@ -181,19 +187,57 @@ fun TextView.showEditButton(show: Boolean) {
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
     if (text != null) {
-        textView.text = formatText(text)
-    } else {
-        textView.text = ""
+        if (text.contains("~*") || text.contains("*~")) {
+            //bold with  underline
+            val formattedText = formatBoldUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_*") || text.contains("*_")) {
+            //bold with  Italic
+            val formattedText = formatBoldItalicText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("~_") || text.contains("_~")) {
+            //underline  with  Italic
+            val formattedText = formatItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_~") || text.contains("~_")) {
+            //underline  with  Italic
+            val formattedText = formatItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_~*") || text.contains("*~_")) {
+            //underline  with  Italic with  bold
+            val formattedText = formatBoldItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("~_*") || text.contains("*_~")) {
+            //underline  with  Italic with  bold
+            val formattedText = formatBoldItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else {
+            // only  single property  like only bold  ,  underline  , Italic
+            if (text != null) {
+                textView.text = formatAnyOneBoldItalicUnderlineText(text)
+            } else {
+                textView.text = ""
+            }
+        }
+
     }
 }
 
+data class SpanInfo(val start: Int, val end: Int, val style: Any)
 
-fun formatText(input: String): SpannableString {
+fun formatAnyOneBoldItalicUnderlineText(input: String): SpannableString {
     val cleanedText = StringBuilder()
     val spans = mutableListOf<SpanInfo>()
 
     // Regex pattern to capture all formatting markers and nested content
-    val regex = "(\\*[^*_~]+\\*|_[^*_~]+_|~[^*_~]+~|\\*[^*_~]+_[^*_~]+_\\*|\\*[^*_~]+~[^*_~]+~\\*|_[^*_~]+~[^*_~]+~_\\*|\\*[^*_~]+_[^*_~]+~[^*_~]+~_\\*)".toRegex()
+    val regex =
+        "(\\*[^*_~]+\\*|_[^*_~]+_|~[^*_~]+~|\\*[^*_~]+_[^*_~]+_\\*|\\*[^*_~]+~[^*_~]+~\\*|_[^*_~]+~[^*_~]+~_\\*|\\*[^*_~]+_[^*_~]+~[^*_~]+~_\\*)".toRegex()
 
     var currentIndex = 0
 
@@ -213,19 +257,19 @@ fun formatText(input: String): SpannableString {
                 spans.add(SpanInfo(start, end, StyleSpan(Typeface.BOLD)))
             }
             if (matchedText.startsWith("_") && matchedText.endsWith("_")) {
-                spans.add(SpanInfo(start, end, UnderlineSpan()))
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
             }
             if (matchedText.startsWith("~") && matchedText.endsWith("~")) {
-                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
+                spans.add(SpanInfo(start, end, UnderlineSpan()))
             }
             // Handle combinations
             if (matchedText.contains("*") && matchedText.contains("_")) {
                 spans.add(SpanInfo(start, end, StyleSpan(Typeface.BOLD)))
-                spans.add(SpanInfo(start, end, UnderlineSpan()))
+                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
             }
             if (matchedText.contains("*") && matchedText.contains("~")) {
                 spans.add(SpanInfo(start, end, StyleSpan(Typeface.BOLD)))
-                spans.add(SpanInfo(start, end, StyleSpan(Typeface.ITALIC)))
+                spans.add(SpanInfo(start, end, UnderlineSpan()))
             }
             if (matchedText.contains("_") && matchedText.contains("~")) {
                 spans.add(SpanInfo(start, end, UnderlineSpan()))
@@ -247,8 +291,133 @@ fun formatText(input: String): SpannableString {
     return spannable
 }
 
-data class SpanInfo(val start: Int, val end: Int, val style: Any)
+fun formatBoldUnderlineText(input: String): SpannableStringBuilder {
+    val spannableBuilder = SpannableStringBuilder()
+    val regex = "~\\*(.*?)\\*~".toRegex() // Matches ~*text*~
 
+    var lastIndex = 0
+    regex.findAll(input).forEach { matchResult ->
+        // Append text before the matched part
+        spannableBuilder.append(input.substring(lastIndex, matchResult.range.first))
 
+        // Extract the matched text
+        val matchedText = matchResult.groups[1]?.value ?: ""
 
+        // Apply formatting (bold + underline)
+        val spannable = SpannableString(matchedText)
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD),
+            0,
+            spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(UnderlineSpan(), 0, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
+        // Add the formatted text to the builder
+        spannableBuilder.append(spannable)
+
+        lastIndex = matchResult.range.last + 1
+    }
+
+    // Append remaining text after the last match
+    spannableBuilder.append(input.substring(lastIndex))
+    return spannableBuilder
+}
+
+fun formatBoldItalicText(input: String): SpannableStringBuilder {
+    val spannableBuilder = SpannableStringBuilder()
+    val regex = "_\\*(.*?)\\*_".toRegex() // Matches _*text*_
+
+    var lastIndex = 0
+    regex.findAll(input).forEach { matchResult ->
+        // Append unformatted text before the match
+        spannableBuilder.append(input.substring(lastIndex, matchResult.range.first))
+
+        // Extract the matched text
+        val matchedText = matchResult.groups[1]?.value ?: ""
+
+        // Apply bold and italic formatting
+        val spannable = SpannableString(matchedText)
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD_ITALIC),
+            0,
+            spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+        // Add the formatted text to the builder
+        spannableBuilder.append(spannable)
+
+        lastIndex = matchResult.range.last + 1
+    }
+
+    // Append remaining text after the last match
+    spannableBuilder.append(input.substring(lastIndex))
+    return spannableBuilder
+}
+
+fun formatItalicUnderlineText(input: String): SpannableStringBuilder {
+    val spannableBuilder = SpannableStringBuilder()
+    val regex = "~_(.*?)_~".toRegex() // Matches ~_text_~
+
+    var lastIndex = 0
+    regex.findAll(input).forEach { matchResult ->
+        // Append plain text before the match
+        spannableBuilder.append(input.substring(lastIndex, matchResult.range.first))
+
+        // Extract matched text
+        val matchedText = matchResult.groups[1]?.value ?: ""
+
+        // Create Spannable for italic + underline
+        val spannable = SpannableString(matchedText)
+        spannable.setSpan(
+            StyleSpan(Typeface.ITALIC),
+            0,
+            spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(UnderlineSpan(), 0, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        // Append formatted text
+        spannableBuilder.append(spannable)
+
+        lastIndex = matchResult.range.last + 1
+    }
+
+    // Append remaining text after the last match
+    spannableBuilder.append(input.substring(lastIndex))
+    return spannableBuilder
+}
+
+fun formatBoldItalicUnderlineText(input: String): SpannableStringBuilder {
+    val spannableBuilder = SpannableStringBuilder()
+    val regex = "~_\\*(.*?)\\*_~".toRegex() // Matches ~_*text*_~
+
+    var lastIndex = 0
+    regex.findAll(input).forEach { matchResult ->
+        // Append plain text before the match
+        spannableBuilder.append(input.substring(lastIndex, matchResult.range.first))
+
+        // Extract matched text
+        val matchedText = matchResult.groups[1]?.value ?: ""
+
+        // Create Spannable for bold + italic + underline
+        val spannable = SpannableString(matchedText)
+        spannable.setSpan(
+            StyleSpan(Typeface.BOLD_ITALIC),
+            0,
+            spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        spannable.setSpan(UnderlineSpan(), 0, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        // Append formatted text
+        spannableBuilder.append(spannable)
+
+        lastIndex = matchResult.range.last + 1
+    }
+
+    // Append remaining text after the last match
+    spannableBuilder.append(input.substring(lastIndex))
+    return spannableBuilder
+}

@@ -3,9 +3,7 @@ package com.app.ecarepro.di
 import android.content.Context
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
-import com.app.ecarepro.data.network.InvalidSessionInterceptor
 import com.app.ecarepro.data.network.PerformanceMonitorInterceptor
-import com.app.ecarepro.data.network.SessionAuthenticator
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
 import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
 import com.app.ecarepro.data.network.service.AppService
@@ -13,7 +11,6 @@ import com.app.ecarepro.data.network.service.FomApiService
 import com.app.ecarepro.data.network.service.MessageService
 import com.app.ecarepro.data.network.service.SchoolService
 import com.app.ecarepro.data.network.service.UserService
-import com.app.ecarepro.di.annotations.SessionReCreate
 import com.app.ecarepro.utils.Constant
 import com.google.gson.Gson
 import dagger.Module
@@ -26,7 +23,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
+import com.app.ecarepro.di.annotations.SessionReCreate
+import com.app.ecarepro.data.network.InvalidSessionInterceptor
+import com.app.ecarepro.data.network.SessionAuthenticator
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -53,6 +52,8 @@ object NetworkModule {
         invalidSessionInterceptor: InvalidSessionInterceptor,
         sessionAuthenticator: SessionAuthenticator,
         performanceMonitorInterceptor: PerformanceMonitorInterceptor
+
+
     ): OkHttpClient {
         return OkHttpClient
             .Builder()
@@ -60,33 +61,30 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
-            .addInterceptor(invalidSessionInterceptor)
             .addInterceptor(performanceMonitorInterceptor)
+            .addInterceptor(invalidSessionInterceptor)
             .authenticator(sessionAuthenticator)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-
-    /* .addInterceptor(connectivityInterceptor)
-                .addInterceptor(customResponseInterceptor)*/
-    @Provides
-    fun provideRetrofit(
-        okHttpClient: OkHttpClient,
-    ): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(
-                if (BuildConfig.DEBUG) {
-                    Constant.BASE_DEV_URL
-                } else {
-                    Constant.BASE_URL
-                }
-            )
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
+@Provides
+fun provideRetrofit(
+    okHttpClient: OkHttpClient,
+): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl(
+            if (BuildConfig.DEBUG) {
+                Constant.BASE_DEV_URL
+            } else {
+                Constant.BASE_URL
+            }
+        )
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build()
+}
 
     @Provides
     fun provideUserService(
@@ -122,7 +120,6 @@ object NetworkModule {
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
     }
-
     @Provides
     @SessionReCreate
     fun provideSessionUserService(

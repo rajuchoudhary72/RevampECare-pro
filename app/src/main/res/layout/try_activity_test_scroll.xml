@@ -125,6 +125,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/text_present_1"
                                     android:gravity="center"
+                                    android:visibility="invisible"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/_12sdp" />
@@ -185,6 +186,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_below="@+id/text_absent_1"
                                     android:gravity="center"
+                                    android:visibility="invisible"
                                     android:textAlignment="center"
                                     android:textColor="@color/white"
                                     android:textSize="@dimen/_12sdp" />

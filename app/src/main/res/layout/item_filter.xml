@@ -18,26 +18,40 @@
             type="Boolean" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:onClick="@{onClickContent}">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/sfprodisplay_bold"
-            android:padding="15dp"
-            android:text="@{value}"
-            android:textColor="@color/black" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sfprodisplay_bold"
+                    android:padding="15dp"
+                    android:text="@{value}"
+                    android:textColor="@color/black" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingHorizontal="@dimen/_15sdp"
-            android:src="@drawable/ic_check"
-            android:visibility="@{selected ? View.VISIBLE : View.GONE}" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="@{selected ? View.VISIBLE : View.GONE}" />
+            </LinearLayout>
+
+        </ScrollView>
+
     </LinearLayout>
 </layout>

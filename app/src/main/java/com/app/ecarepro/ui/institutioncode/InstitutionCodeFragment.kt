@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -74,7 +76,7 @@ class InstitutionCodeFragment : Fragment() {
                                 userDataStore.setCurrentSchoolCode(school.schoolCode)
                                 navigateToSignFragment(
                                     school.schoolCode,
-                                    school.isStudentLoginBlocked ?: false
+                                    school.isStudentLoginBlocked?:false
                                 )
                             }
                         }
@@ -119,14 +121,13 @@ class InstitutionCodeFragment : Fragment() {
                 binding.btnContinue.isEnabled = true
                 validateSchoolCode()
             }
-        } else {
+        }else{
             binding.textInstitutionCode.apply {
                 setText("")
             }
         }
 
     }
-
     private fun validateSchoolCode() {
         _binding?.apply {
             textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
@@ -147,10 +148,7 @@ class InstitutionCodeFragment : Fragment() {
         findNavController().navigate(
             resId = R.id.signInFragment,
             args = if (arguments == null) {
-                bundleOf(
-                    "schoolCode" to schoolCode,
-                    "isStudentLoginBlocked" to isStudentLoginBlocked
-                )
+                bundleOf("schoolCode" to schoolCode, "isStudentLoginBlocked" to isStudentLoginBlocked)
             } else {
                 arguments?.apply {
                     putString("schoolCode", schoolCode)

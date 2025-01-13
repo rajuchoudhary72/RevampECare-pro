@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-
     <debug-overrides>
         <!-- Trust user-added certificates for debugging -->
         <trust-anchors>

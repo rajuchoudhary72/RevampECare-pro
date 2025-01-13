@@ -8,13 +8,16 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
+import java.net.URI
+import java.net.URL
 import javax.inject.Inject
 
 class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val request: Request = chain.request()
-
+        val url : URL = request.url.toUrl()
+        val urlPath = getUrlWithoutQuery(url)
         // Start Firebase Performance Monitoring HttpMetric
 
 
@@ -48,7 +51,30 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
                         httpMetric,
                         request,
                         response,
-                        responseBodyString.toByteArray().size
+                        responseBodyString.toByteArray().size,
+                        1
+                    )
+                }
+
+
+                if (errorCode == 2) {
+                    val httpMetric: HttpMetric = FirebasePerformance.getInstance().newHttpMetric(
+                        request.url.toString(),
+                        when (request.method) {
+                            "GET" -> FirebasePerformance.HttpMethod.GET
+                            "POST" -> FirebasePerformance.HttpMethod.POST
+                            "PUT" -> FirebasePerformance.HttpMethod.PUT
+                            "DELETE" -> FirebasePerformance.HttpMethod.DELETE
+                            else -> FirebasePerformance.HttpMethod.OPTIONS
+                        }
+                    )
+                    httpMetric.start()
+                    trackWithFirebase(
+                        httpMetric,
+                        request,
+                        response,
+                        responseBodyString.toByteArray().size,
+                        2
                     )
                 }
             } catch (e: Exception) {
@@ -62,12 +88,16 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
         }
         return response
     }
-
+    private fun getUrlWithoutQuery(url: URL): URL {
+        val uri = URI(url.protocol, url.host, url.path, null)
+        return uri.toURL()
+    }
     private fun trackWithFirebase(
         httpMetric: HttpMetric,
         request: Request,
         response: Response,
-        size: Int
+        size: Int,
+        errorCode: Int,
     ) {
         httpMetric.trace {
             setHttpResponseCode(response.code)
@@ -77,7 +107,7 @@ class PerformanceMonitorInterceptor @Inject constructor() : Interceptor {
             setResponsePayloadSize(size.toLong())
 
             // Add custom attributes if needed
-            putAttribute("errorCode", "1")
+            putAttribute("errorCode", errorCode.toString())
             putAttribute("trackedRequest", "true")
 
 

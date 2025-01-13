@@ -3,21 +3,16 @@ package com.app.ecarepro.ui.appointment.v2
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Form
 import com.app.ecarepro.data.network.model.Purpose
-import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.staff.LoadingState
-import com.app.ecarepro.ui.taskmanager.add.convertMillisToDateString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -25,10 +20,16 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import org.json.JSONObject
 import retrofit2.HttpException
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
+import com.app.ecarepro.ui.taskmanager.add.convertMillisToDateString
+import androidx.lifecycle.SavedStateHandle
+import com.app.ecarepro.data.network.model.VisitorDetails
 
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
@@ -42,8 +43,6 @@ class AppointmentViewModel @Inject constructor(
 
     val visitorDetails = savedStateHandle.getStateFlow<VisitorDetails?>("visitorDetails", null)
     val mobileNumber = savedStateHandle.get<String?>("mobileNumber")
-
-
     init {
         viewModelScope.launch {
             combine(
@@ -80,30 +79,24 @@ class AppointmentViewModel @Inject constructor(
                                             "Name" -> {
                                                 form.copy(value = visitorDetails?.name)
                                             }
-
                                             "Mobile" -> {
                                                 form.copy(value = mobileNumber)
                                             }
-
                                             "Email" -> {
                                                 form.copy(value = visitorDetails?.email)
                                             }
-
                                             "Address" -> {
                                                 form.copy(value = visitorDetails?.address)
                                             }
-
                                             "Company" -> {
                                                 form.copy(value = visitorDetails?.company)
                                             }
                                             "VisitingDate" -> {
                                                 form.copy(value = convertMillisToDateString())
                                             }
-
                                             "Appointmenttime" -> {
                                                 form.copy(value = getCurrentTime())
                                             }
-
                                             else -> {
                                                 form
                                             }
@@ -126,13 +119,11 @@ class AppointmentViewModel @Inject constructor(
                 }
         }
     }
-
     private fun getCurrentTime(): String? {
         val currentTime = LocalTime.now()
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         return currentTime.format(formatter)
     }
-
 
     fun updateValue(columnName: String?, toString: String, base64Image: String = "") {
         val uiState = uiState.value
@@ -216,10 +207,13 @@ class AppointmentViewModel @Inject constructor(
             if (uiState is AppointmentUiState.Success) {
                 loadingState.update { LoadingState.Loading }
                 val data = mutableMapOf<String, String>()
+
+               // data["VisitorType"] = "2" //1=visitor , 2=parent , 3=vendor(not in App.)
+
                 data["VisitorType"] = visitorDetails.value?.visitorType?.toString()?:"2"
                 data["captureImg"] = "null"
                 data["VisitorPhoto"] = "null"
-                data["userfrom"] = "3"
+                data["userfrom"] = "2"  // 2 =walk in ,3=e-care,4= invitation form
 
                 uiState
                     .formData

@@ -1,6 +1,6 @@
 package com.app.ecarepro.data.network.model
-import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
 import com.google.gson.annotations.SerializedName
+import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
 
 
 data class AppointmentSavedDto(

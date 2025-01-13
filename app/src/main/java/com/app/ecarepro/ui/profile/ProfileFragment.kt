@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.content.ContextCompat
+import com.app.ecarepro.profileSessionList
 
 
 @AndroidEntryPoint
@@ -280,6 +281,18 @@ class ProfileFragment : Fragment() {
                                 userDataStore.setCurrentUserId(it.id)
                                 restartApp()
                             }
+
+                            /*lifecycleScope.launch {
+                                userDataStore.setCurrentUserId(it.id)
+                             //   sync  data on Local DB when user switch account
+                                mainActivity().showLoader(true)
+                                syncManager.sync { isSuccess, message ->
+                                    mainActivity().showLoader(false)
+                                    if (isSuccess)
+                                        restartApp()
+                                    mainActivity().showMessage(message)
+                                }
+                            }*/
                         }
                         removeAccountListener { _ ->
                             MaterialAlertDialogBuilder(requireContext())
@@ -305,7 +318,12 @@ class ProfileFragment : Fragment() {
                         )
                     }
                 }
-
+                profileSessionList {
+                    id(139)
+                    clickListener { _ ->
+                        findNavController().navigate(R.id.userSessionListFragment)
+                    }
+                }
                 profileLogout {
                     id(131)
                     version("v ${BuildConfig.VERSION_NAME}")
@@ -313,6 +331,7 @@ class ProfileFragment : Fragment() {
                         (requireActivity() as MainActivity).logout()
                     }
                 }
+
             }
         }
     }

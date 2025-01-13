@@ -8,7 +8,6 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
-import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.repository.FomApiRepository
 import com.app.ecarepro.ui.fom_guard.model.verifiy_number.VerifyPhone
 import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
@@ -19,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
 
 @HiltViewModel
 class VerfyPhoneViewModel @Inject constructor(

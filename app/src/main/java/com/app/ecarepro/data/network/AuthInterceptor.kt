@@ -2,7 +2,6 @@ package com.app.ecarepro.data.network
 
 import android.content.Context
 import android.util.Log
-import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -10,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
+import com.app.ecarepro.BuildConfig
 
 class AuthInterceptor @Inject constructor(
     @ApplicationContext val context: Context,
@@ -46,7 +46,6 @@ class AuthInterceptor @Inject constructor(
                     Log.e(SESSION_ID, sessionId)
                 }
             }
-
             if (isLoginApi) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else

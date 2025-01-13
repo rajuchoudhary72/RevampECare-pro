@@ -1,12 +1,12 @@
 package com.app.ecarepro.ui.fom_guard.verifying_phone
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +15,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentVerifyPhoneBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -37,31 +38,30 @@ class VerifyPhoneFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+           findNavController().popBackStack()
         }
         binding.textUserName.doAfterTextChanged {
-            binding.btnContinue.isEnabled = binding.textUserName.text.toString().length == 10
+            binding.btnContinue.isEnabled=binding.textUserName.text.toString().length==10
         }
 
         binding.btnContinue.setOnClickListener {
             verifyNumber()
         }
 
+        
 
     }
 
-    private fun verifyNumber() {
+    private fun verifyNumber(){
         lifecycleScope.launch {
             viewModel.userdetailsfrommobiletateFlow.collectLatest {
                 when (it) {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
-
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
-
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
@@ -79,6 +79,7 @@ class VerifyPhoneFragment : Fragment() {
                 }
             }
         }
+
         viewModel.getuserdetailsfrommobile(binding.textUserName.text.toString())
     }
 
