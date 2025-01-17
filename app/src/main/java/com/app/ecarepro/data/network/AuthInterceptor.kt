@@ -26,6 +26,11 @@ class AuthInterceptor @Inject constructor(
         "User/TwoFactorLogin",
         "User/ResendOTP",
         "User/ValidateOTP",
+        "User/CreateSession",
+    )
+
+    private val sessionApis = mutableListOf(
+        "User/CreateSession"
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -39,6 +44,11 @@ class AuthInterceptor @Inject constructor(
             )
         }
 
+        val isSessionApi = sessionApis.any {
+            it.contains(
+                chain.request().url.pathSegments.take(2).joinToString("/")
+            )
+        }
         val authToken = runBlocking {
             if (isLoginApi.not()) {
                 userDataStore.getUserSessionId()?.let { sessionId ->
@@ -46,7 +56,8 @@ class AuthInterceptor @Inject constructor(
                     Log.e(SESSION_ID, sessionId)
                 }
             }
-            if (isLoginApi) {
+
+            if (isLoginApi && isSessionApi.not()) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else
                 userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN_NEW
