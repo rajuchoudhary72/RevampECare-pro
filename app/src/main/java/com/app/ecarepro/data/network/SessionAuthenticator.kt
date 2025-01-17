@@ -57,7 +57,6 @@ class SessionAuthenticator @Inject constructor(
             }
         }
     }
-
     /**
      * Refresh the session by calling the API and retrieving a new session ID.
      * @return New session ID or null if the refresh fails.
