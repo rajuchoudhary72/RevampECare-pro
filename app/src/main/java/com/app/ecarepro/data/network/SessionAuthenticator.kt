@@ -15,6 +15,7 @@ import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
 import android.annotation.SuppressLint
+import java.util.concurrent.atomic.AtomicBoolean
 
 class SessionAuthenticator @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -22,30 +23,55 @@ class SessionAuthenticator @Inject constructor(
     @SessionReCreate private val userService: UserService
 ) : Authenticator {
 
+    @Volatile
+    private var isRefreshing = AtomicBoolean(false) // Track session refresh status
+    private var newSessionID: String? = null // Cache the new session ID
+
     @SuppressLint("HardwareIds")
     override fun authenticate(route: Route?, response: Response): Request? {
         return synchronized(this) {
-            runBlocking {
+            if (isRefreshing.compareAndSet(false, true)) {
+                // First thread to enter the block will refresh the session
                 try {
-                    val sessionID = userService.createSession(
-                        CreateUserSessionRequestDto(
-                            ipAddress = Secure.getString(
-                                context.contentResolver,
-                                Secure.ANDROID_ID
-                            ),
-                            locationCity = userDataStore.getCityName(),
-                            oldSessionID = userDataStore.getUserSessionId()
-                        )
-                    ).sessionID
-                    userDataStore.saveSessionId(sessionID)
-                    response.request.newBuilder()
-                        .header(SESSION_ID, sessionID)
-                        .build()
-                } catch (e: Exception) {
-                    AppSessionManager.logoutAndRestartApp(true)
-                    null
+                    runBlocking {
+                        newSessionID = refreshSession() // Attempt to refresh the session
+                        newSessionID?.let {
+                            userDataStore.saveSessionId(it) // Save the new session ID
+                        }
+                    }
+                } finally {
+                    isRefreshing.set(false) // Reset the flag after refreshing
+                }
+            } else {
+                // Wait for the ongoing refresh to complete
+                while (isRefreshing.get()) {
+                    Thread.sleep(50) // Short sleep to prevent busy waiting
                 }
             }
+
+            // Use the refreshed session ID for the request
+            return newSessionID?.let {
+                response.request.newBuilder()
+                    .header(SESSION_ID, it)
+                    .build()
+            }
+        }
+    }
+    /**
+     * Refresh the session by calling the API and retrieving a new session ID.
+     * @return New session ID or null if the refresh fails.
+     */
+    private suspend fun refreshSession(): String? {
+        return try {
+            val requestDto = CreateUserSessionRequestDto(
+                ipAddress = Secure.getString(context.contentResolver, Secure.ANDROID_ID),
+                locationCity = userDataStore.getCityName(),
+                oldSessionID = userDataStore.getUserSessionId()
+            )
+            userService.createSession(requestDto).sessionID
+        } catch (e: Exception) {
+            e.printStackTrace() // Log the error for debugging
+            null
         }
     }
 }
