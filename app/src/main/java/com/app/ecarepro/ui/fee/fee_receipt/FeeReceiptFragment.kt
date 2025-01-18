@@ -360,7 +360,6 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             }
 
 
-
     val intent = Intent(Intent.ACTION_VIEW)
     val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".myFileProvider", file)
     intent.setDataAndType(uri, "application/pdf")
