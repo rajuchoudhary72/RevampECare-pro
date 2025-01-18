@@ -351,7 +351,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                 outputStream.write(decodedBytes)
                 outputStream.close()
                 if (i==2){
-                    Toast.makeText(requireContext(), "Fee Receipt saved to eCarePro Download", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Fee Receipt Downloaded", Toast.LENGTH_SHORT).show()
              }
              } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -359,13 +359,13 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             }
 
 
-if (i==1){
+
     val intent = Intent(Intent.ACTION_VIEW)
     val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".myFileProvider", file)
     intent.setDataAndType(uri, "application/pdf")
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     startActivity(intent)
-}
+
 
         } catch (e: Exception) {
             e.printStackTrace()
