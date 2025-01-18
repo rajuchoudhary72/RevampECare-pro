@@ -339,11 +339,12 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
         try {
             val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+            val currentTime = System.currentTimeMillis()
 
 
            // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
             val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "FeeReceipt$recdate.pdf"
+                "FeeReceipt$recdate$currentTime.pdf"
             )
             try {
 
@@ -357,7 +358,6 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                 e.printStackTrace()
                  Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
             }
-
 
 
     val intent = Intent(Intent.ACTION_VIEW)
