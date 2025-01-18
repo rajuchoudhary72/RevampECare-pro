@@ -43,7 +43,6 @@ class AuthInterceptor @Inject constructor(
                 chain.request().url.pathSegments.take(2).joinToString("/")
             )
         }
-
         val isSessionApi = sessionApis.any {
             it.contains(
                 chain.request().url.pathSegments.take(2).joinToString("/")
