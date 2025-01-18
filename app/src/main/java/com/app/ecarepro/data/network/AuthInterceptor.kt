@@ -48,6 +48,7 @@ class AuthInterceptor @Inject constructor(
                 chain.request().url.pathSegments.take(2).joinToString("/")
             )
         }
+
         val authToken = runBlocking {
             if (isLoginApi.not()) {
                 userDataStore.getUserSessionId()?.let { sessionId ->
