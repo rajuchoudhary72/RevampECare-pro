@@ -537,6 +537,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 appUpdateInfo.isFlexibleUpdateAllowed
             }
+
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 popupSnackbarForCompleteUpdate()
             } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
