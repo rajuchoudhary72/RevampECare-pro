@@ -65,7 +65,6 @@ class AuthInterceptor @Inject constructor(
 
         Log.e(AUTH_TOKEN, authToken)
 
-
         requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
         return chain.proceed(requestBuilder.build())
