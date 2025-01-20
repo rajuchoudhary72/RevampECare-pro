@@ -15,7 +15,12 @@ import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
 import android.annotation.SuppressLint
-import java.util.concurrent.atomic.AtomicBoolean
+import android.util.Log
+import com.app.ecarepro.data.network.AuthInterceptor.Companion.AUTH_TOKEN
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlin.concurrent.withLock
+
 
 class SessionAuthenticator @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -23,40 +28,44 @@ class SessionAuthenticator @Inject constructor(
     @SessionReCreate private val userService: UserService
 ) : Authenticator {
 
-    @Volatile
-    private var isRefreshing = AtomicBoolean(false) // Track session refresh status
-    private var newSessionID: String? = null // Cache the new session ID
+    private val mutex = Mutex()
 
     @SuppressLint("HardwareIds")
     override fun authenticate(route: Route?, response: Response): Request? {
-        return synchronized(this) {
-            if (isRefreshing.compareAndSet(false, true)) {
-                // First thread to enter the block will refresh the session
+        return runBlocking {
+            mutex.withLock {
                 try {
-                    runBlocking {
-                        newSessionID = refreshSession() // Attempt to refresh the session
+                    // Refresh the session and save the new session ID
+                    val cachedSessionID = userDataStore.getUserSessionId()
+
+                    // Check if the session was already refreshed
+                    if (response.request.header(SESSION_ID) != cachedSessionID) {
+
+                        return@runBlocking cachedSessionID?.let {
+                            Log.e("API DATA OLD", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.header(SESSION_ID)+") \n SESSION ID ("+response.header(AUTH_TOKEN)+")")
+                            response.request.newBuilder()
+                                .header(SESSION_ID, it)
+                                .build()
+                        }
+                    } else {
+                        val newSessionID = refreshSession()
                         newSessionID?.let {
                             userDataStore.saveSessionId(it) // Save the new session ID
+                            Log.e("API DATA NEW", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.header(SESSION_ID)+") \n SESSION ID ("+it+")")
+                            response.request.newBuilder()
+                                .header(SESSION_ID, it)
+                                .build()
                         }
                     }
-                } finally {
-                    isRefreshing.set(false) // Reset the flag after refreshing
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    AppSessionManager.logoutAndRestartApp(true) // Handle failure gracefully
+                    null
                 }
-            } else {
-                // Wait for the ongoing refresh to complete
-                while (isRefreshing.get()) {
-                    Thread.sleep(50) // Short sleep to prevent busy waiting
-                }
-            }
-
-            // Use the refreshed session ID for the request
-            return newSessionID?.let {
-                response.request.newBuilder()
-                    .header(SESSION_ID, it)
-                    .build()
             }
         }
     }
+
     /**
      * Refresh the session by calling the API and retrieving a new session ID.
      * @return New session ID or null if the refresh fails.
