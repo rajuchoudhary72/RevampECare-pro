@@ -117,6 +117,13 @@ class DefaulterReportFragment : Fragment() {
             binding.ivfeeType.animate()
                 .rotation(if (!binding.rvSelectFeeType.isVisible) 180f else 270f)
         }
+        binding.rvSelectInstallment.isNestedScrollingEnabled = false
+        binding.rvSelectInstallment.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+            if (scrollY > oldScrollY) {
+                binding.rvSelectInstallment.stopNestedScroll() // Prevent nested scrolling interference
+            }
+        }
+
         binding.cardViewSelectInstallment.setOnClickListener {
             binding.rvSelectInstallment.isVisible = !binding.rvSelectInstallment.isVisible
             binding.ivSelectInstallment.animate()
