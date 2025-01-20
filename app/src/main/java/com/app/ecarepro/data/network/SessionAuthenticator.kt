@@ -27,19 +27,25 @@ class SessionAuthenticator @Inject constructor(
         return synchronized(this) {
             runBlocking {
                 try {
-                    val sessionID = userService.createSession(
-                        CreateUserSessionRequestDto(
-                            ipAddress = Secure.getString(
-                                context.contentResolver,
-                                Secure.ANDROID_ID
-                            ),
-                            locationCity = userDataStore.getCityName(),
-                            oldSessionID = userDataStore.getUserSessionId()
-                        )
-                    ).sessionID
-                    userDataStore.saveSessionId(sessionID)
+                    val sessionID = if (userDataStore.shouldCallCreateSession()) {
+                       userService.createSession(
+                            CreateUserSessionRequestDto(
+                                ipAddress = Secure.getString(
+                                    context.contentResolver,
+                                    Secure.ANDROID_ID
+                                ),
+                                locationCity = userDataStore.getCityName(),
+                                oldSessionID = userDataStore.getUserSessionId()
+                            )
+                        ).also {
+                           userDataStore.saveSessionId(it.sessionID)
+                           userDataStore.saveCreateSessionTime(System.currentTimeMillis())
+                       }.sessionID
+                    } else {
+                        userDataStore.getUserSessionId()
+                    }
                     response.request.newBuilder()
-                        .header(SESSION_ID, sessionID)
+                        .header(SESSION_ID, sessionID.orEmpty())
                         .build()
                 } catch (e: Exception) {
                     AppSessionManager.logoutAndRestartApp(true)
@@ -47,6 +53,5 @@ class SessionAuthenticator @Inject constructor(
                 }
             }
         }
-
     }
 }

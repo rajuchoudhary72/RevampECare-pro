@@ -26,6 +26,7 @@ class AuthInterceptor @Inject constructor(
         "User/TwoFactorLogin",
         "User/ResendOTP",
         "User/ValidateOTP",
+        "User/CreateSession",
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {

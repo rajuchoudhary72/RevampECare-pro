@@ -46,9 +46,10 @@ interface UserDataStore {
     suspend fun getUserNameID( ): String?
 
     suspend fun saveUserType(userType: Int)
-
     suspend fun getUserType(): Int?
 
+    suspend fun saveCreateSessionTime(time: Long)
+    suspend fun shouldCallCreateSession(): Boolean
 
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
