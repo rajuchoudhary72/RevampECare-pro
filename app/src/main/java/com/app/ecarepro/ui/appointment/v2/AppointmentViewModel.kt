@@ -213,7 +213,14 @@ class AppointmentViewModel @Inject constructor(
                 data["VisitorType"] = visitorDetails.value?.visitorType?.toString()?:"2"
                 data["captureImg"] = "null"
                 data["VisitorPhoto"] = "null"
-                data["userfrom"] = "2"  // 2 =walk in ,3=e-care,4= invitation form
+                if (mobileNumber==null){
+                    /*for parent  app*/
+                    data["userfrom"] = "3"  // 2 =walk in ,3=e-care,4= invitation form
+                }else{
+                    /*for gourd app*/
+                    data["userfrom"] = "2"  // 2 =walk in ,3=e-care,4= invitation form
+                }
+
 
                 uiState
                     .formData
