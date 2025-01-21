@@ -93,6 +93,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -1828,13 +1829,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
         if (isActivityPaused) {
             syncData(false)
             isActivityPaused = false
         } else {
-            syncData(true)
+            lifecycleScope.launch {
+                delay(30.seconds)
+                syncData(true)
+            }
         }
-        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
     }
 
     companion object {
