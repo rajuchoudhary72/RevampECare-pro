@@ -117,6 +117,8 @@ class DefaulterReportFragment : Fragment() {
             binding.ivfeeType.animate()
                 .rotation(if (!binding.rvSelectFeeType.isVisible) 180f else 270f)
         }
+
+
         binding.cardViewSelectInstallment.setOnClickListener {
             binding.rvSelectInstallment.isVisible = !binding.rvSelectInstallment.isVisible
             binding.ivSelectInstallment.animate()
