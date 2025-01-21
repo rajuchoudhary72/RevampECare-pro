@@ -374,7 +374,6 @@
                     android:background="@drawable/rounded_corner"
                     android:backgroundTint="@color/white"
                     android:visibility="gone"
-                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="7"
                     tools:listitem="@layout/item_filter" />

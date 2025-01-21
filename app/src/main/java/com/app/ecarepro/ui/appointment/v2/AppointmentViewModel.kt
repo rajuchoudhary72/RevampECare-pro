@@ -218,6 +218,7 @@ class AppointmentViewModel @Inject constructor(
                 uiState
                     .formData
                     .filter { it.active == true }
+                    .filter { it.value.orEmpty().isNotEmpty()}
                     .forEach { form: Form ->
                         when (form.columnName) {
                             "Photo" -> {
@@ -259,9 +260,11 @@ class AppointmentViewModel @Inject constructor(
                                         data[form.columnName] = it.employeeID.toString()
                                     }
                             }
-
+                            "Appointmenttime" -> {
+                                data["VisitingTime"] = form.value ?: ""
+                            }
                             "usertype" -> {
-                                data["usertype"] = userDataStore.getUser()?.userType.toString()
+                                data["usertype"] = if (form.value == "Parent") "2" else "1"
                             }
 
                             else -> {
@@ -355,6 +358,7 @@ sealed interface AppointmentUiState {
         val designation: List<Designation> = emptyList(),
         val employees: List<Employee> = emptyList(),
         val guestIdType: List<String> = listOf("Aadhar Card", "Pan Card", "Driving License"),
+        val userType: List<Pair<String, Int>> = listOf(Pair("Parent", 2), Pair("Visitor", 1)),
     ) : AppointmentUiState
 
     data class Error(

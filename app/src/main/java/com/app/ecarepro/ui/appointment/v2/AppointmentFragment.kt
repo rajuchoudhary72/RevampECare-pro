@@ -155,6 +155,24 @@ class AppointmentFragment : Fragment() {
                                 if(form.active == true){
                                     if (isDropDown(form.columnName)) {
                                         when (form.columnName) {
+                                            "usertype" -> {
+                                                textFiledDropdown {
+                                                    id(form.columnName)
+                                                    filedName(form.columnName)
+                                                    hintText(form.columnDisplayName)
+                                                    text(form.value)
+                                                    items(uiState.userType.map { it.first })
+                                                    isMandatory(form.isrequired)
+                                                    itemSelectListener(object : ItemSelectListener {
+                                                        override fun onItemSelect(item: String) {
+                                                            viewModel.updateValue(
+                                                                form.columnName,
+                                                                uiState.userType.firstOrNull { it.first == item }?.first ?: ""
+                                                            )
+                                                        }
+                                                    })
+                                                }
+                                            }
                                             "Purpose" -> {
                                                 textFiledDropdown {
                                                     id(form.columnName)
@@ -363,7 +381,7 @@ class AppointmentFragment : Fragment() {
     }
     private fun isDropDown(columnName: String?): Boolean {
         val dropDownColumns =
-            mutableListOf("Purpose", "Department", "Designation", "Employee", "IdType")
+            mutableListOf("Purpose", "Department", "Designation", "Employee", "IdType", "usertype")
         return dropDownColumns.contains(columnName)
     }
 
