@@ -1824,7 +1824,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        isActivityPaused = true
+        isActivityPaused = trueK
     }
 
     override fun onResume() {
@@ -1835,7 +1835,7 @@ class MainActivity : AppCompatActivity() {
             isActivityPaused = false
         } else {
             lifecycleScope.launch {
-                delay(30.seconds)
+                delay(20.seconds)
                 syncData(true)
             }
         }
