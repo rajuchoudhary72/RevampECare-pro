@@ -29,12 +29,21 @@ class AuthInterceptor @Inject constructor(
         "User/CreateSession",
     )
 
+    private val sessionApis = mutableListOf(
+        "User/CreateSession"
+    )
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
         requestBuilder.addHeader("Content-Type", "application/json")
         requestBuilder.addHeader("Accept", "application/json")
 
         val isLoginApi = loginApis.any {
+            it.contains(
+                chain.request().url.pathSegments.take(2).joinToString("/")
+            )
+        }
+        val isSessionApi = sessionApis.any {
             it.contains(
                 chain.request().url.pathSegments.take(2).joinToString("/")
             )
@@ -47,14 +56,14 @@ class AuthInterceptor @Inject constructor(
                     Log.e(SESSION_ID, sessionId)
                 }
             }
-            if (isLoginApi) {
+
+            if (isLoginApi && isSessionApi.not()) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else
                 userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN_NEW
         }
 
         Log.e(AUTH_TOKEN, authToken)
-
 
         requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
@@ -65,6 +74,5 @@ class AuthInterceptor @Inject constructor(
         const val AUTH_TOKEN = "AuthToken"
         const val SESSION_ID = "SessionID"
     }
-
 
 }
