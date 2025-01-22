@@ -1068,7 +1068,6 @@ class MainActivity : AppCompatActivity() {
             showMessage("Invalid or missing URL")
             return
         }
-
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
