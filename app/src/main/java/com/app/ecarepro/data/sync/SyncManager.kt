@@ -112,7 +112,7 @@ class SyncManager @Inject constructor(
             val id = userDatabase.insertUser(
                 user.copy(
                     loginTime = getCurrentSyncTime(),
-                 //   sessionId = sessionId
+                    sessionId = sessionId
                 )
             )
             userDataStore.setCurrentUserId(id.toInt())

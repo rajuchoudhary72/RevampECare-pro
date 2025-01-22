@@ -1814,13 +1814,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (isActivityPaused) {
-            syncData(false)
-            isActivityPaused = false
-        } else {
-            syncData(true)
-        }
         AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
+        showLoader(false)
+
+        /* if (isActivityPaused) {
+             syncData(false)
+             isActivityPaused = false
+         } else {
+             lifecycleScope.launch {
+                 delay(20.seconds)
+                 syncData(true)
+             }
+         }*/
     }
 
     companion object {
