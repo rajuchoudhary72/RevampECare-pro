@@ -1054,6 +1054,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Something went wrong")
             } else {
                 showLoader(false)
+                Log.d("WebURL", "$feePaymentURL?token=$token")
                 val tabIntent = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
                     .setToolbarColor((this).getColor(R.color.green)).build()
