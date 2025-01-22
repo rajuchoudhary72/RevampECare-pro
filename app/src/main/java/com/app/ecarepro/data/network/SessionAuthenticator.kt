@@ -2,6 +2,7 @@ package com.app.ecarepro.data.network
 
 import android.content.Context
 import android.provider.Settings.Secure
+import android.util.Log
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.AuthInterceptor.Companion.SESSION_ID
@@ -15,12 +16,7 @@ import okhttp3.Response
 import okhttp3.Route
 import javax.inject.Inject
 import android.annotation.SuppressLint
-import android.util.Log
 import com.app.ecarepro.data.network.AuthInterceptor.Companion.AUTH_TOKEN
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlin.concurrent.withLock
-
 
 class SessionAuthenticator @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -28,40 +24,36 @@ class SessionAuthenticator @Inject constructor(
     @SessionReCreate private val userService: UserService
 ) : Authenticator {
 
-    private val mutex = Mutex()
-
     @SuppressLint("HardwareIds")
     override fun authenticate(route: Route?, response: Response): Request? {
         return runBlocking {
-            mutex.withLock {
-                try {
-                    // Refresh the session and save the new session ID
-                    val cachedSessionID = userDataStore.getUserSessionId()
+            try {
+                Log.d("SessionAuthenticator", "authenticate() called for URL: ${response.request.url}")
 
-                    // Check if the session was already refreshed
-                    if (response.request.header(SESSION_ID) != cachedSessionID) {
+                // Always create a new session
+                val newSessionID = refreshSession()
 
-                        return@runBlocking cachedSessionID?.let {
-                            Log.e("API DATA OLD", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.header(SESSION_ID)+") \n SESSION ID ("+response.header(AUTH_TOKEN)+")")
-                            response.request.newBuilder()
-                                .header(SESSION_ID, it)
-                                .build()
-                        }
-                    } else {
-                        val newSessionID = refreshSession()
-                        newSessionID?.let {
-                            userDataStore.saveSessionId(it) // Save the new session ID
-                            Log.e("API DATA NEW", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.header(SESSION_ID)+") \n SESSION ID ("+it+")")
-                            response.request.newBuilder()
-                                .header(SESSION_ID, it)
-                                .build()
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    AppSessionManager.logoutAndRestartApp(true) // Handle failure gracefully
-                    null
+                // Save the new session ID
+                newSessionID?.let {
+                    Log.d("SessionAuthenticator", "New session ID created: $it")
+                    userDataStore.saveSessionId(it)
+                    Log.d("SessionAuthenticator", "New session ID saved in UserDataStore")
+                    Log.e("API DATA", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+it+")")
+
+                    return@runBlocking response.request.newBuilder()
+                        .header(SESSION_ID, it)
+                        .build()
                 }
+
+                // If session creation fails, logout the user
+                Log.e("SessionAuthenticator", "Failed to create new session ID. Logging out.")
+                AppSessionManager.logoutAndRestartApp(true)
+                return@runBlocking null
+
+            } catch (e: Exception) {
+                Log.e("SessionAuthenticator", "Error during session authentication: ${e.message}", e)
+                AppSessionManager.logoutAndRestartApp(true)
+                null
             }
         }
     }
@@ -72,14 +64,21 @@ class SessionAuthenticator @Inject constructor(
      */
     private suspend fun refreshSession(): String? {
         return try {
+            Log.d("SessionAuthenticator", "Attempting to refresh session...")
+
             val requestDto = CreateUserSessionRequestDto(
                 ipAddress = Secure.getString(context.contentResolver, Secure.ANDROID_ID),
                 locationCity = userDataStore.getCityName(),
                 oldSessionID = userDataStore.getUserSessionId()
             )
-            userService.createSession(requestDto).sessionID
+            Log.d("SessionAuthenticator", "Sending session creation request: $requestDto")
+
+            val sessionID = userService.createSession(requestDto).sessionID
+            Log.d("SessionAuthenticator", "Received new session ID from API: $sessionID")
+
+            sessionID
         } catch (e: Exception) {
-            e.printStackTrace() // Log the error for debugging
+            Log.e("SessionAuthenticator", "Error during session refresh: ${e.message}", e)
             null
         }
     }
