@@ -1052,6 +1052,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Something went wrong")
             } else {
                 showLoader(false)
+                Log.d("WebURL", "$feePaymentURL?token=$token")
                 val tabIntent = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
                     .setToolbarColor((this).getColor(R.color.green)).build()
@@ -1065,7 +1066,6 @@ class MainActivity : AppCompatActivity() {
             showMessage("Invalid or missing URL")
             return
         }
-
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
