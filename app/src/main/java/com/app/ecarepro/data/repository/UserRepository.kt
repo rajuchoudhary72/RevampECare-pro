@@ -262,8 +262,8 @@ interface UserRepository {
         fileURL: String,
         fileExt: String
     ): CommonResponse
-
-    fun getUserProfile(refresh: Boolean): Flow<Result<Profile>>
+    fun getUserProfile(): Flow<Result<Profile>>
+   // fun getUserProfile(refresh: Boolean): Flow<Result<Profile>>
     suspend fun getUserProfileEdit(
         edit: Boolean
     ): NetworkEditProfile

@@ -66,15 +66,9 @@ import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var schoolData: NetworkSchool? = null
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-
-
-
     private val mViewModel: HomeViewModel by viewModels()
-
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(

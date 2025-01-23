@@ -22,9 +22,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.MutableLiveData
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -38,15 +35,15 @@ class ProfileViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager,
     private val userDataStore: UserDataStore
 ) : ViewModel() {
-    private val refresh = MutableLiveData(false)
+    val refresh = MutableStateFlow(true)
 
     var userType: Int = 0
 
     val uiState =
-        refresh.asFlow().flatMapLatest {refresh ->
+        refresh.flatMapLatest {
             combine(
                 flow = userDataStore.getUsersFlow(),  // get  data  base to fetch user  detail
-                flow2 = userRepository.getUserProfile(refresh),   // api
+                flow2 = userRepository.getUserProfile(),   // api
                 flow3 = userDataStore.getCurrentUserIdAsFlow()   // selected user
             ) { users, profile, userId ->
                 Triple(users, profile, userId)
@@ -152,9 +149,7 @@ class ProfileViewModel @Inject constructor(
             userDatabase.deleteUser(user.userId)
         }
     }
-    fun refresh() {
-        refresh.value = true
-    }
+
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.USER_PROFILE)
     }
