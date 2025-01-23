@@ -1105,8 +1105,22 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getStudentListToMarkAtt(classID, subID, attDate)
     }
 
-
-    override fun getUserProfile(refresh: Boolean): Flow<Result<Profile>> {
+    override fun getUserProfile(): Flow<Result<Profile>> {
+        return flow {
+            try {
+                val response = userService.getUserProfile()
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
+                }
+                else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+    /*override fun getUserProfile(refresh: Boolean): Flow<Result<Profile>> {
         return flow {
             try {
                 val response =
@@ -1126,7 +1140,7 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
-    }
+    }*/
 
     override suspend fun getUserProfileEdit(edit: Boolean): NetworkEditProfile {
         return userService.getUserProfileEdit(edit)
