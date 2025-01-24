@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
+import com.app.ecarepro.BuildConfig
 
 class AuthInterceptor @Inject constructor(
     @ApplicationContext val context: Context,
@@ -25,6 +26,11 @@ class AuthInterceptor @Inject constructor(
         "User/TwoFactorLogin",
         "User/ResendOTP",
         "User/ValidateOTP",
+        "User/CreateSession",
+    )
+
+    private val sessionApis = mutableListOf(
+        "User/CreateSession"
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -37,15 +43,35 @@ class AuthInterceptor @Inject constructor(
                 chain.request().url.pathSegments.take(2).joinToString("/")
             )
         }
+        val isSessionApi = sessionApis.any {
+            it.contains(
+                chain.request().url.pathSegments.take(2).joinToString("/")
+            )
+        }
 
         val authToken = runBlocking {
-            if (isLoginApi) {
+            if (isLoginApi.not()) {
+                userDataStore.getUserSessionId()?.let { sessionId ->
+                    requestBuilder.addHeader(SESSION_ID, sessionId)
+                    Log.e(SESSION_ID, sessionId)
+                }
+            }
+
+            if (isLoginApi && isSessionApi.not()) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else
                 userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN_NEW
         }
 
         Log.e(AUTH_TOKEN, authToken)
+        Log.e(AUTH_TOKEN, authToken)
+
+        runBlocking {
+            userDataStore.getUserSessionId()?.let { sessionId ->
+                Log.e("API DATA", "API URL ("+chain.request().url.toString()+") \n AUTH TOKEN ("+authToken+") \n SESSION ID ("+sessionId+")")
+            }
+        }
+
         requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
         return chain.proceed(requestBuilder.build())
@@ -53,7 +79,7 @@ class AuthInterceptor @Inject constructor(
 
     companion object {
         const val AUTH_TOKEN = "AuthToken"
+        const val SESSION_ID = "SessionID"
     }
-
 
 }

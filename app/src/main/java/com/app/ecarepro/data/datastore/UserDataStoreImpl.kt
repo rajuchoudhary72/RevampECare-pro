@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.Locale
 import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "user_datastore")
@@ -122,12 +123,14 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getCurrentUserId(): Int? {
         return context.dataStore.data.map { preferences ->
             preferences[currentUserId]
-        }.first()
+        }.first() ?: getUsersFlow().first().firstOrNull()?.id
     }
 
     override fun getCurrentUserIdAsFlow(): Flow<Int?> {
         return context.dataStore.data.map { preferences ->
             preferences[currentUserId]
+        }.map {
+            it ?: getUsersFlow().first().firstOrNull()?.id
         }
     }
 
@@ -279,13 +282,31 @@ class UserDataStoreImpl @Inject constructor(
             preferences[isAuthenticatedKey] ?: false
         }.first()
     }
-
+    override suspend fun getCityName(): String {
+        return context.dataStore.data.map { preferences ->
+            preferences[cityNameKey]
+        }.first() ?: Locale.getDefault().displayName
+    }
+    override suspend fun setCityName(city: String) {
+        context.dataStore.edit { preferences ->
+            preferences[cityNameKey] = city
+        }
+    }
     override suspend fun getAuthToken(): String? {
         val userId = getCurrentUserId()
         if (userId == null || userId == 0) return null
         return userDatabase.getUser(userId)?.authToken
     }
-
+    override suspend fun getUserSessionId(): String? {
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0) return null
+        return userDatabase.getUser(userId)?.sessionId
+    }
+    override suspend fun saveSessionId(sessionId: String) {
+        val userId = getCurrentUserId()
+        if (userId == null || userId == 0) return
+        userDatabase.insertUser(userDatabase.getUser(userId)!!.copy(sessionId = sessionId))
+    }
     override suspend fun saveSlides(sliders: List<Slide>) {
 
         context.dataStore.edit { preferences ->
@@ -326,5 +347,6 @@ class UserDataStoreImpl @Inject constructor(
         private val userTypeKey = intPreferencesKey("userType")
       //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
+        private val cityNameKey = stringPreferencesKey("cityNameKey")
     }
 }

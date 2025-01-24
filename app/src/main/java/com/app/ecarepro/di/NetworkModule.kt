@@ -23,7 +23,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
+import com.app.ecarepro.di.annotations.SessionReCreate
+import com.app.ecarepro.data.network.InvalidSessionInterceptor
+import com.app.ecarepro.data.network.SessionAuthenticator
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -47,6 +49,8 @@ object NetworkModule {
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
         customResponseInterceptor: CustomResponseInterceptor,
+        invalidSessionInterceptor: InvalidSessionInterceptor,
+        sessionAuthenticator: SessionAuthenticator,
         performanceMonitorInterceptor: PerformanceMonitorInterceptor
 
 
@@ -58,6 +62,8 @@ object NetworkModule {
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
             .addInterceptor(performanceMonitorInterceptor)
+            .addInterceptor(invalidSessionInterceptor)
+            .authenticator(sessionAuthenticator)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
@@ -114,5 +120,31 @@ fun provideRetrofit(
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
     }
-
+    @Provides
+    @SessionReCreate
+    fun provideSessionUserService(
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
+    ): UserService {
+        val client = OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(
+                if (BuildConfig.DEBUG) {
+                    Constant.BASE_DEV_URL
+                } else {
+                    Constant.BASE_URL
+                }
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(UserService::class.java)
+    }
 }

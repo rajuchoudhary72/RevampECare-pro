@@ -53,7 +53,11 @@ interface UserDataStore {
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
     suspend fun getAuthToken(): String?
+    suspend fun getUserSessionId(): String?
+    suspend fun saveSessionId(sessionId: String)
     suspend fun saveSlides(sliders: List<Slide>)
     fun getSlides(): Flow<List<Slide>>
     suspend fun clear()
+    suspend fun setCityName(city: String)
+    suspend fun getCityName():String
 }

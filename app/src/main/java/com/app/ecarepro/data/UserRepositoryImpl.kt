@@ -16,6 +16,8 @@ import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Purpose
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.network.model.NetworkAssignments
@@ -165,6 +167,7 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.model.ClassID_StID
+import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
@@ -224,7 +227,7 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
             )
         ).also {
             if (it.authenticated == true) {
@@ -248,13 +251,45 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
+                deviceInfo = CreateUserSessionRequestDto(
+                    ipAddress = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    locationCity = userDataStore.getCityName(),
+                )
             )
         ).also {
             if (it.authenticated == true && it.isOTPEnabled == false) {
                 it.userDTL?.let { userDtl: UserDTL ->
                     saveUserDtl(userDtl, schoolCode, userName)
                 }
+            }
+        }
+    }
+
+    override fun createSession(regenerate: Boolean): Flow<Result<UserSessionResponseDto>> {
+        return flow {
+            try {
+                val response = userService.createSession(
+                    CreateUserSessionRequestDto(
+                        ipAddress = Secure.getString(
+                            context.contentResolver,
+                            Secure.ANDROID_ID
+                        ),
+                        locationCity = userDataStore.getCityName(),
+                        oldSessionID = if (regenerate) userDataStore.getUserSessionId() else null
+                    )
+                )
+                if (response.errorCode == 0) {
+                    userDataStore.saveSessionId(response.sessionID)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
             }
         }
     }
@@ -327,7 +362,13 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {
             try {
-                val response = userService.logout(deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID))
+                val response = userService.logout(
+                    deviceID = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    sessionID = userDataStore.getUserSessionId().orEmpty()
+                )
                 if (response.errorCode == 0) {
                     emit(Result.success(true))
                 } else {
@@ -1373,6 +1414,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun wingsList(): NetworkWingReport {
         return userService.wingsList()
+    }
+
+    override suspend fun activeSessions(): NetworkUserSessionsResponse {
+        return userService.activeSessions()
+    }
+
+    override suspend fun removeSession(sessionID: String?): CommonResponse {
+        return userService.removeSession(sessionID)
     }
 
     override suspend fun feeCollection(

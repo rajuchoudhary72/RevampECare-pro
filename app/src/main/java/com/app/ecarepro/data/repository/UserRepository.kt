@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
@@ -121,6 +122,7 @@ import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginRespo
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
@@ -506,6 +508,7 @@ interface UserRepository {
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
     fun getUserUndertaking(refresh: Boolean): Flow<Result<String>>
     fun saveUserUndertaking(request: UserUndertakingModule): Flow<Result<String>>
+    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
 
     suspend fun reportCardDTL(
         stID: Int
@@ -849,5 +852,12 @@ interface UserRepository {
     suspend fun academicYears(): NetworkAcademicYear
 
     suspend fun wingsList(): NetworkWingReport
+
+    suspend fun activeSessions(): NetworkUserSessionsResponse
+
+    suspend fun removeSession(
+     sessionID: String?,
+    ): CommonResponse
+
 
 }

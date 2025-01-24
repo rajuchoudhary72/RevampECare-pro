@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSplashBinding
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -57,9 +58,22 @@ class SplashFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 if (splashViewModel.isUserAuthenticated()) {
-                    systemViewModel.refreshAppLayout()
-                    delay(2000)
-                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                    if (splashViewModel.isUserSessionAvailable()) {
+                        moveToHomeScreen()
+                    } else {
+                        mainActivity().showLoader(true)
+                        systemViewModel.createUserSession { success, message ->
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                mainActivity().showLoader(false)
+                                if (success) {
+                                    moveToHomeScreen()
+                                } else {
+                                    mainActivity().showMessage(message)
+                                    mainActivity().logout(true)
+                                }
+                            }
+                        }
+                    }
                 } else {
                     splashViewModel.getSliders()
                     findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
@@ -67,11 +81,17 @@ class SplashFragment : Fragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
-
-            }
+        }
 
     }
+
+    private suspend fun moveToHomeScreen() {
+        systemViewModel.refreshAppLayout()
+        delay(2000)
+        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+
+    }
+
 
     private fun startAnimation() {
         val anim: AnimationDrawable = binding.backgroundView.drawable as AnimationDrawable

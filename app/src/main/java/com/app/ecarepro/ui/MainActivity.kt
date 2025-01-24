@@ -92,6 +92,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import com.app.ecarepro.data.AppSessionManager
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -536,6 +537,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 appUpdateInfo.isFlexibleUpdateAllowed
             }
+
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 popupSnackbarForCompleteUpdate()
             } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
@@ -1812,12 +1814,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (isActivityPaused) {
-            syncData(false)
-            isActivityPaused = false
-        } else {
-            syncData(true)
-        }
+        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
+        showLoader(false)
+
+        /* if (isActivityPaused) {
+             syncData(false)
+             isActivityPaused = false
+         } else {
+             lifecycleScope.launch {
+                 delay(20.seconds)
+                 syncData(true)
+             }
+         }*/
     }
 
     companion object {

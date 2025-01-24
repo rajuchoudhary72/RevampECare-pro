@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.content.ContextCompat
+import com.app.ecarepro.profileSessionList
 
 
 @AndroidEntryPoint
@@ -314,7 +315,12 @@ class ProfileFragment : Fragment() {
                         )
                     }
                 }
-
+                profileSessionList {
+                    id(139)
+                    clickListener { _ ->
+                        findNavController().navigate(R.id.userSessionListFragment)
+                    }
+                }
                 profileLogout {
                     id(131)
                     version("v ${BuildConfig.VERSION_NAME}")
@@ -322,6 +328,7 @@ class ProfileFragment : Fragment() {
                         (requireActivity() as MainActivity).logout()
                     }
                 }
+
             }
         }
     }

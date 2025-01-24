@@ -863,4 +863,9 @@
     <string name="purpose">Purpose</string>
     <string name="form_type">Form Type</string>
     <string name="please_select_a_time_between_8_00_am_and_5_00_pm">Please select a time between 8:00 AM and 5:00 PM</string>
+    <string name="session_text_info_holder">This is list of device that logged into your device. Revoke/Logout any session that you do not recognize.</string>
+    <string name="your_current_sesssion">Your current sesssion</string>
+    <string name="logout_all_devices">Logout All Devices</string>
+    <string name="active_sessions">Active Sessions</string>
+    <string name="check_active_sessions">Check Active Sessions</string>
 </resources>
