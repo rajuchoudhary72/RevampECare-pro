@@ -129,6 +129,8 @@ class UserDataStoreImpl @Inject constructor(
     override fun getCurrentUserIdAsFlow(): Flow<Int?> {
         return context.dataStore.data.map { preferences ->
             preferences[currentUserId]
+        }.map {
+            it ?: getUsersFlow().first().firstOrNull()?.id
         }
     }
 

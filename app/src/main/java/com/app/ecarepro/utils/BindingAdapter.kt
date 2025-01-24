@@ -23,6 +23,7 @@ import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.google.android.material.card.MaterialCardView
 import com.squareup.picasso.Picasso
+import java.util.regex.Pattern
 
 @BindingAdapter("imageUrl")
 fun loadImage(imageView: ImageView, url: String) {
@@ -186,47 +187,62 @@ fun TextView.showEditButton(show: Boolean) {
 
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
-    if (text != null) {
-        if (text.contains("~*") || text.contains("*~")) {
-            //bold with  underline
-            val formattedText = formatBoldUnderlineText(text)
-            // Set the formatted text to a TextView
-            textView.text = formattedText
-        } else if (text.contains("_*") || text.contains("*_")) {
-            //bold with  Italic
-            val formattedText = formatBoldItalicText(text)
-            // Set the formatted text to a TextView
-            textView.text = formattedText
-        } else if (text.contains("~_") || text.contains("_~")) {
-            //underline  with  Italic
-            val formattedText = formatItalicUnderlineText(text)
-            // Set the formatted text to a TextView
-            textView.text = formattedText
-        } else if (text.contains("_~") || text.contains("~_")) {
-            //underline  with  Italic
-            val formattedText = formatItalicUnderlineText(text)
-            // Set the formatted text to a TextView
-            textView.text = formattedText
-        } else if (text.contains("_~*") || text.contains("*~_")) {
-            //underline  with  Italic with  bold
-            val formattedText = formatBoldItalicUnderlineText(text)
-            // Set the formatted text to a TextView
-            textView.text = formattedText
-        } else if (text.contains("~_*") || text.contains("*_~")) {
-            //underline  with  Italic with  bold
-            val formattedText = formatBoldItalicUnderlineText(text)
-            // Set the formatted text to a TextView
-            textView.text = formattedText
-        } else {
-            // only  single property  like only bold  ,  underline  , Italic
-            if (text != null) {
-                textView.text = formatAnyOneBoldItalicUnderlineText(text)
-            } else {
-                textView.text = ""
-            }
-        }
 
-    }
+    val formattedText = text?.parseMarkdown()
+
+// Example of setting the formatted text in a TextView
+    textView.text = formattedText
+
+    /* val formattedText = text?.let {
+         formatText(
+             it
+     )
+     }*/
+
+// Set the formatted text to a TextView
+    // textView.text = formattedText
+
+    /* if (text != null) {
+         if (text.contains("~*") || text.contains("*~")) {
+             //bold with  underline
+             val formattedText = formatBoldUnderlineText(text)
+             // Set the formatted text to a TextView
+             textView.text = formattedText
+         } else if (text.contains("_*") || text.contains("*_")) {
+             //bold with  Italic
+             val formattedText = formatBoldItalicText(text)
+             // Set the formatted text to a TextView
+             textView.text = formattedText
+         } else if (text.contains("~_") || text.contains("_~")) {
+             //underline  with  Italic
+             val formattedText = formatItalicUnderlineText(text)
+             // Set the formatted text to a TextView
+             textView.text = formattedText
+         } else if (text.contains("_~") || text.contains("~_")) {
+             //underline  with  Italic
+             val formattedText = formatItalicUnderlineText(text)
+             // Set the formatted text to a TextView
+             textView.text = formattedText
+         } else if (text.contains("_~*") || text.contains("*~_")) {
+             //underline  with  Italic with  bold
+             val formattedText = formatBoldItalicUnderlineText(text)
+             // Set the formatted text to a TextView
+             textView.text = formattedText
+         } else if (text.contains("~_*") || text.contains("*_~")) {
+             //underline  with  Italic with  bold
+             val formattedText = formatBoldItalicUnderlineText(text)
+             // Set the formatted text to a TextView
+             textView.text = formattedText
+         } else {
+             // only  single property  like only bold  ,  underline  , Italic
+             if (text != null) {
+                 textView.text = formatAnyOneBoldItalicUnderlineText(text)
+             } else {
+                 textView.text = ""
+             }
+         }
+
+     }*/
 }
 
 data class SpanInfo(val start: Int, val end: Int, val style: Any)
@@ -420,4 +436,132 @@ fun formatBoldItalicUnderlineText(input: String): SpannableStringBuilder {
     // Append remaining text after the last match
     spannableBuilder.append(input.substring(lastIndex))
     return spannableBuilder
+}
+fun formatText(input: String): SpannableStringBuilder {
+    val spannableBuilder = SpannableStringBuilder(input)
+
+    // Define regex patterns for different styles
+    val patterns = listOf(
+        Pair("\\*~_([^*~_]+)_~\\*") { text: String ->
+            // Bold + Italic + Underline
+            listOf(
+                StyleSpan(Typeface.BOLD_ITALIC),
+                UnderlineSpan()
+            )
+        },
+        Pair("~_\\*([^~_*]+)\\*_~") { text: String ->
+            // Italic + Underline + Bold
+            listOf(
+                StyleSpan(Typeface.BOLD_ITALIC),
+                UnderlineSpan()
+            )
+        },
+        Pair("~\\*([^~*]+)\\*~", { text: String ->
+            // Bold + Underline
+            listOf(
+                StyleSpan(Typeface.BOLD),
+                UnderlineSpan()
+            )
+        }),
+        Pair("_~([^_~]+)~_", { text: String ->
+            // Italic + Underline
+            listOf(
+                StyleSpan(Typeface.ITALIC),
+                UnderlineSpan()
+            )
+        }),
+        Pair("\\*([^*]+)\\*", { text: String ->
+            // Bold
+            listOf(StyleSpan(Typeface.BOLD))
+        }),
+        Pair("_([^_]+)_", { text: String ->
+            // Italic
+            listOf(StyleSpan(Typeface.ITALIC))
+        }),
+        Pair("~([^~]+)~", { text: String ->
+            // Underline
+            listOf(UnderlineSpan())
+        })
+    )
+
+    // Apply each regex pattern and replace the text with formatting
+    patterns.forEach { (pattern, spanFactory) ->
+        val regex = Regex(pattern)
+        val matches = regex.findAll(spannableBuilder.toString())
+
+        matches.toList().reversed().forEach { matchResult ->
+            val start = matchResult.range.first
+            val end = matchResult.range.last + 1
+
+            // Apply all spans for this match
+            spanFactory(matchResult.value).forEach { span ->
+                spannableBuilder.setSpan(span, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+
+            // Remove the formatting markers (e.g., *, _, ~)
+            spannableBuilder.replace(start, end, matchResult.groupValues[1])
+        }
+    }
+
+    return spannableBuilder
+}
+
+
+enum class TextFormattingType(val pattern: String, val markdownSymbol: String) {
+    BOLD("\\*(.*?)\\*", "*"),
+    ITALIC("_(.*?)_", "_"),
+    UNDERLINE("~(.*?)~", "~");
+
+    companion object {
+        val allCases = values()
+    }
+}
+
+fun String.parseMarkdown(): SpannableStringBuilder {
+    var text = this
+    val spannableBuilder = SpannableStringBuilder(text)
+
+    // Function to apply formatting and strip markdown symbols
+    fun applyFormatting(formatting: TextFormattingType) {
+        val regex = Pattern.compile(formatting.pattern)
+        val matcher = regex.matcher(text)
+
+        while (matcher.find()) {
+            val matchStart = matcher.start()
+            val matchEnd = matcher.end()
+            val rawText = text.substring(matchStart, matchEnd)
+
+            // Extract text without markdown symbols
+            val formattedText = rawText.trimmingCharacters(formatting.markdownSymbol.toCharArray().toString())
+
+            // Replace the matched range with the stripped text
+            spannableBuilder.replace(matchStart, matchEnd, formattedText)
+
+            // Apply the corresponding style
+            when (formatting) {
+                TextFormattingType.BOLD -> spannableBuilder.setSpan(
+                    StyleSpan(Typeface.BOLD), matchStart, matchStart + formattedText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                TextFormattingType.ITALIC -> spannableBuilder.setSpan(
+                    StyleSpan(Typeface.ITALIC), matchStart, matchStart + formattedText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                TextFormattingType.UNDERLINE -> spannableBuilder.setSpan(
+                    UnderlineSpan(), matchStart, matchStart + formattedText.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+
+        // Remove symbols from text
+        text = text.replace(formatting.pattern.toRegex(), "$1")
+    }
+
+    // Apply all formatting types
+    for (formatting in TextFormattingType.allCases) {
+        applyFormatting(formatting)
+    }
+
+    return spannableBuilder
+}
+fun String.trimmingCharacters(characters: String): String {
+    return this.trim { it in characters }
 }
