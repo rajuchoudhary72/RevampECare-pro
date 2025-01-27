@@ -62,6 +62,8 @@ class SplashFragment : Fragment() {
                         moveToHomeScreen()
                     } else {
                         mainActivity().showLoader(true)
+                        /*if  existing  user logged  and  first time run App after implementation  of user session then
+                        need to pass session ID in header  so  call create session api  */
                         systemViewModel.createUserSession { success, message ->
                             viewLifecycleOwner.lifecycleScope.launch {
                                 mainActivity().showLoader(false)
