@@ -43,6 +43,7 @@ class EBookFragment(val data: List<Book>?) : Fragment(), ItemListener<Book> {
 
 
         if (data != null) {
+        if (data.isNotEmpty()) {
 
             binding.rvLatestBook.isVisible = true
             binding.tvNoData.isVisible = false
@@ -58,6 +59,10 @@ class EBookFragment(val data: List<Book>?) : Fragment(), ItemListener<Book> {
             binding.rvLatestBook.isVisible = false
             binding.tvNoData.isVisible = true
         }
+    } else {
+        binding.rvLatestBook.isVisible = false
+        binding.tvNoData.isVisible = true
+    }
 
 
     }
