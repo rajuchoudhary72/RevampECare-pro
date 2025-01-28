@@ -58,6 +58,7 @@ class SettingsFragment : Fragment() {
 
             cardChangeUserName.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
 
+
             cardSync.setOnClickListener {
                 /*sync  manually  from user click sync button  on setting screen */
                 lifecycleScope.launch {
