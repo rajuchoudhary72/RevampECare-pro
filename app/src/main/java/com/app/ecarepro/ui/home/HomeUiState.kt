@@ -14,7 +14,7 @@ sealed interface HomeUiState {
     data class Success(
         val favourites: List<Menu>,
         val cards: List<Card>,
-        val user: NetworkUserDetailsDto,
+        val user: NetworkUserDetailsDto?,
         val underTaking:String
     ) : HomeUiState
 

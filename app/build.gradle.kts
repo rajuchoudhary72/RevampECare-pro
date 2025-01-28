@@ -67,6 +67,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+        create("uat") {
+            initWith(buildTypes.getByName("debug"))
+            isMinifyEnabled = false
+            isDebuggable = true
+            matchingFallbacks += listOf("debug")
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-UAT"
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(

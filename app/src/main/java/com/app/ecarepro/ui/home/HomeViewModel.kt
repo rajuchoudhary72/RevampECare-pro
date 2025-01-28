@@ -74,7 +74,7 @@ class HomeViewModel @Inject constructor(
                     HomeUiState.Success(
                         cards = cards,
                         favourites = favourite ?: emptyList(),
-                        user = userDataStore.getUser()!!,
+                        user = userDataStore.getUser(),
                         underTaking = undertaking.getOrNull() ?: ""
                     )
                 } else {

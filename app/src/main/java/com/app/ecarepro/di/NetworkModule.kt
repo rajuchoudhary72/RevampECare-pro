@@ -44,7 +44,6 @@ object NetworkModule {
 
     @Provides
     fun provideOkHttpClient(
-        @ApplicationContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
@@ -69,7 +68,7 @@ object NetworkModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-@Provides
+/*@Provides
 fun provideRetrofit(
     okHttpClient: OkHttpClient,
 ): Retrofit {
@@ -84,7 +83,18 @@ fun provideRetrofit(
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
         .build()
-}
+}*/
+
+    @Provides
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(getBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
 
     @Provides
     fun provideUserService(
@@ -135,16 +145,17 @@ fun provideRetrofit(
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
         return Retrofit.Builder()
-            .baseUrl(
-                if (BuildConfig.DEBUG) {
-                    Constant.BASE_DEV_URL
-                } else {
-                    Constant.BASE_URL
-                }
-            )
+            .baseUrl(getBaseUrl())
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
             .create(UserService::class.java)
+    }
+    private fun getBaseUrl(): String {
+        return if (BuildConfig.BUILD_TYPE.equals("release", true)) {
+            Constant.BASE_URL
+        } else {
+            Constant.BASE_DEV_URL
+        }
     }
 }
