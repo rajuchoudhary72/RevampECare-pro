@@ -44,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 293
-        versionName = "2.8.1"
+        versionCode = 294
+        versionName = "2.8.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -66,6 +66,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("uat") {
+            initWith(buildTypes.getByName("debug"))
+            isMinifyEnabled = false
+            isDebuggable = true
+            matchingFallbacks += listOf("debug")
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-UAT"
         }
         release {
             isMinifyEnabled = false
