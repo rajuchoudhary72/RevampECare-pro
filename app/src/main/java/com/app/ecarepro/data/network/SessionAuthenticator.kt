@@ -29,6 +29,8 @@ class SessionAuthenticator @Inject constructor(
         return runBlocking {
             try {
                 Log.d("SessionAuthenticator", "authenticate() called for URL: ${response.request.url}")
+                Log.e("Raju Log ", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+response.request.header(
+                    SESSION_ID)+") \n CODE ("+response.code+")")
 
                 // Always create a new session
                 val newSessionID = refreshSession()
