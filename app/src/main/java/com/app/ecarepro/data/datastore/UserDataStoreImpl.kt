@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.app.ecarepro.data.database.ECareProDatabase
@@ -124,12 +123,14 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getCurrentUserId(): Int? {
         return context.dataStore.data.map { preferences ->
             preferences[currentUserId]
-        }.first()
+        }.first() ?: getUsersFlow().first().firstOrNull()?.id
     }
 
     override fun getCurrentUserIdAsFlow(): Flow<Int?> {
         return context.dataStore.data.map { preferences ->
             preferences[currentUserId]
+        }.map {
+            it ?: getUsersFlow().first().firstOrNull()?.id
         }
     }
 
@@ -262,20 +263,6 @@ class UserDataStoreImpl @Inject constructor(
         }.first()
     }
 
-    override suspend fun saveCreateSessionTime(time: Long) {
-        context.dataStore.edit { preferences ->
-            preferences[createSessionTime] = time
-        }
-    }
-
-    override suspend fun shouldCallCreateSession(): Boolean {
-       val lastTime =  context.dataStore.data.map { preferences ->
-            preferences[createSessionTime]
-        }.first()?:return true
-        val currentTimeMillis = System.currentTimeMillis()
-        val oneMinuteInMillis = 60 * 1000
-        return (currentTimeMillis - lastTime) > oneMinuteInMillis
-    }
 
 
     override suspend fun getRoleName(): String? {
@@ -361,6 +348,5 @@ class UserDataStoreImpl @Inject constructor(
       //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
         private val cityNameKey = stringPreferencesKey("cityNameKey")
-        private val createSessionTime = longPreferencesKey("createSessionTime")
     }
 }

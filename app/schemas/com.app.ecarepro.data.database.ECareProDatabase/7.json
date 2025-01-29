@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 7,
-    "identityHash": "a9fd639b8035eaf9cac52c5fd0430143",
+    "identityHash": "b6fd7f5ba3a4c15665654cc61754164d",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL, `name` TEXT, `photo` TEXT, `userType` INTEGER NOT NULL, `auth_token` TEXT, `session_id` TEXT DEFAULT '', `roleName` TEXT, `schoolCode` TEXT, `is_user_authenticated` INTEGER, `is_verified` INTEGER, `mobileNumber` TEXT, `classID` TEXT, `loginTime` TEXT, `stName` TEXT, `class` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL, `name` TEXT, `photo` TEXT, `userType` INTEGER NOT NULL, `auth_token` TEXT, `roleName` TEXT, `schoolCode` TEXT, `is_user_authenticated` INTEGER, `is_verified` INTEGER, `mobileNumber` TEXT, `classID` TEXT, `loginTime` TEXT, `stName` TEXT, `class` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -43,13 +43,6 @@
             "columnName": "auth_token",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "sessionId",
-            "columnName": "session_id",
-            "affinity": "TEXT",
-            "notNull": false,
-            "defaultValue": "''"
           },
           {
             "fieldPath": "roleName",
@@ -283,7 +276,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a9fd639b8035eaf9cac52c5fd0430143')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b6fd7f5ba3a4c15665654cc61754164d')"
     ]
   }
 }

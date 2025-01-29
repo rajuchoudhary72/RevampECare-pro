@@ -13,5 +13,6 @@ data class BookDTL(
     val publicationYear: String,
     val storageHint: String,
     val subject: String,
-    val title: String
+    val title: String,
+    val status: String
 )

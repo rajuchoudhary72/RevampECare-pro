@@ -62,21 +62,16 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import kotlinx.coroutines.Dispatchers
 import java.util.Locale
 
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var schoolData: NetworkSchool? = null
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-
-
-
     private val mViewModel: HomeViewModel by viewModels()
-
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -251,21 +246,24 @@ class HomeFragment : Fragment() {
                     mViewModel.currentLocation =
                         Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
 
-                    val cityName =
-                        if (location != null) {
-                            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                            val addresses =
-                                geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                            if (!addresses.isNullOrEmpty()) {
-                                addresses[0].locality
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val cityName =
+                            if (location != null) {
+                                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                                val addresses =
+                                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                                if (!addresses.isNullOrEmpty()) {
+                                    addresses[0].locality
+                                } else {
+                                    Locale.getDefault().displayName
+                                }
                             } else {
                                 Locale.getDefault().displayName
                             }
-                        } else {
-                            Locale.getDefault().displayName
-                        }
 
-                    mViewModel.setCityName(cityName)
+                        mViewModel.setCityName(cityName?:Locale.getDefault().displayName)
+                    }
 
                 }
                 .addOnFailureListener {

@@ -64,6 +64,13 @@ class AuthInterceptor @Inject constructor(
         }
 
         Log.e(AUTH_TOKEN, authToken)
+        Log.e(AUTH_TOKEN, authToken)
+
+        runBlocking {
+            userDataStore.getUserSessionId()?.let { sessionId ->
+                Log.e("API DATA", "API URL ("+chain.request().url.toString()+") \n AUTH TOKEN ("+authToken+") \n SESSION ID ("+sessionId+")")
+            }
+        }
 
         requestBuilder.addHeader(AUTH_TOKEN, authToken)
 

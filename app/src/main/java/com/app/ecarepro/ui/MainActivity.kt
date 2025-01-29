@@ -49,7 +49,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
-import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -93,7 +92,7 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
+import com.app.ecarepro.data.AppSessionManager
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -538,6 +537,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 appUpdateInfo.isFlexibleUpdateAllowed
             }
+
             if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
                 popupSnackbarForCompleteUpdate()
             } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
@@ -767,7 +767,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(parentMenu.menuID, menu.chMenuID, "Menu")
+                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
                             }
                         }
 
@@ -778,12 +778,7 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(
-                                        parentMenu.menuID,
-                                        menu.chMenuID,
-                                        childChildMenu.sbChMenuID,
-                                        "Menu"
-                                    )
+                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
                                 }
                             }
                         }
@@ -1059,6 +1054,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Something went wrong")
             } else {
                 showLoader(false)
+                Log.d("WebURL", "$feePaymentURL?token=$token")
                 val tabIntent = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
                     .setToolbarColor((this).getColor(R.color.green)).build()
@@ -1072,7 +1068,6 @@ class MainActivity : AppCompatActivity() {
             showMessage("Invalid or missing URL")
             return
         }
-
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
@@ -1102,12 +1097,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(
-        menuID: Int,
-        childMenuId: Int,
-        refId: String? = null,
-        from: String = "other"
-    ) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1349,12 +1339,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(
-        menuID: Int,
-        childMenuId: Int,
-        childChildMenuId: Int,
-        from: String = "other"
-    ) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1824,21 +1809,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        isActivityPaused = trueK
+        isActivityPaused = true
     }
 
     override fun onResume() {
         super.onResume()
         AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
-        if (isActivityPaused) {
-            syncData(false)
-            isActivityPaused = false
-        } else {
-            lifecycleScope.launch {
-                delay(20.seconds)
-                syncData(true)
-            }
-        }
+        showLoader(false)
+
+        /* if (isActivityPaused) {
+             syncData(false)
+             isActivityPaused = false
+         } else {
+             lifecycleScope.launch {
+                 delay(20.seconds)
+                 syncData(true)
+             }
+         }*/
     }
 
     companion object {
