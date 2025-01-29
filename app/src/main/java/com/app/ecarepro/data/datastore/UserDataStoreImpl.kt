@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.app.ecarepro.data.database.ECareProDatabase
@@ -328,7 +329,20 @@ class UserDataStoreImpl @Inject constructor(
             eCareProDatabase.schoolDao().nukeTable()
         }
     }
+    override suspend fun saveCreateSessionTime(time: Long) {
+        context.dataStore.edit { preferences ->
+            preferences[createSessionTime] = time
+        }
+    }
 
+    override suspend fun shouldCallCreateSession(): Boolean {
+        val lastTime =  context.dataStore.data.map { preferences ->
+            preferences[createSessionTime]
+        }.first()?:return true
+        val currentTimeMillis = System.currentTimeMillis()
+        val oneMinuteInMillis = 60 * 1000
+        return (currentTimeMillis - lastTime) > oneMinuteInMillis
+    }
 
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
@@ -341,6 +355,7 @@ class UserDataStoreImpl @Inject constructor(
         private val slidesKey = stringPreferencesKey("slides")
         private val generalSettingsKey = stringPreferencesKey("generalSettings")
         private val messageSettingsKey = stringPreferencesKey("messageSettings")
+        private val createSessionTime = longPreferencesKey("createSessionTime")
 
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
