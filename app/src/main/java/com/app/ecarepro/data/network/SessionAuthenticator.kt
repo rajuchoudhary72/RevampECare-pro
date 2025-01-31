@@ -5,7 +5,6 @@ import android.provider.Settings.Secure
 import android.util.Log
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.AuthInterceptor.Companion.SESSION_ID
 import com.app.ecarepro.data.network.service.UserService
 import com.app.ecarepro.di.annotations.SessionReCreate
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -29,8 +28,8 @@ class SessionAuthenticator @Inject constructor(
         return runBlocking {
             try {
                 Log.d("SessionAuthenticator", "authenticate() called for URL: ${response.request.url}")
-                Log.e("Raju Log ", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+response.request.header(
-                    SESSION_ID)+") \n CODE ("+response.code+")")
+               /* Log.e("Raju Log ", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+response.request.header(
+                    SESSION_ID)+") \n CODE ("+response.code+")")*/
 
                 // Always create a new session
                 val newSessionID = refreshSession()
@@ -42,9 +41,9 @@ class SessionAuthenticator @Inject constructor(
                     Log.d("SessionAuthenticator", "New session ID saved in UserDataStore")
                     Log.e("API DATA", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+it+")")
 
-                    return@runBlocking response.request.newBuilder()
+                    /*return@runBlocking response.request.newBuilder()
                         .header(SESSION_ID, it)
-                        .build()
+                        .build()*/
                 }
 
                 // If session creation fails, logout the user
