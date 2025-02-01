@@ -370,7 +370,6 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                 startActivity(intent)
             }
 
-
         } catch (e: Exception) {
             e.printStackTrace()
             // Handle exceptions appropriately (e.g., show an error message)
