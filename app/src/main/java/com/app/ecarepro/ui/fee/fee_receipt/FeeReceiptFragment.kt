@@ -169,8 +169,28 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             }
             }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermission()
+                return
+            }
+        }
 
 
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                100
+            )
+        }
     }
 
     private fun popUpSessionList() {
@@ -321,12 +341,11 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
         try {
             val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
-            val currentTime = System.currentTimeMillis()
-
+           // val currentTime = System.currentTimeMillis()
 
            // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
             val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "FeeReceipt$recdate$currentTime.pdf"
+                "FeeReceipt$recdate.pdf"
             )
             try {
 
@@ -335,7 +354,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                 outputStream.close()
                 if (i==2){
                     mainActivity().showMessage("Download started, check you status bar for more information.")
-                    showDownloadNotification(file, "FeeReceipt$recdate$currentTime.pdf")
+                    showDownloadNotification(file, "FeeReceipt$recdate.pdf")
 
                 }
 
