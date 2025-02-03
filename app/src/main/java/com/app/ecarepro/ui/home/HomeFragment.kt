@@ -245,25 +245,8 @@ class HomeFragment : Fragment() {
                 .addOnSuccessListener { location: Location? ->
                     mViewModel.currentLocation =
                         Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
-
-
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val cityName =
-                            if (location != null) {
-                                val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                                val addresses =
-                                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                                if (!addresses.isNullOrEmpty()) {
-                                    addresses[0].locality
-                                } else {
-                                    Locale.getDefault().displayName
-                                }
-                            } else {
-                                Locale.getDefault().displayName
-                            }
-
-                        mViewModel.setCityName(cityName?:Locale.getDefault().displayName)
-                    }
+                    Log.e("Home", "startLocationFetch: ${mViewModel.currentLocation.toString()}" )
+                    mViewModel.setCityName()
 
                 }
                 .addOnFailureListener {

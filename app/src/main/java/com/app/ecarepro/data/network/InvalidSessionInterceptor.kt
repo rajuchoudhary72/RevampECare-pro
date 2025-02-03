@@ -9,8 +9,7 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class InvalidSessionInterceptor @Inject constructor(
-    private val userDataStore: UserDataStore,
-    private val appSessionManager: AppSessionManager
+    private val userDataStore: UserDataStore
 ) : Interceptor {
 
     companion object {
@@ -34,7 +33,7 @@ class InvalidSessionInterceptor @Inject constructor(
     private suspend fun handle403Response(response: Response, chain: Interceptor.Chain): Response {
         if (userDataStore.shouldCallCreateSession()) {
             logInvalidSessionDetails(response)
-            appSessionManager.logoutAndRestartApp()
+            AppSessionManager.logoutAndRestartApp()
             return response
 
         } else {
