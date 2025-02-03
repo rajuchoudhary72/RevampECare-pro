@@ -44,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 299
-        versionName = "2.8.7"
+        versionCode = 300
+        versionName = "2.8.8"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
