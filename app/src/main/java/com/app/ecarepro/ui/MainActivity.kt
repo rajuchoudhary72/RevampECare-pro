@@ -93,6 +93,7 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -1821,7 +1822,7 @@ class MainActivity : AppCompatActivity() {
         AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
         showLoader(false)
 
-        /* if (isActivityPaused) {
+         if (isActivityPaused) {
              syncData(false)
              isActivityPaused = false
          } else {
@@ -1829,7 +1830,7 @@ class MainActivity : AppCompatActivity() {
                  delay(20.seconds)
                  syncData(true)
              }
-         }*/
+         }
     }
 
     companion object {
