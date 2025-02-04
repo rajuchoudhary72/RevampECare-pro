@@ -66,8 +66,12 @@ class CircularDetailsFragment : Fragment() {
         }
 
         binding.relDownload.setOnClickListener {
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.circular))
+            try {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.circular))
+            }catch (e:SecurityException){
+                e.printStackTrace()
+            }
         }
 
         lifecycleScope.launch {

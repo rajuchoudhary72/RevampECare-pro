@@ -245,8 +245,25 @@ class HomeFragment : Fragment() {
                 .addOnSuccessListener { location: Location? ->
                     mViewModel.currentLocation =
                         Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
-                    Log.e("Home", "startLocationFetch: ${mViewModel.currentLocation.toString()}" )
-                    mViewModel.setCityName()
+
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val cityName =
+                            if (location != null) {
+                                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                                val addresses =
+                                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                                if (!addresses.isNullOrEmpty()) {
+                                    addresses[0].locality
+                                } else {
+                                    Locale.getDefault().displayName
+                                }
+                            } else {
+                                Locale.getDefault().displayName
+                            }
+
+                        mViewModel.setCityName(cityName?:Locale.getDefault().displayName)
+                    }
 
                 }
                 .addOnFailureListener {
@@ -506,7 +523,7 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-        startLocationFetch()
+       // startLocationFetch()
 
     }
     @Deprecated("Deprecated in Java")
@@ -516,7 +533,7 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationFetch()
+              //  startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
             }

@@ -60,7 +60,4 @@ interface UserDataStore {
     suspend fun clear()
     suspend fun setCityName(city: String)
     suspend fun getCityName():String
-
-    suspend fun shouldCallCreateSession(): Boolean
-    suspend fun saveCreateSessionTime(time: Long)
 }

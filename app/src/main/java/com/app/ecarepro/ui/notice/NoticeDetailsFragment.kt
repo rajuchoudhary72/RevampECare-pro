@@ -69,8 +69,12 @@ class NoticeDetailsFragment : Fragment() {
         }
 
         noticeDetailsBinding.relDownload.setOnClickListener {
-           val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.notice) )
+            try {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.notice) )
+            }catch (e:SecurityException){
+                e.printStackTrace()
+            }
         }
 
         lifecycleScope.launch {

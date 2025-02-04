@@ -93,6 +93,7 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -529,31 +530,35 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
-        // isImmediatepopup =forceUpdate
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
-            val isAppUpdateAllowed = if (forceUpdate) {
-                appUpdateInfo.isImmediateUpdateAllowed
-            } else {
-                appUpdateInfo.isFlexibleUpdateAllowed
-            }
+        try {
+            // isImmediatepopup =forceUpdate
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+                val isAppUpdateAllowed = if (forceUpdate) {
+                    appUpdateInfo.isImmediateUpdateAllowed
+                } else {
+                    appUpdateInfo.isFlexibleUpdateAllowed
+                }
 
-            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                popupSnackbarForCompleteUpdate()
-            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
-                appUpdateManager.startUpdateFlowForResult(
-                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                    appUpdateInfo,
-                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
-                    if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
-                    // The current activity making the update request.
-                    this,
-                    // Include a request code to later monitor this update request.
-                    MY_REQUEST_CODE
-                )
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                    popupSnackbarForCompleteUpdate()
+                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
+                    appUpdateManager.startUpdateFlowForResult(
+                        // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                        appUpdateInfo,
+                        // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                        if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                        // The current activity making the update request.
+                        this,
+                        // Include a request code to later monitor this update request.
+                        MY_REQUEST_CODE
+                    )
+                }
             }
+            appUpdateManager.registerListener(installStateUpdatedListener)
+        }catch (e:RuntimeException){
+            e.printStackTrace()
         }
-        appUpdateManager.registerListener(installStateUpdatedListener)
     }
 
     private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
@@ -1040,9 +1045,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-            navController.navigate(R.id.webViewFragment, bundle)
+           // navController.navigate(R.id.webViewFragment, bundle)
             Log.d("WebURL", url)
-            // openCustomTab(tabIntent, Uri.parse(url))
+             openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
@@ -1817,7 +1822,7 @@ class MainActivity : AppCompatActivity() {
         AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
         showLoader(false)
 
-        /* if (isActivityPaused) {
+         if (isActivityPaused) {
              syncData(false)
              isActivityPaused = false
          } else {
@@ -1825,7 +1830,7 @@ class MainActivity : AppCompatActivity() {
                  delay(20.seconds)
                  syncData(true)
              }
-         }*/
+         }
     }
 
     companion object {

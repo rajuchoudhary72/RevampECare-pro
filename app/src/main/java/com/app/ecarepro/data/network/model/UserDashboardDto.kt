@@ -68,6 +68,10 @@ data class UserDashboardDto(
     val sessionStartDate: String?,
     @SerializedName("sessionEndDate")
     val sessionEndDate: String?,
+  /*  @SerializedName("collectionStartDate")
+    val collectionStartDate: String?,
+    @SerializedName("collectionEndDate")
+    val collectionEndDate: String?,*/
     @SerializedName("timetable")
     val timetable: List<Timetable>?,
     @SerializedName("upcomingActivities")

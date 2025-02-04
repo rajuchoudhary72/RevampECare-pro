@@ -1,35 +1,36 @@
 package com.app.ecarepro.ui.home
 
 import android.content.Context
-import android.location.Geocoder
 import android.os.Build
 import android.provider.Settings
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.DashboardButtons
-import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkSchool
-import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
+import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.network.model.Slider
+import com.app.ecarepro.data.network.model.UserDashboardDto
+import com.app.ecarepro.data.network.model.UserUndertakingModule
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -141,31 +142,11 @@ class HomeViewModel @Inject constructor(
     fun refresh() {
         refresh.postValue(true)
     }
-
-    fun setCityName() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val cityName =
-                if (currentLocation != null) {
-                    val geocoder = Geocoder(context, Locale.getDefault())
-                    val addresses =
-                        geocoder.getFromLocation(
-                            currentLocation!!.first,
-                            currentLocation!!.second,
-                            1
-                        )
-                    if (!addresses.isNullOrEmpty()) {
-                        addresses[0].locality
-                    } else {
-                        Locale.getDefault().displayName
-                    }
-                } else {
-                    Locale.getDefault().displayName
-                }
-            userDataStore.setCityName(cityName)
-            println("City Name $cityName")
+    fun setCityName(city:String){
+        viewModelScope.launch {
+            userDataStore.setCityName(city)
         }
     }
-
     init {
         viewModelScope.launch {
             schoolData.postValue(userDataStore.getSchoolData())

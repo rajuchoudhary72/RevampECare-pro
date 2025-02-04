@@ -2,67 +2,24 @@ package com.app.ecarepro.data.network
 
 import android.util.Log
 import com.app.ecarepro.data.AppSessionManager
-import com.app.ecarepro.data.datastore.UserDataStore
-import kotlinx.coroutines.runBlocking
+import com.app.ecarepro.data.network.AuthInterceptor.Companion.AUTH_TOKEN
+
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 
-class InvalidSessionInterceptor @Inject constructor(
-    private val userDataStore: UserDataStore
-) : Interceptor {
-
-    companion object {
-        private const val AUTH_TOKEN = "AuthToken"
-        private const val SESSION_ID = "SessionID"
-        private const val TAG = "InvalidSessionInterceptor"
-    }
-
+class InvalidSessionInterceptor @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        return runBlocking {
-            val originalRequest = chain.request()
-            val originalResponse = chain.proceed(originalRequest)
+        val request = chain.request()
+        val response = chain.proceed(request)
 
-            if (originalResponse.code == 403) {
-                return@runBlocking handle403Response(originalResponse, chain)
-            }
-            originalResponse
-        }
-    }
-
-    private suspend fun handle403Response(response: Response, chain: Interceptor.Chain): Response {
-        if (userDataStore.shouldCallCreateSession()) {
-            logInvalidSessionDetails(response)
+     /*   if (response.code == 403) {
+            Log.e("InvalidSessionInterceptor", "API URL ("+response.request.url.toString()+") \n AUTH TOKEN ("+response.request.header(AUTH_TOKEN)+") \n SESSION ID ("+response.request.header(
+                SESSION_ID)+") \n CODE ("+response.code+")")
             AppSessionManager.logoutAndRestartApp()
-            return response
 
-        } else {
-            val newRequestBuilder = response.request.newBuilder()
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Accept", "application/json")
+        }*/
 
-            userDataStore.getUserSessionId()?.let { sessionId ->
-                newRequestBuilder.header(SESSION_ID, sessionId)
-                Log.d(TAG, "Refreshing session ID: $sessionId") // Log at DEBUG level
-            }
-
-            userDataStore.getAuthToken()?.let { authToken ->
-                newRequestBuilder.header(AUTH_TOKEN, authToken)
-            }
-
-            return chain.proceed(newRequestBuilder.build())
-        }
-    }
-
-    private fun logInvalidSessionDetails(response: Response) {
-        Log.e(
-            TAG,
-            """
-                API URL: ${response.request.url}
-                AUTH TOKEN: ${response.request.header(AUTH_TOKEN)}
-                SESSION ID: ${response.request.header(SESSION_ID)}
-                CODE: ${response.code}
-            """.trimIndent()
-        )
+        return response
     }
 }
