@@ -394,28 +394,32 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     }
 
     private fun downloadFile(fileSource: String) {
+        try {
+            when (Constant.isPdfUrl(fileSource)) {
+                1 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+                }
 
-        when (Constant.isPdfUrl(fileSource)) {
-            1 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-            }
+                2 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
 
-            2 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-            }
+                3 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                }
 
-            3 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                else -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
             }
-
-            else -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-            }
-        } }
+        }catch (e:SecurityException){
+            e.printStackTrace()
+        }
+    }
 
 
     private fun dateSelctedPoPUp(t: AssignSubmitStudent) {

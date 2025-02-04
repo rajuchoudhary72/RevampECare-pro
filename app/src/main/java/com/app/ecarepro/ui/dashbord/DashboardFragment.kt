@@ -119,7 +119,6 @@ class DashboardFragment : Fragment() {
                 }
                 buildProCard(cards)
             }
-
             if (data.showFeeCollection == true)
                 buildEstimatedCollectionCard(
                     data.feeCollection,

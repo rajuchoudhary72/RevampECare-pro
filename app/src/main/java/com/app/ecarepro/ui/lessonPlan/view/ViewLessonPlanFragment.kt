@@ -126,28 +126,36 @@ class ViewLessonPlanFragment : Fragment() {
     }
 
     private fun downloadFile(fileSource:String){
-        when (Constant.isPdfUrl(fileSource)) {
-            1 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.lesson))
-            }
+        try {
+            when (Constant.isPdfUrl(fileSource)) {
 
-            2 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-            }
+                1 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.lesson))
+                }
 
-            3 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.lesson),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                2 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
 
-            }
+                3 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.lesson),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
-            else -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
+
+                else -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
             }
-        } }
+        }catch (e:NullPointerException){
+            e.printStackTrace()
+        }
+
+
+    }
     }
 
 

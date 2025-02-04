@@ -66,8 +66,13 @@ class QuestionPaperSubFragment( val questionPapers: List<QuestionPaper>) : Fragm
             })
         }
         if (pos==2){
-            val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(t.file, getString(R.string.question_paper) )
+            try {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(t.file, getString(R.string.question_paper) )
+            }catch (e:NullPointerException){
+                e.printStackTrace()
+            }
+
         }
     }
 }
