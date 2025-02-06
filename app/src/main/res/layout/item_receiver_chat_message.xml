@@ -54,7 +54,7 @@
             app:formattedText="@{message}"
             android:textColor="@color/black"
             android:enabled="true"
-            android:autoLink="web"
+            app:formattedNewText="@{message}"
             android:textIsSelectable="true"
             android:focusable="true"
             android:longClickable="true"

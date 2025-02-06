@@ -260,6 +260,8 @@ data class StudentProfile(
     val dob: String?,
     @SerializedName("fatherAadhaarNumber")
     val fatherAadhaarNumber: String?,
+    @SerializedName("fatherPAN")
+    val fatherPAN: String?,
     @SerializedName("fatherAnnualIncome")
     val fatherAnnualIncome: String?,
     @SerializedName("fatherDOB")

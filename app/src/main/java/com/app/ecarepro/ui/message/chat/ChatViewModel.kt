@@ -87,8 +87,12 @@ class ChatViewModel @Inject constructor(
         )
 
     init {
-        viewModelScope.launch {
-            user = userDataStore.getUser()!!
+        try {
+            viewModelScope.launch {
+                user = userDataStore.getUser()!!
+            }
+        }catch (e:NullPointerException){
+            e.printStackTrace()
         }
     }
 

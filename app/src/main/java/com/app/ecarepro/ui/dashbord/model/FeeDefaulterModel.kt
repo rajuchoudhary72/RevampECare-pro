@@ -13,7 +13,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
-class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
+class FeeDefaulterModel(val feeDefaulter: FeeDefaulter?) :
     ViewBindingKotlinModel<ItemFeeDefaulterCardBinding>(R.layout.item_fee_defaulter_card) {
     private var isExpanded = false
     override fun ItemFeeDefaulterCardBinding.bind() {
@@ -26,16 +26,23 @@ class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
 
         /**/
         // Convert to BigDecimal to avoid scientific notation
-        val number = feeDefaulter.amount
-        val roundedNumber = String.format("%.2f", number)
-        amount.subTitle("₹" + roundedNumber)
-        total.subTitle(feeDefaulter.totalStudent.toString())
-        defaulter.subTitle(feeDefaulter.dafaulterCount.toString())
+        val number = feeDefaulter?.amount
+        if (feeDefaulter==null){
+            val roundedNumber = String.format("%.2f", number)
+            amount.subTitle("₹ 0.0 ")
+            total.subTitle("0")
+            defaulter.subTitle("0")
+        }else{
+            val roundedNumber = String.format("%.2f", number)
+            amount.subTitle("₹" + roundedNumber)
+            total.subTitle(feeDefaulter?.totalStudent.toString())
+            defaulter.subTitle(feeDefaulter?.dafaulterCount.toString())
+        }
         chartView.isClearBackgroundColor = true
         chartView.aa_drawChartWithChartModel(getBarChartModel(feeDefaulter))
     }
 
-    private fun getBarChartModel(feeDefaulter: FeeDefaulter) = AAChartModel()
+    private fun getBarChartModel(feeDefaulter: FeeDefaulter?) = AAChartModel()
         .chartType(AAChartType.Pie)
         .colorsTheme(arrayOf("#0c9674", "#7dffc0"))
         .dataLabelsEnabled(true)
