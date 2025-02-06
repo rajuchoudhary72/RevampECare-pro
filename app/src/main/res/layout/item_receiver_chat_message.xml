@@ -51,7 +51,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/calibri_regular"
             android:padding="17dp"
-            app:formattedText="@{message}"
             android:textColor="@color/black"
             android:enabled="true"
             app:formattedNewText="@{message}"

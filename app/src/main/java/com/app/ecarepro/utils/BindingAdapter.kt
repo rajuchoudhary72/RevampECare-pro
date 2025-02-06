@@ -208,8 +208,9 @@ fun setFormattedNewText(textView: TextView, text1: String?) {
         textView.text = spannable
         textView.movementMethod = LinkMovementMethod.getInstance() // Make links clickable
     }else{
-        val formattedText = text1?.parseMarkdown()
-        textView.text = formattedText
+        CompleteTextFormate(text1, textView)
+      /*  val formattedText = text1?.parseMarkdown()
+        textView.text = formattedText*/
     }
 
     textView.movementMethod = LinkMovementMethod.getInstance() // Make links clickable
@@ -222,47 +223,51 @@ fun setFormattedText(textView: TextView, text: String?) {
 // Example of setting the formatted text in a TextView
     textView.text = formattedText*/
 
-     if (text != null) {
-         if (text.contains("~*") || text.contains("*~")) {
-             //bold with  underline
-             val formattedText = formatBoldUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("_*") || text.contains("*_")) {
-             //bold with  Italic
-             val formattedText = formatBoldItalicText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("~_") || text.contains("_~")) {
-             //underline  with  Italic
-             val formattedText = formatItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("_~") || text.contains("~_")) {
-             //underline  with  Italic
-             val formattedText = formatItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("_~*") || text.contains("*~_")) {
-             //underline  with  Italic with  bold
-             val formattedText = formatBoldItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("~_*") || text.contains("*_~")) {
-             //underline  with  Italic with  bold
-             val formattedText = formatBoldItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else {
-             // only  single property  like only bold  ,  underline  , Italic
-             if (text != null) {
-                 textView.text = formatAnyOneBoldItalicUnderlineText(text)
-             } else {
-                 textView.text = ""
-             }
-         }
+    CompleteTextFormate(text, textView)
+}
 
-     }
+private fun CompleteTextFormate(text: String?, textView: TextView) {
+    if (text != null) {
+        if (text.contains("~*") || text.contains("*~")) {
+            //bold with  underline
+            val formattedText = formatBoldUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_*") || text.contains("*_")) {
+            //bold with  Italic
+            val formattedText = formatBoldItalicText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("~_") || text.contains("_~")) {
+            //underline  with  Italic
+            val formattedText = formatItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_~") || text.contains("~_")) {
+            //underline  with  Italic
+            val formattedText = formatItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_~*") || text.contains("*~_")) {
+            //underline  with  Italic with  bold
+            val formattedText = formatBoldItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("~_*") || text.contains("*_~")) {
+            //underline  with  Italic with  bold
+            val formattedText = formatBoldItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else {
+            // only  single property  like only bold  ,  underline  , Italic
+            if (text != null) {
+                textView.text = formatAnyOneBoldItalicUnderlineText(text)
+            } else {
+                textView.text = ""
+            }
+        }
+
+    }
 }
 
 data class SpanInfo(val start: Int, val end: Int, val style: Any)

@@ -598,7 +598,7 @@ class ProfileFragment : Fragment() {
             id(R.string.permanent_education_number)
             iconRes(R.drawable.avd_dashboard)
             title(getString(R.string.permanent_education_number))
-            subTitle(profile.admissionNo)
+            subTitle(profile.peN_Number)
         }
         profileItem {
             id(R.string.fathers_name)

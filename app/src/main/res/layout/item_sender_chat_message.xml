@@ -56,7 +56,6 @@
             android:longClickable="true"
             android:padding="15dp"
             app:formattedNewText="@{message}"
-            app:formattedText="@{message}"
             android:textColor="@color/black"
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
