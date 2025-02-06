@@ -55,7 +55,7 @@ class FeeDefaulterModel(val feeDefaulter: FeeDefaulter?) :
                     .data(
                         arrayOf(
                             arrayOf( 80),
-                            arrayOf("Defaulter 885Amount ₹1,62,01,020", 29),
+                            arrayOf("Defaulter Amount ₹ 0.0 ", 29),
                         )
                     )
             )
