@@ -2,16 +2,13 @@ package com.app.ecarepro.ui.dashbord.model
 
 import androidx.core.view.isVisible
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.FeeDefaulter
+import com.app.ecarepro.model.FeeDefaulter
 import com.app.ecarepro.databinding.ItemFeeDefaulterCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.app.ecarepro.ui.views.subTitle
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
     ViewBindingKotlinModel<ItemFeeDefaulterCardBinding>(R.layout.item_fee_defaulter_card) {
