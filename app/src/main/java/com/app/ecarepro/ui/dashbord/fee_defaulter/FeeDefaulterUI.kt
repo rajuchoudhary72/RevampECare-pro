@@ -43,9 +43,7 @@ class FeeDefaulterUI : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getFeeDefaulters(feeTypeId, installIds)
-
     }
 
     private fun getFeeDefaulters(feeTypeId: Int?,
