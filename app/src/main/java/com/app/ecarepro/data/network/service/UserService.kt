@@ -187,9 +187,9 @@ interface UserService {
     ): CommonResponse
     @GET("Report/FeeCollection")
     suspend fun feeCollection(
-        @Query("FeeTypeId") feeTypeId: Int,
-        @Query("FromDate") fromDate: String,
-        @Query("TillDate") tillDate: String,
+        @Query("FeeTypeId") feeTypeId: Int?,
+        @Query("FromDate") fromDate: String?,
+        @Query("TillDate") tillDate: String?,
     ): FeeCollection
     @POST("User/GetCredentials")
     suspend fun getCredentials(
@@ -962,10 +962,14 @@ interface UserService {
     @GET("QuestionBank/Create")
     suspend fun getQuestionBankCreate(  ): NetworkQuestionBankCreate
 
+
+
     @GET("QuestionBank/GetSubject")
     suspend fun getQuestionBankSubject(
         @Query("ClassID") classID: Int
     ): NetworkQuestionBankSubject
+
+
 
     @GET("QuestionBank/GetChapters")
     suspend fun getQuestionBankChapters(

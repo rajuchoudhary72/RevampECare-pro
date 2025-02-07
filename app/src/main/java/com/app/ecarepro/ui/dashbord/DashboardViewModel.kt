@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.dashbord
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -16,6 +17,9 @@ import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import kotlinx.coroutines.flow.update
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -23,7 +27,7 @@ class DashboardViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
-    private val feeCollection = MutableStateFlow<FeeCollection?>(null)
+    val feeCollection = MutableStateFlow<FeeCollection?>(null)
     private val modelWiseCollection = MutableStateFlow<ModeWiseCollection?>(null)
 
     val dashboard = combine(
@@ -36,33 +40,38 @@ class DashboardViewModel @Inject constructor(
         var data = dashboardData
 
         if (feeCollection != null) {
+            Log.e("Dashboard Fee 1", data?.feeCollection.toString())
             data = dashboardData?.copy(
-                feeCollection = feeCollection.copy(
-                    collectionStartDate = dashboardData.feeCollection?.collectionStartDate,
-                    collectionEndDate = dashboardData.feeCollection?.collectionEndDate
-                )
+                feeCollection = feeCollection.copy()
             )
+            Log.e("Dashboard Fee 2", data?.feeCollection.toString())
         }
 
         if (modelWiseColl != null) {
             data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
         }
-
+        Log.e("Dashboard Data", data?.feeCollection.toString())
 
         data
     }
+    init {
+        getFeeCollection()
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        getTodayModeWiseCollection(sdf.format(Date())) { _, _ ->
+        }
+    }
     fun getFeeCollection(
-        feeTypeId: Int,
-        fromDate: String,
-        tillDate: String,
-        onResponse: (Boolean, String?) -> Unit
+        feeTypeId: Int? = null,
+        fromDate: String? = null,
+        tillDate: String? = null,
+        onResponse: ((Boolean, String?) -> Unit)? = null
     ) {
         viewModelScope.launch {
             userRepository.feeCollection(feeTypeId, fromDate, tillDate).collectLatest {
                 if (it.isSuccess) {
                     feeCollection.value = it.getOrNull()
                 }
-                onResponse.invoke(it.isSuccess, it.exceptionOrNull()?.message)
+                onResponse?.invoke(it.isSuccess, it.exceptionOrNull()?.message)
             }
         }
     }

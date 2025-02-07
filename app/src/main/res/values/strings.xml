@@ -850,7 +850,7 @@
     <string name="fee_book">Fee Book</string>
     <string name="due_amount">Due Amount</string>
     <string name="timetable_of">Timetable of %1$s</string>
-    <string name="circuler_details">Circuler Details</string>
+    <string name="circuler_details">Circular Details</string>
     <string name="notice_details">Notice Details</string>
     <string name="must_read">Must Read</string>
     <string name="do_you_want_to_send_push_notification">Do you want to send push notification?</string>
@@ -868,6 +868,7 @@
     <string name="logout_all_devices">Logout All Devices</string>
     <string name="active_sessions">Active Sessions</string>
     <string name="check_active_sessions">Check Active Sessions</string>
+
     <string name="class_wise_breakdown">Class-Wise Breakdown</string>
     <string name="default_amount">Default Amount</string>
     <string name="defaulter">Defaulter</string>
@@ -882,24 +883,7 @@
     <string name="all_fee_type">All Fee Type</string>
     <string name="all_installments">All Installments</string>
 
-
-    <string-array name="class_options">
-        <item>All Classes</item>
-        <item>Class 6</item>
-        <item>Class 7</item>
-    </string-array>
-
-    <string-array name="section_options">
-        <item>All Sections</item>
-        <item>Section A</item>
-        <item>Section B</item>
-    </string-array>
-
-    <string-array name="month_options">
-        <item>All Months</item>
-        <item>January</item>
-        <item>February</item>
-    </string-array>
-
-
+    <string name="father_aadhaar_no">Father Aadhaar No</string>
+    <string name="father_pan">Father PAN</string>
 </resources>
+

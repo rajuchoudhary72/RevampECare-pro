@@ -120,9 +120,9 @@ class DashboardFragment : Fragment() {
             }
             if (data.showFeeCollection == true)
                 buildEstimatedCollectionCard(
-                    data.feeCollection,
-                    data.feeCollection?.collectionStartDate,
-                    data.feeCollection?.collectionEndDate
+                    dashboardViewModel.feeCollection.value,
+                    data.collectionStartDate,
+                    data.collectionEndDate
                 )
 
 
@@ -249,7 +249,7 @@ class DashboardFragment : Fragment() {
         collectionModeWise: CollectionModeWise?,
         sessionStartDate: String?
     ) {
-        collectionModeWise ?: return
+       collectionModeWise ?: return
         todayModeWiseCollectionCard {
             id(R.id.today_mode_collection)
             isExpanded(isExpanded)
@@ -463,7 +463,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: FeeDefaulter?) {
-        feeDefaulter ?: return
+        //feeDefaulter ?: return
         FeeDefaulterModel(feeDefaulter)
             .id("121")
             .addTo(this)

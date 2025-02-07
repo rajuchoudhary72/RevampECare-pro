@@ -97,15 +97,19 @@ class MessageFragment : Fragment() {
             messageViewModel.isFilterApplied.update { false }
         }
         arguments?.let {args ->
-            if(args.getString("ID").isNullOrEmpty().not()){
-                findNavController().navigate(
-                    R.id.chatFragment,
-                    bundleOf(
-                        "ID" to args.getString("ID"),
-                        "MessageType" to MessageType.INBOX.value
+            if (args.getString("ID")=="Menu"){
+
+            }else{
+                if(args.getString("ID").isNullOrEmpty().not()){
+                    findNavController().navigate(
+                        R.id.chatFragment,
+                        bundleOf(
+                            "ID" to args.getString("ID"),
+                            "MessageType" to MessageType.INBOX.value
+                        )
                     )
-                )
-                args.remove("ID")
+                    args.remove("ID")
+                }
             }
         }
     }

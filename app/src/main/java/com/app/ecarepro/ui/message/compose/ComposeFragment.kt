@@ -159,7 +159,7 @@ class ComposeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        composeViewModel.fetchMessageSettings()
         setUpViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -465,7 +465,7 @@ class ComposeFragment : Fragment() {
     }
 
     private fun setUpViews() {
-
+        binding.btnAddAttachment.bringToFront()
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.btnReplyMessage.setOnClickListener {
@@ -492,6 +492,7 @@ class ComposeFragment : Fragment() {
 
             findNavController().navigate(R.id.selectRecipientsFragment)
         }
+
 
         binding.btnAddAttachment.setOnClickListener {
             binding.cardAttachmentOptions.isVisible = binding.cardAttachmentOptions.isVisible.not()

@@ -186,7 +186,7 @@ interface UserRepository {
     ): LoginResponseDto
 
     suspend fun feeCollection(
-        feeTypeID: Int, fromDate: String, tillDate: String
+        feeTypeID: Int?, fromDate: String?, tillDate: String?
     ): Flow<Result<FeeCollection>>
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto

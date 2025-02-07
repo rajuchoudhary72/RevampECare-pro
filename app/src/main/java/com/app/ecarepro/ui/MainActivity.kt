@@ -556,7 +556,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             appUpdateManager.registerListener(installStateUpdatedListener)
-        }catch (e:RuntimeException){
+        } catch (e: RuntimeException) {
             e.printStackTrace()
         }
     }
@@ -772,7 +772,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
+                                getFragmentId(parentMenu.menuID, menu.chMenuID, "Menu")
                             }
                         }
 
@@ -783,7 +783,12 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
+                                    getFragmentId(
+                                        parentMenu.menuID,
+                                        menu.chMenuID,
+                                        childChildMenu.sbChMenuID,
+                                        "Menu"
+                                    )
                                 }
                             }
                         }
@@ -1018,7 +1023,12 @@ class MainActivity : AppCompatActivity() {
             customTabsIntent.intent.setPackage(packageName)
             customTabsIntent.launchUrl(this, uri!!)
         } else {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+            try {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)
+            } catch (e: ActivityNotFoundException) {
+                showMessage("No browser available to handle the URL")
+            }
         }
     }
 
@@ -1045,9 +1055,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-           // navController.navigate(R.id.webViewFragment, bundle)
+            // navController.navigate(R.id.webViewFragment, bundle)
             Log.d("WebURL", url)
-             openCustomTab(tabIntent, Uri.parse(url))
+            openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
@@ -1102,7 +1112,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
+    fun getFragmentId(
+        menuID: Int,
+        childMenuId: Int,
+        refId: String? = null,
+        from: String = "other"
+    ) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1344,7 +1359,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
+    fun getFragmentId(
+        menuID: Int,
+        childMenuId: Int,
+        childChildMenuId: Int,
+        from: String = "other"
+    ) {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1814,7 +1834,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        isActivityPaused = true
+        try {
+            try {
+                isActivityPaused = true
+            } catch (e: RuntimeException) {
+                e.printStackTrace()
+            }
+
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        }
+
     }
 
     override fun onResume() {
@@ -1822,15 +1852,15 @@ class MainActivity : AppCompatActivity() {
         AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
         showLoader(false)
 
-         if (isActivityPaused) {
-             syncData(false)
-             isActivityPaused = false
-         } else {
-             lifecycleScope.launch {
-                 delay(20.seconds)
-                 syncData(true)
-             }
-         }
+        if (isActivityPaused) {
+            syncData(false)
+            isActivityPaused = false
+        } else {
+            lifecycleScope.launch {
+                delay(20.seconds)
+                syncData(true)
+            }
+        }
     }
 
     companion object {

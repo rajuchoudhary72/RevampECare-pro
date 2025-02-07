@@ -315,9 +315,10 @@
                     <ImageView
                         android:id="@+id/btnAddAttachment"
                         isVisible="@{viewModel.attachmentVisible}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:padding="8dp"
+                        android:scaleType="centerInside"
                         android:src="@drawable/baseline_attach_file_24"
                         app:layout_constraintBottom_toBottomOf="@+id/message"
                         app:layout_constraintEnd_toEndOf="@+id/message"

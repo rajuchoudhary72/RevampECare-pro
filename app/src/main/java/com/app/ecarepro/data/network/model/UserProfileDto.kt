@@ -105,6 +105,8 @@ data class Profile(
     val admissionDate: String?,
     @SerializedName("admissionNo")
     val admissionNo: String?,
+    @SerializedName("peN_Number")
+    val peN_Number: String?,
     @SerializedName("billNumber")
     val billNumber: String?,
     @SerializedName("apaaR_ID")
@@ -260,6 +262,8 @@ data class StudentProfile(
     val dob: String?,
     @SerializedName("fatherAadhaarNumber")
     val fatherAadhaarNumber: String?,
+    @SerializedName("fatherPAN")
+    val fatherPAN: String?,
     @SerializedName("fatherAnnualIncome")
     val fatherAnnualIncome: String?,
     @SerializedName("fatherDOB")

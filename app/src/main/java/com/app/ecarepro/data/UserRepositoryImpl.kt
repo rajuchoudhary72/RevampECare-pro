@@ -1430,9 +1430,9 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun feeCollection(
-        feeTypeID: Int,
-        fromDate: String,
-        tillDate: String
+        feeTypeID: Int?,
+        fromDate: String?,
+        tillDate: String?
     ): Flow<Result<FeeCollection>> {
         return flow {
             try {
