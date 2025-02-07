@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,7 +32,7 @@ import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.DataValue
 import com.app.ecarepro.data.network.model.FeeCollection
-import com.app.ecarepro.data.network.model.FeeDefaulter
+import com.app.ecarepro.model.FeeDefaulter
 import com.app.ecarepro.data.network.model.LibraryDetails
 import com.app.ecarepro.data.network.model.Questionnaire
 import com.app.ecarepro.data.network.model.StaffAttendance
