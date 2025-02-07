@@ -129,8 +129,6 @@ class ChatFragment : Fragment() {
     }
 
 
-
-
     private fun setUpViews() {
 
         binding.toolbar.setNavigationOnClickListener {
