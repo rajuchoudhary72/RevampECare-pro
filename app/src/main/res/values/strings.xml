@@ -850,7 +850,7 @@
     <string name="fee_book">Fee Book</string>
     <string name="due_amount">Due Amount</string>
     <string name="timetable_of">Timetable of %1$s</string>
-    <string name="circuler_details">Circuler Details</string>
+    <string name="circuler_details">Circular Details</string>
     <string name="notice_details">Notice Details</string>
     <string name="must_read">Must Read</string>
     <string name="do_you_want_to_send_push_notification">Do you want to send push notification?</string>
@@ -868,4 +868,6 @@
     <string name="logout_all_devices">Logout All Devices</string>
     <string name="active_sessions">Active Sessions</string>
     <string name="check_active_sessions">Check Active Sessions</string>
+    <string name="father_aadhaar_no">Father Aadhaar No</string>
+    <string name="father_pan">Father PAN</string>
 </resources>
