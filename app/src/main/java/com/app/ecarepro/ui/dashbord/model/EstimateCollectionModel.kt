@@ -4,7 +4,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.FeeCollection
-import com.app.ecarepro.data.network.model.FeeType
+import com.app.ecarepro.model.FeeType
 import com.app.ecarepro.databinding.ItemEstimateCollectionCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.app.ecarepro.utils.rupeeText

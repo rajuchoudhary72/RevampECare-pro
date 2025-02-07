@@ -137,6 +137,7 @@ import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -1076,5 +1077,11 @@ interface UserService {
     suspend fun removeSession(
         @Query("SessionID") sessionID: String?,
     ): CommonResponse
+
+    @GET("Report/FeeDefaulters")
+    suspend fun getFeeDefaulters(
+        @Query("FeeTypeId") feeTypeId: Int?,
+        @Query("InstallIds") installIds: Int?
+    ): NetworkFeeDefaulter
 
 }

@@ -45,6 +45,7 @@ import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.Purpose
 
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -859,5 +860,9 @@ interface UserRepository {
      sessionID: String?,
     ): CommonResponse
 
+    suspend fun getFeeDefaulters(
+         feeTypeId: Int?,
+        installIds: Int?
+    ): NetworkFeeDefaulter
 
 }

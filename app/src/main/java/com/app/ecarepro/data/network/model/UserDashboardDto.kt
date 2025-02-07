@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.model
 
+import com.app.ecarepro.model.FeeDefaulter
+import com.app.ecarepro.model.FeeType
 import com.app.ecarepro.utils.Constant.Companion.BASE_URL_COM
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

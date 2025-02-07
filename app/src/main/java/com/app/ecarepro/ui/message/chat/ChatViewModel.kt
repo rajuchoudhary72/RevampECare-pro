@@ -37,7 +37,7 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val id = savedStateHandle.getLiveData("ID", initialValue = "")
-     val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
+    val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
 
     val messageBody = MutableStateFlow("")
 

@@ -150,6 +150,7 @@ import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -1422,6 +1423,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun removeSession(sessionID: String?): CommonResponse {
         return userService.removeSession(sessionID)
+    }
+
+    override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: Int?): NetworkFeeDefaulter {
+        return userService.getFeeDefaulters(feeTypeId, installIds)
     }
 
     override suspend fun feeCollection(
