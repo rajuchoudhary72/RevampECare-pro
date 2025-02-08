@@ -83,7 +83,7 @@ data class UserDashboardDto(
     @SerializedName("feeCollection")
     val feeCollection: FeeCollection?,
     @SerializedName("feeDafaulter")
-    val feeDafaulter: FeeDefaulter?,
+    val feeDafaulter: NetworkFeeDefaulter?,
     @SerializedName("bankBalance")
     val bankBalance: List<BankBalance>?,
     @SerializedName("stuStatusWiseStatistics")

@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.CollectionModeWise
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
@@ -28,14 +30,16 @@ class DashboardViewModel @Inject constructor(
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     val feeCollection = MutableStateFlow<FeeCollection?>(null)
+    val feeDefaulter = MutableStateFlow<NetworkFeeDefaulter?>(null)
     private val modelWiseCollection = MutableStateFlow<ModeWiseCollection?>(null)
 
     val dashboard = combine(
         flow = userDataStore.getDashboardData(),
         flow2 = userDataStore.getFeeds(),
         flow3 = feeCollection,
-        flow4 = modelWiseCollection
-    ) { dashboardData, feeds, feeCollection, modelWiseColl ->
+        flow4 = modelWiseCollection,
+        flow5 = feeDefaulter
+    ) { dashboardData, feeds, feeCollection, modelWiseColl,feeDefaulter ->
 
         var data = dashboardData
 
@@ -46,6 +50,14 @@ class DashboardViewModel @Inject constructor(
             )
             Log.e("Dashboard Fee 2", data?.feeCollection.toString())
         }
+        if (feeDefaulter != null) {
+            Log.e("Dashboard Fee 1", data?.feeDafaulter.toString())
+            data = dashboardData?.copy(
+                feeDafaulter = feeDefaulter.copy()
+            )
+            Log.e("Dashboard Fee 2", data?.feeCollection.toString())
+        }
+
 
         if (modelWiseColl != null) {
             data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
@@ -59,7 +71,26 @@ class DashboardViewModel @Inject constructor(
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         getTodayModeWiseCollection(sdf.format(Date())) { _, _ ->
         }
+        getFeeDefaulters(0, 0)
     }
+
+
+
+    fun getFeeDefaulters(
+        feeTypeId: Int?,
+        installIds: Int?,
+        onResponse: ((Boolean, String?) -> Unit)? = null
+    ) {
+        viewModelScope.launch {
+            userRepository.getFeeDefaultersDas(feeTypeId, installIds).collectLatest {
+                if (it.isSuccess) {
+                    feeDefaulter.value = it.getOrNull()
+                }
+                onResponse?.invoke(it.isSuccess, it.exceptionOrNull()?.message)
+            }
+        }
+    }
+
     fun getFeeCollection(
         feeTypeId: Int? = null,
         fromDate: String? = null,
