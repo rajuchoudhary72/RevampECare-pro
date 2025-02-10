@@ -17,5 +17,7 @@ data class ReplyMessageRequestDto(
     @SerializedName("receiverID")
     val receiverID: Int?,
     @SerializedName("receiverType")
-    val receiverType: Int?
+    val receiverType: Int?,
+    @SerializedName("attachment")
+    val attachment: Attachment?
 )

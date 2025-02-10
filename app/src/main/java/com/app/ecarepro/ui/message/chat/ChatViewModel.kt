@@ -1,24 +1,39 @@
 package com.app.ecarepro.ui.message.chat
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
 import android.net.wifi.WifiManager
+import android.util.Base64
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.Attachment
+import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.Message
+import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.Recipient
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.Sender
+import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.repository.MessageRepository
+import com.app.ecarepro.model.ComposeMessageType
+import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
+import com.app.ecarepro.utils.FileAccess
+import com.app.ecarepro.utils.getFile
+import com.lassi.data.media.MiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -26,6 +41,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.coroutines.flow.filter
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
 
 
 @HiltViewModel
@@ -37,12 +57,34 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val id = savedStateHandle.getLiveData("ID", initialValue = "")
-    val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
+     val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
 
     val messageBody = MutableStateFlow("")
+    val message = MutableStateFlow("")
+
+    val composeMessageType =
+        savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.ONLY_APP_MESSAGE)
 
     private lateinit var user: NetworkUserDetailsDto
 
+    fun setAttachments(attachments: List<MiMedia>) {
+        this@ChatViewModel.attachments.update { attachments }
+    }
+
+    fun removeAttachment(attachment: MiMedia) {
+        attachments.update { current -> current.filterNot { it == attachment } }
+    }
+
+    private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
+    val attachmentVisible = combine(
+        flow = composeMessageType,
+        flow2 = userDataStore.getUserAsFlow(),
+        flow3 = userDataStore.getMessageSettings()
+    ) { messageType, user, messageSettings ->
+        val hideMessageAttachment =
+            messageSettings?.media == null || (messageSettings.media.browseAudio == false && messageSettings.media.browsePDF == false && messageSettings.media.browseImg == false)
+        messageType == ComposeMessageType.ONLY_APP_MESSAGE && hideMessageAttachment.not()
+    }.asLiveData()
 
     val uiState = id.asFlow()
         .filter { it.isNullOrEmpty().not() }
@@ -87,12 +129,8 @@ class ChatViewModel @Inject constructor(
         )
 
     init {
-        try {
-            viewModelScope.launch {
-                user = userDataStore.getUser()!!
-            }
-        }catch (e:NullPointerException){
-            e.printStackTrace()
+        viewModelScope.launch {
+            user = userDataStore.getUser()!!
         }
     }
 
@@ -108,10 +146,11 @@ class ChatViewModel @Inject constructor(
                     ReplyMessageRequestDto(
                         body = messageBody.value.trim(),
                         ipAddress = context.getDeviceIpAddress(),
-                        msgType = 1,
+                        msgType = getMessageType(),
                         receiverType = uiState.receiverType,
                         receiverID = uiState.receiverID,
-                        msgID = uiState.msgID
+                        msgID = uiState.msgID,
+                        attachment = getAttachment()
                     )
                 )
                 .collectLatest { result ->
@@ -129,7 +168,157 @@ class ChatViewModel @Inject constructor(
     }
 
 
+    private fun getMessageType(): Int {
+        val attachments = attachments.value
+        return if (attachments.isEmpty()) {
+            1
+        } else if (attachments.all { AttachmentType.PDF.name == it.name }) {
+            5
+        } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
+            3
+        } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
+            3
+        }else {
+            2
+        }
+    }
+    private fun getMultipleAttachment(): List<String>? {
+        val attachments = attachments.value
+        if (getMessageType()==1)
+            return null
+        /*  if (attachments.isEmpty() || attachments.size == 1)
+                    return null*/
+        return attachments.map { attachment ->
+            if (isPdf(attachment)) {
+                if (attachment.name == AttachmentType.RECORDING.name) {
+                    val file = File(attachment.path)
+                    getBase64StringFromUri(file) ?: ""
+                } else {
+                    val file = context.getFile(attachment.path?.toUri())
+                    getBase64StringFromUri(file!!.toUri()) ?: ""
+                }
+            } else {
+                FileAccess.bitmapToByteArrayBase64String(
+                    FileAccess.bitmapFromFile(
+                        context,
+                        attachment.path!!
+                    )
+                )
+            }
+        }
+    }
+    private fun getAttachment(): Attachment? {
+        val attachments = attachments.value
+
+        return if (attachments.isEmpty()) {
+            null
+        }else  if (getMessageType()==1)
+            return null
+        else if (attachments.size == 1) {
+            val attachment = attachments.first()
+            if (isPdf(attachment)) {
+                if (attachment.name == AttachmentType.RECORDING.name) {
+                    val file = File(attachment.path)
+                    val attach = getBase64StringFromUri(file)
+                    Attachment(
+                        attachment = attach,
+                        fileExt = "mp3",
+                        fileURL = null
+                    )
+                } else {
+                    val file = context.getFile(attachment.path?.toUri())
+                    val attach = getBase64StringFromUri(file!!.toUri())
+                    Attachment(
+                        attachment = attach,
+                        fileExt = getFileExtension(file),
+                        fileURL = null
+                    )
+                }
+            } else {
+                val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
+                val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                //  saveBitmapAndGetExtension(bitmap)
+                val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                //      val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+                Attachment(
+                    attachment = imageString,
+                    fileExt = imageExt,
+                    fileURL = null
+                )
+            }
+        } else {
+            null
+        }
+    }
+
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
+    private fun isPdf(attachment: MiMedia) =
+        mutableListOf(
+            AttachmentType.PDF.name,
+            AttachmentType.AUDIO.name,
+            AttachmentType.RECORDING.name,
+            AttachmentType.GALLERY.name,
+        ).contains(attachment.name)
+
+    private fun getFileExtension(file: File): String {
+        val name = file.name
+        val lastIndexOf = name.lastIndexOf(".")
+        if (lastIndexOf == -1) {
+            return ""
+        }
+        return name.substring(lastIndexOf + 1)
+    }
+
+    private fun getBase64StringFromUri(uri: Uri): String? {
+        val imageStream: InputStream
+        return try {
+            imageStream = requireNotNull(context.contentResolver.openInputStream(uri))
+            val bytes: ByteArray = readBytes(
+                imageStream
+            )
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+    private fun getBase64StringFromUri(file: File): String? {
+        val imageStream: InputStream
+        return try {
+            imageStream = FileInputStream(file)
+            val bytes: ByteArray = readBytes(
+                imageStream
+            )
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+    @Throws(IOException::class)
+    private fun readBytes(inputStream: InputStream): ByteArray {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+
+        var len: Int
+        while ((inputStream.read(buffer).also { len = it }) != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+
+        return byteBuffer.toByteArray()
+    }
+
 }
+
+
 
 fun Context.getDeviceIpAddress(): String {
     val wifiMan = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
@@ -149,7 +338,6 @@ sealed interface ChatUiState {
 
     object EmptyInbox : ChatUiState
 
-
     /*  val senderDTL: Sender*/
     data class Success(
         val messages: List<Message>,
@@ -160,7 +348,7 @@ sealed interface ChatUiState {
         val receiverType: Int?,
         val subject: String?,
         val canReply: Boolean?,
-        val senderDTL: Sender?
+        val senderDTL: Sender?,
     ) : ChatUiState
 
     data class Error(
@@ -184,4 +372,25 @@ enum class MessageType(val value: String) {
         }
     }
 
+}
+
+sealed interface ComposeUiState {
+
+    object Loading : ComposeUiState
+
+    data class Success(
+        val composeMessageType: ComposeMessageType,
+        val attachments: List<MiMedia>,
+        val contacts: List<Contact>,
+        val smsTypes: List<SmsType>,
+        val messageSettings: MessageSettings?
+    ) : ComposeUiState
+
+    data class Error(
+        val error: Throwable
+    ) : ComposeUiState
+
+    fun isLoading() = this == Loading
+
+    fun getErrorOrNull() = if (this is Error) this.error else null
 }

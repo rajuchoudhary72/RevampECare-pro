@@ -1,8 +1,14 @@
 package com.app.ecarepro.ui.message.chat
 
+import android.Manifest
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.style.CharacterStyle
@@ -12,6 +18,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -23,13 +31,19 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
+import com.app.ecarepro.attachment
+import com.app.ecarepro.data.network.model.Contact
+import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.Sender
 import com.app.ecarepro.databinding.FragmentChatBinding
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.receiverChatMessage
+import com.app.ecarepro.recipientChip
 import com.app.ecarepro.senderChatMessage
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.compose.AttachmentType
+import com.app.ecarepro.ui.message.compose.ComposeUiState
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant.Companion.boldFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.boldFindStartIndexes
@@ -37,6 +51,7 @@ import com.app.ecarepro.utils.Constant.Companion.italicFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
+import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileClickListener
 import com.app.ecarepro.utils.imageUrl
 import com.rubensousa.decorator.LinearMarginDecoration
@@ -45,6 +60,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.app.ecarepro.utils.isAudioUrl
+import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
+import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
+import com.lassi.data.media.MiMedia
+import java.io.File
+import java.util.UUID
 
 
 @AndroidEntryPoint
@@ -54,6 +74,8 @@ class ChatFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val chatViewModel: ChatViewModel by viewModels()
+    private var lastClickAttachmentType: AttachmentType? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,6 +103,32 @@ class ChatFragment : Fragment() {
         }
     }
 
+    private fun handleAttachmentTypes(messageSettings: MessageSettings?) {
+        messageSettings?.let { settings ->
+            binding.btnCamera.isVisible = settings.media?.browseImg == true
+            binding.btnGallery.isVisible = settings.media?.browseImg == true
+            binding.btnRecord.isVisible = settings.media?.browseAudio == true
+            binding.btnBrowseAudio.isVisible = settings.media?.browseAudio == true
+            binding.btnBrowsePdf.isVisible = settings.media?.browsePDF == true
+        }
+    }
+
+    private fun buildAttachmentModels(attachments: List<MiMedia>) {
+        binding.attachments.isVisible = attachments.isNotEmpty()
+        binding.attachments.withModels {
+            attachments.forEachIndexed { index, attachment ->
+                attachment {
+                    id(index)
+                    image(attachment.path)
+                    onClickRemove { _ ->
+                        chatViewModel.removeAttachment(attachment)
+                    }
+                }
+            }
+        }
+    }
+
+
     private fun setUpViews() {
 
         binding.toolbar.setNavigationOnClickListener {
@@ -96,6 +144,60 @@ class ChatFragment : Fragment() {
             }
         }
 
+        binding.btnAddAttachment.setOnClickListener {
+            binding.cardAttachmentOptions.isVisible = binding.cardAttachmentOptions.isVisible.not()
+        }
+
+        binding.btnBrowsePdf.setOnClickListener {
+            hideAttachmentCard()
+            lastClickAttachmentType = AttachmentType.PDF
+            launchPicker()
+        }
+
+        binding.btnBrowseAudio.setOnClickListener {
+            hideAttachmentCard()
+            lastClickAttachmentType = AttachmentType.AUDIO
+            launchPicker()
+        }
+
+
+
+        binding.btnGallery.setOnClickListener {
+            hideAttachmentCard()
+            lastClickAttachmentType = AttachmentType.GALLERY
+            // Request necessary permissions and open the gallery
+            if (checkAndRequestPermissions()) {
+                // Permission is already granted, start image picker
+                launchPicker()
+            }
+            // requestExternalStoragePermission()
+        }
+
+        binding.btnRecord.setOnClickListener {
+            hideAttachmentCard()
+            lastClickAttachmentType = AttachmentType.AUDIO
+            openAudioRecorder()
+        }
+        FileAccess.checkPermission(this@ChatFragment)
+        binding.btnCamera.setOnClickListener {
+            try {
+                hideAttachmentCard()
+                lastClickAttachmentType = AttachmentType.CAMERA
+                FileAccess.checkPermission(this@ChatFragment)
+                // checkCameraPermissions()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(300)
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                }
+            } catch (e: SecurityException) {
+                e.message
+            }
+
+
+        }
+
+
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
             chatViewModel.refresh()
@@ -110,6 +212,200 @@ class ChatFragment : Fragment() {
 
     }
 
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val bitmap = result.data?.extras?.get("data") as Bitmap
+                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                file.writeBitmap(
+                    bitmap, Bitmap.CompressFormat.PNG, 100
+                )
+                chatViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
+            }
+        }
+
+    private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
+        outputStream().use { out ->
+            bitmap.compress(format, quality, out)
+            out.flush()
+        }
+    }
+
+
+    private fun checkAndRequestPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionList.toTypedArray(),
+                1001
+            )
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun openAudioRecorder() {
+
+        VoiceSenderDialog(object : AudioRecordListener {
+            override fun onAudioReady(audioUri: String?) {
+                chatViewModel.setAttachments(
+                    listOf(
+                        MiMedia(
+                            path = audioUri,
+                            name = AttachmentType.RECORDING.name
+                        )
+                    )
+                )
+            }
+
+            override fun onReadyForRecord() {}
+
+            override fun onRecordFailed(errorMessage: String?) {
+                mainActivity().showMessage(errorMessage ?: "")
+            }
+        }).show(childFragmentManager, "VOICE")
+    }
+
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedImages = mutableListOf<Uri>()
+                result.data?.let { data ->
+                    val clipData = data.clipData
+                    if (clipData != null) {
+                        for (i in 0 until clipData.itemCount) {
+                            if (selectedImages.size < 7) {
+                                val imageUri = clipData.getItemAt(i).uri
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                    } else {
+                        data.data?.let { imageUri ->
+                            if (selectedImages.size < 7) {
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                    }
+                    chatViewModel.setAttachments(selectedImages.map {
+                        MiMedia(
+                            path = it.toString(),
+                            name = lastClickAttachmentType?.name
+                        )
+                    })
+                }
+            }
+        }
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
+    }
+
+    private fun launchPicker() {
+        when (lastClickAttachmentType) {
+            AttachmentType.GALLERY -> {
+                openGallery()
+            }
+            /* AttachmentType.GALLERY -> {
+                 // Request necessary permissions and open the gallery
+                 if (checkAndRequestPermissions()) {
+                     launchPhotoPicker()
+                 }
+                 //  launchPhotoPicker()
+             }*/
+
+            AttachmentType.AUDIO -> {
+                launchAudioPicker()
+            }
+
+            AttachmentType.PDF -> {
+                launchPdfPicker()
+            }
+
+            else -> {}
+        }
+    }
+
+    private fun launchAudioPicker() {
+        val intent = Intent()
+        intent.type = "audio/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        pdfLauncher.launch(intent)
+    }
+
+    private val pdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let { data ->
+                    if (data.data != null) {
+                        val mImageUri: Uri = data.data!!
+                        chatViewModel.setAttachments(
+                            listOf(
+                                MiMedia(
+                                    path = mImageUri.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            )
+                        )
+                    } else {
+                        if (data.clipData != null) {
+                            val count: Int = data.clipData!!.itemCount
+                            val files = mutableListOf<MiMedia>()
+                            for (i in 0 until count) {
+                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                                files.add(
+                                    MiMedia(
+                                        path = imageUri.toString(),
+                                        name = lastClickAttachmentType?.name
+                                    )
+                                )
+                            }
+                            chatViewModel.setAttachments(files)
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun launchPdfPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*" // Allow any file type
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        pdfLauncher.launch(intent)
+    }
+
+    private fun hideAttachmentCard() {
+        binding.cardAttachmentOptions.isVisible = false
+    }
+
     private fun showRecipients() {
         RecipientsDialog.getInstance(
             (chatViewModel.uiState.value as ChatUiState.Success).recipients
@@ -117,12 +413,15 @@ class ChatFragment : Fragment() {
             .show(childFragmentManager, "")
     }
 
+
     private fun handleUiState(uiState: ChatUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
         uiState.getErrorOrNull()?.let { error ->
             mainActivity().showMessage(error.message ?: "")
         }
         if (uiState is ChatUiState.Success || uiState == ChatUiState.EmptyInbox) {
+           /* handleAttachmentTypes(uiState.messageSettings)
+            buildAttachmentModels(uiState.attachments)*/
             binding.recyclerView.withModels {
                 when (uiState) {
                     ChatUiState.EmptyInbox -> {
@@ -189,6 +488,7 @@ class ChatFragment : Fragment() {
             }
         }
     }
+
     private fun setUpToolbar(sender: Sender) {
         if (chatViewModel.messageType==MessageType.INBOX.value){
             binding.apply {
@@ -248,12 +548,12 @@ class ChatFragment : Fragment() {
         return pdfExtension == extension || doc == extension || docx == extension
     }
 
-    /* fun isAudioUrl(url: String): Boolean {
-         val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
-         val extension = url.substringAfterLast(".", "").lowercase()
-         return audioExtensions.contains(extension)
-     }
- */
+   /* fun isAudioUrl(url: String): Boolean {
+        val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+        val extension = url.substringAfterLast(".", "").lowercase()
+        return audioExtensions.contains(extension)
+    }
+*/
 
     override fun onDestroyView() {
         super.onDestroyView()

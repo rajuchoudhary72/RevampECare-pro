@@ -5,6 +5,9 @@
 
     <data>
 
+        <import type="com.app.ecarepro.model.ComposeMessageType" />
+
+
         <variable
             name="viewModel"
             type="com.app.ecarepro.ui.message.chat.ChatViewModel" />
@@ -129,45 +132,209 @@
                     tools:itemCount="1"
                     tools:listitem="@layout/item_sender_chat_message" />
 
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAttachmentOptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/horizontal_margin"
+                    android:layout_marginBottom="@dimen/horizontal_margin"
                     android:visibility="gone"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="2dp"
+                    app:contentPadding="10dp"
+                    app:layout_constraintBottom_toTopOf="@id/send_message_layout"
+                    app:strokeWidth="0dp"
+                    tools:visibility="visible">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCamera"
+                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Camera"
+                            app:icon="@drawable/ic_camera"
+                            app:iconGravity="textTop"
+                            app:iconPadding="5dp"
+                            app:layout_constraintEnd_toStartOf="@+id/btnGallery"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnGallery"
+                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Browse Photo"
+                            app:icon="@drawable/ic_add_photo"
+                            app:iconGravity="textTop"
+                            app:iconPadding="5dp"
+                            app:layout_constraintEnd_toStartOf="@+id/btnRecord"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/btnCamera"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRecord"
+                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Record"
+                            app:icon="@drawable/ic_mic"
+                            app:iconGravity="textTop"
+                            app:iconPadding="5dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/btnGallery"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnBrowseAudio"
+                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Browse Audio"
+                            app:icon="@drawable/ic_add_audio"
+                            app:iconGravity="textTop"
+                            app:iconPadding="5dp"
+                            app:layout_constraintEnd_toEndOf="@+id/btnCamera"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="@+id/btnCamera"
+                            app:layout_constraintTop_toBottomOf="@+id/btnCamera"
+                            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnBrowsePdf"
+                            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:insetLeft="0dp"
+                            android:insetTop="0dp"
+                            android:insetRight="0dp"
+                            android:insetBottom="0dp"
+                            android:text="Browse PDF"
+                            app:icon="@drawable/ic_add_pdf"
+                            app:iconGravity="textTop"
+                            app:iconPadding="5dp"
+                            app:layout_constraintEnd_toEndOf="@+id/btnGallery"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="@+id/btnGallery"
+                            app:layout_constraintTop_toBottomOf="@+id/btnCamera"
+                            app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerSmall" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+
+                <LinearLayout
                     android:id="@+id/send_message_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:padding="16dp"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent">
 
-                    <EditText
-                        android:id="@+id/message"
-                        android:layout_width="0dp"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:autofillHints="true"
-                        android:background="@drawable/bg_outline_round_corner_green_10"
-                        android:maxLines="4"
-                        android:inputType="textMultiLine"
-                        android:minHeight="42dp"
-                        android:paddingHorizontal="10dp"
-                        android:scrollbars="vertical"
-                        android:text="@={viewModel.messageBody}"
-                        tools:ignore="LabelFor" />
+                        android:background="#0D5FA150"
+                        android:padding="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_reply_message"
-                        style="@style/Widget.Material3.Button.Icon"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_marginStart="10dp"
-                        android:enabled="@{viewModel.messageBody.length()>0}"
-                        android:gravity="center_vertical"
-                        android:insetTop="0dp"
-                        android:insetBottom="0dp"
-                        app:cornerRadius="10dp"
-                        app:icon="@drawable/ic_sent"
-                        app:iconTint="@color/white" />
+                        <EditText
+                            android:id="@+id/message"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1"
+                            android:autofillHints="true"
+                            android:background="@drawable/bg_outline_round_corner_green_10"
+                            android:fontFamily="@font/calibri_regular"
+                            android:hint="@string/enter_your_message_here"
+                            android:inputType="textMultiLine"
+                            android:maxLines="4"
+                            android:minHeight="42dp"
+                            android:padding="10dp"
+                            android:scrollbars="vertical"
+                            android:text="@={viewModel.message}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/btn_reply_message"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="LabelFor" />
+
+                        <ImageView
+                            android:id="@+id/btnAddAttachment"
+                            isVisible="@{viewModel.attachmentVisible}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_attach_file_24"
+                            app:layout_constraintBottom_toBottomOf="@+id/message"
+                            app:layout_constraintEnd_toEndOf="@+id/message"
+                            app:layout_constraintTop_toTopOf="@+id/message"
+                            tools:ignore="ContentDescription" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_reply_message"
+                            style="@style/Widget.Material3.Button.Icon"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:enabled="@{viewModel.message.length()>0}"
+                            android:gravity="center_vertical"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_sent"
+                            app:iconTint="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <com.airbnb.epoxy.Carousel
+                        android:id="@+id/attachments"
+                        isVisible="@{viewModel.composeMessageType == ComposeMessageType.ONLY_APP_MESSAGE}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#0D5FA150"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                 </LinearLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

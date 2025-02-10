@@ -74,7 +74,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:inputType="none"
-                                    app:simpleItems="@array/task_priority_items"
                                     tools:ignore="LabelFor"
                                     android:textSize="14sp"
 
@@ -99,8 +98,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:inputType="none"
-                                    app:simpleItems="@array/task_priority_items"
-                                    tools:ignore="LabelFor"
+                                    android:focusable="false"
+                                    android:clickable="true"
                                     android:textSize="14sp"
                                     />
 
@@ -210,7 +209,7 @@
                                     android:layout_height="wrap_content"
                                     android:textSize="14sp"
                                     android:gravity="center"
-                                    android:textColor="@color/green" />
+                                    android:textColor="@color/red" />
                             </LinearLayout>
 
 
@@ -240,7 +239,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/class_wise_breakdown"
                             android:textStyle="bold"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="@color/green"
                             android:padding="8dp" />
 
