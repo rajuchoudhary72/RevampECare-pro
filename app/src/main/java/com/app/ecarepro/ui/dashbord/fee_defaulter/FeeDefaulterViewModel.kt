@@ -24,7 +24,7 @@ class FeeDefaulterViewModel @Inject constructor(
 
     fun  getFeeDefaulters(
         feeTypeId: Int?,
-        installIds: Int?
+        installIds: String?
     )=viewModelScope.launch {
         runCatching {
             feeDefaulterMutableStateFlow.value = NetworkResult.Loading()
