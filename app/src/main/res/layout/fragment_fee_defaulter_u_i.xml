@@ -74,7 +74,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:inputType="none"
-                                    app:simpleItems="@array/task_priority_items"
                                     tools:ignore="LabelFor"
                                     android:textSize="14sp"
 
@@ -99,8 +98,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:inputType="none"
-                                    app:simpleItems="@array/task_priority_items"
-                                    tools:ignore="LabelFor"
+                                    android:focusable="false"
+                                    android:clickable="true"
                                     android:textSize="14sp"
                                     />
 
