@@ -862,7 +862,7 @@ interface UserRepository {
 
     suspend fun getFeeDefaulters(
          feeTypeId: Int?,
-        installIds: Int?
+        installIds: String?
     ): NetworkFeeDefaulter
 
 }

@@ -1425,7 +1425,7 @@ class UserRepositoryImpl @Inject constructor(
         return userService.removeSession(sessionID)
     }
 
-    override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: Int?): NetworkFeeDefaulter {
+    override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: String?): NetworkFeeDefaulter {
         return userService.getFeeDefaulters(feeTypeId, installIds)
     }
 
