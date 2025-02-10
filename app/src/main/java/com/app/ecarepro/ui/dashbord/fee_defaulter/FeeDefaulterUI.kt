@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.dashbord.fee_defaulter
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -30,6 +31,8 @@ class FeeDefaulterUI : Fragment() {
     private val feeDefaulterViewModel: FeeDefaulterViewModel by viewModels()
     private var feeTypeId: Int? = 0
     private var installIds: Int? = 0
+    private lateinit var selectedInstallmentType: MutableList<String>
+    private lateinit var selectedInstallmentIds: MutableList<Int>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,11 +46,11 @@ class FeeDefaulterUI : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getFeeDefaulters(feeTypeId, installIds)
+        getFeeDefaulters(feeTypeId, installIds.toString())
     }
 
     private fun getFeeDefaulters(feeTypeId: Int?,
-                                 installIds: Int?) {
+                                 installIds: String?) {
 
         lifecycleScope.launch {
             feeDefaulterViewModel.feeDefaulterStateFlow.collectLatest {
@@ -122,20 +125,43 @@ class FeeDefaulterUI : Fragment() {
 
         binding.feeType.setOnItemClickListener { _, _, position, _ ->
             feeTypeId=feeType[position].feeTypeID
-            getFeeDefaulters(feeTypeId,installIds)
+            getFeeDefaulters(feeTypeId,installIds.toString())
         }
     }
 
     private fun buildFeeInstallment(installment: List<Installment>) {
-        val adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            installment.map { it.installName })
-        binding.installments.setAdapter(adapter)
+        val feeTypeNames = installment.map { it.installName }.toTypedArray()
+        val feeTypeIds = installment.map { it.installID }
 
-        binding.installments.setOnItemClickListener { _, _, position, _ ->
-            installIds=installment[position].installID
-            getFeeDefaulters(feeTypeId,installIds)
+        selectedInstallmentType = mutableListOf()
+        selectedInstallmentIds = mutableListOf()
+
+        val checkedItems = BooleanArray(installment.size) { false }
+
+        binding.installments.setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Select Installments")
+
+            builder.setMultiChoiceItems(feeTypeNames, checkedItems) { _, which, isChecked ->
+                if (isChecked) {
+                    selectedInstallmentType.add(feeTypeNames[which])
+                    selectedInstallmentIds.add(feeTypeIds[which])
+                } else {
+                    selectedInstallmentType.remove(feeTypeNames[which])
+                    selectedInstallmentIds.remove(feeTypeIds[which])
+                }
+            }
+
+            val installIds = selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
+
+            builder.setPositiveButton("OK") { _, _ ->
+                binding.installments.setText(selectedInstallmentType.joinToString(", "))  // Show selected items
+                getFeeDefaulters(feeTypeId, installIds) // Fetch defaulters based on selection
+            }
+
+            builder.setNegativeButton("Cancel", null)
+            builder.create().show()
         }
     }
+
 }
