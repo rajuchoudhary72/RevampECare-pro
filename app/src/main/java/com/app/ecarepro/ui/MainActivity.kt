@@ -1462,8 +1462,36 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+
+
                 }
             }
+
+
+            /*for new development Infraction and  Appreciation */
+            /* 24 -> {
+                 when (childMenuId) {
+
+                     21 -> {
+                         when (childChildMenuId) {
+                            23 -> {
+                                *//*add to student for Appreciation *//*
+                                navController.navigate(R.id.smsReportFragment)
+                            }
+                        }
+                    }
+
+                    22 -> {
+                        when (childChildMenuId) {
+                            17 -> {
+                                *//*add to student for Infraction *//*
+                                navController.navigate(R.id.collectionReport)
+                            }
+                        }
+                    }
+
+                }
+            }*/
         }
     }
 
