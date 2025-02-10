@@ -127,7 +127,6 @@ class ChatViewModel @Inject constructor(
                 }
         }
     }
-
 }
 
 fun Context.getDeviceIpAddress(): String {
