@@ -44,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 300
-        versionName = "2.8.8"
+        versionCode = 302
+        versionName = "2.9.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -179,7 +179,7 @@ dependencies {
     implementation(libs.decorator)
 
     /*AAChartCore-Kotlin is a Kotlin library typically used in User Interface*/
-    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.1")
+    implementation("com.github.AAChartModel:AAChartCore-Kotlin:7.2.0")
 
     /* Page indicator */
     implementation(libs.scrollingpagerindicator)

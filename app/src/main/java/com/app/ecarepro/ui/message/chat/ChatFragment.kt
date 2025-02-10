@@ -248,12 +248,12 @@ class ChatFragment : Fragment() {
         return pdfExtension == extension || doc == extension || docx == extension
     }
 
-   /* fun isAudioUrl(url: String): Boolean {
-        val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
-        val extension = url.substringAfterLast(".", "").lowercase()
-        return audioExtensions.contains(extension)
-    }
-*/
+    /* fun isAudioUrl(url: String): Boolean {
+         val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+         val extension = url.substringAfterLast(".", "").lowercase()
+         return audioExtensions.contains(extension)
+     }
+ */
 
     override fun onDestroyView() {
         super.onDestroyView()

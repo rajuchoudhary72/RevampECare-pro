@@ -7,8 +7,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.CharacterStyle
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
 import android.widget.ImageView
 import android.widget.TextView
@@ -184,65 +186,88 @@ fun TextView.showEditButton(show: Boolean) {
     }
 }
 
+@BindingAdapter("formattedNewText")
+fun setFormattedNewText(textView: TextView, text1: String?) {
+    val spannable = SpannableString(text1)
 
+    // Use a regex to find and add links
+    val regex = Regex("https?://[\\w\\-\\.]+(?:/[\\w\\-\\.]+)*(?:\\?\\S*)?") // Regex for URL
+    val matchResults = text1?.let { regex.findAll(it) }
+
+    if (matchResults != null) {
+        for (match in matchResults) {
+            spannable.setSpan(
+                URLSpan(match.value),
+                match.range.first,
+                match.range.last + 1,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+    }
+    if (spannable.contains("https")){
+        textView.text = spannable
+        textView.movementMethod = LinkMovementMethod.getInstance() // Make links clickable
+    }else{
+        CompleteTextFormate(text1, textView)
+      /*  val formattedText = text1?.parseMarkdown()
+        textView.text = formattedText*/
+    }
+
+    textView.movementMethod = LinkMovementMethod.getInstance() // Make links clickable
+}
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
 
-    val formattedText = text?.parseMarkdown()
+   /* val formattedText = text?.parseMarkdown()
 
 // Example of setting the formatted text in a TextView
-    textView.text = formattedText
+    textView.text = formattedText*/
 
-    /* val formattedText = text?.let {
-         formatText(
-             it
-     )
-     }*/
+    CompleteTextFormate(text, textView)
+}
 
-// Set the formatted text to a TextView
-    // textView.text = formattedText
+private fun CompleteTextFormate(text: String?, textView: TextView) {
+    if (text != null) {
+        if (text.contains("~*") || text.contains("*~")) {
+            //bold with  underline
+            val formattedText = formatBoldUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_*") || text.contains("*_")) {
+            //bold with  Italic
+            val formattedText = formatBoldItalicText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("~_") || text.contains("_~")) {
+            //underline  with  Italic
+            val formattedText = formatItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_~") || text.contains("~_")) {
+            //underline  with  Italic
+            val formattedText = formatItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("_~*") || text.contains("*~_")) {
+            //underline  with  Italic with  bold
+            val formattedText = formatBoldItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else if (text.contains("~_*") || text.contains("*_~")) {
+            //underline  with  Italic with  bold
+            val formattedText = formatBoldItalicUnderlineText(text)
+            // Set the formatted text to a TextView
+            textView.text = formattedText
+        } else {
+            // only  single property  like only bold  ,  underline  , Italic
+            if (text != null) {
+                textView.text = formatAnyOneBoldItalicUnderlineText(text)
+            } else {
+                textView.text = ""
+            }
+        }
 
-    /* if (text != null) {
-         if (text.contains("~*") || text.contains("*~")) {
-             //bold with  underline
-             val formattedText = formatBoldUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("_*") || text.contains("*_")) {
-             //bold with  Italic
-             val formattedText = formatBoldItalicText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("~_") || text.contains("_~")) {
-             //underline  with  Italic
-             val formattedText = formatItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("_~") || text.contains("~_")) {
-             //underline  with  Italic
-             val formattedText = formatItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("_~*") || text.contains("*~_")) {
-             //underline  with  Italic with  bold
-             val formattedText = formatBoldItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else if (text.contains("~_*") || text.contains("*_~")) {
-             //underline  with  Italic with  bold
-             val formattedText = formatBoldItalicUnderlineText(text)
-             // Set the formatted text to a TextView
-             textView.text = formattedText
-         } else {
-             // only  single property  like only bold  ,  underline  , Italic
-             if (text != null) {
-                 textView.text = formatAnyOneBoldItalicUnderlineText(text)
-             } else {
-                 textView.text = ""
-             }
-         }
-
-     }*/
+    }
 }
 
 data class SpanInfo(val start: Int, val end: Int, val style: Any)

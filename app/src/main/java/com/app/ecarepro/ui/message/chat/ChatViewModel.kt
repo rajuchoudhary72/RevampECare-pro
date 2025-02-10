@@ -37,7 +37,7 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val id = savedStateHandle.getLiveData("ID", initialValue = "")
-     val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
+    val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
 
     val messageBody = MutableStateFlow("")
 
@@ -87,8 +87,12 @@ class ChatViewModel @Inject constructor(
         )
 
     init {
-        viewModelScope.launch {
-            user = userDataStore.getUser()!!
+        try {
+            viewModelScope.launch {
+                user = userDataStore.getUser()!!
+            }
+        }catch (e:NullPointerException){
+            e.printStackTrace()
         }
     }
 

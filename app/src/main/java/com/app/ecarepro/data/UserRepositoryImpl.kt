@@ -150,6 +150,7 @@ import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -1424,10 +1425,27 @@ class UserRepositoryImpl @Inject constructor(
         return userService.removeSession(sessionID)
     }
 
+    override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: Int?): NetworkFeeDefaulter {
+        return userService.getFeeDefaulters(feeTypeId, installIds)
+    }
+
+    override suspend fun getFeeDefaultersDas(
+        feeTypeId: Int?, installIds: Int?
+    ): Flow<Result<NetworkFeeDefaulter>> {
+        return flow {
+            try {
+                val response = userService.getFeeDefaulters(feeTypeId, installIds)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
     override suspend fun feeCollection(
-        feeTypeID: Int,
-        fromDate: String,
-        tillDate: String
+        feeTypeID: Int?,
+        fromDate: String?,
+        tillDate: String?
     ): Flow<Result<FeeCollection>> {
         return flow {
             try {

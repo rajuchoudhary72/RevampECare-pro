@@ -598,7 +598,7 @@ class ProfileFragment : Fragment() {
             id(R.string.permanent_education_number)
             iconRes(R.drawable.avd_dashboard)
             title(getString(R.string.permanent_education_number))
-            subTitle(profile.admissionNo)
+            subTitle(profile.peN_Number)
         }
         profileItem {
             id(R.string.fathers_name)
@@ -654,7 +654,12 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.contactMobile)
         }
-
+        profileItem {
+            id(R.string.aadharCardNo)
+            iconRes(R.drawable.adhar_card_icon)
+            title(getString(R.string.aadharCardNo))
+            subTitle(profile.studentProfile?.aadhaarNumber)
+        }
         profileItem {
             id(R.string.bill_number)
             iconRes(R.drawable.ic_contact_no_)
@@ -682,6 +687,19 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.studentProfile?.contactMobile)
         }
+        profileItem {
+            id(R.string.father_aadhaar_no)
+            iconRes(R.drawable.adhar_card_icon)
+            title(getString(R.string.father_aadhaar_no))
+            subTitle(profile.studentProfile?.fatherAadhaarNumber)
+        }
+        profileItem {
+            id(R.string.father_pan)
+            iconRes(R.drawable.pan_card_icon)
+            title(getString(R.string.father_pan))
+            subTitle(profile.studentProfile?.fatherPAN)
+        }
+
         profileItem {
             id(R.string.bill_number)
             iconRes(R.drawable.ic_contact_no_)

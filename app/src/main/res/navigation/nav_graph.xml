@@ -1004,4 +1004,8 @@
         android:id="@+id/userSessionListFragment"
         android:name="com.app.ecarepro.ui.user_session_list.UserSessionListFragment"
         android:label="UserSessionListFragment" />
+    <fragment
+        android:id="@+id/feeDefaulterUI"
+        android:name="com.app.ecarepro.ui.dashbord.fee_defaulter.FeeDefaulterUI"
+        android:label="FeeDefaulterUI" />
 </navigation>
