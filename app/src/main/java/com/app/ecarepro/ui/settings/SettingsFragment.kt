@@ -18,6 +18,7 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSettingsBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.lifecycle.lifecycleScope
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.ui.MainActivity
@@ -38,6 +39,7 @@ class SettingsFragment : Fragment() {
     lateinit var usetDataStore: com.app.ecarepro.data.datastore.UserDataStore
 
     private val viewModel: SystemViewModel by viewModels()
+
     @Inject
     lateinit var syncManager: SyncManager
     override fun onCreateView(
@@ -104,6 +106,7 @@ class SettingsFragment : Fragment() {
 
 
     }
+
     private fun FragmentSettingsBinding.setLastSyncTime() {
         viewLifecycleOwner.lifecycleScope.launch {
             lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
@@ -111,21 +114,15 @@ class SettingsFragment : Fragment() {
     }
 
     private fun launchPlayStore() {
-        var intent: Intent? = null
-        try {
-            intent = Intent(Intent.ACTION_VIEW)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setData(Uri.parse("market://details?id=${requireContext().packageName}"))
-            startActivity(intent)
-        } catch (anfe: ActivityNotFoundException) {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW, Uri.parse(
-                        "https://play.google.com/store/apps/details?id=${requireContext().packageName}"
-                    )
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW, Uri.parse(
+                    "https://play.google.com/store/apps/details?id=${requireContext().packageName.replace(".dev","")}"
                 )
-            )
-        }
+            ).apply {
+                putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://com.android.chrome"));
+            }
+        )
     }
 
     override fun onDestroyView() {
@@ -152,7 +149,7 @@ class SettingsFragment : Fragment() {
                             if (it.data.errorCode == 0) {
                                 if (it.data.settings != null) {
                                     for (item in it.data.settings) {
-                                        if (item.settingName=="ChangeUserName") {
+                                        if (item.settingName == "ChangeUserName") {
 
                                             binding.cardChangeUserName.isVisible = item.isEnabled!!
                                             break

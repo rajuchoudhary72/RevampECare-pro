@@ -1178,7 +1178,7 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     7 -> navController.navigate(R.id.composeFragment)
                     8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
-                    9 -> navController.navigate(R.id.messageFragment)
+                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
                 }
             }
 

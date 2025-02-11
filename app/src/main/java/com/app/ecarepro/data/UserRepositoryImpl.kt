@@ -1434,7 +1434,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Flow<Result<NetworkFeeDefaulter>> {
         return flow {
             try {
-                val response = userService.getFeeDefaulters(feeTypeId, installIds)
+                val response = userService.getFeeDefaulters(feeTypeId, installIds.toString())
                 emit(Result.success(response))
             } catch (error: Throwable) {
                 emit(Result.failure(error))
