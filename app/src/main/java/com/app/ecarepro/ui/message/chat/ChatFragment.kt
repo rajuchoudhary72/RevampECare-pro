@@ -420,7 +420,8 @@ class ChatFragment : Fragment() {
             mainActivity().showMessage(error.message ?: "")
         }
         if (uiState is ChatUiState.Success || uiState == ChatUiState.EmptyInbox) {
-
+           /* handleAttachmentTypes(uiState.messageSettings)
+            buildAttachmentModels(uiState.attachments)*/
             binding.recyclerView.withModels {
                 when (uiState) {
                     ChatUiState.EmptyInbox -> {

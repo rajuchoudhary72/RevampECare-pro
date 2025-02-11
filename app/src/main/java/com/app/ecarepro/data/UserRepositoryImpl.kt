@@ -1430,7 +1430,7 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFeeDefaultersDas(
-        feeTypeId: Int?, installIds: Int?
+        feeTypeId: Int?, installIds: String?
     ): Flow<Result<NetworkFeeDefaulter>> {
         return flow {
             try {

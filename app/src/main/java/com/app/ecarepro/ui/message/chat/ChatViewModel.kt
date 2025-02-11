@@ -76,7 +76,6 @@ class ChatViewModel @Inject constructor(
     }
 
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
-    private val contacts = MutableStateFlow<List<Contact>>(emptyList())
     val attachmentVisible = combine(
         flow = composeMessageType,
         flow2 = userDataStore.getUserAsFlow(),
@@ -183,12 +182,39 @@ class ChatViewModel @Inject constructor(
             2
         }
     }
-
+    private fun getMultipleAttachment(): List<String>? {
+        val attachments = attachments.value
+        if (getMessageType()==1)
+            return null
+        /*  if (attachments.isEmpty() || attachments.size == 1)
+                    return null*/
+        return attachments.map { attachment ->
+            if (isPdf(attachment)) {
+                if (attachment.name == AttachmentType.RECORDING.name) {
+                    val file = File(attachment.path)
+                    getBase64StringFromUri(file) ?: ""
+                } else {
+                    val file = context.getFile(attachment.path?.toUri())
+                    getBase64StringFromUri(file!!.toUri()) ?: ""
+                }
+            } else {
+                FileAccess.bitmapToByteArrayBase64String(
+                    FileAccess.bitmapFromFile(
+                        context,
+                        attachment.path!!
+                    )
+                )
+            }
+        }
+    }
     private fun getAttachment(): Attachment? {
         val attachments = attachments.value
+
         return if (attachments.isEmpty()) {
             null
-        } else if (attachments.size == 1) {
+        }else  if (getMessageType()==1)
+            return null
+        else if (attachments.size == 1) {
             val attachment = attachments.first()
             if (isPdf(attachment)) {
                 if (attachment.name == AttachmentType.RECORDING.name) {

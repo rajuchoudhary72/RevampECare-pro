@@ -71,14 +71,14 @@ class DashboardViewModel @Inject constructor(
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         getTodayModeWiseCollection(sdf.format(Date())) { _, _ ->
         }
-        getFeeDefaulters(0, 0)
+        getFeeDefaulters(0, 0.toString())
     }
 
 
 
     fun getFeeDefaulters(
         feeTypeId: Int?,
-        installIds: Int?,
+        installIds: String?,
         onResponse: ((Boolean, String?) -> Unit)? = null
     ) {
         viewModelScope.launch {

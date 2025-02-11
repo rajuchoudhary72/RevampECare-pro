@@ -94,6 +94,11 @@ public class TryRVCellAdapter extends RecyclerView.Adapter<TryRVCellAdapter.View
                 holder.gridcell.setBackground(context.getResources().getDrawable(R.drawable.circle_calender_holiday));
                 holder.gridcell2.setText("H");
                 break;
+                case "Working holiday":
+                holder.gridcell.setTextColor(context.getResources().getColor(R.color.white));
+                holder.gridcell.setBackground(context.getResources().getDrawable(R.drawable.circle_wh));
+                holder.gridcell2.setText("WH");
+                break;
             case "White":
                 holder.gridcell.setTextColor(context.getResources().getColor(R.color.white));
                 break;
@@ -276,6 +281,9 @@ public class TryRVCellAdapter extends RecyclerView.Adapter<TryRVCellAdapter.View
                                 break;
                             case 6:
                                 list.add(day + "-holiday" + "-" + getMonthAsString(currentMonth) + "-" + yy+"-"+FragmentAPI.report_arraylist.get(aSize).getTemp());
+                                break;
+                                case 7:
+                                list.add(day + "-Working holiday" + "-" + getMonthAsString(currentMonth) + "-" + yy+"-"+FragmentAPI.report_arraylist.get(aSize).getTemp());
                                 break;
                             case 5:
                                 if (FragmentAPI.report_arraylist.get(aSize).getDuration() > 0) {

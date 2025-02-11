@@ -235,6 +235,7 @@
     <string name="as_you_have_marked">As you have marked :</string>
 
     <string name="lbl_present">Present :</string>
+    <string name="lbl_wh_">Working Holiday :</string>
     <string name="lbl_a">A</string>
     <string name="lbl_absent">Absent :</string>
     <string name="lbl_l">L</string>
@@ -245,6 +246,7 @@
     <string name="lbl_yes">YES</string>
     <string name="lbl_open">Open</string>
     <string name="lbl_p">P</string>
+    <string name="lbl_wh">WH</string>
     <string name="lbl_cancel">CANCEL</string>
     <string name="subject_attendance">Subject Attendance</string>
     <string name="class_attendance">Class Attendance</string>

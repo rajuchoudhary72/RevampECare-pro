@@ -862,7 +862,7 @@ interface UserRepository {
 
     suspend fun getFeeDefaultersDas(
         feeTypeId: Int?,
-        installIds: Int?
+        installIds: String?
     ): Flow<Result<NetworkFeeDefaulter>>
 
 
