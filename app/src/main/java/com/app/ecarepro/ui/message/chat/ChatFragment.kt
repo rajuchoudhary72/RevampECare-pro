@@ -431,6 +431,8 @@ class ChatFragment : Fragment() {
                         }
                     }
                     is ChatUiState.Success -> {
+                        handleAttachmentTypes(uiState.messageSettings)
+                        buildAttachmentModels(uiState.attachments)
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
                         }

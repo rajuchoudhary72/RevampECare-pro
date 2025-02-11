@@ -46,6 +46,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
+import kotlinx.coroutines.flow.firstOrNull
 
 
 @HiltViewModel
@@ -86,10 +87,15 @@ class ChatViewModel @Inject constructor(
         messageType == ComposeMessageType.ONLY_APP_MESSAGE && hideMessageAttachment.not()
     }.asLiveData()
 
-    val uiState = id.asFlow()
-        .filter { it.isNullOrEmpty().not() }
-        .flatMapLatest {
-            messageRepository.getConversationDetails(it, MessageType.getMessageType(messageType))
+    val uiState =
+        combine(
+            flow = id.asFlow(),
+            flow2 = attachments
+        ) { id, attachments ->
+            Pair(id, attachments)
+        }
+            .flatMapLatest {(id, _) ->
+                messageRepository.getConversationDetails(id, MessageType.getMessageType(messageType))
         }
         .map { result ->
             if (result.isSuccess) {
@@ -107,7 +113,9 @@ class ChatViewModel @Inject constructor(
                             canReply = response.canReply,
                             recipients = response.recipients ?: emptyList(),
                             subject = response.subject,
-                            senderDTL =  response.senderDTL
+                            senderDTL =  response.senderDTL,
+                            messageSettings = userDataStore.getMessageSettings().firstOrNull(),
+                            attachments = attachments.value
 
                         )
                     }
@@ -349,6 +357,8 @@ sealed interface ChatUiState {
         val subject: String?,
         val canReply: Boolean?,
         val senderDTL: Sender?,
+        val messageSettings: MessageSettings?,
+        val attachments: List<MiMedia>,
     ) : ChatUiState
 
     data class Error(
