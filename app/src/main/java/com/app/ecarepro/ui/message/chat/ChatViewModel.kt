@@ -76,6 +76,12 @@ class ChatViewModel @Inject constructor(
         attachments.update { current -> current.filterNot { it == attachment } }
     }
 
+    fun clearAttachment(){
+        attachments.update {
+            emptyList()
+        }
+    }
+
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
     val attachmentVisible = combine(
         flow = composeMessageType,
@@ -152,7 +158,7 @@ class ChatViewModel @Inject constructor(
             messageRepository
                 .replyMessage(
                     ReplyMessageRequestDto(
-                        body = messageBody.value.trim(),
+                        body = message.value.trim(),
                         ipAddress = context.getDeviceIpAddress(),
                         msgType = getMessageType(),
                         receiverType = uiState.receiverType,
@@ -164,7 +170,8 @@ class ChatViewModel @Inject constructor(
                 .collectLatest { result ->
                     result
                         .onSuccess { message ->
-                            messageBody.update { "" }
+                            this@ChatViewModel.message.update { "" }
+                            attachments.update { emptyList() }
                             refresh()
                             func(true, message)
                         }
