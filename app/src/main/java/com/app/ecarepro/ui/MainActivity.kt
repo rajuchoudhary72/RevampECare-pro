@@ -876,7 +876,7 @@ class MainActivity : AppCompatActivity() {
             10 -> navController.navigate(R.id.calenderActivityNavHost)
             //11 ->  navController.navigate(R.id.feeModule)
             // 12 ->  navController.navigate(R.id.conversationReportFragment)
-            12 -> navController.navigate(R.id.feeDefaulterUI)
+            12 -> navController.navigate(R.id.bookLibraryFragment)
             13 -> navController.navigate(R.id.EBookNavFragment)
             14 -> navController.navigate(R.id.academicPerformanceHostFragment)
             15 -> navController.navigate(R.id.questionPaperFragment)
@@ -1178,7 +1178,8 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     7 -> navController.navigate(R.id.composeFragment)
                     8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
-                    9 -> navController.navigate(R.id.messageFragment)
+                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
+
                 }
             }
 
@@ -1462,8 +1463,36 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+
+
                 }
             }
+
+
+            /*for new development Infraction and  Appreciation */
+            /* 24 -> {
+                 when (childMenuId) {
+
+                     21 -> {
+                         when (childChildMenuId) {
+                            23 -> {
+                                *//*add to student for Appreciation *//*
+                                navController.navigate(R.id.smsReportFragment)
+                            }
+                        }
+                    }
+
+                    22 -> {
+                        when (childChildMenuId) {
+                            17 -> {
+                                *//*add to student for Infraction *//*
+                                navController.navigate(R.id.collectionReport)
+                            }
+                        }
+                    }
+
+                }
+            }*/
         }
     }
 

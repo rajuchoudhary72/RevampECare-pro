@@ -32,8 +32,8 @@ import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.DataValue
 import com.app.ecarepro.data.network.model.FeeCollection
-import com.app.ecarepro.model.FeeDefaulter
 import com.app.ecarepro.data.network.model.LibraryDetails
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.Questionnaire
 import com.app.ecarepro.data.network.model.StaffAttendance
 import com.app.ecarepro.data.network.model.StatusWiseStatistics
@@ -134,7 +134,7 @@ class DashboardFragment : Fragment() {
                 buildTeachersWorkLoad(data.teacherWorkLoad)
 
             if (data.showFeeDafaulter == true)
-                buildFeeDefaulterCard(data.feeDafaulter)
+                buildFeeDefaulterCard(dashboardViewModel.feeDefaulter.value)
 
             if (data.showBankBalnce == true)
                 buildBankBalanceCard(data.bankBalance)
@@ -462,9 +462,23 @@ class DashboardFragment : Fragment() {
         return outputFormat.format(date)
     }
 
-    private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: FeeDefaulter?) {
-        //feeDefaulter ?: return
+    private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: NetworkFeeDefaulter?) {
+
+       /* //feeDefaulter ?: return
         FeeDefaulterModel(feeDefaulter)
+            .id("121")
+            .addTo(this)*/
+
+        FeeDefaulterModel(
+            feeDefaulter = feeDefaulter,
+            onClick = {  ->
+                 findNavController().navigate(
+                            R.id.feeDefaulterUI)
+                /*this@DashboardFragment.findNavController()
+                    .navigate(R.id.feeDefaulterUI.apply {
+                    })*/
+            }
+        )
             .id("121")
             .addTo(this)
 

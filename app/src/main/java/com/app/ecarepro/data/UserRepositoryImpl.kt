@@ -1429,6 +1429,19 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getFeeDefaulters(feeTypeId, installIds)
     }
 
+    override suspend fun getFeeDefaultersDas(
+        feeTypeId: Int?, installIds: String?
+    ): Flow<Result<NetworkFeeDefaulter>> {
+        return flow {
+            try {
+                val response = userService.getFeeDefaulters(feeTypeId, installIds)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
     override suspend fun feeCollection(
         feeTypeID: Int?,
         fromDate: String?,

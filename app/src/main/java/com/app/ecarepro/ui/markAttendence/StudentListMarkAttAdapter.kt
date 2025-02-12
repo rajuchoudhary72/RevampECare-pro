@@ -68,6 +68,7 @@ class StudentListMarkAttAdapter(
             binding.tvMarkLeave.isEnabled = true
             binding.tvMarkLate.isEnabled = true
             binding.tvMarkNa.isEnabled = true
+            binding.tvMarkWh.isEnabled = true
         } else {
             if (hasMarked) {
                 binding.tvMarkPresent.isEnabled = false
@@ -75,6 +76,7 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLeave.isEnabled = false
                 binding.tvMarkLate.isEnabled = false
                 binding.tvMarkNa.isEnabled = false
+                binding.tvMarkWh.isEnabled = false
             }
         }
 
@@ -90,12 +92,14 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                    binding.tvMarkWh.isEnabled = false
                 }else{
                     binding.tvMarkPresent.isEnabled = true
                     binding.tvMarkAbsent.isEnabled = true
                     binding.tvMarkLeave.isEnabled = true
                     binding.tvMarkLate.isEnabled = true
                     binding.tvMarkNa.isEnabled = true
+                    binding.tvMarkWh.isEnabled = true
                 }
 
                 /*binding.tvMarkPresent.text = "P"
@@ -113,7 +117,8 @@ class StudentListMarkAttAdapter(
 
                 updateUI(1,binding,data,position)
 
-            } else if (data.isLate == 1) {
+            }
+            else if (data.isLate == 1) {
 
 
 
@@ -134,12 +139,14 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                    binding.tvMarkWh.isEnabled = false
                 }else{
                     binding.tvMarkPresent.isEnabled = true
                     binding.tvMarkAbsent.isEnabled = true
                     binding.tvMarkLeave.isEnabled = true
                     binding.tvMarkLate.isEnabled = true
                     binding.tvMarkNa.isEnabled = true
+                    binding.tvMarkWh.isEnabled = true
                 }
                 /*binding.tvMarkAbsent.text = "A"
                 binding.tvMarkAbsent.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
@@ -158,6 +165,7 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                    binding.tvMarkWh.isEnabled = false
                     binding.tvApproveLeave.isVisible=true
                 }else{
                     binding.tvMarkPresent.isEnabled = true
@@ -165,6 +173,7 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = true
                     binding.tvMarkLate.isEnabled = true
                     binding.tvMarkNa.isEnabled = true
+                    binding.tvMarkWh.isEnabled = true
                 }
                /* binding.tvMarkLeave.text = "L"
                 binding.tvMarkLeave.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
@@ -182,12 +191,14 @@ class StudentListMarkAttAdapter(
                     binding.tvMarkLeave.isEnabled = false
                     binding.tvMarkLate.isEnabled = false
                     binding.tvMarkNa.isEnabled = false
+                    binding.tvMarkWh.isEnabled = false
                  }else{
                     binding.tvMarkPresent.isEnabled = true
                     binding.tvMarkAbsent.isEnabled = true
                     binding.tvMarkLeave.isEnabled = true
                     binding.tvMarkLate.isEnabled = true
                     binding.tvMarkNa.isEnabled = true
+                    binding.tvMarkWh.isEnabled = true
                 }
                 /*binding.tvMarkNa.text = "NA"
                 binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
@@ -195,6 +206,32 @@ class StudentListMarkAttAdapter(
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_na)*/
 
                 updateUI(5, binding, data, position)
+            }
+            7 -> {
+                binding.tvApproveLeave.isVisible=false
+
+                if (data.isConstant == 1) {
+                    binding.tvMarkPresent.isEnabled = false
+                    binding.tvMarkAbsent.isEnabled = false
+                    binding.tvMarkLeave.isEnabled = false
+                    binding.tvMarkLate.isEnabled = false
+                    binding.tvMarkNa.isEnabled = false
+                    binding.tvMarkWh.isEnabled = false
+                    binding.tvApproveLeave.isVisible=true
+                }else{
+                    binding.tvMarkPresent.isEnabled = true
+                    binding.tvMarkAbsent.isEnabled = true
+                    binding.tvMarkLeave.isEnabled = true
+                    binding.tvMarkLate.isEnabled = true
+                    binding.tvMarkNa.isEnabled = true
+                    binding.tvMarkWh.isEnabled = true
+                }
+                /* binding.tvMarkLeave.text = "L"
+                 binding.tvMarkLeave.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                 binding.tvMarkLeave.background =
+                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_leave)*/
+
+                updateUI(7, binding, data, position)
             }
 
             else -> {}
@@ -216,6 +253,9 @@ class StudentListMarkAttAdapter(
         })
         binding.tvMarkNa.setOnClickListener(View.OnClickListener {
             updateUI(5, binding, data, position)
+        })
+        binding.tvMarkWh.setOnClickListener(View.OnClickListener {
+            updateUI(7, binding, data, position)
         })
 
 
@@ -242,6 +282,9 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkNa.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
+                binding.tvMarkWh.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
                 binding.tvMarkPresent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_present)
                 binding.tvMarkAbsent.background =
@@ -251,6 +294,8 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkWh.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
                 data.status=1
@@ -276,6 +321,9 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkNa.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
+                binding.tvMarkWh.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
                 binding.tvMarkAbsent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.absent_circle2)
                 binding.tvMarkPresent.background =
@@ -285,6 +333,8 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkWh.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
                 data.status=2
@@ -307,6 +357,9 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkNa.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
+                binding.tvMarkWh.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
                 binding.tvMarkLeave.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkAbsent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
@@ -317,6 +370,8 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLeave.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.background_box_rectangle_blue)
                 binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkWh.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
                 data.status=3
@@ -338,6 +393,9 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkNa.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
+                binding.tvMarkWh.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
                 binding.tvMarkLate.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkAbsent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
@@ -348,6 +406,8 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_late)
                 binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkWh.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
 
@@ -361,6 +421,9 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkNa.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
+                binding.tvMarkWh.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
                 binding.tvMarkPresent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_present)
                 binding.tvMarkAbsent.background =
@@ -368,6 +431,8 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLeave.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkWh.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
 
                 data.status=1
@@ -390,6 +455,7 @@ class StudentListMarkAttAdapter(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
                 binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                binding.tvMarkWh.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkAbsent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkPresent.background =
@@ -400,7 +466,41 @@ class StudentListMarkAttAdapter(
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkNa.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_na)
+                binding.tvMarkWh.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 data.status=4
+                data.isLate=0
+                studentListArrayList[absoluteAdapterPosition] = data
+              //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,4),absoluteAdapterPosition,false)
+            }
+            7 -> {
+                binding.tvMarkPresent.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkAbsent.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkLeave.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkLate.setTextColor(
+                    stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
+                )
+                binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                binding.tvMarkWh.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                binding.tvMarkAbsent.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkPresent.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkLeave.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkLate.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkNa.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
+                binding.tvMarkWh.background =
+                    stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_wh)
+                data.status=7
                 data.isLate=0
                 studentListArrayList[absoluteAdapterPosition] = data
               //  stuMarkAttendanceFragment.onItemClick(StudentAtt(0,data .stID,4),absoluteAdapterPosition,false)

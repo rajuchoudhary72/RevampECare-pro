@@ -9,6 +9,7 @@
             name="isExpanded"
             type="java.lang.Boolean" />
 
+
     </data>
 
     <soup.neumorphism.NeumorphCardView
