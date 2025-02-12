@@ -139,8 +139,13 @@ class ChatFragment : Fragment() {
         }
 
         binding.btnReplyMessage.setOnClickListener {
-            chatViewModel.replyMessage { _, message ->
+            mainActivity().showLoader(true)
+            chatViewModel.replyMessage { success, message ->
+                mainActivity().showLoader(false)
                 mainActivity().showMessage(message)
+                if(success){
+                    chatViewModel.clearAttachment()
+                }
             }
         }
 
@@ -215,7 +220,7 @@ class ChatFragment : Fragment() {
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val bitmap = result.data?.extras?.get("data") as Bitmap
                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
                 file.writeBitmap(
@@ -431,7 +436,7 @@ class ChatFragment : Fragment() {
                         }
                     }
                     is ChatUiState.Success -> {
-                        handleAttachmentTypes(uiState.messageSettings)
+                      //  handleAttachmentTypes(uiState.messageSettings)
                         buildAttachmentModels(uiState.attachments)
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
@@ -565,15 +570,15 @@ class ChatFragment : Fragment() {
 
     fun setUpFontStyle(binding: FragmentChatBinding) {
 
-        if (binding.tvSubject.getText().toString() != "") {
-            val ssb = SpannableStringBuilder(binding.tvSubject.getText())
+        if (binding.tvSubject.text.toString() != "") {
+            val ssb = SpannableStringBuilder(binding.tvSubject.text)
 
 
             try {
                 var cs: CharacterStyle
 
 
-                val sentence: String = binding.tvSubject.getText().toString()
+                val sentence: String = binding.tvSubject.text.toString()
 
                 val boldStartIndexes: List<Int> = boldFindStartIndexes(sentence)
                 val boldEndIndexes: List<Int> = boldFindEndStarIndexes(sentence)
@@ -598,10 +603,10 @@ class ChatFragment : Fragment() {
                     }
                 }
 
-                binding.tvSubject.setText(ssb)
+                binding.tvSubject.text = ssb
 
 
-                val ssbbb = SpannableStringBuilder(binding.tvSubject.getText())
+                val ssbbb = SpannableStringBuilder(binding.tvSubject.text)
 
                 var dboldstart = 0
                 var dboldend = 0
