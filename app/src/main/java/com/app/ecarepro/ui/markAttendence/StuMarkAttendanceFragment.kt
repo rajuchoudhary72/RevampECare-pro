@@ -74,6 +74,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private val stuMarkAttendanceViewModel : StuMarkAttendanceViewModel by viewModels()
     private var classID= 0
     private var p  = 0
+    private var wh  = 0
     private var a  = 0
     private var l  = 0
     private var approve_leave  = 0
@@ -460,6 +461,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         val tv_cancel: TextView
         val tv_ok: TextView
         val tv_present_count: TextView
+        val tv_working_holiday: TextView
         val tv_absent_count: TextView
         val tv_leave_count: TextView
         val tvLateCount: TextView
@@ -478,11 +480,13 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         tv_ok = dialog.findViewById(R.id.tv_ok)
         llLate = dialog.findViewById(R.id.llLate)
         tv_present_count = dialog.findViewById(R.id.tv_present_count)
+        tv_working_holiday = dialog.findViewById(R.id.tv_wh_count)
         tv_absent_count = dialog.findViewById(R.id.tv_absent_count)
         tv_leave_count = dialog.findViewById(R.id.leave_day)
         na_day = dialog.findViewById(R.id.na_day)
         tvLateCount = dialog.findViewById(R.id.late_day)
         p  = 0
+        wh  = 0
         a  = 0
         l  = 0
         approve_leave=0
@@ -494,6 +498,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                 p++
             else if (i.status == 2)
                 a++
+            else if (i.status == 7)
+                wh++
             else if (i.status == 3) {
                 l++
                 if (i.isConstant == 1) {
@@ -506,7 +512,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
         }
-        tv_present_count.text = p.toString() + ""
+        tv_present_count.text = (p+wh).toString()
+
+        tv_working_holiday.text = wh.toString() + ""
         tv_absent_count.text = a.toString() + ""
         if (approve_leave>0 && (l-approve_leave)>0){
         tv_leave_count.text = buildString {

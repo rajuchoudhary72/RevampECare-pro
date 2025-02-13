@@ -111,21 +111,15 @@ class SettingsFragment : Fragment() {
     }
 
     private fun launchPlayStore() {
-        var intent: Intent? = null
-        try {
-            intent = Intent(Intent.ACTION_VIEW)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setData(Uri.parse("market://details?id=${requireContext().packageName}"))
-            startActivity(intent)
-        } catch (anfe: ActivityNotFoundException) {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW, Uri.parse(
-                        "https://play.google.com/store/apps/details?id=${requireContext().packageName}"
-                    )
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW, Uri.parse(
+                    "https://play.google.com/store/apps/details?id=${requireContext().packageName.replace(".dev","")}"
                 )
-            )
-        }
+            ).apply {
+                putExtra(Intent.EXTRA_REFERRER, Uri.parse("android-app://com.android.chrome"));
+            }
+        )
     }
 
     override fun onDestroyView() {

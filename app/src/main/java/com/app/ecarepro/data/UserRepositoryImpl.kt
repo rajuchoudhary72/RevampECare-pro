@@ -1433,12 +1433,26 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getFeeDefaulters(feeTypeId, installIds)
     }
 
+
     override suspend fun postCompliance(postComplianceData: PostComplianceData): CommonResponse {
         return userService.postCompliance(postComplianceData)
     }
 
     override suspend fun resolvedCompliance(ID: String?, utype: Int?): CommonResponse {
         return userService.resolvedCompliance(ID, utype)
+
+    override suspend fun getFeeDefaultersDas(
+        feeTypeId: Int?, installIds: String?
+    ): Flow<Result<NetworkFeeDefaulter>> {
+        return flow {
+            try {
+                val response = userService.getFeeDefaulters(feeTypeId, installIds)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+
     }
 
     override suspend fun feeCollection(

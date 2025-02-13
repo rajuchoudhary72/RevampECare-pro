@@ -864,6 +864,12 @@ interface UserRepository {
      sessionID: String?,
     ): CommonResponse
 
+    suspend fun getFeeDefaultersDas(
+        feeTypeId: Int?,
+        installIds: String?
+    ): Flow<Result<NetworkFeeDefaulter>>
+
+
     suspend fun getFeeDefaulters(
          feeTypeId: Int?,
         installIds: String?
