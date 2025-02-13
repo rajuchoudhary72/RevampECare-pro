@@ -277,47 +277,47 @@ class  StudentListFragment : Fragment(), ItemListener<Student> {
     override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
 
 
-        when (toFragment) {
-            Constant.FRA_ADD_APPRE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_addAppreciationFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
-
-            Constant.FRA_VIEW_APPRE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_appreciationListFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
-
-            Constant.FRA_ADD_INFE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_addInfractionFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
-
-            Constant.FRA_VIEW_INFE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_infractionListFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
-
-            Constant.PROFILE_FRA_STU -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_studentProfileNavHostFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
-        }
+//        when (toFragment) {
+//            Constant.FRA_ADD_APPRE -> {
+//                findNavController().navigate(
+//                    R.id.action_studentListFragment2_to_addAppreciationFragment,
+//                    Bundle().apply {
+//                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+//                    })
+//            }
+//
+//            Constant.FRA_VIEW_APPRE -> {
+//                findNavController().navigate(
+//                    R.id.action_studentListFragment2_to_appreciationListFragment,
+//                    Bundle().apply {
+//                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+//                    })
+//            }
+//
+//            Constant.FRA_ADD_INFE -> {
+//                findNavController().navigate(
+//                    R.id.action_studentListFragment2_to_addInfractionFragment,
+//                    Bundle().apply {
+//                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+//                    })
+//            }
+//
+//            Constant.FRA_VIEW_INFE -> {
+//                findNavController().navigate(
+//                    R.id.action_studentListFragment2_to_infractionListFragment,
+//                    Bundle().apply {
+//                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+//                    })
+//            }
+//
+//            Constant.PROFILE_FRA_STU -> {
+//                findNavController().navigate(
+//                    R.id.action_studentListFragment2_to_studentProfileNavHostFragment,
+//                    Bundle().apply {
+//                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+//                    })
+//            }
+//        }
 
     }
     private fun checkIsBoarding() {

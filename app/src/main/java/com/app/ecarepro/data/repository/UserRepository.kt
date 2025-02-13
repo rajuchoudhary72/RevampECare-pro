@@ -120,10 +120,12 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChap
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.model.NetworkUserSessionsResponse
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
@@ -342,6 +344,7 @@ interface UserRepository {
 
 
     suspend fun saveInfraction(
+        uType:Int,
         action:Int,
         stID:Int,
         infrSubTypeID:Int,
@@ -349,7 +352,8 @@ interface UserRepository {
         instance:Int,
         infractionOn:String,
         correctiveAction:String,
-
+         consequencesAttachment: BrowsedFile?,
+         isComplianceActive:Boolean
     ): CommonResponse
 
 
@@ -870,5 +874,14 @@ interface UserRepository {
          feeTypeId: Int?,
         installIds: String?
     ): NetworkFeeDefaulter
+
+    suspend fun postCompliance(
+         postComplianceData: PostComplianceData
+    ): CommonResponse
+
+    suspend fun resolvedCompliance(
+        ID: String?,
+        utype: Int?
+    ): CommonResponse
 
 }

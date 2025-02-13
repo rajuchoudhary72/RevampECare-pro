@@ -8,8 +8,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.databinding.FragmentStudentProfileDetailsBinding
+import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionListAdapter
 import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
+import com.app.ecarepro.ui.studentProfile.student_profile.StudentProfileSiblingListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,10 +49,15 @@ class StudentProfileDetailsFragment(
             if (siblingDetails!=null){
                 if (siblingDetails.isNotEmpty()){
                     if (siblingDetails.size>0){
+                        val siblingListAdapter = StudentProfileSiblingListAdapter(
+                            siblingDetails,
+                        )
 
-                        binding.siblingDetails=siblingDetails[0]
-                        binding.tvClasses.text=siblingDetails[0].`class`
-
+                        binding.rvSeblingList.apply {
+                            setHasFixedSize(true)
+                            layoutManager = LinearLayoutManager(activity)
+                            adapter = siblingListAdapter
+                        }
                     }else{
                         binding.llSiblingDetails.isVisible=false
                     }

@@ -48,7 +48,7 @@ class StudentListViewModel @Inject constructor(
         toFragment:String
     )=viewModelScope.launch {
         var showAll=false
-        if (toFragment== Constant.FRA_ADD_APPRE || toFragment== Constant.FRA_VIEW_APPRE || toFragment== Constant.FRA_VIEW_INFE || toFragment== Constant.FRA_ADD_INFE ){
+        if (toFragment== Constant.APPRECIATION_FRAG || toFragment== Constant.INFRECTION_FRAG ){
             showAll = userDataStore.isGeneralSettingEnabled("DisciplineLogStudent")
         }
         runCatching {

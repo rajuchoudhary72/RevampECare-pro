@@ -130,7 +130,6 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubj
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import android.provider.Settings.Secure
 import com.app.ecarepro.data.network.CreateUserSessionRequestDto
 import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
@@ -142,8 +141,6 @@ import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
 import com.app.ecarepro.data.network.model.NetworkWingReport
-import com.app.ecarepro.data.network.model.SendMessageRequest
-import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
@@ -151,8 +148,8 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.NetworkUserSessionsResponse
-import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
 
@@ -1083,5 +1080,16 @@ interface UserService {
         @Query("FeeTypeId") feeTypeId: Int?,
         @Query("InstallIds") installIds: String?
     ): NetworkFeeDefaulter
+
+    @POST("DisciplineLog/PostCompliance")
+    suspend fun postCompliance(
+        @Body request: PostComplianceData,
+    ): CommonResponse
+
+    @GET("DisciplineLog/ResolvedCompliance")
+    suspend fun resolvedCompliance(
+        @Query("ID") ID: String?,
+        @Query("utype") utype: Int?
+    ): CommonResponse
 
 }

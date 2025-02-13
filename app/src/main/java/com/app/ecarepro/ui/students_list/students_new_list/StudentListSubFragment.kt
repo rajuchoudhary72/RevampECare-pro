@@ -1,6 +1,5 @@
 package com.app.ecarepro.ui.students_list.students_new_list
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -145,7 +144,8 @@ class StudentListSubFragment() : Fragment(),
 
             val circularAdapter = StudentListNewAdapter(
                 students,
-                this@StudentListSubFragment
+                this@StudentListSubFragment,
+                toFragment
             )
             binding.rvStudentList.apply {
                 setHasFixedSize(true)
@@ -163,38 +163,44 @@ class StudentListSubFragment() : Fragment(),
 
 
         when (toFragment) {
-            Constant.FRA_ADD_APPRE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_addAppreciationFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
+            Constant.APPRECIATION_FRAG -> {
+                when(pos){
+                    0->{
+                        findNavController().navigate(
+                            R.id.action_studentListFragment2_to_appreciationListFragment,
+                            Bundle().apply {
+                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                            })
+                    }
+                    1->{
+                        findNavController().navigate(
+                            R.id.action_studentListFragment2_to_addAppreciationFragment,
+                            Bundle().apply {
+                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                            })
+                    }
+                }
 
-            Constant.FRA_VIEW_APPRE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_appreciationListFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
             }
+            Constant.INFRECTION_FRAG -> {
+                when(pos){
+                    0->{
+                        findNavController().navigate(
+                            R.id.action_studentListFragment2_to_infractionListFragment,
+                            Bundle().apply {
+                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                            })
+                    }
+                    1->{
+                        findNavController().navigate(
+                            R.id.action_studentListFragment2_to_addInfractionFragment,
+                            Bundle().apply {
+                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                            })
+                    }
+                }
 
-            Constant.FRA_ADD_INFE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_addInfractionFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
             }
-
-            Constant.FRA_VIEW_INFE -> {
-                findNavController().navigate(
-                    R.id.action_studentListFragment2_to_infractionListFragment,
-                    Bundle().apply {
-                        putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-                    })
-            }
-
             Constant.PROFILE_FRA_STU -> {
                 findNavController().navigate(
                     R.id.action_studentListFragment2_to_studentProfileNavHostFragment,

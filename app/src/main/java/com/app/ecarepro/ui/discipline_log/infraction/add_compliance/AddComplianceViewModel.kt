@@ -1,4 +1,4 @@
-package com.app.ecarepro.ui.discipline_log.infraction.add_infraction
+package com.app.ecarepro.ui.discipline_log.infraction.add_compliance
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,14 +7,13 @@ import android.util.Base64
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.CommonResponse
-import com.app.ecarepro.data.network.model.NetworkAddInfraction
-import com.app.ecarepro.data.network.model.NetworkInfractionInstance
-import com.app.ecarepro.data.network.model.NetworkInfractionTypes
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.network.model.NetworkSubInfractionTypes
+import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.BrowsedFile
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.getFile
@@ -33,115 +32,76 @@ import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
-class AddInfractionViewModel @Inject constructor(
+class AddComplianceViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private   val userRepository: UserRepository
+    private val userDataStore: UserDataStore,
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
+
+    var UType: Int = -1
 
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
 
     fun setAttachments(attachments: List<MiMedia>) {
-        this@AddInfractionViewModel.attachments.update { attachments }
+        this@AddComplianceViewModel.attachments.update { attachments }
     }
 
     fun removeAttachment( ) {
         attachments.update { emptyList() }
     }
 
-    private val infractionTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkInfractionTypes>> = MutableStateFlow(
+    private val postComplianceMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
-    val infractionTypesStateFlow: StateFlow<NetworkResult<NetworkInfractionTypes>> = infractionTypesMutableStateFlow
+    val postComplianceStateFlow: StateFlow<NetworkResult<CommonResponse>> = postComplianceMutableStateFlow
 
 
-    private val infractionInstanceMutableStateFlow: MutableStateFlow<NetworkResult<NetworkInfractionInstance>> = MutableStateFlow(
+    private val resolvedComplianceMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
-    val infractionInstanceStateFlow: StateFlow<NetworkResult<NetworkInfractionInstance>> = infractionInstanceMutableStateFlow
+    val resolvedComplianceStateFlow: StateFlow<NetworkResult<CommonResponse>> = resolvedComplianceMutableStateFlow
 
 
-    private val addInfractionMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAddInfraction>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val addInfractionStateFlow: StateFlow<NetworkResult<NetworkAddInfraction>> = addInfractionMutableStateFlow
+    init {
 
- private val subInfractionTypesMutableStateFlow: MutableStateFlow<NetworkResult<NetworkSubInfractionTypes>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val subInfractionTypesStateFlow: StateFlow<NetworkResult<NetworkSubInfractionTypes>> = subInfractionTypesMutableStateFlow
+        viewModelScope.launch {
+            try {
+                UType = userDataStore.getUserType() ?: 1
+            } catch (e: NullPointerException) {
+                e.toString()
+            }
+        }
+    }
 
-    private val saveInfractionMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val saveInfractionStateFlow: StateFlow<NetworkResult<CommonResponse>> = saveInfractionMutableStateFlow
-
-
-    fun getInfractionTypes( )=viewModelScope.launch {
+    fun  postCompliance( compliance: String, id:String )=viewModelScope.launch {
         runCatching {
-            infractionTypesMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getInfractionTypes()
+            postComplianceMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.postCompliance(PostComplianceData(
+                uType = 1,
+                browsedFile = getAttachment(),
+                compliance = compliance,
+                id = id
+            ))
         }.onSuccess {
-            infractionTypesMutableStateFlow.value = NetworkResult.Success(it)
+            postComplianceMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            infractionTypesMutableStateFlow.value = NetworkResult.Error(it.message)
+            postComplianceMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }
 
-    fun  addInfraction( stID: Int  )=viewModelScope.launch {
-        runCatching {
-            addInfractionMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.addInfraction(stID)
-        }.onSuccess {
-            addInfractionMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            addInfractionMutableStateFlow.value = NetworkResult.Error(it.message)
-        }
-
-    }
-
-    fun  getSubInfractionTypes(infrTypeID: Int)=viewModelScope.launch {
-        runCatching {
-            subInfractionTypesMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.getSubInfractionTypes(infrTypeID)
-        }.onSuccess {
-            subInfractionTypesMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            subInfractionTypesMutableStateFlow.value = NetworkResult.Error(it.message)
-        }
-
-    }
-
-    fun  getinfractionInstance(
-        infrTypeID: Int,
-        InfrSubTypeID: Int,
-        StID: Int
+    fun  resolvedCompliance(
+        ID: String?,
     )=viewModelScope.launch {
         runCatching {
-            infractionInstanceMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.infractionInstance(infrTypeID, InfrSubTypeID, StID)
+            resolvedComplianceMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.resolvedCompliance(
+                ID = ID,
+                utype = 1
+            )
         }.onSuccess {
-            infractionInstanceMutableStateFlow.value = NetworkResult.Success(it)
+            resolvedComplianceMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            infractionInstanceMutableStateFlow.value = NetworkResult.Error(it.message)
-        }
-
-    }
-
-    fun   saveInfraction(
-        uType: Int,
-        action:Int,
-        stID:Int,
-        infrSubTypeID:Int,
-        consID:Int,
-        instance:Int,
-        infractionOn:String,
-        correctiveAction:String,
-        isComplianceActive:Boolean
-        )=viewModelScope.launch {
-        runCatching {
-            saveInfractionMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.saveInfraction(uType,action, stID, infrSubTypeID, consID, instance, infractionOn, correctiveAction,getAttachment(),isComplianceActive)
-        }.onSuccess {
-            saveInfractionMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            saveInfractionMutableStateFlow.value = NetworkResult.Error(it.message)
+            resolvedComplianceMutableStateFlow.value = NetworkResult.Error(it.message)
         }
 
     }
@@ -247,5 +207,6 @@ class AddInfractionViewModel @Inject constructor(
 
         return byteBuffer.toByteArray()
     }
+
 
 }

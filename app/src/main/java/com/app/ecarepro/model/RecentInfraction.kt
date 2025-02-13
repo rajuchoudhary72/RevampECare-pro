@@ -6,6 +6,7 @@ data class RecentInfraction(
     val consequences: String,
     val correctiveAction: String,
     val designation: String,
+    val compCreatedOn: String,
     val infraction: String,
     val infractionOn: String,
     val instance: String,
@@ -13,9 +14,13 @@ data class RecentInfraction(
     val point: Int,
     val stID: Int,
     val staffName: String,
+    val complianceAttachment: String,
     val stffPhoto: String,
     val studentName: Any,
     val canDelete: Boolean,
+    val isResolved: Boolean,
+    val showResolvedButton: Boolean,
+    val isComplianceActive: Boolean,
     val id: String,
     val subInfraction: String
 )

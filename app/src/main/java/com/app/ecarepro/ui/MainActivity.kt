@@ -1306,7 +1306,9 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         when (childMenuId) {
                             21 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.appreciationSelectionFragment)
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.APPRECIATION_FRAG)
+                                })
 
                             } else {
                                 navController.navigate(R.id.appreciationListFragment)
@@ -1314,7 +1316,9 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             22 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.infractionSelectFragment)
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                                })
 
                             } else {
                                 navController.navigate(R.id.infractionListFragment)
