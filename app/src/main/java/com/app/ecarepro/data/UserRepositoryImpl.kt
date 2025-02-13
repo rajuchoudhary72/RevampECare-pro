@@ -1440,6 +1440,7 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun resolvedCompliance(ID: String?, utype: Int?): CommonResponse {
         return userService.resolvedCompliance(ID, utype)
+    }
 
     override suspend fun getFeeDefaultersDas(
         feeTypeId: Int?, installIds: String?
