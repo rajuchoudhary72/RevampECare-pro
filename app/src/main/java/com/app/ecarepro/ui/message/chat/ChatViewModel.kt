@@ -34,19 +34,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.firstOrNull
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
+import javax.inject.Inject
 
 
 @HiltViewModel
@@ -58,9 +57,8 @@ class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val id = savedStateHandle.getLiveData("ID", initialValue = "")
-     val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
+    val messageType = savedStateHandle.get<String>("MessageType") ?: MessageType.INBOX.value
 
-    val messageBody = MutableStateFlow("")
     val message = MutableStateFlow("")
 
     val composeMessageType =
@@ -76,7 +74,7 @@ class ChatViewModel @Inject constructor(
         attachments.update { current -> current.filterNot { it == attachment } }
     }
 
-    fun clearAttachment(){
+    fun clearAttachment() {
         attachments.update {
             emptyList()
         }
@@ -100,47 +98,50 @@ class ChatViewModel @Inject constructor(
         ) { id, attachments ->
             Pair(id, attachments)
         }
-        .flatMapLatest {(id, _) ->
-            messageRepository.getConversationDetails(id, MessageType.getMessageType(messageType))
-        }
-        .map { result ->
-            if (result.isSuccess) {
-                result.getOrNull()!!.let { response ->
-                    if (response.msgDTL.isNullOrEmpty()) {
-                        ChatUiState.EmptyInbox
-                    } else {
-                        /*  senderDTL =  response.senderDTL*/
-                        ChatUiState.Success(
-                            messages = response.msgDTL,
-                            msgID = response.msgID,
-                            readCount = response.readCount,
-                            receiverID = response.receiverID,
-                            receiverType = response.receiverType,
-                            canReply = response.canReply,
-                            recipients = response.recipients ?: emptyList(),
-                            subject = response.subject,
-                            senderDTL =  response.senderDTL,
-                            messageSettings = userDataStore.getMessageSettings().firstOrNull(),
-                            attachments = attachments.value
-
-                        )
-                    }
-                }
-
-            } else {
-                val error = result.exceptionOrNull() ?: IllegalArgumentException(
-                    UNKNOWN_ERROR_MESSAGE
-                )
-                ChatUiState.Error(
-                    error
+            .flatMapLatest { (id, _) ->
+                messageRepository.getConversationDetails(
+                    id,
+                    MessageType.getMessageType(messageType)
                 )
             }
-        }
-        .stateIn(
-            initialValue = ChatUiState.Loading,
-            started = SharingStarted.WhileSubscribed(300),
-            scope = viewModelScope
-        )
+            .map { result ->
+                if (result.isSuccess) {
+                    result.getOrNull()!!.let { response ->
+                        if (response.msgDTL.isNullOrEmpty()) {
+                            ChatUiState.EmptyInbox
+                        } else {
+                            /*  senderDTL =  response.senderDTL*/
+                            ChatUiState.Success(
+                                messages = response.msgDTL,
+                                msgID = response.msgID,
+                                readCount = response.readCount,
+                                receiverID = response.receiverID,
+                                receiverType = response.receiverType,
+                                canReply = response.canReply,
+                                recipients = response.recipients ?: emptyList(),
+                                subject = response.subject,
+                                senderDTL = response.senderDTL,
+                                messageSettings = userDataStore.getMessageSettings().firstOrNull(),
+                                attachments = attachments.value
+
+                            )
+                        }
+                    }
+
+                } else {
+                    val error = result.exceptionOrNull() ?: IllegalArgumentException(
+                        UNKNOWN_ERROR_MESSAGE
+                    )
+                    ChatUiState.Error(
+                        error
+                    )
+                }
+            }
+            .stateIn(
+                initialValue = ChatUiState.Loading,
+                started = SharingStarted.WhileSubscribed(300),
+                scope = viewModelScope
+            )
 
     init {
         viewModelScope.launch {
@@ -193,13 +194,14 @@ class ChatViewModel @Inject constructor(
             3
         } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
             3
-        }else {
+        } else {
             2
         }
     }
+
     private fun getMultipleAttachment(): List<String>? {
         val attachments = attachments.value
-        if (getMessageType()==1)
+        if (getMessageType() == 1)
             return null
         /*  if (attachments.isEmpty() || attachments.size == 1)
                     return null*/
@@ -222,12 +224,13 @@ class ChatViewModel @Inject constructor(
             }
         }
     }
+
     private fun getAttachment(): Attachment? {
         val attachments = attachments.value
 
         return if (attachments.isEmpty()) {
             null
-        }else  if (getMessageType()==1)
+        } else if (getMessageType() == 1)
             return null
         else if (attachments.size == 1) {
             val attachment = attachments.first()
@@ -274,6 +277,7 @@ class ChatViewModel @Inject constructor(
             else -> "unknown"
         }
     }
+
     private fun isPdf(attachment: MiMedia) =
         mutableListOf(
             AttachmentType.PDF.name,
@@ -304,6 +308,7 @@ class ChatViewModel @Inject constructor(
             null
         }
     }
+
     private fun getBase64StringFromUri(file: File): String? {
         val imageStream: InputStream
         return try {
@@ -317,6 +322,7 @@ class ChatViewModel @Inject constructor(
             null
         }
     }
+
     @Throws(IOException::class)
     private fun readBytes(inputStream: InputStream): ByteArray {
         val byteBuffer = ByteArrayOutputStream()
@@ -332,7 +338,6 @@ class ChatViewModel @Inject constructor(
     }
 
 }
-
 
 
 fun Context.getDeviceIpAddress(): String {
