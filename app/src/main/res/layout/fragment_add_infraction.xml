@@ -23,7 +23,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            >
 
 
             <LinearLayout
@@ -224,6 +226,15 @@
                             android:text="@string/instance"
                             android:visibility="visible" />
 
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+
                         <TextView
                             android:id="@+id/tv_select_cons"
                             android:layout_width="0dp"
@@ -239,8 +250,72 @@
                             android:visibility="visible"
                             app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cv_attachment_button"
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="@dimen/_35sdp"
+                            app:cardCornerRadius="@dimen/_25sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:layout_gravity="center"
+                            >
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:contentDescription="@string/attach_file"
+                                android:src="@drawable/baseline_attach_file_24"
+                                android:padding="@dimen/_8sdp" />
+                        </androidx.cardview.widget.CardView>
+
 
                     </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_attachements"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginHorizontal="@dimen/_10sdp"
+                            android:background="@drawable/bg_outline_round_corner_green"
+                            android:visibility="gone"
+                            >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_light"
+                                android:textSize="12sp"
+                                android:text="@string/file_attached"
+                                android:padding="@dimen/_8sdp"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="@dimen/_5sdp"
+                                />
+
+                            <ImageView
+                                android:id="@+id/iv_remove_attachment"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/remove_attchment"
+                                android:src="@drawable/tb_doc_picker_ic_icon_cancel"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                />
+
+
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/tv_att_text_holder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/you_can_upload_the_attachment_for_consequences_if_any_from_here_such_as_warning_letter_warning_cards_etc_png_jpg_jpeg_pdf_only_upto_5mb"
+                        android:textSize="12sp"
+                       android:layout_marginBottom="@dimen/_15sdp"
+                        android:layout_marginHorizontal="@dimen/_10sdp"
+                        />
+
 
 
                     <EditText
@@ -254,6 +329,20 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:hint="@string/enter_corrective_action"
                         android:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <CheckBox
+                            android:id="@+id/cb_active_compliance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/activate_compliance"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            />
+
+                    </LinearLayout>
 
 
                     <LinearLayout

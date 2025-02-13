@@ -30,6 +30,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title">Title : </string>
     <string name="notice">Notice</string>
+    <string name="compliance">compliance</string>
     <string name="report_card">Report Card</string>
     <string name="circular">Circular</string>
     <string name="payslip">PaySlip</string>
@@ -146,7 +147,7 @@
     <string name="appreciatin_on">"Appreciation on : "</string>
     <string name="select_consequences">Select Consequences</string>
     <string name="select_reward">Select Reward</string>
-    <string name="enter_corrective_action">Enter Corrective Action</string>
+    <string name="enter_corrective_action">Enter Corrective Action \n \n \n</string>
     <string name="enter_remark">Enter Remark</string>
     <string name="subcategory">Subcategory:</string>
     <string name="consequences">Consequences:</string>
@@ -658,6 +659,7 @@
     <string name="bus_location">Bus Location</string>
     <string name="select_search_filter">Select Search Filter</string>
     <string name="students_list">Students Profile</string>
+    <string name="students_lists">Students List</string>
     <string name="staff_list">Staff List</string>
     <string name="mobile">Mobile</string>
     <string name="students_place_of_birth">Students Place of Birth</string>
@@ -828,6 +830,7 @@
     <string name="academic_performance">Academic Performance</string>
     <string name="leave_report">Leave Report</string>
     <string name="students_profile">Students Profile</string>
+    <string name="add_compliance">Add Compliance</string>
     <string name="attendance_summary">Attendance Summary</string>
     <string name="select_wing">Select Wing</string>
     <string name="class_promotion">Class Promotion</string>
@@ -885,5 +888,18 @@
 
     <string name="father_aadhaar_no">Father Aadhaar No</string>
     <string name="father_pan">Father PAN</string>
+    <string name="add_attachment">Add Attachment</string>
+    <string name="resolved">Resolved</string>
+    <string name="save_compliance">Save Compliance</string>
+    <string name="you_can_upload_the_attachment_for_compliance_if_any_from_here_png_jpg_jpeg_pdf_only_upto_5mb">You can upload the attachment for compliance (if any) from here. PNG, JPG, JPEG, PDF only. Upto 5MB</string>
+    <string name="attach_pdf">Attach PDF</string>
+    <string name="attach_image">Attach Image</string>
+    <string name="file_attached">File Attached</string>
+    <string name="activate_compliance">Activate Compliance</string>
+    <string name="you_can_upload_the_attachment_for_consequences_if_any_from_here_such_as_warning_letter_warning_cards_etc_png_jpg_jpeg_pdf_only_upto_5mb">You can upload the attachment for consequences (if any) from here such as warning letter, warning cards etc. PNG, JPG, JPEG, PDF only. Upto 5MB.</string>
+    <string name="attach_file">Attach File</string>
+    <string name="remove_attchment">Remove Attchment</string>
+    <string name="attachments">Attachments</string>
+    <string name="add">Add</string>
 </resources>
 

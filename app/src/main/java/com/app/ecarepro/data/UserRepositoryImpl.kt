@@ -167,8 +167,10 @@ import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
+import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.NetworkUserSessionsResponse
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
@@ -580,18 +582,20 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveInfraction(
+        uType: Int,
         action: Int,
         stID: Int,
         infrSubTypeID: Int,
         consID: Int,
         instance: Int,
         infractionOn: String,
-        correctiveAction: String
+        correctiveAction: String,
+        consequencesAttachment: BrowsedFile?,
+        isComplianceActive:Boolean
     ): CommonResponse {
         return userService.saveInfraction(
-            PostSaveInfraction(
-                action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID
-            )
+            PostSaveInfraction(uType,
+                action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID, consequencesAttachment,isComplianceActive)
         )
     }
 
@@ -1427,6 +1431,14 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: String?): NetworkFeeDefaulter {
         return userService.getFeeDefaulters(feeTypeId, installIds)
+    }
+
+    override suspend fun postCompliance(postComplianceData: PostComplianceData): CommonResponse {
+        return userService.postCompliance(postComplianceData)
+    }
+
+    override suspend fun resolvedCompliance(ID: String?, utype: Int?): CommonResponse {
+        return userService.resolvedCompliance(ID, utype)
     }
 
     override suspend fun feeCollection(

@@ -42,8 +42,7 @@ class StudentProfileInfractionListAdapter(private var recentInfractions: List<Re
                  append(infractionListFragment.getString(R.string.category))
                  append(data.infraction)
              }
-             binding.tvQuantity.text= buildString {
-                 append(infractionListFragment.getString(R.string.instance_wit))
+             binding.tvInstance.text= buildString {
                  append(data.instance)
              }
              binding.tvDate.text= buildString {

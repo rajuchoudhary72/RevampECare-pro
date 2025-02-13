@@ -48,7 +48,7 @@ class StudentListNavHost : Fragment() {
             lifecycleOwner = viewLifecycleOwner
         }
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.students_profile)
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.students_lists)
         try {
             toFragment = requireArguments().getString(Constant.TO).toString()
         } catch (_: Exception) {
