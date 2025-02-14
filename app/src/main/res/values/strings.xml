@@ -147,7 +147,7 @@
     <string name="appreciatin_on">"Appreciation on : "</string>
     <string name="select_consequences">Select Consequences</string>
     <string name="select_reward">Select Reward</string>
-    <string name="enter_corrective_action">Enter Corrective Action \n \n \n</string>
+    <string name="enter_corrective_action">\n \n \n</string>
     <string name="enter_remark">Enter Remark</string>
     <string name="subcategory">Subcategory:</string>
     <string name="consequences">Consequences:</string>

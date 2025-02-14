@@ -35,6 +35,7 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
 
          if (binding!=null){
 
+             binding.rlCompilance.isVisible=true
 
              var isMaxLineOne=true
              val data=recentInfractions[position]
@@ -44,12 +45,12 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
                  binding.cvComplianceNotActivated.isVisible=false
                  if (data.isResolved){
                      binding.cvResolved.setCardBackgroundColor(infractionListFragment.resources.getColor(R.color.green,null))
+                     binding.tvResolvedHolder.text=infractionListFragment.getString(R.string.resolved)
                  }
              }else{
                  binding.llCompliance.isVisible=false
                  binding.cvComplianceNotActivated.isVisible=true
              }
-
 
 
                  binding.ivDelete.isVisible=data.canDelete

@@ -51,7 +51,7 @@ import com.app.ecarepro.model.RecentAppreciation
             binding.tvDiagnosis.text= data.reward
             binding.tvRemark.text= data.remark
             binding.tvAttdentName.text= data.staffName
-            binding.tvAttdentName.isVisible=false
+            binding.ivDelete.isVisible=false
 
 
         }
