@@ -213,7 +213,9 @@
             <RelativeLayout
                 android:id="@+id/rl_compilance"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                >
 
                 <LinearLayout
                     android:id="@+id/ll_compliance"
@@ -251,6 +253,7 @@
                         android:layout_marginStart="@dimen/_5sdp"
                         >
                         <TextView
+                            android:id="@+id/tv_resolved_holder"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Not Resolved"
