@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -29,6 +30,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.ShareViewModelDiscipline
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.compose.AttachmentType
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.lassi.common.utils.KeyUtils
@@ -103,12 +105,7 @@ class AddComplianceFragment : Fragment() {
                                tvAttchmentName.text=getFilenameFromUrl(infraction.complianceAttachment)
                                llAttachedFile.setOnClickListener {
                                    try {
-                                       val androidDownloader = AndroidDownloader(requireContext())
-                                       if (isPdfUrlByExtension(infraction.complianceAttachment)){
-                                           androidDownloader.downloadFile(infraction.complianceAttachment ,getString(R.string.compliance))
-                                       }else{
-                                           androidDownloader.downloadFile(infraction.complianceAttachment, "Photo", "image/jpeg")
-                                       }
+                                       openFile(infraction.complianceAttachment)
                                    }catch (e:SecurityException){
                                        e.printStackTrace()
                                    }
@@ -147,8 +144,52 @@ class AddComplianceFragment : Fragment() {
             postCompliance()
         }
         binding.cvResolvedButton.setOnClickListener {
-            resolvedCompliance()
+            showAlertDialogToResolved()
         }
+
+    }
+
+    private fun showAlertDialogToResolved() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Are you sure?")
+        builder.setMessage("Are you sure to you want to resolve?")
+        builder.setPositiveButton("OK") { dialog, which ->
+            resolvedCompliance()
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("CANCEL"){ dialog, which ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+
+    private fun openFile(fileSource: String) {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
+            }
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }else -> {
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
+        }
+        }
+
+
 
     }
 
