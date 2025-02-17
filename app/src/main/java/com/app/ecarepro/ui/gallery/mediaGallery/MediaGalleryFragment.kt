@@ -90,7 +90,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
                 mediaGalleryViewModel.getMediaGallery(
                     pageIndex,
                     queryType,
-                    yearList[yearPosition].toInt(),
+                    0,
                     binding.tvPubDate.text.toString(),
                     binding.edSearch.text.toString()
                 )
