@@ -152,7 +152,6 @@ class FeeDefaulterUI : Fragment() {
                 }
             }
 
-
             builder.setPositiveButton("OK") { _, _ ->
                 binding.installments.setText(selectedInstallmentType.joinToString(", "))  // Show selected items
                  installIds = selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
