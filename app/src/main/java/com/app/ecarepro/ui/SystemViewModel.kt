@@ -11,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.AppLayoutDto
+
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
@@ -123,7 +125,8 @@ class SystemViewModel @Inject constructor(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
                         favroiteMenus = response.favoriteMenus ?: emptyList(),
-                        searchOption = response.searchOptions ?: emptyList()
+                        searchOption = response.searchOptions ?: emptyList(),
+                        appLayoutDto = response
                     )
                 } else {
                     val error = result.exceptionOrNull() ?: IllegalArgumentException(
@@ -305,6 +308,7 @@ sealed interface MainActivityUiState {
         val menus: List<Menu>,
         val favroiteMenus: List<Menu>,
         val searchOption: List<SearchOption> = emptyList(),
+        val appLayoutDto: AppLayoutDto
     ) : MainActivityUiState
 
     data class Error(

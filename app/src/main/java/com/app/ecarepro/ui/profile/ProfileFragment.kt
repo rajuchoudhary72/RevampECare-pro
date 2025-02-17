@@ -593,6 +593,14 @@ class ProfileFragment : Fragment() {
             iconRes(R.drawable.ic_date_of_birth)
             title(getString(R.string.date_of_birth))
             subTitle(profile.dob)
+
+        }
+        profileItem {
+            id(R.string.transport)
+            iconRes(R.drawable.baseline_directions_bus_24)
+            title(getString(R.string.transport))
+            subTitle(profile.transport)
+
         }
         profileItem {
             id(R.string.permanent_education_number)

@@ -185,20 +185,15 @@ class ChatFragment : Fragment() {
         }
         FileAccess.checkPermission(this@ChatFragment)
         binding.btnCamera.setOnClickListener {
-            try {
-                hideAttachmentCard()
-                lastClickAttachmentType = AttachmentType.CAMERA
-                FileAccess.checkPermission(this@ChatFragment)
-                // checkCameraPermissions()
+            hideAttachmentCard()
+            lastClickAttachmentType = AttachmentType.CAMERA
+            FileAccess.checkPermission(this@ChatFragment)
+            if(checkCameraPermissions()){
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
                     cameraLauncher.launch(FileAccess.cameraIntent())
                 }
-            } catch (e: SecurityException) {
-                e.message
             }
-
-
         }
 
 
@@ -269,7 +264,25 @@ class ChatFragment : Fragment() {
             true
         }
     }
+    private fun checkCameraPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
 
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionList.add(Manifest.permission.CAMERA)
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), permissionList.toTypedArray(), 1001
+            )
+            false
+        } else {
+            true
+        }
+    }
     private fun openAudioRecorder() {
 
         VoiceSenderDialog(object : AudioRecordListener {
