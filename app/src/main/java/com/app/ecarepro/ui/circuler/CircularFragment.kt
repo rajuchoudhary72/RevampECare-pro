@@ -87,13 +87,19 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         }
 
         // Collect the debounced search query
-        lifecycleScope.launch {
-            searchQueryStateFlow
-                .debounce(300L) // Adjust debounce time (in milliseconds) as needed
-                .collectLatest { query ->
-                    pageIndex=1
-                    circularViewModel.getCirculars(pageIndex, selectedYearID, query)
-                }
+        fragmentCircularBinding.edSearch.doAfterTextChanged {
+//            lifecycleScope.launch {
+//                searchQueryStateFlow
+//                    .debounce(300L) // Adjust debounce time (in milliseconds) as needed
+//                    .collectLatest { query ->
+//                        pageIndex=1
+//                        circularViewModel.getCirculars(pageIndex, selectedYearID, query)
+//                    }
+//            }
+
+            pageIndex=1
+            circularViewModel.getCirculars(pageIndex, selectedYearID, it.toString())
+
         }
 
 
