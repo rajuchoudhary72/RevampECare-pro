@@ -96,7 +96,7 @@ class ChatViewModel @Inject constructor(
             flow = id.asFlow(),
             flow2 = attachments
         ) { id, attachments ->
-            Pair(id, attachments)
+            Pair(id.orEmpty(), attachments)
         }
             .flatMapLatest { (id, _) ->
                 messageRepository.getConversationDetails(

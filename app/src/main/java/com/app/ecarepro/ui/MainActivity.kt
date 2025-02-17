@@ -1018,17 +1018,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        val packageName = "com.android.chrome"
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl(this, uri!!)
-        } else {
-            try {
+        try {
+            val packageName = "com.android.chrome"
+            if (packageName != null) {
+                customTabsIntent.intent.setPackage(packageName)
+                customTabsIntent.launchUrl(this, uri!!)
+            } else {
+
                 val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(fallbackIntent)
-            } catch (e: ActivityNotFoundException) {
-                showMessage("No browser available to handle the URL")
             }
+        } catch (e: ActivityNotFoundException) {
+            showMessage("No browser available to handle the URL")
         }
     }
 
@@ -1178,7 +1179,7 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     7 -> navController.navigate(R.id.composeFragment)
                     8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
-                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
+                    9 -> navController.navigate(R.id.messageFragment, bundleOf("openSend" to true))
                 }
             }
 
@@ -1861,18 +1862,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         try {
-            try {
-                isActivityPaused = true
-            } catch (e: RuntimeException) {
-                e.printStackTrace()
-            }
-
+            isActivityPaused = true
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
-
+        super.onPause()
     }
 
     override fun onResume() {

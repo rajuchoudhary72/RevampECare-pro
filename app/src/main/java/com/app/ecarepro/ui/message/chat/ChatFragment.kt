@@ -1,7 +1,6 @@
 package com.app.ecarepro.ui.message.chat
 
 import android.Manifest
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -137,7 +136,7 @@ class ChatFragment : Fragment() {
             chatViewModel.replyMessage { success, message ->
                 mainActivity().showLoader(false)
                 mainActivity().showMessage(message)
-                if(success){
+                if (success) {
                     chatViewModel.clearAttachment()
                 }
             }
@@ -179,20 +178,15 @@ class ChatFragment : Fragment() {
         }
         FileAccess.checkPermission(this@ChatFragment)
         binding.btnCamera.setOnClickListener {
-            try {
-                hideAttachmentCard()
-                lastClickAttachmentType = AttachmentType.CAMERA
-                FileAccess.checkPermission(this@ChatFragment)
-                // checkCameraPermissions()
+            hideAttachmentCard()
+            lastClickAttachmentType = AttachmentType.CAMERA
+            FileAccess.checkPermission(this@ChatFragment)
+            if(checkCameraPermissions()){
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
                     cameraLauncher.launch(FileAccess.cameraIntent())
                 }
-            } catch (e: SecurityException) {
-                e.message
             }
-
-
         }
 
 
@@ -248,6 +242,25 @@ class ChatFragment : Fragment() {
             ) {
                 permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(), permissionList.toTypedArray(), 1001
+            )
+            false
+        } else {
+            true
+        }
+    }
+    private fun checkCameraPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
+
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionList.add(Manifest.permission.CAMERA)
         }
 
         return if (permissionList.isNotEmpty()) {
