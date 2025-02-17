@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import com.app.ecarepro.data.network.model.AppLayoutDto
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -630,6 +631,8 @@ class MainActivity : AppCompatActivity() {
                         buildDrawerModels(data.menus)
                         buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
+                        showBadgeCount(data.appLayoutDto)
+
                     }
                 }
         }
@@ -661,6 +664,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.drawerLayout.open()
+    }
+    private fun showBadgeCount(appLayoutDto: AppLayoutDto) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+            val notificationCount = appLayoutDto.notificationCount ?: 0
+            if (notificationCount > 0) {
+                getOrCreateBadge(R.id.notification).apply {
+                    isVisible = true
+                    number = notificationCount
+                }
+            } else {
+                removeBadge(R.id.notification)
+            }
+            val messageCount = appLayoutDto.unreadMessageCount ?: 0
+            if (messageCount > 0) {
+                getOrCreateBadge(R.id.message).apply {
+                    isVisible = true
+                    number = messageCount
+                }
+            } else {
+                removeBadge(R.id.message)
+            }
+        }
     }
 
     /*private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -1018,17 +1043,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        val packageName = "com.android.chrome"
-        if (packageName != null) {
-            customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl(this, uri!!)
-        } else {
-            try {
+        try {
+            val packageName = "com.android.chrome"
+            if (packageName != null) {
+                customTabsIntent.intent.setPackage(packageName)
+                customTabsIntent.launchUrl(this, uri!!)
+            } else {
+
                 val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(fallbackIntent)
-            } catch (e: ActivityNotFoundException) {
-                showMessage("No browser available to handle the URL")
             }
+        } catch (e: ActivityNotFoundException) {
+            showMessage("No browser available to handle the URL")
         }
     }
 
@@ -1866,18 +1892,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        super.onPause()
         try {
-            try {
-                isActivityPaused = true
-            } catch (e: RuntimeException) {
-                e.printStackTrace()
-            }
-
+            isActivityPaused = true
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
-
+        super.onPause()
     }
 
     override fun onResume() {

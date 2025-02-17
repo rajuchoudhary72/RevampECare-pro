@@ -7,7 +7,7 @@ import com.app.ecarepro.model.Installment
 data class NetworkFeeDefaulter(
     val errorCode: Int,
     val feeDefaulters: List<FeeDefaulter>,
-    val feeTypes: List<FeeType>,
+    val feeTypes: List<FeeType>?,
     val installments: List<Installment>,
     val message: String,
     val status: String,
