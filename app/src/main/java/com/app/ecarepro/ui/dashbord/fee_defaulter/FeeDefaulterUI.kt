@@ -29,8 +29,8 @@ class FeeDefaulterUI : Fragment() {
 
     private lateinit var binding: FragmentFeeDefaulterUIBinding
     private val feeDefaulterViewModel: FeeDefaulterViewModel by viewModels()
-    private var feeTypeId: Int? = 0
-    private var installIds: Int? = 0
+    private var feeTypeId: Int = 0
+    private var installIds: String = "0"
     private lateinit var selectedInstallmentType: MutableList<String>
     private lateinit var selectedInstallmentIds: MutableList<Int>
 
@@ -46,7 +46,7 @@ class FeeDefaulterUI : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getFeeDefaulters(feeTypeId, installIds.toString())
+        getFeeDefaulters(feeTypeId, installIds)
     }
 
     private fun getFeeDefaulters(feeTypeId: Int?,
@@ -125,7 +125,7 @@ class FeeDefaulterUI : Fragment() {
 
         binding.feeType.setOnItemClickListener { _, _, position, _ ->
             feeTypeId=feeType[position].feeTypeID
-            getFeeDefaulters(feeTypeId,installIds.toString())
+            getFeeDefaulters(feeTypeId, installIds)
         }
     }
 
@@ -152,11 +152,10 @@ class FeeDefaulterUI : Fragment() {
                 }
             }
 
-            val installIds = selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
-
             builder.setPositiveButton("OK") { _, _ ->
                 binding.installments.setText(selectedInstallmentType.joinToString(", "))  // Show selected items
-                getFeeDefaulters(feeTypeId, installIds) // Fetch defaulters based on selection
+                 installIds = selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
+                getFeeDefaulters(feeTypeId, installIds.trim()) // Fetch defaulters based on selection
             }
 
             builder.setNegativeButton("Cancel", null)
