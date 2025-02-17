@@ -42,9 +42,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:onClick="@{changeUser}"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:onClick="@{changeUser}"
         android:paddingHorizontal="@dimen/horizontal_margin"
         android:paddingVertical="@dimen/_5sdp">
 
@@ -82,10 +82,10 @@
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintTop_toBottomOf="@id/name"
             bind:address="@{school.schAdd1}"
-            bind:name="@{school.schoolName}"
-            bind:photo="@{school.logo}"
+            bind:childName="@{childName}"
             bind:childPhoto="@{childPhoto}"
-            bind:childName="@{childName}" />
+            bind:name="@{school.schoolName}"
+            bind:photo="@{school.logo}" />
 
         <ImageView
             android:id="@+id/btn_close"

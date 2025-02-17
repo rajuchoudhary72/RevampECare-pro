@@ -3,7 +3,7 @@
     <debug-overrides>
         <!-- Trust user-added certificates for debugging -->
         <trust-anchors>
-            <certificates src="user"/>
+            <certificates src="user" />
         </trust-anchors>
     </debug-overrides>
 

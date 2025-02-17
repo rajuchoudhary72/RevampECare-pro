@@ -58,15 +58,12 @@
         </FrameLayout>
 
 
-
-
         <RelativeLayout
             android:id="@+id/rl_bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/bottom_nav_background"
-             >
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,41 +76,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
                     android:layout_marginHorizontal="@dimen/_30sdp"
-                    android:background="@drawable/bg_round_corner_white"
                     android:layout_marginTop="25dp"
-                    >
+                    android:background="@drawable/bg_round_corner_white">
 
-                     <ImageView
-                         android:id="@+id/iv_search"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:src="@drawable/ic_search_new"
-                         android:layout_centerVertical="true"
-                         android:layout_marginStart="25dp"
-                         app:tint="@color/brand_color" />
+                    <ImageView
+                        android:id="@+id/iv_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="25dp"
+                        android:src="@drawable/ic_search_new"
+                        app:tint="@color/brand_color" />
 
                     <TextView
                         android:id="@+id/search_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                         android:text="Global Search"
-                        android:textColor="@color/grey_40"
                         android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/iv_search"
                         android:layout_marginStart="5dp"
-                        />
+                        android:layout_toEndOf="@+id/iv_search"
+                        android:text="Global Search"
+                        android:textColor="@color/grey_40" />
 
                     <ImageView
                         android:id="@+id/iv_setting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_setting_new"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="25dp"
-                        android:layout_alignParentEnd="true"
                         android:layout_marginEnd="20dp"
-                        app:tint="@color/brand_color"
-                        />
+                        android:src="@drawable/ic_setting_new"
+                        app:tint="@color/brand_color" />
 
 
                 </RelativeLayout>
@@ -122,16 +116,13 @@
                     android:id="@+id/bottomNavigationView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                     app:menu="@menu/bottom_navigation_menu"
                     android:background="@color/transparent"
-                     tools:visibility="visible"
-                    app:labelVisibilityMode="labeled"
-
-                    app:itemIconTint="@color/bnv_tab_item_foreground"
-                app:itemTextColor="@color/bnv_tab_item_foreground"
                     app:itemActiveIndicatorStyle="@android:color/transparent"
-
-                    />
+                    app:itemIconTint="@color/bnv_tab_item_foreground"
+                    app:itemTextColor="@color/bnv_tab_item_foreground"
+                    app:labelVisibilityMode="labeled"
+                    app:menu="@menu/bottom_navigation_menu"
+                    tools:visibility="visible" />
 
 
             </LinearLayout>

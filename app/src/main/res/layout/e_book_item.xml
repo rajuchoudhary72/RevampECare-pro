@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="ebookDetails"
             type="com.app.ecarepro.model.Book" />
@@ -11,8 +12,8 @@
         android:id="@+id/cv_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="@dimen/_10sdp">
+        android:layout_margin="@dimen/_10sdp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,8 +24,7 @@
                 android:id="@+id/iv_photo"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_marginTop="5dp"
-                />
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -33,15 +33,15 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:fontFamily="@font/ubuntu_medium"
-                 android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_16sdp" />
 
             <TextView
                 android:id="@+id/tv_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:fontFamily="@font/ubuntu_light"
                 android:layout_gravity="center"
-                android:layout_marginVertical="@dimen/_10sdp" />
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:fontFamily="@font/ubuntu_light" />
 
 
         </LinearLayout>

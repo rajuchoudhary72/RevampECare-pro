@@ -28,9 +28,12 @@ data class AppLayoutDto(
     val status: String?,
     @SerializedName("userInfo")
     val userInfo: UserInfo?,
-
     @SerializedName("searchOptions")
-    val searchOptions: List<SearchOption>?
+    val searchOptions: List<SearchOption>?,
+    @SerializedName("notificationCount")
+    val notificationCount: Int?,
+    @SerializedName("unreadMessageCount")
+    val unreadMessageCount: Int?
 )
 @Parcelize
 data class SearchOption(

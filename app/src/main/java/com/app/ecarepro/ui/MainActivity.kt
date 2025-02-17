@@ -49,8 +49,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
+import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.sync.SyncManager
@@ -92,7 +94,6 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-import com.app.ecarepro.data.AppSessionManager
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -630,6 +631,7 @@ class MainActivity : AppCompatActivity() {
                         buildDrawerModels(data.menus)
                         buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
+                        showBadgeCount(data.appLayoutDto)
                     }
                 }
         }
@@ -661,6 +663,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.drawerLayout.open()
+    }
+
+    private fun showBadgeCount(appLayoutDto: AppLayoutDto) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+            val notificationCount = appLayoutDto.notificationCount ?: 0
+            if (notificationCount > 0) {
+                getOrCreateBadge(R.id.notification).apply {
+                    isVisible = true
+                    number = notificationCount
+                }
+            } else {
+                removeBadge(R.id.notification)
+            }
+
+            val messageCount = appLayoutDto.unreadMessageCount ?: 0
+            if (messageCount > 0) {
+                getOrCreateBadge(R.id.message).apply {
+                    isVisible = true
+                    number = messageCount
+                }
+            } else {
+                removeBadge(R.id.message)
+            }
+
+        }
     }
 
     /*private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
