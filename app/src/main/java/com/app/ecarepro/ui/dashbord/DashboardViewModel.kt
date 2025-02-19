@@ -4,24 +4,23 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-import com.app.ecarepro.data.network.model.CollectionModeWise
-import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
-import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.ui.dashbord.model.ModeWiseCollection
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
@@ -39,7 +38,7 @@ class DashboardViewModel @Inject constructor(
         flow3 = feeCollection,
         flow4 = modelWiseCollection,
         flow5 = feeDefaulter
-    ) { dashboardData, feeds, feeCollection, modelWiseColl,feeDefaulter ->
+    ) { dashboardData, feeds, feeCollection, modelWiseColl, feeDefaulter ->
 
         var data = dashboardData
 
@@ -60,12 +59,14 @@ class DashboardViewModel @Inject constructor(
 
 
         if (modelWiseColl != null) {
-            data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
+            data =
+                dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
         }
         Log.e("Dashboard Data", data?.feeCollection.toString())
 
         data
     }
+
     init {
         getFeeCollection()
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -75,18 +76,20 @@ class DashboardViewModel @Inject constructor(
     }
 
 
-
     fun getFeeDefaulters(
         feeTypeId: Int?,
         installIds: Int?,
         onResponse: ((Boolean, String?) -> Unit)? = null
     ) {
         viewModelScope.launch {
-            userRepository.getFeeDefaultersDas(feeTypeId, installIds).collectLatest {
-                if (it.isSuccess) {
-                    feeDefaulter.value = it.getOrNull()
+            userRepository.getFeeDefaultersDas(feeTypeId, installIds).collectLatest { result ->
+                if (result.isSuccess) {
+                    Log.e("HARI", "API Success", )
+                    feeDefaulter.update {
+                        result.getOrNull()
+                    }
                 }
-                onResponse?.invoke(it.isSuccess, it.exceptionOrNull()?.message)
+                onResponse?.invoke(result.isSuccess, result.exceptionOrNull()?.message)
             }
         }
     }
@@ -113,7 +116,7 @@ class DashboardViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             userRepository.todayModeWiseCollection(date).collectLatest {
-                if(it.isSuccess){
+                if (it.isSuccess) {
                     modelWiseCollection.value = it.getOrNull()
                 }
                 onResponse.invoke(it.isSuccess, it.exceptionOrNull()?.message)
@@ -121,9 +124,10 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    fun sendScreenEvent(){
+    fun sendScreenEvent() {
         analyticsManager.trackScreen(AnalyticsConstants.Screens.DASH_BOARD_SCREEN)
     }
+
     fun sendAnalyticEvent(
         event: String,
         attributes: Map<String, String>

@@ -12,6 +12,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Calendar
 import android.content.Context
+import android.util.Log
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import java.text.SimpleDateFormat
@@ -468,6 +469,7 @@ class DashboardFragment : Fragment() {
         FeeDefaulterModel(feeDefaulter)
             .id("121")
             .addTo(this)*/
+        Log.e("HARI", feeDefaulter.toString() )
 
         FeeDefaulterModel(
             feeDefaulter = feeDefaulter,
