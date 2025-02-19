@@ -8,7 +8,7 @@ data class NetworkFeeDefaulter(
     val errorCode: Int,
     val feeDefaulters: List<FeeDefaulter>,
     val feeTypes: List<FeeType>?,
-    val installments: List<Installment>,
+    val installments: List<Installment>?,
     val message: String,
     val status: String,
     val totalAmount: String,
