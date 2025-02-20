@@ -1043,18 +1043,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        try {
+        if (uri == null || uri.scheme.isNullOrEmpty()) {
+            showMessage("Invalid or missing URL")
+            return
+        }
+        if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
-            if (packageName != null) {
-                customTabsIntent.intent.setPackage(packageName)
-                customTabsIntent.launchUrl(this, uri!!)
-            } else {
-
+            customTabsIntent.intent.setPackage(packageName)
+            try {
+                customTabsIntent.launchUrl(this, uri)
+            } catch (e: ActivityNotFoundException) {
+                showMessage("Chrome cannot open this link")
+            }
+        } else {
+            try {
                 val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
                 startActivity(fallbackIntent)
+            } catch (e: ActivityNotFoundException) {
+                showMessage("No browser available to handle the URL")
             }
-        } catch (e: ActivityNotFoundException) {
-            showMessage("No browser available to handle the URL")
         }
     }
 

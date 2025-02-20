@@ -82,11 +82,13 @@ class DashboardViewModel @Inject constructor(
         onResponse: ((Boolean, String?) -> Unit)? = null
     ) {
         viewModelScope.launch {
-            userRepository.getFeeDefaultersDas(feeTypeId, installIds).collectLatest {
-                if (it.isSuccess) {
-                    feeDefaulter.value = it.getOrNull()
+            userRepository.getFeeDefaultersDas(feeTypeId, installIds).collectLatest { result ->
+                if (result.isSuccess) {
+                    feeDefaulter.update {
+                        result.getOrNull()
+                    }
                 }
-                onResponse?.invoke(it.isSuccess, it.exceptionOrNull()?.message)
+                onResponse?.invoke(result.isSuccess, result.exceptionOrNull()?.message)
             }
         }
     }
