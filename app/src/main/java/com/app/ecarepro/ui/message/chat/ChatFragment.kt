@@ -50,8 +50,10 @@ import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileClickListener
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.utils.isAudioUrl
-import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
-import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
+import com.app.ecarepro.utils.launchAudioPicker
+import com.app.ecarepro.utils.launchGallery
+import com.app.ecarepro.utils.launchPdfPicker
+import com.app.ecarepro.utils.openAudioRecorder
 import com.lassi.data.media.MiMedia
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -123,10 +125,10 @@ class ChatFragment : Fragment() {
 
 
     private fun setUpViews() {
-
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
         binding.btnRecipient.setOnClickListener {
             showRecipients()
         }
@@ -163,25 +165,37 @@ class ChatFragment : Fragment() {
         binding.btnGallery.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.GALLERY
-            // Request necessary permissions and open the gallery
             if (checkAndRequestPermissions()) {
-                // Permission is already granted, start image picker
                 launchPicker()
             }
-            // requestExternalStoragePermission()
         }
 
         binding.btnRecord.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.AUDIO
-            openAudioRecorder()
+            openAudioRecorder(
+                fragmentManager = childFragmentManager,
+                onSuccess = { uri ->
+                    chatViewModel.setAttachments(
+                        listOf(
+                            MiMedia(
+                                path = uri, name = AttachmentType.RECORDING.name
+                            )
+                        )
+                    )
+                },
+                onFailure = { errorMessage ->
+                    mainActivity().showMessage(errorMessage ?: "")
+                }
+
+            )
         }
         FileAccess.checkPermission(this@ChatFragment)
         binding.btnCamera.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.CAMERA
             FileAccess.checkPermission(this@ChatFragment)
-            if(checkCameraPermissions()){
+            if (checkCameraPermissions()) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
                     cameraLauncher.launch(FileAccess.cameraIntent())
@@ -253,6 +267,7 @@ class ChatFragment : Fragment() {
             true
         }
     }
+
     private fun checkCameraPermissions(): Boolean {
         val permissionList = mutableListOf<String>()
 
@@ -271,27 +286,6 @@ class ChatFragment : Fragment() {
         } else {
             true
         }
-    }
-
-    private fun openAudioRecorder() {
-
-        VoiceSenderDialog(object : AudioRecordListener {
-            override fun onAudioReady(audioUri: String?) {
-                chatViewModel.setAttachments(
-                    listOf(
-                        MiMedia(
-                            path = audioUri, name = AttachmentType.RECORDING.name
-                        )
-                    )
-                )
-            }
-
-            override fun onReadyForRecord() {}
-
-            override fun onRecordFailed(errorMessage: String?) {
-                mainActivity().showMessage(errorMessage ?: "")
-            }
-        }).show(childFragmentManager, "VOICE")
     }
 
     private val pickImagesLauncher =
@@ -323,46 +317,25 @@ class ChatFragment : Fragment() {
             }
         }
 
-    private fun openGallery() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        intent.action = Intent.ACTION_GET_CONTENT
-        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
-    }
 
     private fun launchPicker() {
         when (lastClickAttachmentType) {
             AttachmentType.GALLERY -> {
-                openGallery()
-            }/* AttachmentType.GALLERY -> {
-                 // Request necessary permissions and open the gallery
-                 if (checkAndRequestPermissions()) {
-                     launchPhotoPicker()
-                 }
-                 //  launchPhotoPicker()
-             }*/
+                launchGallery(pickImagesLauncher, false)
+            }
 
             AttachmentType.AUDIO -> {
-                launchAudioPicker()
+                launchAudioPicker(pdfLauncher, false)
             }
 
             AttachmentType.PDF -> {
-                launchPdfPicker()
+                launchPdfPicker(pdfLauncher, false)
             }
 
             else -> {}
         }
     }
 
-    private fun launchAudioPicker() {
-        val intent = Intent()
-        intent.type = "audio/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        pdfLauncher.launch(intent)
-    }
 
     private val pdfLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -398,21 +371,6 @@ class ChatFragment : Fragment() {
             }
         }
 
-    private fun launchPdfPicker() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*" // Allow any file type
-            putExtra(
-                Intent.EXTRA_MIME_TYPES, arrayOf(
-                    "application/pdf",
-                    "application/msword",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                )
-            )
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        }
-        pdfLauncher.launch(intent)
-    }
 
     private fun hideAttachmentCard() {
         binding.cardAttachmentOptions.isVisible = false
@@ -562,13 +520,6 @@ class ChatFragment : Fragment() {
         val extension = url.substringAfterLast(".", "").lowercase()
         return pdfExtension == extension || doc == extension || docx == extension
     }
-
-    /* fun isAudioUrl(url: String): Boolean {
-         val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
-         val extension = url.substringAfterLast(".", "").lowercase()
-         return audioExtensions.contains(extension)
-     }
- */
 
     override fun onDestroyView() {
         super.onDestroyView()
