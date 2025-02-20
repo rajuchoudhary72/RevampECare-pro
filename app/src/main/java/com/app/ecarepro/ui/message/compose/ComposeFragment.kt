@@ -58,15 +58,13 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.app.ecarepro.utils.FileAccess
-import com.app.ecarepro.utils.FileUtils
-import com.app.ecarepro.utils.launchAudioPicker
-import com.app.ecarepro.utils.launchGallery
-import com.app.ecarepro.utils.launchPdfPicker
-import com.app.ecarepro.utils.openAudioRecorder
+import com.app.ecarepro.utils.FileAccess.Companion.launchAudioPicker
+import com.app.ecarepro.utils.FileAccess.Companion.launchDocPicker
+import com.app.ecarepro.utils.FileAccess.Companion.launchGallery
+import com.app.ecarepro.utils.FileAccess.Companion.openAudioRecorder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -679,7 +677,7 @@ class ComposeFragment : Fragment() {
             }
 
             AttachmentType.PDF -> {
-                launchPdfPicker(pdfLauncher)
+                launchDocPicker(pdfLauncher)
             }
 
             else -> {}

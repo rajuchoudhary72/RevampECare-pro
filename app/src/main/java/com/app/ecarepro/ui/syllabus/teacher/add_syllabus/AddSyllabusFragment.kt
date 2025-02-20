@@ -42,6 +42,7 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
+import com.app.ecarepro.utils.FileAccess.Companion.launchPdfPicker
 import com.app.ecarepro.utils.getFile
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -157,7 +158,9 @@ class AddSyllabusFragment : Fragment() {
         }
 
         binding.tvAddAttac.setOnClickListener {
-            pickPdf()
+            launchPdfPicker(
+                pdfPickerLauncher
+            )
         }
 
         binding.btnSubmit.setOnClickListener {
@@ -405,17 +408,6 @@ class AddSyllabusFragment : Fragment() {
 
         builder.setCanceledOnTouchOutside(false)
         builder.show()
-    }
-
-
-
-
-    fun pickPdf() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            type = "application/pdf"
-            addCategory(Intent.CATEGORY_OPENABLE)
-        }
-        pdfPickerLauncher.launch(intent)
     }
 
 

@@ -47,13 +47,13 @@ import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileAccess
+import com.app.ecarepro.utils.FileAccess.Companion.launchAudioPicker
+import com.app.ecarepro.utils.FileAccess.Companion.launchDocPicker
+import com.app.ecarepro.utils.FileAccess.Companion.launchGallery
+import com.app.ecarepro.utils.FileAccess.Companion.openAudioRecorder
 import com.app.ecarepro.utils.FileClickListener
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.utils.isAudioUrl
-import com.app.ecarepro.utils.launchAudioPicker
-import com.app.ecarepro.utils.launchGallery
-import com.app.ecarepro.utils.launchPdfPicker
-import com.app.ecarepro.utils.openAudioRecorder
 import com.lassi.data.media.MiMedia
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -329,7 +329,7 @@ class ChatFragment : Fragment() {
             }
 
             AttachmentType.PDF -> {
-                launchPdfPicker(pdfLauncher, false)
+                launchDocPicker(pdfLauncher, false)
             }
 
             else -> {}
