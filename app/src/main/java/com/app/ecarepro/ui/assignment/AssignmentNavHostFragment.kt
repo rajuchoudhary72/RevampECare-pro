@@ -54,7 +54,7 @@ class AssignmentNavHostFragment : Fragment() {
 
 
         lifecycleScope.launch {
-            assignmentNavHostViewModel.assignmentStateFlow.collectLatest {
+            assignmentNavHostViewModel.assignmentStateFlow.observe(viewLifecycleOwner) {
 
                 when (it) {
 

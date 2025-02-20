@@ -21,6 +21,7 @@ import com.app.ecarepro.model.AssignmentShareModel
 import com.app.ecarepro.model.TeacherAssignment
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,6 +72,9 @@ class StaffAssignmentsListNavHostFragment : Fragment() , ItemListener<TeacherAss
 
         binding.spinnerSelectFilterType.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
+
+
+
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 // Check if view is null before proceeding
                 if (view == null) {
@@ -82,19 +86,44 @@ class StaffAssignmentsListNavHostFragment : Fragment() , ItemListener<TeacherAss
                     1 -> {
                         filterType = Constant.FILTER_SUBJECT
                         binding.searchBar.setText("")
+                        binding.searchBar.isVisible=true
+                        binding.tvDate.isVisible=false
                     }
                     2 -> {
                         filterType = Constant.FILTER_CLASS
                         binding.searchBar.setText("")
+                        binding.searchBar.isVisible=true
+                        binding.tvDate.isVisible=false
                     }
                     3 -> {
                         filterType = Constant.FILTER_TEACHER
                         binding.searchBar.setText("")
+                        binding.searchBar.isVisible=true
+                        binding.tvDate.isVisible=false
                     }
+                    4 -> {
+                        filterType = Constant.FILTER_DATE
+                        binding.searchBar.setText("")
+                        binding.searchBar.isVisible=false
+                        binding.tvDate.isVisible=true
+                    }
+                }
+                if (assignmentList!=null){
+                    assignmentList?.let { it1 -> setupRecycleViewStudentList(it1) }
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        binding.tvDate.setOnClickListener {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                    binding.tvDate.text = Constant.dateToShowSec(date.toString())
+                    filterDataOnDate(binding.tvDate.text.toString())
+                }
+
+            })
         }
 
 
@@ -180,7 +209,14 @@ class StaffAssignmentsListNavHostFragment : Fragment() , ItemListener<TeacherAss
 
     }
 
+    private fun filterDataOnDate(date: String) {
 
+        if ( assignmentList!=null){
+            assignmentListFilter = assignmentList!!.filter { s -> s.asgDate!!.lowercase() == date.lowercase() }
+            setupRecycleViewStudentList(assignmentListFilter)
+        }
+
+    }
 
 
     override fun onItemClick(t: TeacherAssignment, pos: Int, boolean: Boolean) {

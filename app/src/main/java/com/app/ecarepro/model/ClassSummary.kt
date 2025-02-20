@@ -9,5 +9,6 @@ data class ClassSummary(
     val late: Int,
     val leave: Int,
     val present: Int,
-    val na: Int
+    val na: Int,
+    val wh: Int
 )

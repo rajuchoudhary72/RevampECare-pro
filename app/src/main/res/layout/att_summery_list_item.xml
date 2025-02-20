@@ -83,6 +83,16 @@
                 android:textColor="@color/att_na_color"
                 android:textSize="@dimen/_14sdp" />
 
+            <TextView
+                android:id="@+id/tvTotalWhCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:textColor="@color/category7"
+                android:textSize="@dimen/_14sdp" />
+
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
