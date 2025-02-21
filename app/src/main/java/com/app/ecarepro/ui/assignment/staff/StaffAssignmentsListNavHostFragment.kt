@@ -96,17 +96,18 @@ class StaffAssignmentsListNavHostFragment : Fragment() , ItemListener<TeacherAss
                         binding.tvDate.isVisible=false
                     }
                     3 -> {
-                        filterType = Constant.FILTER_TEACHER
-                        binding.searchBar.setText("")
-                        binding.searchBar.isVisible=true
-                        binding.tvDate.isVisible=false
-                    }
-                    4 -> {
                         filterType = Constant.FILTER_DATE
                         binding.searchBar.setText("")
                         binding.searchBar.isVisible=false
                         binding.tvDate.isVisible=true
                     }
+                    4 -> {
+                        filterType = Constant.FILTER_TEACHER
+                        binding.searchBar.setText("")
+                        binding.searchBar.isVisible=true
+                        binding.tvDate.isVisible=false
+                    }
+
                 }
                 if (assignmentList!=null){
                     assignmentList?.let { it1 -> setupRecycleViewStudentList(it1) }
