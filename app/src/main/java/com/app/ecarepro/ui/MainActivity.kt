@@ -1043,15 +1043,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        if (uri == null || uri.scheme.isNullOrEmpty()) {
-            showMessage("Invalid or missing URL")
-            return
-        }
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
             try {
-                customTabsIntent.launchUrl(this, uri)
+                if (uri != null) {
+                    customTabsIntent.launchUrl(this, uri)
+                }
             } catch (e: ActivityNotFoundException) {
                 showMessage("Chrome cannot open this link")
             }
@@ -1088,9 +1086,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-            // navController.navigate(R.id.webViewFragment, bundle)
+             navController.navigate(R.id.webViewFragment, bundle)
             Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))
+           // openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
