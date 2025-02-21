@@ -29,7 +29,11 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -53,6 +57,9 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     private lateinit var   circularListAdapter: CircularListAdapter
     private var circularList = mutableListOf<Circular>()
     private val searchQueryStateFlow = MutableStateFlow("")
+    private var searchJob: Job? = null  // Job to handle debounce logic
+    private val debounceTime = 300L  // 300ms delay
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,19 +94,19 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         }
 
         // Collect the debounced search query
-        fragmentCircularBinding.edSearch.doAfterTextChanged {
-//            lifecycleScope.launch {
-//                searchQueryStateFlow
-//                    .debounce(300L) // Adjust debounce time (in milliseconds) as needed
-//                    .collectLatest { query ->
-//                        pageIndex=1
-//                        circularViewModel.getCirculars(pageIndex, selectedYearID, query)
-//                    }
-//            }
+        try {
+            fragmentCircularBinding.edSearch.doAfterTextChanged { text ->
+                searchJob?.cancel() // Cancel previous job if user types again
 
-            pageIndex=1
-            circularViewModel.getCirculars(pageIndex, selectedYearID, it.toString())
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(debounceTime)  // Wait for user to stop typing
 
+                    pageIndex=1
+                    circularViewModel.getCirculars(pageIndex, selectedYearID, text.toString())
+                }
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
         }
 
 

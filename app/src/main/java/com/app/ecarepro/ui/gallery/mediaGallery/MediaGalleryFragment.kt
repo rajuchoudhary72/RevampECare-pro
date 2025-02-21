@@ -36,6 +36,7 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class MediaGalleryFragment : Fragment(), ItemListener<Album> {
@@ -54,6 +55,9 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
+
+    private var searchJob: Job? = null  // Job to handle debounce logic
+    private val debounceTime = 300L  // 300ms delay
 
     private val searchByList =
         mutableListOf<String>("All Search", "NewsPaper", "Headline", "Publish Date", "Year")
@@ -86,14 +90,20 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         try {
-            binding.edSearch.doAfterTextChanged {
-                mediaGalleryViewModel.getMediaGallery(
-                    pageIndex,
-                    queryType,
-                    0,
-                    binding.tvPubDate.text.toString(),
-                    binding.edSearch.text.toString()
-                )
+            binding.edSearch.doAfterTextChanged { text ->
+                searchJob?.cancel() // Cancel previous job if user types again
+
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(debounceTime)  // Wait for user to stop typing
+
+                    mediaGalleryViewModel.getMediaGallery(
+                        pageIndex,
+                        queryType,
+                        0,
+                        binding.tvPubDate.text.toString(),
+                        text.toString()
+                    )
+                }
             }
         } catch (e: IndexOutOfBoundsException) {
             e.printStackTrace()

@@ -60,6 +60,10 @@ class StudentRepoAttAdapter(
                 append("NA : ")
                 append(data.na)
             }
+            tvTotalWhCount.text= buildString {
+                append("WH : ")
+                append(data.wh)
+            }
 
             cvMain.setOnClickListener {
                 studentAttendanceReportFragment.onItemClick(data,1,false)

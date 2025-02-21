@@ -380,10 +380,6 @@ class AddInfractionFragment : Fragment() {
         if (!infrConsSelected){
             isValidate=false
             mainActivity().showMessage(getString( R.string.select_consequences))
-        }else
-        if (binding.etPlanName.text.toString().isEmpty()){
-            isValidate=false
-            mainActivity().showMessage(getString( R.string.enter_corrective_action))
         }
 
         if (isValidate){

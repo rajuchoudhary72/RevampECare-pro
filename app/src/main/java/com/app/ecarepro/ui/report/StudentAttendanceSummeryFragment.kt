@@ -152,8 +152,19 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                 tvNACount.text = buildString {
                     append(data.totalNA)
                 }
+                tvWHCount.text = buildString {
+                    append(data.totalWH)
+                }
 
-                try {
+            try {
+
+                tvWHPer.text = buildString {
+
+                    append(setCalculatedPercentageToInt(data.totalWH, totalStudent))
+
+                    append("%")
+                }
+
                     tvPresentPer.text = buildString {
 
                         append(setCalculatedPercentageToInt(data.totalPresent, totalStudent))
@@ -201,6 +212,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                         data.totalLeave,
                         data.totalLate,
                         data.totalNA,
+                        data.totalWH,
 
                         )
 
@@ -268,7 +280,8 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         totalAbsent: Int,
         totalLeave: Int,
         totalLate: Int,
-        totalNA: Int
+        totalNA: Int,
+        totalWH: Int
     ) {
         binding.pieChart.setUsePercentValues(true)
         binding.pieChart.setUsePercentValues(false)
@@ -280,12 +293,14 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
             yvalues.add(PieEntry(totalLeave.toFloat(), 2))
             yvalues.add(PieEntry(totalNA.toFloat(), 3))
+            yvalues.add(PieEntry(totalWH.toFloat(), 4))
         } else {
             yvalues.add(PieEntry((totalPresent - totalLate).toFloat(), 0))
             yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
             yvalues.add(PieEntry(totalLeave.toFloat(), 2))
             yvalues.add(PieEntry(totalLate.toFloat(), 3))
             yvalues.add(PieEntry(totalNA.toFloat(), 4))
+            yvalues.add(PieEntry(totalWH.toFloat(), 5))
         }
 
         val dataSet = PieDataSet(yvalues, "")
@@ -300,14 +315,16 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             resources.getColor(R.color.disabled),
             resources.getColor(R.color.absent_red),
             resources.getColor(R.color.att_leave_color),
-            resources.getColor(R.color.att_na_color)
+            resources.getColor(R.color.att_na_color),
+            resources.getColor(R.color.category7)
         )
         else dataSet.setColors(
             resources.getColor(R.color.disabled),
             resources.getColor(R.color.absent_red),
             resources.getColor(R.color.att_leave_color),
             resources.getColor(R.color.att_late_color),
-            resources.getColor(R.color.att_na_color)
+            resources.getColor(R.color.att_na_color),
+            resources.getColor(R.color.category7),
 
         )
 

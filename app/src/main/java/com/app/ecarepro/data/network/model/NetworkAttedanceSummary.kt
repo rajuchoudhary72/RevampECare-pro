@@ -12,5 +12,6 @@ data class NetworkAttedanceSummary(
     val totalLate: Int,
     val totalLeave: Int,
     val totalPresent: Int,
+    val totalWH: Int,
     val totalNA: Int
 )
