@@ -8,15 +8,12 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
@@ -64,33 +61,11 @@ class FileAccess {
 
 
         fun galleryIntent(): Intent {
-
-            //  val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            //  fragment. startActivityForResult(intent, REQUEST_CAMERA_PERMISSION)
-
-
             return Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-
         }
 
         fun cameraIntent(): Intent {
-
-            //  val intent = Intent()
-            //intent.setType("image/*")
-            // intent.setAction(Intent.ACTION_GET_CONTENT)
-            //fragment.startActivityForResult(Intent.createChooser(intent, "Select File"), REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION)
-
-
             return Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        }
-
-        fun pickPdfFileIntent(): Intent {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "application/pdf"
-            }
-            return intent
         }
 
 
@@ -170,7 +145,6 @@ class FileAccess {
             }
         }
 
-
         fun launchGallery(
             launcher: ActivityResultLauncher<Intent>,
             multiSelection: Boolean = true
@@ -229,7 +203,6 @@ class FileAccess {
             onSuccess: (uri: String?) -> Unit,
             onFailure: (errorMessage: String?) -> Unit,
         ) {
-
             VoiceSenderDialog(object : AudioRecordListener {
                 override fun onAudioReady(audioUri: String?) {
                     onSuccess(audioUri)

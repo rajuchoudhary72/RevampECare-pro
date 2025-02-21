@@ -144,7 +144,9 @@ class SubmitAssignmentFragment : Fragment() {
         }
 
         binding.tvBrowseFile.setOnClickListener {
-            pdfLauncher.launch(FileAccess.pickPdfFileIntent())
+            FileAccess.launchPdfPicker(
+                pdfLauncher
+            )
          }
 
         viewAssignmentDetails()
