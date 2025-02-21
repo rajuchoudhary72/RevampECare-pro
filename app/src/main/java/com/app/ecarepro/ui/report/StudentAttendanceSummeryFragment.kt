@@ -334,7 +334,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         binding.pieChart.animateXY(1400, 1400)
 
         val s = """
-            ${totalPresent + totalAbsent + totalLeave  + totalNA}
+            ${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}
             Student(s)
             """.trimIndent()
         val length = (totalPresent + totalAbsent + totalLeave).toString() + ""
