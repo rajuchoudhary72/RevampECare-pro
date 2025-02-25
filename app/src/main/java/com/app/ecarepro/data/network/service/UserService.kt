@@ -174,17 +174,27 @@ interface UserService {
     suspend fun createSession(
         @Body request: CreateUserSessionRequestDto
     ): UserSessionResponseDto
+
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,
         @Query("Username") username: String
     ): NetworkUserDetailsDto
+
     @GET("User/LogOut")
     suspend fun logout(
         @Query("DeviceType") deviceType: Int = 1,
         @Query("deviceID") deviceID: String ,
         @Query("SessionID") sessionID: String ,
     ): CommonResponse
+
+    @GET("User/LogOutAll")
+    suspend fun logoutAll(
+        @Query("DeviceType") deviceType: Int = 1,
+        @Query("deviceID") deviceID: String ,
+        @Query("SessionID") sessionID: String ,
+    ): CommonResponse
+
     @GET("Report/FeeCollection")
     suspend fun feeCollection(
         @Query("FeeTypeId") feeTypeId: Int?,

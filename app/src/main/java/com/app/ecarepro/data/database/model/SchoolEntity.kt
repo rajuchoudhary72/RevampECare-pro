@@ -34,7 +34,6 @@ data class SchoolEntity(
     val supportPhone: String?,
     val themColor: String?,
     val webSite: String?,
-    val slides: String?,
 )
 
 fun SchoolEntity?.asNetworkSchool(): NetworkSchool? {

@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -35,6 +33,8 @@ class InstitutionCodeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val institutionCodeViewModel: InstitutionCodeViewModel by viewModels()
+
+    private val MYSFHSschools = listOf("MYSFNC", "MYSFHS")
 
     @Inject
     lateinit var userDataStore: UserDataStore
@@ -76,7 +76,7 @@ class InstitutionCodeFragment : Fragment() {
                                 userDataStore.setCurrentSchoolCode(school.schoolCode)
                                 navigateToSignFragment(
                                     school.schoolCode,
-                                    school.isStudentLoginBlocked?:false
+                                    school.isStudentLoginBlocked ?: false
                                 )
                             }
                         }
@@ -92,6 +92,7 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnContinue.setOnClickListener {
             validateSchoolCode()
         }
+
         binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.isMainApp
 
         binding.btnFindSchoolCollege.setOnClickListener {
@@ -105,14 +106,7 @@ class InstitutionCodeFragment : Fragment() {
         binding.btnHelp.setOnClickListener {
             findNavController().navigate(R.id.helpFragment)
         }
-        if (institutionCodeViewModel.isMYSFHS) {
-            binding.textInstitutionCode.apply {
-                setText("MYSFHS")
-                isEnabled = false
-                binding.btnContinue.isEnabled = true
-                validateSchoolCode()
-            }
-        }
+
 
         if (institutionCodeViewModel.isMYSFPSPlay) {
             binding.textInstitutionCode.apply {
@@ -121,15 +115,25 @@ class InstitutionCodeFragment : Fragment() {
                 binding.btnContinue.isEnabled = true
                 validateSchoolCode()
             }
-        }else{
+        } else {
             binding.textInstitutionCode.apply {
                 setText("")
             }
         }
 
     }
+
     private fun validateSchoolCode() {
         _binding?.apply {
+            if (institutionCodeViewModel.isMYSFHS) {
+                val code = textInstitutionCode.text.toString()
+                if (MYSFHSschools.contains(code).not()) {
+                    textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
+                    mainActivity().showMessage("Please enter a valid school code.")
+                    return
+                }
+            }
+
             textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_green))
             (requireActivity() as MainActivity).showLoader(true)
             institutionCodeViewModel.validateSchoolCode(textInstitutionCode.text.toString()) {
@@ -148,7 +152,10 @@ class InstitutionCodeFragment : Fragment() {
         findNavController().navigate(
             resId = R.id.signInFragment,
             args = if (arguments == null) {
-                bundleOf("schoolCode" to schoolCode, "isStudentLoginBlocked" to isStudentLoginBlocked)
+                bundleOf(
+                    "schoolCode" to schoolCode,
+                    "isStudentLoginBlocked" to isStudentLoginBlocked
+                )
             } else {
                 arguments?.apply {
                     putString("schoolCode", schoolCode)

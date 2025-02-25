@@ -6,6 +6,7 @@ import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.database.ECareProDatabase
 import com.app.ecarepro.data.database.MIGRATION_4_5
 import com.app.ecarepro.data.database.MIGRATION_5_6
+import com.app.ecarepro.data.database.MIGRATION_8_9
 import com.app.ecarepro.data.database.dao.SchoolDao
 import com.app.ecarepro.data.database.dao.UserDao
 import dagger.Module
@@ -27,7 +28,7 @@ object DatabaseModule {
             applicationContext,
             ECareProDatabase::class.java, "ecare-database"
         )
-            .addMigrations(MIGRATION_4_5, MIGRATION_5_6)
+            .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_8_9)
             .build()
     }
 

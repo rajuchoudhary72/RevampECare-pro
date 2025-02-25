@@ -117,6 +117,9 @@ class MainActivity : AppCompatActivity() {
         AppUpdateManagerFactory.create(this)
     }
 
+    val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
+    val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
+
     @Inject
     lateinit var analyticsManager: AnalyticsManager
 
@@ -1212,7 +1215,17 @@ class MainActivity : AppCompatActivity() {
 
             7 -> {
                 when (childMenuId) {
-                    10 -> navController.navigate(R.id.circularFragment)
+                    10 -> {
+                        if (refId != null) {
+                            navController.navigate(
+                                R.id.circularDetailsFragment,
+                                bundleOf(Constant.CIRCULAR_ID to refId)
+                            )
+                        } else {
+                            navController.navigate(R.id.circularFragment)
+                        }
+
+                    }
 
                     11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
@@ -1574,7 +1587,11 @@ class MainActivity : AppCompatActivity() {
         } else {
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.logout))
-                .setMessage(getString(R.string.are_you_sure_to_logout))
+                .setMessage(
+                    if (isMYSFHS || isMYSFPSPlay) getString(R.string.are_you_sure_to_logout_all) else getString(
+                        R.string.are_you_sure_to_logout
+                    )
+                )
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     try {
                         systemViewModel.logout {
