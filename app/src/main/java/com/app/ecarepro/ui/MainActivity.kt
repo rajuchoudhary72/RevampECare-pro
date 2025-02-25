@@ -1227,9 +1227,18 @@ class MainActivity : AppCompatActivity() {
 
                     }
 
-                    11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
-                    })
+                    11 -> {
+                        if (refId.isNullOrEmpty()) {
+                            navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
+                            })
+                        } else {
+                            navController.navigate(R.id.noticeDetailsFragment, Bundle().apply {
+                                putString(Constant.NOTICE_ID_ARGUMENT, refId)
+                            })
+                        }
+
+                    }
 
                     12 -> {
                         lifecycleScope.launch {

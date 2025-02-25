@@ -173,7 +173,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
     override fun onItemClick(t: Circular, pos: Int, boolean: Boolean) {
         findNavController().navigate(R.id.action_circularFragment_to_circularDetailsFragment,Bundle( ).apply {
-            putInt(Constant.CIRCULAR_ID, t.cirID)
+            putString(Constant.CIRCULAR_ID, t.id)
         })
      }
 
