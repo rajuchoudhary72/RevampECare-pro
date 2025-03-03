@@ -127,7 +127,7 @@ class InstitutionCodeFragment : Fragment() {
         _binding?.apply {
             if (institutionCodeViewModel.isMYSFHS) {
                 val code = textInstitutionCode.text.toString()
-                if (MYSFHSschools.contains(code).not()) {
+                if (MYSFHSschools.contains(code.toUpperCase()).not()) {
                     textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
                     mainActivity().showMessage("Please enter a valid school code.")
                     return

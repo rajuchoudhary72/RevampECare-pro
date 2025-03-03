@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.assignment.staff
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -7,14 +8,16 @@ import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkTeacherAssignment
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.lifecycle.SavedStateHandle
-import com.app.ecarepro.utils.Constant
+
+
 @HiltViewModel
 class TeacherAssignmentViewModel @Inject constructor(
     private val userDataStore: UserDataStore,
@@ -22,66 +25,78 @@ class TeacherAssignmentViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val staffId = savedStateHandle.get<String>(Constant.STAFF_ID_ARGUMENT)?:""
-    var userType : String = ""
+    // Use a more descriptive variable name and leverage null safety
+    private val _staffId: String =
+        savedStateHandle.get<String>(Constant.STAFF_ID_ARGUMENT)
+            ?: throw IllegalArgumentException("Staff ID is required.")
+
+    // Use a StateFlow for immutable state
+    private val _userType = MutableStateFlow<String?>(null)
+    val userType: StateFlow<String?> = _userType.asStateFlow()
 
     init {
+        fetchUserRole()
+        fetchTeachersAssignments(_staffId)
+    }
+
+    // Use StateFlows with backing properties to expose read-only state
+    private val _showSearchView = MutableStateFlow(false)
+    val showSearchView: StateFlow<Boolean> = _showSearchView.asStateFlow()
+
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+    private val _teacherAssignmentState =
+        MutableStateFlow<NetworkResult<NetworkTeacherAssignment>>(NetworkResult.Loading())
+    val teacherAssignmentState: StateFlow<NetworkResult<NetworkTeacherAssignment>> =
+        _teacherAssignmentState.asStateFlow()
+
+    private val _deleteAssignmentState =
+        MutableStateFlow<NetworkResult<CommonResponse>>(NetworkResult.Loading())
+    val deleteAssignmentState: StateFlow<NetworkResult<CommonResponse>> =
+        _deleteAssignmentState.asStateFlow()
+
+    // Use a clear and descriptive function name
+    private fun fetchUserRole() {
         viewModelScope.launch {
-            userType = userDataStore.getRoleName().toString()
+            _userType.value = userDataStore.getRoleName()
         }
     }
 
-    val showSearchView = MutableStateFlow(false)
-    val searchQuery = MutableStateFlow("")
+    // Use a clear and descriptive function name
+    fun fetchTeachersAssignments(staffId: String) = viewModelScope.launch {
+        _teacherAssignmentState.value = NetworkResult.Loading()
+        try {
+            val result = userRepository.teachersAssignment(staffId)
+            _teacherAssignmentState.value = NetworkResult.Success(result)
 
-
-
-    private val teacAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkTeacherAssignment>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val teacAssignmentStateFlow: StateFlow<NetworkResult<NetworkTeacherAssignment>> = teacAssignmentMutableStateFlow
-
-    private val deleteAssignmentMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
-        NetworkResult.Loading())
-    val deleteAssignmentStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteAssignmentMutableStateFlow
-
-    init {
-        teachersAssignment(staffId)
-    }
-    fun teachersAssignment(iD: String )=viewModelScope.launch {
-        runCatching {
-            teacAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.teachersAssignment(iD )
-        }.onSuccess {
-            teacAssignmentMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            teacAssignmentMutableStateFlow.value = NetworkResult.Error(it.message)
+        } catch (e: Exception) {
+            _teacherAssignmentState.value =
+                NetworkResult.Error(e.message ?: "An unknown error occurred.")
         }
-
     }
 
-    fun deleteAssignment(  iD: String  )=viewModelScope.launch {
-        runCatching {
-            deleteAssignmentMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.deleteAssignment(iD )
-        }.onSuccess {
-            deleteAssignmentMutableStateFlow.value = NetworkResult.Success(it)
-        }.onFailure {
-            deleteAssignmentMutableStateFlow.value = NetworkResult.Error(it.message)
+    // Use a clear and descriptive function name
+    fun deleteAssignment(assignmentId: String) = viewModelScope.launch {
+        _deleteAssignmentState.value = NetworkResult.Loading()
+        try {
+            val result = userRepository.deleteAssignment(assignmentId)
+            _deleteAssignmentState.value = NetworkResult.Success(result)
+        } catch (e: Exception) {
+            _deleteAssignmentState.value =
+                NetworkResult.Error(e.message ?: "An unknown error occurred.")
         }
-
     }
 
     fun showSearchBar() {
-        showSearchView.update { true }
+        _showSearchView.update { true }
     }
 
     fun clearSearchQuery() {
-        if (searchQuery.value.isEmpty()) {
-            showSearchView.update { false }
-        } else
-            searchQuery.update {
-                ""
-            }
+        if (_searchQuery.value.isEmpty()) {
+            _showSearchView.update { false }
+        } else {
+            _searchQuery.update { "" }
+        }
     }
-
 }
