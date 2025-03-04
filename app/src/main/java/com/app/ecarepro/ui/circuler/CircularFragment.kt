@@ -2,6 +2,8 @@ package com.app.ecarepro.ui.circuler
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -29,15 +31,16 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
+
 
 
 @AndroidEntryPoint
@@ -55,63 +58,56 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
     private lateinit var   circularListAdapter: CircularListAdapter
-    private var circularList = mutableListOf<Circular>()
-    private val searchQueryStateFlow = MutableStateFlow("")
-    private var searchJob: Job? = null  // Job to handle debounce logic
-    private val debounceTime = 300L  // 300ms delay
+    private var isFirst=true
 
+
+    private var searchHandler: Handler = Handler(Looper.getMainLooper())
+    private var searchRunnable: Runnable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        fragmentCircularBinding= FragmentCirculerBinding.inflate(inflater,container,false)
+        fragmentCircularBinding = FragmentCirculerBinding.inflate(inflater, container, false)
         fragmentCircularBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         fragmentCircularBinding.includeToolbar.toolbarTitle.text = getString(R.string.circular)
-        fragmentCircularBinding.tvSelectSession.setOnClickListener {
-            popUpSelectAcademicYears()
-        }
-
-
-        pageIndex=1
         return fragmentCircularBinding.root
 
     }
 
 
-    @OptIn(FlowPreview::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+        fragmentCircularBinding.tvSelectSession.setOnClickListener {
+            popUpSelectAcademicYears()
+        }
 
-        circularListAdapter = CircularListAdapter( circularList , this@CircularFragment)
+        circularListAdapter = CircularListAdapter( this@CircularFragment)
 
             fragmentCircularBinding.recyclerCircular.adapter = circularListAdapter
 
 
-        fragmentCircularBinding.edSearch.doAfterTextChanged {
-            searchQueryStateFlow.value = it.toString()
-        }
+        fragmentCircularBinding.edSearch.doAfterTextChanged { text ->
+            val query = text?.toString()?.trim() ?: ""
+            if (query != circularViewModel.lastSearchQuery) {
+                circularViewModel.lastSearchQuery = query
 
-        // Collect the debounced search query
-        try {
-            fragmentCircularBinding.edSearch.doAfterTextChanged { text ->
-                searchJob?.cancel() // Cancel previous job if user types again
+                // Cancel the previous search request
+                searchRunnable?.let { searchHandler.removeCallbacks(it) }
 
-                searchJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(debounceTime)  // Wait for user to stop typing
-
+                // Schedule a new search request with a delay
+                searchRunnable = Runnable {
                     pageIndex=1
-                    circularViewModel.getCirculars(pageIndex, selectedYearID, text.toString())
+                    circularViewModel.pageIndex=1
+                    circularViewModel.getCirculars(pageIndex, selectedYearID, query)
                 }
+                searchHandler.postDelayed(searchRunnable!!, 500) // 500ms delay
             }
-        } catch (e: IndexOutOfBoundsException) {
-            e.printStackTrace()
         }
-
 
         lifecycleScope.launch {
-            circularViewModel._circularsStateFlowStateFlow.collectLatest {
+            circularViewModel._circularsStateFlowStateFlow.observe(viewLifecycleOwner) {
                 when (it) {
 
                     is NetworkResult.Loading -> {
@@ -133,7 +129,11 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                             if (it.data.academicYears!=null){
                                 yearList=it.data.academicYears
                                 if (it.data.academicYears.isNotEmpty()){
-                                    fragmentCircularBinding.tvSelectSession.text= it.data.academicYears[0].session
+                                    if (isFirst){
+                                        circularViewModel.academicYear=it.data.academicYears[0].session
+                                        fragmentCircularBinding.tvSelectSession.text= it.data.academicYears[0].session
+                                        isFirst=false
+                                    }
                                 }
                             }
 
@@ -147,6 +147,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
                                         circularListAdapter.clearData()
                                     }
+                                   circularViewModel.cacheListData.addAll(it.data.circularList)
                                     circularListAdapter.setData(it.data.circularList.toMutableList())
 
                                     fragmentCircularBinding.includeToolbar.toolbarTitle.text= "All Circular" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
@@ -172,15 +173,22 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                     }
 
 
+                    else -> {}
                 }
             }
         }
         setupRecycleViewPager()
 
-        if (savedInstanceState == null) {
+        if (circularViewModel.isFirst ) {
             circularViewModel.getCirculars(pageIndex,selectedYearID,"")
+            circularViewModel.isFirst=false
+        }else{
+            pageIndex=circularViewModel.pageIndex
+            circularListAdapter.setData(circularViewModel.cacheListData)
+            fragmentCircularBinding.tvSelectSession.text= circularViewModel.academicYear
+
         }
-        super.onViewCreated(view, savedInstanceState)
+
 
     }
 
@@ -205,6 +213,8 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
             if (isYearSelected){
                 pageIndex=1
                 fragmentCircularBinding.tvSelectSession.text= selectedYearData!!.session
+                circularViewModel.academicYear=selectedYearData!!.session
+                circularViewModel.cacheListData.clear()
                 circularViewModel.getCirculars(pageIndex, selectedYearID,"")
                 builder.dismiss()
             }
@@ -254,6 +264,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
+                                circularViewModel.pageIndex=pageIndex
                                 circularViewModel.getCirculars(pageIndex,selectedYearID,fragmentCircularBinding.edSearch.text.toString())
 
                             }

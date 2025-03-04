@@ -38,7 +38,7 @@ class ApplyLeaveViewModel @Inject constructor(
     fun leaveApply(
         leaveID: Int,
         fromDate: String,
-        tillDate:String,
+        tillDate:String?,
         duration:Double,
         halfdayDTL: List<HalfdayDTL>?,
         reason:String,
