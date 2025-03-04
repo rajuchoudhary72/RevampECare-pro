@@ -11,11 +11,11 @@ import com.app.ecarepro.model.Circular
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.model.Notice
 
-class CircularListAdapter(private var circularList: MutableList<Circular>,
-                          private var circularFragment: CircularFragment ) :
+class CircularListAdapter(private var circularFragment: CircularFragment ) :
     RecyclerView.Adapter<CircularListAdapter.CircularViewHolder>() {
 
         private lateinit var bindingm:   CircularListItemBinding
+    private var circularList = mutableListOf<Circular>()
 
 
 
@@ -35,12 +35,10 @@ class CircularListAdapter(private var circularList: MutableList<Circular>,
                 circularFragment.onItemClick(circularList[position],1,true)
             }
 
-            cvMustRead.visibility=if (circularList[position].mustRead) View.VISIBLE else View.GONE
-
             if (circularList[position].isRead){
-                 cvNotItem.elevation=0f
+                cvNotItem.elevation=0f
             }else{
-                 cvNotItem.elevation=8f
+                cvNotItem.elevation=8f
             }
         }
 

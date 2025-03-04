@@ -55,6 +55,7 @@ class Constant {
         const val ID = "ID"
         const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
+        const val LEAVE_SHORT_VALUE = "LeaveShortValue"
         const val TO = "to"
         const val NOTICE_TYPE = "notice_type"
         const val NOTICE_CLASS = "notice_class"

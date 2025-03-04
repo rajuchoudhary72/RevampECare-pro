@@ -65,8 +65,17 @@
 
         </RelativeLayout>
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_short_leave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Apply Short Leave    "
+            android:textStyle="bold"
+            android:layout_margin="@dimen/_10sdp"
+            />
 
         <LinearLayout
+            android:id="@+id/ll_date_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -99,10 +108,12 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/view_2"
                 android:layout_width="12sp"
                 android:layout_height="1.5dp"
                 android:layout_gravity="center"
-                android:background="@color/grey_60" />
+                android:background="@color/grey_60"
+                />
 
             <LinearLayout
                 android:id="@+id/ll_end_date"
@@ -110,7 +121,8 @@
                 android:layout_height="@dimen/cbn_height"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:gravity="center"
@@ -136,6 +148,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_session_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

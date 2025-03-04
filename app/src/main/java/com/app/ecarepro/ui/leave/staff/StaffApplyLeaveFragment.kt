@@ -18,7 +18,6 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -53,9 +52,11 @@ import java.util.Calendar
 class StaffApplyLeaveFragment : Fragment() {
 
 
+    private var isSortLeaveEnable: Boolean = false
     private lateinit var holidayList: HolidayList
     private lateinit var selectedLeaveTypeData: LeaveDetail
     private var leaveID: Int=0
+    private var shortLeaveValue: Double = 0.00
     private lateinit var leaveTerm: LeaveTerms
     private lateinit var termCondition: TermCondition
     private var isSessionFromSelected: Boolean=false
@@ -78,6 +79,7 @@ class StaffApplyLeaveFragment : Fragment() {
     var timestampOneDay = "86400000".toLong()
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,6 +94,7 @@ class StaffApplyLeaveFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
           leaveID = requireArguments().getInt(Constant.LEAVE_ID_ARGUMENT)
+        shortLeaveValue = requireArguments().getDouble(Constant.LEAVE_SHORT_VALUE)
         val leaveType = requireArguments().getString(Constant.NAME)
 
         binding.tvLeaveType.text = leaveType
@@ -101,6 +104,7 @@ class StaffApplyLeaveFragment : Fragment() {
         val arrayAdapter =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, sessionList)
         binding.autoCompleteSessionTo.setAdapter(arrayAdapter)
+
         binding.autoCompleteSessionFrom.setAdapter(arrayAdapter)
 
 
@@ -116,7 +120,11 @@ class StaffApplyLeaveFragment : Fragment() {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.tvStartDate.text = Constant.dateToShow(date.toString())
                     binding.tvEndDate.text = Constant.dateToShow(date.toString())
-                    days = 1.0
+                    days = if (isSortLeaveEnable){
+                        shortLeaveValue
+                    }else{
+                        1.0
+                    }
                     if (selectedLeaveTypeData.sandwichEnable) {
                         days = calculateDaysAfterHolidays(days)
                     }
@@ -185,42 +193,44 @@ class StaffApplyLeaveFragment : Fragment() {
             if (validateData()) {
                 filterDays=days
                 halfdayDTL.clear()
-                if (sessionFromPos == 0 && sessionToPos == 1) {
-                    halfdayDTL.clear()
-                } else
-                    if (sessionFromPos == 0 && sessionToPos == 0) {
-                        halfdayDTL.add(
-                            HalfdayDTL(
-                                Constant.toSystemDate(binding.tvEndDate.text.toString()),
-                                1
-                            )
-                        )
-                        days -= 0.5
+                if (!isSortLeaveEnable){
+                    if (sessionFromPos == 0 && sessionToPos == 1) {
+                        halfdayDTL.clear()
                     } else
-                        if (sessionFromPos == 1 && sessionToPos == 0) {
-                            halfdayDTL.add(
-                                HalfdayDTL(
-                                    Constant.toSystemDate(binding.tvStartDate.text.toString()),
-                                    2
-                                )
-                            )
+                        if (sessionFromPos == 0 && sessionToPos == 0) {
                             halfdayDTL.add(
                                 HalfdayDTL(
                                     Constant.toSystemDate(binding.tvEndDate.text.toString()),
                                     1
                                 )
                             )
-                            days -= 1
+                            days -= 0.5
                         } else
-                            if (sessionFromPos == 1 && sessionToPos == 1) {
+                            if (sessionFromPos == 1 && sessionToPos == 0) {
                                 halfdayDTL.add(
                                     HalfdayDTL(
                                         Constant.toSystemDate(binding.tvStartDate.text.toString()),
                                         2
                                     )
                                 )
-                                days -= 0.5
-                            }
+                                halfdayDTL.add(
+                                    HalfdayDTL(
+                                        Constant.toSystemDate(binding.tvEndDate.text.toString()),
+                                        1
+                                    )
+                                )
+                                days -= 1
+                            } else
+                                if (sessionFromPos == 1 && sessionToPos == 1) {
+                                    halfdayDTL.add(
+                                        HalfdayDTL(
+                                            Constant.toSystemDate(binding.tvStartDate.text.toString()),
+                                            2
+                                        )
+                                    )
+                                    days -= 0.5
+                                }
+                }
 
                 binding.tvDuration.text = buildString {
                     append(days)
@@ -270,8 +280,33 @@ class StaffApplyLeaveFragment : Fragment() {
             i_agree_dialog()
         }
 
+        binding.switchShortLeave.setOnCheckedChangeListener { _, isChecked ->
+            onDurationSelect(isChecked)
+            isSortLeaveEnable=isChecked
+        }
+
+        if (shortLeaveValue>0.0){
+            binding.switchShortLeave.isVisible=true
+        }
 
 
+    }
+
+    private fun onDurationSelect(isChecked: Boolean) {
+        if (isChecked){
+            binding.llSessionSection.isVisible=false
+            binding.llDateSection.isVisible=true
+            binding.llEndDate.isVisible=false
+            binding.view2.isVisible=false
+            days=shortLeaveValue
+            binding.tvFrom.text=getString(R.string.date)
+        } else{
+            days=1.0
+            binding.llSessionSection.isVisible=true
+            binding.llDateSection.isVisible=true
+            binding.llEndDate.isVisible=true
+            binding.view2.isVisible=true
+        }
     }
 
 
@@ -341,7 +376,10 @@ class StaffApplyLeaveFragment : Fragment() {
 
                         }
 
-                    }  }  }  }
+                    }
+
+                    else -> {}
+                }  }  }
         leaveSettingViewModel.leaveSetting()
     }
 
@@ -412,10 +450,12 @@ class StaffApplyLeaveFragment : Fragment() {
             validate = false
             mainActivity().showMessage("Select From Date")
         }
-        if (binding.tvEndDate.text.toString().isEmpty()) {
-            validate = false
-            mainActivity().showMessage("Select To Date")
+        if (!isSortLeaveEnable){
+            if (binding.tvEndDate.text.toString().isEmpty()) {
+                validate = false
+                mainActivity().showMessage("Select To Date")
 
+            }
         }
 
         if (binding.textFiledReason.text.toString().isEmpty()) {
@@ -434,13 +474,15 @@ class StaffApplyLeaveFragment : Fragment() {
                  mainActivity().showMessage("Attachment is mandatory")
              }
          }
-        if (!isSessionFromSelected){
-            validate = false
-            mainActivity().showMessage("Select From session ")
-        }
-        if (!isSessionToSelected){
-            validate = false
-            mainActivity().showMessage("Select To session ")
+        if (!isSortLeaveEnable){
+            if (!isSessionFromSelected){
+                validate = false
+                mainActivity().showMessage("Select From session ")
+            }
+            if (!isSessionToSelected){
+                validate = false
+                mainActivity().showMessage("Select To session ")
+            }
         }
 
         return validate
@@ -515,7 +557,7 @@ class StaffApplyLeaveFragment : Fragment() {
               leaveApplyLeaveViewModel.leaveApply(
                  leaveID,
                  toSystemDate(binding.tvStartDate.text.toString()),
-                 toSystemDate(binding.tvEndDate.text.toString()),
+                  toSystemDate(binding.tvEndDate.text.toString()),
                  days,
                  halfdayDTL,
                  binding.textFiledReason.text.toString(),

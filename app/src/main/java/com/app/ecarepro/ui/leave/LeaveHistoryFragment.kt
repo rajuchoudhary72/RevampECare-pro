@@ -75,17 +75,18 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
                             binding.rvLeaveHistory.isVisible = true
                             binding.tvNoData.isVisible = false
 
-                            val leaveHistoryAdapter = LeaveHistoryAdapter(
-                                it.data.dtl,
-                                this@LeaveHistoryFragment
-                            )
-
-                            binding.rvLeaveHistory.apply {
-                                setHasFixedSize(true)
-                                layoutManager = LinearLayoutManager(activity)
-                                adapter = leaveHistoryAdapter
+                            userDataStore.getUser()?.run {
+                                val leaveHistoryAdapter = LeaveHistoryAdapter(
+                                    it.data.dtl,
+                                    this@LeaveHistoryFragment,
+                                    userType
+                                )
+                                binding.rvLeaveHistory.apply {
+                                    setHasFixedSize(true)
+                                    layoutManager = LinearLayoutManager(activity)
+                                    adapter = leaveHistoryAdapter
+                                }
                             }
-
 
                         }else{
                             binding.rvLeaveHistory.isVisible = false

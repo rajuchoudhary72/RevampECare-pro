@@ -7,5 +7,5 @@ data class LeaveRequestData(
     val halfdayDTL: List<HalfdayDTL>?,
     val leaveID: Int,
     val reason: String,
-    val tillDate: String
+    val tillDate: String?
 )
