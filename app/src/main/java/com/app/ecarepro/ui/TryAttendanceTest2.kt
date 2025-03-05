@@ -84,21 +84,25 @@ class TryAttendanceTest2 : AppCompatActivity() {
     private fun uiSetup() {
         binding.fullscreen2.schoolday.text = working_days
         binding.fullscreen2.presentDay.text = present_days
+        binding.fullscreen2.whDay.text = working_holidy_days
         binding.fullscreen2.absentDay.text = absent_days
         binding.fullscreen2.leaveDay.text = leave_days
         binding.totalSchoolDay.text = schooldays
         binding.totalPresentDay.text = total_present
+        binding.totalWorkingDay.text = total_workingHoliday
         binding.totalAbsentDay.text = total_absent
         binding.totalLeaveDay.text = total_leave
 
         val total_days = schooldays.toInt()
         val persent = total_present.toInt()
+        val working = total_workingHoliday.toInt()
         val absent = total_absent.toInt()
         val leave = total_leave.toInt()
         val late = total_late.toInt()
         val absent_ = (absent * 100).toDouble()
         val leave_ = (leave * 100).toDouble()
         val present_ = (persent * 100).toDouble()
+        val working_ = (working * 100).toDouble()
         val late_ = (late * 100).toDouble()
         //Math.round((absent_ / total_days)* 100.0) / 100.0 ;
         try {
@@ -108,6 +112,8 @@ class TryAttendanceTest2 : AppCompatActivity() {
                 (Math.round((leave_ / total_days) * 100.0) / 100.0).toString() + "%"
             binding.incRowAttendanceCircle.perPresent.text =
                 (Math.round((present_ / total_days) * 100.0) / 100.0).toString() + "%"
+            binding.incRowAttendanceCircle.perWorkingHoliday.text =
+                (Math.round((working_ / total_days) * 100.0) / 100.0).toString() + "%"
             binding.incRowAttendanceCircle.tvLateCircle.text =
                 (Math.round((late_ / total_days) * 100.0) / 100.0).toString() + "%"
         } catch (e: Exception) {
@@ -367,9 +373,11 @@ class TryAttendanceTest2 : AppCompatActivity() {
                                     leave_days = "${data.leaveDays}"
 
                                     present_days = "${data.presentDays}"
+                                    working_holidy_days = "${data.whDays}"
                                     total_absent = "${data.totalAbsent}"
                                     total_leave = "${data.totalLeave}"
                                     total_present = "${data.totalPresent}"
+                                    total_workingHoliday = "${data.totalWH}"
                                     working_days = "${data.workingDays}"
                                   try {
                                       session = data.academicYears[0].session
@@ -556,9 +564,11 @@ class TryAttendanceTest2 : AppCompatActivity() {
         var leave_days: String = "0"
         var late_days: String = "0"
         var present_days: String = "0"
+        var working_holidy_days: String = "0"
         var total_absent: String = "0"
         var total_leave: String = "0"
         var total_present: String = "0"
+        var total_workingHoliday: String = "0"
         var total_late: String = "0"
         var working_days: String = "0"
         var session: String? = "0"

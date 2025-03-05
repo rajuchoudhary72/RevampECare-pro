@@ -54,6 +54,10 @@ class StudentAttAdapter(private var stuAttendanceRepos: List<StuAttendanceRepo>,
                 bindingm.tvStatus.text = "L"
                 bindingm.tvStatus.background = ResourcesCompat.getDrawable(attendanceReportFragment.resources,R.drawable.circle_leave,null)
             }
+            7-> {
+                bindingm.tvStatus.text = "WH"
+                bindingm.tvStatus.background = ResourcesCompat.getDrawable(attendanceReportFragment.resources,R.drawable.circle_wh,null)
+            }
 
             4 -> bindingm.tvStatus.text = ""
         }

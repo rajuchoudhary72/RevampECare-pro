@@ -86,9 +86,16 @@
                                 app:imageUrl="@{data.schImgURL}" />
 
                             <TextView
+                                android:id="@+id/schName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="https://www.stxaviersdelhi.com/" />
+                                android:enabled="true"
+                                android:autoLink="web"
+                                android:focusable="true"
+                                android:textIsSelectable="true"
+                                android:fontFamily="@font/calibri_regular"
+                                android:longClickable="true"
+                                />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
                         <View

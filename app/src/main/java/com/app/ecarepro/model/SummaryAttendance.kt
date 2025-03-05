@@ -10,5 +10,6 @@ data class SummaryAttendance(
     val present: Int,
     val startDate: String,
     val working: Int,
-    val year: Int
+    val year: Int,
+    val wh: Int
 )
