@@ -101,14 +101,9 @@ class ExcellenceAwardFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            binding.nestScroll.visibility =View.VISIBLE
-                            binding.noRecord.root.visibility =View.GONE
                             it.data.sportActivity?.let { it1 -> setSportsItems(it1) }
                             it.data.academicActivity?.let { it1 -> setAcademicAdapterItems(it1) }
                             updateUI(it.data)
-                        }else{
-                            binding.nestScroll.visibility =View.GONE
-                            binding.noRecord.root.visibility =View.VISIBLE
                         }
 
                     }
