@@ -429,6 +429,14 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <include
+            android:id="@+id/no_record"
+            layout="@layout/item_no_data_found_view"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
