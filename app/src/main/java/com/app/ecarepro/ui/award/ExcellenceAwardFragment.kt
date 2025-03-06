@@ -27,6 +27,9 @@ import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentExcellenceAwardBinding
 import com.app.ecarepro.ui.MainActivity
@@ -40,6 +43,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExcellenceAwardFragment : Fragment() {
@@ -47,7 +51,8 @@ class ExcellenceAwardFragment : Fragment() {
     private val mViewModel: ExcellenceAwardViewModel by viewModels()
     private val sportsAdapter by lazy { SportsAdapter() }
     private val academicAdapter by lazy { SportsAdapter() }
-
+    @Inject
+    lateinit var userDataStore: UserDataStore
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +73,15 @@ class ExcellenceAwardFragment : Fragment() {
                 createPDF()
 
         }
+        lifecycleScope.launch {
+            userDataStore.getSchoolData()?.let {
+                it.webSite?.let { url ->
+                    binding.schName.text = url
+
+                }
+            }
+        }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
     }
 
     private fun observers() {
