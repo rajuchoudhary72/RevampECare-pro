@@ -42,7 +42,7 @@ class SelectRecipientsViewModel @Inject constructor(
     }
 
     fun isContactsSelected(contacts: List<Contact>): Boolean {
-        Log.e("RAJU IS Selected", contacts.size.toString() + "  ->  " + selectedContacts.size.toString() )
+      //  Log.e("RAJU IS Selected", contacts.size.toString() + "  ->  " + selectedContacts.size.toString() )
         if (contacts.isEmpty()) return false
         return selectedContacts.containsAll(contacts)
     }

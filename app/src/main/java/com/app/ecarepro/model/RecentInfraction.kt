@@ -8,7 +8,7 @@ data class RecentInfraction(
     val designation: String,
     val infraction: String,
     val infractionOn: String,
-    val instance: String,
+    val instance: Int,
     val photo: Any,
     val point: Int,
     val stID: Int,

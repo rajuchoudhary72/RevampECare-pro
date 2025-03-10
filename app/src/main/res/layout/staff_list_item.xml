@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_140sdp">
+        android:layout_height="@dimen/_130sdp">
 
         <LinearLayout
             android:id="@+id/ll_main"
@@ -53,22 +53,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:ellipsize="end"
+                 android:paddingHorizontal="6dp"
                 android:gravity="center"
-                android:paddingHorizontal="6dp"
                 android:textAlignment="center"
-                />
-
-            <TextView
-                android:id="@+id/tv_subject_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:paddingHorizontal="6dp"
-                android:textAlignment="center"
-                android:visibility="gone"
-                />
+                android:textStyle="bold" />
 
 
 

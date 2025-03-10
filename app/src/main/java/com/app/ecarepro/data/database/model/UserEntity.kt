@@ -13,7 +13,6 @@ data class UserEntity(
     @ColumnInfo(name = "photo") val photo: String?,
     @ColumnInfo(name = "userType") val userType: Int,
     @ColumnInfo(name = "auth_token") val authToken: String?,
-    @ColumnInfo(name = "session_id", defaultValue = "") val sessionId: String?,
     @ColumnInfo(name = "roleName") val roleName: String?,
     @ColumnInfo(name = "schoolCode") val schoolCode: String?,
     @ColumnInfo(name = "is_user_authenticated") val isUserAuthenticated: Boolean?,
@@ -41,7 +40,6 @@ fun UserEntity.asNetworkUserDetailsDto(): NetworkUserDetailsDto {
         classID = classID,
         loginTime = loginTime,
         className = className,
-        stName = stName,
-        sessionID = sessionId
+        stName = stName
     )
 }

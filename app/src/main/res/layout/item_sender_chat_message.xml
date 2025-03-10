@@ -38,7 +38,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="-16dp"
-            android:backgroundTint="@color/green_10"
             android:background="@drawable/bg_round_corner_green_16"
             app:layout_constraintBottom_toBottomOf="@+id/barrier2"
             app:layout_constraintEnd_toEndOf="@+id/message"
@@ -54,13 +53,14 @@
             android:focusable="true"
             android:fontFamily="@font/calibri_regular"
             android:longClickable="true"
-            android:padding="15dp"
-            app:formattedNewText="@{message}"
-            android:textColor="@color/black"
+            android:padding="17dp"
+            android:autoLink="web"
+            app:formattedText="@{message}"
+            android:textColor="@color/white"
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="testing" />
+            tools:text="Vanjhal" />
 
         <com.google.android.material.imageview.ShapeableImageView
             app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent"
@@ -83,7 +83,7 @@
             android:id="@+id/files"
             clickListener="@{onClickPhoto}"
             files="@{files}"
-            isVisible="@{files.size() > 1}"
+            isVisible="@{files.size() > 0}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"

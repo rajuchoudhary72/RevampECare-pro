@@ -4,8 +4,9 @@
     <item
         android:id="@+id/menu_filter"
         android:icon="@drawable/ic_filter"
-        android:iconTint="@color/white"
         android:title=""
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:iconTint="@color/white"
+        />
 
 </menu>

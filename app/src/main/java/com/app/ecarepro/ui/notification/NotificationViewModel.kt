@@ -13,37 +13,32 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
-import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     val appRepository: AppRepository,
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
-    private val refresh = MutableLiveData(false)
-    val uiState =
-        refresh.asFlow().flatMapLatest { refresh ->
-            appRepository.getNotifications(refresh)
-        }
-            .map { result ->
-                if (result.isSuccess) {
-                    val notifications = result.getOrNull() ?: emptyList()
-                    NotificationUiState.Success(notifications)
-                } else {
-                    NotificationUiState.Error(
-                        result.exceptionOrNull() ?: IllegalArgumentException(
-                            UNKNOWN_ERROR_MESSAGE
-                        )
+
+    val uiState = appRepository
+        .getNotifications()
+        .map { result ->
+            if (result.isSuccess) {
+                val notifications = result.getOrNull() ?: emptyList()
+                NotificationUiState.Success(notifications)
+            } else {
+                NotificationUiState.Error(
+                    result.exceptionOrNull() ?: IllegalArgumentException(
+                        UNKNOWN_ERROR_MESSAGE
                     )
-                }
+                )
             }
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = NotificationUiState.Loading,
-                started = SharingStarted.WhileSubscribed(400)
-            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            initialValue = NotificationUiState.Loading,
+            started = SharingStarted.WhileSubscribed(400)
+        )
 
     fun markNotificationAsSeen(id: String) {
         viewModelScope.launch {
@@ -53,9 +48,6 @@ class NotificationViewModel @Inject constructor(
 
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.NOTIFICATION_LIST)
-    }
-    fun refresh() {
-        refresh.postValue(true)
     }
 }
 

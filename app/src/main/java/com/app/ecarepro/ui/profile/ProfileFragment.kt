@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
@@ -49,7 +50,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.core.content.ContextCompat
-import com.app.ecarepro.profileSessionList
 
 
 @AndroidEntryPoint
@@ -179,7 +179,7 @@ class ProfileFragment : Fragment() {
 
 
     }
-
+    @SuppressLint("ImplicitSamInstance")
     private fun handleUiState(uiState: ProfileUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
@@ -256,7 +256,7 @@ class ProfileFragment : Fragment() {
                         )
                         /*show  child info  if  user is parent*/
                         if (it.stName.isNullOrEmpty().not()){
-                            childName("${it.stName ?: ""} (${it.className ?: ""})")
+                            childName("${it.stName ?: ""} (${it.className?.trim() ?: ""})")
                         }else{
                             childName(null)
                         }
@@ -315,12 +315,7 @@ class ProfileFragment : Fragment() {
                         )
                     }
                 }
-               /* profileSessionList {
-                    id(139)
-                    clickListener { _ ->
-                        findNavController().navigate(R.id.userSessionListFragment)
-                    }
-                }*/
+
                 profileLogout {
                     id(131)
                     version("v ${BuildConfig.VERSION_NAME}")
@@ -328,7 +323,6 @@ class ProfileFragment : Fragment() {
                         (requireActivity() as MainActivity).logout()
                     }
                 }
-
             }
         }
     }
@@ -598,7 +592,7 @@ class ProfileFragment : Fragment() {
             id(R.string.permanent_education_number)
             iconRes(R.drawable.avd_dashboard)
             title(getString(R.string.permanent_education_number))
-            subTitle(profile.peN_Number)
+            subTitle(profile.admissionNo)
         }
         profileItem {
             id(R.string.fathers_name)
@@ -654,12 +648,7 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.contactMobile)
         }
-        profileItem {
-            id(R.string.aadharCardNo)
-            iconRes(R.drawable.adhar_card_icon)
-            title(getString(R.string.aadharCardNo))
-            subTitle(profile.studentProfile?.aadhaarNumber)
-        }
+
         profileItem {
             id(R.string.bill_number)
             iconRes(R.drawable.ic_contact_no_)
@@ -687,19 +676,6 @@ class ProfileFragment : Fragment() {
             title(getString(R.string.contact_number))
             subTitle(profile.studentProfile?.contactMobile)
         }
-        profileItem {
-            id(R.string.father_aadhaar_no)
-            iconRes(R.drawable.adhar_card_icon)
-            title(getString(R.string.father_aadhaar_no))
-            subTitle(profile.studentProfile?.fatherAadhaarNumber)
-        }
-        profileItem {
-            id(R.string.father_pan)
-            iconRes(R.drawable.pan_card_icon)
-            title(getString(R.string.father_pan))
-            subTitle(profile.studentProfile?.fatherPAN)
-        }
-
         profileItem {
             id(R.string.bill_number)
             iconRes(R.drawable.ic_contact_no_)

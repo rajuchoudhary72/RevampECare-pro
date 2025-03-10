@@ -112,7 +112,6 @@ class MessageFragment : Fragment() {
                 }
             }
         }
-
         arguments?.let {
             if(it.getBoolean("openSend", false)){
                 binding.viewPager.setCurrentItem(1,false)

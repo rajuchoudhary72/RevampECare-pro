@@ -1,48 +1,57 @@
 package com.app.ecarepro.ui.dashbord.model
 
-import android.annotation.SuppressLint
-import android.util.Log
+import androidx.core.view.isVisible
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
+import com.app.ecarepro.data.network.model.FeeDefaulter
 import com.app.ecarepro.databinding.ItemFeeDefaulterCardBinding
 import com.app.ecarepro.ui.views.epoxy.ViewBindingKotlinModel
 import com.app.ecarepro.ui.views.subTitle
-import java.util.IllegalFormatConversionException
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
+import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
-
-class FeeDefaulterModel(val feeDefaulter: NetworkFeeDefaulter?, val onClick: () -> Unit) :
+class FeeDefaulterModel(val feeDefaulter: FeeDefaulter) :
     ViewBindingKotlinModel<ItemFeeDefaulterCardBinding>(R.layout.item_fee_defaulter_card) {
-
-    @SuppressLint("DefaultLocale")
+    private var isExpanded = false
     override fun ItemFeeDefaulterCardBinding.bind() {
-
-        Log.e("HARI", "Module Build $feeDefaulter")
-
+        isExpanded = this@FeeDefaulterModel.isExpanded
         title.setOnClickListener {
-            onClick()
+            this@FeeDefaulterModel.isExpanded = this@FeeDefaulterModel.isExpanded.not()
+            chartView.isVisible = this@FeeDefaulterModel.isExpanded
+            groupCollapsed.isVisible = this@FeeDefaulterModel.isExpanded.not()
         }
 
-        if (feeDefaulter == null) {
-            amount.subTitle("₹ 0 ")
-            total.subTitle("0")
-            defaulter.subTitle("0")
-        } else {
-            amount.subTitle(feeDefaulter.totalAmount)
-            total.subTitle(feeDefaulter.totalStudent.toString())
-            defaulter.subTitle(feeDefaulter.totalDefaulter.toString())
-        }
+        /**/
+        // Convert to BigDecimal to avoid scientific notation
+        val number = feeDefaulter.amount
+        val roundedNumber = String.format("%.2f", number)
+        amount.subTitle("₹" + roundedNumber)
+        total.subTitle(feeDefaulter.totalStudent.toString())
+        defaulter.subTitle(feeDefaulter.dafaulterCount.toString())
+        chartView.isClearBackgroundColor = true
+        chartView.aa_drawChartWithChartModel(getBarChartModel(feeDefaulter))
     }
 
-    override fun equals(other: Any?): Boolean {
-        return false
-    }
-
-    override fun hashCode(): Int {
-        var result = super.hashCode()
-        result = 31 * result + feeDefaulter.hashCode()
-        result = 31 * result + onClick.hashCode()
-        return result
-    }
-
+    private fun getBarChartModel(feeDefaulter: FeeDefaulter) = AAChartModel()
+        .chartType(AAChartType.Pie)
+        .colorsTheme(arrayOf("#0c9674", "#7dffc0"))
+        .dataLabelsEnabled(true)
+        .yAxisTitle("℃")
+        .legendEnabled(false)
+        .series(
+            arrayOf(
+                AASeriesElement()
+                    .name("Language market shares")
+                    .data(
+                        arrayOf(
+                            arrayOf( 80),
+                            arrayOf("Defaulter 885Amount ₹1,62,01,020", 29),
+                        )
+                    )
+            )
+        )
 
 }

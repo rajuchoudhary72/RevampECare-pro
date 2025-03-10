@@ -131,13 +131,10 @@ import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.provider.Settings.Secure
-import com.app.ecarepro.data.network.CreateUserSessionRequestDto
-import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
-import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
@@ -151,7 +148,6 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
-import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.Profile
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
 import okhttp3.RequestBody
@@ -169,24 +165,11 @@ interface UserService {
     suspend fun twoFactorLogin(
         @Body request: UserLoginRequestDto,
     ): TwoFactorLoginResponseDto
-
-    @POST("User/CreateSession")
-    suspend fun createSession(
-        @Body request: CreateUserSessionRequestDto
-    ): UserSessionResponseDto
-
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,
         @Query("Username") username: String
     ): NetworkUserDetailsDto
-
-    @GET("User/LogOut")
-    suspend fun logout(
-        @Query("DeviceType") deviceType: Int = 1,
-        @Query("deviceID") deviceID: String ,
-        @Query("SessionID") sessionID: String ,
-    ): CommonResponse
 
     @GET("User/LogOutAll")
     suspend fun logoutAll(
@@ -195,11 +178,16 @@ interface UserService {
         @Query("SessionID") sessionID: String ,
     ): CommonResponse
 
+    @GET("User/LogOut")
+    suspend fun logout(
+        @Query("DeviceType") deviceType: Int = 1,
+        @Query("deviceID") deviceID: String ,
+    ): CommonResponse
     @GET("Report/FeeCollection")
     suspend fun feeCollection(
-        @Query("FeeTypeId") feeTypeId: Int?,
-        @Query("FromDate") fromDate: String?,
-        @Query("TillDate") tillDate: String?,
+        @Query("FeeTypeId") feeTypeId: Int,
+        @Query("FromDate") fromDate: String,
+        @Query("TillDate") tillDate: String,
     ): FeeCollection
     @POST("User/GetCredentials")
     suspend fun getCredentials(
@@ -595,9 +583,6 @@ interface UserService {
     @GET("Report/StaffList")
     suspend fun getStaffList(): NetworkStaffList
 
-    @GET("Staff/List")
-    suspend fun teachersList(): NetworkStaffList
-
     @GET("Report/StaffProfile")
     suspend fun getStaffProfile(
         @Query("SID") sId: Int
@@ -972,14 +957,10 @@ interface UserService {
     @GET("QuestionBank/Create")
     suspend fun getQuestionBankCreate(  ): NetworkQuestionBankCreate
 
-
-
     @GET("QuestionBank/GetSubject")
     suspend fun getQuestionBankSubject(
         @Query("ClassID") classID: Int
     ): NetworkQuestionBankSubject
-
-
 
     @GET("QuestionBank/GetChapters")
     suspend fun getQuestionBankChapters(
@@ -1079,19 +1060,4 @@ interface UserService {
 
     @GET("School/Wings")
     suspend fun wingsList(): NetworkWingReport
-
-    @GET("User/ActiveSessions")
-    suspend fun activeSessions(): NetworkUserSessionsResponse
-
-    @GET("User/RemoveSession")
-    suspend fun removeSession(
-        @Query("SessionID") sessionID: String?,
-    ): CommonResponse
-
-    @GET("Report/FeeDefaulters")
-    suspend fun getFeeDefaulters(
-        @Query("FeeTypeId") feeTypeId: Int?,
-        @Query("InstallIds") installIds: String?
-    ): NetworkFeeDefaulter
-
 }

@@ -107,12 +107,10 @@ class SyncManager @Inject constructor(
         userToUpdate: NetworkUserDetailsDto?,
     ) {
         userToUpdate?.let { currentUserInDatabase ->
-            val sessionId = currentUserInDatabase.sessionID
             userDatabase.deleteUserById(currentUserInDatabase.id)
             val id = userDatabase.insertUser(
                 user.copy(
-                    loginTime = getCurrentSyncTime(),
-                    sessionId = sessionId
+                    loginTime = getCurrentSyncTime()
                 )
             )
             userDataStore.setCurrentUserId(id.toInt())

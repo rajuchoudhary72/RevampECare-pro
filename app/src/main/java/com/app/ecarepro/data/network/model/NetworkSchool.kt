@@ -102,5 +102,6 @@ fun NetworkSchool.asNetworkSchool(): SchoolEntity {
         supportDays = supportDays,
         themColor = themColor,
         webSite = webSite,
+        slides = ""
     )
 }

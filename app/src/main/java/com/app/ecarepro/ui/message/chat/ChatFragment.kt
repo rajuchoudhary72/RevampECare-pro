@@ -1,13 +1,8 @@
 package com.app.ecarepro.ui.message.chat
 
-import android.Manifest
-import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.style.CharacterStyle
@@ -17,11 +12,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -29,8 +23,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.attachment
-import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.Sender
 import com.app.ecarepro.databinding.FragmentChatBinding
 import com.app.ecarepro.noDataFoundView
@@ -38,7 +30,6 @@ import com.app.ecarepro.receiverChatMessage
 import com.app.ecarepro.senderChatMessage
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.Constant.Companion.boldFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.boldFindStartIndexes
@@ -46,22 +37,14 @@ import com.app.ecarepro.utils.Constant.Companion.italicFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.italicFindStartIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
-import com.app.ecarepro.utils.FileAccess
-import com.app.ecarepro.utils.FileAccess.Companion.launchAudioPicker
-import com.app.ecarepro.utils.FileAccess.Companion.launchDocPicker
-import com.app.ecarepro.utils.FileAccess.Companion.launchGallery
-import com.app.ecarepro.utils.FileAccess.Companion.openAudioRecorder
 import com.app.ecarepro.utils.FileClickListener
 import com.app.ecarepro.utils.imageUrl
-import com.app.ecarepro.utils.isAudioUrl
-import com.lassi.data.media.MiMedia
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
-import java.util.UUID
+import com.app.ecarepro.utils.isAudioUrl
 
 
 @AndroidEntryPoint
@@ -71,12 +54,11 @@ class ChatFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val chatViewModel: ChatViewModel by viewModels()
-    private var lastClickAttachmentType: AttachmentType? = null
-
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentChatBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = chatViewModel
@@ -91,119 +73,28 @@ class ChatFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             chatViewModel.uiState.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle, Lifecycle.State.CREATED
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.CREATED
             ).collectLatest { uiState ->
                 handleUiState(uiState)
             }
         }
     }
 
-    private fun handleAttachmentTypes(messageSettings: MessageSettings?) {
-        messageSettings?.let { settings ->
-            binding.btnCamera.isVisible = settings.media?.browseImg == true
-            binding.btnGallery.isVisible = settings.media?.browseImg == true
-            binding.btnRecord.isVisible = settings.media?.browseAudio == true
-            binding.btnBrowseAudio.isVisible = settings.media?.browseAudio == true
-            binding.btnBrowsePdf.isVisible = settings.media?.browsePDF == true
-        }
-    }
-
-    private fun buildAttachmentModels(attachments: List<MiMedia>) {
-        binding.attachments.isVisible = attachments.isNotEmpty()
-        binding.attachments.withModels {
-            attachments.forEachIndexed { index, attachment ->
-                attachment {
-                    id(index)
-                    image(attachment.path)
-                    onClickRemove { _ ->
-                        chatViewModel.removeAttachment(attachment)
-                    }
-                }
-            }
-        }
-    }
-
-
     private fun setUpViews() {
+
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-
         binding.btnRecipient.setOnClickListener {
             showRecipients()
         }
 
         binding.btnReplyMessage.setOnClickListener {
-            mainActivity().showLoader(true)
-            chatViewModel.replyMessage { success, message ->
-                mainActivity().showLoader(false)
+            chatViewModel.replyMessage { _, message ->
                 mainActivity().showMessage(message)
-                if (success) {
-                    chatViewModel.clearAttachment()
-                }
             }
         }
-
-        binding.btnAddAttachment.setOnClickListener {
-            binding.cardAttachmentOptions.isVisible = binding.cardAttachmentOptions.isVisible.not()
-        }
-
-        binding.btnBrowsePdf.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.PDF
-            launchPicker()
-        }
-
-        binding.btnBrowseAudio.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.AUDIO
-            launchPicker()
-        }
-
-
-
-        binding.btnGallery.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.GALLERY
-            if (checkAndRequestPermissions()) {
-                launchPicker()
-            }
-        }
-
-        binding.btnRecord.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.AUDIO
-            openAudioRecorder(
-                fragmentManager = childFragmentManager,
-                onSuccess = { uri ->
-                    chatViewModel.setAttachments(
-                        listOf(
-                            MiMedia(
-                                path = uri, name = AttachmentType.RECORDING.name
-                            )
-                        )
-                    )
-                },
-                onFailure = { errorMessage ->
-                    mainActivity().showMessage(errorMessage ?: "")
-                }
-
-            )
-        }
-        FileAccess.checkPermission(this@ChatFragment)
-        binding.btnCamera.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.CAMERA
-            FileAccess.checkPermission(this@ChatFragment)
-            if (checkCameraPermissions()) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(300)
-                    cameraLauncher.launch(FileAccess.cameraIntent())
-                }
-            }
-        }
-
-
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
@@ -219,169 +110,12 @@ class ChatFragment : Fragment() {
 
     }
 
-
-    private val cameraLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val bitmap = result.data?.extras?.get("data") as Bitmap
-                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
-                file.writeBitmap(
-                    bitmap, Bitmap.CompressFormat.PNG, 100
-                )
-                chatViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
-            }
-        }
-
-    private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
-        outputStream().use { out ->
-            bitmap.compress(format, quality, out)
-            out.flush()
-        }
-    }
-
-
-    private fun checkAndRequestPermissions(): Boolean {
-        val permissionList = mutableListOf<String>()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(), Manifest.permission.READ_MEDIA_IMAGES
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionList.add(Manifest.permission.READ_MEDIA_IMAGES)
-            }
-        } else {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-        }
-
-        return if (permissionList.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), permissionList.toTypedArray(), 1001
-            )
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun checkCameraPermissions(): Boolean {
-        val permissionList = mutableListOf<String>()
-
-        if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionList.add(Manifest.permission.CAMERA)
-        }
-
-        return if (permissionList.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), permissionList.toTypedArray(), 1001
-            )
-            false
-        } else {
-            true
-        }
-    }
-
-    private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val selectedImages = mutableListOf<Uri>()
-                result.data?.let { data ->
-                    val clipData = data.clipData
-                    if (clipData != null) {
-                        for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
-                                val imageUri = clipData.getItemAt(i).uri
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                    } else {
-                        data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                    }
-                    chatViewModel.setAttachments(selectedImages.map {
-                        MiMedia(
-                            path = it.toString(), name = lastClickAttachmentType?.name
-                        )
-                    })
-                }
-            }
-        }
-
-
-    private fun launchPicker() {
-        when (lastClickAttachmentType) {
-            AttachmentType.GALLERY -> {
-                launchGallery(pickImagesLauncher, false)
-            }
-
-            AttachmentType.AUDIO -> {
-                launchAudioPicker(pdfLauncher, false)
-            }
-
-            AttachmentType.PDF -> {
-                launchDocPicker(pdfLauncher, false)
-            }
-
-            else -> {}
-        }
-    }
-
-
-    private val pdfLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                result.data?.let { data ->
-                    if (data.data != null) {
-                        val mImageUri: Uri = data.data!!
-                        chatViewModel.setAttachments(
-                            listOf(
-                                MiMedia(
-                                    path = mImageUri.toString(),
-                                    name = lastClickAttachmentType?.name
-                                )
-                            )
-                        )
-                    } else {
-                        if (data.clipData != null) {
-                            val count: Int = data.clipData!!.itemCount
-                            val files = mutableListOf<MiMedia>()
-                            for (i in 0 until count) {
-                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
-                                files.add(
-                                    MiMedia(
-                                        path = imageUri.toString(),
-                                        name = lastClickAttachmentType?.name
-                                    )
-                                )
-                            }
-                            chatViewModel.setAttachments(files)
-                        }
-                    }
-                }
-            }
-        }
-
-
-    private fun hideAttachmentCard() {
-        binding.cardAttachmentOptions.isVisible = false
-    }
-
     private fun showRecipients() {
         RecipientsDialog.getInstance(
             (chatViewModel.uiState.value as ChatUiState.Success).recipients
-        ).show(childFragmentManager, "")
+        )
+            .show(childFragmentManager, "")
     }
-
 
     private fun handleUiState(uiState: ChatUiState) {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
@@ -389,7 +123,6 @@ class ChatFragment : Fragment() {
             mainActivity().showMessage(error.message ?: "")
         }
         if (uiState is ChatUiState.Success || uiState == ChatUiState.EmptyInbox) {
-
             binding.recyclerView.withModels {
                 when (uiState) {
                     ChatUiState.EmptyInbox -> {
@@ -398,10 +131,7 @@ class ChatFragment : Fragment() {
                             binding.toolbar.title = "Message"
                         }
                     }
-
                     is ChatUiState.Success -> {
-                        handleAttachmentTypes(uiState.messageSettings)
-                        buildAttachmentModels(uiState.attachments)
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
                         }
@@ -454,15 +184,13 @@ class ChatFragment : Fragment() {
                         }
 
                     }
-
                     else -> {}
                 }
             }
         }
     }
-
     private fun setUpToolbar(sender: Sender) {
-        if (chatViewModel.messageType == MessageType.INBOX.value) {
+        if (chatViewModel.messageType==MessageType.INBOX.value){
             binding.apply {
                 headerView.isVisible = true
                 photo.imageUrl(
@@ -470,22 +198,21 @@ class ChatFragment : Fragment() {
                     ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
                 )
                 name.text = sender.name
-                if (sender.senderType == 3) {
+                if (sender.senderType==3){
                     designation.text = sender.designation
-                } else if (sender.senderType == 1) {
-                    designation.text = "Class :- " + sender.className
-                } else if (sender.senderType == 2) {
-                    designation.text = "P/O  " + sender.childName + " , " + sender.className
+                }else  if (sender.senderType==1){
+                    designation.text = "Class :- "+ sender.className
+                } else  if (sender.senderType==2){
+                    designation.text = "P/O  " + sender.childName+" , "+ sender.className
                 }
 
             }
-        } else {
-            binding.headerView.isVisible = false
+        }else{
+            binding.headerView.isVisible =false
             binding.toolbar.setTitle("Message")
         }
 
     }
-
     private fun openPhoto(photo: String?) {
         if (photo.isNullOrEmpty()) return
         if (isPdfUrl(photo)) {
@@ -506,7 +233,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun openPdfFromUrl(url: String) {
-        if (isAdded) {
+        if(isAdded){
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             val chooser = Intent.createChooser(intent, "Choose an app to open with")
             startActivity(chooser)
@@ -521,6 +248,13 @@ class ChatFragment : Fragment() {
         return pdfExtension == extension || doc == extension || docx == extension
     }
 
+   /* fun isAudioUrl(url: String): Boolean {
+        val audioExtensions = listOf("mp3", "wav", "ogg", "flac", "aac", "m4a")
+        val extension = url.substringAfterLast(".", "").lowercase()
+        return audioExtensions.contains(extension)
+    }
+*/
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -529,15 +263,15 @@ class ChatFragment : Fragment() {
 
     fun setUpFontStyle(binding: FragmentChatBinding) {
 
-        if (binding.tvSubject.text.toString() != "") {
-            val ssb = SpannableStringBuilder(binding.tvSubject.text)
+        if (binding.tvSubject.getText().toString() != "") {
+            val ssb = SpannableStringBuilder(binding.tvSubject.getText())
 
 
             try {
                 var cs: CharacterStyle
 
 
-                val sentence: String = binding.tvSubject.text.toString()
+                val sentence: String = binding.tvSubject.getText().toString()
 
                 val boldStartIndexes: List<Int> = boldFindStartIndexes(sentence)
                 val boldEndIndexes: List<Int> = boldFindEndStarIndexes(sentence)
@@ -562,10 +296,10 @@ class ChatFragment : Fragment() {
                     }
                 }
 
-                binding.tvSubject.text = ssb
+                binding.tvSubject.setText(ssb)
 
 
-                val ssbbb = SpannableStringBuilder(binding.tvSubject.text)
+                val ssbbb = SpannableStringBuilder(binding.tvSubject.getText())
 
                 var dboldstart = 0
                 var dboldend = 0
@@ -582,12 +316,12 @@ class ChatFragment : Fragment() {
                     }
                 }
 
-                binding.tvSubject.text = ssbbb
+                binding.tvSubject.setText(ssbbb)
 
 
-                val ssbbbitalic = SpannableStringBuilder(binding.tvSubject.text)
+                val ssbbbitalic = SpannableStringBuilder(binding.tvSubject.getText())
 
-                val sentenceit: String = binding.tvSubject.text.toString()
+                val sentenceit: String = binding.tvSubject.getText().toString()
 
                 val italicStartIndexes: List<Int> = italicFindStartIndexes(sentenceit)
                 val italicEndIndexes: List<Int> = italicFindEndStarIndexes(sentenceit)
@@ -610,10 +344,10 @@ class ChatFragment : Fragment() {
                     }
                 }
 
-                binding.tvSubject.text = ssbbbitalic
+                binding.tvSubject.setText(ssbbbitalic)
 
 
-                val ssbbbitalicDelte = SpannableStringBuilder(binding.tvSubject.text)
+                val ssbbbitalicDelte = SpannableStringBuilder(binding.tvSubject.getText())
 
 
                 var itlicDeleteIndesx = 0
@@ -629,7 +363,8 @@ class ChatFragment : Fragment() {
                                 ditalicstart - itlicDeleteIndesx + 1
                             )
                             ssbbbitalicDelte.delete(
-                                ditalicdend - itlicDeleteIndesx - 1, ditalicdend - itlicDeleteIndesx
+                                ditalicdend - itlicDeleteIndesx - 1,
+                                ditalicdend - itlicDeleteIndesx
                             )
                             itlicDeleteIndesx = itlicDeleteIndesx + 2
                             break
@@ -637,11 +372,11 @@ class ChatFragment : Fragment() {
                     }
                 }
 
-                binding.tvSubject.text = ssbbbitalicDelte
+                binding.tvSubject.setText(ssbbbitalicDelte)
 
-                val ssbbbitalicstrikethrough = SpannableStringBuilder(binding.tvSubject.text)
+                val ssbbbitalicstrikethrough = SpannableStringBuilder(binding.tvSubject.getText())
 
-                val sentenceStric: String = binding.tvSubject.text.toString()
+                val sentenceStric: String = binding.tvSubject.getText().toString()
 
                 val strikethroughStartIndexes: List<Int> =
                     strikethroughFindStartIndexes(sentenceStric)
@@ -649,7 +384,8 @@ class ChatFragment : Fragment() {
                     strikethroughFindEndStarIndexes(sentenceStric)
 
                 Log.v(
-                    "Okkkkk", "Word Start Indexes strikethrough : $strikethroughStartIndexes"
+                    "Okkkkk",
+                    "Word Start Indexes strikethrough : $strikethroughStartIndexes"
                 )
                 Log.v("Okkkkk", "Word End Indexes strikethrough : $strikethroughEndIndexes")
 
@@ -662,17 +398,20 @@ class ChatFragment : Fragment() {
                             strikethroughend = strikethroughEndIndexes[j]
                             cs = UnderlineSpan()
                             ssbbbitalicstrikethrough.setSpan(
-                                cs, strikethroughstart, strikethroughend, 1
+                                cs,
+                                strikethroughstart,
+                                strikethroughend,
+                                1
                             )
                             break
                         }
                     }
                 }
 
-                binding.tvSubject.text = ssbbbitalicstrikethrough
+                binding.tvSubject.setText(ssbbbitalicstrikethrough)
 
                 val ssbbbitalicstrikethroughDelete =
-                    SpannableStringBuilder(binding.tvSubject.text)
+                    SpannableStringBuilder(binding.tvSubject.getText())
 
 
                 var strikethroughstartDeleteIndex = 0
@@ -697,7 +436,7 @@ class ChatFragment : Fragment() {
                     }
                 }
 
-                binding.tvSubject.text = ssbbbitalicstrikethroughDelete
+                binding.tvSubject.setText(ssbbbitalicstrikethroughDelete)
             } catch (ignored: Exception) {
             }
         }

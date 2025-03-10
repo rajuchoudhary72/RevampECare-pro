@@ -9,25 +9,34 @@
     type="com.app.ecarepro.model.Circular" />
     </data>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".ui.circuler.CircularDetailsFragment">
 
 
-        <include
-            android:id="@+id/include_toolbar"
-            layout="@layout/common_toolbar"
-            />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_notic_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Circular Details"
+            app:titleTextAppearance="?attr/titleTextAppearance"
+            app:navigationIcon="@drawable/ic_arrow_back_24px"
+            app:titleTextColor="@color/white"
+            app:titleCentered="true"
+            android:background="@color/md_theme_light_primary"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
 
   <ScrollView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/include_toolbar"
-      >
+      app:layout_constraintTop_toBottomOf="@+id/toolbar_notic_detail"
 
+      >
       <androidx.constraintlayout.widget.ConstraintLayout
            android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -275,5 +284,5 @@
 
   </ScrollView>
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

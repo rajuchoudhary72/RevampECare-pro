@@ -18,6 +18,8 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.Html
 import android.text.Spannable
+import com.app.ecarepro.data.network.model.MessageSettings
+
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.CharacterStyle
@@ -49,7 +51,6 @@ import com.app.ecarepro.R
 import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.ContactsDto
-import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.databinding.FragmentComposeBinding
@@ -58,14 +59,18 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.app.ecarepro.utils.FileAccess
-import com.app.ecarepro.utils.FileAccess.Companion.launchAudioPicker
-import com.app.ecarepro.utils.FileAccess.Companion.launchDocPicker
-import com.app.ecarepro.utils.FileAccess.Companion.launchGallery
-import com.app.ecarepro.utils.FileAccess.Companion.openAudioRecorder
+import com.app.ecarepro.utils.FileUtils
+import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
+import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
+import com.lassi.domain.media.LassiOption
+import com.lassi.domain.media.MediaType
+import com.lassi.domain.media.SortingOption
+import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -85,6 +90,24 @@ class ComposeFragment : Fragment() {
     private val composeViewModel: ComposeViewModel by viewModels()
 
     private var lastClickAttachmentType: AttachmentType? = null
+    private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
+
+    private val mPermissionSettingResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            requestExternalStoragePermission()
+        }
+
+
+    private val receiveData =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val selectedMedia =
+                    it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
+                if (selectedMedia.isNotEmpty()) {
+                    composeViewModel.setAttachments(selectedMedia)
+                }
+            }
+        }
 
     private val pdfLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -136,7 +159,7 @@ class ComposeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        composeViewModel.fetchMessageSettings()
+
         setUpViews()
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -161,6 +184,21 @@ class ComposeFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                //                if (et_reply.getText().toString().trim().length() > 0) {
+//                    if (iv_post_reply2.getVisibility() == GONE) {
+//                        iv_post_reply2.setVisibility(VISIBLE);
+//                    }
+//                    if (iv_post_reply.getVisibility() == VISIBLE) {
+//                        iv_post_reply.setVisibility(GONE);
+//                    }
+//                } else {
+//                    if (iv_post_reply2.getVisibility() == VISIBLE) {
+//                        iv_post_reply2.setVisibility(GONE);
+//                    }
+//                    if (iv_post_reply.getVisibility() == GONE) {
+//                        iv_post_reply.setVisibility(VISIBLE);
+//                    }
+//                }
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -332,7 +370,6 @@ class ComposeFragment : Fragment() {
             setUpSmsTypes(uiState.smsTypes)
         }
     }
-
     private fun handleAttachmentTypes(messageSettings: MessageSettings?) {
         messageSettings?.let { settings ->
             binding.btnCamera.isVisible = settings.media?.browseImg == true
@@ -342,7 +379,6 @@ class ComposeFragment : Fragment() {
             binding.btnBrowsePdf.isVisible = settings.media?.browsePDF == true
         }
     }
-
     private fun setUpSmsTypes(smsTypes: List<SmsType>) {
         binding.spinnerSmsTypeLayout.isVisible = smsTypes.isNotEmpty()
         if (smsTypes.isEmpty()) return
@@ -429,7 +465,7 @@ class ComposeFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.btnAddAttachment.bringToFront()
+
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.btnReplyMessage.setOnClickListener {
@@ -456,7 +492,6 @@ class ComposeFragment : Fragment() {
 
             findNavController().navigate(R.id.selectRecipientsFragment)
         }
-
 
         binding.btnAddAttachment.setOnClickListener {
             binding.cardAttachmentOptions.isVisible = binding.cardAttachmentOptions.isVisible.not()
@@ -488,20 +523,7 @@ class ComposeFragment : Fragment() {
         binding.btnRecord.setOnClickListener {
             hideAttachmentCard()
             lastClickAttachmentType = AttachmentType.AUDIO
-            openAudioRecorder(
-                fragmentManager = childFragmentManager,
-                onSuccess = { uri ->
-                    composeViewModel.setAttachments(
-                        listOf(
-                            MiMedia(
-                                path = uri,
-                                name = AttachmentType.RECORDING.name
-                            )
-                        )
-                    )
-                },
-                onFailure = { errorMessage -> mainActivity().showMessage(errorMessage ?: "") }
-            )
+            openAudioRecorder()
         }
         FileAccess.checkPermission(this@ComposeFragment)
         binding.btnCamera.setOnClickListener {
@@ -534,6 +556,28 @@ class ComposeFragment : Fragment() {
             }
         }
 
+    private fun openAudioRecorder() {
+
+        VoiceSenderDialog(object : AudioRecordListener {
+            override fun onAudioReady(audioUri: String?) {
+                composeViewModel.setAttachments(
+                    listOf(
+                        MiMedia(
+                            path = audioUri,
+                            name = AttachmentType.RECORDING.name
+                        )
+                    )
+                )
+            }
+
+            override fun onReadyForRecord() {}
+
+            override fun onRecordFailed(errorMessage: String?) {
+                mainActivity().showMessage(errorMessage ?: "")
+            }
+        }).show(childFragmentManager, "VOICE")
+    }
+
     private fun hideAttachmentCard() {
         binding.cardAttachmentOptions.isVisible = false
     }
@@ -544,7 +588,7 @@ class ComposeFragment : Fragment() {
             contacts.forEach { contact ->
                 recipientChip {
                     id(contact.receiverID)
-                    text(contact.name)
+                    text(contact.name.ifEmpty { contact.className })
                     image(contact.photo)
                     closeClickistener { _ ->
                         composeViewModel.removeContacts(contact)
@@ -664,25 +708,145 @@ class ComposeFragment : Fragment() {
                 }
             }
         }
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
+    }
 
 
     private fun launchPicker() {
         when (lastClickAttachmentType) {
             AttachmentType.GALLERY -> {
-                launchGallery(pickImagesLauncher)
+                openGallery()
             }
+           /* AttachmentType.GALLERY -> {
+                // Request necessary permissions and open the gallery
+                if (checkAndRequestPermissions()) {
+                    launchPhotoPicker()
+                }
+                //  launchPhotoPicker()
+            }*/
 
             AttachmentType.AUDIO -> {
-                launchAudioPicker(pdfLauncher)
+                launchAudioPicker()
             }
 
             AttachmentType.PDF -> {
-                launchDocPicker(pdfLauncher)
+                launchPdfPicker()
             }
 
             else -> {}
         }
     }
+
+    private fun launchPhotoPicker() {
+        /*    val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
+           receiveData.launch(intent)*/
+        val intent = Lassi(requireContext())
+            .with(LassiOption.CAMERA_AND_GALLERY)
+            .setMediaType(MediaType.IMAGE)
+            .setMaxCount(7)
+            .setAscSort(SortingOption.DESCENDING)
+            .setPlaceHolder(R.drawable.img_placeholder)
+            .setErrorDrawable(R.drawable.img_placeholder)
+            .setGridSize(3)
+            .setMinFileSize(0) // Restrict by minimum file size
+            .setMaxFileSize(12000) // Restrict by maximum file size
+            .setCompressionRatio(65) // compress image for single item selection (can be 0 to 100)
+            .setAlertDialogNegativeButtonColor(R.color.black)
+            .setSupportedFileTypes(
+                "jpg", "jpeg", "png", "webp", "gif", "mp4", "mkv", "webm", "avi", "flv", "3gp",
+                "pdf", "odt", "doc", "docs", "docx", "txt", "ppt", "pptx", "rtf", "xlsx", "xls"
+            )
+            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
+            .setStatusBarColor(R.color.md_theme_light_primary)
+            .setToolbarColor(R.color.md_theme_light_primary)
+            .setToolbarResourceColor(android.R.color.white)
+            .setProgressBarColor(R.color.red)
+            .setGalleryBackgroundColor(R.color.white)
+            .build()
+        receiveData.launch(intent)
+        /*openGallery()*/
+
+    }
+
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val attachments = mutableListOf<MiMedia>()
+//   val data= result.data
+                val clipData = result.data?.clipData
+                if (clipData != null) {
+                    for (i in 0 until clipData.itemCount) {
+                        val imageUri: Uri = clipData.getItemAt(i).uri
+                        // Process each image URI here
+                        println("Selected Image URI: $imageUri")
+                        val miMedia = MiMedia(
+                            id = 0,
+                            name = imageUri.lastPathSegment,
+                            path = imageUri.toString(),
+                        )
+                        attachments.add(miMedia)
+                    }
+                    composeViewModel.setAttachments(attachments)
+                    /*  //val count = data.clipData!!.itemCount
+                      for (i in 0 until count){
+                          val imageUri = data.clipData!!.getItemAt(i).uri
+                          val miMedia = MiMedia(
+                              id = 0,
+                              name = imageUri.lastPathSegment,
+                              path = imageUri.toString(),
+                          )
+                          attachments.add(miMedia)
+                      }
+                      composeViewModel.setAttachments(attachments)*/
+                } else {
+                    // Single image selected
+                    val imageUri: Uri? = result.data?.data
+                    imageUri?.let {
+                        println("Selected Single Image URI: $it")
+                        val miMedia = MiMedia(
+                            id = 0,
+                            name = it.lastPathSegment,
+                            path = it.toString(),
+                        )
+                        attachments.add(miMedia)
+                    }
+                    composeViewModel.setAttachments(attachments)
+                }
+            }
+        }
+
+    private fun launchAudioPicker() {
+        val intent = Intent()
+        intent.type = "audio/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        pdfLauncher.launch(intent)
+    }
+
+    private fun launchPdfPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*" // Allow any file type
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        pdfLauncher.launch(intent)
+    }
+
+    private fun getLasiIntent() =
+        Lassi(requireContext()).setStatusBarColor(R.color.md_theme_light_primary)
+            .setToolbarColor(R.color.md_theme_light_primary)
+            .setToolbarResourceColor(android.R.color.white)
+            .setAlertDialogNegativeButtonColor(R.color.black)
+            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
+            .setGalleryBackgroundColor(R.color.white)
+            .setProgressBarColor(R.color.md_theme_light_primary).setGridSize(3)
 
     private fun checkCameraPermissions() {
         if (ContextCompat.checkSelfPermission(
@@ -871,6 +1035,11 @@ class ComposeFragment : Fragment() {
 
             when (item.itemId) {
                 R.id.bold -> {
+                    //et_reply.setText(Html.fromHtml(sourceString));
+                    // et_reply.getText().insert(et_reply.getSelectionStart(), Html.fromHtml(sourceString));
+                    /*et_reply.getText().replace(Math.min(start, end), Math.max(start, end),
+                            Html.fromHtml(sourceString), 0, et_reply.length()+1);*/
+                    //int startw =et_reply.getSelectionStart();//this is to get the the cursor position
                     val sourceString = "$star<b>$value</b>$star"
                     binding.message.text.replace(start, end, Html.fromHtml(sourceString))
 
@@ -878,12 +1047,18 @@ class ComposeFragment : Fragment() {
                 }
 
                 R.id.italic -> {
+                    /*cs = new  StyleSpan(Typeface.ITALIC);
+                    ssb.setSpan(cs, start, end, 1);
+                    et_reply.setText(ssb);*/
                     val italicString = "$underScore<i>$value</i>$underScore"
                     binding.message.text.replace(start, end, Html.fromHtml(italicString))
                     return true
                 }
 
                 R.id.underline -> {
+                    /* cs = new UnderlineSpan();
+                    ssb.setSpan(cs, start, end, 1);
+                    et_reply.setText(ssb);*/
                     val stricktString = "$stricketStart<u>$value</u>$stricketEnd"
                     binding.message.text.replace(start, end, Html.fromHtml(stricktString))
                     return true

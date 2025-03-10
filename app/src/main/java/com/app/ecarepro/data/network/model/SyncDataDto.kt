@@ -20,8 +20,6 @@ data class SyncDataDto(
 data class SyncData(
     @SerializedName("authToken")
     val authToken: String?,
-    @SerializedName("sessionID")
-    val sessionID: String?,
     @SerializedName("city")
     val city: String?,
     @SerializedName("classID")
@@ -75,7 +73,6 @@ fun SyncData.asUserEntity(): UserEntity {
         classID = classID,
         loginTime = "",
         stName = stName,
-        className = classX,
-        sessionId = sessionID
+        className = classX
     )
 }

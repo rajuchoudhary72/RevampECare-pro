@@ -84,7 +84,7 @@ class SelectRecipientPagerFragment : Fragment() {
                     StaffTypeDto(
                         staffType = selectRecipientsPagerViewModel.staffTypes.value?.getOrNull()
                             ?: emptyList(),
-                        selectedStaffType = selectRecipientsPagerViewModel.getSelectedStaffType()
+                        selectedStaffType = selectRecipientsPagerViewModel.getSelectedStaffType()?:selectRecipientsPagerViewModel.staffTypes.value?.getOrNull() ?: emptyList()
                     )
 
                 )
@@ -357,9 +357,9 @@ class SelectRecipientPagerFragment : Fragment() {
                                 true
                             )
                         }
-                        .forEachIndexed { index, contact ->
+                        .forEach { contact ->
                             selectableRecipient {
-                                id(contact.hashCode()+index)
+                                id(contact.hashCode())
                                 isSelected(selectRecipientsViewModel.isContactSelected(contact))
                                 photo(contact.photo)
                                 name(contact.name)
@@ -399,17 +399,27 @@ class SelectRecipientPagerFragment : Fragment() {
                     selectableClassView {
                         id(classContact.classID)
                         className(classContact.className)
-                        isSelected(
+                      /*  isSelected(
                             selectRecipientsViewModel.isContactsSelected(
                                 classContact.contacts ?: emptyList()
                             )
-                        )
+                        )*/
+                        /*for need only strawberry */
+                        isSelected(isClassSelected(classContact))
                         onClickViewAll { _ ->
-                            selectRecipientsPagerViewModel.setSelectedClassId(
+                            /*selectRecipientsPagerViewModel.setSelectedClassId(
                                 classId = classContact.classID,
                                 className = classContact.className ?: ""
                             )
-                            this@buildClassWithContactModels.requestModelBuild()
+                            this@buildClassWithContactModels.requestModelBuild()*/
+                            /*for need only strawberry */
+                            if (isClassSelected(classContact).not()) {
+                                selectRecipientsPagerViewModel.setSelectedClassId(
+                                    classId = classContact.classID,
+                                    className = classContact.className ?: ""
+                                )
+                                this@buildClassWithContactModels.requestModelBuild()
+                            }
                         }
                         selectClass { _ ->
                             if (selectRecipientsViewModel.isContactsSelected(
@@ -443,9 +453,9 @@ class SelectRecipientPagerFragment : Fragment() {
                         true
                     )?:false
                 }
-                ?.forEachIndexed {index, contact ->
+                ?.forEach { contact ->
                     selectableRecipient {
-                        id(contact.hashCode()+index)
+                        id(contact.hashCode())
                         isSelected(selectRecipientsViewModel.isContactSelected(contact))
                         photo(contact.photo)
                         name(contact.name)
@@ -471,6 +481,11 @@ class SelectRecipientPagerFragment : Fragment() {
         }
     }
 
+    /*for need only strawberry */
+    private fun isClassSelected(classContact: ClassContact) =
+        selectRecipientsViewModel.isContactsSelected(
+            classContact.contacts ?: emptyList()
+        )
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -74,7 +74,7 @@ class ComposeViewModel @Inject constructor(
         messageType == ComposeMessageType.ONLY_APP_MESSAGE && hideMessageAttachment.not()
     }.asLiveData()
     var currentLocation: Pair<Double, Double>? = null
-    val messageSettings = MutableStateFlow<MessageSettings?>(null)
+
     val message = MutableStateFlow("")
     val subject = MutableStateFlow("")
 
@@ -127,18 +127,7 @@ class ComposeViewModel @Inject constructor(
         if (contacts.isNotEmpty())
             this@ComposeViewModel.contacts.update { contacts }
     }
-    fun fetchMessageSettings() {
-        viewModelScope.launch {
-            messageRepository
-                .getMessageSettings()
-                .collectLatest { result ->
-                    result.onSuccess { settings ->
-                        userDataStore.saveMessageSettings(settings)
-                        messageSettings.update { settings }
-                    }
-                }
-        }
-    }
+
     fun removeContacts(contact: Contact) {
         contacts.update { current -> current.filterNot { it == contact } }
     }

@@ -1,0 +1,10 @@
+<resources>
+    <string name="notice">News</string>
+    <string name="all_notices">All News</string>
+    <string name="notice_details">News Details</string>
+    <string name="syllabus">Policies</string>
+    <string name="add_syllabus">Add Policies</string>
+    <string name="no_Syllabus_available">No Policies Available</string>
+    <string name="demo_school_name_franciscan_international_school">Strawberry Fields Play School</string>
+    <string name="demo_school_location_greater_noida">Chandigarh</string>
+</resources>

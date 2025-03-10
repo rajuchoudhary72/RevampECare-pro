@@ -3,7 +3,7 @@
     "project_number": "546577104298",
     "firebase_url": "https://strawberry-fields-high-school.firebaseio.com",
     "project_id": "strawberry-fields-high-school",
-    "storage_bucket": "strawberry-fields-high-school.appspot.com"
+    "storage_bucket": "strawberry-fields-high-school.firebasestorage.app"
   },
   "client": [
     {
@@ -20,6 +20,14 @@
           "android_info": {
             "package_name": "com.franciscan.strawberry",
             "certificate_hash": "50f88243e83b460baa35fdfbe1a57d8f47768b68"
+          }
+        },
+        {
+          "client_id": "546577104298-hk0ud2jr6n8k2i6lfbms2vjj8o5937a1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.franciscan.strawberry",
+            "certificate_hash": "23e2bdecdf9b90cc6fa134cbb028132527ab4bfa"
           }
         },
         {

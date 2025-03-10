@@ -394,32 +394,28 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
     }
 
     private fun downloadFile(fileSource: String) {
-        try {
-            when (Constant.isPdfUrl(fileSource)) {
-                1 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-                }
 
-                2 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-                }
-
-                3 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-                }
-
-                else -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-                }
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
             }
-        }catch (e:SecurityException){
-            e.printStackTrace()
-        }
-    }
+
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+
+            3 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            }
+
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
 
 
     private fun dateSelctedPoPUp(t: AssignSubmitStudent) {

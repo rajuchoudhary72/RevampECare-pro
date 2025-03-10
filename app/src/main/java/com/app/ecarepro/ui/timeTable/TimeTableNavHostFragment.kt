@@ -47,9 +47,9 @@ class TimeTableNavHostFragment : Fragment() {
             name= requireArguments().getString(Constant.NAME).toString()
 
              if (name.isEmpty() || name=="null"){
-                 binding.includeToolbar.toolbarTitle.text=getString(R.string.timetable)
+                 binding.includeToolbar.toolbarTitle.text="Timetable"
              }else{
-                 binding.includeToolbar.toolbarTitle.text = getString(R.string.timetable_of, name)
+                 binding.includeToolbar.toolbarTitle.text = "Timetable of $name"
              }
 
         }catch (_:Exception){}
@@ -71,70 +71,67 @@ class TimeTableNavHostFragment : Fragment() {
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        Log.d("main", "Error$it")
+                        Log.d("main", "Error" + it)
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            val data = it.data.data
+                            if (it.data.data!=null ) {
 
-                            if (data!=null){
+                                binding.tabLayout.visibility=View.VISIBLE
+                                binding.viewPager.visibility=View.VISIBLE
+                                binding.tvNoData.visibility=View.GONE
 
-                                if (data.isNotEmpty()){
-
-                                    binding.tabLayout.visibility=View.VISIBLE
-                                    binding.viewPager.visibility=View.VISIBLE
-                                    binding.tvNoData.visibility=View.GONE
-
-                                    val fragmentList : ArrayList<Fragment> = ArrayList()
-
-                                    data.forEach { itemDat ->
-                                        fragmentList.add(DayWiseTimeTableFragment.newInstance(itemDat,
-                                            toFragment
-                                        ))
-                                    }
-
-                                    val viewPagerAdapter = ViewPagerAdapter(
-                                        fragmentList,
-                                        activity?.supportFragmentManager!!,
-                                        lifecycle
-                                    )
-                                    binding.viewPager.adapter = viewPagerAdapter
-
-                                    TabLayoutMediator(
-                                        binding.tabLayout,
-                                        binding.viewPager
-                                    ) { tab, position ->
-                                        tab.text = data[position].day
-                                    }.attach()
+                                val fragmentList : ArrayList<Fragment> = ArrayList()
 
 
 
+                               // fragmentList.add( DayWiseTimeTableFragment( todayData(it.data.data)))
+                                fragmentList.add(TimeTableDayWiseNavHostFragment.newInstance(it.data,toFragment))
 
-                                }else{
-                                    binding.tabLayout.visibility=View.GONE
-                                    binding.viewPager.visibility=View.GONE
-                                    binding.tvNoData.visibility=View.VISIBLE
-                                }
+                                val viewPagerAdapter = ViewPagerAdapter(
+                                    fragmentList,
+                                    activity?.supportFragmentManager!!,
+                                    lifecycle
+                                )
+                                binding.viewPager.adapter = viewPagerAdapter
+
+
+                                TabLayoutMediator(
+                                    binding.tabLayout,
+                                    binding.viewPager
+                                ) { tab, position ->
+
+                                  /* if (position==0){
+                                       tab.text =  "Today"
+                                   }else*/ if (position==0) {
+                                       tab.text =  "Day Wise"
+                                   }
+
+
+
+
+                                }.attach()
+
 
                             }else{
                                 binding.tabLayout.visibility=View.GONE
                                 binding.viewPager.visibility=View.GONE
                                 binding.tvNoData.visibility=View.VISIBLE
                             }
+
                         }else{
                             binding.tabLayout.visibility=View.GONE
                             binding.viewPager.visibility=View.GONE
                             binding.tvNoData.visibility=View.VISIBLE
                         }
 
-
-
                     }
 
+                    else -> {}
                 }
 
 

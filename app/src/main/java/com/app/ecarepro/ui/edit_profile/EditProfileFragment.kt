@@ -202,8 +202,8 @@ binding.cbSameAddress.setOnCheckedChangeListener {
             parentStatus.setText(profile.studentProfile.parentStaus, false)
 
             //Child's Details
+
             textStudentName.setText(profile.studentProfile.name)
-            textStudentEmail.setText(profile.studentProfile.studentEmail)
             textClass.setText(profile.studentProfile.className)
             textDOB.setText(profile.studentProfile.dob)
             textAdmissionDate.setText(profile.studentProfile.admissionDate)
@@ -387,8 +387,7 @@ binding.cbSameAddress.setOnCheckedChangeListener {
                         textSchoolAddress.text.toString(),
                         textSchoolBoard.text.toString(),
                         textSchoolName.text.toString()
-                    ),
-                    textStudentEmail.text.toString()
+                    )
                 )
             )
 
@@ -396,7 +395,8 @@ binding.cbSameAddress.setOnCheckedChangeListener {
 
         }
 
-        lifecycleScope.launch {
+
+          lifecycleScope.launch {
               viewModel.updateParentProfileStateFlow.collectLatest {
                   when (it) {
 

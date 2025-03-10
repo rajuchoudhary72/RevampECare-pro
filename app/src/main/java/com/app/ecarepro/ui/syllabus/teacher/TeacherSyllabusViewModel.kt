@@ -2,14 +2,15 @@ package com.app.ecarepro.ui.syllabus.teacher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkTeacherSyllabus
 import com.app.ecarepro.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,74 +18,65 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TeacherSyllabusViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _showSearchView = MutableStateFlow(false)
-    val showSearchView: StateFlow<Boolean> = _showSearchView.asStateFlow()
+    val isMainApp = BuildConfig.FLAVOR == "Franciscan e-Care"
+    val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
+    val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
 
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    val showSearchView = MutableStateFlow(false)
+    val searchQuery = MutableStateFlow("")
 
-    fun showSearchBar() {
-        _showSearchView.update { true }
-    }
+    private val teacherSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<NetworkTeacherSyllabus>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val teacherSyllabusStateFlow: StateFlow<NetworkResult<NetworkTeacherSyllabus>> = teacherSyllabusMutableStateFlow
 
-    fun updateSearchQuery(query: String) {
-        _searchQuery.update { query }
-    }
 
-    fun clearSearchQuery() {
-        if (_searchQuery.value.isEmpty()) {
-            _showSearchView.update { false }
-        } else {
-            _searchQuery.update { "" }
-        }
-    }
-
-    private val _teacherSyllabusState =
-        MutableStateFlow<NetworkResult<NetworkTeacherSyllabus>>(NetworkResult.Loading())
-    val teacherSyllabusState: StateFlow<NetworkResult<NetworkTeacherSyllabus>> =
-        _teacherSyllabusState.asStateFlow()
+    private val deleteSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
+    val deleteSyllabusStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteSyllabusMutableStateFlow
 
     init {
         getTeacherSyllabuses()
     }
-
-    fun getTeacherSyllabuses() {
-        viewModelScope.launch {
-            _teacherSyllabusState.update { NetworkResult.Loading() }
-            try {
-                val result = userRepository.getTeacherSyllabuses()
-                _teacherSyllabusState.update { NetworkResult.Success(result) }
-            } catch (e: Exception) {
-                _teacherSyllabusState.update {
-                    NetworkResult.Error(
-                        e.message ?: "An error occurred"
-                    )
-                }
-            }
+    fun getTeacherSyllabuses( )=viewModelScope.launch {
+        runCatching {
+            teacherSyllabusMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.getTeacherSyllabuses( )
+        }.onSuccess {
+            teacherSyllabusMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            teacherSyllabusMutableStateFlow.value = NetworkResult.Error(it.message)
         }
+
     }
 
-    private val _deleteSyllabusState =
-        MutableStateFlow<NetworkResult<CommonResponse>>(NetworkResult.Loading())
-    val deleteSyllabusState: StateFlow<NetworkResult<CommonResponse>> =
-        _deleteSyllabusState.asStateFlow()
-
-    fun deleteSyllabus(syllabusId: String) {
-        viewModelScope.launch {
-            _deleteSyllabusState.update { NetworkResult.Loading() }
-            try {
-                val result = userRepository.deleteSyllabus(syllabusId)
-                _deleteSyllabusState.update { NetworkResult.Success(result) }
-            } catch (e: Exception) {
-                _deleteSyllabusState.update {
-                    NetworkResult.Error(
-                        e.message ?: "An error occurred"
-                    )
-                }
-            }
+    fun deleteSyllabus(
+        ID: String
+    )=viewModelScope.launch {
+        runCatching {
+            deleteSyllabusMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.deleteSyllabus( ID)
+        }.onSuccess {
+            deleteSyllabusMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            deleteSyllabusMutableStateFlow.value = NetworkResult.Error(it.message)
         }
+
     }
+
+    fun showSearchBar() {
+        showSearchView.update { true }
+    }
+
+    fun clearSearchQuery() {
+        if (searchQuery.value.isEmpty()) {
+            showSearchView.update { false }
+        } else
+            searchQuery.update {
+                ""
+            }
+    }
+
 }

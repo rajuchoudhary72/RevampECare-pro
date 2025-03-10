@@ -12,13 +12,13 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.util.Calendar
 import android.content.Context
-import android.util.Log
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,8 +33,8 @@ import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.CollectionModeWise
 import com.app.ecarepro.data.network.model.DataValue
 import com.app.ecarepro.data.network.model.FeeCollection
+import com.app.ecarepro.data.network.model.FeeDefaulter
 import com.app.ecarepro.data.network.model.LibraryDetails
-import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.Questionnaire
 import com.app.ecarepro.data.network.model.StaffAttendance
 import com.app.ecarepro.data.network.model.StatusWiseStatistics
@@ -119,11 +119,12 @@ class DashboardFragment : Fragment() {
                 }
                 buildProCard(cards)
             }
+
             if (data.showFeeCollection == true)
                 buildEstimatedCollectionCard(
-                    dashboardViewModel.feeCollection.value,
-                    data.collectionStartDate,
-                    data.collectionEndDate
+                    data.feeCollection,
+                    data.feeCollection?.collectionStartDate,
+                    data.feeCollection?.collectionEndDate
                 )
 
 
@@ -135,7 +136,7 @@ class DashboardFragment : Fragment() {
                 buildTeachersWorkLoad(data.teacherWorkLoad)
 
             if (data.showFeeDafaulter == true)
-                buildFeeDefaulterCard(dashboardViewModel.feeDefaulter.value)
+                buildFeeDefaulterCard(data.feeDafaulter)
 
             if (data.showBankBalnce == true)
                 buildBankBalanceCard(data.bankBalance)
@@ -250,7 +251,7 @@ class DashboardFragment : Fragment() {
         collectionModeWise: CollectionModeWise?,
         sessionStartDate: String?
     ) {
-       collectionModeWise ?: return
+        collectionModeWise ?: return
         todayModeWiseCollectionCard {
             id(R.id.today_mode_collection)
             isExpanded(isExpanded)
@@ -463,24 +464,9 @@ class DashboardFragment : Fragment() {
         return outputFormat.format(date)
     }
 
-    private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: NetworkFeeDefaulter?) {
-
-       /* //feeDefaulter ?: return
+    private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: FeeDefaulter?) {
+        feeDefaulter ?: return
         FeeDefaulterModel(feeDefaulter)
-            .id("121")
-            .addTo(this)*/
-        Log.e("HARI", feeDefaulter.toString() )
-
-        FeeDefaulterModel(
-            feeDefaulter = feeDefaulter,
-            onClick = {  ->
-                 findNavController().navigate(
-                            R.id.feeDefaulterUI)
-                /*this@DashboardFragment.findNavController()
-                    .navigate(R.id.feeDefaulterUI.apply {
-                    })*/
-            }
-        )
             .id("121")
             .addTo(this)
 

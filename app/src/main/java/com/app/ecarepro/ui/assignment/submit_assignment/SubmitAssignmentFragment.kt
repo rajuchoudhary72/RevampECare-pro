@@ -144,9 +144,7 @@ class SubmitAssignmentFragment : Fragment() {
         }
 
         binding.tvBrowseFile.setOnClickListener {
-            FileAccess.launchPdfPicker(
-                pdfLauncher
-            )
+            pdfLauncher.launch(FileAccess.pickPdfFileIntent())
          }
 
         viewAssignmentDetails()
@@ -424,32 +422,31 @@ class SubmitAssignmentFragment : Fragment() {
     }
 
     private fun downloadFile(fileSource: String) {
-        try {
-            when (Constant.isPdfUrl(fileSource)) {
-                1 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
-                }
-                2 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-                }
-                3 -> {
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+            }
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+            3 -> {
 
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 //                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
 //                    putString(Constant.URL_ARGUMENT, fileSource)
 //                })
-                }
-                else -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-                }
             }
-        }catch (e:SecurityException){
-            e.printStackTrace()
-        }
-    }
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
+
+
+
+
 }

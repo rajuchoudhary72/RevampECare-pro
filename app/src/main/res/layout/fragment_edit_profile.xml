@@ -305,23 +305,6 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textInputLayoutStudentEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/student_email_id"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/textStudentEmail"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textEmailAddress"
-                                />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

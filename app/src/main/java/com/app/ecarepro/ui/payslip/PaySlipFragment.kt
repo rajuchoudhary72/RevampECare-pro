@@ -154,14 +154,9 @@ class PaySlipFragment : Fragment() {
         }
 
         binding.fbDowload.setOnClickListener {
-            try {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
-                mainActivity().showMessage("Download started, check you status bar for more information.")
-            }catch (e:NullPointerException){
-                e.printStackTrace()
-            }
-
+            val androidDownloader = AndroidDownloader(requireContext())
+            androidDownloader.downloadFile(downloadFileUrl, getString(R.string.payslip))
+            mainActivity().showMessage("Download started, check you status bar for more information.")
         }
 
     }

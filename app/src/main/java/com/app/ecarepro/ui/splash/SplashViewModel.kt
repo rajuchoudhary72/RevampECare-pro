@@ -26,6 +26,6 @@ class SplashViewModel @Inject constructor(
     suspend fun getSliders() {
         schoolRepository.fetchWalkThroughData()
     }
-    suspend fun isUserSessionAvailable() = userDataStore.getUserSessionId().isNullOrEmpty().not()
+
     suspend fun isUserAuthenticated() = userDataStore.isUserAuthenticated()
 }

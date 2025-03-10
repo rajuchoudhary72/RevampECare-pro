@@ -1,8 +1,6 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
-import com.app.ecarepro.data.network.UserSessionResponseDto
-import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -45,7 +43,6 @@ import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
-import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.Purpose
 
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -123,7 +120,6 @@ import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginRespo
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
-import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
@@ -186,7 +182,7 @@ interface UserRepository {
     ): LoginResponseDto
 
     suspend fun feeCollection(
-        feeTypeID: Int?, fromDate: String?, tillDate: String?
+        feeTypeID: Int, fromDate: String, tillDate: String
     ): Flow<Result<FeeCollection>>
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
@@ -213,8 +209,7 @@ interface UserRepository {
     fun getVisitorDetails(): Flow<Result<VisitorDetails>>
 
     fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
-    fun submitForm(formData:Map<String,String>): Flow<Result<AppointmentSavedData>>
-
+    fun submitForm(formData:Map<String,String>): Flow<Result<String>>
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 
@@ -265,8 +260,8 @@ interface UserRepository {
         fileURL: String,
         fileExt: String
     ): CommonResponse
+
     fun getUserProfile(): Flow<Result<Profile>>
-   // fun getUserProfile(refresh: Boolean): Flow<Result<Profile>>
     suspend fun getUserProfileEdit(
         edit: Boolean
     ): NetworkEditProfile
@@ -504,12 +499,11 @@ interface UserRepository {
     ): NetworkBirthday
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
-    fun getUserDashboard(refresh: Boolean): Flow<Result<UserDashboardDto>>
-    fun getStudentListToAssignHouse(id: String, orderBy: String): Flow<Result<UserDashboardDto>>
+    fun getUserDashboard(): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
-    fun getUserUndertaking(refresh: Boolean): Flow<Result<String>>
+    fun getUserUndertaking(): Flow<Result<String>>
     fun saveUserUndertaking(request: UserUndertakingModule): Flow<Result<String>>
-    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
 
     suspend fun reportCardDTL(
         stID: Int
@@ -550,8 +544,6 @@ interface UserRepository {
     ): NetworkLessonPlanDTL
 
     suspend fun getStaffList(): NetworkStaffList
-
-    suspend fun teachersList(): NetworkStaffList
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 
@@ -853,22 +845,5 @@ interface UserRepository {
     suspend fun academicYears(): NetworkAcademicYear
 
     suspend fun wingsList(): NetworkWingReport
-
-    suspend fun activeSessions(): NetworkUserSessionsResponse
-
-    suspend fun removeSession(
-     sessionID: String?,
-    ): CommonResponse
-
-    suspend fun getFeeDefaultersDas(
-        feeTypeId: Int?,
-        installIds: Int?
-    ): Flow<Result<NetworkFeeDefaulter>>
-
-
-    suspend fun getFeeDefaulters(
-         feeTypeId: Int?,
-        installIds: String?
-    ): NetworkFeeDefaulter
 
 }

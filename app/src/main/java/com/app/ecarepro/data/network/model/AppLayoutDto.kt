@@ -28,12 +28,9 @@ data class AppLayoutDto(
     val status: String?,
     @SerializedName("userInfo")
     val userInfo: UserInfo?,
+
     @SerializedName("searchOptions")
-    val searchOptions: List<SearchOption>?,
-    @SerializedName("notificationCount")
-    val notificationCount: Int?,
-    @SerializedName("unreadMessageCount")
-    val unreadMessageCount: Int?
+    val searchOptions: List<SearchOption>?
 )
 @Parcelize
 data class SearchOption(
@@ -77,16 +74,17 @@ data class UserInfo(
 ){
     fun getFullName(): String? {
         return if (childName.isNullOrEmpty())
-            name
+            name?.trim()
         else
             "$name  \nP/O  $childName"
     }
 
     fun getFullHomeScreenName(): String? {
         return if (childName.isNullOrEmpty())
-            name
+            name?.trim()
         else
-            "$name  \nP/O  $childName ($otherInfo)"
+           // "$name  \nP/O  $childName ($otherInfo)"
+        "$name \nP/O  $childName (${otherInfo?.trim()})"
     }
 }
 

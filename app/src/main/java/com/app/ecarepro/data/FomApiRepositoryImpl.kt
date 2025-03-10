@@ -17,7 +17,6 @@ import com.app.ecarepro.model.CollectionReport
 
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
 import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
-import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
@@ -112,7 +111,7 @@ class FomApiRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun getuserdetailsfrommobile(url: String): VisitorDetailsDto {
+    override suspend fun getuserdetailsfrommobile(url: String): VerifyPhone {
         return fomApiService.getuserdetailsfrommobile(url)
     }
 

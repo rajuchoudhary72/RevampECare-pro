@@ -9,6 +9,7 @@ import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
  import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.Conversation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,13 @@ class ConversationReportViewModel @Inject constructor(
     private val messageRepository: MessageRepository
 ) : ViewModel() {
 
+
+    var startDate = ""
+    var endDate=""
+    var isFirst = true
+    var cacheListConversationReport = ArrayList<Conversation>()
+    var posIndex = 0
+    var canDelete=false
 
     private val convReportMutableStateFlow: MutableStateFlow<NetworkResult<NetworkConversationReport>> = MutableStateFlow(
         NetworkResult.Loading())

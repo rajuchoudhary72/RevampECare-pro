@@ -28,8 +28,6 @@ data class TwoFactorLoginResponseDto(
     val userDTL: UserDTL?
 )
 data class UserDTL(
-    @SerializedName("sessionID")
-    val sessionID: String?,
     @SerializedName("authToken")
     val authToken: String?,
     @SerializedName("authenticated")
@@ -74,7 +72,6 @@ fun UserDTL.asUserEntity(): UserEntity {
         classID = classID.toString(),
         loginTime = System.currentTimeMillis().toString(),
         stName = stName,
-        className = classX,
-        sessionId = sessionID
+        className = classX
     )
 }

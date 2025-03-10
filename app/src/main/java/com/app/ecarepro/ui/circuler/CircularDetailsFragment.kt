@@ -1,19 +1,20 @@
 package com.app.ecarepro.ui.circuler
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
+ import android.content.ClipData
+ import android.content.ClipboardManager
+ import android.content.Context
+ import android.os.Build
+ import android.os.Bundle
+ import android.text.Html
+ import android.text.Html.fromHtml
+ import android.text.method.LinkMovementMethod
+ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebResourceRequest
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+ import androidx.core.content.getSystemService
+ import androidx.core.text.HtmlCompat
+ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
@@ -30,25 +31,28 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CircularDetailsFragment : Fragment() {
 
-    private lateinit var binding: FragmentCirculerDetailsBinding
-    private lateinit var fileSource: String
+    private lateinit var binding : FragmentCirculerDetailsBinding
+     private lateinit var fileSource: String
 
-    private val circularDetailsViewModel: CircularDetailsViewModel by viewModels()
+    private val circularDetailsViewModel:CircularDetailsViewModel by    viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View  {
 
-        binding = FragmentCirculerDetailsBinding.inflate(inflater, container, false)
+        binding= FragmentCirculerDetailsBinding.inflate(inflater,container,false)
 
-        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.circuler_details)
+        binding.toolbarNoticDetail.setNavigationOnClickListener { findNavController().popBackStack() }
 
-        val circularID = requireArguments().getString(Constant.CIRCULAR_ID)
-        circularDetailsViewModel.getCircularDTL(circularID.orEmpty())
 
-        return binding.root
+
+        val circularID=  requireArguments().getString(Constant.CIRCULAR_ID)
+        if (circularID != null) {
+            circularDetailsViewModel.getCircularDTL(circularID)
+        }
+
+         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,20 +63,14 @@ class CircularDetailsFragment : Fragment() {
 //        }
 
         binding.relView.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_circularDetailsFragment_to_openPdfFragment,
-                Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+            findNavController().navigate(R.id.action_circularDetailsFragment_to_openPdfFragment,Bundle( ).apply {
+                putString(Constant.URL_ARGUMENT, fileSource)
+            })
         }
 
         binding.relDownload.setOnClickListener {
-            try {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.circular))
-            } catch (e: SecurityException) {
-                e.printStackTrace()
-            }
+            val androidDownloader = AndroidDownloader(requireContext())
+            androidDownloader.downloadFile(fileSource, getString(R.string.circular))
         }
 
         lifecycleScope.launch {
@@ -82,17 +80,15 @@ class CircularDetailsFragment : Fragment() {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
-
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
-
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
+                        if (it.data!=null){
                             try {
-                                binding.circularDetails = it.data.circuler
-                                fileSource = it.data.circuler.filePath
+                                binding.circularDetails=it.data.circuler
+                                fileSource=it.data.circuler.filePath
 
 //                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
 //                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
@@ -101,55 +97,8 @@ class CircularDetailsFragment : Fragment() {
 //
 //                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
 
-                                val formattedHtml = """
-    <html>
-    <head>
-        <style>
-            a { color: blue; text-decoration: underline; }
-        </style>
-    </head>
-    <body>
-        ${formatTextWithLinks(it.data.circuler.message)}
-    </body>
-    </html>
-""".trimIndent()
-
-
-                                binding.tvNoticeDetails.webViewClient = object : WebViewClient() {
-                                    override fun shouldOverrideUrlLoading(
-                                        view: WebView?,
-                                        request: WebResourceRequest?
-                                    ): Boolean {
-                                        val url = request?.url.toString()
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        startActivity(intent) // Opens in an external browser
-                                        return true
-                                    }
-                                }
-
-                                binding.tvNoticeDetails.settings.javaScriptEnabled = true
-                                binding.tvNoticeDetails.settings.domStorageEnabled = true
-                                binding.tvNoticeDetails.webViewClient = WebViewClient()
-                                binding.tvNoticeDetails.loadDataWithBaseURL(
-                                    null,
-                                    formattedHtml,
-                                    "text/html",
-                                    "UTF-8",
-                                    null
-                                )
-                                binding.tvNoticeDetails.webViewClient = object : WebViewClient() {
-                                    override fun shouldOverrideUrlLoading(
-                                        view: WebView?,
-                                        request: WebResourceRequest?
-                                    ): Boolean {
-                                        val url = request?.url.toString()
-                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                        startActivity(intent) // Opens the link in the default browser
-                                        return true // Return true to prevent WebView from loading the URL
-                                    }
-                                }
-
-                            } catch (e: NullPointerException) {
+                                binding.tvNoticeDetails.loadDataWithBaseURL(null, it.data.circuler.message, "text/html", "UTF-8", null)
+                            }catch (e:NullPointerException){
                                 e.message
                             }
 
@@ -160,15 +109,7 @@ class CircularDetailsFragment : Fragment() {
         }
     }
 
-
-    fun formatTextWithLinks(input: String): String {
-        val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+)"
-        return input.replace(Regex(urlPattern)) {
-            "<a href='${it.value}'>${it.value}</a>"
-        }
-    }
-
-    private fun copyToClipboard(context: Context, text: String, label: String) {
+    private fun copyToClipboard(context: Context, text: String, label: String ) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(label, text)
         clipboard.setPrimaryClip(clip)

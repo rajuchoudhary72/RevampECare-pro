@@ -1,11 +1,17 @@
 package com.app.ecarepro.ui.notice
 
 import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
+import android.text.Html.fromHtml
 import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,23 +35,23 @@ class NoticeDetailsFragment : Fragment() {
     private lateinit var fileSource: String
     private lateinit var noticeDetailsBinding: FragmentNoticeDetailsBinding
 
-    private val _noticeDetailsViewModel: NoticeDetailsViewModel by viewModels()
+    private val _noticeDetailsViewModel : NoticeDetailsViewModel by viewModels()
 
     var noticeID: String? = null
+
+
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        noticeDetailsBinding =
-            FragmentNoticeDetailsBinding.inflate(inflater, container, false).apply {
-                lifecycleOwner = viewLifecycleOwner
-                noticeDetailsViewModel = _noticeDetailsViewModel
-            }
-        noticeDetailsBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        noticeDetailsBinding.includeToolbar.toolbarTitle.text = getString(R.string.notice_details)
-        noticeID = requireArguments().getString(Constant.NOTICE_ID_ARGUMENT)
+        noticeDetailsBinding = FragmentNoticeDetailsBinding.inflate(inflater, container, false).apply {
+            lifecycleOwner= viewLifecycleOwner
+            noticeDetailsViewModel=_noticeDetailsViewModel
+        }
+        noticeDetailsBinding.toolbarNoticDetail.setNavigationOnClickListener { findNavController().popBackStack() }
+        noticeID= requireArguments().getString(Constant.NOTICE_ID_ARGUMENT)
 
 
 
@@ -57,20 +63,14 @@ class NoticeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         noticeDetailsBinding.relView.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_noticeDetailsFragment_to_openPdfFragment,
-                Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+            findNavController().navigate(R.id.action_noticeDetailsFragment_to_openPdfFragment,Bundle( ).apply {
+                putString(Constant.URL_ARGUMENT, fileSource)
+            })
         }
 
         noticeDetailsBinding.relDownload.setOnClickListener {
-            try {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(fileSource, getString(R.string.notice))
-            } catch (e: SecurityException) {
-                e.printStackTrace()
-            }
+           val androidDownloader = AndroidDownloader(requireContext())
+            androidDownloader.downloadFile(fileSource, getString(R.string.notice) )
         }
 
         lifecycleScope.launch {
@@ -80,30 +80,26 @@ class NoticeDetailsFragment : Fragment() {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
-
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
-                            noticeDetailsBinding.noticeDetailData = it.data.notice
-                            fileSource = it.data.notice.filePath
+                        if (it.data!=null){
+                            noticeDetailsBinding.noticeDetailData=it.data.notice
+                            fileSource=it.data.notice.filePath
+
 
 
                             val htmlWithLineBreaks = it.data.notice.detail.replace("\n", "<br>")
-                            val spanned = HtmlCompat.fromHtml(
-                                htmlWithLineBreaks,
-                                HtmlCompat.FROM_HTML_MODE_LEGACY
-                            )
+                            val spanned = HtmlCompat.fromHtml(htmlWithLineBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
                             noticeDetailsBinding.tvNoticeDetails.text = spanned
 
-                            noticeDetailsBinding.tvNoticeDetails.movementMethod =
-                                LinkMovementMethod.getInstance()
+                            noticeDetailsBinding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
 
                         }
-                    }
+                        }
 
 
                 }

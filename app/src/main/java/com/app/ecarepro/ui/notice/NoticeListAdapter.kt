@@ -33,13 +33,22 @@ class NoticeListAdapter(
         val binding = DataBindingUtil.getBinding<NoticeListItemBinding>(holder.itemView)
             binding?.apply {
                 noticeData=noticeList[position]
+
+                if(noticeList[position].isRead == true){
+                    cvNotItem.cardElevation=0f
+                }else{
+                    cvNotItem.cardElevation=20f
+                }
+
                 if (noticeType== Constant.NOTICE_CLASS){
                     llUpdate.isVisible=false
                 }else{
                      llDate.isVisible=false
                 }
                 clMain.setOnClickListener {
+                    noticeList[position].isRead=true
                     noticeListFragment.onItemClick(noticeList[position],1,true)
+
                 }
 
             }

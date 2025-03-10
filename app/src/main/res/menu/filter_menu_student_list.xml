@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_by_roll_no"
-        android:icon="@drawable/ic_menu_search_by_date"
         android:title="@string/sort_by_roll_no"
+        android:icon="@drawable/ic_menu_search_by_date"
         app:showAsAction="never" />
     <item
         android:id="@+id/menu_by_admission_no"

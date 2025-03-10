@@ -30,7 +30,7 @@ class VerifyPhoneFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentVerifyPhoneBinding.inflate(inflater, container, false)
+        binding=FragmentVerifyPhoneBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -58,28 +58,26 @@ class VerifyPhoneFragment : Fragment() {
                 when (it) {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                    }
-                    is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                    }
-                    is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data != null) {
-                            mainActivity().showMessage(it.data.message)
+                    } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (it.data != null) {
+                        mainActivity().showMessage(it.data.message)
+                        findNavController().navigate(
+                            R.id.appointmentFragment,
+                            bundleOf("toAppointment" to  true)
+                        )
+                     /*   if (!it.data. status) {
                             findNavController().navigate(
                                 R.id.appointmentFragment,
-                                bundleOf(
-                                    "toAppointment" to true,
-                                    "visitorDetails" to it.data.data,
-                                    "mobileNumber" to binding.textUserName.text.toString(),
-                                )
+                                bundleOf("toAppointment" to  true)
                             )
-                        }
-                    }
-                }
-            }
-        }
+                        }else{
 
+                            mainActivity().showMessage(it.data.message)
+                        }*/
+                    }  } } }  }
         viewModel.getuserdetailsfrommobile(binding.textUserName.text.toString())
     }
 

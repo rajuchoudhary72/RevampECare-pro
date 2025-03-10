@@ -62,7 +62,7 @@ class InstitutionCodeFragment : Fragment() {
         institutionCodeViewModel.schools.observe(viewLifecycleOwner) { schools ->
             lifecycleScope.launch {
                 binding.carouselSchool.isVisible = (schools.isNullOrEmpty()
-                    .not() && institutionCodeViewModel.isUserAuthenticated()) && institutionCodeViewModel.isMainApp
+                    .not() && institutionCodeViewModel.isUserAuthenticated()) && !institutionCodeViewModel.isMYSFPSPlay
             }
             binding.carouselSchool.withModels {
                 schools.filterNotNull().forEach { school ->
@@ -93,7 +93,7 @@ class InstitutionCodeFragment : Fragment() {
             validateSchoolCode()
         }
 
-        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.isMainApp
+        binding.btnFindSchoolCollege.isVisible = institutionCodeViewModel.isMYSFPSPlay
 
         binding.btnFindSchoolCollege.setOnClickListener {
             setFragmentResultListener(SearchInstitutionFragment.REQUEST_KEY_SCHOOL_CODE) { _, data ->

@@ -24,13 +24,12 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 class ConversationReportAdapter(
-    private var conversationList: MutableList<Conversation>,
     private val conversationReportFragment: ConversationReportFragment,
     private var canDeleteConv: Boolean
 ) :
     RecyclerView.Adapter<ConversationReportAdapter.MedicineIssueViewHolder>() {
 
-
+        private var conversationList = mutableListOf<Conversation>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedicineIssueViewHolder {
         val binding =

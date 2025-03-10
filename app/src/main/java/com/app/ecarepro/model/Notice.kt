@@ -8,7 +8,7 @@ data class Notice(
     val heading: String?,
     val id: String?,
     val isNew: Boolean?,
-    val isRead: Boolean?,
+    var isRead: Boolean?,
     val noticeDate: String?,
     val ntID: Int?,
     val updatedOn: String?

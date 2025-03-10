@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.appointmentPhotoPicker
 import com.app.ecarepro.button
-import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.databinding.FragmentAppointmentBinding
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.textFiled
@@ -155,24 +153,6 @@ class AppointmentFragment : Fragment() {
                                 if(form.active == true){
                                     if (isDropDown(form.columnName)) {
                                         when (form.columnName) {
-                                            "usertype" -> {
-                                                textFiledDropdown {
-                                                    id(form.columnName)
-                                                    filedName(form.columnName)
-                                                    hintText(form.columnDisplayName)
-                                                    text(form.value)
-                                                    items(uiState.userType.map { it.first })
-                                                    isMandatory(form.isrequired)
-                                                    itemSelectListener(object : ItemSelectListener {
-                                                        override fun onItemSelect(item: String) {
-                                                            viewModel.updateValue(
-                                                                form.columnName,
-                                                                uiState.userType.firstOrNull { it.first == item }?.first ?: ""
-                                                            )
-                                                        }
-                                                    })
-                                                }
-                                            }
                                             "Purpose" -> {
                                                 textFiledDropdown {
                                                     id(form.columnName)
@@ -321,15 +301,12 @@ class AppointmentFragment : Fragment() {
                         button {
                             id("button")
                             clickListener { _ ->
-                                viewModel.submitForm { isSuccess, message, data: AppointmentSavedData? ->
+                                viewModel.submitForm { isSuccess, message ->
                                     mainActivity().showMessage(message)
-                                    if (isSuccess) {
-                                        if (arguments?.getBoolean("toAppointment") == true) {
-                                            findNavController().navigate(
-                                                R.id.printOutAppointenentFragment,
-                                                bundleOf("appointmentData" to data?.appdetails)
-                                            )
-                                        } else {
+                                    if(isSuccess){
+                                        if(arguments?.getBoolean("toAppointment") == true){
+                                            findNavController().navigate(R.id.printOutAppointenentFragment)
+                                        }else{
                                             findNavController().popBackStack()
                                         }
                                     }
@@ -345,43 +322,23 @@ class AppointmentFragment : Fragment() {
     }
 
     private fun pickTime(title: String, onTimeSet: (String) -> Unit) {
-        if (isAdded.not()) return
         val materialTimePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
             .setInputMode(INPUT_MODE_CLOCK)
-            .setTimeFormat(TimeFormat.CLOCK_12H)
-            .setHour(8) // Default hour
-            .setMinute(0) // Default minute
             .setTitleText(title)
             .build()
 
         materialTimePicker.addOnPositiveButtonClickListener {
-            val selectedHour = materialTimePicker.hour
-            val selectedMinute = materialTimePicker.minute
-            // Validate the selected time
-            if (isValidTime(selectedHour, selectedMinute)) {
-                onTimeSet(formatTimeWithAmPm(selectedHour,selectedMinute))
-            } else {
-                mainActivity().showMessage(getString(R.string.please_select_a_time_between_8_00_am_and_5_00_pm))
-            }
+            val hour = materialTimePicker.hour
+            val minute = materialTimePicker.minute
+            onTimeSet("$hour:$minute")
         }
         materialTimePicker.show(childFragmentManager, "timePicker")
     }
-    private fun formatTimeWithAmPm(hour: Int, minute: Int): String {
-        val isAfternoon = hour >= 12
-        val formattedHour = if (hour % 12 == 0) 12 else hour % 12
-        val suffix = if (isAfternoon) "PM" else "AM"
-        return String.format("%02d:%02d %s", formattedHour, minute, suffix)
-    }
-    private fun isValidTime(hour: Int, minute: Int): Boolean {
-        // Convert time to minutes since midnight
-        val selectedTimeInMinutes = hour * 60 + minute
-        val startTimeInMinutes = 8 * 60 // 8:00 AM
-        val endTimeInMinutes = 17 * 60 // 5:00 PM
-        return selectedTimeInMinutes in startTimeInMinutes until endTimeInMinutes
-    }
+
     private fun isDropDown(columnName: String?): Boolean {
         val dropDownColumns =
-            mutableListOf("Purpose", "Department", "Designation", "Employee", "IdType", "usertype")
+            mutableListOf("Purpose", "Department", "Designation", "Employee", "IdType")
         return dropDownColumns.contains(columnName)
     }
 

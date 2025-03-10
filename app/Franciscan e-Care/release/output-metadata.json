@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.franciscan.ecare_pro",
+  "variantName": "Franciscan e-CareRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 266,
+      "versionName": "2.5.5",
+      "outputFile": "app-Franciscan e-Care-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

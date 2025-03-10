@@ -41,7 +41,8 @@ class FormGuardAppointmentListAdapter(
 
             appointmentData=data
 
-            btnCheckOut.isVisible = data.checkInTime.isNotEmpty() && data.checkOutTime.isEmpty()
+            btnCheckOut.isVisible = data.checkInTime.isEmpty()
+
            if(data.visitorPhoto.isNullOrEmpty().not()){
                Picasso.get().
                load(data.visitorPhoto)

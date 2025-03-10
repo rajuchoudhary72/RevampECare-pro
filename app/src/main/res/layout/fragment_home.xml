@@ -127,7 +127,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rl_user_details">
+            app:layout_constraintTop_toBottomOf="@id/rl_user_details"
+            >
 
             <com.google.android.material.card.MaterialCardView
                  android:layout_width="match_parent"
@@ -145,23 +146,22 @@
                 app:cardBackgroundColor="@color/background_dashboard"
                 app:cardPreventCornerOverlap="false"/>
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresh"
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_50sdp">
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="4"
+                 android:background="@color/background_dashboard"
+                android:layout_marginTop="@dimen/_50sdp"
+                 tools:listitem="@layout/item_card_option" />
 
-                <com.airbnb.epoxy.EpoxyRecyclerView
-                    android:id="@+id/recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/background_dashboard"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="4"
-                    tools:listitem="@layout/item_card_option" />
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
 
 
         </FrameLayout>

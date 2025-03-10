@@ -49,10 +49,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.R
-import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.sync.SyncManager
@@ -94,7 +92,6 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -116,10 +113,8 @@ class MainActivity : AppCompatActivity() {
     private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
-
     val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
     val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
-
     @Inject
     lateinit var analyticsManager: AnalyticsManager
 
@@ -441,7 +436,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }*/
-    fun checkAppVersion() {
+    private fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {
                 when (it) {
@@ -534,35 +529,30 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
-        try {
-            // isImmediatepopup =forceUpdate
-            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
-                val isAppUpdateAllowed = if (forceUpdate) {
-                    appUpdateInfo.isImmediateUpdateAllowed
-                } else {
-                    appUpdateInfo.isFlexibleUpdateAllowed
-                }
-
-                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                    popupSnackbarForCompleteUpdate()
-                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
-                    appUpdateManager.startUpdateFlowForResult(
-                        // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                        appUpdateInfo,
-                        // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
-                        if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
-                        // The current activity making the update request.
-                        this,
-                        // Include a request code to later monitor this update request.
-                        MY_REQUEST_CODE
-                    )
-                }
+        // isImmediatepopup =forceUpdate
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+            val isAppUpdateAllowed = if (forceUpdate) {
+                appUpdateInfo.isImmediateUpdateAllowed
+            } else {
+                appUpdateInfo.isFlexibleUpdateAllowed
             }
-            appUpdateManager.registerListener(installStateUpdatedListener)
-        } catch (e: RuntimeException) {
-            e.printStackTrace()
+            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                popupSnackbarForCompleteUpdate()
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
+                appUpdateManager.startUpdateFlowForResult(
+                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                    appUpdateInfo,
+                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                    if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                    // The current activity making the update request.
+                    this,
+                    // Include a request code to later monitor this update request.
+                    MY_REQUEST_CODE
+                )
+            }
         }
+        appUpdateManager.registerListener(installStateUpdatedListener)
     }
 
     private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
@@ -634,7 +624,6 @@ class MainActivity : AppCompatActivity() {
                         buildDrawerModels(data.menus)
                         buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
-                        showBadgeCount(data.appLayoutDto)
                     }
                 }
         }
@@ -666,31 +655,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.drawerLayout.open()
-    }
-
-    private fun showBadgeCount(appLayoutDto: AppLayoutDto) {
-        binding.appBarMain.contentMain.bottomNavigationView.apply {
-            val notificationCount = appLayoutDto.notificationCount ?: 0
-            if (notificationCount > 0) {
-                getOrCreateBadge(R.id.notification).apply {
-                    isVisible = true
-                    number = notificationCount
-                }
-            } else {
-                removeBadge(R.id.notification)
-            }
-
-            val messageCount = appLayoutDto.unreadMessageCount ?: 0
-            if (messageCount > 0) {
-                getOrCreateBadge(R.id.message).apply {
-                    isVisible = true
-                    number = messageCount
-                }
-            } else {
-                removeBadge(R.id.message)
-            }
-
-        }
     }
 
     /*private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -802,7 +766,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(parentMenu.menuID, menu.chMenuID, "Menu")
+                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
                             }
                         }
 
@@ -813,12 +777,7 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(
-                                        parentMenu.menuID,
-                                        menu.chMenuID,
-                                        childChildMenu.sbChMenuID,
-                                        "Menu"
-                                    )
+                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
                                 }
                             }
                         }
@@ -1040,26 +999,18 @@ class MainActivity : AppCompatActivity() {
             33 -> navController.navigate(R.id.surveyListFragment)
             35 -> navController.navigate(R.id.busLocationFragment)
             39 -> navController.navigate(R.id.fomGuardFragment)
-            40 -> navController.navigate(R.id.teacherListFragment)
-
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        try {
-            val packageName = "com.android.chrome"
-            if (packageName != null) {
-                customTabsIntent.intent.setPackage(packageName)
-                customTabsIntent.launchUrl(this, uri!!)
-            } else {
-
-                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(fallbackIntent)
-            }
-        } catch (e: ActivityNotFoundException) {
-            showMessage("No browser available to handle the URL")
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(this, uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
         }
     }
 
@@ -1086,9 +1037,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-            // navController.navigate(R.id.webViewFragment, bundle)
+            navController.navigate(R.id.webViewFragment, bundle)
             Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))
+            // openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
@@ -1100,7 +1051,6 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Something went wrong")
             } else {
                 showLoader(false)
-                Log.d("WebURL", "$feePaymentURL?token=$token")
                 val tabIntent = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
                     .setToolbarColor((this).getColor(R.color.green)).build()
@@ -1114,6 +1064,7 @@ class MainActivity : AppCompatActivity() {
             showMessage("Invalid or missing URL")
             return
         }
+
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
@@ -1143,12 +1094,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(
-        menuID: Int,
-        childMenuId: Int,
-        refId: String? = null,
-        from: String = "other"
-    ) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1209,26 +1155,33 @@ class MainActivity : AppCompatActivity() {
                 when (childMenuId) {
                     7 -> navController.navigate(R.id.composeFragment)
                     8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
-                    9 -> navController.navigate(R.id.messageFragment, bundleOf("openSend" to true))
+                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
                 }
             }
 
             7 -> {
                 when (childMenuId) {
                     10 -> {
+                        Log.e("refId1", ""+refId)
+
                         if (refId != null) {
-                            navController.navigate(
-                                R.id.circularDetailsFragment,
-                                bundleOf(Constant.CIRCULAR_ID to refId)
-                            )
+                            if (refId=="Menu"){
+                                Log.e("refId2", ""+refId)
+                                navController.navigate(R.id.circularFragment)
+                            }else{
+                                Log.e("refId3", ""+refId)
+                                navController.navigate(
+                                    R.id.circularDetailsFragment,
+                                    bundleOf(Constant.CIRCULAR_ID to refId)
+                                )
+                            }
                         } else {
                             navController.navigate(R.id.circularFragment)
                         }
 
                     }
-
                     11 -> {
-                        if (refId.isNullOrEmpty()) {
+                        if (refId.isNullOrEmpty() || refId=="Menu" ) {
                             navController.navigate(R.id.noticeListFragment, Bundle().apply {
                                 putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
                             })
@@ -1239,7 +1192,6 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     }
-
                     12 -> {
                         lifecycleScope.launch {
                             userDataStore.getUser()?.run {
@@ -1409,12 +1361,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFragmentId(
-        menuID: Int,
-        childMenuId: Int,
-        childChildMenuId: Int,
-        from: String = "other"
-    ) {
+    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1512,36 +1459,8 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-
                 }
             }
-
-
-            /*for new development Infraction and  Appreciation */
-            /* 24 -> {
-                 when (childMenuId) {
-
-                     21 -> {
-                         when (childChildMenuId) {
-                            23 -> {
-                                *//*add to student for Appreciation *//*
-                                navController.navigate(R.id.smsReportFragment)
-                            }
-                        }
-                    }
-
-                    22 -> {
-                        when (childChildMenuId) {
-                            17 -> {
-                                *//*add to student for Infraction *//*
-                                navController.navigate(R.id.collectionReport)
-                            }
-                        }
-                    }
-
-                }
-            }*/
         }
     }
 
@@ -1915,27 +1834,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        try {
-            isActivityPaused = true
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
         super.onPause()
+        isActivityPaused = true
     }
 
     override fun onResume() {
         super.onResume()
-        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
-        showLoader(false)
-
         if (isActivityPaused) {
             syncData(false)
             isActivityPaused = false
         } else {
-            lifecycleScope.launch {
-                delay(20.seconds)
-                syncData(true)
-            }
+            syncData(true)
         }
     }
 

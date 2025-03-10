@@ -109,18 +109,13 @@ class QuestionBankFragment : Fragment(), ItemListener<QBQuestion> {
                 findNavController().navigate(R.id.addQuestionBankFragment)
             }
             Constant.DOWNLOAD -> {
-                try {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(t.filename, getString(R.string.question_paper))
-                    Toast.makeText(
-                        requireContext(),
-                        "Download started, check you status bar for more information.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }catch (e:NullPointerException){
-                    e.printStackTrace()
-                }
-
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(t.filename, getString(R.string.question_paper))
+                Toast.makeText(
+                    requireContext(),
+                    "Download started, check you status bar for more information.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

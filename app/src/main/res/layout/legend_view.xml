@@ -14,35 +14,35 @@
             android:id="@+id/image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingEnd="10dp"
             android:visibility="gone"
+            tools:visibility="visible"
+            tools:src="@drawable/ic_person"
+            android:paddingEnd="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/sub_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/title"
-            tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_person"
-            tools:visibility="visible" />
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/calibri_regular"
+            tools:text="Defaulter"
             android:textColor="@color/grey_40"
             app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Defaulter" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/sub_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/calibri_bold"
+            tools:text="600"
             android:textAppearance="?attr/textAppearanceBodyMedium"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="@+id/title"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:text="600" />
+            app:layout_constraintTop_toBottomOf="@+id/title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

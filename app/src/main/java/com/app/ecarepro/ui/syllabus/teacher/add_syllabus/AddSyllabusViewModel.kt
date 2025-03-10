@@ -9,15 +9,12 @@ import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkMyClass
 import com.app.ecarepro.data.network.model.NetworkMySubjects
-import com.app.ecarepro.data.network.model.NetworkPushNotificationRequest
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.create_syllabus.BrowsedFile
 import com.app.ecarepro.data.network.model.create_syllabus.PostSyllabus
-import com.app.ecarepro.data.repository.MessageRepository
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.ui.message.compose.AttachmentType
-import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.getFile
 import com.lassi.data.media.MiMedia
@@ -25,7 +22,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
@@ -39,8 +35,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddSyllabusViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val  userRepository: UserRepository,
-    private val messageRepository: MessageRepository
+    private val  userRepository: UserRepository
 ) : ViewModel() {
 
 
@@ -64,7 +59,6 @@ class AddSyllabusViewModel @Inject constructor(
     private val saveSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
     val saveSyllabusStateFlow: StateFlow<NetworkResult<CommonResponse>> = saveSyllabusMutableStateFlow
-
 
     fun getMyClass(subID: Int   )=viewModelScope.launch {
         runCatching {
@@ -118,24 +112,6 @@ class AddSyllabusViewModel @Inject constructor(
         }.onFailure {
             saveSyllabusMutableStateFlow.value = NetworkResult.Error(it.message)
         }
-    }
-
-    fun sendPushNotification(
-        networkPushNotificationRequest: NetworkPushNotificationRequest,
-        result: (Boolean, String) -> Unit
-    )=viewModelScope.launch {
-       messageRepository.sendPushNotification(networkPushNotificationRequest)
-           .collectLatest { response ->
-               if (response.isSuccess) {
-                   result(true, response.getOrNull() ?: "")
-               } else {
-                   result(
-                       false,
-                       response.exceptionOrNull()?.message ?: UNKNOWN_ERROR_MESSAGE
-                   )
-               }
-
-           }
     }
 
 

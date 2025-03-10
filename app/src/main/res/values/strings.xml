@@ -91,7 +91,6 @@
     <string name="latest_book">Latest Book</string>
     <string name="my_account">My Account</string>
     <string name="yes">OK</string>
-    <string name="yes_holder">Yes</string>
     <string name="add_image">Add Image</string>
     <string name="pending">Pending</string>
     <string name="add_photo">Add Photo!</string>
@@ -282,7 +281,7 @@
     <string name="father_spouse_name">Father/Spouse Name</string>
     <string name="father_spouse_mobile_no">Father/Spouse Mobile No</string>
     <string name="aadhar_card_number">Aadhar Card Number</string>
-    <string name="pan_card_number">PAN</string>
+    <string name="pan_card_number">Pan Card Number</string>
     <string name="sp">:</string>
     <string name="early_out">Early Out</string>
     <string name="late_in">Late In</string>
@@ -468,12 +467,12 @@
     <string name="address">Address</string>
     <string name="pAddress">Permanent Address</string>
     <string name="aadharCardNo">Aadhar Card Number</string>
-    <string name="paNNumber">PAN</string>
+    <string name="paNNumber">PAN Card Number</string>
     <string name="cbseid">CBSE ID</string>
     <string name="club">Club</string>
     <string name="otp_verification">OTP Verification <font color="#FF0000">*</font></string>
     <string name="resend_otp"><u>Resend OTP</u></string>
-    <string name="uan_number">UAN</string>
+    <string name="uan_number">UN Number</string>
     <string name="nationalnumber">National Teacher ID:</string>
     <string name="bank_account_number">Bank Account Number</string>
     <string name="uan_account_number">UAN</string>
@@ -499,7 +498,6 @@
     <string name="marital_status">Marital Status</string>
     <string name="logout">Logout</string>
     <string name="are_you_sure_to_logout">Are you sure to logout?</string>
-    <string name="are_you_sure_to_logout_all">Are you sure you want to logout. This will logout all the users from the app.</string>
     <string name="no">No</string>
     <string name="print">Print</string>
 
@@ -850,41 +848,16 @@
     <string name="fee_receipt">Fee Receipt</string>
     <string name="fee_book">Fee Book</string>
     <string name="due_amount">Due Amount</string>
-    <string name="timetable_of">Timetable of %1$s</string>
-    <string name="circuler_details">Circular Details</string>
-    <string name="notice_details">Notice Details</string>
-    <string name="must_read">Must Read</string>
-    <string name="do_you_want_to_send_push_notification">Do you want to send push notification?</string>
-    <string name="priority">Priority</string>
     <string name="select_assignee">Select Assignee</string>
+    <string name="priority">Priority</string>
     <string name="remind_before">Remind Before</string>
-    <string name="student_email_id">Student Email ID</string>
-    <string name="teachers">Teachers</string>
-    <string name="appointment_time">Appointment Time</string>
-    <string name="purpose">Purpose</string>
-    <string name="form_type">Form Type</string>
-    <string name="please_select_a_time_between_8_00_am_and_5_00_pm">Please select a time between 8:00 AM and 5:00 PM</string>
-    <string name="session_text_info_holder">This is list of device that logged into your device. Revoke/Logout any session that you do not recognize.</string>
-    <string name="your_current_sesssion">Your current sesssion</string>
-    <string name="logout_all_devices">Logout All Devices</string>
-    <string name="active_sessions">Active Sessions</string>
-    <string name="check_active_sessions">Check Active Sessions</string>
 
-    <string name="class_wise_breakdown">Class-Wise Breakdown</string>
-    <string name="default_amount">Default Amount</string>
-    <string name="defaulter">Defaulter</string>
-    <string name="total_student">Total Student</string>
-    <string name="summary">Summary</string>
-    <string name="month">Month</string>
-    <string name="sessions">Sessions</string>
-    <string name="filter">Filter</string>
-    <string name="fee_type">Fee Type</string>
-    <string name="installments">Installments</string>
-    <string name="fee_defaulter">Fee Defaulter</string>
-    <string name="all_fee_type">All Fee Type</string>
-    <string name="all_installments">All Installments</string>
+    <string name="new_notice">New</string>
+    <string name="all_notices">All Notices</string>
+    <string name="notice_details">Notice Details</string>
+    <string name="all_circular">All Circular</string>
 
-    <string name="father_aadhaar_no">Father Aadhaar No</string>
-    <string name="father_pan">Father PAN</string>
+    <string name="are_you_sure_to_logout_all">Are you sure you want to logout. This will logout all the users from the app.</string>
+
+
 </resources>
-

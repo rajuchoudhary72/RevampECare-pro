@@ -60,12 +60,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDq6yT23T7qHcODFmC3LfnbhXgFI8Z8vDY" />
-        <meta-data
-            android:name="firebase_performance_logcat_enabled"
-            android:value="true" />
-        <meta-data
-            android:name="firebase_performance_collection_enabled"
-            android:value="true" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

@@ -18,12 +18,11 @@ import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MegaEBookCollectionFragment() : Fragment() {
+class MegaEBookCollectionFragment(val megaBookLink: String) : Fragment() {
 
     private lateinit var binding : FragmentMegaEBookCollectionBinding
     private val eBookViewModel: EBookViewModel by viewModels()
 
-    private var megaBookLink: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,9 +37,8 @@ class MegaEBookCollectionFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        megaBookLink = arguments?.getString("link")
 
-        megaBookLink?.let { setUpMegaBook(it) }
+        setUpMegaBook(megaBookLink)
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()

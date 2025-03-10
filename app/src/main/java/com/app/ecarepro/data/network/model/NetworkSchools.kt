@@ -8,7 +8,7 @@ data class NetworkSchoolsDto(
     @SerializedName("errorCode")
     val errorCode: Int?,
     @SerializedName("list")
-    val list: List<NetworkSchoolItem>?,
+    val list: List<NetworkSchoolItem>,
     @SerializedName("message")
     val message: String?,
     @SerializedName("status")

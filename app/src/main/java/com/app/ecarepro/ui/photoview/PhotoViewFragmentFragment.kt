@@ -56,16 +56,11 @@ class PhotoViewFragmentFragment : Fragment() {
         }
 
         binding.btnDownload.setOnClickListener {
-            try {
-                arguments?.getString(PHOTO)?.let { photo ->
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(photo, "Photo", "image/jpeg")
-                    Toast.makeText(requireContext(), "Downloading started", Toast.LENGTH_SHORT).show()
-                }
-            }catch (e:NullPointerException){
-                e.printStackTrace()
+            arguments?.getString(PHOTO)?.let { photo ->
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(photo, "Photo", "image/jpeg")
+                Toast.makeText(requireContext(), "Downloading started", Toast.LENGTH_SHORT).show()
             }
-
         }
         binding.btnShare.setOnClickListener {
             if (photo.isNullOrEmpty()) return@setOnClickListener

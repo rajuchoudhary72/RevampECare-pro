@@ -19,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.view.get
-import java.util.Date
 
 import com.app.ecarepro.databinding.DialogAddTaskBinding
 import com.app.ecarepro.model.Assignee
@@ -335,7 +334,7 @@ class AddTaskBottomSheet : BottomSheetDialogFragment() {
 
 
 fun Fragment.selectDate(title: String, onDateSelection: (String) -> Unit) {
-    if (isAdded.not()) return
+
     val constraintsBuilder =
         CalendarConstraints.Builder()
             .setValidator(DateValidatorPointForward.now())
@@ -371,9 +370,9 @@ fun Fragment.selectDatePro(title: String, onDateSelection: (String) -> Unit) {
     }
     datePicker.show(childFragmentManager, "tag");
 }
-fun convertMillisToDateString(millis: Long? = null): String {
+private fun convertMillisToDateString(millis: Long): String {
     val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     val calendar = Calendar.getInstance()
-    calendar.timeInMillis = millis?:Date().time
+    calendar.timeInMillis = millis
     return formatter.format(calendar.time)
 }

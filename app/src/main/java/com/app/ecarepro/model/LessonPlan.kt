@@ -2,7 +2,7 @@ package com.app.ecarepro.model
 
 data class LessonPlan(
     val actionTakenBy: Any,
-    val attachment: AttachmentView?,
+    val attachment: AttachmentView,
     val auditoryIds: String,
     val auditoryTxt: String,
     val classIds: String,

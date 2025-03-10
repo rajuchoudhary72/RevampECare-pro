@@ -2,20 +2,17 @@ package com.app.ecarepro.ui.staffList
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.data.network.model.NetworkStaffList
 import com.app.ecarepro.databinding.FragmentStaffListBinding
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.ui.MainActivity
@@ -25,149 +22,126 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
 @AndroidEntryPoint
-class StaffListFragment : Fragment(), ItemListener<Staff> {
+class StaffListFragment : Fragment() , ItemListener<Staff> {
 
-    private var _binding: FragmentStaffListBinding? = null
-    private val binding get() = _binding!!
-
+    private lateinit var binding: FragmentStaffListBinding
     private val staffListViewModel: StaffListViewModel by viewModels()
-    private var targetFragment: String? = null
-    private var staffList: List<Staff> = emptyList()
-    private var filteredStaffList: List<Staff> = emptyList()
+    private var toFragment: String= ""
 
+    private   var teacherList: List<Staff>? = null
+    private lateinit var teacherListFilter: List<Staff>
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStaffListBinding.inflate(inflater, container, false).apply {
+        binding = FragmentStaffListBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = staffListViewModel
         }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        try {
+            toFragment= requireArguments().getString(Constant.TO).toString()
+        }catch (_:Exception){}
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
-        parseArguments()
-        observeSearchQuery()
-        observeStaffList()
-    }
 
-    private fun setupToolbar() {
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-    }
 
-    private fun parseArguments() {
-        targetFragment = arguments?.getString(Constant.TO)
-    }
+        lifecycleScope.launch {
+            staffListViewModel.searchQuery.collectLatest {
 
-    private fun observeSearchQuery() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                staffListViewModel.searchQuery.collectLatest { query ->
-                    filterStaffList(query)
+                if (it.isNotEmpty() && teacherList!=null){
+                    teacherListFilter = teacherList!!.filter { s ->   s .name.lowercase().contains(it.lowercase()) || s .mobile.lowercase().contains(it.lowercase()) || s .designation.lowercase().contains(it.lowercase()) || s .mobile.lowercase().contains(it.lowercase())  }
+                    setupRecycleViewStudentList(teacherListFilter)
+                }else{
+                    teacherList?.let { it1 -> setupRecycleViewStudentList(it1) }
                 }
+
+
             }
         }
+
+        getStaffList()
+
+
     }
 
-    private fun filterStaffList(query: String) {
-        if (query.isNotEmpty()) {
-            filteredStaffList = staffList.filter { staff ->
-                staff.name.lowercase().contains(query.lowercase()) ||
-                        staff.mobile.lowercase().contains(query.lowercase()) ||
-                        staff.designation.lowercase().contains(query.lowercase())
-            }
-            setupRecyclerView(filteredStaffList)
-        } else {
-            setupRecyclerView(staffList)
-        }
-    }
+    private fun getStaffList() {
 
-    private fun observeStaffList() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                staffListViewModel.staffListState.collectLatest { result ->
-                    handleStaffListResult(result)
+        lifecycleScope.launch {
+            staffListViewModel.staffListStateFlow.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                        binding.rvStaffList.isVisible = false
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.rvStaffList.isVisible = false
+                        Log.d("main", "Error$it")
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.rvStaffList.isVisible = true
+
+                        if (it.data!=null){
+                            teacherList = it.data.staffs
+                            setupRecycleViewStudentList(it.data.staffs)
+                        }
+
+                    }
+
+
+                    else -> {}
                 }
+
+
             }
+
         }
+
+       // staffListViewModel.getStaffList()
+
     }
 
-    private fun handleStaffListResult(result: NetworkResult<NetworkStaffList>) {
-        when (result) {
-            is NetworkResult.Loading -> {
-                showLoadingState()
-            }
-
-            is NetworkResult.Error -> {
-                showErrorState(result.message)
-            }
-
-            is NetworkResult.Success -> {
-                showSuccessState(result)
-            }
+    override fun onItemClick(t: Staff, pos: Int, boolean: Boolean) {
+        if (toFragment==Constant.PROFILE_FRA_STAFF){
+            findNavController().navigate(R.id.action_staffListFragment_to_staffProfileNavHostFragment,Bundle( ).apply {
+                putInt(Constant.STAFF_ID_ARGUMENT, t.sid)
+            })
         }
+
     }
 
-    private fun showLoadingState() {
-        (requireActivity() as? MainActivity)?.showLoader(true)
-        binding.rvStaffList.isVisible = false
-        binding.tvNoData.isVisible = false
-    }
+    private fun setupRecycleViewStudentList(staffs: List<Staff>) {
+        if ( staffs != null) {
 
-    private fun showErrorState(errorMessage: String?) {
-        (requireActivity() as? MainActivity)?.showLoader(false)
-        binding.rvStaffList.isVisible = false
-        binding.tvNoData.isVisible = false
-        Log.e("StaffListFragment", "Error: $errorMessage")
-        //Show error message to user.
-    }
+         if ( staffs.isNotEmpty()) {
+                binding.rvStaffList.isVisible = true
+                binding.tvNoData.isVisible = false
 
-    private fun showSuccessState(result: NetworkResult.Success<NetworkStaffList>) {
-        (requireActivity() as? MainActivity)?.showLoader(false)
-        binding.rvStaffList.isVisible = true
+                val circularAdapter = StaffListAdapter(
+                     staffs,
+                    this@StaffListFragment
+                )
 
-        if (result.data != null) {
-            staffList = result.data.staffs
-            filterStaffList(staffListViewModel.searchQuery.value)
-        } else {
-            binding.tvNoData.isVisible = true
-            binding.rvStaffList.isVisible = false
-        }
-    }
-
-
-    override fun onItemClick(item: Staff, position: Int, isSelected: Boolean) {
-        if (targetFragment == Constant.PROFILE_FRA_STAFF) {
-            findNavController().navigate(
-                R.id.action_staffListFragment_to_staffProfileNavHostFragment,
-                Bundle().apply {
-                    putInt(Constant.STAFF_ID_ARGUMENT, item.sid)
+                binding.rvStaffList.apply {
+                    setHasFixedSize(true)
+                    layoutManager = GridLayoutManager(activity, 2)
+                    adapter = circularAdapter
                 }
-            )
-        }
-    }
-
-    private fun setupRecyclerView(staffs: List<Staff>) {
-        binding.tvNoData.isVisible = staffs.isEmpty()
-        binding.rvStaffList.isVisible = staffs.isNotEmpty()
-
-        if (staffs.isNotEmpty()) {
-            val staffListAdapter = StaffListAdapter(staffs, this@StaffListFragment)
-            binding.rvStaffList.apply {
-                setHasFixedSize(true)
-                layoutManager = GridLayoutManager(activity, 2)
-                adapter = staffListAdapter
+            } else {
+                binding.rvStaffList.isVisible = false
+                binding.tvNoData.isVisible = true
             }
-        }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        }
     }
 }

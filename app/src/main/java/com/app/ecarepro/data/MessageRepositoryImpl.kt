@@ -9,7 +9,6 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkConversationReport
-import com.app.ecarepro.data.network.model.NetworkPushNotificationRequest
 import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.SendMessageRequest
@@ -288,22 +287,6 @@ class MessageRepositoryImpl @Inject constructor(
         }
 
      }
-
-    override suspend fun sendPushNotification(request: NetworkPushNotificationRequest): Flow<Result<String>> {
-        return flow {
-            try {
-                val response = messageService.sendPushNotification(request)
-                if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: "Success"))
-                } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
-                }
-            } catch (error: Throwable) {
-                emit(Result.failure(error))
-            }
-        }
-    }
-
 
     override suspend fun deleteSentMessage(id: String): Flow<Result<String>> {
         return flow {

@@ -6,7 +6,7 @@ data class RecentAppreciation(
     val appreciationOn: String,
     val `class`: Any,
     val designation: String,
-    val instance: String,
+    val instance: Int,
     val photo: Any,
     val point: Int,
     val remark: String,

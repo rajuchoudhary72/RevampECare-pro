@@ -31,8 +31,8 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/user_img"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_centerVertical="true"
                      app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round"
                     app:strokeColor="?attr/colorOutlineVariant"
@@ -125,216 +125,97 @@
                 </LinearLayout>
 
 
-
-
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical">
+                        android:drawablePadding="@dimen/_3sdp"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:text="@string/time"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
+                         app:drawableStartCompat="@drawable/clock_icon" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/appointment_time"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/clock_icon" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.visitingTime}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-
-
-                            />
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/ll_mobile"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/mobile"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/baseline_contact_phone_24" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.mobile}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:fontFamily="@font/ubuntu_regular"
+                        android:gravity="center"
+                        android:text="@{appointmentData.visitingTime}"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
 
 
-                            />
+                        />
 
 
-                    </LinearLayout>
-                </LinearLayout>
-
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-                    <LinearLayout
-                        android:id="@+id/ll_check_in"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/check_in"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/check_in_icon" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.checkInTime}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-
-
-                            />
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/ll_check_out"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/check_out"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/check_out_icon" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.checkOutTime}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-
-
-                            />
-
-
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_check_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-                    <LinearLayout
-                        android:id="@+id/ll_purpouse"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
+                        android:drawablePadding="@dimen/_3sdp"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:text="@string/check_in"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
+                         app:drawableStartCompat="@drawable/check_in_icon" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/purpose"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/baseline_edit_document_24" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.purpose}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-
-
-                            />
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/ll_type"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/form_type"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/baseline_edit_document_24" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.formtype}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
+                        android:fontFamily="@font/ubuntu_regular"
+                        android:gravity="center"
+                        android:text="@{appointmentData.checkInTime}"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
 
 
-                            />
+                        />
 
 
-                    </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_check_out"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_3sdp"
+                        android:fontFamily="@font/ubuntu_light"
+                        android:text="@string/check_out"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
+                         app:drawableStartCompat="@drawable/check_out_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ubuntu_regular"
+                        android:gravity="center"
+                        android:text="@{appointmentData.checkOutTime}"
+                        android:textAppearance="?attr/textAppearanceLabelLarge"
+
+
+                        />
+
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/ll_checkout_checkIn"

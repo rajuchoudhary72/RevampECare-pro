@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
+class PhotoAlbumDTLFragment : Fragment(), ItemListener<Photo> {
 
     private lateinit var albumSetting: AlbumSetting
     private lateinit var photoDetails: NetworkAlbumPhotoDetails
@@ -71,6 +71,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pageIndex = 1
 
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
@@ -78,34 +79,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
         }
 
 
-            if (!isDataLoaded){
-                observeData()
-                pageIndex = 1
-                getPhotoAlbumDTL()
-            }else{
-                pageIndex= photoAlbumDTLViewModel.lastPageIndex!!
-                photoAlbumAdapter.setData(photoAlbumDTLViewModel.cachedPhotoList)
-                setupRecycleViewPager()
-              photoAlbumDTLViewModel.cachedData.let {
-                  if (it != null) {
-                      binding.tvHeading.text = it.title
-
-                      binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                          fromHtml(it.description, Html.FROM_HTML_MODE_COMPACT)
-                      } else {
-                          fromHtml(it.description)
-                      }
-
-                      binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
-
-                      if (binding.tvDes.lineCount >= 4) {
-                          binding.tvMore.visibility = View.VISIBLE
-                      } else {
-                          binding.tvMore.visibility = View.GONE
-                      }
-                  }
-              }
-            }
+            getPhotoAlbumDTL()
 
 
 
@@ -113,7 +87,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
     }
 
-    private fun observeData() {
+    private fun getPhotoAlbumDTL() {
         lifecycleScope.launch {
             photoAlbumDTLViewModel.photoAlbumStateFlow.observe(viewLifecycleOwner) {
                 when (it) {
@@ -126,21 +100,16 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.rvAlbum.isVisible = false
-                        isDataLoaded = true
                         Log.d("main", "Error$it")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        isDataLoaded = true
                         binding.rvAlbum.isVisible = true
 
                         if (it.data != null) {
 
                             if (it.data.photos != null) {
-
-                                photoAlbumDTLViewModel.cachedData = it.data
-                                photoAlbumDTLViewModel.cachedPhotoList.addAll(it.data.photos!!)
 
                                 binding.rvAlbum.isVisible = true
                                 binding.tvNoAlbum.isVisible = false
@@ -168,7 +137,8 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                                 }
                                 albumSetting= it.data.setting!!
                                 photoDetails=it.data
-                                photoAlbumAdapter.setData(it.data.photos!!.toMutableList())
+                                photoAlbumAdapter.setData(it.data.photos.toMutableList())
+                                isDataLoaded = true
                             } else {
                                 if (pageIndex == 1) {
                                     binding.rvAlbum.isVisible = false
@@ -188,11 +158,11 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
         }
 
-    }
 
-    private fun getPhotoAlbumDTL() {
+            photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
 
-        photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
+
+
         setupRecycleViewPager()
 
     }
@@ -216,7 +186,6 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
-                                photoAlbumDTLViewModel.lastPageIndex=pageIndex
                                 photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
                             }
                         }
@@ -227,14 +196,31 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
         })
     }
 
-    override fun onItemClick(t: List<Photo>, pos: Int, boolean: Boolean) {
-        photoDetails.photos=t
+    override fun onItemClick(t: Photo, pos: Int, boolean: Boolean) {
+
+//        findNavController().navigate(R.id.photoSliderFragment ,
+//            Bundle().apply {
+//                putString(Constant.ID, t.id)
+//                putString(Constant.URL_ARGUMENT, t.photoPath)
+//                putString(Constant.FULL_URL_ARGUMENT, t.photoPath)
+//                putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
+//                putBoolean("isLiked", t.isLike)
+//                putBoolean("isFav", t.isFavourite)
+//                putInt("likes", t.likes)
+//
+//                putBoolean("isLikeEnabled", albumSetting.isLikeEnabled)
+//                putBoolean("isShareEnabled", albumSetting.isShareEnabled)
+//                putBoolean("isAddFavouriteEnabled",albumSetting.isAddFavouriteEnabled)
+//
+//
+//            })
+
         findNavController().navigate(R.id.photoSliderNavHostFragment ,
             Bundle().apply {
                 putParcelable("photoDetails", photoDetails)
                 putInt("photoPosition", pos)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
-            })
+                  })
 
     }
 

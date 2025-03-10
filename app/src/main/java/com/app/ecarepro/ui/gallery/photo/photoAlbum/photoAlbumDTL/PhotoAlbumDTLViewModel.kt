@@ -9,7 +9,6 @@ import com.app.ecarepro.data.network.model.NetworkAlbumType
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.repository.UserRepository
-import com.app.ecarepro.model.Photo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,24 +20,25 @@ class PhotoAlbumDTLViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _photoAlbumStateFlow: MutableLiveData<NetworkResult<NetworkAlbumPhotoDetails>> =
-        MutableLiveData(NetworkResult.Loading())
 
-    val photoAlbumStateFlow: LiveData<NetworkResult<NetworkAlbumPhotoDetails>> = _photoAlbumStateFlow
+    private val photoAlbumMutableStateFlow: MutableLiveData<NetworkResult<NetworkAlbumPhotoDetails>> = MutableLiveData(
+        NetworkResult.Loading())
+    val  photoAlbumStateFlow: LiveData<NetworkResult<NetworkAlbumPhotoDetails>> = photoAlbumMutableStateFlow
 
-     var cachedData: NetworkAlbumPhotoDetails? = null
-     var cachedPhotoList: ArrayList<Photo> = ArrayList()
-    private var lastLoadedAlbumId: String? = null
-     var lastPageIndex: Int? = 0
 
-    fun getPhotoAlbumDTL(iD: String, pg: Int) = viewModelScope.launch {
+
+    fun getPhotoAlbumDTL(
+        iD: String,
+        pg: Int,
+    )=viewModelScope.launch {
         runCatching {
-            _photoAlbumStateFlow.value = NetworkResult.Loading()
-            userRepository.getPhotoAlbumDTL(iD, pg)
+            photoAlbumMutableStateFlow.value = NetworkResult.Loading( )
+            userRepository.getPhotoAlbumDTL( iD, pg)
         }.onSuccess {
-            _photoAlbumStateFlow.value = NetworkResult.Success(it)
+            photoAlbumMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {
-            _photoAlbumStateFlow.value = NetworkResult.Error(it.message)
+            photoAlbumMutableStateFlow .value = NetworkResult.Error(it.message)
         }
     }
+
 }

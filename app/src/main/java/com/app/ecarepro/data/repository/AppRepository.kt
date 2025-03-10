@@ -13,7 +13,7 @@ import com.app.ecarepro.data.network.model.SyncData
 
 interface AppRepository {
     fun getAppLayout(): Flow<Result<AppLayoutDto>>
-    fun getNotifications(refresh: Boolean): Flow<Result<List<Notification>>>
+    fun getNotifications(): Flow<Result<List<Notification>>>
     fun registerDevice(registerDevice: RegisterDevice): Flow<Result<String>>
     fun getFavourites(): Flow<Result<List<Favourites>>>
     fun updateFavourites(items:List<Favourites>): Flow<Result<String>>

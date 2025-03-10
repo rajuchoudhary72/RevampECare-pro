@@ -73,6 +73,7 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
     private var isLoading: Boolean = true
     private lateinit var conversationReportAdapter : ConversationReportAdapter
     private var mConversationList  = mutableListOf<Conversation>()
+    private var isFirst= true
 
 
 
@@ -90,16 +91,14 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
 
         binding.apply {
 
-            conversationReportAdapter = ConversationReportAdapter( mConversationList , this@ConversationReportFragment,false)
+            conversationReportAdapter = ConversationReportAdapter( this@ConversationReportFragment,false)
 
-            binding.recyclerSmsUsageReport.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(activity)
-                adapter = conversationReportAdapter
-            }
+            binding.recyclerSmsUsageReport.adapter=conversationReportAdapter
 
             tvDateFrom.text = Constant.currentDate()
             tvDateTo.text = Constant.currentDate()
+
+
 
             tvDateFrom.setOnClickListener { pickDateRange() }
             tvDateTo.setOnClickListener { pickDateRange() }
@@ -109,8 +108,18 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
             }
         }
 
-        getConversationReport()
         setupRecycleViewPager()
+
+        if (conversationReportViewModel.isFirst){
+            getConversationReport()
+            conversationReportViewModel.isFirst=false
+        }else{
+            pageIndex=conversationReportViewModel.posIndex
+            conversationReportAdapter.setData(conversationReportViewModel.cacheListConversationReport,conversationReportViewModel.canDelete)
+           binding. tvDateFrom.text =  conversationReportViewModel.startDate
+            binding. tvDateTo.text = conversationReportViewModel.endDate
+        }
+
 
     }
 
@@ -141,6 +150,7 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
                 tvDateTo.text = to
             }
             pageIndex=1
+            conversationReportViewModel.posIndex=1
             getConversationReport()
         }
 
@@ -148,6 +158,9 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
     }
 
     private fun getConversationReport() {
+
+        conversationReportViewModel.startDate=binding.tvDateFrom.text.toString()
+        conversationReportViewModel.endDate=binding.tvDateTo.text.toString()
 
         lifecycleScope.launch {
             conversationReportViewModel.convReportStateFlow.collectLatest {
@@ -177,7 +190,10 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
                                 //isLoading=true
                                 if (pageIndex==1){
                                     conversationReportAdapter.clearData()
+                                    conversationReportViewModel.cacheListConversationReport.clear()
                                 }
+                                conversationReportViewModel.cacheListConversationReport.addAll(it.data.conversation)
+                                conversationReportViewModel.canDelete=it.data.canDeleteConv
                                 conversationReportAdapter.setData(it.data.conversation.toMutableList(),it.data.canDeleteConv)
 
 
@@ -237,6 +253,7 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
         builder.setPositiveButton("Delete") { dialog, _ ->
             conversationReportViewModel.deleteConversation(t.msgID,Constant.DEVICE_TYPE).invokeOnCompletion {
                 pageIndex=1
+                conversationReportViewModel.posIndex=1
                 getConversationReport()
             }
             dialog.dismiss()
@@ -463,6 +480,7 @@ class ConversationReportFragment : Fragment(), ItemListener<Conversation> {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
+                                conversationReportViewModel.posIndex=pageIndex
                                 getConversationReport()
 
                             }

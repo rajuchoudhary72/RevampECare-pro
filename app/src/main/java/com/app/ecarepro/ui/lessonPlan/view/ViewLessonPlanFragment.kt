@@ -92,70 +92,73 @@ class ViewLessonPlanFragment : Fragment() {
                                     append(" by ")
                                     append(it.data.lessonPlans.actionTakenBy)
                                 }
+
                                 if (it.data.lessonPlans.status==0){
                                     binding. tvStatus.setTextColor( this@ViewLessonPlanFragment.resources.getColor(R.color.att_late_color,null))
                                     binding. tvStatus.text="Pending"
+
                                 }else{
                                     binding. tvStatus.setTextColor( this@ViewLessonPlanFragment.resources.getColor(R.color.green,null))
                                     binding. tvStatus.text="Approved"
+
                                 }
-                                try {
-                                    if (it.data.lessonPlans.attachment!=null){
-                                        if (it.data.lessonPlans.attachment.fileURL !=null){
-                                            binding.llFile.setOnClickListener { _ ->
-                                                downloadFile(it.data.lessonPlans.attachment.fileURL)
-                                            }
-                                        }else{
-                                            binding.llFile.isVisible=false
-                                        }
-                                    }else{
-                                        binding.llFile.isVisible=false
+                                if (it.data.lessonPlans.attachment.fileURL!=null){
+                                    binding.llFile.setOnClickListener { _ ->
+                                        downloadFile(it.data.lessonPlans.attachment.fileURL)
                                     }
-                                }catch (e:NullPointerException){
-                                    e.printStackTrace()
+                                }else{
+                                    binding.llFile.isVisible=false
                                 }
+
                                 binding.cvDetailsApprove.isVisible = it.data.lessonPlans.status != 1
+
+
+
+
                             }
+
                         }
+
                     }
+
 
                 }
             }
         }
+
+
+
         viewLessonPlanViewModel.getLessonPlanDTL( id, teacherID)
+
+
+
+
+
     }
 
     private fun downloadFile(fileSource:String){
-        try {
-            when (Constant.isPdfUrl(fileSource)) {
-
-                1 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.lesson))
-                }
-
-                2 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-                }
-
-                3 -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.lesson),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-
-                }
-
-                else -> {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
-                }
+        when (Constant.isPdfUrl(fileSource)) {
+            1 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.lesson))
             }
-        }catch (e:NullPointerException){
-            e.printStackTrace()
-        }
 
+            2 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
 
-    }
+            3 -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.lesson),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+
+            }
+
+            else -> {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+            }
+        } }
     }
 
 

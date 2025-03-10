@@ -160,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/_3sdp"
                             android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/appointment_time"
+                            android:text="@string/time"
                             android:textAppearance="?attr/textAppearanceLabelLarge"
                             app:drawableStartCompat="@drawable/clock_icon" />
 
@@ -239,35 +239,7 @@
 
 
                     </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawablePadding="@dimen/_3sdp"
-                            android:fontFamily="@font/ubuntu_light"
-                            android:text="@string/purpose"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-                            app:drawableStartCompat="@drawable/baseline_edit_document_24" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:text="@{appointmentData.purpose}"
-                            android:textAppearance="?attr/textAppearanceLabelLarge"
-
-
-                            />
-
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ll_checkout_checkIn"

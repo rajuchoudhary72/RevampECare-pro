@@ -9,7 +9,6 @@
             name="isExpanded"
             type="java.lang.Boolean" />
 
-
     </data>
 
     <soup.neumorphism.NeumorphCardView
@@ -62,17 +61,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_arrow_right"
-                android:drawablePadding="8dp"
-                android:fontFamily="@font/calibri_regular"
-                android:text="View"
-                android:textColor="@color/brand_color"
-                app:layout_constraintEnd_toEndOf="parent"
-                 />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/amount"

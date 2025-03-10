@@ -210,12 +210,7 @@ fun TextView.autoLink(textValue: String) {
 
 @BindingAdapter("rupeeText")
 fun TextView.rupeeText(rupee: Double?) {
-    if (rupee==null){
-        text = "₹$0.0"
-    }else{
-        text = "₹$rupee"
-    }
-
+    text = "₹$rupee"
 }
 @BindingAdapter("rupeeText")
 fun TextView.rupeeText(rupee: String?) {

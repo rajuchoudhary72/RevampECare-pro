@@ -54,7 +54,6 @@ data class StudentProfile(
     var motherProfession: String,
     var motherResidentialAddress: String,
     var name: String,
-    var studentEmail: String,
     var nationality: String,
     var parentAnniversaryDate: String,
     var parentStaus: String,

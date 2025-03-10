@@ -8,10 +8,8 @@ import android.provider.Settings.Secure
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.GeneralSettingsDto
-import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -43,7 +41,6 @@ import javax.inject.Inject
 class SystemViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val userDataStore: UserDataStore,
-    private val userDatabase: UserDatabase,
     private val appRepository: AppRepository,
     private val userRepository: UserRepository,
     private val schoolRepository: SchoolRepository,
@@ -80,8 +77,6 @@ class SystemViewModel @Inject constructor(
     val user = userDataStore.getUserAsFlow()
     var userRoleName: String = ""
     var UType: Int = -1
-    val dataStore = userDataStore
-    val database = userDatabase
 
     init {
         viewModelScope.launch {
@@ -98,15 +93,14 @@ class SystemViewModel @Inject constructor(
     }
 
     fun checkAppVersion() = viewModelScope.launch {
-        if (userDataStore.isUserAuthenticated())
-            runCatching {
-                appVersionMutableStateFlow.value = NetworkResult.Loading()
-                schoolRepository.checkAppVersion()
-            }.onSuccess {
-                appVersionMutableStateFlow.value = NetworkResult.Success(it)
-            }.onFailure {
-                appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
-            }
+        runCatching {
+            appVersionMutableStateFlow.value = NetworkResult.Loading()
+            schoolRepository.checkAppVersion()
+        }.onSuccess {
+            appVersionMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            appVersionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
 
     }
 
@@ -124,8 +118,7 @@ class SystemViewModel @Inject constructor(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
                         favroiteMenus = response.favoriteMenus ?: emptyList(),
-                        searchOption = response.searchOptions ?: emptyList(),
-                        appLayoutDto = response
+                        searchOption = response.searchOptions ?: emptyList()
                     )
                 } else {
                     val error = result.exceptionOrNull() ?: IllegalArgumentException(
@@ -180,12 +173,6 @@ class SystemViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    suspend fun logoutCurrentUser(onSuccess: suspend () -> Unit) {
-        userRepository.logout().collectLatest {
-            onSuccess()
         }
     }
 
@@ -287,19 +274,6 @@ class SystemViewModel @Inject constructor(
             attributes
         )
     }
-
-    fun createUserSession(onResult: (Boolean, String) -> Unit) {
-        viewModelScope.launch {
-            userRepository.createSession().collectLatest {
-                it.onSuccess {
-                    onResult(true, "")
-                }
-                    .onFailure {
-                        onResult(false, it.message ?: UNKNOWN_ERROR_MESSAGE)
-                    }
-            }
-        }
-    }
 }
 
 sealed interface MainActivityUiState {
@@ -310,7 +284,6 @@ sealed interface MainActivityUiState {
         val menus: List<Menu>,
         val favroiteMenus: List<Menu>,
         val searchOption: List<SearchOption> = emptyList(),
-        val appLayoutDto: AppLayoutDto
     ) : MainActivityUiState
 
     data class Error(
