@@ -23,7 +23,6 @@ import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 @AndroidEntryPoint
@@ -84,6 +83,7 @@ class SplashFragment : Fragment() {
                     delay(2000)
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 } else {
+
                     //   splashViewModel.getSliders()
                     //   findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
                 }
@@ -110,15 +110,16 @@ class SplashFragment : Fragment() {
             oldDb = SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READONLY)
 
             // Query user_id and password from old database
-            cursor = oldDb.rawQuery("SELECT user_name_id, password FROM user_info_table_db", null)
+            cursor = oldDb.rawQuery("SELECT * FROM user_info_table_db", null)
 
             cursor?.use {
                 while (it.moveToNext()) {
                     val userId = it.getString(it.getColumnIndexOrThrow("user_name_id"))
                     val password = it.getString(it.getColumnIndexOrThrow("password"))
+                    val isActive = it.getInt(it.getColumnIndexOrThrow("isActive"))
 
                     // Add to list
-                    userList.add(UserDataOldApp(userId, password))
+                    userList.add(UserDataOldApp(userId, password,isActive))
                 }
             }
         } catch (e: Exception) {
