@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassPromotionBinding
 import com.app.ecarepro.model.MyClasseX
-import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentPromotedClass
 import com.app.ecarepro.ui.MainActivity
@@ -30,7 +28,7 @@ class ClassPromotionFragment : Fragment() {
     private var classModel: MyClasseX? = null
     private lateinit var binding: FragmentClassPromotionBinding
     private var studentListArrayList = mutableListOf<StudentPro>()
-    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList) }
+    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList,this@ClassPromotionFragment) }
     private val classAdapter by lazy {
         ArrayAdapter<MyClasseX>(requireContext(), R.layout.simple_spinner_item).apply {
             this.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
@@ -210,7 +208,7 @@ class ClassPromotionFragment : Fragment() {
         }
 
         if (requestList.isEmpty()) {
-            mainActivity().showMessage("Add Message here")
+            mainActivity().showMessage(getString(com.app.ecarepro.R.string.classPromotion_add_message_here))
             return
         }
 
