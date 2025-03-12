@@ -308,7 +308,17 @@
                         android:text="@string/present"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp" />
-
+                    <TextView
+                        android:id="@+id/tvwh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:text="@string/working_holiday"
+                        android:visibility="visible"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_11sdp" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -340,17 +350,7 @@
                         android:visibility="visible"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp" />
-                    <TextView
-                        android:id="@+id/tvwh"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:fontFamily="@font/ubuntu_medium"
-                        android:gravity="center"
-                        android:text="@string/working_holiday"
-                        android:visibility="visible"
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -402,7 +402,16 @@
                         android:gravity="center"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp" />
-
+                    <TextView
+                        android:id="@+id/tvTotalWh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_11sdp" />
                     <TextView
                         android:id="@+id/tvTotalAbsent"
                         android:layout_width="0dp"
@@ -433,16 +442,7 @@
                         android:visibility="visible"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp" />
-                    <TextView
-                        android:id="@+id/tvTotalWh"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.2"
-                        android:fontFamily="@font/ubuntu_medium"
-                        android:gravity="center"
-                        android:visibility="visible"
-                        android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+
                 </LinearLayout>
 
                 <View
