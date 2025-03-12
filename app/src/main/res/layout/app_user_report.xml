@@ -36,7 +36,7 @@
                     android:paddingTop="@dimen/_2sdp"
                     android:paddingRight="@dimen/_5sdp"
                     android:paddingBottom="@dimen/_2sdp"
-                    android:text="Get Report"
+                    android:text="@string/appUserReport_get_report_title"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp"
                     android:visibility="gone" />
@@ -47,7 +47,7 @@
                     android:layout_height="195dp"
                     android:gravity="center"
                     android:rotation="270"
-                    android:text="No. of Users"
+                    android:text="@string/appUserReport_noOfUsers_title"
                     android:textSize="@dimen/_7sdp" />
 
                 <com.github.mikephil.charting.charts.PieChart
@@ -108,7 +108,7 @@
                             android:layout_marginStart="@dimen/_2sdp"
                             android:layout_marginLeft="@dimen/_2sdp"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="Android"
+                            android:text="@string/general_android"
                             android:textColor="@color/module"
                             android:textSize="@dimen/_14sdp" />
 
@@ -164,7 +164,7 @@
                             android:layout_marginStart="@dimen/_2sdp"
                             android:layout_marginLeft="@dimen/_2sdp"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="iOS"
+                            android:text="@string/general_ios"
                             android:textColor="@color/module"
                             android:textSize="@dimen/_14sdp" />
 
@@ -220,7 +220,7 @@
                             android:layout_marginStart="@dimen/_2sdp"
                             android:layout_marginLeft="@dimen/_2sdp"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="Both"
+                            android:text="@string/general_both"
                             android:textColor="@color/module"
                             android:textSize="@dimen/_14sdp" />
 
@@ -287,7 +287,7 @@
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_weight="1.7"
                         android:fontFamily="@font/ubuntu_regular"
-                        android:text="Remaining"
+                        android:text="@string/general_remaining"
                         android:textColor="@color/module"
                         android:textSize="@dimen/_14sdp" />
 

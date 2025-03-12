@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -178,11 +177,11 @@ class AddInfractionFragment : Fragment() {
                             binding.studentData=it.data.studentDTL
 
                             binding.tvAdmissionNo.text= buildString {
-                                append(getString(R.string.admission_no))
+                                append(getString(R.string.general_admission_no_pun))
                                 append(it.data.studentDTL.admissionNo)
                             }
                             binding.tvClassName.text= buildString {
-                                append(getString(R.string.classes))
+                                append(getString(R.string.general_classes_pun))
                                 append(it.data.studentDTL.`class`)
                             }
                             binding.tvFatherName.text= buildString {
