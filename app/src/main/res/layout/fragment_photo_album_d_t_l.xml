@@ -104,7 +104,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/more"
+                            android:text="@string/general_from..."
                             android:textColor="@color/light_gray_gallerytext"
                             android:textSize="@dimen/_13sdp"
                             android:visibility="gone" />
@@ -136,7 +136,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:visibility="gone"
-                    android:text="@string/no_record_found"
+                    android:text="@string/general_no_record_found"
                     android:textSize="16sp"
 
                     />

@@ -19,7 +19,6 @@
         app:navigationIcon="@drawable/ic_arrow_back_24px"
         app:titleCentered="true"
         android:elevation="8dp"
-        app:title="Defaulter Report"
         app:titleTextAppearance="?attr/titleTextAppearance"
         app:titleTextColor="@color/white"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -87,7 +86,7 @@
                         android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center_vertical"
                         android:padding="13dp"
-                        android:text="@string/select_year"
+                        android:text="@string/general_select_year"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginBottom="10dp"
                         android:visibility="gone"
@@ -153,7 +152,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

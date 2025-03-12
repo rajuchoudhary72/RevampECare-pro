@@ -306,7 +306,7 @@
             android:layout_marginVertical="@dimen/_50sdp"
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
-            android:text="Print Out "
+            android:text="@string/print_out"
             android:textAppearance="?attr/textAppearanceLabelLarge"
             app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
 
