@@ -41,7 +41,7 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
     private val assignHomeList = mutableListOf<Student>()
     private val houseList = mutableListOf<House>()
     private val mAdapter by lazy {
-        AssignHomeAdapter(assignHomeList, houseList) { poss, student ->
+        AssignHomeAdapter(assignHomeList, houseList,this@AssignHomeFragment) { poss, student ->
             getHousePopUp(
                 poss,
                 student

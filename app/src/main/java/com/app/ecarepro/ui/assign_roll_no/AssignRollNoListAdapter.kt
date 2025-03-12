@@ -41,11 +41,11 @@ class AssignRollNoListAdapter(
         fun bind(student: StudentRllNo) {
             binding.apply {
                 tvStuName.text = buildString {
-                    append("Name : ")
+                    append(assignRollNoFragment.getString(R.string.general_name_pun))
                     append(student.name)
                 }
                 tvAdmission.text = buildString {
-                    append("Admission no : ")
+                    append(assignRollNoFragment.getString(R.string.general_admission_no_pun))
                     append(student.admissionNumber)
                 }
                 edtRoll.setText(student.rollNumber)
@@ -66,7 +66,7 @@ class AssignRollNoListAdapter(
                             if (edtRoll.text.toString().toInt() > 0) {
                                 edtRoll.error = null
                             } else {
-                                edtRoll.error = "Invalid Roll No"
+                                edtRoll.error = assignRollNoFragment.getString(R.string.assignRollNumber_invalid_roll_no)
                             }
                         } else {
                             edtRoll.error = null
@@ -77,7 +77,7 @@ class AssignRollNoListAdapter(
                                 edtRoll.text.toString()
 
                             if (getCountNumber(edtRoll.text.toString()) > 1) {
-                                edtRoll.error = "Already Assigned"
+                                edtRoll.error = assignRollNoFragment.getString(R.string.assignRollNumber_already_assigned)
                             }
                         }
 

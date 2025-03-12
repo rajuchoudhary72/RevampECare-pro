@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +16,6 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAppreciationListBinding
 import com.app.ecarepro.model.RecentAppreciation
-import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.appreciation.adapter.AppreciationListAdapter
 import com.app.ecarepro.ui.mainActivity
@@ -79,11 +77,11 @@ class AppreciationListFragment : Fragment(), ItemListener<RecentAppreciation> {
                             binding.studentData=it.data.studentDTL
 
                             binding.tvAdmissionNo.text= buildString {
-                                append(getString(R.string.admission_no))
+                                append(getString(R.string.general_admission_no_pun))
                                 append(it.data.studentDTL.admissionNo)
                             }
                             binding.tvClassName.text= buildString {
-                                append(getString(R.string.classes))
+                                append(getString(R.string.general_classes_pun))
                                 append(it.data.studentDTL.`class`)
                             }
                             binding.tvFatherName.text= buildString {
