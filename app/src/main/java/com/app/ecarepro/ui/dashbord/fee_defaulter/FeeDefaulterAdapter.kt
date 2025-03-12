@@ -1,17 +1,17 @@
 package com.app.ecarepro.ui.dashbord.fee_defaulter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FeeDefaulterDashboardListItemBinding
-import com.app.ecarepro.databinding.LeaveSettingListItemBinding
 import com.app.ecarepro.model.FeeDefaulter
-import com.app.ecarepro.model.LeaveDetail
 import kotlin.math.roundToInt
 
-class FeeDefaulterAdapter(private var leaveDetailList: List<FeeDefaulter>) :
+class FeeDefaulterAdapter(
+    private var leaveDetailList: List<FeeDefaulter>,
+    private var feeDefaulterUI: FeeDefaulterUI
+) :
     RecyclerView.Adapter<FeeDefaulterAdapter.LeaveHistoryViewHolder>() {
 
         private lateinit var binding:   FeeDefaulterDashboardListItemBinding
@@ -38,11 +38,11 @@ class FeeDefaulterAdapter(private var leaveDetailList: List<FeeDefaulter>) :
             binding.tvAmount.text=data.amount
 
             binding.tvTotalStudents.text= buildString {
-                append("Total: ")
+                append(feeDefaulterUI.getString(R.string.general_total_pun))
                 append(data.totalStudent) }
 
             binding.tvDefaulterStudents.text= buildString {
-                append("Defaulter: ")
+                append(R.string.general_defaulter)
                 append(data.defaulterCount) }
 
             binding.tvPercent.text= buildString {

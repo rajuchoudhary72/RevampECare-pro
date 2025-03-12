@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentEditProfileBinding
 import com.app.ecarepro.ui.MainActivity
@@ -124,12 +125,12 @@ binding.cbSameAddress.setOnCheckedChangeListener {
 
 
             textAnniversaryDate.setOnClickListener {
-                selectDatePro("Select Anniversary date") {
+                selectDatePro(getString(R.string.select_anniversary_date)) {
                     textAnniversaryDate.setText(it)
                 }
             }
             textAdmissionDate.setOnClickListener {
-                selectDatePro("Select Admission date") {
+                selectDatePro(getString(R.string.select_admission_date)) {
                     textAdmissionDate.setText(it)
                 }
             }
