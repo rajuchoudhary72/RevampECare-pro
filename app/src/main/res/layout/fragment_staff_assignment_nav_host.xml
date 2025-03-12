@@ -55,7 +55,7 @@
                         android:background="@drawable/spinner_drop_background_white"
                         android:gravity="center_vertical"
                         android:visibility="visible"
-                        android:text="Filter By"
+                        android:text="@string/general_filter_by"
                         android:layout_marginHorizontal="@dimen/_2sdp"
                         android:layout_marginVertical="@dimen/_2sdp"
                         />
@@ -90,7 +90,7 @@
                     android:layout_weight="7"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/select_date"
+                    android:text="@string/general_select_date"
                     android:textStyle="bold"
                     android:visibility="gone"
                     />
@@ -115,7 +115,7 @@
             android:id="@+id/fb_post_assignment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/post_assignment"
+            android:text="@string/assignment_post_assignment"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="@dimen/_20sdp"
@@ -132,7 +132,7 @@
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/no_record_found"
+            android:text="@string/general_no_record_found"
             android:textSize="16sp"
             android:visibility="gone"
 

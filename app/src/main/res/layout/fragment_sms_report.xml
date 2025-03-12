@@ -23,7 +23,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="SMS Report"
+            app:title="@string/sms_report_title"
             app:titleTextColor="@color/white"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -86,7 +86,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

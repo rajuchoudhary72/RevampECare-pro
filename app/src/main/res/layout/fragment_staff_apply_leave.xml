@@ -15,9 +15,6 @@
         tools:context=".ui.leave.apply_leave.ApplyLeaveFragment">
 
 
-
-
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -69,9 +66,10 @@
             android:id="@+id/switch_short_leave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apply Short Leave    "
+            android:text="@string/apply_short_leave"
             android:textStyle="bold"
             android:layout_margin="@dimen/_10sdp"
+            android:visibility="gone"
             />
 
         <LinearLayout
@@ -94,7 +92,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/from_" />
+                    android:text="@string/general_from_pun" />
 
 
                 <TextView
@@ -130,7 +128,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/to_" />
+                    android:text="@string/general_to_pun" />
 
 
                 <TextView
@@ -315,7 +313,7 @@
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/submit"
+            android:text="@string/general_submit"
             android:textAllCaps="true"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"

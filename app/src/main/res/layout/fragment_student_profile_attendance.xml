@@ -48,7 +48,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:paddingEnd="@dimen/_10sdp"
                         android:paddingRight="@dimen/_10sdp"
-                        android:text="@string/select_year"
+                        android:text="@string/general_select_year"
                          android:textSize="@dimen/_14sdp"
                         android:visibility="visible"
                         android:layout_marginStart="@dimen/_10sdp"
@@ -151,7 +151,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_5sdp"
                                 android:fontFamily="@font/ubuntu_medium"
-                                android:text="@string/absent"
+                                android:text="@string/general_absent"
                                 android:textColor="@color/grey_60"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -285,7 +285,7 @@
                         android:layout_weight="1.3"
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
-                        android:text="@string/months"
+                        android:text="@string/general_months"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp" />
 
@@ -315,7 +315,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
-                        android:text="@string/absent"
+                        android:text="@string/general_absent"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_11sdp" />
 
@@ -456,7 +456,7 @@
                     android:id="@+id/tvNoData"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/no_record_found"
+                    android:text="@string/general_no_record_found"
                     android:layout_centerVertical="true"
                     android:visibility="gone"
                      android:gravity="center"

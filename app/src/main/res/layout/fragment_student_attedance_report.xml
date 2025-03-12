@@ -128,7 +128,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/absent"
+                            android:text="@string/general_absent"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -241,7 +241,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="Late "
+                            android:text="@string/late"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -299,7 +299,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="NA "
+                            android:text="@string/na"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -357,7 +357,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="WH "
+                            android:text="@string/wh"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -415,7 +415,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />
