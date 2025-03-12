@@ -38,7 +38,7 @@ class EBookAdapter(private var latestBookList: List<Book>,
          bindings?.apply {
              bindings.tvName.text=latestBookList[position].title
              bindings.tvAuthor.text= buildString {
-                 append("Author: ")
+                 append(eBookFragment.getString(R.string.general_author_pun))
                  append(latestBookList[position].author)
              }
 

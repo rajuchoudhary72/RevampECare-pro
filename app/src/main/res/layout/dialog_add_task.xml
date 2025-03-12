@@ -66,7 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Task List"
+                    android:hint="@string/task_list"
                     app:layout_constraintTop_toBottomOf="@+id/til_priority">
 
                     <AutoCompleteTextView
@@ -124,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Task Name"
+                    android:hint="@string/task_name"
                     app:layout_constraintEnd_toStartOf="@+id/til_start_date"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Task Description"
+                    android:hint="@string/task_description"
                     app:layout_constraintTop_toBottomOf="@+id/til_task_name">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -164,7 +164,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Start Date"
+                    android:hint="@string/start_date"
                     app:layout_constraintEnd_toStartOf="@+id/til_end_date"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/til_task_name"
@@ -186,7 +186,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="End Date"
+                    android:hint="@string/end_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/til_start_date"
                     app:layout_constraintTop_toBottomOf="@+id/til_task_description">
@@ -222,7 +222,7 @@
                         android:background="@color/transparent"
                         android:focusable="false"
                         android:inputType="none"
-                        android:text="Select attachment"
+                        android:text="@string/select_attachment"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         app:drawableEndCompat="@drawable/ic_arrow_right_black" />
 
@@ -262,7 +262,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
                     android:checked="@={viewModel.makePublic}"
-                    android:text="Make it public"
+                    android:text="@string/make_it_public"
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@+id/til_before" />
 
@@ -289,7 +289,7 @@
                         android:background="@color/transparent"
                         android:focusable="false"
                         android:inputType="none"
-                        android:text="Select Watchers"
+                        android:text="@string/select_watchers"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         app:drawableEndCompat="@drawable/ic_arrow_right_black" />
 
@@ -313,7 +313,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="@dimen/horizontal_margin"
                     android:backgroundTint="@color/green"
-                    android:text="Add Task"
+                    android:text="@string/add_task"
                     android:textColor="@color/white"
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@+id/til_watchers"
