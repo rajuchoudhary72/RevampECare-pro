@@ -50,7 +50,7 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
              when (data.status) {
                  0 ->  tvStatus.text = ""
                  1 -> {
-                      tvStatus.text = "P"
+                      tvStatus.text = studentAttendanceReportFragment.getString(R.string.p)
                      if (data.isLate) {
                           tvStatus.background =  ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_pending,null)
                      } else {
@@ -58,15 +58,15 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
                      }
                  }
                  2 -> {
-                       tvStatus.text = "A"
+                       tvStatus.text = studentAttendanceReportFragment.getString(R.string.a)
                        tvStatus.background =  ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.absent_circle2,null)
                  }
                  3 -> {
-                      tvStatus.text = "L"
+                      tvStatus.text = studentAttendanceReportFragment.getString(R.string.l)
                       tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_leave,null)
                  }
                  4 ->  {
-                     tvStatus.text = "NA"
+                     tvStatus.text = studentAttendanceReportFragment.getString(R.string.na)
                      tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_na,null)
                  }
              }
