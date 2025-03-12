@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/ubuntu_regular"
-                        android:text="@string/today"
+                        android:text="@string/general_today"
                         app:rippleColor="@color/white"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall"
 
@@ -136,7 +136,7 @@
                         android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="@string/from_date"
+                        android:text="@string/general_from_date"
                         android:textColor="@color/grey_40"
                         android:textSize="16sp" />
 
@@ -154,7 +154,7 @@
                         android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:text="@string/to_date"
+                        android:text="@string/general_to_date"
                         android:textColor="@color/grey_40"
                         android:textSize="16sp" />
 

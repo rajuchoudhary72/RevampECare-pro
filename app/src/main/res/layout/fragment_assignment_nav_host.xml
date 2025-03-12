@@ -48,7 +48,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
-             android:text="@string/no_record_found"
+             android:text="@string/general_no_record_found"
             android:visibility="gone"
             android:textSize="16sp"
 

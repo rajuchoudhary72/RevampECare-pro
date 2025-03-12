@@ -61,7 +61,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="none"
-                            android:text="@string/select_class" />
+                            android:text="@string/general_select_class" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +96,7 @@
                     android:id="@+id/bt_auto_assign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/auto_assign"
+                    android:text="@string/assignRollNumber_auto_assign_button_title"
                     android:layout_gravity="start"
                     android:visibility="gone"
                     />
@@ -126,7 +126,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />
