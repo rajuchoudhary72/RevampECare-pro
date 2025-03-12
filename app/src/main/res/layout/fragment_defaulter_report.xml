@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Defaulter Report"
+            app:title="@string/defaulter_report_title"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white">
@@ -94,14 +94,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Start Date" />
+                                android:text="@string/start_date" />
 
                             <TextView
                                 android:id="@+id/dateFrom"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/sfprodisplay_bold"
-                                android:text="Start Date"
+                                android:text="@string/start_date"
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
@@ -128,14 +128,14 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="End Date" />
+                                android:text="@string/end_date" />
 
                             <TextView
                                 android:id="@+id/dateTo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/sfprodisplay_bold"
-                                android:text="End Date"
+                                android:text="@string/end_date"
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
@@ -163,7 +163,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/sfprodisplay_bold"
                             android:padding="15dp"
-                            android:text="@string/select_class"
+                            android:text="@string/general_select_class"
                             android:textColor="@color/black" />
 
                         <ImageView
@@ -307,7 +307,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/sfprodisplay_bold"
                             android:padding="15dp"
-                            android:text="@string/select_section"
+                            android:text="@string/general_select_section"
                             android:textColor="@color/black" />
 
                         <ImageView
@@ -403,7 +403,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -449,7 +449,7 @@
                 android:backgroundTint="@color/brand_color"
                 android:fontFamily="@font/ubuntu_bold"
                 android:gravity="center"
-                android:text="@string/submit"
+                android:text="@string/general_submit"
                 android:textColor="@color/white" />
         </LinearLayout>
 

@@ -32,7 +32,7 @@
                 android:id="@+id/tv_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/submit"
+                android:text="@string/general_submit"
                 android:layout_gravity="end"
                 android:gravity="end"
                 android:layout_marginEnd="@dimen/_15sdp"
@@ -89,7 +89,7 @@
                             android:id="@+id/textInputLayoutName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/name"
+                            android:hint="@string/general_name"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -215,7 +215,7 @@
                             android:id="@+id/textInputLayoutClass"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/classes"
+                            android:hint="@string/general_classes_pun"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -958,7 +958,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="Profile updation record"
+                    android:text="@string/profile_updation_record"
                     android:fontFamily="@font/ubuntu_medium" />
 
 

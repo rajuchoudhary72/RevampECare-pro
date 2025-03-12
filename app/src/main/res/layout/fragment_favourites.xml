@@ -43,7 +43,7 @@
                         android:backgroundTint="@color/white"
                         android:insetTop="0dp"
                         android:insetBottom="0dp"
-                        android:text="Save"
+                        android:text="@string/general_save"
                         android:textColor="@color/green_80"
                         app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium" />
 
