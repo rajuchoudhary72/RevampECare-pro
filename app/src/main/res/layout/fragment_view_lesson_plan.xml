@@ -103,7 +103,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_medium"
-                            android:text="@string/subject"
+                            android:text="@string/general_subject"
 
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
@@ -126,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_medium"
-                            android:text="@string/classes"
+                            android:text="@string/general_classes_pun"
 
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
@@ -149,7 +149,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_medium"
-                            android:text="@string/status"
+                            android:text="@string/general_status"
 
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
@@ -487,7 +487,7 @@
                                 android:lines="1"
                                 android:paddingStart="@dimen/_5sdp"
                                 android:paddingEnd="@dimen/_5sdp"
-                                android:text="@string/attachment"
+                                android:text="@string/general_attachment"
                                 android:textColor="#545454"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -544,7 +544,7 @@
                                 android:paddingLeft="@dimen/_4sdp"
                                 android:paddingRight="@dimen/_4sdp"
                                 android:paddingStart="@dimen/_4sdp"
-                                android:text="Enable for the students after approval"
+                                android:text="@string/enable_for_the_students_after_approval"
                                 app:fontFamily="@font/ubuntu_medium" />
                         </LinearLayout>
 
@@ -567,7 +567,7 @@
                                 android:gravity="center"
                                 android:paddingTop="@dimen/_10sdp"
                                 android:paddingBottom="@dimen/_10sdp"
-                                android:text="Approve"
+                                android:text="@string/approve"
                                 android:textColor="@color/green"
                                 android:textSize="@dimen/_16sdp"
                                 app:fontFamily="@font/ubuntu_bold" />
@@ -588,7 +588,7 @@
                                 android:gravity="center"
                                 android:paddingTop="@dimen/_10sdp"
                                 android:paddingBottom="@dimen/_10sdp"
-                                android:text="Reject"
+                                android:text="@string/reject"
                                 android:textColor="@color/red"
                                 android:textSize="@dimen/_16sdp"
                                 app:fontFamily="@font/ubuntu_bold" />

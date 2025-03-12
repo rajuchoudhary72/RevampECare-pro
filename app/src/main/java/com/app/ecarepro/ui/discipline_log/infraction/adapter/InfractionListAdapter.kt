@@ -6,11 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.DisciplineViewListItemBinding
-import com.app.ecarepro.databinding.ProfileUpdateRecordItemBinding
 import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment
 
@@ -67,7 +65,7 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
                  append(data.infractionOn)
              }
              binding.tvReword.text= buildString {
-                 append("Consequences: ")
+                 append(R.string.consequences_pun)
              }
 
              binding.cvMain.setOnClickListener {
@@ -93,8 +91,8 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
 
              binding.ivDelete.setOnClickListener {
                  val builder = AlertDialog.Builder(infractionListFragment.requireContext())
-                 builder.setTitle("Are you sure ?")
-                 builder.setMessage("Are you sure, You want to delete it")
+                 builder.setTitle(R.string.general_are_you_sure)
+                 builder.setMessage(infractionListFragment.getString(R.string.general_delete_conformation))
 
                  builder.setPositiveButton(android.R.string.yes) { dialog, which ->
                      infractionListFragment.onItemClick(data,1,false)

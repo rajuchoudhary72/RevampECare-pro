@@ -63,7 +63,7 @@
                       <TextView
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="@string/title"
+                          android:text="@string/general_title_pun"
 
                           />
 
@@ -259,7 +259,7 @@
                           android:layout_weight="1"
                           android:layout_height="wrap_content"
                           android:fontFamily="@font/ubuntu_regular"
-                          android:text="@string/submitted"
+                          android:text="@string/general_submitted"
                           app:strokeColor="@color/white"
                           app:rippleColor="@color/white"
 
@@ -272,7 +272,7 @@
                           android:layout_weight="1"
                           android:layout_height="wrap_content"
                           android:fontFamily="@font/ubuntu_regular"
-                          android:text="@string/not_submitted"
+                          android:text="@string/general_not_submitted"
                           app:strokeColor="@color/white"
                           app:rippleColor="@color/white"
                           app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />

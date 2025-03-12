@@ -78,15 +78,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text='@{@string/admission_no+": "+data.admno}'
+                        android:text='@{@string/general_admission_no_pun+": "+data.admno}'
                         android:textColor="@color/black"
-                        tools:text="@string/admission_no" />
+                        tools:text="@string/general_admission_no_pun" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text='@{data.studentname}'
-                        tools:text="@string/name" />
+                        tools:text="@string/general_name" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/total"
+                        android:text="@string/general_total"
                         android:textColor="@color/black" />
 
                     <TextView

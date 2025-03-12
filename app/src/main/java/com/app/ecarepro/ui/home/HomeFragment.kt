@@ -433,7 +433,7 @@ class HomeFragment : Fragment() {
                                     )
                                 } else {
                                     if (favouriteSlider.title!!.contains(
-                                            getString(R.string.assessment),
+                                            getString(R.string.assessment_title),
                                             true
                                         )
                                     ) {

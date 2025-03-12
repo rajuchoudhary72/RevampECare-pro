@@ -29,7 +29,7 @@
               android:fontFamily="@font/ubuntu_medium"
              android:layout_gravity="end"
              android:textColor="@color/white"
-            android:text="@string/save"
+            android:text="@string/general_save"
             android:visibility="gone"
              style="@style/Widget.MaterialComponents.Button.TextButton"
              />
@@ -168,7 +168,7 @@
             android:layout_marginTop="@dimen/_300sdp"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
             android:visibility="gone"
 

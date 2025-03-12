@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_15sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="Enter Mobile Number"
+                    android:text="@string/enter_mobile_number"
                     android:textSize="18sp"
 
                     android:drawablePadding="@dimen/_10sdp"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/_15sdp"
 
-                    android:hint="Ex . XXXXXX XXXX"
+                    android:hint="@string/ex_xxxxxx_xxxx"
                     app:hintTextColor="@color/grey_40"
 
                     app:layout_constraintTop_toBottomOf="@+id/btn_find_school_college"
@@ -93,7 +93,7 @@
                     android:layout_marginHorizontal="@dimen/_15sdp"
 
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/next"
+                    android:text="@string/login_next"
                     android:enabled="false"
                     android:textAppearance="?attr/textAppearanceLabelLarge"
                     app:layout_constraintEnd_toEndOf="parent"

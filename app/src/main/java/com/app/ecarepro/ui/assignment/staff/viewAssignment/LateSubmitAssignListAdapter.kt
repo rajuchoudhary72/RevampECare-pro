@@ -34,10 +34,10 @@ class LateSubmitAssignListAdapter(
          val data = activityLST[position]
 
         if (data.isOfflineSubmitted){
-            bindingm.tvSubmittedBy.text=  viewAssignmentFragment.getString(R.string.offline)
+            bindingm.tvSubmittedBy.text=  viewAssignmentFragment.getString(R.string.general_offline)
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#000000"))
         }else{
-            bindingm.tvSubmittedBy.text= viewAssignmentFragment.getString(R.string.online)
+            bindingm.tvSubmittedBy.text= viewAssignmentFragment.getString(R.string.general_online)
             bindingm.tvSubmittedBy.setTextColor(Color.parseColor("#4DAC3C"))
 
         }

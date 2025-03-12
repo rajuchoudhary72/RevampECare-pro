@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,7 +20,6 @@ import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionListAdapter
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,11 +80,11 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
                              if (it.data.studentDTL!=null){
                                  binding.tvAdmissionNo.text= buildString {
-                                     append(getString(R.string.admission_no))
+                                     append(getString(R.string.general_admission_no_pun))
                                      append(it.data.studentDTL.admissionNo)
                                  }
                                  binding.tvClassName.text= buildString {
-                                     append(getString(R.string.classes))
+                                     append(getString(R.string.general_classes_pun))
                                      append(it.data.studentDTL.`class`)
                                  }
                                  binding.tvFatherName.text= buildString {

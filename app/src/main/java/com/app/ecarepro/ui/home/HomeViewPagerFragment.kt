@@ -53,9 +53,9 @@ class HomeViewPagerFragment : Fragment() {
         _binding = FragmentHomeViewPagerBinding.inflate(inflater, container, false)
 
         try {
-            showDashboard =  requireArguments().getBoolean("Dashboard")
-            showAttendance =  requireArguments().getBoolean("Attendance")
-            showFeeds =  requireArguments().getBoolean("Feed")
+            showDashboard =  requireArguments().getBoolean(getString(R.string.dashboard_title))
+            showAttendance =  requireArguments().getBoolean(getString(R.string.attendance_title))
+            showFeeds =  requireArguments().getBoolean(getString(R.string.feed_title))
         }catch (e:Exception){}
 
         return binding.root
@@ -71,15 +71,15 @@ class HomeViewPagerFragment : Fragment() {
 
         if (showDashboard){
             fragmentList.add(DashboardFragment() )
-            fragmentName.add(" Dashboard")
+            fragmentName.add(getString(R.string.dashboard_title))
         }
         if (showAttendance){
             fragmentList.add(AttendanceFragment() )
-            fragmentName.add("Attendance")
+            fragmentName.add(getString(R.string.attendance_title))
         }
         if (showFeeds){
             fragmentList.add(FeedsFragment() )
-            fragmentName.add("Feed")
+            fragmentName.add(getString(R.string.feed_title))
         }
 
 
