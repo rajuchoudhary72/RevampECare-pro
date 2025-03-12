@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.DayWiseTimeTableItemBinding
 import com.app.ecarepro.model.TimeTable
 import com.app.ecarepro.utils.Constant
@@ -43,16 +44,16 @@ class DayWiseListAdapter(
 
             when (data.period) {
                 1 -> {
-                    tvSt.text="st"
+                    tvSt.text= activityCalenderFragment.getString(R.string.st)
                 }
                 2 -> {
-                    tvSt.text="nd"
+                    tvSt.text= activityCalenderFragment.getString(R.string.nd)
                 }
                 3 -> {
-                    tvSt.text="rd"
+                    tvSt.text= activityCalenderFragment.getString(R.string.rd)
                 }
                 else -> {
-                    tvSt.text="th"
+                    tvSt.text= activityCalenderFragment.getString(R.string.th)
                 }
             }
         }

@@ -370,33 +370,33 @@ class DefaulterReportFragment : Fragment() {
 
 
         var isValidated = true
-        if (binding.dateFrom.text.toString() == "From Date") {
+        if (binding.dateFrom.text.toString() == getString(R.string.general_from_date)) {
             isValidated = false
-            mainActivity().showMessage("Select From Date")
+            mainActivity().showMessage(getString(R.string.select_from_date))
         }
-        if (binding.dateTo.text.toString() == "To Date") {
+        if (binding.dateTo.text.toString() == getString(R.string.general_to_date)) {
             isValidated = false
-            mainActivity().showMessage("Select To Date")
+            mainActivity().showMessage(getString(R.string.select_to_date))
         }
         if (sectionid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Section")
+            mainActivity().showMessage(getString(R.string.please_select_section))
         }
         if (installid.isEmpty()) {
             isValidated = false
-            mainActivity().showMessage("Please Select Installment")
+            mainActivity().showMessage(getString(R.string.please_select_installment))
         }
         if (feetypeid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Fee Type")
+            mainActivity().showMessage(getString(R.string.please_select_fee_type))
         }
         if (schoolid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select School")
+            mainActivity().showMessage(getString(R.string.please_select_school))
         }
         if (classid == "") {
             isValidated = false
-            mainActivity().showMessage("Please Select Class")
+            mainActivity().showMessage(getString(R.string.please_select_class))
         }
 
 

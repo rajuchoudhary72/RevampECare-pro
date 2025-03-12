@@ -79,7 +79,7 @@ class DashboardFragment : Fragment() {
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     var isExpanded = false
-    private var modeByCollectionFilter: String = "Today"
+    private var modeByCollectionFilter: String = getString(R.string.general_today)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -289,7 +289,9 @@ class DashboardFragment : Fragment() {
         minDateString: String?,
         onDateSelected: (String) -> Unit
     ) {
-        val options = arrayOf("Today", "Yesterday", "Select Date")
+        val options = arrayOf(getString(R.string.general_today),
+            getString(R.string.general_yesterday),
+            getString(R.string.general_select_date))
         val dateFormat = "yyyy-MM-dd"
 
         // Parse the minDateString to a Long value
@@ -301,11 +303,11 @@ class DashboardFragment : Fragment() {
         }
 
         MaterialAlertDialogBuilder(context)
-            .setTitle("Select Date")
+            .setTitle( getString(R.string.general_select_date))
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> { // Today
-                        modeByCollectionFilter = "Today"
+                        modeByCollectionFilter =  getString(R.string.general_today)
                         val today = Calendar.getInstance().time
                         val formattedDate =
                             SimpleDateFormat(dateFormat, Locale.getDefault()).format(today)
@@ -313,7 +315,7 @@ class DashboardFragment : Fragment() {
                     }
 
                     1 -> { // Yesterday
-                        modeByCollectionFilter = "Yesterday"
+                        modeByCollectionFilter =  getString(R.string.general_yesterday)
                         val calendar = Calendar.getInstance()
                         calendar.add(Calendar.DAY_OF_YEAR, -1)
                         val yesterday = calendar.time
@@ -331,7 +333,7 @@ class DashboardFragment : Fragment() {
                             .build()
 
                         val datePicker = MaterialDatePicker.Builder.datePicker()
-                            .setTitleText("Select date")
+                            .setTitleText( getString(R.string.general_select_date))
                             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                             .setCalendarConstraints(constraintsBuilder)
                             .build()
@@ -416,7 +418,7 @@ class DashboardFragment : Fragment() {
             CalendarConstraints.Builder() // You can add constraints here if needed
 
         val datePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Select Date Range")
+            .setTitleText(getString(R.string.general_select_date_range))
             .setCalendarConstraints(
                 constraintsBuilder.setValidator(DateValidatorPointBackward.now()).build()
             )

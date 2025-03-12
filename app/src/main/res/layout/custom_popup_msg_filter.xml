@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="@string/filter_by"
+            android:text="@string/general_filter_by"
             android:textColor="@color/module"
             android:textSize="@dimen/_18sdp" />
         <ImageView
@@ -74,7 +74,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:gravity="center"
-                   android:text="@string/from_"
+                   android:text="@string/general_from_pun"
                    android:fontFamily="@font/ubuntu_regular"
                    android:textColor="@color/module"
                    android:textSize="@dimen/_9sdp" />
@@ -113,7 +113,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:gravity="center"
-                   android:text="@string/to_"
+                   android:text="@string/general_to_pun"
                    android:fontFamily="@font/ubuntu_regular"
                    android:textColor="@color/module"
                    android:textSize="@dimen/_9sdp" />
@@ -169,7 +169,7 @@
                android:layout_weight="1"
                android:textColor="@color/module"
                android:padding="@dimen/_4sdp"
-               android:text="@string/staff"
+               android:text="@string/general_staff"
                 android:fontFamily="@font/ubuntu_regular" />
            <RadioButton
                android:id="@+id/rgSenderRb3"
@@ -181,7 +181,7 @@
                android:layout_weight="1"
                android:textColor="@color/module"
                android:padding="@dimen/_4sdp"
-               android:text="@string/parent"
+               android:text="@string/general_parent"
                 android:fontFamily="@font/ubuntu_regular" />
            <RadioButton
                android:id="@+id/rgSenderRb4"
@@ -193,7 +193,7 @@
                android:layout_weight="1"
                android:textColor="@color/module"
                android:padding="@dimen/_4sdp"
-               android:text="@string/student"
+               android:text="@string/general_student"
                 android:fontFamily="@font/ubuntu_regular" />
        </RadioGroup>
        <EditText
@@ -243,7 +243,7 @@
                android:layout_weight="1"
                android:textColor="@color/module"
                android:padding="@dimen/_4sdp"
-               android:text="@string/staff"
+               android:text="@string/general_staff"
                 android:fontFamily="@font/ubuntu_regular" />
            <RadioButton
                android:id="@+id/rgRecipientRb3"
@@ -255,7 +255,7 @@
                android:layout_weight="1"
                android:textColor="@color/module"
                android:padding="@dimen/_4sdp"
-               android:text="@string/parent"
+               android:text="@string/general_parent"
                 android:fontFamily="@font/ubuntu_regular" />
            <RadioButton
                android:id="@+id/rgRecipientRb4"
@@ -267,7 +267,7 @@
                android:layout_weight="1"
                android:textColor="@color/module"
                android:padding="@dimen/_4sdp"
-               android:text="@string/student"
+               android:text="@string/general_student"
                 android:fontFamily="@font/ubuntu_regular" />
        </RadioGroup>
        <EditText
