@@ -91,7 +91,7 @@
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="@string/select_section"
+                    android:text="@string/general_select_section"
                     android:visibility="gone"
                     app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
 
@@ -131,7 +131,7 @@
                 android:background="@drawable/background_box_rectangle_white"
                 android:fontFamily="@font/ubuntu_light"
                 android:gravity="center_vertical"
-                android:hint="@string/enter_title"
+                android:hint="@string/general_enter_title"
                 android:lines="4"
                 android:maxLines="6"
                 android:padding="10dp"
@@ -161,7 +161,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:lines="1"
                         android:padding="7dp"
-                        android:text="@string/attachment"
+                        android:text="@string/general_attachment"
                         android:textColor="#545454" />
 
                     <ImageView
@@ -187,7 +187,7 @@
 
                     android:drawablePadding="6dp"
                     android:gravity="center_vertical"
-                    android:text="@string/browse_file"
+                    android:text="@string/general_browse_file"
                     app:drawableRightCompat="@drawable/ic_add_green_fil" />
 
             </RelativeLayout>

@@ -85,7 +85,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_regular"
-                    android:text="@string/status"
+                    android:text="@string/general_status"
                     app:strokeColor="@color/white"
                     app:rippleColor="@color/white"
                     app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerExtraSmall" />
@@ -115,7 +115,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/from_" />
+                    android:text="@string/general_from_pun" />
 
 
                 <TextView
@@ -148,7 +148,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/to_" />
+                    android:text="@string/general_to_pun" />
 
 
                 <TextView
@@ -330,7 +330,7 @@
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/submit"
+            android:text="@string/general_submit"
             android:textAllCaps="true"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"

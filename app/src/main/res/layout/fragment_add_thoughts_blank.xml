@@ -117,7 +117,7 @@
                     android:enabled="false"
                     android:layout_gravity="center"
                     android:paddingHorizontal="100dp"
-                    android:text="@string/save"
+                    android:text="@string/general_save"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/til_text_filed" />

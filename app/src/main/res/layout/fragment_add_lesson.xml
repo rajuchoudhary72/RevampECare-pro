@@ -60,7 +60,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:paddingEnd="@dimen/_10sdp"
                         android:paddingRight="@dimen/_10sdp"
-                        android:text="@string/from_date"
+                        android:text="@string/general_from_date"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_14sdp"
                         android:visibility="visible" />
@@ -81,7 +81,7 @@
                         android:paddingLeft="@dimen/_10sdp"
                         android:paddingEnd="@dimen/_10sdp"
                         android:paddingRight="@dimen/_10sdp"
-                        android:text="@string/to_date"
+                        android:text="@string/general_to_date"
                         android:textColor="@color/grey_60"
                         android:textSize="@dimen/_14sdp"
                         android:visibility="visible" />
@@ -659,7 +659,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/rectangle_border_gray"
                                 android:fontFamily="@font/ubuntu_medium"
-                                android:hint="Please provide the Direct Instruction of the Topics covered in this Lesson Plan"
+                                android:hint="@string/please_provide_the_direct_instruction_of_the_topics_covered_in_this_lesson_plan"
                                 android:inputType="textMultiLine"
                                 android:minHeight="@dimen/_50sdp"
                                 android:padding="@dimen/_2sdp"
@@ -684,7 +684,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/ubuntu_medium"
-                                    android:text="Guided Practice: "
+                                    android:text="@string/guided_practice"
                                     android:textColor="@color/grey_60"
                                     android:textSize="@dimen/_14sdp" />
 
@@ -705,7 +705,7 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/rectangle_border_gray"
                                 android:fontFamily="@font/ubuntu_medium"
-                                android:hint="Please provide the Guided Practice of the Topics covered in this Lesson Plan"
+                                android:hint="@string/please_provide_the_guided_practice_of_the_topics_covered_in_this_lesson_plan"
                                 android:inputType="textMultiLine"
                                 android:minHeight="@dimen/_50sdp"
                                 android:padding="@dimen/_2sdp"
@@ -729,7 +729,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Extension of the topic: "
+                                    android:text="@string/extension_of_the_topic"
                                     android:textSize="@dimen/_14sdp"
                                     android:fontFamily="@font/ubuntu_medium"
                                     android:textColor="@color/grey_60" />
@@ -758,13 +758,13 @@
                                 android:inputType="textMultiLine"
                                 android:maxLength="500"
                                 android:background="@drawable/rectangle_border_gray"
-                                android:hint="Please provide the introduction of the Topics covered in this Lesson Plan" />
+                                android:hint="@string/please_provide_the_introduction_of_the_topics_covered_in_this_lesson_plan" />
 
                             <TextView
                                 android:id="@+id/tvExtensionCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0/500"
+                                android:text="@string/_0_500"
                                 android:textSize="@dimen/_10sdp"
                                 android:fontFamily="@font/ubuntu_medium"
                                 android:textColor="@color/grey_60"
@@ -785,7 +785,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Closure: "
+                                    android:text="@string/closure_pun"
                                     android:textSize="@dimen/_14sdp"
                                     android:fontFamily="@font/ubuntu_medium"
                                     android:textColor="@color/grey_60" />
@@ -814,13 +814,13 @@
                                 android:inputType="textMultiLine"
                                 android:maxLength="500"
                                 android:background="@drawable/rectangle_border_gray"
-                                android:hint="Please provide the introduction of the Topics covered in this Lesson Plan" />
+                                android:hint="@string/please_provide_the_introduction_of_the_topics_covered_in_this_lesson_plan" />
 
                             <TextView
                                 android:id="@+id/tvClosureCount"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0/500"
+                                android:text="@string/_0_500"
                                 android:textSize="@dimen/_10sdp"
                                 android:fontFamily="@font/ubuntu_medium"
                                 android:textColor="@color/grey_60"
@@ -841,7 +841,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Learning Outcomes/Others: "
+                                    android:text="@string/learning_outcomes_others"
                                     android:textSize="@dimen/_14sdp"
                                     android:fontFamily="@font/ubuntu_medium"
                                     android:textColor="@color/grey_60" />
@@ -869,7 +869,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:inputType="textMultiLine"
                                 android:background="@drawable/rectangle_border_gray"
-                                android:hint="Please provide the introduction of the Topics covered in this Lesson Plan" />
+                                android:hint="@string/please_provide_the_introduction_of_the_topics_covered_in_this_lesson_plan" />
 
                         </LinearLayout>
 
@@ -891,7 +891,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/ubuntu_medium"
-                                android:text="Independent Practice: "
+                                android:text="@string/independent_practice"
                                 android:textColor="@color/grey_60"
                                 android:textSize="@dimen/_14sdp" />
 
@@ -912,7 +912,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/rectangle_border_gray"
                             android:fontFamily="@font/ubuntu_medium"
-                            android:hint="Please provide the Independent Practice of the Topics covered in this Lesson Plan"
+                            android:hint="@string/please_provide_the_independent_practice_of_the_topics_covered_in_this_lesson_plan"
                             android:inputType="textMultiLine"
                             android:minHeight="@dimen/_50sdp"
                             android:padding="@dimen/_2sdp"
@@ -937,7 +937,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/ubuntu_medium"
-                                android:text="Rubrics: "
+                                android:text="@string/rubrics"
                                 android:textColor="@color/grey_60"
                                 android:textSize="@dimen/_14sdp" />
 
@@ -958,7 +958,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/rectangle_border_gray"
                             android:fontFamily="@font/ubuntu_medium"
-                            android:hint="Please provide the Assessment of the Topics covered in this Lesson Plan"
+                            android:hint="@string/please_provide_the_assessment_of_the_topics_covered_in_this_lesson_plan"
                             android:inputType="textMultiLine"
                             android:minHeight="@dimen/_50sdp"
                             android:padding="@dimen/_2sdp"
@@ -985,7 +985,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/ubuntu_medium"
-                                android:text="Exam Date: "
+                                android:text="@string/exam_date"
                                 android:textColor="@color/grey_60"
                                 android:textSize="@dimen/_14sdp" />
 
@@ -1007,7 +1007,7 @@
                             android:paddingLeft="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"
                             android:paddingRight="@dimen/_10sdp"
-                            android:text="dd/mm/yyyy"
+                            android:text="@string/dd_mm_yyyy"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp"
                             android:visibility="visible" />
@@ -1044,7 +1044,7 @@
                                 android:lines="1"
                                 android:paddingStart="@dimen/_5sdp"
                                 android:paddingEnd="@dimen/_5sdp"
-                                android:text="attachment"
+                                android:text="@string/attachment"
                                 android:textColor="#545454"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -1071,7 +1071,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"
-                            android:text="Browse file"
+                            android:text="@string/browse_file"
                             android:textSize="@dimen/_14sdp"
                             android:visibility="visible"
                             app:drawableRightCompat="@drawable/ic_add_green_fil" />
@@ -1101,7 +1101,7 @@
                             android:paddingLeft="@dimen/_4sdp"
                             android:paddingRight="@dimen/_4sdp"
                             android:paddingStart="@dimen/_4sdp"
-                            android:text="Enable for the students after approval"
+                            android:text="@string/enable_for_the_students_after_approval"
                             app:fontFamily="@font/ubuntu_medium" />
                     </LinearLayout>
 
@@ -1134,7 +1134,7 @@
                             android:layout_marginStart="@dimen/_7sdp"
                             android:background="@drawable/shape_button_green_radius"
                             android:fontFamily="@font/ubuntu_light"
-                            android:text="Reset"
+                            android:text="@string/reset"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp" />
                     </LinearLayout>

@@ -86,7 +86,8 @@ class FeeDefaulterUI : Fragment() {
                                     binding.tvNoData.isVisible = false
 
                                     val outPassReportAdapter = FeeDefaulterAdapter(
-                                        it.data.feeDefaulters
+                                        it.data.feeDefaulters,
+                                        this@FeeDefaulterUI
                                     )
 
                                     binding.rvFeeDefaulter.apply {
@@ -140,7 +141,7 @@ class FeeDefaulterUI : Fragment() {
 
         binding.installments.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Select Installments")
+            builder.setTitle(getString(R.string.fee_defaulter_select_installments))
 
             builder.setMultiChoiceItems(feeTypeNames, checkedItems) { _, which, isChecked ->
                 if (isChecked) {
@@ -152,13 +153,13 @@ class FeeDefaulterUI : Fragment() {
                 }
             }
 
-            builder.setPositiveButton("OK") { _, _ ->
+            builder.setPositiveButton(R.string.general_ok) { _, _ ->
                 binding.installments.setText(selectedInstallmentType.joinToString(", "))  // Show selected items
                  installIds = selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
                 getFeeDefaulters(feeTypeId, installIds.trim()) // Fetch defaulters based on selection
             }
 
-            builder.setNegativeButton("Cancel", null)
+            builder.setNegativeButton(R.string.general_cancel, null)
             builder.create().show()
         }
     }
