@@ -5,28 +5,28 @@
     <item
         android:id="@+id/menu"
         android:icon="@drawable/ic_menu_new"
-        android:title="Menu"
+        android:title="@string/menu_menu_title"
          />
 
     <item
         android:icon="@drawable/ic_profile"
         android:id="@+id/profile"
         android:iconTint="@color/white"
-        android:title="Profile" />
+        android:title="@string/profile_menu_title" />
 
     <item
         android:icon="@drawable/ic_home_new"
         android:id="@+id/home"
-        android:title="Home" />
+        android:title="@string/home_menu_title" />
 
     <item
         android:icon="@drawable/ic_notification_new"
         android:id="@+id/notification"
-        android:title="Notification" />
+        android:title="@string/notification_menu_title" />
 
     <item
         android:icon="@drawable/ic_message_new"
         android:id="@+id/message"
-        android:title="Message" />
+        android:title="@string/message_menu_title" />
 
 </menu>
