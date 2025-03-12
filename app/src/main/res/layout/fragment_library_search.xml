@@ -86,7 +86,7 @@
                                     android:gravity="center_vertical"
                                     android:maxLines="1"
                                     android:inputType="text"
-                                    android:hint="Enter Title"
+                                    android:hint="@string/general_enter_title"
 
                                     android:visibility="visible" />
 

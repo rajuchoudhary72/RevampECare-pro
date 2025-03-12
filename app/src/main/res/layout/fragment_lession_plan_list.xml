@@ -83,7 +83,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:gravity="center"
-                                    android:text="@string/from"
+                                    android:text="@string/general_from_pun"
                                     android:textColor="@color/grey_60"
                                     android:textSize="@dimen/_14sdp" />
 
@@ -96,7 +96,7 @@
                                     android:gravity="center"
                                     android:paddingTop="@dimen/_7sdp"
                                     android:paddingBottom="@dimen/_7sdp"
-                                    android:text="@string/select_date"
+                                    android:text="@string/general_select_date"
                                     android:textColor="@color/grey_60"
                                     android:textSize="@dimen/_14sdp" />
                             </LinearLayout>
@@ -136,7 +136,7 @@
                                     android:gravity="center"
                                     android:paddingTop="@dimen/_7sdp"
                                     android:paddingBottom="@dimen/_7sdp"
-                                    android:text="@string/select_date"
+                                    android:text="@string/general_select_date"
                                     android:textColor="@color/grey_60"
                                     android:textSize="@dimen/_14sdp" />
                             </LinearLayout>
