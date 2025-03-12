@@ -239,17 +239,17 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         .series(
             arrayOf(
                 AASeriesElement()
-                    .name("Student")
+                    .name(getString(R.string.student))
                     .size("80%")
                     .innerSize("70%")
                     .borderWidth(0)
                     .allowPointSelect(false)
                     .data(
                         arrayOf(
-                            arrayOf("Present", present),
-                            arrayOf("Absent", absent),
-                            arrayOf("Leave", leave),
-                            arrayOf("Late", late)
+                            arrayOf(getString(R.string.present), present),
+                            arrayOf(getString(R.string.general_absent), absent),
+                            arrayOf(getString(R.string.leave), leave),
+                            arrayOf(getString(R.string.late), late)
                         )
                     )
             )
@@ -333,10 +333,8 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         binding.pieChart.legend.isEnabled = false
         binding.pieChart.animateXY(1400, 1400)
 
-        val s = """
-            ${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}
-            Student(s)
-            """.trimIndent()
+        val s = "${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}"+ getString(R.string.student_s).trimIndent()
+
         val length = (totalPresent + totalAbsent + totalLeave + totalNA + totalWH).toString() + ""
         val ss1 = SpannableString(s)
         ss1.setSpan(RelativeSizeSpan(2f), 0, length.length, 0) // set size

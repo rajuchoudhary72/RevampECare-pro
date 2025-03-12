@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,12 +18,10 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.network.model.Video
 import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
-import com.app.ecarepro.model.Photo
 import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
 
 import com.app.ecarepro.utils.Constant
-import com.app.ecarepro.utils.YoutubeURL
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -53,7 +50,7 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
     ): View? {
         binding=FragmentPhotoAlbumDTLBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title= "Videos"
+        binding.toolbar.title= getString(R.string.videos_title)
         photoAlbumId = requireArguments().getString(Constant.ID).toString()
         albumDTLAdapter =    VideoAlbumDTLAdapter(this@VideoAlbumDTLFragment)
         binding.rvAlbum.apply {
@@ -110,7 +107,9 @@ class VideoAlbumDTLFragment : Fragment() , ItemListener<Video> {
 
                                 binding.tvHeading.text=it.data.title
                                 binding.tvDes.text=it.data.description
-                                binding.tvDatePhoto.text = it.data.eventDate + " | " + it.data.totalVideos + " Video"
+                                binding.tvDatePhoto.text = it.data.eventDate + " | " + it.data.totalVideos + " "+ getString(
+                                    R.string.video
+                                )
 
                                 if (binding.tvDes.getLineCount() >= 4) {
                                     binding.tvMore.setVisibility(View.VISIBLE)

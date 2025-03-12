@@ -122,18 +122,18 @@ class StudentIDFragment : Fragment() {
     private fun selectImageOptionDialog() {
         try {
             val items = arrayOf<CharSequence>(
-                "Take Photo", "Choose from Library",
-                "Cancel"
+                getString(R.string.take_photo), getString(R.string.choose_from_library),
+                getString(R.string.cancel)
             )
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Add Photo!")
+            builder.setTitle(getString(R.string.add_photo))
             builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
                 FileAccess.checkPermission(this)
-                if (items[item] == "Take Photo") {
+                if (items[item] ==getString(R.string.take_photo)) {
                     cameraLauncher.launch(FileAccess.cameraIntent())
-                } else if (items[item] == "Choose from Library") {
+                } else if (items[item] == getString(R.string.choose_from_library)) {
                     galleryLauncher.launch(FileAccess.galleryIntent())
-                } else if (items[item] == "Cancel") {
+                } else if (items[item] == getString(R.string.cancel)) {
                     dialog.dismiss()
                 }
             })
@@ -254,7 +254,7 @@ class StudentIDFragment : Fragment() {
                 startImagePicker()
             } else {
                 // Permission denied, show a message to the user
-                mainActivity().showMessage("Permission denied, cannot pick image")
+                mainActivity().showMessage(getString(R.string.permission_denied_cannot_pick_image))
             }
         }
     }
@@ -303,7 +303,7 @@ class StudentIDFragment : Fragment() {
 
 
                     } else {
-                        mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 252 pixels.")
+                        mainActivity().showMessage(getString(R.string.oops_could_not_proceed_the_image_height_must_be_greater_than_252_pixels))
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -518,7 +518,7 @@ class StudentIDFragment : Fragment() {
                             )
                             Snackbar.make(
                                 binding.scParentLayout,
-                                "It will be uploaded after verification",
+                                getString(R.string.it_will_be_uploaded_after_verification),
                                 Snackbar.LENGTH_LONG
                             ).show()
                         } else if (uploadImage == 2) {
@@ -531,7 +531,7 @@ class StudentIDFragment : Fragment() {
                             )
                             Snackbar.make(
                                 binding.scParentLayout,
-                                "It will be uploaded after verification",
+                                getString(R.string.it_will_be_uploaded_after_verification),
                                 Snackbar.LENGTH_LONG
                             ).show()
                         } else if (uploadImage == 3) {
@@ -544,7 +544,7 @@ class StudentIDFragment : Fragment() {
                             )
                             Snackbar.make(
                                 binding.scParentLayout,
-                                "It will be uploaded after verification",
+                                getString(R.string.it_will_be_uploaded_after_verification),
                                 Snackbar.LENGTH_LONG
                             ).show()
                         }

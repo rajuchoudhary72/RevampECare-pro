@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.AttSummeryListItemBinding
 import com.app.ecarepro.model.ClassSummary
 
@@ -32,36 +33,36 @@ class StudentRepoAttAdapter(
         val data= classSummaryList[position]
         with(bindingm) {
             tvClassName.text= buildString {
-                append("Class : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_classes_pun))
                 append(data.className)
             }
             tvTotalStudentCount.text= buildString {
-                append("Total Student : ")
+                append(studentAttendanceReportFragment.getString(R.string.total_students_pun))
                 append(data.present+data.absent+data.leave+data.wh+data.na)
             }
             tvTotalAbsentCount.text= buildString {
-                append("Absent : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_absent_pun))
                 append(data.absent)
             }
             tvTotalLateCount.text= buildString {
-                append("Late : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_late_pun))
                 append(data.late)
             }
             tvTotalLateCount.isVisible=lateEnabled
             tvTotalLeaveCount.text= buildString {
-                append("Leave : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_leave_pun))
                 append(data.leave)
             }
             tvTotalPresentCount.text= buildString {
-                append("Present : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_present_pun))
                 append(data.present)
             }
             tvTotalNaCount.text= buildString {
-                append("NA : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_na_pun))
                 append(data.na)
             }
             tvTotalWhCount.text= buildString {
-                append("WH : ")
+                append(studentAttendanceReportFragment.getString(R.string.general_wh_pun))
                 append(data.wh)
             }
 

@@ -144,9 +144,9 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
         binding.tvApprove.setOnClickListener {
             if (leaveListIds.isNotEmpty()){
                 val builder = AlertDialog.Builder(requireContext())
-                builder.setTitle("Are You Sure")
-                builder.setMessage("Are you sure you want to proceed?")
-                builder.setPositiveButton("Yes") { dialog, _ ->
+                builder.setTitle(getString(R.string.general_are_you_sure))
+                builder.setMessage(getString(R.string.are_you_sure_you_want_to_proceed))
+                builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                     val leaveIds=leaveListIds.joinToString(",")
                     leaveReportViewModel.leaveAction(applType,null,leaveIds,Constant.LEAVE_ACTION_APPROVE,0,"",null,null,null).invokeOnCompletion {
                         leaveReportAdapter.clearData()
@@ -156,21 +156,21 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     }
                     dialog.dismiss()
                 }
-                builder.setNegativeButton("No") { dialog, _ ->
+                builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 val dialog: AlertDialog = builder.create()
                 dialog.show()
 
             }else{
-                mainActivity().showMessage("Please select at least one leave by click on Check Box")
+                mainActivity().showMessage(getString(R.string.please_select_at_least_one_leave_by_click_on_check_box))
             }
         }
         binding.tvReject.setOnClickListener {
             if (leaveListIds.isNotEmpty()){
                 popUpRemark(null,true)
             }else{
-            mainActivity().showMessage("Please select at least one leave by click on Check Box")
+            mainActivity().showMessage(getString(R.string.please_select_at_least_one_leave_by_click_on_check_box))
         }
         }
 
@@ -485,7 +485,8 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
                         dialog.dismiss()
                     }else{
-                        textInputEditText.error="Rejection Reason is mandatory field"
+                        textInputEditText.error=
+                            getString(R.string.rejection_reason_is_mandatory_field)
                     }
                 }else{
 

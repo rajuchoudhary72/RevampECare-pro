@@ -53,8 +53,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -92,7 +90,7 @@ class PostAssignmentFragment : Fragment() {
     ): View  {
        binding = FragmentPostAssignmentBinding.inflate(inflater,container,false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.post_assignment)
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.assignment_post_assignment)
        try {
            assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
            isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
@@ -271,19 +269,19 @@ class PostAssignmentFragment : Fragment() {
             isValidate=false
             mainActivity().showMessage("Enter Title")
         }
-        if ( binding.ctvAssignmentDt.text.toString()==getString(R.string.assignment_date)){
+        if ( binding.ctvAssignmentDt.text.toString()==getString(R.string.assignment_assignment_date)){
             isValidate=false
-            mainActivity().showMessage("Select Assignment Date")
+            mainActivity().showMessage(getString(R.string.assignment_select_assignment_date))
         }
         if (binding.isSubmitDate.isChecked){
-            if ( binding.tvSubmissionDt.text.toString()==getString(R.string.submission_date)){
+            if ( binding.tvSubmissionDt.text.toString()==getString(R.string.assignment_submission_date)){
                 isValidate=false
-                mainActivity().showMessage("Select Submission Date")
+                mainActivity().showMessage(getString(R.string.assignment_select_submission_date))
             }
         }
         if ( binding.etDescription.text.toString().isEmpty()){
             isValidate=false
-            mainActivity().showMessage("Enter Data")
+            mainActivity().showMessage(getString(R.string.general_enter_data))
         }
 
 
@@ -327,7 +325,7 @@ class PostAssignmentFragment : Fragment() {
                        (requireActivity() as MainActivity).showLoader(false)
                    } is NetworkResult.Success -> {
                        (requireActivity() as MainActivity).showLoader(false)
-                       mainActivity().showMessage("Assignment Uploaded Successfully")
+                       mainActivity().showMessage(getString(R.string.assignment_uploaded_successfully))
                         findNavController().popBackStack()
                    }  }
                } }
@@ -490,20 +488,20 @@ class PostAssignmentFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo),
-            getString(R.string.choose_library),
-            getString(R.string.cancel)
+            getString(R.string.general_take_photo),
+            getString(R.string.general_choose_library),
+            getString(R.string.general_cancel)
 
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo))
+        builder.setTitle(getString(R.string.general_add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this@PostAssignmentFragment)
-            if (items[item] == getString(R.string.take_photo)) {
+            if (items[item] == getString(R.string.general_take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
+            } else if (items[item] == getString(R.string.general_choose_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
+            } else if (items[item] == getString(R.string.general_cancel)) {
                 dialog.dismiss()
             }
         })
@@ -602,7 +600,7 @@ class PostAssignmentFragment : Fragment() {
         val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text= getText(R.string.lbl_select_Student)
+        tvHeading.text= getText(R.string.general_select_Student)
         val  llSelectAll = view.findViewById<LinearLayout>(R.id.llSelectAll)
         val  checkImage = view.findViewById<ImageView>(R.id.checkImage)
         llSelectAll.isVisible=false
@@ -650,7 +648,7 @@ class PostAssignmentFragment : Fragment() {
 
 
 
-        val subjectListAdapter= StudentListAdapter(students, selectAll,  object : ItemListener<Student> {
+        val subjectListAdapter= StudentListAdapter(students, selectAll, this@PostAssignmentFragment , object : ItemListener<Student> {
             override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
                 isStudentSelected = true
             }

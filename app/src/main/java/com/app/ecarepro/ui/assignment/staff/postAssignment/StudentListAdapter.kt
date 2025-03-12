@@ -7,19 +7,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.MyClasseItem
-import com.app.ecarepro.model.AcademicYear
-import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.model.Student
 import com.app.ecarepro.utils.listener.ItemListener
 
-class StudentListAdapter(private var academicYearList: List<Student>,
-                         private val selectAll: Boolean,
-                         private var itemListener: ItemListener<Student>
+class StudentListAdapter(
+    private var academicYearList: List<Student>,
+    private val selectAll: Boolean,
+    private val postAssignmentFragment: PostAssignmentFragment,
+    private var itemListener: ItemListener<Student>
 ) :
     RecyclerView.Adapter<StudentListAdapter.PopUpListViewHolder>() {
 
@@ -36,9 +34,9 @@ class StudentListAdapter(private var academicYearList: List<Student>,
 
     override fun onBindViewHolder(holder: PopUpListViewHolder, pos: Int) {
 
-        holder.itemName.text="Name: "+academicYearList[holder.bindingAdapterPosition].recipientName
-        holder.rollNo.text="Roll No: "+academicYearList[holder.bindingAdapterPosition].rollNumber
-        holder.className.text="Class : "+academicYearList[holder.bindingAdapterPosition].`class`
+        holder.itemName.text=postAssignmentFragment.getString(R.string.general_name_pun)+academicYearList[holder.bindingAdapterPosition].recipientName
+        holder.rollNo.text=postAssignmentFragment.getString(R.string.general_rollNo)+academicYearList[holder.bindingAdapterPosition].rollNumber
+        holder.className.text=postAssignmentFragment.getString(R.string.general_classes_pun)+academicYearList[holder.bindingAdapterPosition].`class`
         holder.checkImage.isVisible=true
         holder.checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
 

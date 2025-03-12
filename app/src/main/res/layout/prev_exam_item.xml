@@ -176,7 +176,7 @@
                     android:fontFamily="@font/ubuntu_regular"
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
-                    android:text="@string/download"
+                    android:text="@string/general_download"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     app:drawableLeftCompat="@drawable/download_fill"

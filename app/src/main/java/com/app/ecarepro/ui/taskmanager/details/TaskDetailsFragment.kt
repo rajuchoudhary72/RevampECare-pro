@@ -165,7 +165,7 @@ class TaskDetailsFragment : Fragment() {
                         onClickEdit { v: View ->
                             if (v.id == R.id.title) {
                                 openTextInputDialog(
-                                    "Title",
+                                    getString(R.string.title),
                                     uiState.taskDetails.task?.taskTitle ?: ""
                                 ) {
                                     (requireActivity() as MainActivity).showLoader(true)
@@ -180,7 +180,7 @@ class TaskDetailsFragment : Fragment() {
                                 }
                             } else if (v.id == R.id.description) {
                                 openTextInputDialog(
-                                    "Description",
+                                   getString(R.string.general_description),
                                     uiState.taskDetails.task?.description ?: ""
                                 ) {
                                     (requireActivity() as MainActivity).showLoader(true)
@@ -209,7 +209,7 @@ class TaskDetailsFragment : Fragment() {
                             updatePriority(uiState.taskDetails.task?.priority!!)
                         }
                         editStartDate { _ ->
-                            selectDate("Start Date") {
+                            selectDate(getString(R.string.start_date)) {
                                 (requireActivity() as MainActivity).showLoader(true)
                                 mViewModel.updateTask(
                                     TaskFiledName.START_DATE,
@@ -222,7 +222,7 @@ class TaskDetailsFragment : Fragment() {
                             }
                         }
                         editEndDate { _ ->
-                            selectDate("Due Date") {
+                            selectDate(getString(R.string.due_date)) {
                                 (requireActivity() as MainActivity).showLoader(true)
                                 mViewModel.updateTask(
                                     TaskFiledName.DUE_DATE,
@@ -337,7 +337,7 @@ class TaskDetailsFragment : Fragment() {
     private fun updatePriority(priority: Int) {
         val items = TaskPriority.getTaskPriorityFromThis(priority)
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Update Status")
+            .setTitle(getString(R.string.update_status))
             .setItems(items.map { it.value }.toTypedArray()) { dialog, which ->
                 mViewModel.updateTask(
                     TaskFiledName.PRIORITY,
@@ -353,18 +353,19 @@ class TaskDetailsFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            "Take Photo", "Choose from Library",
-            "Cancel"
+            getString(R.string.take_photo),
+            getString(R.string.choose_from_library),
+            getString(R.string.cancel)
         )
         val builder = android.app.AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Photo!")
+        builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this)
-            if (items[item] == "Take Photo") {
+            if (items[item] ==  getString(R.string.take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == "Choose from Library") {
+            } else if (items[item] == getString(R.string.choose_from_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == "Cancel") {
+            } else if (items[item] == getString(R.string.cancel)) {
                 dialog.dismiss()
             }
         })
@@ -378,13 +379,13 @@ class TaskDetailsFragment : Fragment() {
     ) {
 
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Update $title")
+        builder.setTitle(getString(R.string.update, title))
 
         val input = EditText(requireContext())
         input.inputType = InputType.TYPE_CLASS_TEXT
         input.setText(value)
         input.setSelection(value.length)
-        input.hint = "Enter $title..."
+        input.hint = getString(R.string.enter)+" $title..."
         input.textSize = 15f
         input.setBackgroundResource(R.drawable.bg_outline_round_corner_green)
         input.setPadding(30, 30, 30, 30)

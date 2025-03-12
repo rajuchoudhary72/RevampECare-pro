@@ -66,7 +66,7 @@ class StudentsFragment : Fragment() {
             binding.chart.getLegend().isEnabled = false
             binding.chart.animateXY(1400, 1400)
             val total_login: Int = studentArrayList.get(0).total
-            val s = "$total_login\nStudents"
+            val s = "$total_login\n"+getString(R.string.students)
             val ss1 = SpannableString(s)
             val len = total_login.toString().length
             ss1.setSpan(RelativeSizeSpan(2f), 0, len, 0) // set size

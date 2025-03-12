@@ -46,14 +46,14 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
 
         binding.btnLogoutDevice.setOnClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("Logout All Devices")
-            builder.setMessage("Are you sure, you want to logout from all devices?")
+            builder.setTitle(getString(R.string.logout_all_devices))
+            builder.setMessage(getString(R.string.are_you_sure_you_want_to_logout_from_all_devices))
 
-            builder.setPositiveButton("Sure") { dialog, _ ->
+            builder.setPositiveButton(getString(R.string.sure)) { dialog, _ ->
                 removeSession(null)
                 dialog.dismiss()
             }
-            builder.setNegativeButton("No") { dialog, _ ->
+            builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
             }
 
@@ -129,14 +129,14 @@ class UserSessionListFragment : Fragment() , ItemListener<String> {
     override fun onItemClick(t: String, pos: Int, boolean: Boolean) {
 
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("Logout This Devices")
-            builder.setMessage("Are you sure, you want to logout from this device?")
+            builder.setTitle(getString(R.string.logout_this_devices))
+            builder.setMessage(getString(R.string.are_you_sure_you_want_to_logout_from_this_device))
 
-            builder.setPositiveButton("Sure") { dialog, _ ->
+            builder.setPositiveButton(getString(R.string.sure)) { dialog, _ ->
                 removeSession(t)
                 dialog.dismiss()
             }
-            builder.setNegativeButton("No") { dialog, _ ->
+            builder.setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.dismiss()
             }
 

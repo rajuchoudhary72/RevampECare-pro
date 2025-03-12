@@ -20,13 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.Album
-import com.app.ecarepro.data.network.model.FavList
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentMediaGalleryBinding
-import com.app.ecarepro.databinding.FragmentPhotoAlbumBinding
-import com.app.ecarepro.model.FeeReceiptSession
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.fee.fee_receipt.FeeReceiptPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
 
@@ -60,7 +56,9 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     private val debounceTime = 300L  // 300ms delay
 
     private val searchByList =
-        mutableListOf<String>("All Search", "NewsPaper", "Headline", "Publish Date", "Year")
+        mutableListOf<String>(getString(R.string.mediaGallery_search_all_search),
+            getString(R.string.mediaGallery_search_newspaper), getString(R.string.mediaGallery_search_headline),
+            getString(R.string.mediaGallery_search_publish_date), getString(R.string.mediaGallery_search_year))
 
     private var yearList = mutableListOf<String>()
 
@@ -73,7 +71,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     ): View {
         binding = FragmentMediaGalleryBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title = "Media Gallery"
+        binding.toolbar.title = getString(R.string.media_gallery_title)
         binding.toolbar.isVisible = true
         mediaGalleryAdapter = MediaGalleryAdapter(this@MediaGalleryFragment)
 
@@ -276,7 +274,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
 
-        tvHeading.text = "Select Search By"
+        tvHeading.text = getString(R.string.select_search_by)
         builder.setView(view)
 
 
@@ -326,7 +324,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
 
-        tvHeading.text = "Select Year"
+        tvHeading.text = getString(R.string.select_year)
         builder.setView(view)
 
 
@@ -392,7 +390,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
                 1 -> {
                     binding.tvYear.isVisible = false
                     binding.edSearch.isVisible = true
-                    binding.edSearch.hint = "Enter Newspaper"
+                    binding.edSearch.hint = getString(R.string.enter_newspaper)
                     binding.edSearch.setText("")
 
                     binding.tvPubDate.isVisible = false
@@ -401,7 +399,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
                 2 -> {
                     binding.tvYear.isVisible = false
                     binding.edSearch.isVisible = true
-                    binding.edSearch.hint = "Enter Headline"
+                    binding.edSearch.hint = getString(R.string.enter_headline)
                     binding.tvPubDate.isVisible = false
                     binding.edSearch.setText("")
                 }

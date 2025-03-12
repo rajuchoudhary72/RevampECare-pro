@@ -110,8 +110,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     subID=0
                     binding.recyclerNotice.isVisible = false
                     binding.includeToolbar.btnSave.isVisible=false
-                    binding.autoCompleteSub.setText("Select Subject ",false)
-                    binding.autoCompleteClass.setText("Select Class ",false)
+                    binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
+                    binding.autoCompleteClass.setText(getString(R.string.select_class),false)
                     from=getString(R.string.class_attendance)
                     getClassList()
                     binding.includeToolbar.toolbarTitle.text = from
@@ -121,8 +121,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     subID=0
                     binding.recyclerNotice.isVisible = false
                     binding.includeToolbar.btnSave.isVisible=false
-                    binding.autoCompleteSub.setText("Select Subject ",false)
-                    binding.autoCompleteClass.setText("Select Class ",false)
+                    binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
+                    binding.autoCompleteClass.setText(getString(R.string.select_class),false)
                     from=getString(R.string.subject_attendance)
                     getClassList()
                     binding.includeToolbar.toolbarTitle.text = from
@@ -146,7 +146,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     getSubjectList(classID)
                 }else{
                     subID=0
-                    binding.autoCompleteSub.setText("Select Subject ",false)
+                    binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
                     classID=classesForClsTeaches[pos].classID
                     className=classesForClsTeaches[pos].className
                     getStudentListToMarkAtt(classID,subID)
@@ -257,9 +257,10 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 binding.tvNoData.isVisible = false
                                  if (it.data.hasMarked){
                                      binding.includeToolbar.btnSave.isVisible = editMode
-                                     binding.includeToolbar.btnSave.text = "Modify"
+                                     binding.includeToolbar.btnSave.text =
+                                         getString(R.string.modify)
                                  }else{
-                                     binding.includeToolbar.btnSave.text = "Save"
+                                     binding.includeToolbar.btnSave.text = getString(R.string.save)
                                  }
 
                                 if (!it.data.freezingTime.isNullOrEmpty()){
@@ -325,7 +326,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         dialog.setContentView(R.layout.dialog_pendong_leave)
         tv_pending_leave = dialog.findViewById<TextView>(R.id.tv_pending_leave)
 
-        tv_pending_leave.text = "Pending Leave: $pendingLeave"
+        tv_pending_leave.text = getString(R.string.pending_leave)+" $pendingLeave"
 
         cv_yes = dialog.findViewById<CardView>(R.id.cv_yes)
         cv_no = dialog.findViewById<CardView>(R.id.cv_no)
@@ -521,13 +522,15 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         append(l)
         append(" (")
         append(l-approve_leave)
-        append(" Marked, ")
+        append(getString(R.string.marked))
+        append(" , ")
         append(approve_leave)
-        append(" Pre-Approved)")
+        append(getString(R.string.pre_approved))
+        append(" )")
        } } else if (approve_leave>0){
             tv_leave_count.text = buildString {
                 append(approve_leave)
-                append(" (Pre-Approved)")
+                append(getString(R.string.pre_approved_bra))
             }
         }else{
             tv_leave_count.text = l.toString() + ""
@@ -684,7 +687,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             rb1.visibility = View.GONE
             rb2.visibility = View.GONE
             tv_sub_text.visibility = View.VISIBLE
-            tv_sub_text.text = "Do you want to sent SMS Alert ?"
+            tv_sub_text.text = getString(R.string.do_you_want_to_sent_sms_alert)
             rbType = 1
             ll_yes_no.visibility = View.VISIBLE
             tv_done.visibility = View.GONE
@@ -692,7 +695,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             rb1.visibility = View.GONE
             rb2.visibility = View.GONE
             tv_sub_text.visibility = View.VISIBLE
-            tv_sub_text.text = "Do you want to sent App Message Alert ?"
+            tv_sub_text.text = getString(R.string.do_you_want_to_sent_app_message_alert)
             rbType = 2
             ll_yes_no.visibility = View.VISIBLE
             tv_done.visibility = View.GONE
@@ -717,7 +720,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         }
         tvOk.setOnClickListener(View.OnClickListener {
             if (rbType == 0) {
-                Toast.makeText(context, "Please select Notification type", Toast.LENGTH_SHORT)
+                Toast.makeText(context,
+                    getString(R.string.please_select_notification_type), Toast.LENGTH_SHORT)
                     .show()
              } else   {
                  if (rbType==1){
@@ -727,13 +731,14 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                          stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
                              (requireActivity() as MainActivity).showLoader(false)
                              if (isSuccess){
-                                 mainActivity().showMessage("SMS Sent Successfully")
+                                 mainActivity().showMessage(getString(R.string.sms_sent_successfully))
                              }else{
                                  mainActivity().showMessage(message)
                              }
                          }
                      }else{
-                         Toast.makeText(context, "Sms Template not defined", Toast.LENGTH_SHORT).show()
+                         Toast.makeText(context,
+                             getString(R.string.sms_template_not_defined), Toast.LENGTH_SHORT).show()
                      }
                  }else{
                      dialog.dismiss()

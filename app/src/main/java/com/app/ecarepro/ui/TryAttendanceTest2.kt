@@ -21,9 +21,7 @@ import com.app.ecarepro.ui.month_list.FragmentAPI
 import com.app.ecarepro.ui.staffAttendence.AttendanceViewModel
 import com.app.ecarepro.utils.calenderInstance
 import com.app.ecarepro.utils.dateToMonth
-import com.app.ecarepro.utils.date_converterDay
 import com.app.ecarepro.utils.getDayNumberSuffix
-import com.google.firebase.installations.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -465,72 +463,72 @@ class TryAttendanceTest2 : AppCompatActivity() {
     private fun switch_case_month(start_month: Int) {
         when (start_month) {
             1 -> session_month_string_list.add(
-                resources.getString(R.string.jan)
+                resources.getString(R.string.general_january)
             )
 
             2 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.feb
+                    R.string.general_february
                 )
             )
 
             3 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.mar
+                    R.string.general_march
                 )
             )
 
             4 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.apr
+                    R.string.general_april
                 )
             )
 
             5 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.may
+                    R.string.general_may
                 )
             )
 
             6 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.jun
+                    R.string.general_june
                 )
             )
 
             7 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.jul
+                    R.string.general_july
                 )
             )
 
             8 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.aug
+                    R.string.general_august
                 )
             )
 
             9 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.sep
+                    R.string.general_september
                 )
             )
 
             10 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.oct
+                    R.string.general_october
                 )
             )
 
             11 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.nov
+                    R.string.general_november
                 )
             )
 
             12 -> session_month_string_list.add(
                 resources.getString(
-                    R.string.dec
+                    R.string.general_december
                 )
             )
         }

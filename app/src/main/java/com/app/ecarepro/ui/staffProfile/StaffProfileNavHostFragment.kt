@@ -100,25 +100,25 @@ class StaffProfileNavHostFragment : Fragment() {
                                         "PersonalDetails" -> {
                                             if (i.isShow){
                                                 fragmentList.add(StaffProfileFragment(it.data.details))
-                                                fragmentName.add("Personal Details")
+                                                fragmentName.add(getString(R.string.personal_details))
                                             }
                                         }
                                         "Attendance" -> {
                                             if (i.isShow){
                                                 fragmentList.add(ProfileAtteFragment(it.data.attendanceDTL))
-                                                fragmentName.add("Attendance")
+                                                fragmentName.add(getString(R.string.attendance))
                                             }
                                         }
                                         "Salary" -> {
                                             if (i.isShow){
                                                 fragmentList.add(ProfileSalaryStrFragment(it.data.salaryStructure))
-                                                fragmentName.add("Salary")
+                                                fragmentName.add(getString(R.string.salary))
                                             }
                                         }
                                         "Timetable" -> {
                                             if (i.isShow){
                                                 fragmentList.add(ProfileTimeTableFragment(it.data.timetableSummary))
-                                                fragmentName.add("Timetable")
+                                                fragmentName.add(getString(R.string.timetable))
                                             }
                                         }
 
@@ -142,7 +142,7 @@ class StaffProfileNavHostFragment : Fragment() {
                             }
                             }
                             }else{
-                                mainActivity().showMessage("No Record Found")
+                                mainActivity().showMessage(getString(R.string.general_no_data_found))
                             }
 
 

@@ -96,7 +96,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                           fromHtml(it.description)
                       }
 
-                      binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
+                      binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " "+getString(R.string.photos)
 
                       if (binding.tvDes.lineCount >= 4) {
                           binding.tvMore.visibility = View.VISIBLE
@@ -155,7 +155,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                                 }
 
                                 binding.tvDatePhoto.text =
-                                    it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
+                                    it.data.eventDate + " | " + it.data.totalPhotos + " "+getString(R.string.photos)
 
                                 if (binding.tvDes.getLineCount() >= 4) {
                                     binding.tvMore.setVisibility(View.VISIBLE)

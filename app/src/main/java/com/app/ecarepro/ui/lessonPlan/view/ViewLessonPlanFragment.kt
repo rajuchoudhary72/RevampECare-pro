@@ -84,20 +84,20 @@ class ViewLessonPlanFragment : Fragment() {
 
                                 binding.tvPlanDuration.text= buildString {
                                     append(it.data.lessonPlans.fromDate)
-                                    append(" to ")
+                                    append(get(R.string._to_))
                                     append(it.data.lessonPlans.tillDate)
                                 }
 
                                 binding.tvStatusBy.text= buildString {
-                                    append(" by ")
+                                    append(get(R.string._by_))
                                     append(it.data.lessonPlans.actionTakenBy)
                                 }
                                 if (it.data.lessonPlans.status==0){
                                     binding. tvStatus.setTextColor( this@ViewLessonPlanFragment.resources.getColor(R.color.att_late_color,null))
-                                    binding. tvStatus.text="Pending"
+                                    binding. tvStatus.text=getString(R.string.pending)
                                 }else{
                                     binding. tvStatus.setTextColor( this@ViewLessonPlanFragment.resources.getColor(R.color.green,null))
-                                    binding. tvStatus.text="Approved"
+                                    binding. tvStatus.text=getString(R.string.approved)
                                 }
                                 try {
                                     if (it.data.lessonPlans.attachment!=null){
@@ -136,7 +136,8 @@ class ViewLessonPlanFragment : Fragment() {
 
                 2 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                    androidDownloader.downloadFile(fileSource,
+                        getString(R.string.photo), "image/jpeg")
                 }
 
                 3 -> {
@@ -147,7 +148,7 @@ class ViewLessonPlanFragment : Fragment() {
 
                 else -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                    androidDownloader.downloadFile(fileSource, getString(R.string.photo), "image/jpeg")
                 }
             }
         }catch (e:NullPointerException){

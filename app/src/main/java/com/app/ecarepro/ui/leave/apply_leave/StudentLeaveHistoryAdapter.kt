@@ -47,7 +47,7 @@ class StudentLeaveHistoryAdapter(private var leaveList: List<Dtl>,
 
         }
 
-        builder.setNegativeButton( R.string.cancel) { _, _ ->
+        builder.setNegativeButton( R.string.general_cancel) { _, _ ->
 
         }
 

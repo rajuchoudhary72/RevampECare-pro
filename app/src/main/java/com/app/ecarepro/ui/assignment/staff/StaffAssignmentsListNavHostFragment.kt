@@ -50,7 +50,7 @@ class StaffAssignmentsListNavHostFragment : Fragment() , ItemListener<TeacherAss
             viewModel = teacherAssignmentViewModel
         }
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.assignment)
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.assignment_title)
         try {
             staffId= requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
         }catch (_:Exception){}

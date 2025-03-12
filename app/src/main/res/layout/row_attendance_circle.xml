@@ -99,7 +99,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_10sdp"
             android:gravity="center"
-            android:text="@string/absent"
+            android:text="@string/general_absent"
             android:fontFamily="@font/ubuntu_regular"
             android:textColor="@color/red"
             android:textSize="@dimen/_11sdp" />

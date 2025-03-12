@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                      android:layout_marginTop="3dp"
                     android:drawablePadding="3dp"
-                    android:text="@string/title"
+                    android:text="@string/general_title_pun"
                     app:fontFamily="@font/ubuntu_medium" />
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:drawablePadding="3dp"
-                    android:text="@string/classes"
+                    android:text="@string/general_classes_pun"
                     app:fontFamily="@font/ubuntu_medium" />
 
                 <TextView
@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:drawablePadding="3dp"
-                    android:text="@string/subject"
+                    android:text="@string/general_subject"
                     app:fontFamily="@font/ubuntu_medium" />
 
                 <TextView
@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:drawablePadding="3dp"
-                    android:text="@string/update_on"
+                    android:text="@string/general_update_on_pun"
                     app:fontFamily="@font/ubuntu_medium" />
 
                 <TextView
@@ -211,7 +211,7 @@
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:text="@string/download"
+                    android:text="@string/general_download"
                     android:textColor="@color/brand_color"
                     app:drawableLeftCompat="@drawable/download_24px"
                     app:drawableTint="@color/brand_color"

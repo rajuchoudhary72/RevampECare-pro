@@ -114,7 +114,7 @@ class QuestionBankFragment : Fragment(), ItemListener<QBQuestion> {
                     androidDownloader.downloadFile(t.filename, getString(R.string.question_paper))
                     Toast.makeText(
                         requireContext(),
-                        "Download started, check you status bar for more information.",
+                        getString(R.string.download_started_check_you_status_bar_for_more_information),
                         Toast.LENGTH_SHORT
                     ).show()
                 }catch (e:NullPointerException){

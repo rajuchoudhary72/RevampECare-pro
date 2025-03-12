@@ -69,7 +69,7 @@ class TaskManagerFragment : Fragment() {
                 if (uiState.tasksDto.overdue.isNullOrEmpty().not()) {
                     taskSummary {
                         id(R.id.overdue_tasks)
-                        title("Overdue")
+                        title(getString(R.string.overdue))
                         count("${uiState.tasksDto.overdue?.size ?: 0} Tasks")
                         clickListener { _ ->
                             if (extendedTaskId != R.id.overdue_tasks) {
@@ -109,7 +109,7 @@ class TaskManagerFragment : Fragment() {
                 if (uiState.tasksDto.todays.isNullOrEmpty().not()) {
                     taskSummary {
                         id(R.id.today_tasks)
-                        title("Today's")
+                        title(getString(R.string.today_s))
                         count("${uiState.tasksDto.todays?.size ?: 0} Tasks")
                         clickListener { _ ->
                             if (extendedTaskId != R.id.today_tasks) {
@@ -148,7 +148,7 @@ class TaskManagerFragment : Fragment() {
                 if (uiState.tasksDto.upcoming.isNullOrEmpty().not()) {
                     taskSummary {
                         id(R.id.upcoming_tasks)
-                        title("Upcoming")
+                        title(getString(R.string.upcoming))
                         count("${uiState.tasksDto.upcoming?.size ?: 0} Tasks")
                         clickListener { _ ->
                             if (extendedTaskId != R.id.upcoming_tasks) {
@@ -186,8 +186,8 @@ class TaskManagerFragment : Fragment() {
                 if (uiState.tasksDto.closed.isNullOrEmpty().not()) {
                     taskSummary {
                         id(R.id.closed_tasks)
-                        title("Closed")
-                        count("${uiState.tasksDto.closed?.size ?: 0} Tasks")
+                        title(getString(R.string.closed))
+                        count("${uiState.tasksDto.closed?.size ?: 0} "+ getString(R.string.tasks))
                         clickListener { _ ->
                             if (extendedTaskId != R.id.closed_tasks) {
                                 extendedTaskId = R.id.closed_tasks
@@ -231,7 +231,7 @@ class TaskManagerFragment : Fragment() {
     private fun updateTask(task: Task) {
         val items = TaskStatus.getTaskApartFromThis(task.status)
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Update Status")
+            .setTitle(getString(R.string.update_status))
             .setItems(items.map { it.value }.toTypedArray()) { dialog, which ->
                 (requireActivity() as MainActivity).showLoader(true)
                 mViewModel.updateTask(task, items[which].id) { _, message ->

@@ -570,7 +570,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun popupSnackbarForCompleteUpdate() {
         Snackbar.make(
-            binding.root, "An app update is ready to install.", Snackbar.LENGTH_INDEFINITE
+            binding.root,
+            getString(R.string.an_app_update_is_ready_to_install), Snackbar.LENGTH_INDEFINITE
         ).apply {
             setAction("INSTAll") { appUpdateManager.completeUpdate() }
             setActionTextColor(resources.getColor(R.color.brand_color))

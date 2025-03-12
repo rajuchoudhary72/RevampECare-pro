@@ -46,18 +46,20 @@ class LessonPlanListAdapter(
             tvPlanClass.text=data.classesName
             tvPlanDuration.text = buildString {
                 append(data.fromDate)
-                append("to")
+                append(" ")
+                append(lessonPlanListFragment.getString(R.string.to))
+                append(" ")
                 append(data.tillDate)
             }
 
             if (data.status==0){
                 tvStatus.setTextColor( lessonPlanListFragment.resources.getColor(R.color.att_late_color,null))
-                 tvStatus.text="Pending"
+                 tvStatus.text=lessonPlanListFragment.getString(R.string.pending)
                 llEdit.isVisible=true
                 llDelete.isVisible=true
             }else{
                 tvStatus.setTextColor( lessonPlanListFragment.resources.getColor(R.color.green,null))
-                 tvStatus.text="Approved"
+                 tvStatus.text=lessonPlanListFragment.getString(R.string.approve)
                 llEdit.isVisible=false
                 llDelete.isVisible=false
             }
