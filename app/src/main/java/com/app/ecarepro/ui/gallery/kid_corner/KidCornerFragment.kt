@@ -1,0 +1,294 @@
+package com.app.ecarepro.ui.gallery.kid_corner
+
+import android.app.AlertDialog
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.databinding.FragmentKidCornerBinding
+import com.app.ecarepro.databinding.FragmentMediaGalleryBinding
+import com.app.ecarepro.model.AcademicYear
+import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.gallery.kid_corner.kid_album_details.KidAlbumDetailsFragment
+import com.app.ecarepro.ui.gallery.kid_corner.model.Album
+import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
+import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
+import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment.Companion.description
+
+import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
+import com.app.ecarepro.utils.listener.ItemListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+
+@AndroidEntryPoint
+class KidCornerFragment : Fragment(), ItemListener<Album> {
+
+
+    private var yearId: Int=0
+    private var searchByPostition: Int = 0
+    private var yearPosition: Int = 0
+    private var isSearchBySelected: Boolean = false
+    private var isYearSelected: Boolean = false
+    private lateinit var kidCornerAdapter: KidCornerAdapter
+    private lateinit var binding: FragmentKidCornerBinding
+    private val kidCornerViewModel: KidCornerViewModel by viewModels()
+
+    private var pageIndex: Int = 1
+    private var pastVisiblesItems: Int = 0
+    private var totalItemCount: Int = 0
+    private var visibleItemCount: Int = 0
+    private var isLoading: Boolean = true
+
+    private var searchJob: Job? = null  // Job to handle debounce logic
+    private val debounceTime = 300L  // 300ms delay
+
+
+
+    private var yearList = mutableListOf<String>()
+    private var yearListData = mutableListOf<AcademicYear>()
+
+    private var queryType = 0
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentKidCornerBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.title = "Kid Corner"
+        binding.toolbar.isVisible = true
+        kidCornerAdapter = KidCornerAdapter(this@KidCornerFragment)
+
+        binding.rvPhotoAlbum.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(activity, 2)
+            adapter = kidCornerAdapter
+        }
+
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        try {
+            binding.edSearch.doAfterTextChanged { text ->
+                searchJob?.cancel() // Cancel previous job if user types again
+
+                searchJob = CoroutineScope(Dispatchers.Main).launch {
+                    delay(debounceTime)  // Wait for user to stop typing
+                    pageIndex=1
+                    kidCornerViewModel.getSearchKidsAlbum(
+                        pageIndex,
+                        yrID = yearId,
+                        keyword = text.toString()
+                    )
+                }
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
+
+        lifecycleScope.launch {
+            kidCornerViewModel.mediaGalleryStateFlow.collectLatest {
+                when (it) {
+
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                        binding.rvPhotoAlbum.isVisible = false
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.rvPhotoAlbum.isVisible = false
+                        Log.d("main", "Error$it")
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        binding.rvPhotoAlbum.isVisible = true
+
+                        if (it.data != null) {
+
+                            if (it.data.academicYears != null) {
+                            if (it.data.academicYears.isNotEmpty()) {
+                                yearList.clear()
+                                yearListData.clear()
+                                it.data.academicYears.forEach { year ->
+                                    yearList.add(year.session)
+                                }
+                                yearListData = it.data.academicYears.toMutableList()
+                                binding.tvYear.text=yearListData[0].session
+                                yearId=yearListData[0].yrID
+
+                            }
+                            }
+
+                            if (it.data.albums != null) {
+
+                                if (pageIndex == 1) {
+                                    kidCornerAdapter.clearData()
+                                    binding.rvPhotoAlbum.isVisible = true
+                                    binding.tvNoData.isVisible = false
+                                }
+                                isLoading = true
+
+                                kidCornerAdapter.setData(it.data.albums.toMutableList())
+
+                            } else {
+                                if (pageIndex == 1) {
+                                    binding.rvPhotoAlbum.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    else -> {}
+                }
+            }
+
+
+        }
+
+
+        setupRecycleViewPager()
+
+
+        binding.tvYear.setOnClickListener {
+            popUpYear()
+        }
+
+        kidCornerViewModel.getKidsCornerAlbums(
+            pageIndex,
+        )
+
+    }
+
+
+    private fun setupRecycleViewPager() {
+
+
+        binding.rvPhotoAlbum.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
+
+                if (linearLayoutManager != null) {
+                    if (dy > 0) {
+                        visibleItemCount = linearLayoutManager.childCount;
+                        totalItemCount = linearLayoutManager.itemCount;
+                        pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
+
+                        if (isLoading) {
+                            if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
+                                isLoading = false
+                                pageIndex += 1
+                                kidCornerViewModel.getKidsCornerAlbums(
+                                    pageIndex,
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+        })
+
+
+    }
+
+    override fun onItemClick(t: Album, pos: Int, boolean: Boolean) {
+        findNavController().navigate(
+            R.id.kidAlbumDetailsFragment,
+            bundleOf(
+                KidAlbumDetailsFragment.KidId to t.kid,
+                KidAlbumDetailsFragment.AlbumTitle to t.title,
+            )
+        )
+    }
+
+
+
+    private fun popUpYear() {
+
+        val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
+        val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
+        val relCancel = view.findViewById<RelativeLayout>(R.id.rel_cancel)
+        val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
+        val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
+        val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
+
+        tvHeading.text = "Select Year"
+        builder.setView(view)
+
+
+        relOk.setOnClickListener {
+
+            if (isYearSelected) {
+                binding.tvYear.text = yearList[yearPosition]
+                pageIndex = 1
+                yearId=yearListData[yearPosition].yrID
+
+                pageIndex=1
+                kidCornerViewModel.getSearchKidsAlbum(
+                    pageIndex,
+                    yrID = yearId,
+                    keyword = null
+                )
+
+                builder.dismiss()
+            }
+
+
+        }
+
+        val staffPopUpListAdapter =
+            SearchByPopUpAdapter(yearList, object : ItemListener<String> {
+                override fun onItemClick(t: String, pos: Int, boolean: Boolean) {
+                    isYearSelected = true
+                    yearPosition = pos
+                }
+            })
+
+        rvYears.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(activity)
+            adapter = staffPopUpListAdapter
+        }
+
+        relCancel.setOnClickListener {
+            builder.dismiss()
+        }
+
+        builder.setCanceledOnTouchOutside(false)
+        builder.show()
+    }
+
+}

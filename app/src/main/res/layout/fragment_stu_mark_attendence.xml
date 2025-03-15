@@ -31,8 +31,6 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 style="@style/Widget.MaterialComponents.AppBarLayout.Primary"
-
-
                 >
 
                 <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -139,6 +137,9 @@
                             </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
+
+
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/autoInputSubInputLayout"
                             android:layout_width="match_parent"
@@ -161,6 +162,29 @@
 
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/autoInputOrderInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                            android:layout_marginHorizontal="10dp"
+                            android:visibility="visible"
+                            android:layout_marginBottom="10dp"
+
+                            >
+
+                            <AutoCompleteTextView
+                                android:id="@+id/autoCompleteOrder"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                android:text="@string/order_by"
+
+                                />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
                     </LinearLayout>
 
 
@@ -181,7 +205,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-
+                    android:visibility="gone"
                     >
 
                     <HorizontalScrollView

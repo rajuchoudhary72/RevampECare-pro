@@ -148,9 +148,11 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import okhttp3.RequestBody
 
 interface UserService {
@@ -547,7 +549,8 @@ interface UserService {
     suspend fun getStudentListToMarkAtt(
         @Query("ClassID") classID: Int,
         @Query("SubID") subID: Int,
-        @Query("AttDate") attDate: String
+        @Query("AttDate") attDate: String,
+        @Query("Orderby") orderBy: Int
     ): NetworkStudentListToMarkAtt
 
     @POST("Staff/PostAttendance")
@@ -952,6 +955,25 @@ interface UserService {
         @Query("Date") date: String,
         @Query("Query") query: String
     ): NetworkMediaGallery
+
+    @GET("Gallery/KidsCornerAlbums")
+    suspend fun getKidsCornerAlbums(
+        @Query("pg") pg: Int
+    ): NetworkKidCornerModel
+
+    @GET("Gallery/SearchKidsAlbum")
+    suspend fun getSearchKidsAlbum(
+        @Query("pg") pg: Int,
+        @Query("YrID") yrID: Int,
+        @Query("keyword") keyword: String?
+    ): NetworkKidCornerModel
+
+    @GET("Gallery/KidsAlbumDetails")
+    suspend fun getKidsAlbumDetails(
+        @Query("pg") pg: Int,
+        @Query("ID") id: String,
+    ): NetworkKidsAlbumDetailsModel
+
 
     @GET("QuestionBank/MyQuestionBank")
     suspend fun getMyQuestionBank(  ): NetworkQuestionBank

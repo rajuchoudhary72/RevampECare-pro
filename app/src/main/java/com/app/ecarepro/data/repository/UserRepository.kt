@@ -124,6 +124,7 @@ import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.Staff
@@ -133,6 +134,7 @@ import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
@@ -524,7 +526,8 @@ interface UserRepository {
     suspend fun getStudentListToMarkAtt(
         classID: Int,
         subID: Int,
-        attDate: String
+        attDate: String,
+        orderBy: Int
     ): NetworkStudentListToMarkAtt
 
     suspend fun postMarkAttedance(
@@ -799,6 +802,21 @@ interface UserRepository {
           date: String,
          query: String
     ): NetworkMediaGallery
+
+    suspend fun getKidsCornerAlbums(
+         pg: Int
+    ): NetworkKidCornerModel
+
+    suspend fun getSearchKidsAlbum(
+         pg: Int,
+         yrID: Int,
+        keyword: String?
+    ): NetworkKidCornerModel
+
+    suspend fun getKidsAlbumDetails(
+         pg: Int,
+         id: String,
+    ): NetworkKidsAlbumDetailsModel
 
     suspend fun getMyQuestionBank(  ): NetworkQuestionBank
 

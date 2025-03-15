@@ -46,6 +46,7 @@ import java.util.Calendar
 class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
+    private var orderBY: Int=0
     private var editMode: Boolean= false
     private var openPreviousDay: Boolean=false
     private var mIsCurrentDate: Boolean=true
@@ -81,6 +82,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var lt  = 0
     private var na  = 0
     private lateinit var   dialog  : Dialog
+    private val orderBYList = arrayOf("Roll No", "Name", "Admission No")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -149,7 +151,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     binding.autoCompleteSub.setText("Select Subject ",false)
                     classID=classesForClsTeaches[pos].classID
                     className=classesForClsTeaches[pos].className
-                    getStudentListToMarkAtt(classID,subID)
+                    getStudentListToMarkAtt(classID,subID,orderBY)
                 }
 
             }
@@ -158,7 +160,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             AdapterView.OnItemClickListener { parent, view, pos, id ->
                 subID=mySubjectList[pos].subID
                 subjectName=mySubjectList[pos].subjectName
-                getStudentListToMarkAtt(classID,subID)
+                getStudentListToMarkAtt(classID,subID,orderBY)
             }
 
         getClassList()
@@ -174,12 +176,12 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     mIsCurrentDate=isCurrentDate
                     if (from==getString(R.string.subject_attendance)){
                         if (classID!=0 && subID!=0){
-                            getStudentListToMarkAtt(classID,subID)
+                            getStudentListToMarkAtt(classID,subID,orderBY)
                         }
 
                     }else{
                         if (classID!=0  ){
-                            getStudentListToMarkAtt(classID,subID)
+                            getStudentListToMarkAtt(classID,subID,orderBY)
                         }
                     }
                 }
@@ -214,6 +216,19 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
            }catch (_:Exception){}
         }
 
+        val arrayAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            orderBYList
+        )
+        binding.autoCompleteOrder.setAdapter(arrayAdapter)
+
+        binding.autoCompleteOrder.onItemClickListener=
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+                orderBY=pos
+                getStudentListToMarkAtt(classID,subID,orderBY)
+            }
+
     }
 
     private fun setupRecyclerView(studentListArrayList: MutableList<StudentListMarkAtt>) {
@@ -237,7 +252,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     }
 
 
-    private fun getStudentListToMarkAtt(classID: Int, subID: Int) {
+    private fun getStudentListToMarkAtt(classID: Int, subID: Int, orderBY: Int) {
 
         lifecycleScope.launch {
             stuMarkAttendanceViewModel.stuListToMarkAttStateFlow.collectLatest {  when (it) {
@@ -302,7 +317,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     }
 
                 } }  } }
-        stuMarkAttendanceViewModel.getStudentListToMarkAtt(classID,subID,Constant.toSystemDate(mDate))
+        stuMarkAttendanceViewModel.getStudentListToMarkAtt(classID,subID,Constant.toSystemDate(mDate),orderBY)
 
 
 

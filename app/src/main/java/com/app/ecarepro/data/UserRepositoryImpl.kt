@@ -169,9 +169,11 @@ import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
+import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
@@ -1105,9 +1107,10 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getStudentListToMarkAtt(
         classID: Int,
         subID: Int,
-        attDate: String
+        attDate: String,
+        orderBy: Int
     ): NetworkStudentListToMarkAtt {
-        return userService.getStudentListToMarkAtt(classID, subID, attDate)
+        return userService.getStudentListToMarkAtt(classID, subID, attDate,orderBy)
     }
 
     override fun getUserProfile(): Flow<Result<Profile>> {
@@ -1348,6 +1351,22 @@ class UserRepositoryImpl @Inject constructor(
         query: String
     ): NetworkMediaGallery {
         return userService.getMediaGallery(pg, queryType, year, date, query)
+    }
+
+    override suspend fun getKidsCornerAlbums(pg: Int): NetworkKidCornerModel {
+        return userService.getKidsCornerAlbums(pg)
+    }
+
+    override suspend fun getSearchKidsAlbum(
+        pg: Int,
+        yrID: Int,
+        keyword: String?
+    ): NetworkKidCornerModel {
+        return userService.getSearchKidsAlbum(pg, yrID, keyword)
+    }
+
+    override suspend fun getKidsAlbumDetails(pg: Int, id: String): NetworkKidsAlbumDetailsModel {
+        return userService.getKidsAlbumDetails(pg, id)
     }
 
     override suspend fun getMyQuestionBank(): NetworkQuestionBank {

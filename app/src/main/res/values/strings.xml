@@ -908,5 +908,6 @@
     <string name="add">Add</string>
     <string name="working_holiday">Working\nHoliday</string>
     <string name="working_holiday_without_new_line">Working Holiday</string>
+    <string name="order_by">Order By</string>
 </resources>
 
