@@ -317,7 +317,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     }
 
                 } }  } }
-        stuMarkAttendanceViewModel.getStudentListToMarkAtt(classID,subID,Constant.toSystemDate(mDate),orderBY)
+        stuMarkAttendanceViewModel.getStudentListToMarkAtt(classID,subID,Constant.toSystemDate(mDate))
 
 
 

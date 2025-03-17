@@ -21,17 +21,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentKidCornerBinding
-import com.app.ecarepro.databinding.FragmentMediaGalleryBinding
 import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.gallery.kid_corner.kid_album_details.KidAlbumDetailsFragment
 import com.app.ecarepro.ui.gallery.kid_corner.model.Album
 import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
-import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
-import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment.Companion.description
 
-import com.app.ecarepro.utils.Constant
-import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -74,7 +69,7 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
     ): View {
         binding = FragmentKidCornerBinding.inflate(inflater, container, false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title = "Kid Corner"
+        binding.toolbar.title = getString(R.string.kid_corner_title)
         binding.toolbar.isVisible = true
         kidCornerAdapter = KidCornerAdapter(this@KidCornerFragment)
 
@@ -224,12 +219,12 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
 
     }
 
-    override fun onItemClick(t: Album, pos: Int, boolean: Boolean) {
+    override fun onItemClick(malbum: Album, pos: Int, boolean: Boolean) {
         findNavController().navigate(
             R.id.kidAlbumDetailsFragment,
             bundleOf(
-                KidAlbumDetailsFragment.KidId to t.kid,
-                KidAlbumDetailsFragment.AlbumTitle to t.title,
+                KidAlbumDetailsFragment.KidId to malbum.kid,
+                KidAlbumDetailsFragment.AlbumTitle to malbum.title,
             )
         )
     }
@@ -245,7 +240,7 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
 
-        tvHeading.text = "Select Year"
+        tvHeading.text = getString(R.string.select_year)
         builder.setView(view)
 
 

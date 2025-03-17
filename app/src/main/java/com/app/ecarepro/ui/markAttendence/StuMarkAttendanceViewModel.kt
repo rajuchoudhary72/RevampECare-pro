@@ -88,11 +88,10 @@ class StuMarkAttendanceViewModel  @Inject constructor(
         classID: Int,
         subID: Int,
         attDate: String,
-        orderBy:Int
     )=viewModelScope.launch {
         runCatching {
             stuListToMarkAttMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.getStudentListToMarkAtt(classID, subID, attDate,orderBy)
+            userRepository.getStudentListToMarkAtt(classID, subID, attDate)
         }.onSuccess {
             stuListToMarkAttMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {

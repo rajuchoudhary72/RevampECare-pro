@@ -549,8 +549,7 @@ interface UserService {
     suspend fun getStudentListToMarkAtt(
         @Query("ClassID") classID: Int,
         @Query("SubID") subID: Int,
-        @Query("AttDate") attDate: String,
-        @Query("Orderby") orderBy: Int
+        @Query("AttDate") attDate: String
     ): NetworkStudentListToMarkAtt
 
     @POST("Staff/PostAttendance")

@@ -1,17 +1,13 @@
 package com.app.ecarepro.ui.gallery.kid_corner.kid_album_details
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,25 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
-import com.app.ecarepro.databinding.FragmentKidCornerBinding
 import com.app.ecarepro.databinding.FragmentKidCornerDetailsBinding
-import com.app.ecarepro.databinding.FragmentMediaGalleryBinding
-import com.app.ecarepro.model.AcademicYear
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerImageViewFragment
-import com.app.ecarepro.ui.gallery.kid_corner.model.Album
 import com.app.ecarepro.ui.gallery.kid_corner.model.AlbumDetailX
-import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
-import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
-import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment.Companion.description
 
-import com.app.ecarepro.utils.Constant
-import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
@@ -188,16 +174,16 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
 
     }
 
-    override fun onItemClick(t: AlbumDetailX, pos: Int, boolean: Boolean) {
+    override fun onItemClick(albumDetailX: AlbumDetailX, pos: Int, boolean: Boolean) {
         findNavController().navigate(
             R.id.kidCornerImageViewFragment,
             bundleOf(
-                KidCornerImageViewFragment.PHOTO to t.fullImage,
-                KidCornerImageViewFragment.CREATED_BY to t.createdBy,
-                KidCornerImageViewFragment.NAME to t.name,
-                KidCornerImageViewFragment.DESCRIPTION to t.description,
-                KidCornerImageViewFragment.GUIDE_NAME to t.guideBy,
-                KidCornerImageViewFragment.CLASSES to t.`class`,
+                KidCornerImageViewFragment.PHOTO to albumDetailX.fullImage,
+                KidCornerImageViewFragment.CREATED_BY to albumDetailX.createdBy,
+                KidCornerImageViewFragment.NAME to albumDetailX.name,
+                KidCornerImageViewFragment.DESCRIPTION to albumDetailX.description,
+                KidCornerImageViewFragment.GUIDE_NAME to albumDetailX.guideBy,
+                KidCornerImageViewFragment.CLASSES to albumDetailX.`class`,
             )
         )
     }

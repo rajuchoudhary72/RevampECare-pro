@@ -526,8 +526,7 @@ interface UserRepository {
     suspend fun getStudentListToMarkAtt(
         classID: Int,
         subID: Int,
-        attDate: String,
-        orderBy: Int
+        attDate: String
     ): NetworkStudentListToMarkAtt
 
     suspend fun postMarkAttedance(

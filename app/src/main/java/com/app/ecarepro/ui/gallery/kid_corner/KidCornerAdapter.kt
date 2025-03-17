@@ -53,8 +53,8 @@ class KidCornerAdapter(
                 .into(item.ivPhoto)
 
             item.tvTitle.text=data.title
-            item.tvEventOn.text="Event On: "+data.createdOn
-            item.tvTotalPhotos.text="Total Memories: "+data.totalPhoto
+            item.tvEventOn.text= kidCornerFragment.getString(R.string.event_on)+data.createdOn
+            item.tvTotalPhotos.text= kidCornerFragment.getString(R.string.total_memories)+data.totalPhoto
             item.cvMain.setOnClickListener {
                 kidCornerFragment.onItemClick(data,0,false)
             }
