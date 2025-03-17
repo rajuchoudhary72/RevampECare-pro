@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.ItemGallerymoduleBinding
 import com.app.ecarepro.databinding.ItemKidCornerDetailsItemBinding
-import com.app.ecarepro.databinding.ItemKidCornerItemLayoutBinding
-import com.app.ecarepro.ui.gallery.kid_corner.model.Album
 import com.app.ecarepro.ui.gallery.kid_corner.model.AlbumDetailX
 import com.squareup.picasso.Picasso
 
@@ -29,7 +26,7 @@ class KidAlbumDetailsAdapter(
 
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
         val data = albumList[position]
-        holder.bind(data)
+        holder.bind(data,position)
 
 
     }
@@ -48,14 +45,14 @@ class KidAlbumDetailsAdapter(
 
  inner   class NoticeViewHolder(val item: ItemKidCornerDetailsItemBinding) : RecyclerView.ViewHolder(item.root) {
 
-        fun bind(data: AlbumDetailX) {
+        fun bind(data: AlbumDetailX, position: Int) {
 
             Picasso.get().load(data.thumbImage)
                 .placeholder(R.drawable.default_profile)
                 .into(item.ivPhoto)
 
             item.cvMain.setOnClickListener {
-                kidCornerFragment.onItemClick(data,0,false)
+                kidCornerFragment.onItemClick(data,position,false)
             }
 
 

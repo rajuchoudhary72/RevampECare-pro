@@ -1,5 +1,7 @@
 package com.app.ecarepro.ui.gallery.kid_corner.kid_album_details
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
@@ -8,9 +10,13 @@ import com.app.ecarepro.data.network.model.NetworkFavorites
 import com.app.ecarepro.data.network.model.NetworkMediaGallery
 import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkResult
+import com.app.ecarepro.data.network.model.NetworkStudentProfile
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.NetworkKidCornerModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.Album
+import com.app.ecarepro.ui.gallery.kid_corner.model.AlbumDetail
+import com.app.ecarepro.ui.gallery.kid_corner.model.AlbumDetailX
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +28,20 @@ import javax.inject.Inject
 class KidAlbumDetailsViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
+
+
+    var pageIndex = 1
+    var isFirst=true
+    var cacheListData :  ArrayList<AlbumDetailX> = ArrayList()
+    private val albumDetail = MutableLiveData<AlbumDetail>()
+
+    fun getAlbumDetail(): LiveData<AlbumDetail> {
+        return albumDetail
+    }
+
+    fun setAlbumDetail(albumDetail: AlbumDetail) {
+        this.albumDetail.value = albumDetail
+    }
 
 
     private val mediaGalleryMutableStateFlow: MutableStateFlow<NetworkResult<NetworkKidsAlbumDetailsModel>> = MutableStateFlow(

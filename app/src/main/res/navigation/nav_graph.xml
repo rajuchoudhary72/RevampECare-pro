@@ -1024,4 +1024,8 @@
         android:id="@+id/kidCornerFragment"
         android:name="com.app.ecarepro.ui.gallery.kid_corner.KidCornerFragment"
         android:label="KidCornerFragment" />
+    <fragment
+        android:id="@+id/kidCornerSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerSliderNavHostFragment"
+        android:label="KidCornerSliderNavHostFragment" />
 </navigation>

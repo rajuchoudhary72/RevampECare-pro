@@ -152,9 +152,9 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         setSubjectFilter()
         setStatusFilter()
 
-        if ( lessonPlanListViewModel. userType == Constant.PRINCIPAL || lessonPlanListViewModel. userType ==  Constant.MANAGEMENT) {
-            binding.fbAdd.isVisible=false
-        }
+//        if ( lessonPlanListViewModel. userType == Constant.PRINCIPAL || lessonPlanListViewModel. userType ==  Constant.MANAGEMENT) {
+//            binding.fbAdd.isVisible=false
+//        }
 
     }
 

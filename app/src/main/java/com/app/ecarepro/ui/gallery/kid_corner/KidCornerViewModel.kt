@@ -10,7 +10,9 @@ import com.app.ecarepro.data.network.model.NetworkPhotoAlbum
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.data.repository.UserRepository
+import com.app.ecarepro.model.Circular
 import com.app.ecarepro.model.NetworkKidCornerModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.Album
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +29,12 @@ class KidCornerViewModel @Inject constructor(
         NetworkResult.Loading())
     val  mediaGalleryStateFlow: StateFlow<NetworkResult<NetworkKidCornerModel>> = mediaGalleryMutableStateFlow
 
+    var pageIndex = 1
+    var isFirst=true
+    var cacheListData :  ArrayList<Album> = ArrayList()
+    var academicYear=""
+    var academicYearID=0
+    var lastSearchQuery: String = ""
 
 
     fun getKidsCornerAlbums(

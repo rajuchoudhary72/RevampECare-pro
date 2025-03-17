@@ -27,7 +27,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import com.app.ecarepro.data.network.model.Video
 import com.app.ecarepro.databinding.FragmentKidCornerImageViewBinding
+import com.app.ecarepro.model.Photo
+import com.app.ecarepro.model.photo_setting.AlbumSetting
+import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment
 
 @AndroidEntryPoint
 class KidCornerImageViewFragment : Fragment() {
@@ -53,9 +57,6 @@ class KidCornerImageViewFragment : Fragment() {
         val guideName = arguments?.getString(GUIDE_NAME)
         val classes = arguments?.getString(CLASSES)
 
-        binding.btnClose.setOnClickListener {
-            findNavController().popBackStack()
-        }
 
         binding.tvCreatedBy.text = createdBy
         binding.tvName.text = name
@@ -115,6 +116,7 @@ class KidCornerImageViewFragment : Fragment() {
         _binding = null
     }
 
+
     companion object {
         const val PHOTO = "photo"
         const val CREATED_BY = "createdBy"
@@ -122,5 +124,17 @@ class KidCornerImageViewFragment : Fragment() {
         const val DESCRIPTION = "description"
         const val GUIDE_NAME = "guideName"
         const val CLASSES = "class"
+
+        fun newInstance(photo: String?, createdBy: String?, name: String?, description: String, guideName: String, classes: String) =
+            KidCornerImageViewFragment().apply {
+                arguments = Bundle().apply {
+                    putString(PHOTO, photo)
+                    putString(CREATED_BY, createdBy)
+                    putString(NAME, name)
+                    putString(DESCRIPTION, description)
+                    putString(GUIDE_NAME, guideName)
+                    putString(CLASSES, classes)
+                }
+            }
     }
 }

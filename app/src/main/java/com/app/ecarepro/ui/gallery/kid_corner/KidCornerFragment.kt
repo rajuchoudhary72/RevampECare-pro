@@ -2,6 +2,8 @@ package com.app.ecarepro.ui.gallery.kid_corner
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -60,7 +62,10 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
     private var yearList = mutableListOf<String>()
     private var yearListData = mutableListOf<AcademicYear>()
 
-    private var queryType = 0
+    private var searchHandler: Handler = Handler(Looper.getMainLooper())
+    private var searchRunnable: java.lang.Runnable? = null
+
+
 
 
     override fun onCreateView(
@@ -85,24 +90,26 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.edSearch.doAfterTextChanged { text ->
+            val query = text?.toString()?.trim() ?: ""
+            if (query != kidCornerViewModel.lastSearchQuery) {
+                kidCornerViewModel.lastSearchQuery = query
 
+                // Cancel the previous search request
+                searchRunnable?.let { searchHandler.removeCallbacks(it) }
 
-        try {
-            binding.edSearch.doAfterTextChanged { text ->
-                searchJob?.cancel() // Cancel previous job if user types again
-
-                searchJob = CoroutineScope(Dispatchers.Main).launch {
-                    delay(debounceTime)  // Wait for user to stop typing
+                // Schedule a new search request with a delay
+                searchRunnable = Runnable {
                     pageIndex=1
+                    kidCornerViewModel.pageIndex=1
                     kidCornerViewModel.getSearchKidsAlbum(
                         pageIndex,
-                        yrID = yearId,
+                        yrID = kidCornerViewModel.academicYearID,
                         keyword = text.toString()
                     )
                 }
+                searchHandler.postDelayed(searchRunnable!!, 500) // 500ms delay
             }
-        } catch (e: IndexOutOfBoundsException) {
-            e.printStackTrace()
         }
 
         lifecycleScope.launch {
@@ -135,6 +142,8 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
                                 }
                                 yearListData = it.data.academicYears.toMutableList()
                                 binding.tvYear.text=yearListData[0].session
+                                kidCornerViewModel.academicYearID=yearListData[0].yrID
+                                kidCornerViewModel.academicYear=yearListData[0].session
                                 yearId=yearListData[0].yrID
 
                             }
@@ -149,6 +158,7 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
                                 }
                                 isLoading = true
 
+                                kidCornerViewModel.cacheListData.addAll(it.data.albums)
                                 kidCornerAdapter.setData(it.data.albums.toMutableList())
 
                             } else {
@@ -178,9 +188,19 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
             popUpYear()
         }
 
-        kidCornerViewModel.getKidsCornerAlbums(
-            pageIndex,
-        )
+        if (kidCornerViewModel.isFirst){
+            kidCornerViewModel.getKidsCornerAlbums(
+                pageIndex,
+            )
+            kidCornerViewModel.isFirst=false
+        }else{
+           pageIndex= kidCornerViewModel.pageIndex
+           // kidCornerAdapter.setData(kidCornerViewModel.cacheListData)
+           binding. tvYear.text= kidCornerViewModel.academicYear
+            yearId= kidCornerViewModel.academicYearID
+        }
+
+
 
     }
 
@@ -205,6 +225,7 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
+                                kidCornerViewModel.pageIndex=pageIndex
                                 kidCornerViewModel.getKidsCornerAlbums(
                                     pageIndex,
                                 )
@@ -250,8 +271,11 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
                 binding.tvYear.text = yearList[yearPosition]
                 pageIndex = 1
                 yearId=yearListData[yearPosition].yrID
+                kidCornerViewModel.academicYearID=yearListData[yearPosition].yrID
 
                 pageIndex=1
+                kidCornerViewModel.academicYear=yearList[yearPosition]
+                kidCornerViewModel.cacheListData.clear()
                 kidCornerViewModel.getSearchKidsAlbum(
                     pageIndex,
                     yrID = yearId,

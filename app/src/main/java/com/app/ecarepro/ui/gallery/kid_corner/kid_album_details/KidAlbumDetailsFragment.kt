@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,8 +19,10 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentKidCornerDetailsBinding
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerImageViewFragment
+import com.app.ecarepro.ui.gallery.kid_corner.KidCornerShareViewModel
+import com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerSliderNavHostFragment
 import com.app.ecarepro.ui.gallery.kid_corner.model.AlbumDetailX
+import com.app.ecarepro.utils.Constant
 
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +36,7 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
     private lateinit var kidCornerAdapter: KidAlbumDetailsAdapter
     private lateinit var binding: FragmentKidCornerDetailsBinding
     private val kidCornerViewModel: KidAlbumDetailsViewModel by viewModels()
-
+    private val kidCornerShareViewModel: KidCornerShareViewModel by activityViewModels()
     private var pageIndex: Int = 1
     private var pastVisiblesItems: Int = 0
     private var totalItemCount: Int = 0
@@ -96,6 +99,7 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
 
                                 if (pageIndex == 1) {
                                     kidCornerAdapter.clearData()
+                                    kidCornerShareViewModel.clearList()
                                 }
 
                                 binding.tvCreatedOn.text=it.data.albumDetail.createdOn
@@ -103,10 +107,16 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
                                 binding.tvYear.text=it.data.albumDetail.yearName
                                 binding.tvDes.text=it.data.albumDetail.description
 
+                                kidCornerViewModel.setAlbumDetail(it.data.albumDetail)
+
+
                                 binding.rvPhotoAlbum.isVisible = true
                                 binding.tvNoData.isVisible = false
                                 isLoading = true
 
+                                kidCornerViewModel.cacheListData.addAll(it.data.albumDetails)
+
+                                kidCornerShareViewModel.setSelectedAlbum(it.data.albumDetails)
                                 kidCornerAdapter.setData(it.data.albumDetails.toMutableList())
 
                             } else {
@@ -131,10 +141,25 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
 
         setupRecycleViewPager()
 
-        kidCornerViewModel.getKidsAlbumDetails(
-            pageIndex,
-            albumID
-        )
+
+        if (kidCornerViewModel.isFirst){
+            kidCornerViewModel.getKidsAlbumDetails(
+                pageIndex,
+                albumID
+            )
+            kidCornerViewModel.isFirst=false
+        }else{
+            pageIndex= kidCornerViewModel.pageIndex
+            kidCornerAdapter.setData(kidCornerViewModel.cacheListData)
+            kidCornerViewModel.getAlbumDetail().value.apply {
+                if (this != null) {
+                    binding.tvCreatedOn.text=this.createdOn
+                    binding.tvUpdatedOn.text=this.updatedOn
+                    binding.tvYear.text=this.yearName
+                    binding.tvDes.text=this.description
+            }
+            }
+        }
 
     }
 
@@ -159,6 +184,7 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
+                                kidCornerViewModel.pageIndex=pageIndex
                                 kidCornerViewModel.getKidsAlbumDetails(
                                     pageIndex,
                                     albumID
@@ -175,17 +201,10 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
     }
 
     override fun onItemClick(albumDetailX: AlbumDetailX, pos: Int, boolean: Boolean) {
-        findNavController().navigate(
-            R.id.kidCornerImageViewFragment,
-            bundleOf(
-                KidCornerImageViewFragment.PHOTO to albumDetailX.fullImage,
-                KidCornerImageViewFragment.CREATED_BY to albumDetailX.createdBy,
-                KidCornerImageViewFragment.NAME to albumDetailX.name,
-                KidCornerImageViewFragment.DESCRIPTION to albumDetailX.description,
-                KidCornerImageViewFragment.GUIDE_NAME to albumDetailX.guideBy,
-                KidCornerImageViewFragment.CLASSES to albumDetailX.`class`,
-            )
-        )
+        findNavController().navigate(R.id.kidCornerSliderNavHostFragment ,
+            Bundle().apply {
+                putInt("photoPosition", pos)
+            })
     }
 
 
