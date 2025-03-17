@@ -201,7 +201,6 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
         }
 
 
-
     }
 
 
