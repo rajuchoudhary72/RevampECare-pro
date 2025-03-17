@@ -49,7 +49,7 @@
                     android:fontFamily="@font/ubuntu_bold"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:text="Created On: "
+                    android:text="@string/created_on"
                     tools:ignore="RtlSymmetry"
                     />
 
@@ -78,7 +78,7 @@
                     android:fontFamily="@font/ubuntu_bold"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:text="Updated On :"
+                    android:text="@string/updated_on"
                     tools:ignore="RtlSymmetry"
                     />
 
@@ -107,7 +107,7 @@
                     android:fontFamily="@font/ubuntu_bold"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:text="Year Name: "
+                    android:text="@string/year_name"
                     tools:ignore="RtlSymmetry"
                     />
 
@@ -136,7 +136,7 @@
                     android:fontFamily="@font/ubuntu_bold"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:text="Description: "
+                    android:text="@string/description"
                     tools:ignore="RtlSymmetry"
                     />
 
@@ -170,9 +170,8 @@
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_no_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/ubuntu_medium"
                 android:layout_gravity="center"
                 android:gravity="center"

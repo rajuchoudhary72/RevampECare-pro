@@ -912,5 +912,6 @@
     <string name="kid_corner_title">Kid Corner</string>
     <string name="event_on">"Event On: "</string>
     <string name="total_memories">"Total Memories: "</string>
+    <string name="year_name">Year Name:</string>
 </resources>
 
