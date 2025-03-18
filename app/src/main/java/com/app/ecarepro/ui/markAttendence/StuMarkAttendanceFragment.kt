@@ -190,21 +190,29 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
         binding.tvSortByRollNo.setOnClickListener {
-           try {
-               rollNoFilterAsc=!rollNoFilterAsc
-               studentListArrayList = if (rollNoFilterAsc) studentListArrayList.sortedBy  { it.otherDTL[1].value  }.toMutableList()
-               else  studentListArrayList.sortedByDescending { it.otherDTL[1].value  }.toMutableList()
-               setupRecyclerView(studentListArrayList)
-           }catch (_:Exception){}
+            try {
+                rollNoFilterAsc = !rollNoFilterAsc
+                studentListArrayList = studentListArrayList
+                    .sortedWith(compareBy { it.otherDTL.getOrNull(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE })
+                    .let { if (rollNoFilterAsc) it else it.reversed() }
+                    .toMutableList()
+                setupRecyclerView(studentListArrayList)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
         }
         binding.tvSortByAdmission.setOnClickListener {
             try {
-                admissionFilterAsc=!admissionFilterAsc
-                studentListArrayList = if (admissionFilterAsc) studentListArrayList.sortedBy  { it.otherDTL[0].value  }.toMutableList()
-                else  studentListArrayList.sortedByDescending { it.otherDTL[0].value  }.toMutableList()
+                admissionFilterAsc = !admissionFilterAsc
+                studentListArrayList = studentListArrayList
+                    .sortedWith(compareBy { it.otherDTL.getOrNull(0)?.value?.toIntOrNull() ?: Int.MAX_VALUE })
+                    .let { if (admissionFilterAsc) it else it.reversed() }
+                    .toMutableList()
                 setupRecyclerView(studentListArrayList)
-            }catch (_:Exception){}
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         binding.tvSortByName.setOnClickListener {
