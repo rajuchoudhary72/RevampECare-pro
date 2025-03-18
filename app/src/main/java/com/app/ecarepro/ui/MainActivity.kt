@@ -1376,6 +1376,7 @@ class MainActivity : AppCompatActivity() {
                     49 -> navController.navigate(R.id.videoAlbumFragment)
                     50 -> navController.navigate(R.id.favoritesListFragment)
                     51 -> navController.navigate(R.id.mediaGalleryFragment)
+                    73 -> navController.navigate(R.id.kidCornerFragment)
                 }
             }
 
