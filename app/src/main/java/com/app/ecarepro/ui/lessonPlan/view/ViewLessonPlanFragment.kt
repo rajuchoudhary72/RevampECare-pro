@@ -101,6 +101,8 @@ class ViewLessonPlanFragment : Fragment() {
             alertmsg.text = getString(R.string.are_you_sure_you_want_to_approve_the_lesson_plan)
         }
 
+
+
         tv_done.setOnClickListener {
             val reason: String = textInputEditText.text.toString().trim()
 
