@@ -6,4 +6,5 @@ data class DefaulterDataList(
     val classsection :String,
     val contactno :String,
     val amount :String,
+    val sno:Int,
  )

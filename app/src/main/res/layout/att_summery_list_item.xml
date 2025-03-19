@@ -36,7 +36,14 @@
                 android:fontFamily="@font/ubuntu_regular"
                 android:textColor="@color/grey_60"
                 android:textSize="@dimen/_14sdp" />
-
+            <TextView
+                android:id="@+id/tvTotalPresentWorkingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:textColor="@color/present_wh"
+                android:textSize="@dimen/_14sdp" />
             <TextView
                 android:id="@+id/tvTotalPresentCount"
                 android:layout_width="wrap_content"
@@ -45,7 +52,14 @@
                 android:fontFamily="@font/ubuntu_regular"
                 android:textColor="@color/green"
                 android:textSize="@dimen/_14sdp" />
-
+            <TextView
+                android:id="@+id/tvTotalWhCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/ubuntu_regular"
+                android:textColor="@color/category7"
+                android:textSize="@dimen/_14sdp" />
             <TextView
                 android:id="@+id/tvTotalAbsentCount"
                 android:layout_width="wrap_content"
@@ -83,14 +97,7 @@
                 android:textColor="@color/att_na_color"
                 android:textSize="@dimen/_14sdp" />
 
-            <TextView
-                android:id="@+id/tvTotalWhCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:fontFamily="@font/ubuntu_regular"
-                android:textColor="@color/category7"
-                android:textSize="@dimen/_14sdp" />
+
 
 
         </LinearLayout>

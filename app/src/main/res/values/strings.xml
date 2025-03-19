@@ -291,6 +291,7 @@
     <string name="late_in">Late In</string>
     <string name="total_absent">Total Absent</string>
     <string name="total_present">Total Present</string>
+    <string name="student_attedance_present">Present Days</string>
     <string name="from">From:</string>
     <string name="total_lecture_in_a_week">Total Lecture in a week</string>
     <string name="number_of_period_taken">Number of Period Taken</string>
@@ -907,11 +908,17 @@
     <string name="attachments">Attachments</string>
     <string name="add">Add</string>
     <string name="working_holiday">Working\nHoliday</string>
+    <string name="total_present_working_holiday">Total\nPresent</string>
     <string name="working_holiday_without_new_line">Working Holiday</string>
     <string name="order_by">Order By</string>
     <string name="kid_corner_title">Kid Corner</string>
     <string name="event_on">"Event On: "</string>
     <string name="total_memories">"Total Memories: "</string>
     <string name="year_name">Year Name:</string>
+    <string name="attedancedetail_year_count_total_present">Total present Days</string>
+    <string name="reject_plan">Reject Plan</string>
+    <string name="are_you_sure_you_want_to_reject_the_lesson_plan">Are you sure, you want to Reject the Lesson Plan?</string>
+    <string name="approve_plan">Approve Plan</string>
+    <string name="are_you_sure_you_want_to_approve_the_lesson_plan">Are you sure, you want to Approve the Lesson Plan?</string>
 </resources>
 

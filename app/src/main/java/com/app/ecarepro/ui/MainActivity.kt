@@ -1249,7 +1249,8 @@ class MainActivity : AppCompatActivity() {
                     14 -> navController.navigate(R.id.birthdayFragment)
 
                     15 -> {
-                        lifecycleScope.launch {
+                        navController.navigate(R.id.allStaffListFragment)
+                      /*  lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
                                     if (roleName == "Principal" || roleName == "Management") {
@@ -1259,11 +1260,11 @@ class MainActivity : AppCompatActivity() {
                                                 putString(Constant.TO, Constant.FRA_LESSON_PLAN)
                                             })
                                     } else {
-                                        navController.navigate(R.id.lessonPlanListFragment)
+                                        navController.navigate(R.id.allStaffListFragment)
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
 
                     16 -> navController.navigate(R.id.questionPaperFragment)

@@ -289,9 +289,7 @@
                 android:orientation="vertical"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 tools:listitem="@layout/lesson_plan_list_item"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
 

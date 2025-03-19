@@ -145,6 +145,7 @@ class StudentAttRepoFragment : Fragment() {
         with(binding) {
             workingDay.text=data.workingDays.toString()
             presentDay.text=data.presentDays.toString()
+            workingPresentHolidayDay.text=data.present_WH_Days.toString()
             workingHolidayDay.text=data.whDays.toString()
             absentDay.text=data.absentDays.toString()
             leaveDay.text=data.leaveDays.toString()
@@ -152,6 +153,8 @@ class StudentAttRepoFragment : Fragment() {
 
              totalSchoolDay.text=data.schoolDays.toString()
             totalPresentDay.text=data.totalPresent.toString()
+            totalPresentWorkingDay.text=data.totalPresent_WH.toString()
+
             totalWorkingPresentDay.text=data.totalWH.toString()
             totalAbsentDay.text=data.totalAbsent.toString()
             totalLeaveDay.text=data.totalLeave.toString()
@@ -163,6 +166,11 @@ class StudentAttRepoFragment : Fragment() {
                 perPresent.text = buildString {
 
                     append(setCalculatedPercentageToInt(data.totalPresent, data.schoolDays))
+                    append("%")  }
+
+                perPresentWorkingHoliday.text = buildString {
+
+                    append(setCalculatedPercentageToInt(data.totalPresent_WH, data.schoolDays))
                     append("%")  }
 
                 perWorkingHoliday.text = buildString {
