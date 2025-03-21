@@ -133,7 +133,7 @@ class AllStaffListFragment : Fragment(), ItemListener<Staff> {
 
                 binding.rvStaffList.apply {
                     setHasFixedSize(true)
-                    layoutManager = GridLayoutManager(activity, 2)
+                    layoutManager = GridLayoutManager(activity, 1)
                     adapter = circularAdapter
                 }
             } else {

@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.databinding.AllStaffListItemBinding
 import com.app.ecarepro.databinding.StaffListItemBinding
 import com.app.ecarepro.model.Staff
 import com.squareup.picasso.NetworkPolicy
@@ -18,10 +19,10 @@ class AllStaffListAdapter(
 ) :
     RecyclerView.Adapter<AllStaffListAdapter.StaffListViewHolder>() {
 
-    private lateinit var bindingm: StaffListItemBinding
+    private lateinit var bindingm: AllStaffListItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StaffListViewHolder {
-        bindingm = StaffListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm = AllStaffListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return StaffListViewHolder(bindingm)
     }
 
@@ -29,21 +30,20 @@ class AllStaffListAdapter(
 
     override fun onBindViewHolder(holder: StaffListViewHolder, position: Int) {
 
-        val binding = DataBindingUtil.getBinding<StaffListItemBinding>(holder.itemView)
+        val binding = DataBindingUtil.getBinding<AllStaffListItemBinding>(holder.itemView)
         with(binding!!) {
             staffData = staffList[position]
             val data = staffList[position]
 
             tvClassName.text = buildString {
-                append("( ")
+                append("Designation: ")
                 append(data.designation)
-                append(" )")
+                append(" ")
             }
-            tvSubjectName.isVisible=true
             tvSubjectName.text = buildString {
-                append("Pending ( ")
+                append("Pending:")
                 append(data.pending)
-                append(" )")
+                append(" ")
             }
             llMain.setOnClickListener {
                 staffListFragment.onItemClick(data, 1, false)
@@ -59,7 +59,7 @@ class AllStaffListAdapter(
 
     }
 
-    class StaffListViewHolder(itemView: StaffListItemBinding) :
+    class StaffListViewHolder(itemView: AllStaffListItemBinding) :
         RecyclerView.ViewHolder(itemView.root) {
     }
 

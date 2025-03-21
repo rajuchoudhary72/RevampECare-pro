@@ -393,8 +393,9 @@ class MainActivity : AppCompatActivity() {
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
+            val SubCildMenuId = data.getString("SbChMenuID")?.toInt()
             val refId = data.getString("refID")
-            Log.e("Note", "$schCode $userID $menuId $childMenuId $refId")
+            Log.e("Note", "$schCode $userID $menuId $childMenuId $SubCildMenuId  $refId")
 
             if (userDataStore.getUsersFlow().first()
                     .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
@@ -419,8 +420,17 @@ class MainActivity : AppCompatActivity() {
 
             if (menuId != null) {
                 if (childMenuId != null) {
-                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId, refId)
+                    if (SubCildMenuId != null) {
+                        if (SubCildMenuId>0){
+                            getFragmentId(menuId, SubCildMenuId, refId)
+                        }else{
+                            Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
+                            getFragmentId(menuId, childMenuId, refId)
+                        }
+                    }else{
+                        Log.e("Note", "getFragmentId(menuId, childMenuId)")
+                        getFragmentId(menuId, childMenuId, refId)
+                    }
                 }
             }
             showLoader(false)
@@ -1457,7 +1467,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1500,8 +1509,13 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-
+                    0 -> {
+                        when (childChildMenuId) {
+                            15 -> {
+                                navController.navigate(R.id.allStaffListFragment)
+                            }
+                        }
+                    }
                 }
             }
 

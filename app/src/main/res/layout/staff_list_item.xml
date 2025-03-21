@@ -23,7 +23,6 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/circleImageViewProfile"
-
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center_horizontal"
@@ -68,11 +67,6 @@
                 android:textAlignment="center"
                 android:visibility="gone"
                 />
-
-
-
-
-
 
         </LinearLayout>
 
