@@ -562,13 +562,18 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun infractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        stID: Int
+        stID: Int,
+        uType: Int
     ): NetworkInfractionInstance {
-        return userService.infractionInstance(infrTypeID, InfrSubTypeID, stID)
+        return userService.infractionInstance(infrTypeID, InfrSubTypeID, stID,uType)
     }
 
     override suspend fun addInfraction(stID: Int): NetworkAddInfraction {
         return userService.addInfraction(stID)
+    }
+
+    override suspend fun addStaffInfraction(stID: Int): NetworkAddInfraction {
+        return userService.addStaffInfraction(stID)
     }
 
     override suspend fun getAppreciations(stID: Int): NetworkAppreciations {
@@ -577,6 +582,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getInfractions(stID: Int): NetworkInfractions {
         return userService.getInfractions(stID)
+    }
+
+    override suspend fun getStaffInfractions(SID: Int): NetworkInfractions {
+        return userService.getStaffInfractions(SID)
     }
 
     override suspend fun disciplineLogDeleteLog(id: String, type: Int): CommonResponse {

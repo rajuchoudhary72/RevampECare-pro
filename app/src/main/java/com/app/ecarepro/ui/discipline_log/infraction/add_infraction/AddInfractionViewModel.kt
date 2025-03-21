@@ -96,6 +96,18 @@ class AddInfractionViewModel @Inject constructor(
 
     }
 
+    fun  addStaffInfraction( stID: Int  )=viewModelScope.launch {
+        runCatching {
+            addInfractionMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.addStaffInfraction(stID)
+        }.onSuccess {
+            addInfractionMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            addInfractionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
     fun  getSubInfractionTypes(infrTypeID: Int)=viewModelScope.launch {
         runCatching {
             subInfractionTypesMutableStateFlow.value = NetworkResult.Loading()
@@ -111,11 +123,12 @@ class AddInfractionViewModel @Inject constructor(
     fun  getinfractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        StID: Int
+        StID: Int,
+        uType: Int
     )=viewModelScope.launch {
         runCatching {
             infractionInstanceMutableStateFlow.value = NetworkResult.Loading()
-            userRepository.infractionInstance(infrTypeID, InfrSubTypeID, StID)
+            userRepository.infractionInstance(infrTypeID, InfrSubTypeID, StID,uType)
         }.onSuccess {
             infractionInstanceMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

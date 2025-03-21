@@ -72,11 +72,11 @@ class AddComplianceViewModel @Inject constructor(
         }
     }
 
-    fun  postCompliance( compliance: String, id:String )=viewModelScope.launch {
+    fun  postCompliance(uType:Int, compliance: String, id:String )=viewModelScope.launch {
         runCatching {
             postComplianceMutableStateFlow.value = NetworkResult.Loading()
             userRepository.postCompliance(PostComplianceData(
-                uType = 1,
+                uType = uType,
                 browsedFile = getAttachment(),
                 compliance = compliance,
                 id = id
@@ -91,12 +91,13 @@ class AddComplianceViewModel @Inject constructor(
 
     fun  resolvedCompliance(
         ID: String?,
+        uType: Int
     )=viewModelScope.launch {
         runCatching {
             resolvedComplianceMutableStateFlow.value = NetworkResult.Loading()
             userRepository.resolvedCompliance(
                 ID = ID,
-                utype = 1
+                utype = uType
             )
         }.onSuccess {
             resolvedComplianceMutableStateFlow.value = NetworkResult.Success(it)

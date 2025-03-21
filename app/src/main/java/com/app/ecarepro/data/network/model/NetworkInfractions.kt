@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.model
 
 import com.app.ecarepro.model.RecentInfraction
+import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.StudentDTL
 
 data class NetworkInfractions(
@@ -10,5 +11,6 @@ data class NetworkInfractions(
     val showPoints: Boolean,
     val status: String,
     val studentDTL: StudentDTL,
-    val totalPoints: Int
+    val totalPoints: Int,
+    val stafftDTL: Staff
 )

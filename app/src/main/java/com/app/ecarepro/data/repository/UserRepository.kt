@@ -326,10 +326,13 @@ interface UserRepository {
     suspend fun infractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        StID: Int
+        StID: Int,
+        uType: Int
     ): NetworkInfractionInstance
 
     suspend fun addInfraction( stID: Int  ): NetworkAddInfraction
+
+    suspend fun addStaffInfraction( stID: Int  ): NetworkAddInfraction
 
     suspend fun getAppreciations(
         stID: Int
@@ -337,6 +340,10 @@ interface UserRepository {
 
     suspend fun getInfractions(
         stID: Int
+    ): NetworkInfractions
+
+    suspend fun getStaffInfractions(
+        SID: Int
     ): NetworkInfractions
 
     suspend fun disciplineLogDeleteLog(

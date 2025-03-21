@@ -1,13 +1,16 @@
 package com.app.ecarepro.ui.staffList
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffListItemBinding
 import com.app.ecarepro.model.Staff
+import com.app.ecarepro.utils.Constant
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
@@ -41,6 +44,18 @@ class StaffListAdapter(private var staffList: List<Staff>,
                 append(data.designation)
                 append(" )")
             }
+             tvSubjectName.text= buildString {
+                 append(staffListFragment.getString(R.string.mobile_pun_bold))
+                 append(data.mobile)
+             }
+
+             binding.tvQualification.text= buildString {
+                 append(staffListFragment.getString(R.string.qualification_pun_bold))
+                 append(data.qualification)
+             }
+
+
+
             llMain.setOnClickListener {
                 staffListFragment.onItemClick(data,1,false)
             }
@@ -49,6 +64,25 @@ class StaffListAdapter(private var staffList: List<Staff>,
              load(data.photo)
                  .placeholder(R.drawable.default_profile)
                  .  into(circleImageViewProfile)
+
+             binding.cvView.setOnClickListener {
+                 staffListFragment.findNavController().navigate(
+                     R.id.infractionListFragment,
+                     Bundle().apply {
+                         putInt(Constant.USER_TYPE, Constant.STAFF_TYPE)
+                         putInt(Constant.USER_ID, data.sid)
+                     })
+             }
+
+             binding.cvAdd.setOnClickListener {
+                 staffListFragment.findNavController().navigate(
+                     R.id.addInfractionFragment,
+                     Bundle().apply {
+                         putInt(Constant.USER_TYPE, Constant.STAFF_TYPE)
+                         putInt(Constant.USER_ID, data.sid)
+                     })
+
+             }
 
 
         }

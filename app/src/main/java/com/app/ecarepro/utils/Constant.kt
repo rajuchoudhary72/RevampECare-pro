@@ -61,6 +61,7 @@ class Constant {
         const val NOTICE_CLASS = "notice_class"
         const val NOTICE_SCHOOL = "notice_school"
         const val USER_TYPE = "user_type"
+        const val USER_ID = "user_id"
         const val USER_STAFF = "user_staff"
         const val USER_TEACHER = "user_teacher"
         const val IS_MINE = "isAssignmentIsMine"
