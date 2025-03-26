@@ -38,7 +38,8 @@ class FeeDefaulterAdapter(
             binding.tvAmount.text=data.amount
 
             binding.tvTotalStudents.text= buildString {
-                append(feeDefaulterUI.getString(R.string.general_total_pun))
+                append(feeDefaulterUI.getString(R.string.general_total))
+                append(feeDefaulterUI.getString(R.string.general_pun))
                 append(data.totalStudent) }
 
             binding.tvDefaulterStudents.text= buildString {

@@ -906,8 +906,8 @@
 
 
     //General
+    <string name="general_pun">: </string>
     <string name="general_total">Total</string>
-    <string name="general_total_pun">Total: </string>
     <string name="general_android">Android</string>
     <string name="general_ios">iOS</string>
     <string name="general_both">Both</string>

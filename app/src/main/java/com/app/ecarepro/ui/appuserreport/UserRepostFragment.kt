@@ -188,7 +188,7 @@ class UserRepostFragment : Fragment() {
             totalRemaining += deviceUsersArrayList[k].remaining
         }
         tvTotalUser!!.visibility = View.VISIBLE
-        tvTotalUser!!.text = getString(R.string.general_total_pun)+"$totalUser"
+        tvTotalUser!!.text = getString(R.string.general_total)+getString(R.string.general_pun)+"$totalUser"
         tvAndroidCount!!.text = totalAndroid.toString() + ""
         tvIosCount!!.text = totalIos.toString() + ""
         tvBothCount!!.text = totalBoth.toString() + ""
