@@ -392,13 +392,21 @@
                         android:orientation="vertical"
                         android:layout_marginBottom="30dp"
                         android:padding="10dp">
-
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ubuntu_medium"
+                            android:text="@string/procedure"
+                            android:textStyle="bold"
+                            android:textColor="@color/grey_60"
+                            android:textSize="@dimen/_16sdp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_medium"
                             android:text="@string/introduction"
+                            android:layout_marginTop="@dimen/_4sdp"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 

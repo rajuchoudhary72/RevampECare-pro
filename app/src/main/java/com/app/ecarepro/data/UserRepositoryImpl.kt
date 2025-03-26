@@ -770,6 +770,9 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun teachersList(): NetworkStaffList {
         return userService.teachersList()
     }
+    override suspend fun reportLessonteachersList(): NetworkStaffList {
+        return userService.getReportLessonStaffProfile(12)
+    }
 
     override suspend fun getStaffAttendance(
         staffType: String?,

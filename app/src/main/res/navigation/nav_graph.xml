@@ -1028,4 +1028,13 @@
         android:id="@+id/kidCornerSliderNavHostFragment"
         android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerSliderNavHostFragment"
         android:label="KidCornerSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/allStaffListFragment"
+        android:name="com.app.ecarepro.ui.report.lessonplan.AllStaffListFragment"
+        android:label="StaffListFragment" >
+        <action
+            android:id="@+id/action_allStaffListFragment_to_lessonPlanListFragment"
+            app:destination="@id/lessonPlanListFragment" />
+        />
+    </fragment>
 </navigation>

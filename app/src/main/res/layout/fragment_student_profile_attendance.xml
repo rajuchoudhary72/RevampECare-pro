@@ -134,7 +134,72 @@
                                 android:textSize="@dimen/_10sdp"
                                  />
                         </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/llWH"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:visibility="visible">
 
+                            <View
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_10sdp"
+                                android:layout_gravity="center"
+                                android:background="@color/category7" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="@string/working_holiday"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <TextView
+                                android:id="@+id/tvWhDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="(6.77%)"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_2sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/llPresentHoliday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:visibility="visible">
+
+                            <View
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_10sdp"
+                                android:layout_gravity="center"
+                                android:background="@color/present_wh" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="@string/total_present_working_holiday"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <TextView
+                                android:id="@+id/tvpresentWhDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="(6.77%)"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="@dimen/_2sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -228,39 +293,7 @@
                         </LinearLayout>
 
 
-                        <LinearLayout
-                            android:id="@+id/llWH"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:visibility="visible">
 
-                            <View
-                                android:layout_width="@dimen/_10sdp"
-                                android:layout_height="@dimen/_10sdp"
-                                android:layout_gravity="center"
-                                android:background="@color/category7" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/_5sdp"
-                                android:fontFamily="@font/ubuntu_medium"
-                                android:text="@string/working_holiday"
-                                android:textColor="@color/grey_60"
-                                android:textSize="@dimen/_10sdp" />
-
-                            <TextView
-                                android:id="@+id/tvWhDay"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="(6.77%)"
-                                android:layout_gravity="center"
-                                android:layout_marginStart="@dimen/_2sdp"
-                                android:fontFamily="@font/ubuntu_medium"
-                                android:textColor="@color/grey_60"
-                                android:textSize="@dimen/_10sdp" />
-                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -271,13 +304,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/llPieChart"
-                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_margin="@dimen/_1sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/grey_light"
                     android:paddingTop="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_5sdp"
                     android:visibility="visible"
-                    android:weightSum="7.4"
-                    android:paddingBottom="@dimen/_5sdp">
+                    android:weightSum="8.6"
+                   >
 
                     <TextView
                         android:layout_width="0dp"
@@ -287,7 +321,7 @@
                         android:gravity="center"
                         android:text="@string/months"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -297,7 +331,18 @@
                         android:gravity="center"
                         android:text="@string/working_days"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
+                    <TextView
+                        android:id="@+id/tvPwh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:text="@string/total_present_working_holiday"
+                        android:visibility="visible"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -307,7 +352,7 @@
                         android:gravity="center"
                         android:text="@string/present"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
                     <TextView
                         android:id="@+id/tvwh"
                         android:layout_width="0dp"
@@ -318,7 +363,8 @@
                         android:text="@string/working_holiday"
                         android:visibility="visible"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -327,7 +373,7 @@
                         android:gravity="center"
                         android:text="@string/absent"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -337,7 +383,7 @@
                         android:gravity="center"
                         android:text="@string/leave"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:id="@+id/tvLblLate"
@@ -349,7 +395,7 @@
                         android:text="@string/late"
                         android:visibility="visible"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
 
@@ -365,12 +411,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/rvAttendanceDetail"
-                    android:layout_marginLeft="@dimen/_2sdp"
-                    android:layout_marginRight="@dimen/_2sdp"
+
                     android:background="@color/grey_light"
                     android:paddingTop="@dimen/_5sdp"
                     android:visibility="visible"
-                    android:weightSum="7.4"
+                    android:weightSum="8.6"
                     android:paddingBottom="@dimen/_5sdp">
 
                     <TextView
@@ -381,7 +426,7 @@
                         android:gravity="center"
                         android:text="Total"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:id="@+id/tvTotalWorking"
@@ -391,8 +436,17 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
-
+                        android:textSize="@dimen/_10sdp" />
+                    <TextView
+                        android:id="@+id/tvTotalPWh"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:fontFamily="@font/ubuntu_medium"
+                        android:gravity="center"
+                        android:visibility="visible"
+                        android:textColor="@color/grey_60"
+                        android:textSize="@dimen/_10sdp" />
                     <TextView
                         android:id="@+id/tvTotalPresent"
                         android:layout_width="0dp"
@@ -401,7 +455,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
                     <TextView
                         android:id="@+id/tvTotalWh"
                         android:layout_width="0dp"
@@ -411,7 +465,8 @@
                         android:gravity="center"
                         android:visibility="visible"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
+
                     <TextView
                         android:id="@+id/tvTotalAbsent"
                         android:layout_width="0dp"
@@ -420,7 +475,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:id="@+id/tvTotalLeave"
@@ -430,7 +485,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                     <TextView
                         android:id="@+id/tvTotalLate"
@@ -441,7 +496,7 @@
                         android:gravity="center"
                         android:visibility="visible"
                         android:textColor="@color/grey_60"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_10sdp" />
 
                 </LinearLayout>
 

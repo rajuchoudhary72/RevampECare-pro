@@ -130,7 +130,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:background="@color/white"
                     android:baselineAligned="false"
-                    android:weightSum="6.2"
+                    android:weightSum="7.4"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -146,7 +146,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
                             android:text="School\nDays"
-                            android:textSize="@dimen/_12sdp"
+                            android:textSize="@dimen/_11sdp"
                             android:gravity="center"
                             android:textColor="@color/grey_60" />
 
@@ -170,18 +170,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/working_holiday"
-                            android:textSize="@dimen/_12sdp"
+                            android:text="@string/attedancedetail_year_count_total_present"
+                            android:textSize="@dimen/_11sdp"
                             android:gravity="center"
-                            android:textColor="@color/category7" />
+                            android:textColor="@color/present_wh" />
 
                         <TextView
-                            android:id="@+id/working_holiday_day"
+                            android:id="@+id/working_present_holiday_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
                             android:textSize="@dimen/_12sdp"
-                            android:textColor="@color/category7" />
+                            android:textColor="@color/present_wh" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -196,7 +196,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
                             android:text="@string/present"
-                            android:textSize="@dimen/_12sdp"
+                            android:textSize="@dimen/_11sdp"
                             android:textColor="@color/green" />
 
                         <TextView
@@ -209,6 +209,31 @@
 
                             />
 
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1.2"
+                        android:background="@color/white"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="@string/working_holiday"
+                            android:textSize="@dimen/_11sdp"
+                            android:gravity="center"
+                            android:textColor="@color/category7" />
+
+                        <TextView
+                            android:id="@+id/working_holiday_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:textSize="@dimen/_12sdp"
+                            android:textColor="@color/category7" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="0dp"
@@ -348,7 +373,6 @@
                             android:fontFamily="@font/ubuntu_regular"
                             android:textSize="@dimen/_15sdp" />
                     </RelativeLayout>
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -361,7 +385,35 @@
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="@dimen/_10sdp"
-                            android:text="@string/total_present"
+                            android:text="@string/attedancedetail_year_count_total_present"
+                            android:textColor="@color/present_wh"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:textSize="@dimen/_15sdp" />
+
+                        <TextView
+                            android:id="@+id/total_present_working_day"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/_20sdp"
+                            android:textColor="@color/present_wh"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:textSize="@dimen/_15sdp" />
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:background="@color/white">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:text="@string/student_attedance_present"
                             android:textColor="@color/green"
                             android:fontFamily="@font/ubuntu_regular"
                             android:textSize="@dimen/_15sdp" />
@@ -504,16 +556,45 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_20sdp"
                         android:baselineAligned="false"
-                        android:weightSum="5"
+                        android:weightSum="6"
                         android:orientation="horizontal"
                         android:padding="@dimen/_7sdp">
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
                             android:background="@color/white"
                             android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/per_present_working_holiday"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_80sdp"
+                                android:background="@drawable/circle_wh_present"
+                                android:gravity="center"
+                                android:fontFamily="@font/ubuntu_regular"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_20sdp" />
+
+                            <TextView
+                                android:id="@+id/text_present_working_holiday"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:text="@string/total_present"
+                                android:fontFamily="@font/ubuntu_regular"
+                                android:textColor="@color/present_wh"
+                                android:textSize="@dimen/_10sdp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:layout_marginStart="@dimen/_2sdp"
                             android:orientation="vertical"
                             >
 

@@ -587,6 +587,11 @@ interface UserService {
     @GET("Staff/List")
     suspend fun teachersList(): NetworkStaffList
 
+    @GET("Staff/List")
+    suspend fun getReportLessonStaffProfile(
+        @Query("RptID") sId: Int
+    ): NetworkStaffList
+
     @GET("Report/StaffProfile")
     suspend fun getStaffProfile(
         @Query("SID") sId: Int

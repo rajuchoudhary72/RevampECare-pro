@@ -42,6 +42,7 @@ class Constant {
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val STUDENT_ID_ARGUMENT = "StudentID"
         const val STAFF_ID_ARGUMENT = "StaffID"
+        var LESSONPLAN_HARDCCODE_KEY = ""
         const val TIME_TABLE_TYPE = "TimeTableType"
         const val ASSIGNMENT_TYPE = "AssignmentType"
         const val ALBUM_TYPE = "albumTypePassValue"
