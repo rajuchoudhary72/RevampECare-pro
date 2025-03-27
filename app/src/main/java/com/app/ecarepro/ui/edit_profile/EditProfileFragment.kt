@@ -344,7 +344,6 @@ binding.cbSameAddress.setOnCheckedChangeListener {
             modelEditProfile.stuBloodGroupID=     stuBloodGroupID
             modelEditProfile.stuReligionID=       stuReligionID*/
 
-
             val modelEditProfile = UpdateProfileModel(
                 fatherDesignationID,
                 fatherProfessionID,
