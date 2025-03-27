@@ -47,6 +47,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
     private var orderBY: Int=0
+    private var backDate: Int=0
     private var editMode: Boolean= false
     private var openPreviousDay: Boolean=false
     private var mIsCurrentDate: Boolean=true
@@ -169,6 +170,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         mDate=Constant.currentDate()
         binding.startDate.setText(Constant.currentDate())
         binding.startDate.setOnClickListener {
+
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, backDate) // Subtracting days
+            val minDate = calendar.timeInMillis // Convert to milliseconds
+
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.startDate.setText(Constant.dateToShow(date.toString()))
@@ -178,14 +184,14 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                         if (classID!=0 && subID!=0){
                             getStudentListToMarkAtt(classID,subID,orderBY)
                         }
-
                     }else{
                         if (classID!=0  ){
                             getStudentListToMarkAtt(classID,subID,orderBY)
                         }
                     }
                 }
-            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+            }, minDate = minDate
+                , maxDate = Constant.getLongTimeDate(Constant.currentDate()))
         }
 
 
@@ -437,6 +443,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 if (it.data.classesForSubTeach != null) {
                                     classesForSubTeaches = it.data.classesForSubTeach
                                     openPreviousDay=it.data.openPreviousDay
+                                    backDate=it.data.backDate
                                     binding.tilStartDate.isVisible=openPreviousDay
                                     val classesDataString: ArrayList<String> = ArrayList()
                                     classesDataString.clear()
