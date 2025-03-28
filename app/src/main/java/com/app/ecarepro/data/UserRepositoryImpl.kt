@@ -154,6 +154,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
@@ -173,6 +174,7 @@ import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
@@ -1160,6 +1162,10 @@ class UserRepositoryImpl @Inject constructor(
         return userService.updateParentProfile(request)
     }
 
+    override suspend fun updateTransportProfile(request: UpdateTransportProfileModel): CommonResponse {
+        return userService.updateTransportProfile(request)
+    }
+
     override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
         return flow {
             try {
@@ -1631,6 +1637,9 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+    override suspend fun getUserTransportProfile(): NetworkTransportEditProfile {
+        return userService.getUserTransportProfile()
     }
     companion object {
         private const val USER_PROFILE_KEY = "user_profile"

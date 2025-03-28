@@ -920,5 +920,11 @@
     <string name="are_you_sure_you_want_to_reject_the_lesson_plan">Are you sure, you want to Reject the Lesson Plan?</string>
     <string name="approve_plan">Approve Plan</string>
     <string name="are_you_sure_you_want_to_approve_the_lesson_plan">Are you sure, you want to Approve the Lesson Plan?</string>
+    <string name="vehicle_details">Vehicle Details</string>
+    <string name="update_transport_details">Update Transport Details</string>
+    <string name="summit_transport_details">Submit Transport Details</string>
+    <string name="summit_profile_details">Submit Profile Details</string>
+    <string name="select_vehicle">Select Vehicle</string>
+    <string name="date_from_which_the_student_is_using_the_vehicle">Date from which the student is using the vehicle</string>
 </resources>
 
