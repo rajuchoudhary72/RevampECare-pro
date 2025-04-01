@@ -22,18 +22,16 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ClassTeacherFragment : Fragment() {
-
     private lateinit var binding: FragmentClassTeacherBinding
-    private val classTeacherViewModel : ClassTeacherViewModel by viewModels()
-    private   var teacherList: List<Teacher>? = null
+    private val classTeacherViewModel: ClassTeacherViewModel by viewModels()
+    private var teacherList: List<Teacher>? = null
     private lateinit var teacherListFilter: List<Teacher>
-    private var fromFragment: String= ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentClassTeacherBinding.inflate(inflater,container,false).apply {
+        binding = FragmentClassTeacherBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = classTeacherViewModel
         }
@@ -47,10 +45,13 @@ class ClassTeacherFragment : Fragment() {
         lifecycleScope.launch {
             classTeacherViewModel.searchQuery.collectLatest {
 
-                if (it.isNotEmpty() && teacherList!=null){
-                    teacherListFilter = teacherList!!.filter { s -> s .name.lowercase().contains(it.lowercase()) ||s .`class`.lowercase().contains(it.lowercase())   }
+                if (it.isNotEmpty() && teacherList != null) {
+                    teacherListFilter = teacherList!!.filter { s ->
+                        s.name.lowercase().contains(it.lowercase()) || s.`class`.lowercase()
+                            .contains(it.lowercase())
+                    }
                     setupRecycleViewStudentList(teacherListFilter)
-                }else{
+                } else {
                     teacherList?.let { it1 -> setupRecycleViewStudentList(it1) }
                 }
 
@@ -77,11 +78,9 @@ class ClassTeacherFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.rvClassTeacher.isVisible = true
 
-                        if (it.data!=null){
+                        if (it.data != null) {
                             teacherList = it.data.teachers
-                            setupRecycleViewStudentList(it.data.teachers)
-
-
+                            it.data.teachers?.let { it1 -> setupRecycleViewStudentList(it1) }
 
                         }
 
@@ -95,17 +94,13 @@ class ClassTeacherFragment : Fragment() {
             }
 
         }
-
-        classTeacherViewModel.getClassTeacher( )
-
-
-
+        classTeacherViewModel.getClassTeacher()
     }
 
     private fun setupRecycleViewStudentList(teachers: List<Teacher>) {
-        if (  teachers.isNotEmpty()){
-            binding.rvClassTeacher.isVisible=true
-            binding.tvNoData.isVisible=false
+        if (teachers.isNotEmpty()) {
+            binding.rvClassTeacher.isVisible = true
+            binding.tvNoData.isVisible = false
 
 
             val teachesAdapter = ClassTeachesAdapter(
@@ -114,13 +109,13 @@ class ClassTeacherFragment : Fragment() {
             )
             binding.rvClassTeacher.apply {
                 setHasFixedSize(true)
-                layoutManager = GridLayoutManager(activity,2)
+                layoutManager = GridLayoutManager(activity, 2)
                 adapter = teachesAdapter
             }
-        }else{
-            binding.rvClassTeacher.isVisible=false
-            binding.tvNoData.isVisible=true
+        } else {
+            binding.rvClassTeacher.isVisible = false
+            binding.tvNoData.isVisible = true
         }
     }
-    
+
 }

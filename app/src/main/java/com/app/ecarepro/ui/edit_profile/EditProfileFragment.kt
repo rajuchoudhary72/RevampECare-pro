@@ -154,7 +154,7 @@ class EditProfileFragment : Fragment() {
     private fun setupView(profile: Profile) {
 
         binding.apply {
-            fatherDesignationID = profile.fatherDesignationID
+            fatherDesignationID = profile.fatherDesignationID!!
             fatherProfessionID = profile.fatherProfessionID
             motherDesignationID = profile.motherDesignationID
             motherProfessionID = profile.motherProfessionID
@@ -352,6 +352,7 @@ class EditProfileFragment : Fragment() {
             if (profile.transDetails != null) {
                 binding.vechLL.isVisible = true
             }
+
             val adapterparentsStatus = profile.transVehicles.let {
                 ArrayAdapter(
                     requireContext(),
