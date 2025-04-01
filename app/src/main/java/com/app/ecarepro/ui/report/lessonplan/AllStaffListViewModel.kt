@@ -21,15 +21,14 @@ class AllStaffListViewModel @Inject constructor(
     val searchQuery = MutableStateFlow("")
 
 
-    private val staffListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStaffList>> =
-        MutableStateFlow(
-            NetworkResult.Loading()
-        )
+    private val staffListMutableStateFlow: MutableStateFlow<NetworkResult<NetworkStaffList>> = MutableStateFlow(
+        NetworkResult.Loading())
     val staffListStateFlow: StateFlow<NetworkResult<NetworkStaffList>> = staffListMutableStateFlow
 
     init {
         getStaffList()
     }
+
 
     private fun getStaffList() = viewModelScope.launch {
         runCatching {

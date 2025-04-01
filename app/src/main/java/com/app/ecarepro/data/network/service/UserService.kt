@@ -140,6 +140,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
@@ -152,6 +153,7 @@ import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import okhttp3.RequestBody
 
@@ -700,6 +702,11 @@ interface UserService {
         @Body request: UpdateProfileModel
     ): CommonResponse
 
+    @POST("Student/UpdateTransportDetails")
+    suspend fun updateTransportProfile(
+        @Body request: UpdateTransportProfileModel
+    ): CommonResponse
+
     @POST("User/UploadProfileIMG")
     suspend fun uploadProfileIMG(
         @Body request: UploadPhotoRequest
@@ -1117,5 +1124,9 @@ interface UserService {
         @Query("ID") ID: String?,
         @Query("utype") utype: Int?
     ): CommonResponse
+
+    @GET("Student/TransportDetails")
+    suspend fun getUserTransportProfile(
+    ): NetworkTransportEditProfile
 
 }

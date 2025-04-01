@@ -1,12 +1,12 @@
 package com.app.ecarepro.ui.edit_profile.model
 
-data class Profile(
+data class TransportProfile(
     var bloodGroupLST: List<BloodGroupLST>,
     var canChangeChildImg: Boolean,
     var canChangeCoverImg: Boolean,
     var canChangeProfileImg: Boolean,
     var designationLST: List<DesignationLST>,
-    var fatherDesignationID: Int?,
+    var fatherDesignationID: Int,
     var fatherProfessionID: Int,
     var motherDesignationID: Int,
     var motherProfessionID: Int,
@@ -22,6 +22,5 @@ data class Profile(
     var stuReligionID: Int,
     var studentProfile: StudentProfile,
     var userImgReq: UserImgReq,
-    var username: String,
-
+    var username: String
 )
