@@ -42,9 +42,11 @@ class StudentProfileReportCardFragment : Fragment() {
             val reportCardDTLs=it.reportCardDTLs
             if (!reportCardDTLs.isNullOrEmpty()) {
 
+                val revReportCardList=reportCardDTLs.reversed()
+
                 val fragmentList : ArrayList<Fragment> = ArrayList()
 
-                reportCardDTLs. forEach { itemDat ->
+                revReportCardList. forEach { itemDat ->
                     fragmentList.add( ReportCardDetailsFragment.newInstance(itemDat))
                 }
 
@@ -61,7 +63,7 @@ class StudentProfileReportCardFragment : Fragment() {
                     binding.viewPager
                 ) { tab, position ->
 
-                    tab.text = reportCardDTLs[position].className
+                    tab.text = revReportCardList[position].className
 
                 }.attach()
 

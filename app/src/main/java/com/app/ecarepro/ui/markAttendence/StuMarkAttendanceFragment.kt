@@ -84,6 +84,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var na  = 0
     private lateinit var   dialog  : Dialog
     private val orderBYList = arrayOf("Roll No", "Name", "Admission No")
+    var timestampOneDay = "86400000".toLong()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -173,7 +174,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, backDate) // Subtracting days
-            val minDate = calendar.timeInMillis // Convert to milliseconds
+            val minDate = calendar.timeInMillis   // Convert to milliseconds
 
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
@@ -190,7 +191,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                         }
                     }
                 }
-            }, minDate = minDate
+            }, minDate = minDate-timestampOneDay
                 , maxDate = Constant.getLongTimeDate(Constant.currentDate()))
         }
 
