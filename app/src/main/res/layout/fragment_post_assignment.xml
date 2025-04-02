@@ -155,7 +155,7 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="@string/submission_date"
+                        android:text="@string/assignment_submission_date"
 
                         android:visibility="gone" />
                 </LinearLayout>
@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="@string/submission_date"
+                        android:text="@string/assignment_submission_date"
 
                         />
 
@@ -204,7 +204,7 @@
                     android:background="@drawable/shape_line"
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center_vertical"
-                    android:hint="@string/type_your_assignment"
+                    android:hint="@string/assignment_type_your_assignment"
                     android:lines="4"
                     android:maxLines="6"
                     android:padding="10dp"
@@ -299,7 +299,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:fontFamily="@font/ubuntu_light"
-                    android:text="@string/lbl_assignment_support_file_details" />
+                    android:text="@string/assignment_support_file_size" />
 
                 <CheckBox
                     android:id="@+id/cbMultipleActive"
@@ -308,7 +308,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/allow_student_for_multiple_submission"
+                    android:text="@string/assignment_allow_student_for_multiple_submission"
 
                     android:textSize="16sp" />
 

@@ -8,6 +8,7 @@ import com.app.ecarepro.data.database.MIGRATION_4_5
 import com.app.ecarepro.data.database.MIGRATION_5_6
 import com.app.ecarepro.data.database.dao.SchoolDao
 import com.app.ecarepro.data.database.dao.UserDao
+import com.app.ecarepro.ui.language.LanguageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,6 +49,12 @@ object DatabaseModule {
     @Singleton
     fun provideJsonCache(): JsonCache {
         return JsonCache()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLanguageRepository(@ApplicationContext context: Context): LanguageRepository {
+        return LanguageRepository(context)
     }
 
 }

@@ -97,7 +97,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
                     android:gravity="center"
-                    android:text="@string/installment"
+                    android:text="@string/Installment"
                     android:textColor="@color/grey_60"
                     android:textSize="@dimen/_10sdp" />
 

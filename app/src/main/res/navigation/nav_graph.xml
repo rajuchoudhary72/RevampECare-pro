@@ -1012,4 +1012,8 @@
         android:id="@+id/addComplianceFragment"
         android:name="com.app.ecarepro.ui.discipline_log.infraction.add_compliance.AddComplianceFragment"
         android:label="AddComplianceFragment" />
+    <fragment
+        android:id="@+id/languageSelect"
+        android:name="com.app.ecarepro.ui.language.LanguageSelect"
+        android:label="LanguageSelect" />
 </navigation>

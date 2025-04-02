@@ -94,6 +94,8 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
+import com.app.ecarepro.ui.language.LanguageManager
+import com.app.ecarepro.ui.language.LanguageRepository
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -183,6 +185,17 @@ class MainActivity : AppCompatActivity() {
             // decision.
         }
     }
+
+
+    @Inject
+    lateinit var languageRepository: LanguageRepository
+
+    override fun attachBaseContext(newBase: Context) {
+        val savedLanguageCode = languageRepository.getSavedLanguage() // Fetch saved language
+        val updatedContext = LanguageManager.applyLanguage(newBase, savedLanguageCode) // Returns Context
+        super.attachBaseContext(updatedContext) // Pass updated Context
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1217,7 +1230,7 @@ class MainActivity : AppCompatActivity() {
 
             7 -> {
                 when (childMenuId) {
-                    10 -> navController.navigate(R.id.circularFragment)
+                    10 -> navController.navigate(R.id.languageSelect)
 
                     11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)

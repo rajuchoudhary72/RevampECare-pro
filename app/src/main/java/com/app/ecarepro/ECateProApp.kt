@@ -10,6 +10,7 @@ import android.provider.Settings.Secure
 import androidx.appcompat.app.AppCompatDelegate
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.language.LanguageRepository
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -30,6 +31,8 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
 
     @Inject
     lateinit var appRepository: AppRepository
+
+
     override fun onCreate() {
         super.onCreate()
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -40,6 +43,8 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
         Thread.setDefaultUncaughtExceptionHandler(CrashHandler(this))
         // Register the activity lifecycle callbacks
         registerActivityLifecycleCallbacks(this)
+
+        // Apply saved language on app startup
     }
 
     fun getCurrentActivity(): Activity? {
