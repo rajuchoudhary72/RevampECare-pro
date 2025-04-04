@@ -6,13 +6,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.StaffLeaveListItemBinding
 import com.app.ecarepro.databinding.StudentsLeaveListItemBinding
 import com.app.ecarepro.model.Dtl
 import com.app.ecarepro.utils.Constant
 
-class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
-                          private var leaveHistoryFragment: LeaveHistoryFragment
+class LeaveHistoryAdapter(
+    private var leaveList: List<Dtl>,
+    private var leaveHistoryFragment: LeaveHistoryFragment,
+    private var userType: Int
 ) :
     RecyclerView.Adapter<LeaveHistoryAdapter.LeaveHistoryViewHolder>() {
 
@@ -89,11 +90,21 @@ class LeaveHistoryAdapter(private var leaveList: List<Dtl>,
                 append("Applied On : ")
                 append(data.submittedOn)
             }
-            binding.tvTtlLeaves.text= buildString {
-                append("Total Leave(s): ")
-                append(data.duration)
-                append(" Day")
+
+            if (userType == Constant.STAFF_TYPE) {
+                binding.tvTtlLeaves.text= buildString {
+                    append("Total Leave(s): ")
+                    append(data.duration_str)
+                    append(" Day")
+                }
+            }else{
+                binding.tvTtlLeaves.text= buildString {
+                    append("Total Leave(s): ")
+                    append(data.duration)
+                    append(" Day")
+                }
             }
+
             binding.tvReason.text= buildString {
                 append("Reason: ")
                 append(data.reason)

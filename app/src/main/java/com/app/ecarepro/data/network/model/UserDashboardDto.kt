@@ -323,6 +323,8 @@ data class AdmissionComparison(
     val currentSession: String?,
     @SerializedName("previousSession")
     val previousSession: String?,
+    @SerializedName("nextSession")
+    val nextSession: String?,
     @SerializedName("studentCountStandardWise")
     val studentCountStandardWise: List<StudentCountStandardWise>?
 )
@@ -332,6 +334,8 @@ data class StudentCountStandardWise(
     val currentSession: Int?,
     @SerializedName("previousSession")
     val previousSession: Int?,
+    @SerializedName("nextSession")
+    val nextSession: Int?,
     @SerializedName("standard")
     val standard: String?
 )

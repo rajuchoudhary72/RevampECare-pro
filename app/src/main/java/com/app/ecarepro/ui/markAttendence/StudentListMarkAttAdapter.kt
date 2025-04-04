@@ -455,7 +455,7 @@ class StudentListMarkAttAdapter(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
                 binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
-                binding.tvMarkWh.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                binding.tvMarkWh.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt))
                 binding.tvMarkAbsent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)
                 binding.tvMarkPresent.background =
@@ -486,7 +486,7 @@ class StudentListMarkAttAdapter(
                 binding.tvMarkLate.setTextColor(
                     stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt)
                 )
-                binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
+                binding.tvMarkNa.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.grey_light_compose_msg_headr_txt))
                 binding.tvMarkWh.setTextColor(stuMarkAttendanceFragment.resources.getColor(R.color.white))
                 binding.tvMarkAbsent.background =
                     stuMarkAttendanceFragment.resources.getDrawable(R.drawable.circle_gray_att)

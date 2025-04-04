@@ -77,7 +77,11 @@ class MegaEBookCollectionFragment() : Fragment() {
 
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                (requireActivity() as MainActivity).showLoader(true)
+                try {
+                    (requireActivity() as MainActivity).showLoader(true)
+                }catch (e:IllegalStateException ){
+                    e.printStackTrace()
+                }
                 super.onPageStarted(view, url, favicon)
             }
 

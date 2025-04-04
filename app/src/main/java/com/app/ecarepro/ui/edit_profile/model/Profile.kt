@@ -6,7 +6,7 @@ data class Profile(
     var canChangeCoverImg: Boolean,
     var canChangeProfileImg: Boolean,
     var designationLST: List<DesignationLST>,
-    var fatherDesignationID: Int,
+    var fatherDesignationID: Int?,
     var fatherProfessionID: Int,
     var motherDesignationID: Int,
     var motherProfessionID: Int,
@@ -22,5 +22,6 @@ data class Profile(
     var stuReligionID: Int,
     var studentProfile: StudentProfile,
     var userImgReq: UserImgReq,
-    var username: String
+    var username: String,
+
 )

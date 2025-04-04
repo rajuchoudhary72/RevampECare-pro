@@ -130,7 +130,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
     }
 
     private fun setupAttDeatils(data: NetworkAttedanceSummary) {
-        val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave + data.totalLate
+        val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave  + data.totalNA + data.totalWH
 
 
         if (totalStudent > 0) {
@@ -148,6 +148,9 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                 }
                 tvPresentCount.text = buildString {
                     append(data.totalPresent)
+                }
+                tvPresentWorkingCount.text = buildString {
+                    append(data.totalPresent_WH)
                 }
                 tvNACount.text = buildString {
                     append(data.totalNA)
@@ -171,6 +174,12 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 
                         append("%")
                     }
+                tvPresentWorkingHoliday.text = buildString {
+
+                    append(setCalculatedPercentageToInt(data.totalPresent_WH, totalStudent))
+
+                    append("%")
+                }
 
                     tvAbsentPer.text = buildString {
 
@@ -337,7 +346,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             ${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}
             Student(s)
             """.trimIndent()
-        val length = (totalPresent + totalAbsent + totalLeave).toString() + ""
+        val length = (totalPresent + totalAbsent + totalLeave + totalNA + totalWH).toString() + ""
         val ss1 = SpannableString(s)
         ss1.setSpan(RelativeSizeSpan(2f), 0, length.length, 0) // set size
         ss1.setSpan(

@@ -41,6 +41,13 @@ fun stringFormat2String(stringId1: MainActivity, stringId: Int, value1: String?,
         value2
     )
 }
+fun ensureHttps(url: String): String {
+    return if (url.startsWith("http://") || url.startsWith("https://")) {
+        url
+    } else {
+        "https://$url"
+    }
+}
 fun currentDate(): String {
     val c = Calendar.getInstance().time
     println("Current time => $c")

@@ -1,7 +1,6 @@
 package com.app.ecarepro.ui.know_your_teacher
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffListItemBinding
 import com.app.ecarepro.model.Staff
-import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
 class TeacherListAdapter(private var staffList: List<Staff>,

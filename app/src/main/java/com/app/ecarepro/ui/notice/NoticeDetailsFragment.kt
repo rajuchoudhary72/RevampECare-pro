@@ -92,7 +92,12 @@ class NoticeDetailsFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
                             noticeDetailsBinding.noticeDetailData=it.data.notice
-                            fileSource=it.data.notice.filePath
+                            if (it.data.notice.filePath!=null){
+                                fileSource= it.data.notice.filePath.toString()
+                            }else{
+
+                            }
+
 
 
 

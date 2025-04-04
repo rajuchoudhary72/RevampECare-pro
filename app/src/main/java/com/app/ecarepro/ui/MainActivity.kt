@@ -393,8 +393,9 @@ class MainActivity : AppCompatActivity() {
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
+            val SubCildMenuId = data.getString("SbChMenuID")?.toInt()
             val refId = data.getString("refID")
-            Log.e("Note", "$schCode $userID $menuId $childMenuId $refId")
+            Log.e("Note", "$schCode $userID $menuId $childMenuId $SubCildMenuId  $refId")
 
             if (userDataStore.getUsersFlow().first()
                     .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
@@ -419,8 +420,17 @@ class MainActivity : AppCompatActivity() {
 
             if (menuId != null) {
                 if (childMenuId != null) {
-                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId, refId)
+                    if (SubCildMenuId != null) {
+                        if (SubCildMenuId>0){
+                            getFragmentId(menuId, SubCildMenuId, refId)
+                        }else{
+                            Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
+                            getFragmentId(menuId, childMenuId, refId)
+                        }
+                    }else{
+                        Log.e("Note", "getFragmentId(menuId, childMenuId)")
+                        getFragmentId(menuId, childMenuId, refId)
+                    }
                 }
             }
             showLoader(false)
@@ -1043,15 +1053,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        if (uri == null || uri.scheme.isNullOrEmpty()) {
-            showMessage("Invalid or missing URL")
-            return
-        }
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
             try {
-                customTabsIntent.launchUrl(this, uri)
+                if (uri != null) {
+                    customTabsIntent.launchUrl(this, uri)
+                }
             } catch (e: ActivityNotFoundException) {
                 showMessage("Chrome cannot open this link")
             }
@@ -1088,9 +1096,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-            // navController.navigate(R.id.webViewFragment, bundle)
+             navController.navigate(R.id.webViewFragment, bundle)
             Log.d("WebURL", url)
-            openCustomTab(tabIntent, Uri.parse(url))
+           // openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
@@ -1251,7 +1259,8 @@ class MainActivity : AppCompatActivity() {
                     14 -> navController.navigate(R.id.birthdayFragment)
 
                     15 -> {
-                        lifecycleScope.launch {
+                        navController.navigate(R.id.allStaffListFragment)
+                      /*  lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
                                     if (roleName == "Principal" || roleName == "Management") {
@@ -1261,11 +1270,11 @@ class MainActivity : AppCompatActivity() {
                                                 putString(Constant.TO, Constant.FRA_LESSON_PLAN)
                                             })
                                     } else {
-                                        navController.navigate(R.id.lessonPlanListFragment)
+                                        navController.navigate(R.id.allStaffListFragment)
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
 
                     16 -> navController.navigate(R.id.questionPaperFragment)
@@ -1378,6 +1387,7 @@ class MainActivity : AppCompatActivity() {
                     49 -> navController.navigate(R.id.videoAlbumFragment)
                     50 -> navController.navigate(R.id.favoritesListFragment)
                     51 -> navController.navigate(R.id.mediaGalleryFragment)
+                    73 -> navController.navigate(R.id.kidCornerFragment)
                 }
             }
 
@@ -1457,7 +1467,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1500,8 +1509,13 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-
+                    0 -> {
+                        when (childChildMenuId) {
+                            15 -> {
+                                navController.navigate(R.id.allStaffListFragment)
+                            }
+                        }
+                    }
                 }
             }
 
