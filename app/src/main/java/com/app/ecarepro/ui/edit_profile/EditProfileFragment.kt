@@ -423,6 +423,5 @@ binding.cbSameAddress.setOnCheckedChangeListener {
               }
          }
 
-
     }
 }
