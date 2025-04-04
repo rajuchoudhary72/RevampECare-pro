@@ -1226,11 +1226,38 @@ class MainActivity : AppCompatActivity() {
 
             7 -> {
                 when (childMenuId) {
-                    10 -> navController.navigate(R.id.circularFragment)
+                    10 -> {
+                        Log.e("refId1", ""+refId)
 
-                    11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
-                    })
+                        if (refId != null) {
+                            if (refId=="Menu"){
+                                Log.e("refId2", ""+refId)
+                                navController.navigate(R.id.circularFragment)
+                            }else{
+                                Log.e("refId3", ""+refId)
+                                navController.navigate(
+                                    R.id.circularDetailsFragment,
+                                    bundleOf(Constant.CIRCULAR_ID to refId)
+                                )
+                            }
+                        } else {
+                            navController.navigate(R.id.circularFragment)
+                        }
+
+                    }
+
+                    11 -> {
+                        if (refId.isNullOrEmpty() || refId=="Menu" ) {
+                            navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
+                            })
+                        } else {
+                            navController.navigate(R.id.noticeDetailsFragment, Bundle().apply {
+                                putString(Constant.NOTICE_ID_ARGUMENT, refId)
+                            })
+                        }
+
+                    }
 
                     12 -> {
                         lifecycleScope.launch {

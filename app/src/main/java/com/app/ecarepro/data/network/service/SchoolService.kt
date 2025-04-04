@@ -72,14 +72,12 @@ interface SchoolService {
 
     @GET("School/NoticeDTL")
     suspend fun getNoticeDTL(
-        @Query("NtID") ntID: Int,
-        @Query("ID") iD: Int,
+        @Query("ID") iD: String,
     ): NetworkNoticDetails
 
     @GET("School/CircularDTL")
     suspend fun getCircularDTL(
-        @Query("CirID") cirID: Int,
-        @Query("ID") iD: Int,
+        @Query("ID") iD: String,
     ): NetworkCircularDetails
 
     @GET("Staff/ClassTeacherOf")

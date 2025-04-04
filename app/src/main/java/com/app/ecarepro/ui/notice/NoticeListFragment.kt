@@ -280,7 +280,7 @@ class NoticeListFragment : Fragment(), ItemListener<Notice> {
         findNavController().navigate(
             R.id.action_noticeListFragment_to_noticeDetailsFragment,
             Bundle().apply {
-                t.ntID?.let { putInt(Constant.NOTICE_ID_ARGUMENT, it) }
+                t.id?.let { putString(Constant.NOTICE_ID_ARGUMENT, it) }
             })
 
     }

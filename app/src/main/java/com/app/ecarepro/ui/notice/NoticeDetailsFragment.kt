@@ -37,7 +37,7 @@ class NoticeDetailsFragment : Fragment() {
 
     private val _noticeDetailsViewModel : NoticeDetailsViewModel by viewModels()
 
-    var noticeID = 0
+    var noticeID: String? = null
 
 
 
@@ -51,7 +51,7 @@ class NoticeDetailsFragment : Fragment() {
         }
         noticeDetailsBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         noticeDetailsBinding.includeToolbar.toolbarTitle.text = getString(R.string.notice_details)
-          noticeID=  requireArguments().getInt(Constant.NOTICE_ID_ARGUMENT)
+        noticeID= requireArguments().getString(Constant.NOTICE_ID_ARGUMENT)
 
 
 
@@ -115,7 +115,7 @@ class NoticeDetailsFragment : Fragment() {
             }
         }
 
-        _noticeDetailsViewModel.getNoticeDTL(noticeID,1)
+        _noticeDetailsViewModel.getNoticeDTL(noticeID.orEmpty())
 
     }
 }

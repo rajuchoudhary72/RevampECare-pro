@@ -51,8 +51,10 @@ class CircularDetailsFragment : Fragment() {
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.circuler_details)
 
-        val circularID=  requireArguments().getInt(Constant.CIRCULAR_ID)
-        circularDetailsViewModel.getCircularDTL(circularID,Constant.DEFAULT_ID_CIRCULAR)
+        val circularID=  requireArguments().getString(Constant.CIRCULAR_ID)
+        if (circularID != null) {
+            circularDetailsViewModel.getCircularDTL(circularID)
+        }
 
          return binding.root
     }
