@@ -191,7 +191,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                         }
                     }
                 }
-            }, minDate = minDate-timestampOneDay
+            }, minDate = minDate
                 , maxDate = Constant.getLongTimeDate(Constant.currentDate()))
         }
 
@@ -429,7 +429,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                          if (it.data != null) {
-
+                             backDate=it.data.backDate
                              binding.rbClassWise.isVisible=it.data.classAttendance
                              binding.rbStudentWise.isVisible=it.data.subjectAttendance
 
@@ -444,7 +444,6 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                                 if (it.data.classesForSubTeach != null) {
                                     classesForSubTeaches = it.data.classesForSubTeach
                                     openPreviousDay=it.data.openPreviousDay
-                                    backDate=it.data.backDate
                                     binding.tilStartDate.isVisible=openPreviousDay
                                     val classesDataString: ArrayList<String> = ArrayList()
                                     classesDataString.clear()
