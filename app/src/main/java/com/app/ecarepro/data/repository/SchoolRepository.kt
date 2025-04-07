@@ -40,8 +40,8 @@ interface SchoolRepository {
     fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool>
     suspend fun getNotice(pg: Int,classID: Int, isClassNotice: Boolean): NetworkNotice
     suspend fun getCirculars(pg: Int,yrID: Int,title :String): NetworkCircular
-    suspend fun getNoticeDTL( ntID: Int, iD: Int ): NetworkNoticDetails
-    suspend fun getCircularDTL( cirID: Int, iD: Int ): NetworkCircularDetails
+    suspend fun getNoticeDTL( ntID: String): NetworkNoticDetails
+    suspend fun getCircularDTL( cirID: String): NetworkCircularDetails
     suspend fun getClass(): ClassPromotionModel
     suspend fun getClassPromotions( classId: String): PromotionModel
     suspend fun submitClassPromotions( request: RequestClassPromotion): AppResponse

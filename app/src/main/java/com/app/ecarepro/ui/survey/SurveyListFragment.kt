@@ -78,7 +78,7 @@ class SurveyListFragment : Fragment() {
                         if (it.data != null) {
 
 
-                            if (it.data.allSurvey != null) {
+                            if (it.data.allSurvey.isNotEmpty()) {
 
                                 binding.rvSurveyList.show()
                                 binding.tvNoSurvey.hide()

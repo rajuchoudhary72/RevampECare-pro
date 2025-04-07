@@ -103,12 +103,12 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getCirculars(pg, yrID, title)
     }
 
-    override suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails {
-        return schoolService.getNoticeDTL(ntID, iD)
+    override suspend fun getNoticeDTL(ntID: String): NetworkNoticDetails {
+        return schoolService.getNoticeDTL(ntID)
     }
 
-    override suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails {
-        return schoolService.getCircularDTL(cirID, iD)
+    override suspend fun getCircularDTL(cirID: String): NetworkCircularDetails {
+        return schoolService.getCircularDTL(cirID)
     }
 
     override suspend fun getClass(): ClassPromotionModel {

@@ -53,7 +53,7 @@
             android:padding="17dp"
             android:textColor="@color/black"
             android:enabled="true"
-            app:formattedNewText="@{message}"
+            app:formattedText="@{message}"
             android:textIsSelectable="true"
             android:focusable="true"
             android:longClickable="true"
