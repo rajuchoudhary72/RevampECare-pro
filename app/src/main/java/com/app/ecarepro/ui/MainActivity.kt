@@ -1407,7 +1407,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-
+            /*gallery*/
             34 -> {
                 when (childMenuId) {
                     48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
@@ -1423,14 +1423,14 @@ class MainActivity : AppCompatActivity() {
                     40 -> navController.navigate(R.id.calenderActivityNavHost)
                 }
             }
-            /*gallery*/
+           /* *//*gallery*//*
             34 -> {
                 when (childMenuId) {
                     48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
                     49 -> navController.navigate(R.id.videoAlbumFragment)
                     50 -> navController.navigate(R.id.videoAlbumFragment)
                 }
-            }
+            }*/
         }
     }
 

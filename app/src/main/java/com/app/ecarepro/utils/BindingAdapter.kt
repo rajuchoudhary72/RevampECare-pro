@@ -218,14 +218,65 @@ fun setFormattedNewText(textView: TextView, text1: String?) {
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
 
-   /* val formattedText = text?.parseMarkdown()
+    // val formattedText = text?.parseMarkdown()
 
 // Example of setting the formatted text in a TextView
-    textView.text = formattedText*/
+    textView.text = parseFormattedText(text.toString())
 
-    CompleteTextFormate(text, textView)
+    // CompleteTextFormate(text, textView)
 }
+fun parseFormattedText(input: String): SpannableStringBuilder {
+    val spannable = SpannableStringBuilder()
 
+    // Holds flags for open formatting
+    data class FormatFlag(var bold: Boolean = false, var italic: Boolean = false, var underline: Boolean = false)
+
+    var i = 0
+    val buffer = StringBuilder()
+    val formatFlag = FormatFlag()
+
+    fun applyBuffer() {
+        val start = spannable.length
+        spannable.append(buffer.toString())
+        val end = spannable.length
+
+        if (formatFlag.bold) {
+            spannable.setSpan(StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if (formatFlag.italic) {
+            spannable.setSpan(StyleSpan(Typeface.ITALIC), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        if (formatFlag.underline) {
+            spannable.setSpan(UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        buffer.clear()
+    }
+
+    while (i < input.length) {
+        when (input[i]) {
+            '*' -> {
+                applyBuffer()
+                formatFlag.bold = !formatFlag.bold
+            }
+            '_' -> {
+                applyBuffer()
+                formatFlag.italic = !formatFlag.italic
+            }
+            '~' -> {
+                applyBuffer()
+                formatFlag.underline = !formatFlag.underline
+            }
+            else -> buffer.append(input[i])
+        }
+        i++
+    }
+
+    // Append remaining buffer
+    applyBuffer()
+
+    return spannable
+}
 private fun CompleteTextFormate(text: String?, textView: TextView) {
     if (text != null) {
         if (text.contains("~*") || text.contains("*~")) {
