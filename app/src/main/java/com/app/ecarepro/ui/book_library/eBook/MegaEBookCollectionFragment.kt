@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -18,10 +17,11 @@ import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MegaEBookCollectionFragment(val megaBookLink: String) : Fragment() {
+class MegaEBookCollectionFragment() : Fragment() {
 
     private lateinit var binding : FragmentMegaEBookCollectionBinding
     private val eBookViewModel: EBookViewModel by viewModels()
+    private var megaBookLink: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +37,10 @@ class MegaEBookCollectionFragment(val megaBookLink: String) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        megaBookLink = arguments?.getString("link")
 
-        setUpMegaBook(megaBookLink)
+        megaBookLink?.let { setUpMegaBook(it) }
+
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
@@ -75,7 +77,11 @@ class MegaEBookCollectionFragment(val megaBookLink: String) : Fragment() {
 
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                (requireActivity() as MainActivity).showLoader(true)
+                try {
+                    (requireActivity() as MainActivity).showLoader(true)
+                }catch (e:IllegalStateException ){
+                    e.printStackTrace()
+                }
                 super.onPageStarted(view, url, favicon)
             }
 

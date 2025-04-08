@@ -1,24 +1,19 @@
 package com.app.ecarepro.ui.splash
 
-import android.content.Context
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
-import com.app.ecarepro.data.network.model.UserDataOldApp
 import com.app.ecarepro.databinding.FragmentSplashBinding
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.imageUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -59,114 +54,59 @@ class SplashFragment : Fragment() {
                 }
             }
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                val oldUsers: List<UserDataOldApp> = fetchOldUserData(requireContext())
-
-// Example: Print user details
-                for (user in oldUsers) {
-                    Toast.makeText(
-                        requireContext(),
-                        ("ID: " + user.userId).toString() + ", Password: " + user.userPassword,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d(
-                        "UserData",
-                        ("ID: " + user.userId).toString() + ", Password: " + user.userPassword
-                    )
+        /*we comment this code due to we recent  stop user session  */
+        /* viewLifecycleOwner.lifecycleScope.launch {
+             try {
+                 if (splashViewModel.isUserAuthenticated()) {
+                     if (splashViewModel.isUserSessionAvailable()) {
+                         moveToHomeScreen()
+                     } else {
+                         mainActivity().showLoader(true)
+                         *//*if  existing  user logged  and  first time run App after implementation  of user session then
+                        need to pass session ID in header  so  call create session api  *//*
+                        systemViewModel.createUserSession { success, message ->
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                mainActivity().showLoader(false)
+                                if (success) {
+                                    moveToHomeScreen()
+                                } else {
+                                    mainActivity().showMessage(message)
+                                    mainActivity().logout(true)
+                                }
+                            }
+                        }
+                    }
                 }
-
-
-                if (splashViewModel.isUserAuthenticated()) {
-                    systemViewModel.refreshAppLayout()
-                    delay(2000)
-                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
-                } else {
-
-                    //   splashViewModel.getSliders()
-                    //   findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+                else {
+                    splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }*/
 
 
-        }
-
-    }
-
-    fun fetchOldUserData(context: Context): List<UserDataOldApp> {
-        val userList = mutableListOf<UserDataOldApp>()
-        var oldDb: SQLiteDatabase? = null
-        var cursor: Cursor? = null
-
-        try {
-            // Get the old SQLite database file
-            val dbFile = context.getDatabasePath("palmboard.db") // Ensure correct old DB name
-            if (!dbFile.exists()) return userList // Return empty list if old DB is missing
-
-            // Open the old database in read-only mode
-            oldDb = SQLiteDatabase.openDatabase(dbFile.path, null, SQLiteDatabase.OPEN_READONLY)
-
-            // Query user_id and password from old database
-            cursor = oldDb.rawQuery("SELECT * FROM user_info_table_db", null)
-
-            cursor?.use {
-                while (it.moveToNext()) {
-                    val userId = it.getString(it.getColumnIndexOrThrow("user_name_id"))
-                    val password = it.getString(it.getColumnIndexOrThrow("password"))
-                    val isActive = it.getInt(it.getColumnIndexOrThrow("isActive"))
-
-                    // Add to list
-                    userList.add(UserDataOldApp(userId, password,isActive))
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                if (splashViewModel.isUserAuthenticated()) {
+                    moveToHomeScreen()
+                } else {
+                    splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            cursor?.close()
-            oldDb?.close()
         }
-
-        return userList
     }
-    /* fun fetchOldUserData(context: Context): List<UserDataOldApp> {
-         val userList: MutableList<UserDataOldApp> = ArrayList<UserDataOldApp>()
-         var oldDb: SQLiteDatabase? = null
-         var cursor: Cursor? = null
 
-         try {
-             // Get the old SQLite database file
-             val dbFile: File =
-                 context.getDatabasePath("user_info_table_db") // Change to your old DB name
-             if (!dbFile.exists()) return userList // Return empty list if old DB is missing
+    private suspend fun moveToHomeScreen() {
+        systemViewModel.refreshAppLayout()
+        delay(2000)
+        findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
 
-
-             // Open the old database in read-only mode
-             oldDb =
-                 SQLiteDatabase.openDatabase(dbFile.getPath(), null, SQLiteDatabase.OPEN_READONLY)
-
-             // Query user_id and user_password
-             cursor = oldDb.rawQuery("SELECT user_name_id, password FROM users", null)
-
-             if (cursor != null && cursor.moveToFirst()) {
-                 do {
-                     val userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_name_id"))
-                     val password = cursor.getString(cursor.getColumnIndexOrThrow("password"))
-
-                     // Add to ArrayList
-                     userList.add(UserDataOldApp(userId, password))
-                 } while (cursor.moveToNext())
-             }
-         } catch (e: java.lang.Exception) {
-             e.printStackTrace()
-         } finally {
-             cursor?.close()
-             oldDb?.close()
-         }
-         return userList
-     }*/
+    }
 
 
     private fun startAnimation() {
@@ -174,11 +114,6 @@ class SplashFragment : Fragment() {
         val run = Runnable { anim.start() }
         binding.backgroundView.post(run)
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        fetchOldUserData(requireContext())
     }
 
     override fun onDestroyView() {

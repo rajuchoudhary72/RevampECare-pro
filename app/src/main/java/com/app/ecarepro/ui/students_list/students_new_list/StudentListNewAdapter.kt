@@ -7,11 +7,13 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.StudentListItemBinding
-import com.app.ecarepro.databinding.TeacherItemBinding
 import com.app.ecarepro.model.Student
+import com.app.ecarepro.utils.Constant
 
-class StudentListNewAdapter(private var studentList: List<Student>,
-                            private var studentListFragment: StudentListSubFragment
+class StudentListNewAdapter(
+    private var studentList: List<Student>,
+    private var studentListFragment: StudentListSubFragment,
+    private val toFragment: String
 ) :
     RecyclerView.Adapter<StudentListNewAdapter.CircularViewHolder>() {
 
@@ -30,8 +32,18 @@ class StudentListNewAdapter(private var studentList: List<Student>,
 
         val bindingm = DataBindingUtil.getBinding<StudentListItemBinding>(holder.itemView)
         bindingm?.apply {
+
+
             bindingm.studentData=studentList[position]
             val data= studentList[position]
+
+
+            if (toFragment== Constant.PROFILE_FRA_STU){
+                llButton.isVisible=false
+                bindingm.llMain.setOnClickListener {
+                    studentListFragment.onItemClick(data,1,false)
+                }
+            }
 
             bindingm.rollno.text= buildString {
                 append("Roll No : ")
@@ -50,8 +62,17 @@ class StudentListNewAdapter(private var studentList: List<Student>,
                 append(data.admissionNumber)
             }
 
-            bindingm.llMain.setOnClickListener {
+
+
+
+            bindingm.cvView.setOnClickListener {
+                studentListFragment.onItemClick(data,0,false)
+            }
+            bindingm.cvAdd.setOnClickListener {
                 studentListFragment.onItemClick(data,1,false)
+            }
+            bindingm.llMain.setOnClickListener {
+                studentListFragment.onItemClick(data,3,false)
             }
         }
 

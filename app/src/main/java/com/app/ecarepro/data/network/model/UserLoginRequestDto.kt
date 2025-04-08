@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.model
 
 import com.google.gson.annotations.SerializedName
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
 
 
 data class UserLoginRequestDto(
@@ -9,5 +10,7 @@ data class UserLoginRequestDto(
     @SerializedName("schCode")
     val schCode: String?,
     @SerializedName("username")
-    val username: String?
+    val username: String?,
+    @SerializedName("deviceinfo")
+    val deviceInfo: CreateUserSessionRequestDto? = null
 )

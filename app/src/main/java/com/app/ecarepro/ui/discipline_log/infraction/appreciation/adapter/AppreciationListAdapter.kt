@@ -32,6 +32,7 @@ import com.app.ecarepro.model.RecentAppreciation
 
         val binding = DataBindingUtil.getBinding<DisciplineViewListItemBinding>(holder.itemView)
         if (binding!=null){
+            binding.rlCompilance.isVisible=false
             var isMaxLineOne=true
             val data=recentInfractions[position]
             binding.ivDelete.isVisible=data.canDelete
@@ -39,8 +40,7 @@ import com.app.ecarepro.model.RecentAppreciation
                 append(infractionListFragment.getString(R.string.category))
                 append(data.appreciation)
             }
-            binding.tvQuantity.text= buildString {
-                append(infractionListFragment.getString(R.string.instance_wit))
+            binding.tvInstance.text= buildString {
                 append(data.instance)
             }
             binding.tvDate.text= buildString {

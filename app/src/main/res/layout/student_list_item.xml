@@ -8,14 +8,17 @@
             type="com.app.ecarepro.model.Student" />
     </data>
 
-    <RelativeLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:cardBackgroundColor="@color/white"
+        >
 
         <LinearLayout
             android:id="@+id/ll_main"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
 
             >
@@ -84,25 +87,64 @@
                   />
 
 
+            <LinearLayout
+                android:id="@+id/ll_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
+               >
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_view"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/green"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="@dimen/_4sdp"
+
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:layout_gravity="center"
+                        android:text="@string/view"
+                        android:textColor="@color/white"
+                        />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_add"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/green"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="@dimen/_4sdp"
+                    android:layout_marginStart="@dimen/_4sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:layout_gravity="center"
+                        android:text="@string/add"
+                        android:textColor="@color/white"
+                        />
+                </androidx.cardview.widget.CardView>
+
+
+            </LinearLayout>
 
 
 
         </LinearLayout>
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="2dp"
-            android:layout_height="200dp"
-            android:layout_alignParentEnd="true"
-            />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-           android:layout_alignParentBottom="true"
-            />
-
-
-
-    </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 
  </layout>

@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/calibri_light"
-                android:text='@{data.heading + "  "+data.data }'
+                android:text='@{data.heading + " - "+data.data }'
                 tools:text="Raju Choudhary"
                 android:textAppearance="?attr/textAppearanceBodySmall"
                 android:textColor="@color/black"
@@ -58,10 +58,8 @@
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_arrow_right"
                 android:layout_marginEnd="15dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="8dp"
                 android:text="View"
-                android:textSize="12sp"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/brand_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:fontFamily="@font/calibri_light"

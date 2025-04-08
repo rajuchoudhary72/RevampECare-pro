@@ -21,8 +21,7 @@ class NoticeDetailsViewModel @Inject constructor(
         NetworkResult.Loading())
     val _noticeStateFlow: StateFlow<NetworkResult<NetworkNoticDetails>> = noticeStateFlow
     fun getNoticeDTL(ntID: String) = viewModelScope.launch {
-
-        noticeStateFlow.value = NetworkResult.Loading( )
+    noticeStateFlow.value = NetworkResult.Loading( )
 
         runCatching {
             noticeStateFlow.value = NetworkResult.Loading()

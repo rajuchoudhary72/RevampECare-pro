@@ -200,7 +200,6 @@
                             android:layout_marginTop="2dp"
                             android:layout_toEndOf="@+id/clock2"
                             android:paddingTop="3dp"
-                            android:text="@{assignmentData.asgDate}"
                             android:textColor="#848484"
                             app:fontFamily="@font/ubuntu_medium" />
 

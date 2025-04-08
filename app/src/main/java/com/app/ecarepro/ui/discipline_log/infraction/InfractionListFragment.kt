@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,6 +22,7 @@ import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionListAdapter
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +36,8 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
     private var studentID: Int = 0
     private lateinit var binding: FragmentInfractionListBinding
     private  val infractionListViewModel: InfractionListViewModel by viewModels()
+    private val sharedViewModel: ShareViewModelDiscipline by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -102,7 +106,7 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
                                 val circularAdapter = InfractionListAdapter(
                                     it.data.records,
-                                    this@InfractionListFragment
+                                    this@InfractionListFragment,
                                 )
 
                                 binding.recyclerInfractionList.apply {
@@ -132,27 +136,34 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
     }
 
     override fun onItemClick(t: RecentInfraction, pos: Int, boolean: Boolean) {
-        infractionListViewModel.disciplineLogDeleteLog(t.id,1)
-        lifecycleScope.launch {
-            infractionListViewModel.deleteLogStateFlow.collectLatest {
-                when (it) {
+        if (pos==1){
+            infractionListViewModel.disciplineLogDeleteLog(t.id,1)
+            lifecycleScope.launch {
+                infractionListViewModel.deleteLogStateFlow.collectLatest {
+                    when (it) {
 
-                    is NetworkResult.Loading -> {
-                        (requireActivity() as MainActivity).showLoader(true)
-                    } is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
+                        is NetworkResult.Loading -> {
+                            (requireActivity() as MainActivity).showLoader(true)
+                        } is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
 
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
+                    } is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
 
-                    if (it.data!=null){
-                        it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
-                        infractionListViewModel.getInfractions(studentID)
+                        if (it.data!=null){
+                            it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
+                            infractionListViewModel.getInfractions(studentID)
+                        }
+
                     }
-
-                }
+                    }
                 }
             }
+        } else if (pos==2){
+            sharedViewModel.setRecentInfraction(t)
+            findNavController().navigate(R.id.addComplianceFragment)
+            }
         }
-    }
+
+
 }

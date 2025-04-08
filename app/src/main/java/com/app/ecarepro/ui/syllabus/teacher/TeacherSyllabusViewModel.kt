@@ -2,7 +2,6 @@ package com.app.ecarepro.ui.syllabus.teacher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.NetworkClassSyllabus
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -20,10 +19,6 @@ import javax.inject.Inject
 class TeacherSyllabusViewModel @Inject constructor(
     private val  userRepository: UserRepository
 ) : ViewModel() {
-
-    val isMainApp = BuildConfig.FLAVOR == "Franciscan e-Care"
-    val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
-    val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
 
     val showSearchView = MutableStateFlow(false)
     val searchQuery = MutableStateFlow("")

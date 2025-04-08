@@ -30,11 +30,11 @@ import kotlinx.coroutines.launch
 class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
 
 
-    private lateinit var binding : FragmentTeacherSyllabusBinding
-    private  val teacherSyllabusViewModel: TeacherSyllabusViewModel by viewModels()
-    private var filterType= 0
+    private lateinit var binding: FragmentTeacherSyllabusBinding
+    private val teacherSyllabusViewModel: TeacherSyllabusViewModel by viewModels()
+    private var filterType = 0
     private lateinit var syllabusListFilter: List<Syllabuse>
-    private   var syllabustList: List<Syllabuse>? = null
+    private var syllabustList: List<Syllabuse>? = null
     private var shouldRefresh = false
 
 
@@ -42,7 +42,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding=FragmentTeacherSyllabusBinding.inflate(inflater,container,false).apply {
+        binding = FragmentTeacherSyllabusBinding.inflate(inflater, container, false).apply {
             viewModel = teacherSyllabusViewModel
             lifecycleOwner = viewLifecycleOwner
         }
@@ -54,19 +54,19 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val addSyllabusButton = teacherSyllabusViewModel.isMainApp
-        if (addSyllabusButton){
-            binding.fbAdd.isVisible=true
-        }else{
-            binding.fbAdd.isVisible=false
-        }
+
         binding.fbAdd.setOnClickListener {
-            findNavController().navigate(R.id.addSyllabusFragment )
+            findNavController().navigate(R.id.addSyllabusFragment)
         }
 
         binding.spinnerSelectFilterType.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Check if view is null before proceeding
                 if (view == null) {
                     Log.e("SpinnerListener", "View is null")
@@ -99,25 +99,28 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
                         binding.recyclerSyllabus.isVisible = true
 
                         if (it.data != null) {
-                        if (it.data.syllabuses != null) {
-                            if (it.data.syllabuses.isNotEmpty()) {
-                                syllabustList = it.data.syllabuses
-                                setupRecycleViewSyllabusList(it.data.syllabuses)
+                            if (it.data.syllabuses != null) {
+                                if (it.data.syllabuses.isNotEmpty()) {
+                                    syllabustList = it.data.syllabuses
+                                    setupRecycleViewSyllabusList(it.data.syllabuses)
 
-                                val spinnerTripTypeAdapter = ArrayAdapter(requireActivity(),
-                                    android.R.layout.simple_list_item_1,resources.getStringArray(R.array.filterTypeSyllabus))
-                                binding.spinnerSelectFilterType.adapter=spinnerTripTypeAdapter
+                                    val spinnerTripTypeAdapter = ArrayAdapter(
+                                        requireActivity(),
+                                        android.R.layout.simple_list_item_1,
+                                        resources.getStringArray(R.array.filterTypeSyllabus)
+                                    )
+                                    binding.spinnerSelectFilterType.adapter = spinnerTripTypeAdapter
+
+                                } else {
+                                    binding.recyclerSyllabus.isVisible = false
+                                    binding.tvNoData.isVisible = true
+                                }
 
                             } else {
                                 binding.recyclerSyllabus.isVisible = false
                                 binding.tvNoData.isVisible = true
                             }
-
                         } else {
-                            binding.recyclerSyllabus.isVisible = false
-                            binding.tvNoData.isVisible = true
-                        }
-                        }else {
                             binding.recyclerSyllabus.isVisible = false
                             binding.tvNoData.isVisible = true
                         }
@@ -131,30 +134,44 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
 
         lifecycleScope.launch {
             teacherSyllabusViewModel.searchQuery.collectLatest {
-                if (it.isNotEmpty() && syllabustList!=null){
-                        when(filterType){
-                            0 ->{
-                                syllabusListFilter = syllabustList!!.filter { s ->   s.classSTD.lowercase().contains(it.lowercase()) || s.title.lowercase().contains(it.lowercase()) || s.subject.lowercase().contains(it.lowercase())    }
-                                setupRecycleViewSyllabusList(syllabusListFilter)
-
+                if (it.isNotEmpty() && syllabustList != null) {
+                    when (filterType) {
+                        0 -> {
+                            syllabusListFilter = syllabustList!!.filter { s ->
+                                s.classSTD.lowercase()
+                                    .contains(it.lowercase()) || s.title.lowercase()
+                                    .contains(it.lowercase()) || s.subject.lowercase()
+                                    .contains(it.lowercase())
                             }
-                            1 ->{
-                                syllabusListFilter = syllabustList!!.filter { s ->   s.classSTD.lowercase().contains(it.lowercase())   }
-                                setupRecycleViewSyllabusList(syllabusListFilter)
+                            setupRecycleViewSyllabusList(syllabusListFilter)
 
-                            }
-                            2 ->{
-                                syllabusListFilter = syllabustList!!.filter { s ->   s.title.lowercase().contains(it.lowercase())   }
-                                setupRecycleViewSyllabusList(syllabusListFilter)
-
-                            }
-                            3 ->{
-                                syllabusListFilter = syllabustList!!.filter { s ->   s.subject.lowercase().contains(it.lowercase())   }
-                                setupRecycleViewSyllabusList(syllabusListFilter)
-
-                            }
                         }
-                }else{
+
+                        1 -> {
+                            syllabusListFilter = syllabustList!!.filter { s ->
+                                s.classSTD.lowercase().contains(it.lowercase())
+                            }
+                            setupRecycleViewSyllabusList(syllabusListFilter)
+
+                        }
+
+                        2 -> {
+                            syllabusListFilter = syllabustList!!.filter { s ->
+                                s.title.lowercase().contains(it.lowercase())
+                            }
+                            setupRecycleViewSyllabusList(syllabusListFilter)
+
+                        }
+
+                        3 -> {
+                            syllabusListFilter = syllabustList!!.filter { s ->
+                                s.subject.lowercase().contains(it.lowercase())
+                            }
+                            setupRecycleViewSyllabusList(syllabusListFilter)
+
+                        }
+                    }
+                } else {
                     syllabustList?.let { it1 -> setupRecycleViewSyllabusList(it1) }
                 }
 
@@ -175,13 +192,20 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
                         putString(Constant.URL_ARGUMENT, t.filePath)
                     })
             }
+
             2 -> {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
+                try {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus))
+                } catch (e: NullPointerException) {
+                    e.printStackTrace()
+                }
+
             }
+
             3 -> {
                 shouldRefresh = true
-                findNavController().navigate(R.id.addSyllabusFragment,Bundle( ).apply {
+                findNavController().navigate(R.id.addSyllabusFragment, Bundle().apply {
                     putBoolean("edit", true)
                     putString(Constant.ID, t.id)
                     putInt("classID", t.classID)
@@ -193,6 +217,7 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
                     putString("fileName", t.fileName)
                 })
             }
+
             4 -> {
                 teacherSyllabusViewModel.deleteSyllabus(t.id).invokeOnCompletion {
                     teacherSyllabusViewModel.getTeacherSyllabuses()
@@ -204,11 +229,11 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
 
 
     private fun setupRecycleViewSyllabusList(syllabuses: List<Syllabuse>) {
-        if ( syllabuses != null) {
+        if (syllabuses != null) {
 
             if (syllabuses.isNotEmpty()) {
-                val showDeleteEdit = teacherSyllabusViewModel.isMainApp
-                val syllabusesListAdapter = TeacherSyllabusListAdapter(syllabuses, this@TeacherSyllabusFragment,showDeleteEdit)
+                val syllabusesListAdapter =
+                    TeacherSyllabusListAdapter(syllabuses, this@TeacherSyllabusFragment)
 
 
                 binding.recyclerSyllabus.apply {
@@ -216,18 +241,19 @@ class TeacherSyllabusFragment : Fragment(), ItemListener<Syllabuse> {
                     layoutManager = LinearLayoutManager(activity)
                     adapter = syllabusesListAdapter
                 }
-                binding.recyclerSyllabus.isVisible=true
-                binding.tvNoData.isVisible=false
+                binding.recyclerSyllabus.isVisible = true
+                binding.tvNoData.isVisible = false
 
 
-            }else{
-                binding.recyclerSyllabus.isVisible=false
-                binding.tvNoData.isVisible=true
+            } else {
+                binding.recyclerSyllabus.isVisible = false
+                binding.tvNoData.isVisible = true
 
             }
 
         }
     }
+
     override fun onResume() {
         super.onResume()
         if (shouldRefresh) {

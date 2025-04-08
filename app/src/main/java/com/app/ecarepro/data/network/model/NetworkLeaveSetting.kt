@@ -15,5 +15,6 @@ data class NetworkLeaveSetting(
     val message: String?,
     val serverDate: String?,
     val status: String?,
+    val shortLeaveValue: Double,
     val termCondition: TermCondition?
 )

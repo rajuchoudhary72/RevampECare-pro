@@ -32,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:contentDescription="Search button"
             app:icon="@drawable/ic_search"
             app:iconSize="32dp"
             app:iconTint="?attr/colorOnPrimary"
@@ -54,6 +55,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginTop="16dp"
+                android:contentDescription="User profile picture"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round"
@@ -94,7 +96,7 @@
                         android:layout_marginHorizontal="16dp"
                         android:fontFamily="@font/calibri_bold"
                         android:textColor="@color/brand_color"
-                        android:textSize="@dimen/_14sdp"
+                        android:textSize="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rl_user_details"
@@ -127,8 +129,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rl_user_details"
-            >
+            app:layout_constraintTop_toBottomOf="@id/rl_user_details">
 
             <com.google.android.material.card.MaterialCardView
                  android:layout_width="match_parent"
@@ -146,22 +147,23 @@
                 app:cardBackgroundColor="@color/background_dashboard"
                 app:cardPreventCornerOverlap="false"/>
 
-
-            <com.airbnb.epoxy.EpoxyRecyclerView
-                android:id="@+id/recycler_view"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="4"
-                 android:background="@color/background_dashboard"
-                android:layout_marginTop="@dimen/_50sdp"
-                 tools:listitem="@layout/item_card_option" />
+                android:layout_marginTop="@dimen/_50sdp">
 
+                <com.airbnb.epoxy.EpoxyRecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_dashboard"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="4"
+                    tools:listitem="@layout/item_card_option" />
 
-
-
-
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         </FrameLayout>

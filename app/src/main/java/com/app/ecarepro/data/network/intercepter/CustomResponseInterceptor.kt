@@ -51,15 +51,16 @@ class CustomResponseInterceptor @Inject constructor(
                         .build()
                 }
                 1 -> {
+                    showAlertErrorCodeDialog()
 
-                    runBlocking {
+                   /* runBlocking {
                         if (!dialogShown) {
                             if (showRetryDialog()) {
                                 response.close() // Close current response before retrying
                                   handleResponse(chain, chain.proceed(chain.request())) // Recursive retry
                             }
                         }
-                    }
+                    }*/
                 }
                 2 -> showMessageDialog(message)
             }
@@ -92,7 +93,20 @@ class CustomResponseInterceptor @Inject constructor(
             }
         }
     }
-
+    private fun showAlertErrorCodeDialog() {
+        handler.post {
+            val appContext =  context as ECateProApp
+            handler.post {
+                AlertDialog.Builder(appContext.getCurrentActivity())
+                    .setTitle("Request Failed")
+                    .setMessage("Something went wrong. Please try again later.")
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss()
+                    }
+                    .setCancelable(true)
+                    .show()
+            }
+        }
+    }
     private fun showMessageDialog(message: String) {
         handler.post {
         val appContext =  context as ECateProApp
@@ -104,6 +118,7 @@ class CustomResponseInterceptor @Inject constructor(
                 .setCancelable(false)
                 .show()
         }
-    }}
+    }
+    }
 }
 

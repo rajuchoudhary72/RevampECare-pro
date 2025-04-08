@@ -47,15 +47,15 @@ import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FeeBookFragment : Fragment() , ItemListener <FeeBookModel> {
+class FeeBookFragment : Fragment(), ItemListener<FeeBookModel> {
 
 
     private lateinit var binding: FragmentFeeBookBinding
     private val feeBookViewModel: FeeBookViewModel by viewModels()
-    private var firstTime=true
+    private var firstTime = true
     private val STORAGE_PERMISSION_REQUEST_CODE = 1001
 
-    private var base64String=""
+    private var base64String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,11 +105,10 @@ class FeeBookFragment : Fragment() , ItemListener <FeeBookModel> {
 //                            }
 
 
-                            if (  !it.data.fee_data.isNullOrEmpty()) {
+                            if (!it.data.fee_data.isNullOrEmpty()) {
 
                                 binding.recyclerFeeReceipt.isVisible = true
                                 binding.tvNoData.isVisible = false
-
 
 
                                 val feeReportAdapter = FeeBookAdapter(
@@ -142,20 +141,20 @@ class FeeBookFragment : Fragment() , ItemListener <FeeBookModel> {
     }
 
 
-
     override fun onItemClick(t: FeeBookModel, pos: Int, boolean: Boolean) {
-         when(pos){
-             1 ->{
-                 getFeeCertificateDownload(t,1)
-             }
-             2 ->{
-                 getFeeCertificateDownload(t,2)
-             }
-         }
-         }
+        when (pos) {
+            1 -> {
+                getFeeCertificateDownload(t, 1)
+            }
+
+            2 -> {
+                getFeeCertificateDownload(t, 2)
+            }
+        }
+    }
 
 
-    private fun getFeeCertificateDownload(feeBookModel: FeeBookModel, i : Int){
+    private fun getFeeCertificateDownload(feeBookModel: FeeBookModel, i: Int) {
         lifecycleScope.launch {
             feeBookViewModel.feeCertificateDownloadStateFlow.collectLatest {
                 when (it) {
@@ -163,27 +162,30 @@ class FeeBookFragment : Fragment() , ItemListener <FeeBookModel> {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data!=null){
-                            base64String=it.data.bytedata
+                        if (it.data != null) {
+                            base64String = it.data.bytedata
                             if (checkStoragePermission()) {
-                                saveAndOpenPdf(it.data.bytedata,i,feeBookModel.installname )
+                                saveAndOpenPdf(it.data.bytedata, i, feeBookModel.installname)
                             } else {
                                 requestStoragePermission()
                             }
                         }
-                    } }
+                    }
+                }
             }
         }
 
         feeBookViewModel.getFeeReceiptDownload(feeBookModel)
 
     }
+
     fun generatePDFFromBase64(base64: String, fileName: String) {
         try {
             val decodedBytes: ByteArray = Base64.decode(base64, Base64.DEFAULT)
@@ -235,52 +237,85 @@ class FeeBookFragment : Fragment() , ItemListener <FeeBookModel> {
         val intent = Intent(Intent.ACTION_VIEW)
         val uri = FileProvider.getUriForFile(
             requireContext(),
-            requireContext().packageName + ".myFileProvider",file
+            requireContext().packageName + ".myFileProvider", file
         )
         intent.setDataAndType(uri, "application/pdf")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(intent)
     }
 
-
-
+    private fun writeResponseBodyToDisk(txt: String, receiptNo: String): File? {
+        return try {
+            val dwldsPath = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                "/eCarePro Download/FeeBook/"
+            )
+            if (!dwldsPath.exists()) {
+                dwldsPath.mkdirs()
+            }
+            val file = File.createTempFile(receiptNo, ".pdf", dwldsPath)
+            val pdfAsBytes = Base64.decode(txt, 0)
+            val os: FileOutputStream
+            os = FileOutputStream(file, false)
+            os.write(pdfAsBytes)
+            os.flush()
+            os.close()
+            file
+        } catch (e: IOException) {
+            null
+        }
+    }
     private fun saveAndOpenPdf(base64String: String, i: Int, recdate: String?) {
-
 
 
         try {
             val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
 
+            if (recdate != null) {
+                val file=   writeResponseBodyToDisk(base64String,recdate)
+                try {
 
-           // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
-            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "FeeBook$recdate.pdf"
-            )
-            try {
+                    val outputStream = FileOutputStream(file)
+                    outputStream.write(decodedBytes)
+                    outputStream.close()
+                    if (i == 2) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Fee Receipt saved to eCarePro Download",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
+                }
 
-                val outputStream = FileOutputStream(file)
-                outputStream.write(decodedBytes)
-                outputStream.close()
-                if (i==2){
-                    Toast.makeText(requireContext(), "Fee Receipt saved to eCarePro Download", Toast.LENGTH_SHORT).show()
-             }
-             } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                 Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
+
+                if (i == 1) {
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    val uri = file?.let {
+                        FileProvider.getUriForFile(
+                            requireContext(),
+                            requireContext().packageName + ".myFileProvider",
+                            it
+                        )
+                    }
+                    intent.setDataAndType(uri, "application/pdf")
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(intent)
+                }
             }
+            /*// val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
+            val file = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                "FeeBook$recdate.pdf"
+            )*/
 
 
-if (i==1){
-    val intent = Intent(Intent.ACTION_VIEW)
-    val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".myFileProvider", file)
-    intent.setDataAndType(uri, "application/pdf")
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    startActivity(intent)
-}
 
         } catch (e: Exception) {
             e.printStackTrace()
-            // Handle exceptions appropriately (e.g., show an error message)
+            Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -335,10 +370,11 @@ if (i==1){
         if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission granted, proceed with saving and opening the PDF
-              //  saveAndOpenPdf(base64String, "FeeReceipt", i, recdate) // Assuming you have the Base64 string available
+                //  saveAndOpenPdf(base64String, "FeeReceipt", i, recdate) // Assuming you have the Base64 string available
             } else {
                 // Permission denied, handle accordingly (e.g., show a message)
-                Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

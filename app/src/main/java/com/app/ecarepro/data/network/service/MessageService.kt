@@ -11,6 +11,7 @@ import com.app.ecarepro.data.network.model.InboxMessageDto
 import com.app.ecarepro.data.network.model.MessageFormDto
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.NetworkConversationReport
+import com.app.ecarepro.data.network.model.NetworkPushNotificationRequest
 import com.app.ecarepro.data.network.model.NetworkStudentParentComms
 import com.app.ecarepro.data.network.model.ReplyMessageRequestDto
 import com.app.ecarepro.data.network.model.ReplyMessageResponseDto
@@ -140,4 +141,10 @@ interface MessageService {
         @Query("ScholarType") scholarType: Int,
         @Query("byRollNo") byRollNo: Boolean,
     ): NetworkStudentParentComms
+
+    @POST("Message/SendPushNotification")
+    suspend fun sendPushNotification(
+        @Body request: NetworkPushNotificationRequest
+    ): CommonResponse
+
 }

@@ -39,9 +39,7 @@ class LatestBookAdapter(private var latestBookList: List<LatestBook>,
         placeholder(R.drawable.ic_library_big_image)
             .into(bindingm.userImg)
 
-
     }
-
     class ThoughtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
   }
 

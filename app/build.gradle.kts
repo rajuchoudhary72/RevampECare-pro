@@ -9,6 +9,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
+    id("com.google.firebase.firebase-perf")
 
 }
 
@@ -31,7 +32,7 @@ android {
             keyPassword = "strawberryapp"
         }
         create("MYSFPS Play") {
-            storeFile = file("strawbery_play_key")
+            storeFile = file("strawberry_play_key")
             storePassword = "strawberryplay"
             keyAlias = "strawberryplay"
             keyPassword = "strawberryplay"
@@ -43,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 274
-        versionName = "2.6.3"
+        versionCode = 322
+        versionName = "3.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -65,6 +66,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("uat") {
+            initWith(buildTypes.getByName("debug"))
+            isMinifyEnabled = false
+            isDebuggable = true
+            matchingFallbacks += listOf("debug")
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-UAT"
         }
         release {
             isMinifyEnabled = false
@@ -95,26 +104,20 @@ android {
             resValue("string", "app_name", "Franciscan e-Care")
             signingConfig = signingConfigs.getByName("Franciscan e-Care")
         }
-        create("dev") {
-            dimension = "apps"
-            resValue("string", "app_name", "e-Care-Dev")
-            signingConfig = signingConfigs.getByName("Franciscan e-Care")
-            applicationIdSuffix = ".dev"
-        }
         create("MYSFHS") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFHS")
             applicationId = "com.franciscan.strawberry"
-            versionCode = 44
-            versionName = "2.0.19"
+            versionCode = 40
+            versionName = "2.0.15"
             signingConfig = signingConfigs.getByName("MYSFHS")
         }
         create("MYSFPS Play") {
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
-            versionCode = 7
-            versionName = "1.0.6"
+            versionCode = 5
+            versionName = "1.0.4"
             signingConfig = signingConfigs.getByName("MYSFPS Play")
         }
     }
@@ -163,6 +166,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.cloud.messaging)
     implementation(libs.firebase.messaging)
+    implementation("com.google.firebase:firebase-perf")
     /* OTP Pin View */
     implementation(libs.otpview)
 

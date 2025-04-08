@@ -6,6 +6,7 @@ import android.provider.Settings
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Card
@@ -29,6 +30,7 @@ import com.app.ecarepro.data.network.model.UserUndertakingModule
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -42,14 +44,17 @@ class HomeViewModel @Inject constructor(
     var currentLocation: Pair<Double, Double>? = null
     private val favouriteData = MutableStateFlow<List<Menu>?>(null)
 
-    val uiState =
+    private val refresh = MutableLiveData(false)
 
-        combine(
-            flow = userRepository.getUserDashboard(),
-            flow2 = userRepository.getUserUndertaking(),
-            flow3 = favouriteData
-        ) { dashboard, undertaking, favourite ->
-            Triple(dashboard, undertaking, favourite)
+    val uiState =
+        refresh.asFlow().flatMapLatest { refresh ->
+            combine(
+                flow = userRepository.getUserDashboard(refresh),
+                flow2 = userRepository.getUserUndertaking(refresh),
+                flow3 = favouriteData
+            ) { dashboard, undertaking, favourite ->
+                Triple(dashboard, undertaking, favourite)
+            }
         }
 
             .map { (dashboard, undertaking, favourite) ->
@@ -69,7 +74,7 @@ class HomeViewModel @Inject constructor(
                     HomeUiState.Success(
                         cards = cards,
                         favourites = favourite ?: emptyList(),
-                        user = userDataStore.getUser()!!,
+                        user = userDataStore.getUser(),
                         underTaking = undertaking.getOrNull() ?: ""
                     )
                 } else {
@@ -134,7 +139,14 @@ class HomeViewModel @Inject constructor(
         favouriteData.update { menu }
     }
 
-
+    fun refresh() {
+        refresh.postValue(true)
+    }
+    fun setCityName(city:String){
+        viewModelScope.launch {
+            userDataStore.setCityName(city)
+        }
+    }
     init {
         viewModelScope.launch {
             schoolData.postValue(userDataStore.getSchoolData())

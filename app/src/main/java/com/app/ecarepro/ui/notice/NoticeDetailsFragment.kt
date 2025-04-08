@@ -41,7 +41,6 @@ class NoticeDetailsFragment : Fragment() {
 
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,7 +49,8 @@ class NoticeDetailsFragment : Fragment() {
             lifecycleOwner= viewLifecycleOwner
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
-        noticeDetailsBinding.toolbarNoticDetail.setNavigationOnClickListener { findNavController().popBackStack() }
+        noticeDetailsBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        noticeDetailsBinding.includeToolbar.toolbarTitle.text = getString(R.string.notice_details)
         noticeID= requireArguments().getString(Constant.NOTICE_ID_ARGUMENT)
 
 
@@ -69,8 +69,12 @@ class NoticeDetailsFragment : Fragment() {
         }
 
         noticeDetailsBinding.relDownload.setOnClickListener {
-           val androidDownloader = AndroidDownloader(requireContext())
-            androidDownloader.downloadFile(fileSource, getString(R.string.notice) )
+            try {
+                val androidDownloader = AndroidDownloader(requireContext())
+                androidDownloader.downloadFile(fileSource, getString(R.string.notice) )
+            }catch (e:SecurityException){
+                e.printStackTrace()
+            }
         }
 
         lifecycleScope.launch {
@@ -88,7 +92,12 @@ class NoticeDetailsFragment : Fragment() {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data!=null){
                             noticeDetailsBinding.noticeDetailData=it.data.notice
-                            fileSource=it.data.notice.filePath
+                            if (it.data.notice.filePath!=null){
+                                fileSource= it.data.notice.filePath.toString()
+                            }else{
+
+                            }
+
 
 
 

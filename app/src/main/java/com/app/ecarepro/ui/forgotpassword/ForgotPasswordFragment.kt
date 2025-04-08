@@ -96,7 +96,6 @@ class ForgotPasswordFragment : Fragment() {
                 ) { it ->
                     (requireActivity() as MainActivity).showLoader(false)
                     if (it.errorCode == 0) {
-                        mainActivity().showMessage("${it.message}")
                         findNavController().popBackStack()
                     } else if (it.errorCode == 404) {
                         mainActivity().showMessage("$value is not found registered with us.")

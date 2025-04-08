@@ -68,9 +68,9 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        fragmentCircularBinding= FragmentCirculerBinding.inflate(inflater,container,false)
-        fragmentCircularBinding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        fragmentCircularBinding = FragmentCirculerBinding.inflate(inflater, container, false)
+        fragmentCircularBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        fragmentCircularBinding.includeToolbar.toolbarTitle.text = getString(R.string.circular)
         return fragmentCircularBinding.root
 
     }
@@ -107,8 +107,8 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         }
 
         lifecycleScope.launch {
-            circularViewModel._circularsStateFlowStateFlow.observe(viewLifecycleOwner) { circularNetworkResult ->
-                when (circularNetworkResult) {
+            circularViewModel._circularsStateFlowStateFlow.observe(viewLifecycleOwner) {
+                when (it) {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
@@ -118,32 +118,28 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         fragmentCircularBinding.recyclerCircular.isVisible = false
-                        Log.d("main", "Error" + circularNetworkResult )
+                        Log.d("main", "Error" + it )
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         fragmentCircularBinding.recyclerCircular.isVisible = true
 
-                        if (circularNetworkResult.data!=null){
-                            if (circularNetworkResult.data.academicYears!=null){
-                                yearList=circularNetworkResult.data.academicYears
-                                if (circularNetworkResult.data.academicYears.isNotEmpty()){
+                        if (it.data!=null){
+                            if (it.data.academicYears!=null){
+                                yearList=it.data.academicYears
+                                if (it.data.academicYears.isNotEmpty()){
                                     if (isFirst){
-                                        circularNetworkResult.data.academicYears.forEach {
-                                            if (it.isCur){
-                                                circularViewModel.academicYear=it.session
-                                                fragmentCircularBinding.tvSelectSession.text= it.session
-                                            }
-                                        }
+                                        circularViewModel.academicYear=it.data.academicYears[0].session
+                                        fragmentCircularBinding.tvSelectSession.text= it.data.academicYears[0].session
                                         isFirst=false
                                     }
                                 }
                             }
 
-                            if (circularNetworkResult.data.circularList!=null  ){
+                            if (it.data.circularList!=null  ){
 
-                                if (circularNetworkResult.data.circularList.isNotEmpty()){
+                                if (it.data.circularList.isNotEmpty()){
                                     fragmentCircularBinding.recyclerCircular.isVisible=true
                                     fragmentCircularBinding.tvNoData.isVisible=false
                                     isLoading=true
@@ -151,10 +147,10 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
 
                                         circularListAdapter.clearData()
                                     }
-                                   circularViewModel.cacheListData.addAll(circularNetworkResult.data.circularList)
-                                    circularListAdapter.setData(circularNetworkResult.data.circularList.toMutableList())
+                                   circularViewModel.cacheListData.addAll(it.data.circularList)
+                                    circularListAdapter.setData(it.data.circularList.toMutableList())
 
-                                    fragmentCircularBinding.toolbar.title= "All Circular" + "( " + circularNetworkResult.data.totalCirculer + "/" + circularNetworkResult.data.unreadCirculer + ")"
+                                    fragmentCircularBinding.includeToolbar.toolbarTitle.text= "All Circular" + "( " + it.data.totalCirculer + "/" + it.data.unreadCirculer + ")"
 
                                 }else{
                                     if (pageIndex==1){

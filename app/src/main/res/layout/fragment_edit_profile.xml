@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -19,47 +19,35 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/md_theme_light_primary"
+            android:elevation="8dp"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="Edit Profile"
+            app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+            app:titleTextColor="@color/white">
 
-            <TextView
-                android:id="@+id/tv_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/submit"
-                android:layout_gravity="end"
-                android:gravity="end"
-                android:layout_marginEnd="@dimen/_15sdp"
-                android:textColor="@color/white"
-                android:fontFamily="@font/ubuntu_medium"
-                android:textAllCaps="true"
-                android:visibility="gone"
-                />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginBottom="@dimen/_11sdp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
-
-
-
-
-
+            <LinearLayout
+                android:id="@+id/nestedScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,15 +56,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutUserName"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/username"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/username">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textUserName"
@@ -87,10 +75,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutName"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/name"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/name">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textName"
@@ -101,10 +89,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMobile"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mobile"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mobile">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMobile"
@@ -115,10 +103,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutPOB"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/students_place_of_birth"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/students_place_of_birth">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textUserPOB"
@@ -129,10 +117,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutEmail"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/contact_email_id"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/contact_email_id">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textUserEmail"
@@ -143,10 +131,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutAnniversaryDate"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/anniversary_date"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/anniversary_date">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textAnniversaryDate"
@@ -159,10 +147,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutParentStatus"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/parent_status"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/parent_status">
 
                             <AutoCompleteTextView
                                 android:id="@+id/parentStatus"
@@ -183,8 +171,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="@string/child_s_details"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/child_s_details" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -194,15 +182,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutStudentName"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/student_name"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/student_name">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textStudentName"
@@ -213,10 +201,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutClass"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/classes"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/classes">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textClass"
@@ -227,10 +215,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutDOB"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/date_of_birth"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/date_of_birth">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textDOB"
@@ -243,10 +231,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutAdmissionDate"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/admission_date"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/admission_date">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textAdmissionDate"
@@ -259,10 +247,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutBloodGroup"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/blood_group"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/blood_group">
 
                             <AutoCompleteTextView
                                 android:id="@+id/bloodGroup"
@@ -276,10 +264,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutReligion"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/religion"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/religion">
 
                             <AutoCompleteTextView
                                 android:id="@+id/religion"
@@ -293,17 +281,33 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutAadhaar"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/aadhaar_number"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/aadhaar_number">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textAadhaar"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="53dp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/textInputLayoutStudentEmail"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/student_email_id">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/textStudentEmail"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textEmailAddress" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -314,8 +318,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="@string/correspondence_address"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/correspondence_address" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -326,15 +330,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textAddress"
@@ -345,10 +349,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutCity"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/city"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/city">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textCity"
@@ -360,10 +364,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutState"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/state"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/state">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textState"
@@ -381,8 +385,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="@string/permanent_address"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/permanent_address" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -393,8 +397,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
                         <CheckBox
                             android:id="@+id/cbSameAddress"
@@ -405,10 +409,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutPAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textPAddress"
@@ -419,10 +423,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutPCity"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/city"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/city">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textPCity"
@@ -434,10 +438,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutPState"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/state"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/state">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textPState"
@@ -455,8 +459,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="@string/previous_school_details"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/previous_school_details" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -467,16 +471,16 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutSchoolName"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/school_name"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/school_name">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textSchoolName"
@@ -487,10 +491,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutSchoolAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textSchoolAddress"
@@ -502,10 +506,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutSchoolBoard"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/school_board"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/school_board">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textSchoolBoard"
@@ -524,8 +528,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="@string/father_s_details"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/father_s_details" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -536,16 +540,16 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherName"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_name"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_name">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherName"
@@ -557,10 +561,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherProfession"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_profession"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/father_s_profession">
 
                             <AutoCompleteTextView
                                 android:id="@+id/fatherProfession"
@@ -574,10 +578,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherDesignation"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_designation"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/father_s_designation">
 
                             <AutoCompleteTextView
                                 android:id="@+id/fatherDesignation"
@@ -591,10 +595,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherDOB"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_date_of_birth"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_date_of_birth">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherDOB"
@@ -608,10 +612,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherResidentialAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_residential_address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_residential_address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherResidentialAddress"
@@ -623,10 +627,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherOfficeAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_office_address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_office_address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherOfficeAddress"
@@ -637,10 +641,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherEmail1"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_email_1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_email_1">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherEmail1"
@@ -652,10 +656,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherEmail2"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_email_2"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_email_2">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherEmail2"
@@ -667,10 +671,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherMobile1"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_mobile_1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_mobile_1">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherMobile1"
@@ -682,10 +686,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherMobile2"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_mobile_2"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_mobile_2">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherMobile2"
@@ -697,10 +701,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherAnnualIncome"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_annual_income"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_annual_income">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherAnnualIncome"
@@ -711,10 +715,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutFatherAadharNumber"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/father_s_aadhar_numbe"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/father_s_aadhar_numbe">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textFatherAadharNumber"
@@ -733,8 +737,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="@string/mother_s_details"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/mother_s_details" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -744,16 +748,16 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
 
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherName"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_name"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_name">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherName"
@@ -765,10 +769,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherProfession"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_profession"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/mother_s_profession">
 
                             <AutoCompleteTextView
                                 android:id="@+id/MotherProfession"
@@ -782,26 +786,26 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherDesignation"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_designation"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+                            android:hint="@string/mother_s_designation">
 
                             <AutoCompleteTextView
                                 android:id="@+id/MotherDesignation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="none"
-                                 tools:ignore="LabelFor" />
+                                tools:ignore="LabelFor" />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherDOB"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_date_of_birth"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_date_of_birth">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherDOB"
@@ -815,10 +819,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherResidentialAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_residential_address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_residential_address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherResidentialAddress"
@@ -830,10 +834,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherOfficeAddress"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_office_address"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_office_address">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherOfficeAddress"
@@ -844,10 +848,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherEmail1"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_email_1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_email_1">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherEmail1"
@@ -859,10 +863,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherEmail2"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_email_2"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_email_2">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherEmail2"
@@ -874,10 +878,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherMobile1"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_mobile_1"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_mobile_1">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherMobile1"
@@ -889,10 +893,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherMobile2"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_mobile_2"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_mobile_2">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherMobile2"
@@ -904,10 +908,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherAnnualIncome"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_annual_income"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_annual_income">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherAnnualIncome"
@@ -918,10 +922,10 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/textInputLayoutMotherAadharNumber"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/mother_s_aadhar_numbe"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+                            android:hint="@string/mother_s_aadhar_numbe">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/textMotherAadharNumber"
@@ -941,77 +945,335 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
-                    android:text="Profile updation record"
-                    android:fontFamily="@font/ubuntu_medium" />
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="Profile updation record" />
 
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp" >
+                    android:layout_margin="5dp">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:weightSum="3"
                             android:gravity="center_vertical"
-                            >
+                            android:weightSum="3">
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/sl_no"
                                 android:layout_marginHorizontal="10dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
-                                />
+                                android:text="@string/sl_no" />
+
                             <com.google.android.material.divider.MaterialDivider
                                 android:layout_width="1dp"
-                                android:layout_height="match_parent"/>
+                                android:layout_height="match_parent" />
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/requsted_on"
-                                android:layout_weight="1"
                                 android:layout_marginHorizontal="10dp"
+                                android:layout_weight="1"
                                 android:gravity="center_vertical"
-                                />
+                                android:text="@string/requsted_on" />
+
                             <com.google.android.material.divider.MaterialDivider
                                 android:layout_width="1dp"
-                                android:layout_height="match_parent"/>
+                                android:layout_height="match_parent" />
+
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:text="@string/status_all_cap"
                                 android:layout_marginHorizontal="10dp"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
-                                />
+                                android:text="@string/status_all_cap" />
 
                         </LinearLayout>
+
                         <com.google.android.material.divider.MaterialDivider
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            />
+                            android:layout_height="1dp" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_update_record"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            tools:listitem="@layout/profile_update_record_item"
-                            />
+                            tools:listitem="@layout/profile_update_record_item" />
                     </LinearLayout>
+
+
                 </com.google.android.material.card.MaterialCardView>
-
-
             </LinearLayout>
+                <LinearLayout
+                   android:id="@+id/ll_Transport_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:text="@string/update_transport_details" />
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/drop1"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Transport Type">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/trans_type"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+                                app:simpleItems="@array/task2"
+                                tools:ignore="LabelFor" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/vechLL"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/drop2"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/select_vehicle">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/vechicle_types"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none"
+                                    app:simpleItems="@array/task1"
+                                    tools:ignore="LabelFor" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="@string/vehicle_details" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/driver_name"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/driver_name">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/tv_driver"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/drname"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Driver's Mobile No.">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/driver_mob"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="phone" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/drmob"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Driver's Vehicle No.">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/driver_vehicle_no"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/drl"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Driver's License No.">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/driver_licese"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/addressdriver"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Address of Driver">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/driver_address"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/dradhar"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Driver's Aadhar No.">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/driver_aadhar"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/drlicpoli"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Driver’s Police Clearance Certificate">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/driver_clearance_cert"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:text="@string/date_from_which_the_student_is_using_the_vehicle" />
+                            <EditText
+                                android:id="@+id/btn_select_date"
+                                android:layout_width="130dp"
+                                android:layout_height="40dp"
+                                android:layout_marginHorizontal="10dp"
+                                android:background="@drawable/bg_outline_round_corner_grey"
+                                android:fontFamily="@font/calibri_regular"
+                                android:gravity="center"
+                                android:text="1 July 2024"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/drop3"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:hint="Availability of a Lady Guard/Helper in the vehicle">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/availablity_helper"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none"
+                                    app:simpleItems="@array/task3"
+                                    tools:ignore="LabelFor" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-
-    </LinearLayout>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_alignParentBottom="true">
+            <Button
+                android:id="@+id/btnSummit"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/bg_outline_round_corner_green_10"
+                android:layout_weight="1"
+                android:padding="@dimen/_2sdp"
+                android:layout_width="0dp"
+                android:textSize="@dimen/_16sdp"
+                android:layout_height="wrap_content"
+                android:text="@string/submit" />
+            <Button
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:text="@string/summit_transport_details" />
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

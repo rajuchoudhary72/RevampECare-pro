@@ -16,6 +16,8 @@ import com.app.ecarepro.data.network.model.Department
 import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.Purpose
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
 import com.app.ecarepro.data.network.model.submit_assignment.UserDTL
 import com.app.ecarepro.data.network.model.NetworkAssignments
@@ -143,12 +145,16 @@ import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
 import android.content.Context
 import android.provider.Settings.Secure
+import com.app.ecarepro.data.cache.JsonCache
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.SendMessageRequest
 import com.app.ecarepro.data.network.model.SmsType
@@ -157,12 +163,19 @@ import com.app.ecarepro.model.Student
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.app.ecarepro.data.network.model.StaffAttendanceDetails
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
+import com.app.ecarepro.data.network.model.UserProfileDto
 import com.app.ecarepro.data.network.model.UserUndertakingModule
 import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetails
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
+import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
+import com.app.ecarepro.model.NetworkKidCornerModel
+import com.app.ecarepro.model.NetworkUserSessionsResponse
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
@@ -173,8 +186,9 @@ class UserRepositoryImpl @Inject constructor(
     @ApplicationContext val context: Context,
     private val userService: UserService,
     private val userDataStore: UserDataStore,
-    private val appRepository: AppRepository
+    private val jsonCache: JsonCache
 ) : UserRepository {
+
 
 
     override suspend fun verifyUser(schoolCode: String, username: String): NetworkUserDetailsDto {
@@ -220,7 +234,7 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
             )
         ).also {
             if (it.authenticated == true) {
@@ -244,13 +258,45 @@ class UserRepositoryImpl @Inject constructor(
             UserLoginRequestDto(
                 schCode = schoolCode,
                 username = userName,
-                password = password
+                password = password,
+                deviceInfo = CreateUserSessionRequestDto(
+                    ipAddress = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    locationCity = userDataStore.getCityName(),
+                )
             )
         ).also {
             if (it.authenticated == true && it.isOTPEnabled == false) {
                 it.userDTL?.let { userDtl: UserDTL ->
                     saveUserDtl(userDtl, schoolCode, userName)
                 }
+            }
+        }
+    }
+
+    override fun createSession(regenerate: Boolean): Flow<Result<UserSessionResponseDto>> {
+        return flow {
+            try {
+                val response = userService.createSession(
+                    CreateUserSessionRequestDto(
+                        ipAddress = Secure.getString(
+                            context.contentResolver,
+                            Secure.ANDROID_ID
+                        ),
+                        locationCity = userDataStore.getCityName(),
+                        oldSessionID = if (regenerate) userDataStore.getUserSessionId() else null
+                    )
+                )
+                if (response.errorCode == 0) {
+                    userDataStore.saveSessionId(response.sessionID)
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
             }
         }
     }
@@ -323,7 +369,13 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun logout(): Flow<Result<Boolean>> {
         return flow {
             try {
-                val response = userService.logout(deviceID = Secure.getString(context.contentResolver, Secure.ANDROID_ID))
+                val response = userService.logout(
+                    deviceID = Secure.getString(
+                        context.contentResolver,
+                        Secure.ANDROID_ID
+                    ),
+                    sessionID = userDataStore.getUserSessionId().orEmpty()
+                )
                 if (response.errorCode == 0) {
                     emit(Result.success(true))
                 } else {
@@ -473,7 +525,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun leaveApply(
         leaveID: Int,
         fromDate: String,
-        tillDate: String,
+        tillDate: String?,
         duration: Double,
         halfdayDTL: List<HalfdayDTL>?,
         reason: String,
@@ -534,18 +586,20 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveInfraction(
+        uType: Int,
         action: Int,
         stID: Int,
         infrSubTypeID: Int,
         consID: Int,
         instance: Int,
         infractionOn: String,
-        correctiveAction: String
+        correctiveAction: String,
+        consequencesAttachment: BrowsedFile?,
+        isComplianceActive:Boolean
     ): CommonResponse {
         return userService.saveInfraction(
-            PostSaveInfraction(
-                action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID
-            )
+            PostSaveInfraction(uType,
+                action, consID, correctiveAction, infrSubTypeID, infractionOn, instance, stID, consequencesAttachment,isComplianceActive)
         )
     }
 
@@ -714,6 +768,14 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getStaffList(): NetworkStaffList {
         return  userService.getStaffList()
     }
+
+    override suspend fun teachersList(): NetworkStaffList {
+        return userService.teachersList()
+    }
+    override suspend fun reportLessonteachersList(): NetworkStaffList {
+        return userService.getReportLessonStaffProfile(12)
+    }
+
     override suspend fun getStaffAttendance(
         staffType: String?,
         date: String,
@@ -1055,7 +1117,6 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getStudentListToMarkAtt(classID, subID, attDate)
     }
 
-
     override fun getUserProfile(): Flow<Result<Profile>> {
         return flow {
             try {
@@ -1071,6 +1132,27 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
     }
+    /*override fun getUserProfile(refresh: Boolean): Flow<Result<Profile>> {
+        return flow {
+            try {
+                val response =
+                    if (refresh.not() && jsonCache.isCacheAvailable(USER_PROFILE_KEY)) {
+                        jsonCache.retrieve(USER_PROFILE_KEY, UserProfileDto::class.java)
+                    } else {
+                        userService.getUserProfile().also {
+                            jsonCache.store(USER_PROFILE_KEY, it)
+                        }
+                    }
+                if (response?.errorCode == 0) {
+                    emit(Result.success(response.profile.copy(canEditProfile = response.canEditProfile)))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response?.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }*/
 
     override suspend fun getUserProfileEdit(edit: Boolean): NetworkEditProfile {
         return userService.getUserProfileEdit(edit)
@@ -1078,6 +1160,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateParentProfile(request: UpdateProfileModel): CommonResponse {
         return userService.updateParentProfile(request)
+    }
+
+    override suspend fun updateTransportProfile(request: UpdateTransportProfileModel): CommonResponse {
+        return userService.updateTransportProfile(request)
     }
 
     override fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>> {
@@ -1135,15 +1221,22 @@ class UserRepositoryImpl @Inject constructor(
         return userService.excellenceAward()
     }
 
-    override fun getUserDashboard(): Flow<Result<UserDashboardDto>> {
+    override fun getUserDashboard(refresh: Boolean): Flow<Result<UserDashboardDto>> {
         return flow {
             try {
-                val response = userService.getUserDashboard()
-                if (response.errorCode == 0) {
+                val response =
+                    if (refresh.not() && jsonCache.isCacheAvailable(USER_DASHBOARD_KEY)) {
+                        jsonCache.retrieve(USER_DASHBOARD_KEY, UserDashboardDto::class.java)
+                    } else {
+                        userService.getUserDashboard().also {
+                            jsonCache.store(USER_DASHBOARD_KEY, it)
+                        }
+                    }
+                if (response?.errorCode == 0) {
                     userDataStore.saveDashboardData(response)
                     emit(Result.success(response))
                 } else {
-                    emit(Result.failure(IllegalArgumentException(response.message)))
+                    emit(Result.failure(IllegalArgumentException(response?.message)))
                 }
             } catch (error: Throwable) {
                 emit(Result.failure(error))
@@ -1184,11 +1277,18 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUserUndertaking(): Flow<Result<String>> {
+    override fun getUserUndertaking(refresh: Boolean): Flow<Result<String>> {
         return flow {
             try {
-                val response = userService.getUserUndertaking()
-                emit(Result.success(response))
+                val response =
+                    if (refresh.not() && jsonCache.isCacheAvailable(USER_UNDERTAKING_KEY)) {
+                        jsonCache.retrieve(USER_UNDERTAKING_KEY, String::class.java)
+                    } else {
+                        userService.getUserUndertaking().also {
+                            jsonCache.store(USER_UNDERTAKING_KEY, it)
+                        }
+                    }
+                emit(Result.success(response ?: ""))
             } catch (error: Throwable) {
                 emit(Result.failure(error))
             }
@@ -1259,6 +1359,22 @@ class UserRepositoryImpl @Inject constructor(
         query: String
     ): NetworkMediaGallery {
         return userService.getMediaGallery(pg, queryType, year, date, query)
+    }
+
+    override suspend fun getKidsCornerAlbums(pg: Int): NetworkKidCornerModel {
+        return userService.getKidsCornerAlbums(pg)
+    }
+
+    override suspend fun getSearchKidsAlbum(
+        pg: Int,
+        yrID: Int,
+        keyword: String?
+    ): NetworkKidCornerModel {
+        return userService.getSearchKidsAlbum(pg, yrID, keyword)
+    }
+
+    override suspend fun getKidsAlbumDetails(pg: Int, id: String): NetworkKidsAlbumDetailsModel {
+        return userService.getKidsAlbumDetails(pg, id)
     }
 
     override suspend fun getMyQuestionBank(): NetworkQuestionBank {
@@ -1332,10 +1448,45 @@ class UserRepositoryImpl @Inject constructor(
         return userService.wingsList()
     }
 
+    override suspend fun activeSessions(): NetworkUserSessionsResponse {
+        return userService.activeSessions()
+    }
+
+    override suspend fun removeSession(sessionID: String?): CommonResponse {
+        return userService.removeSession(sessionID)
+    }
+
+    override suspend fun getFeeDefaulters(feeTypeId: Int?, installIds: String?): NetworkFeeDefaulter {
+        return userService.getFeeDefaulters(feeTypeId, installIds)
+    }
+
+
+    override suspend fun postCompliance(postComplianceData: PostComplianceData): CommonResponse {
+        return userService.postCompliance(postComplianceData)
+    }
+
+    override suspend fun resolvedCompliance(ID: String?, utype: Int?): CommonResponse {
+        return userService.resolvedCompliance(ID, utype)
+    }
+
+    override suspend fun getFeeDefaultersDas(
+        feeTypeId: Int?, installIds: String?
+    ): Flow<Result<NetworkFeeDefaulter>> {
+        return flow {
+            try {
+                val response = userService.getFeeDefaulters(feeTypeId, installIds)
+                emit(Result.success(response))
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+
+    }
+
     override suspend fun feeCollection(
-        feeTypeID: Int,
-        fromDate: String,
-        tillDate: String
+        feeTypeID: Int?,
+        fromDate: String?,
+        tillDate: String?
     ): Flow<Result<FeeCollection>> {
         return flow {
             try {
@@ -1361,7 +1512,7 @@ class UserRepositoryImpl @Inject constructor(
     override fun getFormData(): Flow<Result<List<Form>>> {
         return flow {
             try {
-                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/${userDataStore.getSchoolData()?.schoolCode}/3")
+                val response = userService.getFormData("https://fomapi.franciscanecare.com/api/Master/getpageforsetting/${userDataStore.getSchoolData()?.schoolCode}/2")
                 if (response.status == true) {
                     emit(Result.success(response.data?: emptyList()))
                 } else {
@@ -1461,7 +1612,7 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
     @SuppressLint("NewApi")
-    override fun submitForm(formData: Map<String, String>): Flow<Result<String>> {
+    override fun submitForm(formData: Map<String, String>): Flow<Result<AppointmentSavedData>> {
         return flow {
             try {
                 val builder = MultipartBody.Builder()
@@ -1477,10 +1628,7 @@ class UserRepositoryImpl @Inject constructor(
                 )
                 if (response.status == true) {
                     emit(
-                        Result.success(
-                            response.data?.message ?: response.message
-                            ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
-                        )
+                        Result.success(response.data)
                     )
                 } else {
                     emit(Result.failure(IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)))
@@ -1489,5 +1637,13 @@ class UserRepositoryImpl @Inject constructor(
                 emit(Result.failure(error))
             }
         }
+    }
+    override suspend fun getUserTransportProfile(): NetworkTransportEditProfile {
+        return userService.getUserTransportProfile()
+    }
+    companion object {
+        private const val USER_PROFILE_KEY = "user_profile"
+        private const val USER_DASHBOARD_KEY = "user_dashboard"
+        private const val USER_UNDERTAKING_KEY = "user_undertaking"
     }
 }

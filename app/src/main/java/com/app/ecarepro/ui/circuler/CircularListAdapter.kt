@@ -32,14 +32,13 @@ class CircularListAdapter(private var circularFragment: CircularFragment ) :
         binding?.apply {
              circularData=circularList[position]
              clMain.setOnClickListener {
-                 circularList[position].isRead=true
                 circularFragment.onItemClick(circularList[position],1,true)
             }
 
-            if(circularList[position].isRead){
-                cvNotItem.cardElevation=0f
+            if (circularList[position].isRead){
+                cvNotItem.elevation=0f
             }else{
-                cvNotItem.cardElevation=20f
+                cvNotItem.elevation=8f
             }
         }
 

@@ -6,25 +6,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentClassTimeTableBinding
 import com.app.ecarepro.model.Classe
+import com.app.ecarepro.model.Teacher
+import com.app.ecarepro.ui.timetableviewer.view_model.ClassTimeTableViewModel
+import com.app.ecarepro.ui.timetableviewer.view_model.TeacherTimeTableViewModel
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class ClassTimeTableFragment(private val classes: List<Classe>, private val toFragment: String) : Fragment(), ItemListener<Classe> {
 
     private lateinit var binding : FragmentClassTimeTableBinding
+    private val classTimeTableViewModel: ClassTimeTableViewModel by viewModels()
+    private lateinit var classListFilter: List<Classe>
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =  FragmentClassTimeTableBinding.inflate(inflater,container,false)
+        binding =  FragmentClassTimeTableBinding.inflate(inflater,container,false).apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = classTimeTableViewModel
+        }
          return binding.root
     }
 
@@ -32,6 +46,33 @@ class ClassTimeTableFragment(private val classes: List<Classe>, private val toFr
         super.onViewCreated(view, savedInstanceState)
 
         if (classes!=null){
+
+            lifecycleScope.launch {
+                classTimeTableViewModel.searchQuery.collectLatest {
+
+                    if (it.isNotEmpty() && classes != null) {
+                        classListFilter = classes .filter { s ->
+                            s.className.lowercase().contains(it.lowercase())
+                        }
+                        setupRecycleViewStudentList(classListFilter)
+                    } else {
+                        setupRecycleViewStudentList(classes)
+                    }
+
+
+                }
+            }
+
+        }else{
+            binding.rvClassTimeTable.isVisible=false
+            binding.tvNoData.isVisible=true
+
+        }
+
+    }
+
+    private fun setupRecycleViewStudentList(classes: List<Classe>) {
+        if (classes.isNotEmpty()) {
 
             val classTimeTableAdapter =
                 ClassTimeTableAdapter(classes,
@@ -46,14 +87,12 @@ class ClassTimeTableFragment(private val classes: List<Classe>, private val toFr
             binding.rvClassTimeTable.isVisible=true
             binding.tvNoData.isVisible=false
 
-
-        }else{
-            binding.rvClassTimeTable.isVisible=false
-            binding.tvNoData.isVisible=true
-
+        } else {
+            binding.rvClassTimeTable.isVisible = false
+            binding.tvNoData.isVisible = true
         }
-
     }
+
 
     override fun onItemClick(t: Classe, pos: Int, boolean: Boolean) {
         when (toFragment) {

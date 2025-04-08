@@ -85,7 +85,7 @@ class SchoolRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSchools(): List<School> {
-        return schoolService.getSchools().list.map { it.asExternalModel() }
+        return schoolService.getSchools().list?.map { it.asExternalModel() }?: emptyList()
     }
 
     override fun getSchoolDetails(schoolCode: String): Flow<NetworkSchool> {
@@ -103,12 +103,12 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getCirculars(pg, yrID, title)
     }
 
-    override suspend fun getNoticeDTL(id:String): NetworkNoticDetails {
-        return schoolService.getNoticeDTL(id)
+    override suspend fun getNoticeDTL(ntID: String): NetworkNoticDetails {
+        return schoolService.getNoticeDTL(ntID)
     }
 
-    override suspend fun getCircularDTL(id:String): NetworkCircularDetails {
-        return schoolService.getCircularDTL(id)
+    override suspend fun getCircularDTL(cirID: String): NetworkCircularDetails {
+        return schoolService.getCircularDTL(cirID)
     }
 
     override suspend fun getClass(): ClassPromotionModel {

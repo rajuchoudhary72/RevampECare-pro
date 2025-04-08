@@ -12,6 +12,7 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import com.app.ecarepro.data.network.model.AppLayoutDto
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -92,6 +93,8 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
+import com.app.ecarepro.data.AppSessionManager
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -113,8 +116,7 @@ class MainActivity : AppCompatActivity() {
     private val appUpdateManager: AppUpdateManager by lazy {
         AppUpdateManagerFactory.create(this)
     }
-    val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
-    val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
+
     @Inject
     lateinit var analyticsManager: AnalyticsManager
 
@@ -391,8 +393,9 @@ class MainActivity : AppCompatActivity() {
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
+            val SubCildMenuId = data.getString("SbChMenuID")?.toInt()
             val refId = data.getString("refID")
-            Log.e("Note", "$schCode $userID $menuId $childMenuId $refId")
+            Log.e("Note", "$schCode $userID $menuId $childMenuId $SubCildMenuId  $refId")
 
             if (userDataStore.getUsersFlow().first()
                     .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
@@ -417,8 +420,17 @@ class MainActivity : AppCompatActivity() {
 
             if (menuId != null) {
                 if (childMenuId != null) {
-                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId, refId)
+                    if (SubCildMenuId != null) {
+                        if (SubCildMenuId>0){
+                            getFragmentId(menuId, SubCildMenuId, refId)
+                        }else{
+                            Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
+                            getFragmentId(menuId, childMenuId, refId)
+                        }
+                    }else{
+                        Log.e("Note", "getFragmentId(menuId, childMenuId)")
+                        getFragmentId(menuId, childMenuId, refId)
+                    }
                 }
             }
             showLoader(false)
@@ -436,7 +448,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }*/
-    private fun checkAppVersion() {
+    fun checkAppVersion() {
         lifecycleScope.launch {
             systemViewModel.appVersionStateFlow.collectLatest {
                 when (it) {
@@ -529,30 +541,35 @@ class MainActivity : AppCompatActivity() {
 
     /*in app  update */
     private fun checkIsUpdateAvailable(forceUpdate: Boolean) {
-        // isImmediatepopup =forceUpdate
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
-            val isAppUpdateAllowed = if (forceUpdate) {
-                appUpdateInfo.isImmediateUpdateAllowed
-            } else {
-                appUpdateInfo.isFlexibleUpdateAllowed
+        try {
+            // isImmediatepopup =forceUpdate
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+                val isAppUpdateAllowed = if (forceUpdate) {
+                    appUpdateInfo.isImmediateUpdateAllowed
+                } else {
+                    appUpdateInfo.isFlexibleUpdateAllowed
+                }
+
+                if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                    popupSnackbarForCompleteUpdate()
+                } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
+                    appUpdateManager.startUpdateFlowForResult(
+                        // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                        appUpdateInfo,
+                        // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                        if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
+                        // The current activity making the update request.
+                        this,
+                        // Include a request code to later monitor this update request.
+                        MY_REQUEST_CODE
+                    )
+                }
             }
-            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                popupSnackbarForCompleteUpdate()
-            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && isAppUpdateAllowed) {
-                appUpdateManager.startUpdateFlowForResult(
-                    // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                    appUpdateInfo,
-                    // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
-                    if (forceUpdate) AppUpdateType.IMMEDIATE else AppUpdateType.FLEXIBLE,
-                    // The current activity making the update request.
-                    this,
-                    // Include a request code to later monitor this update request.
-                    MY_REQUEST_CODE
-                )
-            }
+            appUpdateManager.registerListener(installStateUpdatedListener)
+        } catch (e: RuntimeException) {
+            e.printStackTrace()
         }
-        appUpdateManager.registerListener(installStateUpdatedListener)
     }
 
     private val installStateUpdatedListener = InstallStateUpdatedListener { state ->
@@ -624,6 +641,8 @@ class MainActivity : AppCompatActivity() {
                         buildDrawerModels(data.menus)
                         buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
+                        showBadgeCount(data.appLayoutDto)
+
                     }
                 }
         }
@@ -655,6 +674,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.drawerLayout.open()
+    }
+    private fun showBadgeCount(appLayoutDto: AppLayoutDto) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+            val notificationCount = appLayoutDto.notificationCount ?: 0
+            if (notificationCount > 0) {
+                getOrCreateBadge(R.id.notification).apply {
+                    isVisible = true
+                    number = notificationCount
+                }
+            } else {
+                removeBadge(R.id.notification)
+            }
+            val messageCount = appLayoutDto.unreadMessageCount ?: 0
+            if (messageCount > 0) {
+                getOrCreateBadge(R.id.message).apply {
+                    isVisible = true
+                    number = messageCount
+                }
+            } else {
+                removeBadge(R.id.message)
+            }
+        }
     }
 
     /*private fun buildFavoriteMenusModels(favoriteMenus: List<com.app.ecarepro.data.network.model.Menu>) {
@@ -766,7 +807,7 @@ class MainActivity : AppCompatActivity() {
                             icon(menu.icon)
                             clickListener { _ ->
                                 systemViewModel.openDrawer(false)
-                                getFragmentId(parentMenu.menuID, menu.chMenuID,"Menu")
+                                getFragmentId(parentMenu.menuID, menu.chMenuID, "Menu")
                             }
                         }
 
@@ -777,7 +818,12 @@ class MainActivity : AppCompatActivity() {
                                 icon(childChildMenu.icon)
                                 clickListener { _ ->
                                     systemViewModel.openDrawer(false)
-                                    getFragmentId(parentMenu.menuID, menu.chMenuID, childChildMenu.sbChMenuID,"Menu")
+                                    getFragmentId(
+                                        parentMenu.menuID,
+                                        menu.chMenuID,
+                                        childChildMenu.sbChMenuID,
+                                        "Menu"
+                                    )
                                 }
                             }
                         }
@@ -999,18 +1045,31 @@ class MainActivity : AppCompatActivity() {
             33 -> navController.navigate(R.id.surveyListFragment)
             35 -> navController.navigate(R.id.busLocationFragment)
             39 -> navController.navigate(R.id.fomGuardFragment)
+            40 -> navController.navigate(R.id.teacherListFragment)
+
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
-        val packageName = "com.android.chrome"
-        if (packageName != null) {
+        if (isChromeInstalled(this)) {
+            val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
-            customTabsIntent.launchUrl(this, uri!!)
+            try {
+                if (uri != null) {
+                    customTabsIntent.launchUrl(this, uri)
+                }
+            } catch (e: ActivityNotFoundException) {
+                showMessage("Chrome cannot open this link")
+            }
         } else {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+            try {
+                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)
+            } catch (e: ActivityNotFoundException) {
+                showMessage("No browser available to handle the URL")
+            }
         }
     }
 
@@ -1037,9 +1096,9 @@ class MainActivity : AppCompatActivity() {
             bundle.putString("title", title)
             bundle.putString("url", url)
             Log.d("WebURL", url)
-            navController.navigate(R.id.webViewFragment, bundle)
+             navController.navigate(R.id.webViewFragment, bundle)
             Log.d("WebURL", url)
-            // openCustomTab(tabIntent, Uri.parse(url))
+           // openCustomTab(tabIntent, Uri.parse(url))
         }
     }
 
@@ -1051,6 +1110,7 @@ class MainActivity : AppCompatActivity() {
                 showMessage("Something went wrong")
             } else {
                 showLoader(false)
+                Log.d("WebURL", "$feePaymentURL?token=$token")
                 val tabIntent = CustomTabsIntent.Builder()
                     .enableUrlBarHiding()
                     .setToolbarColor((this).getColor(R.color.green)).build()
@@ -1064,7 +1124,6 @@ class MainActivity : AppCompatActivity() {
             showMessage("Invalid or missing URL")
             return
         }
-
         if (isChromeInstalled(this)) {
             val packageName = "com.android.chrome"
             customTabsIntent.intent.setPackage(packageName)
@@ -1094,7 +1153,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, refId: String? = null, from: String = "other") {
+    fun getFragmentId(
+        menuID: Int,
+        childMenuId: Int,
+        refId: String? = null,
+        from: String = "other"
+    ) {
         lifecycleScope.launch {
             userDataStore.getUser()?.let {
                 systemViewModel.UType = userDataStore.getUserType()!!
@@ -1156,6 +1220,7 @@ class MainActivity : AppCompatActivity() {
                     7 -> navController.navigate(R.id.composeFragment)
                     8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
                     9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
+
                 }
             }
 
@@ -1180,6 +1245,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     }
+
                     11 -> {
                         if (refId.isNullOrEmpty() || refId=="Menu" ) {
                             navController.navigate(R.id.noticeListFragment, Bundle().apply {
@@ -1192,6 +1258,7 @@ class MainActivity : AppCompatActivity() {
                         }
 
                     }
+
                     12 -> {
                         lifecycleScope.launch {
                             userDataStore.getUser()?.run {
@@ -1219,7 +1286,8 @@ class MainActivity : AppCompatActivity() {
                     14 -> navController.navigate(R.id.birthdayFragment)
 
                     15 -> {
-                        lifecycleScope.launch {
+                        navController.navigate(R.id.allStaffListFragment)
+                      /*  lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
                                     if (roleName == "Principal" || roleName == "Management") {
@@ -1229,11 +1297,11 @@ class MainActivity : AppCompatActivity() {
                                                 putString(Constant.TO, Constant.FRA_LESSON_PLAN)
                                             })
                                     } else {
-                                        navController.navigate(R.id.lessonPlanListFragment)
+                                        navController.navigate(R.id.allStaffListFragment)
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
 
                     16 -> navController.navigate(R.id.questionPaperFragment)
@@ -1307,7 +1375,9 @@ class MainActivity : AppCompatActivity() {
                     userDataStore.getUser()?.run {
                         when (childMenuId) {
                             21 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.appreciationSelectionFragment)
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.APPRECIATION_FRAG)
+                                })
 
                             } else {
                                 navController.navigate(R.id.appreciationListFragment)
@@ -1315,7 +1385,9 @@ class MainActivity : AppCompatActivity() {
                             }
 
                             22 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.infractionSelectFragment)
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                                })
 
                             } else {
                                 navController.navigate(R.id.infractionListFragment)
@@ -1335,13 +1407,14 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-
+            /*gallery*/
             34 -> {
                 when (childMenuId) {
                     48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
                     49 -> navController.navigate(R.id.videoAlbumFragment)
                     50 -> navController.navigate(R.id.favoritesListFragment)
                     51 -> navController.navigate(R.id.mediaGalleryFragment)
+                    73 -> navController.navigate(R.id.kidCornerFragment)
                 }
             }
 
@@ -1350,18 +1423,23 @@ class MainActivity : AppCompatActivity() {
                     40 -> navController.navigate(R.id.calenderActivityNavHost)
                 }
             }
-            /*gallery*/
+           /* *//*gallery*//*
             34 -> {
                 when (childMenuId) {
                     48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
                     49 -> navController.navigate(R.id.videoAlbumFragment)
                     50 -> navController.navigate(R.id.videoAlbumFragment)
                 }
-            }
+            }*/
         }
     }
 
-    fun getFragmentId(menuID: Int, childMenuId: Int, childChildMenuId: Int, from: String = "other") {
+    fun getFragmentId(
+        menuID: Int,
+        childMenuId: Int,
+        childChildMenuId: Int,
+        from: String = "other"
+    ) {
         systemViewModel.sendAnalyticEvent(
             AnalyticsConstants.Events.MODULE_OPEN, mapOf(
                 AnalyticsConstants.Attributes.FROM to from.orEmpty(),
@@ -1416,7 +1494,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1459,8 +1536,41 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    0 -> {
+                        when (childChildMenuId) {
+                            15 -> {
+                                navController.navigate(R.id.allStaffListFragment)
+                            }
+                        }
+                    }
                 }
             }
+
+
+            /*for new development Infraction and  Appreciation */
+            /* 24 -> {
+                 when (childMenuId) {
+
+                     21 -> {
+                         when (childChildMenuId) {
+                            23 -> {
+                                *//*add to student for Appreciation *//*
+                                navController.navigate(R.id.smsReportFragment)
+                            }
+                        }
+                    }
+
+                    22 -> {
+                        when (childChildMenuId) {
+                            17 -> {
+                                *//*add to student for Infraction *//*
+                                navController.navigate(R.id.collectionReport)
+                            }
+                        }
+                    }
+
+                }
+            }*/
         }
     }
 
@@ -1515,11 +1625,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             MaterialAlertDialogBuilder(this)
                 .setTitle(getString(R.string.logout))
-                .setMessage(
-                    if (isMYSFHS || isMYSFPSPlay) getString(R.string.are_you_sure_to_logout_all) else getString(
-                        R.string.are_you_sure_to_logout
-                    )
-                )
+                .setMessage(getString(R.string.are_you_sure_to_logout))
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     try {
                         systemViewModel.logout {
@@ -1834,17 +1940,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        try {
+            isActivityPaused = true
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        }
         super.onPause()
-        isActivityPaused = true
     }
 
     override fun onResume() {
         super.onResume()
+        AppSessionManager.setCurrentActivity(this, systemViewModel, lifecycleScope)
+        showLoader(false)
+
         if (isActivityPaused) {
             syncData(false)
             isActivityPaused = false
         } else {
-            syncData(true)
+            lifecycleScope.launch {
+                delay(20.seconds)
+                syncData(true)
+            }
         }
     }
 

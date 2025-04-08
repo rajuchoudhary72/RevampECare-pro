@@ -24,24 +24,32 @@ import javax.inject.Inject
 import org.json.JSONObject
 import retrofit2.HttpException
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.model.AppointmentSavedData
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import com.app.ecarepro.ui.taskmanager.add.convertMillisToDateString
+import androidx.lifecycle.SavedStateHandle
+import com.app.ecarepro.data.network.model.VisitorDetails
 
 @HiltViewModel
 class AppointmentViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val loadingState = MutableStateFlow<LoadingState>(LoadingState.Success)
     val uiState = MutableStateFlow<AppointmentUiState>(AppointmentUiState.Loading)
 
-
+    val visitorDetails = savedStateHandle.getStateFlow<VisitorDetails?>("visitorDetails", null)
+    val mobileNumber = savedStateHandle.get<String?>("mobileNumber")
     init {
         viewModelScope.launch {
             combine(
                 flow = userRepository.getFormData(),
                 flow2 = userRepository.getFormDataPurpose(),
                 flow3 = userRepository.getFormDataDepartment(),
-                flow4 = userRepository.getVisitorDetails()
+                flow4 = visitorDetails
             ) { formData, purpose, departments, visitorDetails ->
                 Pair(
                     Triple(
@@ -57,7 +65,7 @@ class AppointmentViewModel @Inject constructor(
                     val departments = response.first.third
                     val visitorDetails = response.second
 
-                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess && visitorDetails.isSuccess) {
+                    if (formData.isSuccess && purpose.isSuccess && departments.isSuccess ) {
                         val formDataResult = formData.getOrNull()
                         val purposeResult = purpose.getOrNull()
                         val departmentResult = departments.getOrNull()
@@ -69,19 +77,25 @@ class AppointmentViewModel @Inject constructor(
                                     formData = response.map { form ->
                                         when (form.columnName) {
                                             "Name" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.name)
+                                                form.copy(value = visitorDetails?.name)
                                             }
                                             "Mobile" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.mobile)
+                                                form.copy(value = mobileNumber)
                                             }
                                             "Email" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.email)
+                                                form.copy(value = visitorDetails?.email)
                                             }
                                             "Address" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.address)
+                                                form.copy(value = visitorDetails?.address)
                                             }
                                             "Company" -> {
-                                                form.copy(value = visitorDetails.getOrNull()?.company)
+                                                form.copy(value = visitorDetails?.company)
+                                            }
+                                            "VisitingDate" -> {
+                                                form.copy(value = convertMillisToDateString())
+                                            }
+                                            "Appointmenttime" -> {
+                                                form.copy(value = getCurrentTime())
                                             }
                                             else -> {
                                                 form
@@ -105,7 +119,11 @@ class AppointmentViewModel @Inject constructor(
                 }
         }
     }
-
+    private fun getCurrentTime(): String? {
+        val currentTime = LocalTime.now()
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        return currentTime.format(formatter)
+    }
 
     fun updateValue(columnName: String?, toString: String, base64Image: String = "") {
         val uiState = uiState.value
@@ -179,10 +197,10 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-    fun submitForm(func: (Boolean, String) -> Unit) {
+    fun submitForm(func: (Boolean, String, AppointmentSavedData?) -> Unit) {
         viewModelScope.launch {
             if (isValid().not()) {
-                func(false, "Please fill all required fields")
+                func(false, "Please fill all required fields", null)
                 return@launch
             }
             val uiState = uiState.value
@@ -190,60 +208,79 @@ class AppointmentViewModel @Inject constructor(
                 loadingState.update { LoadingState.Loading }
                 val data = mutableMapOf<String, String>()
 
-                data["VisitorType"] = "2"
+               // data["VisitorType"] = "2" //1=visitor , 2=parent , 3=vendor(not in App.)
+
+                data["VisitorType"] = visitorDetails.value?.visitorType?.toString()?:"2"
                 data["captureImg"] = "null"
                 data["VisitorPhoto"] = "null"
-                data["userfrom"] = "3"
+                if (mobileNumber==null){
+                    /*for parent  app*/
+                    data["userfrom"] = "3"  // 2 =walk in ,3=e-care,4= invitation form
+                }else{
+                    /*for gourd app*/
+                    data["userfrom"] = "2"  // 2 =walk in ,3=e-care,4= invitation form
+                }
 
-                uiState.formData.forEach { form: Form ->
-                    when (form.columnName) {
-                        "Photo" -> {
-                            data["photo"] = form.base64Image?:""
-                        }
 
-                        "IdproofImage" -> {
-                            data["VisitorPhotoInbyte"] = form.base64Image?:""
-                        }
-
-                        "IdType" -> {
-                            data["IdType"] =
-                                if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
-                        }
-
-                        "Purpose" -> {
-                            uiState.purpose.firstOrNull { it.purposeName == form.value }?.let {
-                                data[form.columnName] = it.purposeID.toString()
+                uiState
+                    .formData
+                    .filter { it.active == true }
+                    .filter { it.value.orEmpty().isNotEmpty()}
+                    .forEach { form: Form ->
+                        when (form.columnName) {
+                            "Photo" -> {
+                                data["photo"] = form.base64Image ?: ""
                             }
-                        }
 
-                        "Department" -> {
-                            uiState.departments.firstOrNull { it.departmentName == form.value }
-                                ?.let {
-                                    data[form.columnName] = it.departmentID.toString()
-                                }
-                        }
-
-                        "Designation" -> {
-                            uiState.designation.firstOrNull { it.designationName == form.value }
-                                ?.let {
-                                    data[form.columnName] = it.designationID.toString()
-                                }
-                        }
-
-                        "Employee" -> {
-                            uiState.employees.firstOrNull { it.employeeName == form.value }?.let {
-                                data[form.columnName] = it.employeeID.toString()
+                            "IdproofImage" -> {
+                                data["VisitorPhotoInbyte"] = form.base64Image ?: ""
                             }
-                        }
-                        "usertype" -> {
-                            data["usertype"] = userDataStore.getUser()?.userType.toString()
-                        }
-                        else -> {
-                            data[form.columnName] = form.value ?: ""
+
+                            "IdType" -> {
+                                data["IdType"] =
+                                    if (form.value == "Aadhar Card") "2" else if ("Pan Card" == form.value) "3" else "1"
+                            }
+
+                            "Purpose" -> {
+                                uiState.purpose.firstOrNull { it.purposeName == form.value }?.let {
+                                    data[form.columnName] = it.purposeID.toString()
+                                }
+                            }
+
+                            "Department" -> {
+                                uiState.departments.firstOrNull { it.departmentName == form.value }
+                                    ?.let {
+                                        data[form.columnName] = it.departmentID.toString()
+                                    }
+                            }
+
+                            "Designation" -> {
+                                uiState.designation.firstOrNull { it.designationName == form.value }
+                                    ?.let {
+                                        data[form.columnName] = it.designationID.toString()
+                                    }
+                            }
+
+                            "Employee" -> {
+                                uiState.employees.firstOrNull { it.employeeName == form.value }
+                                    ?.let {
+                                        data[form.columnName] = it.employeeID.toString()
+                                    }
+                            }
+                            "Appointmenttime" -> {
+                                data["VisitingTime"] = form.value ?: ""
+                            }
+
+                            "usertype" -> {
+                                data["usertype"] = if (form.value == "Parent") "2" else "1"
+                            }
+
+                            else -> {
+                                data[form.columnName] = form.value ?: ""
+                            }
                         }
                     }
-                }
-                Log.d("FCM", "nultipart: " +data)
+                Log.d("FCM", "nultipart: " + data)
 
 
                 userRepository.submitForm(data).collectLatest { result ->
@@ -251,30 +288,34 @@ class AppointmentViewModel @Inject constructor(
                     if (result.isSuccess) {
                         func(
                             true,
+                            result.getOrNull()?.message
+                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code.",
                             result.getOrNull()
-                                ?: "We have successfully updated your appointment to the school for review.Kindly check your message or email for current status of the appointment and confirmation code."
                         )
                     } else {
-                        val error = result.exceptionOrNull() ?: IllegalArgumentException(UNKNOWN_ERROR_MESSAGE)
+                        val error = result.exceptionOrNull() ?: IllegalArgumentException(
+                            UNKNOWN_ERROR_MESSAGE
+                        )
                         if (error is HttpException) {
                             if (error.code() == 400) {
                                 func(
                                     false,
-                                    "One or more validation errors occurred."
+                                    "One or more validation errors occurred.",
+                                    null
                                 )
-                            }
-                            else {
+                            } else {
                                 func(
                                     false,
-                                    error.message ?: UNKNOWN_ERROR_MESSAGE
+                                    error.message ?: UNKNOWN_ERROR_MESSAGE,
+                                    null
                                 )
                             }
 
-                        }
-                        else {
+                        } else {
                             func(
                                 false,
-                                error.message ?: UNKNOWN_ERROR_MESSAGE
+                                error.message ?: UNKNOWN_ERROR_MESSAGE,
+                                null
                             )
                         }
                     }
@@ -325,6 +366,7 @@ sealed interface AppointmentUiState {
         val designation: List<Designation> = emptyList(),
         val employees: List<Employee> = emptyList(),
         val guestIdType: List<String> = listOf("Aadhar Card", "Pan Card", "Driving License"),
+        val userType: List<Pair<String, Int>> = listOf(Pair("Parent", 2), Pair("Visitor", 1)),
     ) : AppointmentUiState
 
     data class Error(

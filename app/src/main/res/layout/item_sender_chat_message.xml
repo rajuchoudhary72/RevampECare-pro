@@ -38,6 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="-16dp"
+            android:backgroundTint="@color/green_10"
             android:background="@drawable/bg_round_corner_green_16"
             app:layout_constraintBottom_toBottomOf="@+id/barrier2"
             app:layout_constraintEnd_toEndOf="@+id/message"
@@ -53,14 +54,13 @@
             android:focusable="true"
             android:fontFamily="@font/calibri_regular"
             android:longClickable="true"
-            android:padding="17dp"
-            android:autoLink="web"
+            android:padding="15dp"
             app:formattedText="@{message}"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textIsSelectable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Vanjhal" />
+            tools:text="testing" />
 
         <com.google.android.material.imageview.ShapeableImageView
             app:shapeAppearanceOverlay="?attr/shapeAppearanceMediumComponent"

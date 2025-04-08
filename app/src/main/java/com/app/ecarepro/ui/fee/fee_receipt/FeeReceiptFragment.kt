@@ -42,6 +42,14 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import javax.inject.Inject
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.utils.Constant
 
 @AndroidEntryPoint
 class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
@@ -56,6 +64,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     private val STORAGE_PERMISSION_REQUEST_CODE = 1001
 
     private var base64String=""
+    private var isDownloading=false
 
     @Inject
     lateinit var userDataStore: UserDataStore
@@ -162,8 +171,28 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             }
             }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestNotificationPermission()
+                return
+            }
+        }
 
 
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                100
+            )
+        }
     }
 
     private fun popUpSessionList() {
@@ -235,9 +264,11 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     override fun onItemClick(t: FeeReceipt, pos: Int, boolean: Boolean) {
          when(pos){
              1 ->{
+                 isDownloading=false
                  getFeeCertificateDownload(t.recid.toString(),1,t.recdate,t.feetypeid)
              }
              2 ->{
+                 isDownloading=false
                  getFeeCertificateDownload(t.recid.toString(), 2, t.recdate, t.feetypeid)
              }
          }
@@ -273,19 +304,6 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
         feeReceiptViewModel.getFeeReceiptDownload(recid,sessionSelectData.yrid,feetypeid)
 
     }
-    fun generatePDFFromBase64(base64: String, fileName: String) {
-        try {
-            val decodedBytes: ByteArray = Base64.decode(base64, Base64.DEFAULT)
-            val fos = FileOutputStream(getFilePath(fileName))
-            fos.write(decodedBytes)
-            fos.flush()
-            fos.close()
-
-            openDownloadedPDF(fileName)
-        } catch (e: IOException) {
-            Log.e("TAG", "Faild to generate pdf from base64: ${e.localizedMessage}")
-        }
-    }
 
     private fun openDownloadedPDF(fileName: String) {
         val file = File(getFilePath(fileName))
@@ -320,56 +338,45 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
     }
 
 
-    private fun openPdfFile(file: File) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        val uri = FileProvider.getUriForFile(
-            requireContext(),
-            requireContext().packageName + ".myFileProvider",file
-        )
-        intent.setDataAndType(uri, "application/pdf")
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        startActivity(intent)
-    }
-
-
 
     private fun saveAndOpenPdf(base64String: String, s: String, i: Int, recdate: String?) {
-
-
-
-        try {
-            val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
-
-
-           // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
-            val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                "FeeReceipt$recdate.pdf"
-            )
+        if (!isDownloading){
+            isDownloading=true
             try {
+                val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+                val currentTime = System.currentTimeMillis()
 
-                val outputStream = FileOutputStream(file)
-                outputStream.write(decodedBytes)
-                outputStream.close()
-                if (i==2){
-                    Toast.makeText(requireContext(), "Fee Receipt saved to eCarePro Download", Toast.LENGTH_SHORT).show()
-             }
-             } catch (e: java.lang.Exception) {
+                // val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "FeeReceipt_"+"$recdate.pdf")
+                val file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    "FeeReceipt$recdate$currentTime.pdf"
+                )
+                try {
+
+                    val outputStream = FileOutputStream(file)
+                    outputStream.write(decodedBytes)
+                    outputStream.close()
+                    if (i==2){
+                        mainActivity().showMessage("Download started, check you status bar for more information.")
+                        showDownloadNotification(file, "FeeReceipt$recdate$currentTime.pdf")
+
+                    }
+
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
+                }
+                if (i!=2){
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".myFileProvider", file)
+                    intent.setDataAndType(uri, "application/pdf")
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    startActivity(intent)
+                }
+
+            } catch (e: Exception) {
                 e.printStackTrace()
-                 Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
+                // Handle exceptions appropriately (e.g., show an error message)
             }
-
-
-if (i==1){
-    val intent = Intent(Intent.ACTION_VIEW)
-    val uri = FileProvider.getUriForFile(requireContext(), requireContext().packageName + ".myFileProvider", file)
-    intent.setDataAndType(uri, "application/pdf")
-    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    startActivity(intent)
-}
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            // Handle exceptions appropriately (e.g., show an error message)
         }
     }
 
@@ -431,4 +438,69 @@ if (i==1){
             }
         }
     }
+
+
+
+
+    private fun showDownloadNotification(file: File, fileName: String) {
+        val channelId = "download_channel"
+        val notificationId = 1
+
+        // Create an intent to open the downloaded file
+        val openFileIntent = Intent(Intent.ACTION_VIEW).apply {
+            val uri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.myFileProvider",
+                file
+            )
+            setDataAndType(uri, "application/pdf")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            requireContext(),
+            0,
+            openFileIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Create a notification channel for Android 8+ (Oreo and above)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Download Notifications"
+            val descriptionText = "Notifications for downloaded files"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Build the notification
+        val notification = NotificationCompat.Builder(requireContext(), channelId)
+            .setSmallIcon(R.drawable.ic_download) // Replace with your app's download icon
+            .setContentTitle("File Downloaded")
+            .setContentText("Tap to open $fileName")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true) // Dismiss the notification when tapped
+            .build()
+
+        // Show the notification
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        NotificationManagerCompat.from(requireContext()).notify(notificationId, notification)
+    }
+
 }

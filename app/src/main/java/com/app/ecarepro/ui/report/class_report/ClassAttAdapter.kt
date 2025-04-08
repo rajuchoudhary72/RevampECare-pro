@@ -36,10 +36,17 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
          bindings?.apply {
 
                  tvName.text=data.name
-                 Picasso.get()
+              /*   Picasso.get()
                      .load( data.photo )
                      .placeholder(R.drawable.default_profile)
-                     .networkPolicy(NetworkPolicy.OFFLINE).into(imApproveBy )
+                     .networkPolicy(NetworkPolicy.OFFLINE).into(imApproveBy )*/
+
+
+             Picasso.get().
+             load(data.photo)
+                 .placeholder(R.drawable.default_profile)
+                 .into(imApproveBy)
+
 
                  llMain.setOnClickListener {
                      studentAttendanceReportFragment.onItemClick(data,1,false)

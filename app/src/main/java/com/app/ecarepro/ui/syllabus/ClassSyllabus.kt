@@ -64,28 +64,36 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerSyllabus.isVisible = true
+                        try {
+                            if (it.data != null) {
+                                if (it.data.syllabusLST.size > 0) {
+                                    if (it.data.syllabusLST.isNotEmpty()) {
 
-                        if (it.data != null) {
+                                        binding.recyclerSyllabus.isVisible = true
+                                        binding.tvNoData.isVisible = false
 
-                            if (it.data.syllabusLST.isNotEmpty()) {
+                                        val noticeAdapter =
+                                            SyllabusListAdapter(
+                                                it.data.syllabusLST,
+                                                this@ClassSyllabus
+                                            )
 
-                                binding.recyclerSyllabus.isVisible = true
-                                binding.tvNoData.isVisible = false
-
-                                val noticeAdapter =
-                                    SyllabusListAdapter(it.data.syllabusLST, this@ClassSyllabus)
-
-                                binding.recyclerSyllabus.apply {
-                                    setHasFixedSize(true)
-                                    layoutManager = LinearLayoutManager(activity)
-                                    adapter = noticeAdapter
+                                        binding.recyclerSyllabus.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = LinearLayoutManager(activity)
+                                            adapter = noticeAdapter
+                                        }
+                                    } else {
+                                        binding.recyclerSyllabus.isVisible = false
+                                        binding.tvNoData.isVisible = true
+                                    }
                                 }
-                            } else {
-                                binding.recyclerSyllabus.isVisible = false
-                                binding.tvNoData.isVisible = true
+
                             }
+                        } catch (e: NullPointerException) {
 
                         }
+
 
                     }
 
@@ -100,19 +108,24 @@ class ClassSyllabus : Fragment(), ItemListener<SyllabusLST> {
 
     override fun onItemClick(t: SyllabusLST, pos: Int, boolean: Boolean) {
         try {
-            if (pos == 1) {
-                findNavController().navigate(R.id.action_classSyllabus_to_openPdfFragment,
-                    Bundle().apply {
-                        putString(Constant.URL_ARGUMENT, t.filePath)
-                    })
-            } else if (pos == 2) {
-                val androidDownloader = AndroidDownloader(requireContext())
-                androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus) )
+            try {
+                if (pos == 1) {
+                    findNavController().navigate(R.id.action_classSyllabus_to_openPdfFragment,
+                        Bundle().apply {
+                            putString(Constant.URL_ARGUMENT, t.filePath)
+                        })
+                } else if (pos == 2) {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus))
+
+                }
+            } catch (e: SecurityException) {
 
             }
-        }catch (e:SecurityException){
-
+        }catch (e:NullPointerException){
+            e.printStackTrace()
         }
+
 
     }
 }

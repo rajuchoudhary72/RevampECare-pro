@@ -85,7 +85,7 @@ class FavouritesFragment : Fragment() {
                         modelBeingMoved: FavouriteBindingModel_, itemView: View
                     )
                     {
-                        Log.e("Hari", "onModelMoved: ${modelBeingMoved.title()} : $fromPosition -> $toPosition" )
+                        Log.e("Raju", "onModelMoved: ${modelBeingMoved.title()} : $fromPosition -> $toPosition" )
                         val carouselIndex: Int = carousels.indexOfFirst { modelBeingMoved.title() == it.title }
                         carousels.add(carouselIndex + (toPosition - fromPosition), carousels.removeAt(carouselIndex)
                         )

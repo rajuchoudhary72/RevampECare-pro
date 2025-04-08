@@ -130,7 +130,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
     }
 
     private fun setupAttDeatils(data: NetworkAttedanceSummary) {
-        val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave + data.totalLate
+        val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave  + data.totalNA + data.totalWH
 
 
         if (totalStudent > 0) {
@@ -149,17 +149,37 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                 tvPresentCount.text = buildString {
                     append(data.totalPresent)
                 }
+                tvPresentWorkingCount.text = buildString {
+                    append(data.totalPresent_WH)
+                }
                 tvNACount.text = buildString {
                     append(data.totalNA)
                 }
+                tvWHCount.text = buildString {
+                    append(data.totalWH)
+                }
 
-                try {
+            try {
+
+                tvWHPer.text = buildString {
+
+                    append(setCalculatedPercentageToInt(data.totalWH, totalStudent))
+
+                    append("%")
+                }
+
                     tvPresentPer.text = buildString {
 
                         append(setCalculatedPercentageToInt(data.totalPresent, totalStudent))
 
                         append("%")
                     }
+                tvPresentWorkingHoliday.text = buildString {
+
+                    append(setCalculatedPercentageToInt(data.totalPresent_WH, totalStudent))
+
+                    append("%")
+                }
 
                     tvAbsentPer.text = buildString {
 
@@ -201,6 +221,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                         data.totalLeave,
                         data.totalLate,
                         data.totalNA,
+                        data.totalWH,
 
                         )
 
@@ -268,7 +289,8 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         totalAbsent: Int,
         totalLeave: Int,
         totalLate: Int,
-        totalNA: Int
+        totalNA: Int,
+        totalWH: Int
     ) {
         binding.pieChart.setUsePercentValues(true)
         binding.pieChart.setUsePercentValues(false)
@@ -280,12 +302,14 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
             yvalues.add(PieEntry(totalLeave.toFloat(), 2))
             yvalues.add(PieEntry(totalNA.toFloat(), 3))
+            yvalues.add(PieEntry(totalWH.toFloat(), 4))
         } else {
             yvalues.add(PieEntry((totalPresent - totalLate).toFloat(), 0))
             yvalues.add(PieEntry(totalAbsent.toFloat(), 1))
             yvalues.add(PieEntry(totalLeave.toFloat(), 2))
             yvalues.add(PieEntry(totalLate.toFloat(), 3))
             yvalues.add(PieEntry(totalNA.toFloat(), 4))
+            yvalues.add(PieEntry(totalWH.toFloat(), 5))
         }
 
         val dataSet = PieDataSet(yvalues, "")
@@ -300,14 +324,16 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             resources.getColor(R.color.disabled),
             resources.getColor(R.color.absent_red),
             resources.getColor(R.color.att_leave_color),
-            resources.getColor(R.color.att_na_color)
+            resources.getColor(R.color.att_na_color),
+            resources.getColor(R.color.category7)
         )
         else dataSet.setColors(
             resources.getColor(R.color.disabled),
             resources.getColor(R.color.absent_red),
             resources.getColor(R.color.att_leave_color),
             resources.getColor(R.color.att_late_color),
-            resources.getColor(R.color.att_na_color)
+            resources.getColor(R.color.att_na_color),
+            resources.getColor(R.color.category7),
 
         )
 
@@ -317,10 +343,10 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         binding.pieChart.animateXY(1400, 1400)
 
         val s = """
-            ${totalPresent + totalAbsent + totalLeave  + totalNA}
+            ${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}
             Student(s)
             """.trimIndent()
-        val length = (totalPresent + totalAbsent + totalLeave).toString() + ""
+        val length = (totalPresent + totalAbsent + totalLeave + totalNA + totalWH).toString() + ""
         val ss1 = SpannableString(s)
         ss1.setSpan(RelativeSizeSpan(2f), 0, length.length, 0) // set size
         ss1.setSpan(

@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.model
 
+import com.app.ecarepro.model.FeeDefaulter
+import com.app.ecarepro.model.FeeType
 import com.app.ecarepro.utils.Constant.Companion.BASE_URL_COM
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -68,6 +70,10 @@ data class UserDashboardDto(
     val sessionStartDate: String?,
     @SerializedName("sessionEndDate")
     val sessionEndDate: String?,
+    @SerializedName("collectionStartDate")
+    val collectionStartDate: String?,
+    @SerializedName("collectionEndDate")
+    val collectionEndDate: String?,
     @SerializedName("timetable")
     val timetable: List<Timetable>?,
     @SerializedName("upcomingActivities")
@@ -77,7 +83,7 @@ data class UserDashboardDto(
     @SerializedName("feeCollection")
     val feeCollection: FeeCollection?,
     @SerializedName("feeDafaulter")
-    val feeDafaulter: FeeDefaulter?,
+    val feeDafaulter: NetworkFeeDefaulter?,
     @SerializedName("bankBalance")
     val bankBalance: List<BankBalance>?,
     @SerializedName("stuStatusWiseStatistics")
@@ -251,10 +257,6 @@ data class TransactionDetail(
 }
 
 data class FeeCollection(
-    @SerializedName("collectionStartDate")
-    val collectionStartDate: String?,
-    @SerializedName("collectionEndDate")
-    val collectionEndDate: String?,
     @SerializedName("concession")
     val concession: String?,
     @SerializedName("due")
@@ -321,6 +323,8 @@ data class AdmissionComparison(
     val currentSession: String?,
     @SerializedName("previousSession")
     val previousSession: String?,
+    @SerializedName("nextSession")
+    val nextSession: String?,
     @SerializedName("studentCountStandardWise")
     val studentCountStandardWise: List<StudentCountStandardWise>?
 )
@@ -330,6 +334,8 @@ data class StudentCountStandardWise(
     val currentSession: Int?,
     @SerializedName("previousSession")
     val previousSession: Int?,
+    @SerializedName("nextSession")
+    val nextSession: Int?,
     @SerializedName("standard")
     val standard: String?
 )

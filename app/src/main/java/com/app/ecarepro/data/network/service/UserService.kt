@@ -130,17 +130,18 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubj
 import com.app.ecarepro.model.FeeSummery
 import com.app.ecarepro.ui.survey.SurveyQuestionsResponse
 import com.app.ecarepro.ui.survey.SurveyQuestionsSubmitRequest
-import android.provider.Settings.Secure
+import com.app.ecarepro.data.network.CreateUserSessionRequestDto
+import com.app.ecarepro.data.network.UserSessionResponseDto
 import com.app.ecarepro.data.network.model.AppointmentSavedDto
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
 import com.app.ecarepro.data.network.model.NetworkEditProfile
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkWingReport
-import com.app.ecarepro.data.network.model.SendMessageRequest
-import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
 import com.app.ecarepro.data.network.model.UserUndertakingModule
@@ -148,8 +149,12 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
-import com.app.ecarepro.ui.edit_profile.model.Profile
+import com.app.ecarepro.model.NetworkKidCornerModel
+import com.app.ecarepro.model.PostComplianceData
+import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import okhttp3.RequestBody
 
 interface UserService {
@@ -165,29 +170,27 @@ interface UserService {
     suspend fun twoFactorLogin(
         @Body request: UserLoginRequestDto,
     ): TwoFactorLoginResponseDto
+
+    @POST("User/CreateSession")
+    suspend fun createSession(
+        @Body request: CreateUserSessionRequestDto
+    ): UserSessionResponseDto
     @GET("User/Verify")
     suspend fun verifyUser(
         @Query("SchCode") schoolCode: String,
         @Query("Username") username: String
     ): NetworkUserDetailsDto
-
-    @GET("User/LogOutAll")
-    suspend fun logoutAll(
-        @Query("DeviceType") deviceType: Int = 1,
-        @Query("deviceID") deviceID: String ,
-        @Query("SessionID") sessionID: String ,
-    ): CommonResponse
-
     @GET("User/LogOut")
     suspend fun logout(
         @Query("DeviceType") deviceType: Int = 1,
         @Query("deviceID") deviceID: String ,
+        @Query("SessionID") sessionID: String ,
     ): CommonResponse
     @GET("Report/FeeCollection")
     suspend fun feeCollection(
-        @Query("FeeTypeId") feeTypeId: Int,
-        @Query("FromDate") fromDate: String,
-        @Query("TillDate") tillDate: String,
+        @Query("FeeTypeId") feeTypeId: Int?,
+        @Query("FromDate") fromDate: String?,
+        @Query("TillDate") tillDate: String?,
     ): FeeCollection
     @POST("User/GetCredentials")
     suspend fun getCredentials(
@@ -583,6 +586,14 @@ interface UserService {
     @GET("Report/StaffList")
     suspend fun getStaffList(): NetworkStaffList
 
+    @GET("Staff/List")
+    suspend fun teachersList(): NetworkStaffList
+
+    @GET("Staff/List")
+    suspend fun getReportLessonStaffProfile(
+        @Query("RptID") sId: Int
+    ): NetworkStaffList
+
     @GET("Report/StaffProfile")
     suspend fun getStaffProfile(
         @Query("SID") sId: Int
@@ -689,6 +700,11 @@ interface UserService {
     @POST("User/UpdateParentProfile")
     suspend fun updateParentProfile(
         @Body request: UpdateProfileModel
+    ): CommonResponse
+
+    @POST("Student/UpdateTransportDetails")
+    suspend fun updateTransportProfile(
+        @Body request: UpdateTransportProfileModel
     ): CommonResponse
 
     @POST("User/UploadProfileIMG")
@@ -951,16 +967,39 @@ interface UserService {
         @Query("Query") query: String
     ): NetworkMediaGallery
 
+    @GET("Gallery/KidsCornerAlbums")
+    suspend fun getKidsCornerAlbums(
+        @Query("pg") pg: Int
+    ): NetworkKidCornerModel
+
+    @GET("Gallery/SearchKidsAlbum")
+    suspend fun getSearchKidsAlbum(
+        @Query("pg") pg: Int,
+        @Query("YrID") yrID: Int,
+        @Query("keyword") keyword: String?
+    ): NetworkKidCornerModel
+
+    @GET("Gallery/KidsAlbumDetails")
+    suspend fun getKidsAlbumDetails(
+        @Query("pg") pg: Int,
+        @Query("ID") id: String,
+    ): NetworkKidsAlbumDetailsModel
+
+
     @GET("QuestionBank/MyQuestionBank")
     suspend fun getMyQuestionBank(  ): NetworkQuestionBank
 
     @GET("QuestionBank/Create")
     suspend fun getQuestionBankCreate(  ): NetworkQuestionBankCreate
 
+
+
     @GET("QuestionBank/GetSubject")
     suspend fun getQuestionBankSubject(
         @Query("ClassID") classID: Int
     ): NetworkQuestionBankSubject
+
+
 
     @GET("QuestionBank/GetChapters")
     suspend fun getQuestionBankChapters(
@@ -1060,4 +1099,34 @@ interface UserService {
 
     @GET("School/Wings")
     suspend fun wingsList(): NetworkWingReport
+
+    @GET("User/ActiveSessions")
+    suspend fun activeSessions(): NetworkUserSessionsResponse
+
+    @GET("User/RemoveSession")
+    suspend fun removeSession(
+        @Query("SessionID") sessionID: String?,
+    ): CommonResponse
+
+    @GET("Report/FeeDefaulters")
+    suspend fun getFeeDefaulters(
+        @Query("FeeTypeId") feeTypeId: Int?,
+        @Query("InstallIds") installIds: String?
+    ): NetworkFeeDefaulter
+
+    @POST("DisciplineLog/PostCompliance")
+    suspend fun postCompliance(
+        @Body request: PostComplianceData,
+    ): CommonResponse
+
+    @GET("DisciplineLog/ResolvedCompliance")
+    suspend fun resolvedCompliance(
+        @Query("ID") ID: String?,
+        @Query("utype") utype: Int?
+    ): CommonResponse
+
+    @GET("Student/TransportDetails")
+    suspend fun getUserTransportProfile(
+    ): NetworkTransportEditProfile
+
 }

@@ -12,6 +12,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeCerDownload
 import com.app.ecarepro.data.network.model.NetworkFeeCerfResponse
 import com.app.ecarepro.data.network.model.NetworkFeeReceipt
 import com.app.ecarepro.data.network.model.PostCertf.PostDataFeeCertificate
+import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptDownloadRequest
 import com.app.ecarepro.data.network.model.create_fee_request.FeeReceiptRequest
 import com.app.ecarepro.data.network.model.post_default_report.DefaultReportBody
@@ -100,7 +101,7 @@ interface FomApiRepository {
 
     suspend fun getuserdetailsfrommobile (
           url: String
-    ): VerifyPhone
+    ): VisitorDetailsDto
 
     suspend fun getFeeBookReportList(
         url: String,

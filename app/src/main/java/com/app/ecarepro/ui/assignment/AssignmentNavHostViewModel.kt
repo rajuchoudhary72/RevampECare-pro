@@ -1,5 +1,7 @@
 package com.app.ecarepro.ui.assignment
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
@@ -27,9 +29,9 @@ class AssignmentNavHostViewModel @Inject constructor(
         }
     }
 
-    private val assignmentMutableStateFlow: MutableStateFlow<NetworkResult<NetworkAssignments>> = MutableStateFlow(
+    private val assignmentMutableStateFlow: MutableLiveData<NetworkResult<NetworkAssignments>> = MutableLiveData(
         NetworkResult.Loading())
-    val assignmentStateFlow: StateFlow<NetworkResult<NetworkAssignments>> = assignmentMutableStateFlow
+    val assignmentStateFlow: LiveData<NetworkResult<NetworkAssignments>> = assignmentMutableStateFlow
 
     fun getAssignment( )=viewModelScope.launch {
         runCatching {

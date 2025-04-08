@@ -1,6 +1,8 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.AssignHouseRequest
+import com.app.ecarepro.data.network.UserSessionResponseDto
+import com.app.ecarepro.data.network.model.AppointmentSavedData
 import com.app.ecarepro.data.network.model.Attachment
 import com.app.ecarepro.data.network.model.ChangeUserNameRequestDto
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -43,6 +45,7 @@ import com.app.ecarepro.data.network.model.Designation
 import com.app.ecarepro.data.network.model.Employee
 import com.app.ecarepro.data.network.model.FeeCollection
 import com.app.ecarepro.data.network.model.NetworkAcademicYear
+import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.Purpose
 
 import com.app.ecarepro.data.network.model.NetworkLeaveListStatus
@@ -89,6 +92,7 @@ import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
@@ -117,9 +121,13 @@ import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankChap
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankCreate
 import com.app.ecarepro.data.network.model.question_bank.NetworkQuestionBankSubject
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.NetworkKidCornerModel
+import com.app.ecarepro.model.NetworkUserSessionsResponse
+import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.StudentTeacherResponse
  import com.app.ecarepro.ui.appuserreport.AppUserReportResponse
@@ -127,6 +135,8 @@ import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
@@ -182,7 +192,7 @@ interface UserRepository {
     ): LoginResponseDto
 
     suspend fun feeCollection(
-        feeTypeID: Int, fromDate: String, tillDate: String
+        feeTypeID: Int?, fromDate: String?, tillDate: String?
     ): Flow<Result<FeeCollection>>
     suspend fun changeUserName(
         changeUserNameRequestDto: ChangeUserNameRequestDto
@@ -209,7 +219,8 @@ interface UserRepository {
     fun getVisitorDetails(): Flow<Result<VisitorDetails>>
 
     fun getFormDataEmployee(departmentId:String, designation:String): Flow<Result<List<Employee>>>
-    fun submitForm(formData:Map<String,String>): Flow<Result<String>>
+    fun submitForm(formData:Map<String,String>): Flow<Result<AppointmentSavedData>>
+
 
     suspend fun staffMyClass(subID: Int, iD: Int): NetworkMyClass
 
@@ -260,8 +271,8 @@ interface UserRepository {
         fileURL: String,
         fileExt: String
     ): CommonResponse
-
     fun getUserProfile(): Flow<Result<Profile>>
+   // fun getUserProfile(refresh: Boolean): Flow<Result<Profile>>
     suspend fun getUserProfileEdit(
         edit: Boolean
     ): NetworkEditProfile
@@ -270,6 +281,12 @@ interface UserRepository {
          request: UpdateProfileModel
     ): CommonResponse
 
+    suspend fun updateTransportProfile(
+        request: UpdateTransportProfileModel
+    ): CommonResponse
+
+    suspend fun getUserTransportProfile(
+    ): NetworkTransportEditProfile
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
@@ -298,7 +315,7 @@ interface UserRepository {
     suspend fun leaveApply(
         leaveID: Int,
         fromDate: String,
-        tillDate: String,
+        tillDate: String?,
         duration: Double,
         halfdayDTL: List<HalfdayDTL>?,
         reason: String,
@@ -337,6 +354,7 @@ interface UserRepository {
 
 
     suspend fun saveInfraction(
+        uType:Int,
         action:Int,
         stID:Int,
         infrSubTypeID:Int,
@@ -344,7 +362,8 @@ interface UserRepository {
         instance:Int,
         infractionOn:String,
         correctiveAction:String,
-
+         consequencesAttachment: BrowsedFile?,
+         isComplianceActive:Boolean
     ): CommonResponse
 
 
@@ -499,11 +518,12 @@ interface UserRepository {
     ): NetworkBirthday
     suspend fun excellenceAward (): ExcellenceAwardResponse
 
-    fun getUserDashboard(): Flow<Result<UserDashboardDto>>
-    fun getStudentListToAssignHouse(id:String, orderBy:String): Flow<Result<UserDashboardDto>>
+    fun getUserDashboard(refresh: Boolean): Flow<Result<UserDashboardDto>>
+    fun getStudentListToAssignHouse(id: String, orderBy: String): Flow<Result<UserDashboardDto>>
     fun assignHouse(request: AssignHouseRequest): Flow<Result<CommonResponse>>
-    fun getUserUndertaking(): Flow<Result<String>>
+    fun getUserUndertaking(refresh: Boolean): Flow<Result<String>>
     fun saveUserUndertaking(request: UserUndertakingModule): Flow<Result<String>>
+    fun createSession(regenerate:Boolean = false): Flow<Result<UserSessionResponseDto>>
 
     suspend fun reportCardDTL(
         stID: Int
@@ -544,6 +564,9 @@ interface UserRepository {
     ): NetworkLessonPlanDTL
 
     suspend fun getStaffList(): NetworkStaffList
+
+    suspend fun teachersList(): NetworkStaffList
+    suspend fun reportLessonteachersList(): NetworkStaffList
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 
@@ -788,6 +811,21 @@ interface UserRepository {
          query: String
     ): NetworkMediaGallery
 
+    suspend fun getKidsCornerAlbums(
+         pg: Int
+    ): NetworkKidCornerModel
+
+    suspend fun getSearchKidsAlbum(
+         pg: Int,
+         yrID: Int,
+        keyword: String?
+    ): NetworkKidCornerModel
+
+    suspend fun getKidsAlbumDetails(
+         pg: Int,
+         id: String,
+    ): NetworkKidsAlbumDetailsModel
+
     suspend fun getMyQuestionBank(  ): NetworkQuestionBank
 
     suspend fun  getQuestionBankCreate(  ): NetworkQuestionBankCreate
@@ -845,5 +883,31 @@ interface UserRepository {
     suspend fun academicYears(): NetworkAcademicYear
 
     suspend fun wingsList(): NetworkWingReport
+
+    suspend fun activeSessions(): NetworkUserSessionsResponse
+
+    suspend fun removeSession(
+     sessionID: String?,
+    ): CommonResponse
+
+    suspend fun getFeeDefaultersDas(
+        feeTypeId: Int?,
+        installIds: String?
+    ): Flow<Result<NetworkFeeDefaulter>>
+
+
+    suspend fun getFeeDefaulters(
+         feeTypeId: Int?,
+        installIds: String?
+    ): NetworkFeeDefaulter
+
+    suspend fun postCompliance(
+         postComplianceData: PostComplianceData
+    ): CommonResponse
+
+    suspend fun resolvedCompliance(
+        ID: String?,
+        utype: Int?
+    ): CommonResponse
 
 }

@@ -146,9 +146,7 @@ class PostAssignmentFragment : Fragment() {
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
         binding.tvSelectClass.setOnClickListener {
              if (isSubjectSelected){
-                 if (classesList!=null){
-                     popUpSelectClass()
-                 }
+                 popUpSelectClass()
              }else{
                  mainActivity().showMessage("Select Subject")
              }

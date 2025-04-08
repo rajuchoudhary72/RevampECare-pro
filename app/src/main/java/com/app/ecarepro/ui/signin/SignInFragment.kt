@@ -39,9 +39,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignInFragment : Fragment() {
-    val isMainApp = BuildConfig.FLAVOR == "Franciscan e-Care"
-    val isMYSFHS = BuildConfig.FLAVOR == "MYSFHS"
-    val isMYSFPSPlay = BuildConfig.FLAVOR == "MYSFPS Play"
+    val canChangeSchoolCode = BuildConfig.FLAVOR == "Franciscan e-Care"
+
     private var _binding: FragmentSignInBinding? = null
     private val binding get() = _binding!!
 
@@ -71,7 +70,7 @@ class SignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainActivity().showLoader(false)
+
         binding.textUserName.doAfterTextChanged {
             binding.btnContinue.isEnabled = it.isNullOrBlank().not()
         }
@@ -85,7 +84,7 @@ class SignInFragment : Fragment() {
                 bundleOf("schoolCode" to mViewModel.schoolCode)
             )
         }
-        binding.btnFindSchoolCollege.isVisible = !isMYSFPSPlay
+        binding.btnFindSchoolCollege.isVisible = canChangeSchoolCode
         binding.btnFindSchoolCollege.setOnClickListener {
             findNavController().navigate(
                 R.id.schoolCodeFragment,
@@ -201,7 +200,7 @@ class SignInFragment : Fragment() {
         analyticsManager.trackEvent(
             AnalyticsConstants.Events.LOGIN,
             mapOf(
-                AnalyticsConstants.Attributes.USER_NAME to binding.textUserName.text.toString(),
+                AnalyticsConstants.Attributes.USER_NAME to _binding?.textUserName?.text.toString(),
                 AnalyticsConstants.Attributes.SIGN_IN_TYPE to if (isAddAccount) AnalyticsConstants.Attributes.ADD_ACCOUNT else AnalyticsConstants.Attributes.NORMAL_LOGIN,
             )
         )
@@ -217,6 +216,7 @@ class SignInFragment : Fragment() {
                 restartApp()
             }
         } else {
+            mainActivity().checkAppVersion()
             FirebaseMessaging.getInstance().token
                 .addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {

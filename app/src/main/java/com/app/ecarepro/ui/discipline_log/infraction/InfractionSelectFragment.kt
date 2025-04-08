@@ -32,14 +32,14 @@ class InfractionSelectFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvAddInfraction.setOnClickListener {
-            findNavController().navigate(R.id.action_infractionSelectFragment_to_studentListFragment2,Bundle( ).apply {
-                putString(Constant.TO,  Constant.FRA_ADD_INFE)
-            })
+//            findNavController().navigate(R.id.action_infractionSelectFragment_to_studentListFragment2,Bundle( ).apply {
+//                putString(Constant.TO,  Constant.FRA_ADD_INFE)
+//            })
         }
         binding.tvViewInfraction.setOnClickListener {
-            findNavController().navigate(R.id.action_infractionSelectFragment_to_studentListFragment2,Bundle( ).apply {
-                putString(Constant.TO,   Constant.FRA_VIEW_INFE)
-            })
+//            findNavController().navigate(R.id.action_infractionSelectFragment_to_studentListFragment2,Bundle( ).apply {
+//                putString(Constant.TO,   Constant.FRA_VIEW_INFE)
+//            })
         }
 
     }

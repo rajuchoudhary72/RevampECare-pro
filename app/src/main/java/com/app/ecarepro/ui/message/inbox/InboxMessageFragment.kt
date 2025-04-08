@@ -107,9 +107,9 @@ class InboxMessageFragment : Fragment() {
                     }
 
                     is InboxMessageUiState.Success -> {
-                        uiState.messages.forEach { message ->
+                        uiState.messages.forEachIndexed {index,  message ->
                             recentMessageCard {
-                                id(message.id)
+                                id(message.id, index.toString())
                                 name(message.name)
                                 if (message.senderType==3){
                                     designation(message.designation)

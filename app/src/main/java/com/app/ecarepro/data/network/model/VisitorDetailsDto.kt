@@ -1,16 +1,18 @@
 package com.app.ecarepro.data.network.model
 
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import android.os.Parcelable
 
 data class VisitorDetailsDto(
     @SerializedName("data")
-    val `data`: VisitorDetails?,
+    val data: VisitorDetails?,
     @SerializedName("message")
-    val message: String?,
+    val message: String,
     @SerializedName("status")
     val status: Boolean?
 )
-
+@Parcelize
 data class VisitorDetails(
     @SerializedName("address")
     val address: String?,
@@ -28,4 +30,4 @@ data class VisitorDetails(
     val visitorPhoto: String?,
     @SerializedName("visitorType")
     val visitorType: Int?
-)
+) : Parcelable

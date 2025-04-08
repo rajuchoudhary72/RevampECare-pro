@@ -9,7 +9,7 @@ data class Circular(
     val id: String,
     val isEditable: Boolean,
     val isNew: Boolean,
-    var isRead: Boolean,
+    val isRead: Boolean,
     val message: String,
     val mustRead: Boolean,
     val postedBy: Int,

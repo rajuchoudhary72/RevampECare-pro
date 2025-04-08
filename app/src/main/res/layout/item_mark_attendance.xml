@@ -86,8 +86,8 @@
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/_3sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginRight="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@color/grey_40" />
 
@@ -104,8 +104,8 @@
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/_3sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginRight="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@color/grey_40" />
 
@@ -122,8 +122,8 @@
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/_3sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginRight="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@color/grey_40" />
 
@@ -142,8 +142,8 @@
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/_3sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginRight="@dimen/_7sdp"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:visibility="visible"
                         android:background="@color/grey_40" />
@@ -156,6 +156,29 @@
                         android:background="@drawable/circle_gray_att"
                         android:gravity="center"
                         android:text="NA"
+                        android:visibility="visible"
+                        android:textColor="@color/grey_light_compose_msg_headr_txt" />
+
+
+
+                    <View
+                        android:layout_width="@dimen/_1sdp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:layout_marginRight="@dimen/_7sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:visibility="visible"
+                        android:background="@color/grey_40" />
+
+                    <TextView
+                        android:id="@+id/tv_mark_wh"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_gravity="end"
+                        android:background="@drawable/circle_gray_att"
+                        android:gravity="center"
+                        android:text="WH"
                         android:visibility="visible"
                         android:textColor="@color/grey_light_compose_msg_headr_txt" />
                 </LinearLayout>

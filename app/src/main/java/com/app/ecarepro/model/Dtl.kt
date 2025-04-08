@@ -6,6 +6,7 @@ data class Dtl(
     val applicantPhoto: String,
     val attachment: String,
     val designation: String,
+    val duration_str: String,
     val duration: Double,
     val forwardedBy: Int,
     val forwardedByName: Any,

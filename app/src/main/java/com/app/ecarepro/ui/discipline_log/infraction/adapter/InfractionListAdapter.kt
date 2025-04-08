@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.DisciplineViewListItemBinding
@@ -21,7 +22,6 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
         private lateinit var bindingm:   DisciplineViewListItemBinding
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CircularViewHolder {
         bindingm=DisciplineViewListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return CircularViewHolder(bindingm.root)
@@ -35,22 +35,43 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
 
          if (binding!=null){
 
+             binding.rlCompilance.isVisible=true
+
              var isMaxLineOne=true
              val data=recentInfractions[position]
 
-             binding.ivDelete.isVisible=data.canDelete
+             if (data.isComplianceActive){
+                 binding.llCompliance.isVisible=true
+                 binding.cvComplianceNotActivated.isVisible=false
+                 if (data.isResolved){
+                     binding.cvResolved.setCardBackgroundColor(infractionListFragment.resources.getColor(R.color.green,null))
+                     binding.tvResolvedHolder.text=infractionListFragment.getString(R.string.resolved)
+                 }
+             }else{
+                 binding.llCompliance.isVisible=false
+                 binding.cvComplianceNotActivated.isVisible=true
+             }
+
+
+                 binding.ivDelete.isVisible=data.canDelete
 
              binding.tvMedicineName.text= buildString {
                  append(infractionListFragment.getString(R.string.category))
                  append(data.infraction)
              }
-             binding.tvQuantity.text= buildString {
-                 append(infractionListFragment.getString(R.string.instance_wit))
+             binding.tvInstance.text= buildString {
                  append(data.instance)
              }
              binding.tvDate.text= buildString {
                  append(infractionListFragment.getString(R.string.infraction_on))
                  append(data.infractionOn)
+             }
+             binding.tvReword.text= buildString {
+                 append("Consequences: ")
+             }
+
+             binding.cvMain.setOnClickListener {
+                 infractionListFragment.onItemClick(data,2,false)
              }
 
 

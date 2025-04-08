@@ -21,6 +21,7 @@ import com.app.ecarepro.databinding.FragmentPrintOutAppointenentBinding
 import com.app.ecarepro.ui.fom_guard.model.verify_code.Appdetails
 import com.app.ecarepro.ui.fom_guard.verification_code.FomGuardVerfyCodeViewModel
 import com.app.ecarepro.utils.Constant
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
@@ -53,7 +54,12 @@ class PrintOutAppointenentFragment : Fragment() {
         })*/
 
         binding.appointmentData = appointmentData
-
+        if(appointmentData?.visitorPhoto.isNullOrEmpty().not()){
+            Picasso.get().
+            load(appointmentData?.visitorPhoto)
+                .placeholder(R.drawable.default_profile)
+                .  into(binding.userImg)
+        }
         binding.btnContinue.setOnClickListener {
             /*val bitmap = getBitmapFromView(binding.cvAppointmentDetails)
             val uri = saveImage(bitmap)

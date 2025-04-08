@@ -42,6 +42,7 @@ class Constant {
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val STUDENT_ID_ARGUMENT = "StudentID"
         const val STAFF_ID_ARGUMENT = "StaffID"
+        var LESSONPLAN_HARDCCODE_KEY = ""
         const val TIME_TABLE_TYPE = "TimeTableType"
         const val ASSIGNMENT_TYPE = "AssignmentType"
         const val ALBUM_TYPE = "albumTypePassValue"
@@ -55,6 +56,7 @@ class Constant {
         const val ID = "ID"
         const val LESSON_ID_ARGUMENT = "LessonID"
         const val NAME = "name"
+        const val LEAVE_SHORT_VALUE = "LeaveShortValue"
         const val TO = "to"
         const val NOTICE_TYPE = "notice_type"
         const val NOTICE_CLASS = "notice_class"
@@ -96,16 +98,14 @@ class Constant {
         const val LEAVE_ACTION_CANCEL = -1
 
         const val PROFILE_FRA_STU = "ProfileFragmentStudent"
+        const val APPRECIATION_FRAG = "AppreciationFragment"
+        const val INFRECTION_FRAG = "INFRECTIONFragment"
         const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
         const val FRA_LEAVE = "FragmentLeave"
         const val FRA_ASSI = "FragmentAssignment"
         const val FRA_TIMETABLE = "FragmentTimeTable"
         const val FRA_APP_MESSAGE = "FragmentAppMessage"
         const val FRA_APP_SMS = "FragmentAppSMS"
-        const val FRA_ADD_APPRE = "FragmentAddApprecation"
-        const val FRA_VIEW_APPRE = "FragmentViewApprecation"
-        const val FRA_VIEW_INFE = "FragmentViewInfe"
-        const val FRA_ADD_INFE = "FragmentAddInfe"
         const val FRA_LESSON_PLAN = "FragmentLessonPlan"
         const val FRA_STAFF_LEAVE = "FragmentStaffLeave"
         const val FRA_STU_LEAVE = "FragmentStudentLeave"
@@ -144,6 +144,7 @@ class Constant {
         const val FILTER_SUBJECT = 1
         const val FILTER_CLASS = 2
         const val FILTER_TEACHER = 3
+        const val FILTER_DATE = 4
 
 
         const val DOWNLOAD = 1

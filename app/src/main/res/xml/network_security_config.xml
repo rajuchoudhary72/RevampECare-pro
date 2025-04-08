@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+    <debug-overrides>
+        <!-- Trust user-added certificates for debugging -->
+        <trust-anchors>
+            <certificates src="user"/>
+        </trust-anchors>
+    </debug-overrides>
+
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
             <certificates src="system" />
@@ -7,6 +14,6 @@
     </base-config>
 
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">androidapi.franciscanecare.net</domain>
+        <domain includeSubdomains="true">api.franciscanecare.net</domain>
     </domain-config>
 </network-security-config>

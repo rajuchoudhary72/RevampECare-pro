@@ -3,6 +3,7 @@ package com.app.ecarepro.di
 import android.content.Context
 import com.app.ecarepro.BuildConfig
 import com.app.ecarepro.data.network.AuthInterceptor
+import com.app.ecarepro.data.network.PerformanceMonitorInterceptor
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
 import com.app.ecarepro.data.network.intercepter.CustomResponseInterceptor
 import com.app.ecarepro.data.network.service.AppService
@@ -22,7 +23,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
+import com.app.ecarepro.di.annotations.SessionReCreate
+import com.app.ecarepro.data.network.InvalidSessionInterceptor
+import com.app.ecarepro.data.network.SessionAuthenticator
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -41,11 +44,12 @@ object NetworkModule {
 
     @Provides
     fun provideOkHttpClient(
-        @ApplicationContext context: Context,
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
         connectivityInterceptor: ConnectivityInterceptor,
-        customResponseInterceptor: CustomResponseInterceptor
+        customResponseInterceptor: CustomResponseInterceptor,
+        performanceMonitorInterceptor: PerformanceMonitorInterceptor
+
 
     ): OkHttpClient {
         return OkHttpClient
@@ -54,20 +58,19 @@ object NetworkModule {
             .addInterceptor(authInterceptor)
             .addInterceptor(connectivityInterceptor)
             .addInterceptor(customResponseInterceptor)
+            .addInterceptor(performanceMonitorInterceptor)
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .build()
     }
-/* .addInterceptor(connectivityInterceptor)
-            .addInterceptor(customResponseInterceptor)*/
-@Provides
+/*@Provides
 fun provideRetrofit(
     okHttpClient: OkHttpClient,
 ): Retrofit {
     return Retrofit.Builder()
         .baseUrl(
-            if (BuildConfig.FLAVOR == "dev") {
+            if (BuildConfig.DEBUG) {
                 Constant.BASE_DEV_URL
             } else {
                 Constant.BASE_URL
@@ -76,7 +79,18 @@ fun provideRetrofit(
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
         .build()
-}
+}*/
+
+    @Provides
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(getBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
 
     @Provides
     fun provideUserService(
@@ -112,5 +126,32 @@ fun provideRetrofit(
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
     }
-
+    @Provides
+    @SessionReCreate
+    fun provideSessionUserService(
+        loggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
+    ): UserService {
+        val client = OkHttpClient
+            .Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
+        return Retrofit.Builder()
+            .baseUrl(getBaseUrl())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+            .create(UserService::class.java)
+    }
+    private fun getBaseUrl(): String {
+        return if (BuildConfig.BUILD_TYPE.equals("release", true)) {
+            Constant.BASE_URL
+        } else {
+            Constant.BASE_DEV_URL
+        }
+    }
 }

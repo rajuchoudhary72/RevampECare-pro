@@ -37,7 +37,11 @@ class StudentRepoAttAdapter(
             }
             tvTotalStudentCount.text= buildString {
                 append("Total Student : ")
-                append(data.present+data.absent+data.late+data.leave )
+                append(data.present+data.absent+data.leave+data.wh+data.na)
+            }
+            tvTotalPresentWorkingCount.text= buildString {
+                append("Total Present : ")
+                append(data.totalPresent)
             }
             tvTotalAbsentCount.text= buildString {
                 append("Absent : ")
@@ -59,6 +63,10 @@ class StudentRepoAttAdapter(
             tvTotalNaCount.text= buildString {
                 append("NA : ")
                 append(data.na)
+            }
+            tvTotalWhCount.text= buildString {
+                append("WH : ")
+                append(data.wh)
             }
 
             cvMain.setOnClickListener {

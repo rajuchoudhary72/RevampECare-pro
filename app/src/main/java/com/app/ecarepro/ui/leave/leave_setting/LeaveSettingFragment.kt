@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LeaveSettingFragment : Fragment() {
 
+    private var sortLeaveValue: Double=0.0
     private var isSelected: Boolean=false
     private lateinit var binding : FragmentLeaveSettingBinding
     private val leaveSettingViewModel : LeaveSettingViewModel by viewModels()
@@ -67,6 +68,7 @@ class LeaveSettingFragment : Fragment() {
                         if (it.data !=null) {
                         if (it.data.leaveDetails != null) {
                             leaveTypeList= it.data.leaveDetails as MutableList<LeaveDetail>
+                            sortLeaveValue=it.data.shortLeaveValue
                             it.data.leaveDetails.forEach { data ->
                                 leaveTypesDataString.add(data.leaveType .toString())
                             }
@@ -108,6 +110,7 @@ class LeaveSettingFragment : Fragment() {
                     Bundle().apply {
                         putInt(Constant.LEAVE_ID_ARGUMENT, selectedLeaveTypeData.leaveID!!)
                         putString(Constant.NAME, selectedLeaveTypeData.leaveType)
+                        putDouble(Constant.LEAVE_SHORT_VALUE, sortLeaveValue)
                     })
             }else{
                 mainActivity().showMessage("Select Leave Type")

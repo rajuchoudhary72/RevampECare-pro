@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName
 data class LoginResponseDto(
     @SerializedName("authToken")
     val authToken: String?,
+    @SerializedName("sessionID")
+    val sessionID: String?,
     @SerializedName("authenticated")
     val authenticated: Boolean?,
     @SerializedName("errorCode")
@@ -54,6 +56,7 @@ fun LoginResponseDto.asUserEntity(): UserEntity {
         classID = classID,
         loginTime = loginTime,
         stName = stName,
-        className = className
+        className = className,
+        sessionId = sessionID
     )
 }

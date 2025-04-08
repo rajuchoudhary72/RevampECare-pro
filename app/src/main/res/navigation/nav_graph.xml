@@ -996,4 +996,45 @@
         android:id="@+id/feeBookFragment"
         android:name="com.app.ecarepro.ui.fee.fee_book.FeeBookFragment"
         android:label="FeeBookFragment" />
+    <fragment
+        android:id="@+id/teacherListFragment"
+        android:name="com.app.ecarepro.ui.know_your_teacher.TeacherListFragment"
+        android:label="TeacherListFragment" />
+    <fragment
+        android:id="@+id/userSessionListFragment"
+        android:name="com.app.ecarepro.ui.user_session_list.UserSessionListFragment"
+        android:label="UserSessionListFragment" />
+    <fragment
+        android:id="@+id/feeDefaulterUI"
+        android:name="com.app.ecarepro.ui.dashbord.fee_defaulter.FeeDefaulterUI"
+        android:label="FeeDefaulterUI" />
+    <fragment
+        android:id="@+id/addComplianceFragment"
+        android:name="com.app.ecarepro.ui.discipline_log.infraction.add_compliance.AddComplianceFragment"
+        android:label="AddComplianceFragment" />
+    <fragment
+        android:id="@+id/kidAlbumDetailsFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_album_details.KidAlbumDetailsFragment"
+        android:label="KidAlbumDetailsFragment" />
+    <fragment
+        android:id="@+id/kidCornerImageViewFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerImageViewFragment"
+        android:label="KidCornerImageViewFragment" />
+    <fragment
+        android:id="@+id/kidCornerFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.KidCornerFragment"
+        android:label="KidCornerFragment" />
+    <fragment
+        android:id="@+id/kidCornerSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerSliderNavHostFragment"
+        android:label="KidCornerSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/allStaffListFragment"
+        android:name="com.app.ecarepro.ui.report.lessonplan.AllStaffListFragment"
+        android:label="StaffListFragment" >
+        <action
+            android:id="@+id/action_allStaffListFragment_to_lessonPlanListFragment"
+            app:destination="@id/lessonPlanListFragment" />
+        />
+    </fragment>
 </navigation>
