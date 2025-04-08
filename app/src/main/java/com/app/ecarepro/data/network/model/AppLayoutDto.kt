@@ -43,6 +43,7 @@ data class SearchOption(
     @SerializedName("show")
     val show: Boolean
 ) : Parcelable
+
 data class Menu(
     @SerializedName("childMenus")
     val childMenus: List<ChildMenu>?,

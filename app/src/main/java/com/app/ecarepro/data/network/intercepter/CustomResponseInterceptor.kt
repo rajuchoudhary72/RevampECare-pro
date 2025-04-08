@@ -1,7 +1,6 @@
 package com.app.ecarepro.data.network.intercepter
 
 
-
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
@@ -23,7 +22,7 @@ class CustomResponseInterceptor @Inject constructor(
 
     private val handler = Handler(Looper.getMainLooper())
     private var dialogShown = false // Prevent multiple dialogs
-
+    private val ignoreItems = mutableListOf("Report/StudentList", "Report/StaffList")
     override fun intercept(chain: Interceptor.Chain): Response {
 
         var response = chain.proceed(chain.request())
@@ -33,12 +32,15 @@ class CustomResponseInterceptor @Inject constructor(
 
     private fun handleResponse(chain: Interceptor.Chain, response: Response): Response {
         val responseBody = response.body
-        val responseBodyString = responseBody .string() ?: ""
+        val responseBodyString = responseBody.string() ?: ""
+
+        if (isUrlIgnored(response.request.url.toUri().toString()))
+            return response.newBuilder()
+                .body(ResponseBody.create(responseBody.contentType(), responseBodyString)).build()
+
 
         try {
-
-             val jsonObject = JSONObject(responseBodyString)
-
+            val jsonObject = JSONObject(responseBodyString)
 
             val errorCode = jsonObject.optInt("errorCode", -1)
             val message = jsonObject.optString("message", "An error occurred")
@@ -50,75 +52,84 @@ class CustomResponseInterceptor @Inject constructor(
                         .body(ResponseBody.create(responseBody.contentType(), responseBodyString))
                         .build()
                 }
+
                 1 -> {
                     showAlertErrorCodeDialog()
 
-                   /* runBlocking {
-                        if (!dialogShown) {
-                            if (showRetryDialog()) {
-                                response.close() // Close current response before retrying
-                                  handleResponse(chain, chain.proceed(chain.request())) // Recursive retry
-                            }
-                        }
-                    }*/
+                    /* runBlocking {
+                         if (!dialogShown) {
+                             if (showRetryDialog()) {
+                                 response.close() // Close current response before retrying
+                                   handleResponse(chain, chain.proceed(chain.request())) // Recursive retry
+                             }
+                         }
+                     }*/
                 }
+
                 2 -> showMessageDialog(message)
             }
-        } catch (_: Exception) { }
+        } catch (_: Exception) {
+        }
 
         return response.newBuilder()
             .body(ResponseBody.create(responseBody.contentType(), responseBodyString))
             .build()
     }
 
+    private fun isUrlIgnored(url: String): Boolean =
+        ignoreItems.any { url.contains(it, ignoreCase = true) }
+
     private suspend fun showRetryDialog(): Boolean {
         return suspendCoroutine { continuation ->
-            dialogShown=true
+            dialogShown = true
             handler.post {
-                val appContext =  context as ECateProApp
+                val appContext = context as ECateProApp
                 val dialog = AlertDialog.Builder(appContext.getCurrentActivity())
                     .setTitle("Request Failed")
                     .setMessage("An error occurred. Would you like to retry?")
                     .setPositiveButton("Retry") { _, _ ->
-                         dialogShown=false
+                        dialogShown = false
                         continuation.resume(true) // Retry selected
                     }
 //                        .setNegativeButton("Cancel") { _, _ ->
 //                        dialogShown=false
 //                        continuation.resume(false) // Cancel selected
 //                    }
-                        .setCancelable(false)
+                    .setCancelable(false)
                     .create()
                 dialog.show()
             }
         }
     }
+
     private fun showAlertErrorCodeDialog() {
         handler.post {
-            val appContext =  context as ECateProApp
+            val appContext = context as ECateProApp
             handler.post {
                 AlertDialog.Builder(appContext.getCurrentActivity())
                     .setTitle("Request Failed")
                     .setMessage("Something went wrong. Please try again later.")
-                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss()
+                    .setPositiveButton("OK") { dialog, _ ->
+                        dialog.dismiss()
                     }
                     .setCancelable(true)
                     .show()
             }
         }
     }
+
     private fun showMessageDialog(message: String) {
         handler.post {
-        val appContext =  context as ECateProApp
-        handler.post {
-            AlertDialog.Builder(appContext.getCurrentActivity())
-                .setTitle("Notice")
-                .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                .setCancelable(false)
-                .show()
+            val appContext = context as ECateProApp
+            handler.post {
+                AlertDialog.Builder(appContext.getCurrentActivity())
+                    .setTitle("Notice")
+                    .setMessage(message)
+                    .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                    .setCancelable(false)
+                    .show()
+            }
         }
-    }
     }
 }
 

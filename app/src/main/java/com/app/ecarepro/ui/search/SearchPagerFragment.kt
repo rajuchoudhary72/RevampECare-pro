@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSearchPagerBinding
+import com.app.ecarepro.error
 import com.app.ecarepro.menuCard
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.noDataFoundView
@@ -101,6 +102,12 @@ class SearchPagerFragment : Fragment() {
                 noDataFoundView {
                     id(R.id.empty_view)
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                }
+            } else if(uiState is SearchUiState.Error){
+                error {
+                    id(R.id.errorMessage)
+                    spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                    error(uiState.error.message)
                 }
             } else if (uiState is SearchUiState.Success) {
                 when (uiState.searchType) {
