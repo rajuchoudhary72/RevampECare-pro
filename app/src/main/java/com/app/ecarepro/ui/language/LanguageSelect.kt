@@ -14,9 +14,8 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.app.ecarepro.R
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentLanguageSelectBinding
 import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,17 +29,9 @@ class LanguageSelect : Fragment() {
 
     private val viewModel: LanguageViewModel by viewModels()
 
-    private val languages = mapOf(
-        "English" to "en",
-        "Hindi" to "hi",
-        "Bengali" to "bn",
-        "Telugu" to "te",
-        "Marathi" to "mr",
-        "Tamil" to "ta",
-        "Gujarati" to "gu",
-        "Kannada" to "kn",
-        "Odia" to "or",
-        "Punjabi" to "pa"
+    private val languageList = mutableListOf<LanguageModel>(
+        LanguageModel("English" ,"en"),
+        LanguageModel("Hindi" ,"hi")
     )
 
 
@@ -51,7 +42,7 @@ class LanguageSelect : Fragment() {
     ): View {
         binding = FragmentLanguageSelectBinding.inflate(inflater, container, false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = "Language Select"
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.language_select)
         return binding.root
     }
 
@@ -64,16 +55,24 @@ class LanguageSelect : Fragment() {
 
         lifecycleScope.launch {
             viewModel.selectedLanguage.collect { selectedLangCode ->
-               val adapter = LanguageAdapter(languages.keys.toList(), selectedLangCode) { selectedLang ->
-                   val langCode = languages[selectedLang] ?: "en"
+               val adapter = LanguageAdapter(languageList, selectedLangCode,) { selectedLang ->
+                   val langCode = selectedLang ?: "en"
                    viewModel.changeLanguage(langCode)
 
-                   Toast.makeText(requireContext(), "Language set to: $selectedLang", Toast.LENGTH_SHORT).show()
+                 //  Toast.makeText(requireContext(), "Language set to: $selectedLang", Toast.LENGTH_SHORT).show()
 
-                   // Restart app to apply language
-                   requireActivity().let {
-                       LanguageManager.languageSetAndRestartApp(it, langCode)
-                   }
+//                   // Restart app to apply language
+//                   requireActivity().let {
+//                       //LanguageManager.languageSetAndRestartApp(it, langCode)
+//                       setUpLocal(langCode)
+//                   }
+
+                   LanguageManager.setNewLocale(requireContext(), langCode) // Switch to Hindi
+
+                   val intent = Intent(requireActivity(), MainActivity::class.java)
+                   intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                   startActivity(intent)
+                   requireActivity().finish()
 
                }
                 binding.recyclerViewLanguages.adapter = adapter

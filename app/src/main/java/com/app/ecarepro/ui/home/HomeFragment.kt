@@ -543,9 +543,9 @@ class HomeFragment : Fragment() {
     private fun dashboardPrompt( ) {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_dashboard_link)
-            .setPrimaryText("Dashboard")
+            .setPrimaryText(getString(R.string.dashboard))
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
-            .setSecondaryText("Click here to access Dashboards")
+            .setSecondaryText(getString(R.string.click_here_to_access_dashboards))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
                 {
@@ -558,9 +558,9 @@ class HomeFragment : Fragment() {
     private fun addMorePrompt( ) {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_add_more)
-            .setPrimaryText("Favourites")
+            .setPrimaryText(getString(R.string.favourites))
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
-            .setSecondaryText("Click here to add your Favourite menus ")
+            .setSecondaryText(getString(R.string.click_here_to_add_your_favourite_menus))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
                 {
@@ -573,8 +573,8 @@ class HomeFragment : Fragment() {
     private fun cardPrompt( ) {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.cv_dashboard_card)
-            .setPrimaryText(" Information Cards")
-            .setSecondaryText("Slide left to check out all the cards")
+            .setPrimaryText(getString(R.string.information_cards))
+            .setSecondaryText(getString(R.string.slide_left_to_check_out_all_the_cards))
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
@@ -593,8 +593,8 @@ class HomeFragment : Fragment() {
         if (!sharedPreference.getBoolean(Constant.SHARED_PREF_SHOW_PROMPT, false)) {
             MaterialTapTargetPrompt.Builder(requireActivity())
                 .setTarget(binding.imgUserAvatar)
-                .setPrimaryText("Profile")
-                .setSecondaryText("Click here to check out your profile and Transport Details")
+                .setPrimaryText(getString(R.string.profile))
+                .setSecondaryText(getString(R.string.click_here_to_check_out_your_profile_and_transport_details))
                 .setBackgroundColour(requireContext().getColor(R.color.brand_color))
                 .setPromptStateChangeListener { prompt, state ->
                     if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)

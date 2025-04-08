@@ -96,6 +96,7 @@ import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.ui.language.LanguageManager
 import com.app.ecarepro.ui.language.LanguageRepository
+import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -187,18 +188,31 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    @Inject
-    lateinit var languageRepository: LanguageRepository
+//    @Inject
+//    lateinit var languageRepository: LanguageRepository
+//
+//    override fun attachBaseContext(newBase: Context) {
+//        val savedLanguageCode = languageRepository.getSavedLanguage() // Fetch saved language
+//        val updatedContext = LanguageManager.applyLanguage(newBase, savedLanguageCode) // Returns Context
+//        super.attachBaseContext(updatedContext) // Pass updated Context
+//    }
+
 
     override fun attachBaseContext(newBase: Context) {
-        val savedLanguageCode = languageRepository.getSavedLanguage() // Fetch saved language
-        val updatedContext = LanguageManager.applyLanguage(newBase, savedLanguageCode) // Returns Context
-        super.attachBaseContext(updatedContext) // Pass updated Context
+        super.attachBaseContext(LanguageManager.setLocale(newBase))
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        val  langCode=LanguageManager.getSavedLanguage(this)
+//            val local = Locale(langCode)
+//            Locale.setDefault(local)
+//            val config = resources.configuration
+//            config.locale = local
+//            resources.updateConfiguration(config, resources.displayMetrics)
+
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -1230,7 +1244,7 @@ class MainActivity : AppCompatActivity() {
 
             7 -> {
                 when (childMenuId) {
-                    10 -> navController.navigate(R.id.languageSelect)
+                    10 -> navController.navigate(R.id.circularFragment)
 
                     11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
                         putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)

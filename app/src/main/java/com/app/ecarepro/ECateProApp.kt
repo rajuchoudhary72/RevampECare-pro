@@ -2,24 +2,14 @@ package com.app.ecarepro
 
 import android.app.Activity
 import android.app.Application
+import android.app.LocaleManager
 import android.content.Context
-import android.net.wifi.WifiManager
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings.Secure
 import androidx.appcompat.app.AppCompatDelegate
-import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
-import com.app.ecarepro.ui.language.LanguageRepository
+import com.app.ecarepro.ui.language.LanguageManager
 import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.ktx.messaging
 import dagger.hilt.android.HiltAndroidApp
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -32,6 +22,10 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
     @Inject
     lateinit var appRepository: AppRepository
 
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LanguageManager.setLocale(newBase))
+    }
 
     override fun onCreate() {
         super.onCreate()

@@ -79,7 +79,8 @@ class DashboardFragment : Fragment() {
     private val systemViewModel: SystemViewModel by activityViewModels()
 
     var isExpanded = false
-    private var modeByCollectionFilter: String = getString(R.string.general_today)
+    private lateinit var modeByCollectionFilter: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,6 +92,8 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        modeByCollectionFilter = getString(R.string.general_today)
 
         initViews()
 
@@ -112,7 +115,6 @@ class DashboardFragment : Fragment() {
                 if (data.showProCards == true) {
                     cards.addAll(data.proCards ?: emptyList())
                 }
-
                 if (data.showCards == true) {
                     cards.addAll(data.cards ?: emptyList())
                 }

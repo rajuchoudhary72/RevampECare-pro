@@ -198,6 +198,8 @@
     <string name="peroid">Period</string>
 
     <string name="birthday_on">"Birthday On : "</string>
+
+
     <string name="general_father_name_pun">"Father Name : "</string>
     <string name="general_mother_name_pun">"Mother Name : "</string>
     <string name="front_view">Front View</string>
@@ -496,6 +498,8 @@
     <string name="print">Print</string>
 
     <string name="driver_name">Driver Name</string>
+
+
     <string name="vehicle_name">Vehicle Name</string>
     <string name="route_no">Route No</string>
     <string name="route_incharge_name">Route In-charge Name</string>
@@ -1266,6 +1270,18 @@
     <string name="logout_this_devices">Logout This Devices</string>
     <string name="are_you_sure_you_want_to_logout_from_this_device">Are you sure, you want to logout from this device?</string>
     <string name="select_language">Select Language</string>
+    <string name="change_language">Change Language</string>
+    <string name="last_sync">Last Sync : %1$s</string>
+    <string name="language_select">Language Select</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="click_here_to_access_dashboards">Click here to access Dashboards</string>
+    <string name="favourites">Favourites</string>
+    <string name="click_here_to_add_your_favourite_menus">"Click here to add your Favourite menus "</string>
+    <string name="information_cards">" Information Cards"</string>
+    <string name="slide_left_to_check_out_all_the_cards">Slide left to check out all the cards</string>
+    <string name="click_here_to_check_out_your_profile_and_transport_details">Click here to check out your profile and Transport Details</string>
+    <string name="global_search">Global Search</string>
+    <string name="view_dashboard">View dashboard</string>
 
 </resources>
 

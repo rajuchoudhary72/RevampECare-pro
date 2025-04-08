@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 
 class LanguageAdapter(
-    private val languages: List<String>,
+    private val languages: MutableList<LanguageModel>,
     private var selectedLanguageCode: String?,
     private val onLanguageSelected: (String) -> Unit
 ) : RecyclerView.Adapter<LanguageAdapter.LanguageViewHolder>() {
@@ -29,8 +29,13 @@ class LanguageAdapter(
 
     override fun onBindViewHolder(holder: LanguageViewHolder, position: Int) {
         val language = languages[position]
-        holder.languageName.text = language
+        holder.languageName.text = language.langName
         holder.radioButton.isChecked = (position == selectedPosition)
+
+        if (language.langCode == selectedLanguageCode) {
+            holder.radioButton.isChecked = true
+            selectedPosition = position
+        }
 
         holder.itemView.setOnClickListener { updateSelection(position) }
         holder.radioButton.setOnClickListener { updateSelection(position) }
@@ -43,6 +48,6 @@ class LanguageAdapter(
         selectedPosition = newPosition
         notifyItemChanged(previousPosition)
         notifyItemChanged(selectedPosition)
-        onLanguageSelected(languages[selectedPosition])
+        onLanguageSelected(languages[selectedPosition].langCode)
     }
 }

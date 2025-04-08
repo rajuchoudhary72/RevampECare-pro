@@ -98,6 +98,10 @@ class SettingsFragment : Fragment() {
                 launchPlayStore()
             }
 
+            cardChangeLang.setOnClickListener {
+                findNavController().navigate(R.id.languageSelect)
+            }
+
             setLastSyncTime()
         }
         generalSettings()
@@ -106,7 +110,7 @@ class SettingsFragment : Fragment() {
     }
     private fun FragmentSettingsBinding.setLastSyncTime() {
         viewLifecycleOwner.lifecycleScope.launch {
-            lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
+            lastSyncTime.text = getString(R.string.last_sync, usetDataStore.getUser()?.loginTime)
         }
     }
 

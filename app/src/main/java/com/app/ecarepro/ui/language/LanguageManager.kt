@@ -1,65 +1,46 @@
 package com.app.ecarepro.ui.language
 
-
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
-import com.app.ecarepro.ui.MainActivity
-import java.util.Locale
+import java.util.*
 
 object LanguageManager {
 
-    private const val LANGUAGE_KEY = "app_language"
+    private const val PREF_NAME = "app_locale_pref"
+    private const val SELECTED_LANGUAGE = "selected_language"
 
-    // Save selected language in SharedPreferences
-    fun saveLanguage(context: Context, languageCode: String) {
-        val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        sharedPreferences.edit().putString(LANGUAGE_KEY, languageCode).apply()
+    fun setLocale(context: Context): Context {
+        return updateResources(context, getLanguage(context))
     }
 
-    // Get saved language, default to English
-    fun getSavedLanguage(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
-        return sharedPreferences.getString(LANGUAGE_KEY, "en") ?: "en"
+    fun setNewLocale(context: Context, language: String) {
+        persistLanguage(context, language)
     }
 
-    // Apply language and restart app
-    fun setLanguage(activity: Activity, languageCode: String) {
-        saveLanguage(activity, languageCode)
+    fun getLanguage(context: Context): String {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(SELECTED_LANGUAGE, Locale.getDefault().language) ?: "en"
+    }
 
-        val locale = Locale(languageCode)
+    private fun persistLanguage(context: Context, language: String) {
+        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        prefs.edit().putString(SELECTED_LANGUAGE, language).apply()
+    }
+
+    private fun updateResources(context: Context, language: String): Context {
+        val locale = Locale(language)
         Locale.setDefault(locale)
 
-        val config = Configuration()
+        val config = Configuration(context.resources.configuration)
         config.setLocale(locale)
 
-        activity.baseContext.resources.updateConfiguration(
-            config,
-            activity.baseContext.resources.displayMetrics
-        )
-
-    }
-
-    fun applyLanguage(context: Context, languageCode: String): Context {
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-
-        val config = Configuration()
-        config.setLocale(locale)
-
-        return context.createConfigurationContext(config)
-    }
-
-
-
-    // Restart the app
-     fun languageSetAndRestartApp(activity: Activity, languageCode: String) {
-        setLanguage(activity, languageCode)
-        val intent = Intent(activity, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        activity.startActivity(intent)
-        Runtime.getRuntime().exit(0) // Force restart
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.createConfigurationContext(config)
+        } else {
+            @Suppress("DEPRECATION")
+            context.resources.updateConfiguration(config, context.resources.displayMetrics)
+            context
+        }
     }
 }
