@@ -221,6 +221,13 @@ class Constant {
             return outputFormat.format(date!!)
         }
 
+        fun apiToSystemDate(inputDateStr: String): String {
+            val inputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return outputFormat.format(date!!)
+        }
+
         fun dateToShowConn(inputDateStr: String): String {
             val inputFormat: DateFormat =
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
