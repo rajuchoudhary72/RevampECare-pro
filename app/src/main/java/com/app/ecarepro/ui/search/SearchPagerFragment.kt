@@ -93,10 +93,6 @@ class SearchPagerFragment : Fragment() {
     private fun buildUiModels(uiState: SearchUiState) {
         mainActivity().showLoader(uiState.isLoading())
 
-        uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message ?: "")
-        }
-
         binding.recyclerView.withModels {
             if (uiState is SearchUiState.NoResultFound) {
                 noDataFoundView {
