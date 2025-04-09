@@ -81,7 +81,6 @@ class DashboardFragment : Fragment() {
     var isExpanded = false
     private lateinit var modeByCollectionFilter: String
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
