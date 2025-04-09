@@ -10,12 +10,15 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -87,7 +90,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
-
+        // Post to allow the layout to finish rendering first
+        view.postDelayed({
+            if (binding.txtUserName != null && binding.txtUserName.isShown) {
+                binding.txtUserName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                binding.txtUserName.announceForAccessibility("Welcome ${binding.txtUserName.text}")
+            }
+        }, 300)
     }
 
     private fun setUpViews() {
@@ -99,8 +108,14 @@ class HomeFragment : Fragment() {
             mViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
-      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-      binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        binding.imgUserAvatar.setOnClickListener {
+            findNavController().navigate(R.id.profileFragment)
+            binding.imgUserAvatar.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
+        }
+        binding.txtUserName.setOnClickListener {
+            findNavController().navigate(R.id.profileFragment)
+
+        }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
@@ -113,7 +128,7 @@ class HomeFragment : Fragment() {
         )
         binding.recyclerView.addItemDecoration(
             GridMarginDecoration.create(
-                margin =  8,
+                margin = 8,
                 columnProvider = object : ColumnProvider {
                     override fun getNumberOfColumns(): Int {
                         return 4
@@ -150,6 +165,9 @@ class HomeFragment : Fragment() {
                                 imgUserAvatar.imageUrl(user.photo)
                                 // txtUserName.text = user.name
                                 txtUserName.text = user.getFullHomeScreenName()
+                                txtUserName.post {
+                                    txtUserName.announceForAccessibility( user.getFullHomeScreenName())
+                                }
                                 profilePrompt()
                             }
                         }
@@ -210,6 +228,7 @@ class HomeFragment : Fragment() {
         }
 
     }
+
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
@@ -252,7 +271,11 @@ class HomeFragment : Fragment() {
                             if (location != null) {
                                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
                                 val addresses =
-                                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                                    geocoder.getFromLocation(
+                                        location.latitude,
+                                        location.longitude,
+                                        1
+                                    )
                                 if (!addresses.isNullOrEmpty()) {
                                     addresses[0].locality
                                 } else {
@@ -262,7 +285,7 @@ class HomeFragment : Fragment() {
                                 Locale.getDefault().displayName
                             }
 
-                        mViewModel.setCityName(cityName?:Locale.getDefault().displayName)
+                        mViewModel.setCityName(cityName ?: Locale.getDefault().displayName)
                     }
 
                 }
@@ -275,11 +298,13 @@ class HomeFragment : Fragment() {
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
     }
+
     private fun isGPSEnabled(): Boolean {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
+
     private fun removeUTFCharacters(data: String): StringBuffer {
         val p: Pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})")
         val m: Matcher = p.matcher(data)
@@ -297,7 +322,7 @@ class HomeFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is HomeUiState.Success) {
@@ -356,7 +381,7 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
-                }catch (E:IllegalStateException){
+                } catch (E: IllegalStateException) {
 
                 }
 
@@ -370,29 +395,32 @@ class HomeFragment : Fragment() {
                            // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
                         )*/
                         lifecycleScope.launch {
-                            var showDashboard=false
-                            var showAttendance=false
-                            var showFeeds=false
-                            for ( i in mViewModel.dashboardButtons.value!!){
+                            var showDashboard = false
+                            var showAttendance = false
+                            var showFeeds = false
+                            for (i in mViewModel.dashboardButtons.value!!) {
                                 when (i.buttonName) {
                                     "Dashboard" -> {
-                                        showDashboard= i.isShow!!
+                                        showDashboard = i.isShow!!
                                     }
+
                                     "Attendance" -> {
-                                        showAttendance= i.isShow!!
+                                        showAttendance = i.isShow!!
                                     }
+
                                     "Feed" -> {
-                                        showFeeds= i.isShow!!
+                                        showFeeds = i.isShow!!
                                     }
                                 }
                             }
-                            findNavController().navigate(R.id.homeViewPagerFragment,Bundle( ).apply {
-                                putBoolean( "Dashboard",showDashboard)
-                                putBoolean( "Attendance",showAttendance)
-                                putBoolean( "Feed",showFeeds)
-                            })
+                            findNavController().navigate(
+                                R.id.homeViewPagerFragment,
+                                Bundle().apply {
+                                    putBoolean("Dashboard", showDashboard)
+                                    putBoolean("Attendance", showAttendance)
+                                    putBoolean("Feed", showFeeds)
+                                })
                         }
-
 
 
                         //systemViewModel.showDashboard(true)
@@ -494,7 +522,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        binding.root.setOnClickListener {
+            // Trigger accessibility focus and announcement
+            binding.root.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
+        }
     }
+
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
         val packageName = "com.android.chrome"
         if (packageName != null) {
@@ -506,12 +539,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        val tabIntent = CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green)).build()
+        val tabIntent =
+            CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green))
+                .build()
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
         openCustomTab(tabIntent, Uri.parse(url))
-      //  findNavController().navigate(R.id.webViewFragment, bundle)
+        //  findNavController().navigate(R.id.webViewFragment, bundle)
     }
 
     override fun onDestroyView() {
@@ -523,9 +558,10 @@ class HomeFragment : Fragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-       // startLocationFetch()
+        // startLocationFetch()
 
     }
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -533,52 +569,49 @@ class HomeFragment : Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-              //  startLocationFetch()
+                //  startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
             }
         }
     }
 
-    private fun dashboardPrompt( ) {
+    private fun dashboardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_dashboard_link)
             .setPrimaryText("Dashboard")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setSecondaryText("Click here to access Dashboards")
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     addMorePrompt()
                 }
             }
             .show()
     }
 
-    private fun addMorePrompt( ) {
+    private fun addMorePrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_add_more)
             .setPrimaryText("Favourites")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setSecondaryText("Click here to add your Favourite menus ")
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     systemViewModel.startShowPrompt(true)
                 }
             }
             .show()
     }
 
-    private fun cardPrompt( ) {
+    private fun cardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.cv_dashboard_card)
             .setPrimaryText(" Information Cards")
             .setSecondaryText("Slide left to check out all the cards")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     dashboardPrompt()
                 }
             }
@@ -587,8 +620,10 @@ class HomeFragment : Fragment() {
 
     private fun profilePrompt() {
 
-        val sharedPreference = requireActivity(). getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT,
-            Context.MODE_PRIVATE)
+        val sharedPreference = requireActivity().getSharedPreferences(
+            Constant.SHARED_PREF_NAME_PROMPT,
+            Context.MODE_PRIVATE
+        )
 
         if (!sharedPreference.getBoolean(Constant.SHARED_PREF_SHOW_PROMPT, false)) {
             MaterialTapTargetPrompt.Builder(requireActivity())
@@ -597,8 +632,7 @@ class HomeFragment : Fragment() {
                 .setSecondaryText("Click here to check out your profile and Transport Details")
                 .setBackgroundColour(requireContext().getColor(R.color.brand_color))
                 .setPromptStateChangeListener { prompt, state ->
-                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                    {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                         cardPrompt()
 
                         try {
@@ -606,7 +640,8 @@ class HomeFragment : Fragment() {
                             val editor = sharedPreference.edit()
                             editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
                             editor.apply()
-                        }catch (e: Exception){}
+                        } catch (e: Exception) {
+                        }
 
                     }
                 }

@@ -28,6 +28,16 @@ class AppRepositoryImpl @Inject constructor(
             try {
                 val response = appService.getAppLayout()
                 if (response.errorCode == 0) {
+                    /*response.userInfo.let {
+                        userDataStore.getUser()?.copy(
+                            photo = it.photo,
+                            userId = it.userID
+                        )?.let { it1 ->
+                            userDataStore.saveUser(
+                                it1
+                            )
+                        }
+                    }*/
                     emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))

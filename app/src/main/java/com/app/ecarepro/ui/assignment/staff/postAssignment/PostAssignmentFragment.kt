@@ -289,13 +289,13 @@ class PostAssignmentFragment : Fragment() {
 
        if (isValidate ){
 
-           if (!isEdit){
+
                submitDate = if (binding.isSubmitDate.isChecked){
                    Constant.toSystemDate( binding.tvSubmissionDt.text.toString())
                }else{
                    getCurrentYearLastDate()
                }
-           }
+
                 postAssignmentViewModel.createAssignment(
                    asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
                    asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,

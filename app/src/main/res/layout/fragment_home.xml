@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_dashboard"
@@ -32,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:contentDescription="Search button"
             app:icon="@drawable/ic_search"
             app:iconSize="32dp"
             app:iconTint="?attr/colorOnPrimary"
@@ -96,7 +96,11 @@
                         android:layout_marginHorizontal="16dp"
                         android:fontFamily="@font/calibri_bold"
                         android:textColor="@color/brand_color"
-                        android:textSize="@dimen/_12sdp"
+                        android:textSize="14sp"
+                        android:padding="@dimen/_5sdp"
+                        android:focusable="true"
+                        android:importantForAccessibility="yes"
+                        android:contentDescription="Welcome"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rl_user_details"

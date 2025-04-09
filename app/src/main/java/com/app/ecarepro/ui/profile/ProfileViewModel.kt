@@ -115,8 +115,8 @@ class ProfileViewModel @Inject constructor(
             PhotoType.CHILD_PHOTO -> {
                 UploadPhotoRequest(
                     type = photoType.type,
-                    studentPhoto = base64Text,
-                    studentPhotoExt = ext
+                    profile = base64Text,
+                    profileExt = ext
                 )
             }
         }

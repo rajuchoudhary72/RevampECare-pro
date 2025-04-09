@@ -8,7 +8,6 @@
         <variable
             name="studentProfile"
             type="com.app.ecarepro.data.network.model.StudentProfile" />
-
         <variable
             name="canEditPhoto"
             type="java.lang.Boolean" />
@@ -16,7 +15,6 @@
         <variable
             name="childImageStatus"
             type="java.lang.Integer" />
-
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
@@ -81,8 +79,6 @@
             app:strokeColor="@color/white"
             app:strokeWidth="3dp"
             tools:ignore="ContentDescription" />
-
-
         <TextView
             isVisible="@{childImageStatus == 1 || childImageStatus== 2}"
             android:layout_width="wrap_content"
@@ -99,7 +95,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fabProfileImage"
             tools:text="Child photo is rejected" />
-
         <TextView
             android:id="@+id/title_name"
             android:layout_width="0dp"

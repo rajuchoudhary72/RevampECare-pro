@@ -13,7 +13,6 @@ import androidx.navigation.fragment.findNavController
 import com.airbnb.epoxy.EpoxyController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentSearchPagerBinding
-import com.app.ecarepro.error
 import com.app.ecarepro.menuCard
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.noDataFoundView
@@ -29,6 +28,7 @@ import com.rubensousa.decorator.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.error
 
 @AndroidEntryPoint
 class SearchPagerFragment : Fragment() {
@@ -92,6 +92,10 @@ class SearchPagerFragment : Fragment() {
 
     private fun buildUiModels(uiState: SearchUiState) {
         mainActivity().showLoader(uiState.isLoading())
+
+        /*uiState.getErrorOrNull()?.let { error ->
+            mainActivity().showMessage(error.message ?: "")
+        }*/
 
         binding.recyclerView.withModels {
             if (uiState is SearchUiState.NoResultFound) {
