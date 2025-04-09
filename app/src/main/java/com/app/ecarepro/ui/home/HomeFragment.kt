@@ -90,13 +90,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
-        // Post to allow the layout to finish rendering first
-        view.postDelayed({
-            if (binding.txtUserName != null && binding.txtUserName.isShown) {
-                binding.txtUserName.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
-                binding.txtUserName.announceForAccessibility("Welcome ${binding.txtUserName.text}")
-            }
-        }, 300)
     }
 
     private fun setUpViews() {
@@ -110,7 +103,6 @@ class HomeFragment : Fragment() {
         }
         binding.imgUserAvatar.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
-            binding.imgUserAvatar.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
         }
         binding.txtUserName.setOnClickListener {
             findNavController().navigate(R.id.profileFragment)
@@ -165,9 +157,6 @@ class HomeFragment : Fragment() {
                                 imgUserAvatar.imageUrl(user.photo)
                                 // txtUserName.text = user.name
                                 txtUserName.text = user.getFullHomeScreenName()
-                                txtUserName.post {
-                                    txtUserName.announceForAccessibility( user.getFullHomeScreenName())
-                                }
                                 profilePrompt()
                             }
                         }
@@ -521,10 +510,6 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-        }
-        binding.root.setOnClickListener {
-            // Trigger accessibility focus and announcement
-            binding.root.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
         }
     }
 

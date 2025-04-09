@@ -21,9 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="5"
-        android:focusable="true"
-
-        android:importantForAccessibility="yes"
         >
 
         <soup.neumorphism.NeumorphCardView
@@ -36,8 +33,6 @@
             app:neumorph_strokeColor="@color/background_dashboard"
             app:neumorph_strokeWidth="@dimen/_1sdp"
             android:contentDescription="Dashboard shortcut widget"
-            android:focusable="true"
-            android:importantForAccessibility="yes"
              >
             <ImageView
                 android:layout_width="match_parent"
@@ -54,8 +49,6 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:contentDescription="View full dashboard"
-            android:focusable="true"
-            android:importantForAccessibility="yes"
             android:layout_height="@dimen/_50sdp"
             app:neumorph_backgroundColor="@color/background_dashboard"
              app:neumorph_strokeWidth="@dimen/_1sdp"

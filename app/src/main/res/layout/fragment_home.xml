@@ -98,8 +98,6 @@
                         android:textColor="@color/brand_color"
                         android:textSize="14sp"
                         android:padding="@dimen/_5sdp"
-                        android:focusable="true"
-                        android:importantForAccessibility="yes"
                         android:contentDescription="Welcome"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
