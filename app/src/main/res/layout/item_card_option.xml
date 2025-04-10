@@ -22,6 +22,10 @@
         android:onClick="@{clickListener}"
         android:orientation="vertical"
          android:gravity="center"
+        android:focusable="true"
+        android:clickable="true"
+        android:contentDescription="@{`Menu option: ` + data.title}"
+        android:importantForAccessibility="yes"
          >
 
 
@@ -41,6 +45,7 @@
                 imageUrl="@{data.icon}"
                 placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="25dp"
+                android:contentDescription="@{data.title}"
                 app:tint="@color/md_theme_light_primary"
                 android:layout_height="25dp"
                 android:layout_gravity="center"

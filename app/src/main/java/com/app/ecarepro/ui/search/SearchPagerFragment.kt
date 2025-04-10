@@ -28,6 +28,7 @@ import com.rubensousa.decorator.GridMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import com.app.ecarepro.error
 
 @AndroidEntryPoint
 class SearchPagerFragment : Fragment() {
@@ -92,15 +93,21 @@ class SearchPagerFragment : Fragment() {
     private fun buildUiModels(uiState: SearchUiState) {
         mainActivity().showLoader(uiState.isLoading())
 
-        uiState.getErrorOrNull()?.let { error ->
+        /*uiState.getErrorOrNull()?.let { error ->
             mainActivity().showMessage(error.message ?: "")
-        }
+        }*/
 
         binding.recyclerView.withModels {
             if (uiState is SearchUiState.NoResultFound) {
                 noDataFoundView {
                     id(R.id.empty_view)
                     spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                }
+            } else if(uiState is SearchUiState.Error){
+                error {
+                    id(R.id.errorMessage)
+                    spanSizeOverride { totalSpanCount, _, _ -> totalSpanCount }
+                    error(uiState.error.message)
                 }
             } else if (uiState is SearchUiState.Success) {
                 when (uiState.searchType) {

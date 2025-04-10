@@ -85,7 +85,7 @@
             android:fontFamily="@font/calibri_regular"
             android:paddingHorizontal="@dimen/_8sdp"
             android:paddingVertical="@dimen/_4sdp"
-            android:text='@{bannerImageStatus == 1 ? "Pending" : "Cover photo is rejected"}'
+            android:text='@{bannerImageStatus == 1 ? "Pending" : (bannerImageStatus == 2 ? "Cover photo is rejected": "") }'
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -120,7 +120,7 @@
             android:fontFamily="@font/calibri_regular"
             android:paddingHorizontal="@dimen/_8sdp"
             android:paddingVertical="@dimen/_4sdp"
-            android:text='@{profileImageStatus == 1 ? "Pending" : "Profile photo is rejected"}'
+            android:text='@{profileImageStatus == 1 ? "Pending" : (profileImageStatus == 2 ? "Profile photo is rejected": "") }'
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
