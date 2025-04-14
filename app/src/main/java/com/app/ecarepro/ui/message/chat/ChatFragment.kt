@@ -53,6 +53,7 @@ import com.app.ecarepro.utils.Constant.Companion.strikethroughFindEndStarIndexes
 import com.app.ecarepro.utils.Constant.Companion.strikethroughFindStartIndexes
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileClickListener
+import com.app.ecarepro.utils.ImageCompressionHelper
 import com.app.ecarepro.utils.imageUrl
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,13 +64,15 @@ import com.app.ecarepro.utils.isAudioUrl
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
 import com.lassi.data.media.MiMedia
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.UUID
 
 
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
-
+    private lateinit var imageCompressionHelper: ImageCompressionHelper
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
@@ -130,7 +133,7 @@ class ChatFragment : Fragment() {
 
 
     private fun setUpViews() {
-
+        imageCompressionHelper = ImageCompressionHelper(requireContext())
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
@@ -318,22 +321,63 @@ class ChatFragment : Fragment() {
                                 selectedImages.add(imageUri)
                             }
                         }
+
+                        // Check if total size exceeds the limit
+                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
+                            // Show compression dialog
+                            imageCompressionHelper.showCompressionDialog(
+                                parentFragmentManager,
+                                selectedImages
+                            ) { compressionOption ->
+                                // Process images with selected compression
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val compressedUris = withContext(Dispatchers.IO) {
+                                        selectedImages.map { uri ->
+                                            imageCompressionHelper.compressImage(
+                                                uri,
+                                                compressionOption
+                                            )
+                                        }
+                                    }
+
+                                    // Now we have compressed images, upload them
+                                    chatViewModel.setAttachments(compressedUris.map {
+                                        MiMedia(
+                                            path = it.toString(),
+                                            name = lastClickAttachmentType?.name
+                                        )
+                                    })
+                                }
+                            }
+                        } else {
+                            /*  // Process images normally (still might want to compress slightly)
+                               composeViewModel.setAttachments(files)*/
+                            chatViewModel.setAttachments(selectedImages.map {
+                                MiMedia(
+                                    path = it.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            })
+                        }
                     } else {
                         data.data?.let { imageUri ->
                             if (selectedImages.size < 7) {
                                 selectedImages.add(imageUri)
                             }
                         }
+                        chatViewModel.setAttachments(selectedImages.map {
+                            MiMedia(
+                                path = it.toString(),
+                                name = lastClickAttachmentType?.name
+                            )
+                        })
                     }
-                    chatViewModel.setAttachments(selectedImages.map {
-                        MiMedia(
-                            path = it.toString(),
-                            name = lastClickAttachmentType?.name
-                        )
-                    })
+
                 }
             }
         }
+
+
     private fun openGallery() {
         val intent = Intent()
         intent.type = "image/*"
