@@ -95,21 +95,48 @@ class StudentListSubFragment() : Fragment(),
                            }
 
 
-                           binding.tvSortByRollNo.setOnClickListener {
-                               rollNoFilterAsc = !rollNoFilterAsc
-                               studentList =
-                                   if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
-                                   else studentList.sortedByDescending { it.rollNumber }.toMutableList()
-                               setupRecycleViewStudentList(studentList)
+//                           binding.tvSortByRollNo.setOnClickListener {
+//                               rollNoFilterAsc = !rollNoFilterAsc
+//                               studentList =
+//                                   if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
+//                                   else studentList.sortedByDescending { it.rollNumber }.toMutableList()
+//                               setupRecycleViewStudentList(studentList)
+//                           }
 
+                           binding.tvSortByRollNo.setOnClickListener {
+                               try {
+                                   rollNoFilterAsc = !rollNoFilterAsc
+                                   studentList = studentList
+                                       .sortedWith(compareBy { it.rollNumber?.toIntOrNull() ?: Int.MAX_VALUE })
+                                       .let { if (rollNoFilterAsc) it else it.reversed() }
+                                       .toMutableList()
+                                   setupRecycleViewStudentList(studentList)
+                               } catch (e: Exception) {
+                                   e.printStackTrace()
+                               }
                            }
+
                            binding.tvSortByAdmission.setOnClickListener {
-                               admissionFilterAsc = !admissionFilterAsc
-                               studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
-                                   .toMutableList()
-                               else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
-                               setupRecycleViewStudentList(studentList)
+                               try {
+                                   admissionFilterAsc = !admissionFilterAsc
+                                   studentList = studentList
+                                       .sortedWith(compareBy { it.admissionNumber?.toIntOrNull() ?: Int.MAX_VALUE })
+                                       .let { if (admissionFilterAsc) it else it.reversed() }
+                                       .toMutableList()
+                                   setupRecycleViewStudentList(studentList)
+                               } catch (e: Exception) {
+                                   e.printStackTrace()
+                               }
                            }
+
+//                           binding.tvSortByAdmission.setOnClickListener {
+//                               admissionFilterAsc = !admissionFilterAsc
+//                               studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
+//                                   .toMutableList()
+//                               else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
+//                               setupRecycleViewStudentList(studentList)
+//                           }
+
 
                            binding.tvSortByName.setOnClickListener {
                                nameFilterAsc = !nameFilterAsc
