@@ -184,21 +184,6 @@ class ComposeFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                //                if (et_reply.getText().toString().trim().length() > 0) {
-//                    if (iv_post_reply2.getVisibility() == GONE) {
-//                        iv_post_reply2.setVisibility(VISIBLE);
-//                    }
-//                    if (iv_post_reply.getVisibility() == VISIBLE) {
-//                        iv_post_reply.setVisibility(GONE);
-//                    }
-//                } else {
-//                    if (iv_post_reply2.getVisibility() == VISIBLE) {
-//                        iv_post_reply2.setVisibility(GONE);
-//                    }
-//                    if (iv_post_reply.getVisibility() == GONE) {
-//                        iv_post_reply.setVisibility(VISIBLE);
-//                    }
-//                }
             }
 
             override fun afterTextChanged(s: Editable) {
