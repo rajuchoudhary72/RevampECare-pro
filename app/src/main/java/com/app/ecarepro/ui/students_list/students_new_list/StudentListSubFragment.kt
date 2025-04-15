@@ -1,10 +1,13 @@
 package com.app.ecarepro.ui.students_list.students_new_list
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -103,6 +106,19 @@ class StudentListSubFragment() : Fragment(),
 //                               setupRecycleViewStudentList(studentList)
 //                           }
 
+                           binding.llSortByRollNo.background.setTint(resources.getColor(R.color.app_color))
+                           binding.llSortByAdmission.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                           binding.llSortByName.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+
+                           binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.white,null))
+                           binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.black,null))
+                           binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.black,null))
+
+                           binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                           binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+                           binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+
+
                            binding.tvSortByRollNo.setOnClickListener {
                                try {
                                    rollNoFilterAsc = !rollNoFilterAsc
@@ -114,6 +130,7 @@ class StudentListSubFragment() : Fragment(),
                                } catch (e: Exception) {
                                    e.printStackTrace()
                                }
+                               sortButtonUi(1)
                            }
 
                            binding.tvSortByAdmission.setOnClickListener {
@@ -127,6 +144,8 @@ class StudentListSubFragment() : Fragment(),
                                } catch (e: Exception) {
                                    e.printStackTrace()
                                }
+                               sortButtonUi(2)
+
                            }
 
 //                           binding.tvSortByAdmission.setOnClickListener {
@@ -144,6 +163,8 @@ class StudentListSubFragment() : Fragment(),
                                    .toMutableList()
                                else studentList.sortedByDescending { it.name!!.trim().lowercase() }.toMutableList()
                                setupRecycleViewStudentList(studentList)
+                               sortButtonUi(3)
+
                            }
 
 
@@ -161,6 +182,54 @@ class StudentListSubFragment() : Fragment(),
         }
 
 
+    }
+
+
+    fun sortButtonUi(pos:Int){
+        when(pos){
+            1 ->{
+                binding.llSortByRollNo.background.setTint(resources.getColor(R.color.app_color))
+                binding.llSortByAdmission.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByName.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+
+                binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.white,null))
+                binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.black,null))
+
+                binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+
+            }
+            2 ->{
+                binding.llSortByRollNo.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByAdmission.background.setTint(resources.getColor(R.color.app_color))
+                binding.llSortByName.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+
+                binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.white,null))
+                binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.black,null))
+
+                binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+
+            }
+            3 ->{
+                binding.llSortByRollNo.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByAdmission.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByName.background.setTint(resources.getColor(R.color.app_color))
+
+                binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.white,null))
+
+                binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+
+            }
+        }
     }
 
     private fun setupRecycleViewStudentList(students: List<Student>) {

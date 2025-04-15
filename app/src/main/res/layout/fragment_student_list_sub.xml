@@ -154,8 +154,9 @@
                 android:gravity="center"
                 >
 
-                <TextView
-                    android:id="@+id/tv_sort_by_roll_no"
+
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_roll_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
@@ -163,45 +164,91 @@
                     android:layout_marginVertical="@dimen/_5sdp"
                     android:backgroundTint="@color/grey_10"
                     android:background="@drawable/bg_rounded_corner_green"
-                    android:fontFamily="@font/calibri_regular"
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/roll_no"
-                    android:textColor="@color/black"
-                    app:drawableStartCompat="@drawable/descending" />
+                    >
 
+                    <ImageView
+                        android:id="@+id/iv_sort_by_roll_no"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:src="@drawable/descending"
+                        />
 
-                <TextView
-                    android:id="@+id/tv_sort_by_admission"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/_5sdp"
-                    android:backgroundTint="@color/grey_10"
-                    android:background="@drawable/bg_rounded_corner_green"
-                    android:gravity="center"
-                    android:text="@string/admission_number"
-                    android:paddingHorizontal="@dimen/_5sdp"
-                    android:paddingVertical="@dimen/_5sdp"
-                    android:textColor="@color/black"
-                    app:drawableStartCompat="@drawable/descending" />
+                    <TextView
+                        android:id="@+id/tv_sort_by_roll_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/calibri_regular"
+                        android:text="@string/roll_no_"
+                        android:textColor="@color/black"
+                        />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_sort_by_name"
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_admission"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
                     android:layout_marginVertical="@dimen/_5sdp"
                     android:backgroundTint="@color/grey_10"
                     android:background="@drawable/bg_rounded_corner_green"
-                    android:fontFamily="@font/calibri_regular"
                     android:gravity="center"
                     android:paddingHorizontal="@dimen/_5sdp"
                     android:paddingVertical="@dimen/_5sdp"
-                    android:text="@string/name"
-                    android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:drawableStartCompat="@drawable/descending" />
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_sort_by_admission"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:src="@drawable/descending"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_sort_by_admission"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/calibri_regular"
+                        android:text="@string/admission_number"
+                        android:textColor="@color/black"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_sort_by_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:layout_marginVertical="@dimen/_5sdp"
+                    android:backgroundTint="@color/grey_10"
+                    android:background="@drawable/bg_rounded_corner_green"
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/_5sdp"
+                    android:paddingVertical="@dimen/_5sdp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/iv_sort_by_name"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:src="@drawable/descending"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_sort_by_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/calibri_regular"
+                        android:text="@string/name"
+                        android:textColor="@color/black"
+                        />
+                </LinearLayout>
+
+
 
                 <TextView
                     android:visibility="gone"

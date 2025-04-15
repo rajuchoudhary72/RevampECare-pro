@@ -115,6 +115,9 @@ class StudentListNavHost : Fragment() {
 
                                     isDataLoaded=true
 
+//                                    binding.viewPager.setCurrentItem(studentsListShareViewModel.tabPos, false)
+//                                    binding.tabLayout.getTabAt(studentsListShareViewModel.tabPos)?.select()
+
                                 }
                             }catch (_:Exception){ }
 
@@ -183,8 +186,7 @@ class StudentListNavHost : Fragment() {
 
 //    override fun onPause() {
 //        super.onPause()
-//        selectedTabIndex = binding. tabLayout.selectedTabPosition
-//        studentsListShareViewModel.tabPos=selectedTabIndex
+//        studentsListShareViewModel.tabPos=binding. tabLayout.selectedTabPosition
 //    }
 
 
