@@ -120,12 +120,12 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                        binding.rvAlbum.isVisible = false
+                       // binding.rvAlbum.isVisible = false
                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        binding.rvAlbum.isVisible = false
+                    //    binding.rvAlbum.isVisible = false
                         isDataLoaded = true
                         Log.d("main", "Error$it")
                     }
