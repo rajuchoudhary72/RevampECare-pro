@@ -26,7 +26,7 @@ import com.squareup.picasso.Picasso
 
 class TeacherSyllabusListAdapter(
     private var syllabusLST: List<Syllabuse>,
-    private var classSyllabus: TeacherSyllabusFragment
+    private var classSyllabus: TeacherSyllabusSubFragment
 ) :
     RecyclerView.Adapter<TeacherSyllabusListAdapter.NoticeViewHolder>() {
 
