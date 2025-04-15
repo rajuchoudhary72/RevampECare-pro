@@ -35,6 +35,7 @@ class StudentListNavHost : Fragment() {
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
     private var isDataLoaded = false
+    private var selectedTabIndex = 0
     private val studentsListShareViewModel : StudentsListShareViewModel by activityViewModels()
 
     @Inject
@@ -114,6 +115,9 @@ class StudentListNavHost : Fragment() {
 
                                     isDataLoaded=true
 
+//                                    binding.viewPager.setCurrentItem(studentsListShareViewModel.tabPos, false)
+//                                    binding.tabLayout.getTabAt(studentsListShareViewModel.tabPos)?.select()
+
                                 }
                             }catch (_:Exception){ }
 
@@ -158,6 +162,17 @@ class StudentListNavHost : Fragment() {
             }
         }
         checkIsBoarding()
+
+
+//        binding.viewPager.setCurrentItem(selectedTabIndex, false)
+//
+//        binding.tabLayout.post {
+//            binding.tabLayout.setScrollPosition(selectedTabIndex, 0f, true)
+//        }
+
+
+
+
     }
     private fun checkIsBoarding() {
         lifecycleScope.launch {
@@ -166,6 +181,14 @@ class StudentListNavHost : Fragment() {
             }
         }
     }
+
+
+
+//    override fun onPause() {
+//        super.onPause()
+//        studentsListShareViewModel.tabPos=binding. tabLayout.selectedTabPosition
+//    }
+
 
     override fun onResume() {
         super.onResume()
