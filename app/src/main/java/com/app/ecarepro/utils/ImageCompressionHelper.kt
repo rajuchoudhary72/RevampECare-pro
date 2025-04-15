@@ -18,8 +18,8 @@ import kotlin.math.roundToInt
 class ImageCompressionHelper(private val context: Context) {
 
     companion object {
-        // API limit in bytes (26MB)
-        const val MAX_PAYLOAD_SIZE = 26 * 1024 * 1024
+        // API limit in bytes (28MB)
+        const val MAX_PAYLOAD_SIZE = 28 * 1024 * 1024
 
         // Compression options
         const val SIZE_SMALL = 0   // 40% of original
@@ -99,8 +99,8 @@ class ImageCompressionHelper(private val context: Context) {
         // Calculate target size based on percentage of original
         val targetSize = when(sizeOption) {
             SIZE_SMALL -> (originalFileSize * 0.4).toLong()   // 40% of original
-            SIZE_MEDIUM -> (originalFileSize * 0.7).toLong()  // 70% of original
-            SIZE_LARGE -> (originalFileSize * 0.85).toLong()  // 85% of original
+            SIZE_MEDIUM -> (originalFileSize * 0.6).toLong()  // 70% of original
+            SIZE_LARGE -> (originalFileSize * 0.8).toLong()  // 85% of original
             SIZE_ACTUAL -> originalFileSize  // 100% of original
             else -> originalFileSize
         }

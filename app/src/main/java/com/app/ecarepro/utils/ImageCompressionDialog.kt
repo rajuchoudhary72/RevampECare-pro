@@ -49,14 +49,19 @@ class ImageCompressionDialog : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.dialog_image_compression, container, false)
-        view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        view.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 view.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val dialog = dialog
                 if (dialog != null) {
-                    val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                    val bottomSheet =
+                        dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
                     bottomSheet?.let {
-                        val background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_top_rounded_corner2)
+                        val background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.bg_top_rounded_corner2
+                        )
                         bottomSheet.background = background
                     }
                 }
@@ -75,52 +80,71 @@ class ImageCompressionDialog : BottomSheetDialogFragment() {
 
         // Setup UI elements
         view.findViewById<TextView>(R.id.tvMessageSize).text =
-            "This message is $formattedSize MB. You can reduce message size by scaling the image to one of the sizes below."
+            "This message is $formattedSize MB. You can reduce message size by scaling the images to one of the sizes below."
 
-        // Calculate sizes for each compression percentage
+
+/// Define your threshold size (e.g., 26MB for API limit)
+        val thresholdSize = ImageCompressionHelper.MAX_PAYLOAD_SIZE
+
+// Calculate sizes for each compression percentage
         val smallSizeBytes = (totalSize * 0.4).toLong()
-        val mediumSizeBytes = (totalSize * 0.7).toLong()
-        val largeSizeBytes = (totalSize * 0.85).toLong()
+        val mediumSizeBytes = (totalSize * 0.6).toLong()
+        val largeSizeBytes = (totalSize * 0.8).toLong()
 
-        // Format sizes for display
+// Format sizes for display
         val smallSizeFormatted = formatFileSize(smallSizeBytes)
         val mediumSizeFormatted = formatFileSize(mediumSizeBytes)
         val largeSizeFormatted = formatFileSize(largeSizeBytes)
         val actualSizeFormatted = formatFileSize(totalSize)
 
-        // Setup buttons with calculated sizes
+// Setup buttons with calculated sizes and check against threshold
         view.findViewById<Button>(R.id.btnSmall).apply {
-            text = "Small (40%) - $smallSizeFormatted"
-            setOnClickListener {
-                onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_SMALL)
-                dismiss()
+            text = "Small - $smallSizeFormatted"
+            if (smallSizeBytes > thresholdSize) {
+                visibility = View.GONE
+            } else {
+                setOnClickListener {
+                    onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_SMALL)
+                    dismiss()
+                }
             }
         }
 
         view.findViewById<Button>(R.id.btnMedium).apply {
-            text = "Medium (70%) - $mediumSizeFormatted"
-            setOnClickListener {
-                onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_MEDIUM)
-                dismiss()
+            text = "Medium - $mediumSizeFormatted"
+            if (mediumSizeBytes > thresholdSize) {
+                visibility = View.GONE
+            } else {
+                setOnClickListener {
+                    onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_MEDIUM)
+                    dismiss()
+                }
             }
         }
 
         view.findViewById<Button>(R.id.btnLarge).apply {
-            text = "Large (85%) - $largeSizeFormatted"
-            setOnClickListener {
-                onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_LARGE)
-                dismiss()
+            text = "Large - $largeSizeFormatted"
+            if (largeSizeBytes > thresholdSize) {
+                visibility = View.GONE
+            } else {
+                setOnClickListener {
+                    onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_LARGE)
+                    dismiss()
+                }
             }
         }
 
         view.findViewById<Button>(R.id.btnActual).apply {
-            text = "Actual Size (100%) - $actualSizeFormatted"
-            setOnClickListener {
-                onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_ACTUAL)
-                dismiss()
+            text = "Actual Size - $actualSizeFormatted"
+            if (totalSize > thresholdSize) {
+                visibility = View.GONE
+            } else {
+                setOnClickListener {
+                    onCompressionSelected?.invoke(ImageCompressionHelper.SIZE_ACTUAL)
+                    dismiss()
+                }
             }
         }
-
         view.findViewById<Button>(R.id.btnCancel).setOnClickListener {
             dismiss()
         }

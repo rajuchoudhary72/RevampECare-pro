@@ -94,20 +94,21 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
+import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
+import com.app.ecarepro.ui.notification.NotificationViewModel
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
+    private val viewModel: NotificationViewModel by viewModels()
+    private val viewMessageModel: InboxMessageViewModel by viewModels()
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
     private val systemViewModel: SystemViewModel by viewModels()
-    private var isImmediatepopup: Boolean = false
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
@@ -314,9 +315,50 @@ class MainActivity : AppCompatActivity() {
             enableNotificationPermission()
         }
         askNotificationPermission()
-
+        observeBadgeCount()
+        observeBadgeMessageCount()
     }
 
+    private fun observeBadgeCount() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.badgeCountFlow.collect { count: Int ->
+                showBadgeCount1(count)
+            }
+        }
+    }
+    private fun observeBadgeMessageCount() {
+        lifecycleScope.launchWhenStarted {
+            viewMessageModel.badgeCountFlow.collect { count: Int ->
+                showBadgeCount2(count)
+            }
+        }
+    }
+
+    private fun showBadgeCount1(count: Int) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+            if (count > 0) {
+                getOrCreateBadge(R.id.notification).apply {
+                    isVisible = true
+                    number = count
+                }
+            } else {
+                removeBadge(R.id.notification)
+            }
+        }
+    }
+
+    private fun showBadgeCount2(messageCount: Int) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+             if (messageCount > 0) {
+                 getOrCreateBadge(R.id.message).apply {
+                     isVisible = true
+                     number = messageCount
+                 }
+             } else {
+                 removeBadge(R.id.message)
+             }
+        }
+    }
     private fun askNotificationPermission() {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

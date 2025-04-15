@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.repository
 
 import com.app.ecarepro.data.network.model.AppLayoutDto
+import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -19,4 +20,5 @@ interface AppRepository {
     fun updateFavourites(items:List<Favourites>): Flow<Result<String>>
     suspend fun notificationSeen(  id: String ): CommonResponse
     fun syncData(): Flow<Result<SyncData>>
+    suspend fun getNotificationCount(): BadgeCountResponse
 }

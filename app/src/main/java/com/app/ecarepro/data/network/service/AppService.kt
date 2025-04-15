@@ -1,6 +1,7 @@
 package com.app.ecarepro.data.network.service
 
 import com.app.ecarepro.data.network.model.AppLayoutDto
+import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.NotificationsDto
@@ -42,6 +43,11 @@ interface AppService {
     suspend fun notificationSeen(
         @Query("ID") id: String
     ): CommonResponse
+
+
+    @GET("User/NotificationCount")
+    suspend fun getNotificationCount():BadgeCountResponse
+
     @GET("App/Sync")
     suspend fun syncData(): SyncDataDto
 }

@@ -183,7 +183,11 @@ class ComposeViewModel @Inject constructor(
             else {
                 if (contacts.value.isEmpty()){
                     result(false,"Please Select recipient")
-                }else{
+                }else if (message.value.isEmpty()){
+                    result(false,"Please enter message")
+                }else if (subject.value.isEmpty()){
+                    result(false,"Please enter Subject")
+                } else{
                     val wifiManager = context.getSystemService(FirebaseMessagingService.WIFI_SERVICE) as WifiManager
                     val wInfo = wifiManager.connectionInfo
                     val macAddress = wInfo.macAddress
@@ -254,12 +258,7 @@ class ComposeViewModel @Inject constructor(
                     getBase64StringFromUri(file!!.toUri()) ?: ""
                 }
             } else {
-                FileAccess.bitmapToByteArrayBase64String(
-                    FileAccess.bitmapFromFile(
-                        context,
-                        attachment.path!!
-                    )
-                )
+                FileAccess.bitmapToByteArrayBase64String(FileAccess.bitmapFromFile(context, attachment.path!!))
             }
         }
     }
