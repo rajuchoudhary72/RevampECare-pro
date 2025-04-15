@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import androidx.fragment.app.FragmentManager
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -23,10 +22,10 @@ class ImageCompressionHelper(private val context: Context) {
         const val MAX_PAYLOAD_SIZE = 26 * 1024 * 1024
 
         // Compression options
-        const val SIZE_SMALL = 0
-        const val SIZE_MEDIUM = 1
-        const val SIZE_LARGE = 2
-        const val SIZE_ACTUAL = 3
+        const val SIZE_SMALL = 0   // 40% of original
+        const val SIZE_MEDIUM = 1  // 70% of original
+        const val SIZE_LARGE = 2   // 85% of original
+        const val SIZE_ACTUAL = 3  // 100% of original
     }
 
     /**
@@ -79,37 +78,45 @@ class ImageCompressionHelper(private val context: Context) {
     }
 
     /**
-     * Compress an image to a specific file size target
+     * Compress an image to a specific percentage of the original size
      * @param imageUri URI of the original image
      * @param sizeOption Selected size option (SMALL, MEDIUM, LARGE, ACTUAL)
      * @return URI of the compressed image file
      */
     fun compressImage(imageUri: Uri, sizeOption: Int): Uri {
-        // Get input stream from URI
-        val inputStream: InputStream = context.contentResolver.openInputStream(imageUri)
-            ?: throw IllegalArgumentException("Cannot open image")
-
-        // Decode bitmap with options to get original size
-        val originalBitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream.close()
-
-        // Original dimensions and size
-        val originalWidth = originalBitmap.width
-        val originalHeight = originalBitmap.height
-
-        // Target file size based on selected option
-        val targetSize = when(sizeOption) {
-            SIZE_SMALL -> 50 * 1024  // ~50KB
-            SIZE_MEDIUM -> 120 * 1024  // ~120KB
-            SIZE_LARGE -> 800 * 1024  // ~800KB
-            SIZE_ACTUAL -> 0  // Keep original
-            else -> 0
-        }
-
         // If keeping original size, just return the original
         if (sizeOption == SIZE_ACTUAL) {
             return imageUri
         }
+
+        // Get input stream from URI
+        val inputStream: InputStream = context.contentResolver.openInputStream(imageUri)
+            ?: throw IllegalArgumentException("Cannot open image")
+
+        // Calculate original file size
+        val originalFileSize = inputStream.available().toLong()
+
+        // Calculate target size based on percentage of original
+        val targetSize = when(sizeOption) {
+            SIZE_SMALL -> (originalFileSize * 0.4).toLong()   // 40% of original
+            SIZE_MEDIUM -> (originalFileSize * 0.7).toLong()  // 70% of original
+            SIZE_LARGE -> (originalFileSize * 0.85).toLong()  // 85% of original
+            SIZE_ACTUAL -> originalFileSize  // 100% of original
+            else -> originalFileSize
+        }
+
+        // Reset input stream position
+        inputStream.close()
+        val resetInputStream = context.contentResolver.openInputStream(imageUri)
+            ?: throw IllegalArgumentException("Cannot open image")
+
+        // Decode bitmap with options to get original size
+        val originalBitmap = BitmapFactory.decodeStream(resetInputStream)
+        resetInputStream.close()
+
+        // Original dimensions
+        val originalWidth = originalBitmap.width
+        val originalHeight = originalBitmap.height
 
         // Try different quality levels to get close to target size
         var quality = 95  // Start with high quality
@@ -122,7 +129,7 @@ class ImageCompressionHelper(private val context: Context) {
 
         // If we need scaling, determine the size ratio
         var scaleFactor = 1.0f
-        if (compressedByteArray.size > targetSize * 2) {
+        if (compressedByteArray.size > targetSize * 1.2) {
             // If the image is still way too big, we need to scale down dimensions
             val targetPixels = originalWidth * originalHeight * (targetSize.toFloat() / compressedByteArray.size)
             scaleFactor = Math.sqrt((targetPixels / (originalWidth * originalHeight)).toDouble()).toFloat()
@@ -140,7 +147,7 @@ class ImageCompressionHelper(private val context: Context) {
         }
 
         // Binary search for quality level
-        while (quality > 10 && compressedByteArray.size > targetSize * 1.1) {
+        while (quality > 10 && compressedByteArray.size > targetSize * 1.05) {
             quality -= 5
             byteArrayOutputStream.reset()
 
@@ -183,4 +190,3 @@ class ImageCompressionHelper(private val context: Context) {
         dialog.show(fragmentManager, ImageCompressionDialog.TAG)
     }
 }
-

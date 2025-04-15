@@ -45,7 +45,7 @@ android {
         minSdk = 23
         targetSdk = 34
         versionCode = 322
-        versionName = "3.1.0"
+        versionName = "3.1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
