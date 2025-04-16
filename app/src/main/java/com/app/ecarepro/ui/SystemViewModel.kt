@@ -29,6 +29,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
 import com.app.ecarepro.data.database.databases.UserDatabase
+import com.app.ecarepro.data.network.model.toDrawerMenu
+import com.app.ecarepro.ui.views.menu.DrawerMenu
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -123,7 +125,7 @@ class SystemViewModel @Inject constructor(
                     }
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
-                        menus = response.menus ?: emptyList(),
+                        menus = response.menus?.map { it.toDrawerMenu() } ?: emptyList(),
                         favroiteMenus = response.favoriteMenus ?: emptyList(),
                         searchOption = response.searchOptions ?: emptyList(),
                         appLayoutDto = response
@@ -305,7 +307,7 @@ sealed interface MainActivityUiState {
 
     data class Success(
         val userInfo: UserInfo?,
-        val menus: List<Menu>,
+        val menus: List<DrawerMenu>,
         val favroiteMenus: List<Menu>,
         val searchOption: List<SearchOption> = emptyList(),
         val appLayoutDto: AppLayoutDto

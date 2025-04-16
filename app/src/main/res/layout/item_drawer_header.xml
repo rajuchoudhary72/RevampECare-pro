@@ -3,23 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="user"
-            type="com.app.ecarepro.data.network.model.UserInfo" />
-    </data>
+    <data />
 
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="50dp"
+        app:cardPreventCornerOverlap="false"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.TopRoundedCorner3"
-        app:strokeWidth="@dimen/_1sdp"
         app:strokeColor="@color/brand_color"
-
-        app:cardPreventCornerOverlap="false">
+        app:strokeWidth="@dimen/_1sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -29,7 +23,6 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_user_avatar"
-                imageUrl="@{user.photo}"
                 placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="88dp"
                 android:layout_height="88dp"
@@ -48,9 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="@{user.getFullName}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_user_avatar"
                 tools:text="Pooja Verma" />
@@ -60,9 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@{user.otherInfo}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
-                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_user_name"
                 tools:text="Student" />
@@ -79,4 +70,4 @@
 
     </com.google.android.material.card.MaterialCardView>
 
- </layout>
+</layout>

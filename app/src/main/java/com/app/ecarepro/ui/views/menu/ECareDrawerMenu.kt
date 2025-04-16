@@ -3,11 +3,15 @@ package com.app.ecarepro.ui.views.menu
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.BuildConfig
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.LayoutEcareDrawerMenuBinding
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
+import com.app.ecarepro.utils.imageUrl
 import com.google.android.material.navigation.NavigationView
 
 class ECareDrawerMenu @JvmOverloads constructor(
@@ -20,21 +24,22 @@ class ECareDrawerMenu @JvmOverloads constructor(
 
     private val menuItems = mutableListOf<DrawerMenu>()
 
+    private var menuHeader: MenuHeader? = null
+
     private var expandedMenuId: Int = -1
 
     private var listener: EcareDrawerClickListener? = null
 
     init {
-        // Inflate the layout using ViewBinding
         val inflater = LayoutInflater.from(context)
         binding = LayoutEcareDrawerMenuBinding.inflate(inflater, this, true)
-
+        setUiHeaderUi()
         setupRecyclerView()
-        // Optionally, setup header/footer here if needed
+        setUpFooter()
     }
 
+
     private fun setupRecyclerView() {
-        // Configure your EpoxyRecyclerView if needed
         binding.recyclerViewNavView.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
@@ -97,9 +102,43 @@ class ECareDrawerMenu @JvmOverloads constructor(
         }
     }
 
+    fun setHeaderMenu(header: MenuHeader) {
+        this.menuHeader = header
+        setUiHeaderUi()
+    }
+
+    private fun setUiHeaderUi() {
+        binding.itemDrawerHeader.apply {
+            imgUserAvatar.imageUrl(
+                menuHeader?.userPhoto,
+                ContextCompat.getDrawable(imgUserAvatar.context, R.drawable.img_school_placeholder)
+            )
+            txtUserName.text = menuHeader?.fullName
+            txtUserType.text = menuHeader?.otherInfo
+            groupUser.setOnClickListener {
+                listener?.onClickHeader()
+            }
+        }
+    }
+
+
+    private fun setUpFooter() {
+        binding.itemDrawerFooter.apply {
+            txtAppVersion.text = "App Version: ${BuildConfig.VERSION_NAME}"
+            btnLogout.setOnClickListener {
+                listener?.onClickFooter()
+            }
+        }
+    }
+
+
     fun setMenuItems(items: List<DrawerMenu>) {
         menuItems.clear()
         menuItems.addAll(items)
+        binding.recyclerViewNavView.requestModelBuild()
+    }
+
+    fun requestMenuModelBuild(){
         binding.recyclerViewNavView.requestModelBuild()
     }
 
