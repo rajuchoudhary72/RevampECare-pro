@@ -114,10 +114,23 @@ class StudentListNavHost : Fragment() {
                                     }.attach()
 
                                     isDataLoaded=true
+                                    binding.viewPager.offscreenPageLimit = fragmentList.size // Adjust based on your tab count
+                                    // Add this code to restore the tab position
+                                    if (selectedTabIndex < classList.size && selectedTabIndex >= 0) {
+                                        binding.viewPager.setCurrentItem(
+                                            selectedTabIndex,
+                                            false
+                                        )
+                                    }
 
-//                                    binding.viewPager.setCurrentItem(studentsListShareViewModel.tabPos, false)
-//                                    binding.tabLayout.getTabAt(studentsListShareViewModel.tabPos)?.select()
+                                    binding.viewPager.setCurrentItem(selectedTabIndex, false)
+                                   binding.tabLayout.getTabAt(selectedTabIndex)?.select()
 
+
+                                    binding.tabLayout.post {
+                                        val selectedTab = binding.tabLayout.getTabAt(selectedTabIndex)
+                                        selectedTab?.select()
+                                    }
                                 }
                             }catch (_:Exception){ }
 
@@ -184,10 +197,10 @@ class StudentListNavHost : Fragment() {
 
 
 
-//    override fun onPause() {
-//        super.onPause()
-//        studentsListShareViewModel.tabPos=binding. tabLayout.selectedTabPosition
-//    }
+    override fun onPause() {
+      super.onPause()
+        selectedTabIndex=binding.tabLayout.selectedTabPosition
+   }
 
 
     override fun onResume() {
