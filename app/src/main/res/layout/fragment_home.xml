@@ -116,6 +116,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:padding="@dimen/_4sdp"
+                    android:visibility="gone"
                     android:src="@drawable/download" />
 
 

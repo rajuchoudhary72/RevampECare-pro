@@ -141,9 +141,9 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
 
-        binding.imgSync.setOnClickListener {
+       /* binding.imgSync.setOnClickListener {
             getContactUrl()
-        }
+        }*/
         binding.swipeRefresh.setOnRefreshListener {
             mViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
