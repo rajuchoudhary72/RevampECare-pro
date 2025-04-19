@@ -37,6 +37,7 @@ import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
@@ -99,6 +100,39 @@ class HomeFragment : Fragment() {
             accessibilityManager.sendAccessibilityEvent(event)
         }
     }
+    private fun getContactUrl() {
+        lifecycleScope.launch {
+            mViewModel._contactUrlDTLStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (it.data.errorCode == 0) {
+                                if (it.data.supprtURL != null) {
+                                    /*load  url on web view direct if  url is not null  or empty*/
+                                    webViewCall(it.data.supprtURL, "Contact US")
+                                }
+                            }
+                        }
+
+                    }
+                    else -> {}
+                }
+
+
+            }
+        }
+        mViewModel.getContactUrl()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
@@ -108,7 +142,7 @@ class HomeFragment : Fragment() {
     private fun setUpViews() {
 
         binding.imgSync.setOnClickListener {
-            mViewModel.refresh()
+            getContactUrl()
         }
         binding.swipeRefresh.setOnRefreshListener {
             mViewModel.refresh()
