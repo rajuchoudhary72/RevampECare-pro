@@ -140,6 +140,7 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
+    implementation(libs.androidx.room.common.jvm)
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*

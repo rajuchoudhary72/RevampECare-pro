@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentLanguageSelectBinding
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.language.dynamic_language.LocalizationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -28,6 +29,7 @@ class LanguageSelect : Fragment() {
     private lateinit var binding: FragmentLanguageSelectBinding
 
     private val viewModel: LanguageViewModel by viewModels()
+    private val localizationViewModel: LocalizationViewModel by viewModels()
 
     private val languageList = mutableListOf<LanguageModel>(
         LanguageModel("English" ,"en"),
@@ -50,6 +52,13 @@ class LanguageSelect : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //setUpLocal()
+
+        lifecycleScope.launch {
+            // Update UI when language changes
+            viewModel.selectedLanguage.collect { language ->
+                updateUITexts()
+            }
+        }
 
         binding.recyclerViewLanguages.layoutManager = LinearLayoutManager(requireContext())
 
@@ -80,6 +89,15 @@ class LanguageSelect : Fragment() {
         }
 
     }
+
+
+        private fun updateUITexts() {
+            lifecycleScope.launch {
+                // Example of updating UI texts based on localization
+                binding.includeToolbar.toolbarTitle.text= localizationViewModel.getString("language_select")
+            }
+        }
+
 
     fun setUpLocal(lan:String){
         val local = Locale(lan)

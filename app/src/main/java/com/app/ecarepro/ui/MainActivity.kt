@@ -98,6 +98,11 @@ import com.app.ecarepro.ui.language.LanguageManager
 import com.app.ecarepro.ui.language.LanguageRepository
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
+import android.util.Base64
+import java.security.MessageDigest
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
+import java.io.ByteArrayInputStream
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -341,6 +346,9 @@ class MainActivity : AppCompatActivity() {
             enableNotificationPermission()
         }
         askNotificationPermission()
+
+        val sha1 = getSHA1Fingerprint(this@MainActivity)
+        Log.d("SHA1 Fingerprint", sha1 ?: "Unavailable")
 
     }
 
@@ -1924,6 +1932,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    fun getSHA1Fingerprint(context: android.content.Context): String? {
+        return try {
+            val packageInfo: PackageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val packageManager = context.packageManager
+                packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.GET_SIGNING_CERTIFICATES
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    PackageManager.GET_SIGNATURES
+                )
+            }
+
+            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.signingInfo.apkContentsSigners
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.signatures
+            }
+
+            val cert = signatures[0].toByteArray()
+            val input = ByteArrayInputStream(cert)
+
+            val cf: CertificateFactory = CertificateFactory.getInstance("X509")
+            val c = cf.generateCertificate(input) as X509Certificate
+
+            val md: MessageDigest = MessageDigest.getInstance("SHA1")
+            val publicKey = md.digest(c.encoded)
+
+            publicKey.joinToString(":") {
+                String.format("%02X", it)
+            }
+        } catch (e: Exception) {
+            Log.e("SHA1", "Error getting SHA1 fingerprint", e)
+            null
+        }
+    }
+
+
     override fun onPause() {
         try {
             isActivityPaused = true
@@ -1952,6 +2003,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val MY_REQUEST_CODE = 123
     }
+
+
+
 }
 
 fun Fragment.mainActivity(): MainActivity {
