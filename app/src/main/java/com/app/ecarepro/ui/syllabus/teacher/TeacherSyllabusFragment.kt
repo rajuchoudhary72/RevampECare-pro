@@ -38,7 +38,7 @@ class TeacherSyllabusFragment : Fragment() {
     private var syllabustList: List<Syllabuse>? = null
     private var shouldRefresh = false
     private val syllabusShareViewModel : SyllabusShareViewModel by activityViewModels()
-
+    private var selectedTabIndex = 0
 
 
     override fun onCreateView(
@@ -212,8 +212,25 @@ class TeacherSyllabusFragment : Fragment() {
                     tab.text = classList[position]
                 }.attach()
 
-                binding.viewPager.setCurrentItem(teacherSyllabusViewModel.selectedTabIndex, false)
-                binding.tabLayout.getTabAt(teacherSyllabusViewModel.selectedTabIndex)?.select()
+
+                binding.viewPager.offscreenPageLimit = fragmentList.size // Adjust based on your tab count
+                // Add this code to restore the tab position
+                if (selectedTabIndex < classList.size && selectedTabIndex >= 0) {
+                    binding.viewPager.setCurrentItem(
+                        selectedTabIndex,
+                        false
+                    )
+                }
+
+                binding.viewPager.setCurrentItem(selectedTabIndex, false)
+                binding.tabLayout.getTabAt(selectedTabIndex)?.select()
+
+
+                binding.tabLayout.post {
+                    val selectedTab = binding.tabLayout.getTabAt(selectedTabIndex)
+                    selectedTab?.select()
+                }
+
 
             }
         }catch (_:Exception){ }
@@ -230,7 +247,7 @@ class TeacherSyllabusFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-       teacherSyllabusViewModel.selectedTabIndex = binding.tabLayout.selectedTabPosition
+        selectedTabIndex= binding.tabLayout.selectedTabPosition
     }
 
     fun getData(){

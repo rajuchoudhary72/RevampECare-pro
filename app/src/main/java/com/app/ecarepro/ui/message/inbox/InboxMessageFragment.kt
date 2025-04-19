@@ -38,6 +38,9 @@ class InboxMessageFragment : Fragment() {
 
     private val inboxMessageViewModel: InboxMessageViewModel by viewModels()
 
+    private fun onSomeNotificationAction() {
+        inboxMessageViewModel.updateBadgeCount()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -161,6 +164,7 @@ class InboxMessageFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        onSomeNotificationAction()
         inboxMessageViewModel.sendScreenEvent()
     }
     override fun onDestroyView() {

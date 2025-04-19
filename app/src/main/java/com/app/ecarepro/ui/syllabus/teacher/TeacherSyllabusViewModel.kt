@@ -26,9 +26,7 @@ class TeacherSyllabusViewModel @Inject constructor(
 
     var isDataLoaded= false
     var isAll= true
-    var lastTabPos=0
     var lastSpinnerPos=0
-    var selectedTabIndex=0
 
 
     private val teacherSyllabusMutableStateFlow: MutableLiveData<NetworkResult<NetworkTeacherSyllabus>> = MutableLiveData(

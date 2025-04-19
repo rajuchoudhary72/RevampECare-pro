@@ -925,5 +925,7 @@
     <string name="summit_profile_details">Submit Profile Details</string>
     <string name="select_vehicle">Select Vehicle</string>
     <string name="date_from_which_the_student_is_using_the_vehicle">Date from which the student is using the vehicle</string>
+    <string name="setting_screen_open">Setting Screen Open</string>
+    <string name="global_search">Global Search</string>
 </resources>
 
