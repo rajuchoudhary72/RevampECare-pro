@@ -29,5 +29,6 @@ data class Dtl(
     val cancelby: String?,
     val cancelledOn: String?,
     val showCancelButton: Boolean,
-    val tillDate: String
+    val tillDate: String,
+    val attPer: String
 )

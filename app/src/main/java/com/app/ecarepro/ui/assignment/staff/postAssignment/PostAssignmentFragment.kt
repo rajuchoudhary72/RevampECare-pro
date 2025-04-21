@@ -297,7 +297,7 @@ class PostAssignmentFragment : Fragment() {
                }
 
                 postAssignmentViewModel.createAssignment(
-                   asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
+                   asgDate =   Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
                    asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,
                    classID = if (isEdit) ids.toString().toInt()   else 0,
                    classIDs =  if (isEdit)  "" else if (isClassWise)  ids.toString()   else "" ,
