@@ -10,15 +10,12 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityEvent
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -44,6 +41,7 @@ import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.Constant
@@ -51,22 +49,20 @@ import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.DecorationLookup
 import com.rubensousa.decorator.GridMarginDecoration
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
+import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import kotlinx.coroutines.Dispatchers
-import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -316,7 +312,8 @@ class HomeFragment : Fragment() {
 
         if (uiState is HomeUiState.Success) {
             binding.recyclerView.withModels {
-                try {
+
+                if (uiState.cards.isNotEmpty())
                     carouselNoSnapBuilder {
                         id("carousel")
                         numViewsToShowOnScreen(1.2f)
@@ -370,9 +367,7 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
-                } catch (E: IllegalStateException) {
 
-                }
 
 
                 viewAllWidget {
