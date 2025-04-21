@@ -11,6 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.FavouritesDto
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
+import com.app.ecarepro.data.network.model.LMSAppLayoutDto
 import com.app.ecarepro.data.network.model.SyncDataDto
 
 interface AppService {
@@ -19,6 +20,10 @@ interface AppService {
         @Query("Device") device: Int = 1,
     ): AppLayoutDto
 
+    @GET("Workspace/Layout")
+    suspend fun getLMSAppLayout(
+        @Query("Platform") platform: Int = 1,
+    ): LMSAppLayoutDto
 
     @GET("App/Notifications")
     suspend fun getNotifications(): NotificationsDto

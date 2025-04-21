@@ -59,6 +59,7 @@ import com.app.ecarepro.databinding.ActivityMainBinding
 import com.app.ecarepro.drawerChildChildItem
 import com.app.ecarepro.drawerChildItem
 import com.app.ecarepro.drawerItem
+import com.app.ecarepro.model.AppLayout
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.views.bottom_navigation.CbnMenuItem
@@ -705,7 +706,7 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.open()
     }
 
-    private fun showBadgeCount(appLayoutDto: AppLayoutDto) {
+    private fun showBadgeCount(appLayoutDto: AppLayout) {
         binding.appBarMain.contentMain.bottomNavigationView.apply {
             val notificationCount = appLayoutDto.notificationCount ?: 0
             if (notificationCount > 0) {

@@ -3,6 +3,7 @@ package com.app.ecarepro.data.network.model
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
+import com.app.ecarepro.model.AppLayout
 import com.app.ecarepro.ui.views.menu.DrawerMenu
 
 
@@ -110,6 +111,24 @@ data class ChildMenu(
     val title: String?,
     @SerializedName("url")
     val url: String?
+)
+
+
+fun AppLayoutDto.toAppLayout() = AppLayout(
+    errorCode = this.errorCode,
+    isAuthenticated = this.isAuthenticated,
+    logoURL = this.logoURL,
+    menus = this.menus?.map { it.toDrawerMenu() },
+    message = this.message,
+    smlLogoURL = this.smlLogoURL,
+    status = this.status,
+    userInfo = this.userInfo,
+    additionalAccounts = this.additionalAccounts,
+    erPAPPS = this.erPAPPS,
+    favoriteMenus = this.menus,
+    searchOptions = this.searchOptions,
+    notificationCount = this.notificationCount,
+    unreadMessageCount = this.unreadMessageCount
 )
 
 

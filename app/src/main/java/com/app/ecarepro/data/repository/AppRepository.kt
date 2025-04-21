@@ -10,9 +10,10 @@ import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.SyncData
+import com.app.ecarepro.model.AppLayout
 
 interface AppRepository {
-    fun getAppLayout(): Flow<Result<AppLayoutDto>>
+    fun getAppLayout(): Flow<Result<AppLayout>>
     fun getNotifications(refresh: Boolean): Flow<Result<List<Notification>>>
     fun registerDevice(registerDevice: RegisterDevice): Flow<Result<String>>
     fun getFavourites(): Flow<Result<List<Favourites>>>
