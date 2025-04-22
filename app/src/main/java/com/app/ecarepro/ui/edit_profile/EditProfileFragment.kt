@@ -652,5 +652,6 @@ class EditProfileFragment : Fragment() {
                 addTransportTextWatchers(view)  // Recursively check all child views
             }
         }
+
     }
 }
