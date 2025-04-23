@@ -13,22 +13,41 @@
         android:background="#F8F8F8"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_stop_name"
+        <RelativeLayout
+            android:id="@+id/rl_head"
+            android:background="@color/light_green"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu_light"
-            android:gravity="center_vertical"
-            android:textColor="@color/green"
-            android:textSize="@dimen/_16sdp"
-            android:padding="@dimen/_6sdp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_stop_name"
+                android:layout_width="match_parent"
+                android:layout_height= "wrap_content"
+                android:fontFamily="@font/ubuntu_light"
+                android:gravity="center_vertical"
+                android:textColor="@color/green"
+                android:textSize= "@dimen/_16sdp"
+                android:padding="@dimen/_6sdp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/iv_expand_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/arrow_down"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/llView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:visibility="gone"
+            />
 
         <View
             android:layout_width="match_parent"
