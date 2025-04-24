@@ -113,8 +113,6 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
 
 
-
-
     }
 
     private fun observeData() {
