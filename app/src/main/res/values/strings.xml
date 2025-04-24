@@ -927,5 +927,7 @@
     <string name="date_from_which_the_student_is_using_the_vehicle">Date from which the student is using the vehicle</string>
     <string name="setting_screen_open">Setting Screen Open</string>
     <string name="global_search">Global Search</string>
+    <string name="collapse_all">Collapse All</string>
+    <string name="expand_all">Expand All</string>
 </resources>
 

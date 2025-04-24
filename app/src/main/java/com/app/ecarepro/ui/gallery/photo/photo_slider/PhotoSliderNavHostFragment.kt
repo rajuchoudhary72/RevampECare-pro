@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
 import com.app.ecarepro.data.network.model.NetworkVideoAlbumDTL
 import com.app.ecarepro.databinding.FragmentPhotoSliderNavHostBinding
@@ -37,6 +38,10 @@ class PhotoSliderNavHostFragment : Fragment() {
         try {
             networkVideoAlbumDTL = requireArguments().getParcelable("videoDetails")!!
         } catch (e: Exception) { }
+
+        binding.btnClose.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         return binding.root
     }
