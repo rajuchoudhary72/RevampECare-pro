@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.LoginResponseDto
+import com.app.ecarepro.data.network.model.SkillCategoriesDto
+import com.app.ecarepro.data.network.model.SkillListDto
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.model.AppLayout
@@ -20,4 +22,6 @@ interface AppRepository {
     fun updateFavourites(items:List<Favourites>): Flow<Result<String>>
     suspend fun notificationSeen(  id: String ): CommonResponse
     fun syncData(): Flow<Result<SyncData>>
+    fun getSkillCategories(): Flow<Result<SkillCategoriesDto>>
+    fun getSkillList(): Flow<Result<SkillListDto>>
 }

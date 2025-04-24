@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.Card
@@ -43,6 +44,8 @@ class HomeViewModel @Inject constructor(
     val dashboardButtons = MutableLiveData<List<DashboardButtons>?>()
     var currentLocation: Pair<Double, Double>? = null
     private val favouriteData = MutableStateFlow<List<Menu>?>(null)
+
+    val isLmsEnables = userDataStore.isLMSEnabled().asLiveData()
 
     private val refresh = MutableLiveData(false)
 
@@ -147,6 +150,13 @@ class HomeViewModel @Inject constructor(
             userDataStore.setCityName(city)
         }
     }
+
+    fun toggleLMS() {
+        viewModelScope.launch {
+            userDataStore.enableLMS(isLmsEnables.value?.not()?:false)
+        }
+    }
+
     init {
         viewModelScope.launch {
             schoolData.postValue(userDataStore.getSchoolData())

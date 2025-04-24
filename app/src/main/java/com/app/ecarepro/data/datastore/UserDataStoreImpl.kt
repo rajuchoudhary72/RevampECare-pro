@@ -287,6 +287,19 @@ class UserDataStoreImpl @Inject constructor(
             preferences[cityNameKey]
         }.first() ?: Locale.getDefault().displayName
     }
+
+    override fun isLMSEnabled(): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[LMSEnabled]?:false
+        }
+    }
+
+    override suspend fun enableLMS(isEnabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[LMSEnabled] = isEnabled
+        }
+    }
+
     override suspend fun setCityName(city: String) {
         context.dataStore.edit { preferences ->
             preferences[cityNameKey] = city
@@ -348,5 +361,6 @@ class UserDataStoreImpl @Inject constructor(
       //  private val classIDKey = intPreferencesKey("classID")
         private val isAuthenticatedKey = booleanPreferencesKey("isAuthenticated")
         private val cityNameKey = stringPreferencesKey("cityNameKey")
+        private val LMSEnabled = booleanPreferencesKey("LMS_ENABLED")
     }
 }

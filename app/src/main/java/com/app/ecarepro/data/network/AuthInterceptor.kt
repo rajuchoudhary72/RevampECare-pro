@@ -5,6 +5,7 @@ import android.util.Log
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -26,6 +27,11 @@ class AuthInterceptor @Inject constructor(
         "User/ResendOTP",
         "User/ValidateOTP",
     )
+    private val lmsApis = mutableListOf(
+        "Workspace/Layout",
+        "Skills/Categories",
+        "Skills/All",
+    )
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
@@ -37,22 +43,30 @@ class AuthInterceptor @Inject constructor(
                 chain.request().url.pathSegments.take(2).joinToString("/")
             )
         }
+        val isLmsApi = lmsApis.any {
+            it.contains(
+                chain.request().url.pathSegments.take(2).joinToString("/")
+            )
+        }
+
 
         val authToken = runBlocking {
+
             if (isLoginApi) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else
                 userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN_NEW
         }
 
-        Log.e(AUTH_TOKEN, authToken)
-        requestBuilder.addHeader(AUTH_TOKEN, authToken)
+        Log.e(if (isLmsApi) AUTH_KEY else AUTH_TOKEN, authToken)
+        requestBuilder.addHeader(if (isLmsApi) AUTH_KEY else AUTH_TOKEN, authToken)
 
         return chain.proceed(requestBuilder.build())
     }
 
     companion object {
         const val AUTH_TOKEN = "AuthToken"
+        const val AUTH_KEY = "AuthKey"
     }
 
 

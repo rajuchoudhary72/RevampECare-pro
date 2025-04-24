@@ -51,14 +51,10 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.data.database.databases.UserDatabase
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.databinding.ActivityMainBinding
-import com.app.ecarepro.drawerChildChildItem
-import com.app.ecarepro.drawerChildItem
-import com.app.ecarepro.drawerItem
 import com.app.ecarepro.model.AppLayout
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
@@ -379,7 +375,7 @@ class MainActivity : AppCompatActivity() {
 
             Log.e(
                 "Note",
-                data.keySet().joinToString() { key -> "$key -> ${data.get(key).toString()}" })
+                data.keySet().joinToString { key -> "$key -> ${data.get(key).toString()}" })
             val schCode = data.getString("SchCode") ?: return@launch
             val userID = data.getString("UserID")?.toInt() ?: return@launch
             val userType = data.getString("UserType")?.toInt() ?: return@launch
@@ -399,7 +395,7 @@ class MainActivity : AppCompatActivity() {
             val currentSchool = userDataStore.getSchoolData()
             if (currentSchool?.schoolCode != schCode) {
                 Log.e("Note", "userDataStore.setCurrentSchoolCode(schCode)")
-                userDataStore.setCurrentSchoolCode(schCode!!)
+                userDataStore.setCurrentSchoolCode(schCode)
             }
 
             val currentUser = userDataStore.getUser()
@@ -626,18 +622,24 @@ class MainActivity : AppCompatActivity() {
                     refId: String?
                 ) {
                     systemViewModel.openDrawer(false)
-                    if (childMenuId == null && childChildMenuId == null) {
-                        getFragmentId(menuId, refId.orEmpty())
-                    } else if (childMenuId != null && childChildMenuId == null) {
-                        getFragmentId(
-                            menuID = menuId,
-                            childMenuId = childMenuId,
-                            refId = refId.orEmpty()
-                        )
-                    } else {
-                        getFragmentId(menuId, childMenuId!!, childChildMenuId!!, refId.orEmpty())
-                    }
 
+                    lifecycleScope.launch {
+                        if(userDataStore.isLMSEnabled().first()){
+                            navController.navigate(R.id.defineSkillFragment)
+                        }else{
+                            if (childMenuId == null && childChildMenuId == null) {
+                                getFragmentId(menuId, refId.orEmpty())
+                            } else if (childMenuId != null && childChildMenuId == null) {
+                                getFragmentId(
+                                    menuID = menuId,
+                                    childMenuId = childMenuId,
+                                    refId = refId.orEmpty()
+                                )
+                            } else {
+                                getFragmentId(menuId, childMenuId!!, childChildMenuId!!, refId.orEmpty())
+                            }
+                        }
+                    }
                 }
 
                 override fun onClickFooter() {
@@ -947,7 +949,7 @@ class MainActivity : AppCompatActivity() {
                             if (it.webSite == null) {
                                 showMessage("Website are currently unavailable for you!")
                             } else {
-                                it.webSite?.let { url ->
+                                it.webSite.let { url ->
                                     webViewCall(
                                         url,
                                         getString(R.string.website_txt)
@@ -1272,7 +1274,7 @@ class MainActivity : AppCompatActivity() {
                                     if (feePayemtURL.isNullOrEmpty()) {
                                         showMessage("Fee Payment URL are currently not unavailable!")
                                     } else {
-                                        webViewCallForPayment(feePayemtURL!!)
+                                        webViewCallForPayment(feePayemtURL)
                                     }
                                 }
                             } catch (_: Exception) {
@@ -1627,7 +1629,7 @@ class MainActivity : AppCompatActivity() {
         binding.appBarMain.contentMain.bottomNavigationView.setupWithNavController(navController)
 
         binding.appBarMain.contentMain.bottomNavigationView.menu.findItem(R.id.home)
-            .setChecked(true);
+            .setChecked(true)
 
         binding.appBarMain.contentMain.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {

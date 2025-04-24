@@ -3,19 +3,20 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.datastore.UserDataStore
-import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
-import com.app.ecarepro.data.network.model.LMSAppLayoutDto
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.network.model.SkillCategoriesDto
+import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.data.network.model.toAppLayout
 import com.app.ecarepro.data.network.service.AppService
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.model.AppLayout
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -23,15 +24,17 @@ class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
     private val jsonCache: JsonCache,
     private val userDataStore: UserDataStore
-
 ) : AppRepository {
 
-    val isLMS = true
+    val lmsBasePath = "https://lmsapiuat.franciscanecare.net/"
+
     override fun getAppLayout(): Flow<Result<AppLayout>> {
         return flow {
             try {
-                val response = if (isLMS) {
-                    appService.getLMSAppLayout().toAppLayout()
+                val response = if (userDataStore.isLMSEnabled().first()) {
+                    appService.getLMSAppLayout(
+                        lmsBasePath + "Workspace/Layout"
+                    ).toAppLayout()
                 } else {
                     appService.getAppLayout().toAppLayout()
                 }
@@ -125,6 +128,36 @@ class AppRepositoryImpl @Inject constructor(
                 val response = appService.syncData()
                 if (response.errorCode == 0 && response.data != null) {
                     emit(Result.success(response.data))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getSkillCategories(): Flow<Result<SkillCategoriesDto>> {
+        return flow {
+            try {
+                val response = appService.getSkillCategories(lmsBasePath + "Skills/Categories")
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getSkillList(): Flow<Result<SkillListDto>> {
+        return flow {
+            try {
+                val response = appService.getSkillList(lmsBasePath + "Skills/All")
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

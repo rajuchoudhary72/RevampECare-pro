@@ -86,6 +86,14 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
+
+        mViewModel.isLmsEnables.observe(viewLifecycleOwner) {
+            binding.textLms.text = if (it) "LMS" else "E-Care"
+        }
+
+        binding.textLms.setOnClickListener {
+            mViewModel.toggleLMS()
+        }
     }
 
     private fun setUpViews() {

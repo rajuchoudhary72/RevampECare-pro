@@ -1037,4 +1037,8 @@
             app:destination="@id/lessonPlanListFragment" />
         />
     </fragment>
+    <fragment
+        android:id="@+id/defineSkillFragment"
+        android:name="com.app.ecarepro.ui.define_skill.DefineSkillFragment"
+        android:label="DefineSkillFragment" />
 </navigation>

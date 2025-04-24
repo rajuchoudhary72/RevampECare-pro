@@ -39,39 +39,35 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-             android:id="@+id/rl_user_details"
+        <LinearLayout
+            android:id="@+id/rl_user_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_user_avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="16dp"
                 android:contentDescription="User profile picture"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round"
                 app:strokeColor="@color/brand_color"
                 app:strokeWidth="2dp"
-                tools:src="@drawable/ic_splash_hexagon"
-
-
-                />
+                tools:src="@drawable/ic_splash_hexagon" />
 
             <LinearLayout
                 android:id="@+id/ll_details"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_toEndOf="@+id/img_user_avatar"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -94,11 +90,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
+                        android:contentDescription="Welcome"
                         android:fontFamily="@font/calibri_bold"
+                        android:padding="@dimen/_5sdp"
                         android:textColor="@color/brand_color"
                         android:textSize="14sp"
-                        android:padding="@dimen/_5sdp"
-                        android:contentDescription="Welcome"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rl_user_details"
@@ -112,42 +108,51 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_4sdp"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_sync" />
+                    android:src="@drawable/ic_sync"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textLms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="@font/calibri_bold"
+                android:paddingHorizontal="@dimen/_10sdp"
+                tools:text="LMS" />
 
-        </RelativeLayout>
+
+        </LinearLayout>
 
 
         <FrameLayout
             android:id="@+id/background_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-             app:cardElevation="0dp"
             android:padding="0dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_user_details">
 
             <com.google.android.material.card.MaterialCardView
-                 android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                app:cardElevation="0dp"
                 android:padding="0dp"
+                app:cardBackgroundColor="@color/background_dashboard"
+                app:cardElevation="0dp"
+                app:cardPreventCornerOverlap="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rl_user_details"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.TopRoundedCorner2"
-                app:strokeWidth="@dimen/_1sdp"
                 app:strokeColor="@color/brand_color"
-                app:cardBackgroundColor="@color/background_dashboard"
-                app:cardPreventCornerOverlap="false"/>
+                app:strokeWidth="@dimen/_1sdp" />
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh"
@@ -169,10 +174,6 @@
 
 
         </FrameLayout>
-
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

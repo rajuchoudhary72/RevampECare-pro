@@ -60,4 +60,7 @@ interface UserDataStore {
     suspend fun clear()
     suspend fun setCityName(city: String)
     suspend fun getCityName():String
+
+    fun isLMSEnabled(): Flow<Boolean>
+    suspend fun enableLMS(isEnabled: Boolean)
 }
