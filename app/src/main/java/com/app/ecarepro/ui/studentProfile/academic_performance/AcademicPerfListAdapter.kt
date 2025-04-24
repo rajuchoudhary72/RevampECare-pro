@@ -36,17 +36,20 @@ class AcademicPerfListAdapter(
         binding?.apply {
             tvStopName.text=markList[position].subjectName
             addLayout(binding.llView,markList[position].marks,position)
-            val subject = markList[position].subjectName
-            binding.llView.isVisible = isExpanded(subject.toString())
-            binding.llView.isVisible= isExpanded
 
+            binding.llView.isVisible= isExpanded
+            if (isExpanded) {
+                ivExpandButton.setImageResource(R.drawable.keyboard_arrow_up_24dp)
+            } else {
+                ivExpandButton.setImageResource(R.drawable.keyboard_arrow_down_24dp)
+            }
             rlHead.setOnClickListener {
                 if (llView.visibility == View.VISIBLE) {
                     llView.visibility = View.GONE
-                    ivExpandButton.setImageResource(R.drawable.arrow_down)
+                    ivExpandButton.setImageResource(R.drawable.keyboard_arrow_down_24dp)
                     } else {
                     llView.visibility = View.VISIBLE
-                    ivExpandButton.setImageResource(R.drawable.ic_arrow_right)
+                    ivExpandButton.setImageResource(R.drawable.keyboard_arrow_up_24dp)
                 }
             }
 
@@ -89,17 +92,6 @@ class AcademicPerfListAdapter(
         }
     }
 
-    fun toggleExpanded(subject: String) {
-        expandedStateMap[subject] = !(expandedStateMap[subject] ?: true)
-    }
-
-    fun isExpanded(subject: String): Boolean {
-        return expandedStateMap[subject] ?: false
-    }
-
-    fun getPositionForSubject(subject: String): Int {
-        return markList.indexOfFirst { it.subjectName == subject }
-    }
 
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {

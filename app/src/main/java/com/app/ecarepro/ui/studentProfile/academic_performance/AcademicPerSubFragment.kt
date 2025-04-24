@@ -22,7 +22,6 @@ class AcademicPerSubFragment() : Fragment() {
     private lateinit var binding: FragmentAcademicPerSubBinding
     private var itemDat: ArrayList<Subject>?=null
     private var isExpanded:Boolean=true
-    private lateinit var stickyHeaderBinding: ItemTransAttendanceBinding
 
 
 
@@ -54,10 +53,12 @@ class AcademicPerSubFragment() : Fragment() {
         binding.llCollapesExpandButton.setOnClickListener {
             setupList(isExpanded)
             if (isExpanded){
-                binding.tvCollapesExpandText.text="Collapes All"
+                binding.ivExpandButton.setImageResource(R.drawable.keyboard_arrow_up_24dp)
+                binding.tvCollapesExpandText.text= getString(R.string.collapse_all)
                 isExpanded=false
             }else{
-                binding.tvCollapesExpandText.text="Expand All"
+                binding.ivExpandButton.setImageResource(R.drawable.keyboard_arrow_down_24dp)
+                binding.tvCollapesExpandText.text= getString(R.string.expand_all)
                 isExpanded=true
             }
         }
@@ -73,9 +74,6 @@ class AcademicPerSubFragment() : Fragment() {
         if (!itemDat.isNullOrEmpty()) {
             val adapter = AcademicPerfListAdapter(itemDat!!, isExpanded)
 
-            setupStickyHeader()
-
-
             binding.rvExamList.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context)
@@ -83,32 +81,6 @@ class AcademicPerSubFragment() : Fragment() {
 
 
             }
-
-            binding.rvExamList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val firstVisiblePos = layoutManager.findFirstVisibleItemPosition()
-
-                    if (firstVisiblePos != RecyclerView.NO_POSITION) {
-                        val subject = adapter.getSubject(firstVisiblePos)
-                        val subjectData = itemDat?.get(firstVisiblePos)
-
-                        // Update sticky header text and toggle
-                        stickyHeaderBinding.tvStopName.text = subjectData?.subjectName ?: ""
-
-                        // Update layout
-                        stickyHeaderBinding.llView.removeAllViews()
-                        adapter.addLayout(stickyHeaderBinding.llView, subjectData?.marks, firstVisiblePos)
-
-                        // Toggle functionality
-                        stickyHeaderBinding.ivExpandButton.visibility = View.GONE
-
-                    }
-                }
-            })
-
-
             binding.rvExamList.isVisible = true
             binding.tvNoData.isVisible = false
         } else {
@@ -129,15 +101,7 @@ class AcademicPerSubFragment() : Fragment() {
 
     }
 
-    private fun setupStickyHeader() {
-        val inflater = LayoutInflater.from(requireContext())
-        stickyHeaderBinding = ItemTransAttendanceBinding.inflate(inflater)
-        binding.stickyHeaderContainer.removeAllViews()
-        binding.stickyHeaderContainer.addView(stickyHeaderBinding.root)
 
-        // Initially hide the content
-        stickyHeaderBinding.llView.visibility = View.GONE
-    }
 
 
 
