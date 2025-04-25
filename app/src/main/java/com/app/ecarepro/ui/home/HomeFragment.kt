@@ -374,7 +374,7 @@ class HomeFragment : Fragment() {
 
         if (uiState is HomeUiState.Success) {
             binding.recyclerView.withModels {
-                try {
+                if (uiState.cards.isNotEmpty())
                     carouselNoSnapBuilder {
                         id("carousel")
                         numViewsToShowOnScreen(1.2f)
@@ -428,9 +428,7 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
-                } catch (E: IllegalStateException) {
 
-                }
 
 
                 viewAllWidget {

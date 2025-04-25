@@ -231,12 +231,46 @@
             android:text="@{String.valueOf(data.applicantName)}"
             android:textColor="@color/grey_60"
             android:textSize="@dimen/_12sdp" />
+        
+        <LinearLayout
+            android:id="@+id/ll_att_per"
+            android:layout_below="@+id/tv_applicant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:id="@+id/tv_holder_att_per"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:padding="@dimen/_2sdp"
+                android:text="Attendance: "
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tv_att_per"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_regular"
+                android:paddingLeft="@dimen/_2sdp"
+                android:paddingTop="@dimen/_2sdp"
+                android:paddingRight="@dimen/_2sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:textColor="@color/grey_60"
+                android:textSize="@dimen/_12sdp" />
+
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llApplicant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_applicant"
+            android:layout_below="@+id/ll_att_per"
             android:visibility="visible"
             android:orientation="vertical"
             >
