@@ -73,6 +73,15 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+       binding.nestedScrollView.post {
+           binding.nestedScrollView.scrollTo(0, photoAlbumDTLViewModel.scrollY)
+        }
+
+        // Save scroll position
+        binding.nestedScrollView.viewTreeObserver.addOnScrollChangedListener {
+            photoAlbumDTLViewModel.scrollY = binding.nestedScrollView.scrollY
+        }
+
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
             binding.tvMore.isVisible = false
