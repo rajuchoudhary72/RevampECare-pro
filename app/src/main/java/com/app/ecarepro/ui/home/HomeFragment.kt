@@ -10,12 +10,16 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -34,6 +38,7 @@ import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
@@ -42,7 +47,6 @@ import com.app.ecarepro.labelCenter
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.MainActivityUiState
 import com.app.ecarepro.ui.SystemViewModel
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.views.carouselNoSnapBuilder
 import com.app.ecarepro.utils.Constant
@@ -50,20 +54,22 @@ import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.viewAllWidget
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.DecorationLookup
 import com.rubensousa.decorator.GridMarginDecoration
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
-import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import kotlinx.coroutines.Dispatchers
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -74,6 +80,7 @@ class HomeFragment : Fragment() {
     private val mViewModel: HomeViewModel by viewModels()
     private val systemViewModel: SystemViewModel by activityViewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -82,36 +89,118 @@ class HomeFragment : Fragment() {
         return binding.root
 
     }
+    private fun announce(message: String) {
+        val accessibilityManager = requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        if (accessibilityManager.isEnabled) {
+            val event = AccessibilityEvent.obtain().apply {
+                eventType = AccessibilityEvent.TYPE_ANNOUNCEMENT
+                className = javaClass.name
+                packageName = requireContext().packageName
+                text.add(message)
+            }
+            accessibilityManager.sendAccessibilityEvent(event)
+        }
+    }
+    // 2. Add this function to set meaningful content descriptions dynamically
+    private fun setupAccessibility() {
+        // Profile section
+        binding.imgUserAvatar.apply {
+            contentDescription = "Profile picture. Tap to open profile"
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+        }
+        binding.txtUserName.apply {
+            // Use actual username in description if available
+            val username = text.toString()
+            contentDescription = "Username: $username. Tap to open profile"
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+        }
 
+        // Make sure recyclerView items have proper descriptions - implement in onBindViewHolder
+        // For each card adapter, make sure to add content descriptions
+    }
+    private fun forceTalkBackAnnouncement(message: String) {
+        // Delay slightly to ensure UI is ready
+        Handler(Looper.getMainLooper()).postDelayed({
+            announce(message)
+        }, 500)
+    }
+    private fun getContactUrl() {
+        lifecycleScope.launch {
+            mViewModel._contactUrlDTLStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (it.data.errorCode == 0) {
+                                if (it.data.supprtURL != null) {
+                                    /*load  url on web view direct if  url is not null  or empty*/
+                                    webViewCall(it.data.supprtURL, "Contact US")
+                                }
+                            }
+                        }
+
+                    }
+                    else -> {}
+                }
+
+
+            }
+        }
+        mViewModel.getContactUrl()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
-
         mViewModel.isLmsEnables.observe(viewLifecycleOwner) {
             binding.textLms.text = if (it) "LMS" else "E-Care"
         }
 
         binding.textLms.setOnClickListener {
             mViewModel.toggleLMS()
+           /* val intent = Intent(requireContext(), MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            Runtime.getRuntime().exit(0)*/
         }
     }
 
     private fun setUpViews() {
 
-        binding.imgSync.setOnClickListener {
-            mViewModel.refresh()
-        }
+       /* binding.imgSync.setOnClickListener {
+            getContactUrl()
+        }*/
         binding.swipeRefresh.setOnRefreshListener {
             mViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
-        binding.imgUserAvatar.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
+        binding.imgUserAvatar.apply {
+            isClickable = true
+            isFocusable = true
+            contentDescription = "Profile picture"
+            setOnClickListener {
+                findNavController().navigate(R.id.profileFragment)
+                announce("Opening profile")
+            }
         }
-        binding.txtUserName.setOnClickListener {
-            findNavController().navigate(R.id.profileFragment)
-
+        binding.txtUserName.apply {
+            isClickable = true
+            isFocusable = true
+            contentDescription = "Your Name"
+            setOnClickListener {
+                announce("Opening profile")
+                // Optionally open a screen
+                findNavController().navigate(R.id.profileFragment)
+            }
         }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
@@ -166,7 +255,6 @@ class HomeFragment : Fragment() {
                         uiState.userInfo?.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
-                                // txtUserName.text = user.name
                                 txtUserName.text = user.getFullHomeScreenName()
                                 profilePrompt()
                             }
@@ -327,7 +415,6 @@ class HomeFragment : Fragment() {
 
         if (uiState is HomeUiState.Success) {
             binding.recyclerView.withModels {
-
                 if (uiState.cards.isNotEmpty())
                     carouselNoSnapBuilder {
                         id("carousel")
@@ -521,6 +608,9 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+        // After building UI
+        setupAccessibility()
+        forceTalkBackAnnouncement("Home screen loaded")
     }
 
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {

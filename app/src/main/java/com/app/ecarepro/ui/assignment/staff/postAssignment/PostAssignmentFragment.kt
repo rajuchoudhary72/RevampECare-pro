@@ -297,7 +297,7 @@ class PostAssignmentFragment : Fragment() {
                }
 
                 postAssignmentViewModel.createAssignment(
-                   asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
+                   asgDate =   Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
                    asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,
                    classID = if (isEdit) ids.toString().toInt()   else 0,
                    classIDs =  if (isEdit)  "" else if (isClassWise)  ids.toString()   else "" ,
@@ -715,8 +715,8 @@ class PostAssignmentFragment : Fragment() {
                             submitDate=data.submitDate
                             binding.etTitle.setText(data.title)
                             binding.etDescription.setText(data.data)
-                            binding.ctvAssignmentDt.text= data.asgDate
-                            binding.tvSubmissionDt.text= data.submitDate
+                            binding.ctvAssignmentDt.text=  Constant.apiToSystemDate(data.asgDate)
+                            binding.tvSubmissionDt.text= Constant.apiToSystemDate(data.submitDate)
                             binding.tvSubmissionDt.isVisible = data.submitDate!=null && data.submitDate.isNotEmpty()
                             binding.cbActive.isChecked= data.isActive
                             binding.cbMultipleActive.isChecked= data.multipleSubmission

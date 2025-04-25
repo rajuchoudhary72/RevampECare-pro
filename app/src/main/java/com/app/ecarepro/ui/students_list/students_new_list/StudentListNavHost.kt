@@ -35,6 +35,7 @@ class StudentListNavHost : Fragment() {
     private val studentListViewModel: StudentListViewModel by viewModels()
     private var schoolType = 2
     private var isDataLoaded = false
+    private var selectedTabIndex = 0
     private val studentsListShareViewModel : StudentsListShareViewModel by activityViewModels()
 
     @Inject
@@ -65,61 +66,76 @@ class StudentListNavHost : Fragment() {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                     }
+                    }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                         Log.d("main", "Error$listNetworkResult")
+                        Log.d("main", "Error$listNetworkResult")
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
                         if (listNetworkResult.data != null) {
-                        if (listNetworkResult.data.students != null) {
+                            if (listNetworkResult.data.students != null) {
 
 
 
-                            try {
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    val classList = mutableListOf<String> ()
-                                    val fragmentList : ArrayList<Fragment> = ArrayList()
+                                try {
+                                    viewLifecycleOwner.lifecycleScope.launch {
+                                        val classList = mutableListOf<String> ()
+                                        val fragmentList : ArrayList<Fragment> = ArrayList()
 
-                                    studentsListShareViewModel.setStudentMutableLiveData(listNetworkResult.data.students)
+                                        studentsListShareViewModel.setStudentMutableLiveData(listNetworkResult.data.students)
 
-                                    withContext(Dispatchers.Default) {
-                                        listNetworkResult.data.students.forEach {
-                                            if (!classList.contains(it.`class`)) {
-                                                classList.add(it.`class`!!)
+                                        withContext(Dispatchers.Default) {
+                                            listNetworkResult.data.students.forEach {
+                                                if (!classList.contains(it.`class`)) {
+                                                    classList.add(it.`class`!!)
+                                                }
+                                            }
+                                            classList. forEach { itemDat ->
+                                                fragmentList.add( StudentListSubFragment.newInstance(itemDat ,toFragment ))
+
                                             }
                                         }
-                                        classList. forEach { itemDat ->
-                                            fragmentList.add( StudentListSubFragment.newInstance(itemDat ,toFragment ))
+                                        val viewPagerAdapter = ViewPagerAdapter(
+                                            fragmentList,
+                                            activity?.supportFragmentManager!!,
+                                            lifecycle
+                                        )
+                                        binding.viewPager.adapter = viewPagerAdapter
 
+                                        TabLayoutMediator(
+                                            binding.tabLayout,
+                                            binding.viewPager
+                                        ) { tab, position ->
+                                            tab.text = classList[position]
+                                        }.attach()
+
+                                        isDataLoaded=true
+                                        // Add this code to restore the tab position
+                                        if (selectedTabIndex < classList.size && selectedTabIndex >= 0) {
+                                            binding.viewPager.setCurrentItem(
+                                                selectedTabIndex,
+                                                false
+                                            )
+                                        }
+
+                                        binding.viewPager.setCurrentItem(selectedTabIndex, false)
+                                        binding.tabLayout.getTabAt(selectedTabIndex)?.select()
+
+
+                                        binding.tabLayout.post {
+                                            val selectedTab = binding.tabLayout.getTabAt(selectedTabIndex)
+                                            selectedTab?.select()
                                         }
                                     }
-                                    val viewPagerAdapter = ViewPagerAdapter(
-                                        fragmentList,
-                                        activity?.supportFragmentManager!!,
-                                        lifecycle
-                                    )
-                                    binding.viewPager.adapter = viewPagerAdapter
-
-                                    TabLayoutMediator(
-                                        binding.tabLayout,
-                                        binding.viewPager
-                                    ) { tab, position ->
-                                        tab.text = classList[position]
-                                    }.attach()
-
-                                    isDataLoaded=true
-
-                                }
-                            }catch (_:Exception){ }
+                                }catch (_:Exception){ }
 
 
 
-                        }
+                            }
                         }
 
                     }
@@ -158,6 +174,17 @@ class StudentListNavHost : Fragment() {
             }
         }
         checkIsBoarding()
+
+
+//        binding.viewPager.setCurrentItem(selectedTabIndex, false)
+//
+//        binding.tabLayout.post {
+//            binding.tabLayout.setScrollPosition(selectedTabIndex, 0f, true)
+//        }
+
+
+
+
     }
     private fun checkIsBoarding() {
         lifecycleScope.launch {
@@ -166,6 +193,14 @@ class StudentListNavHost : Fragment() {
             }
         }
     }
+
+
+
+    override fun onPause() {
+        super.onPause()
+        selectedTabIndex=binding.tabLayout.selectedTabPosition
+    }
+
 
     override fun onResume() {
         super.onResume()

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+   >
+
+    <TextView
+        android:id="@+id/tvMessageSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This message is 2.2 MB. You can reduce message size by scaling the image to one of the sizes below."
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333" />
+
+    <Button
+        android:id="@+id/btnSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Small (45.6 KB)"
+        android:textColor="#3F80F4"
+        android:background="?android:attr/selectableItemBackground"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333" />
+
+    <Button
+        android:id="@+id/btnMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Medium (114 KB)"
+        android:textColor="#3F80F4"
+        android:background="?android:attr/selectableItemBackground"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333" />
+
+    <Button
+        android:id="@+id/btnLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Large (787 KB)"
+        android:textColor="#3F80F4"
+        android:background="?android:attr/selectableItemBackground"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333" />
+
+    <Button
+        android:id="@+id/btnActual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Actual Size (2.2 MB)"
+        android:textColor="#3F80F4"
+        android:background="?android:attr/selectableItemBackground"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#333333" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textColor="#3F80F4"
+        android:background="?android:attr/selectableItemBackground"
+        android:textAllCaps="false"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp" />
+
+</LinearLayout>

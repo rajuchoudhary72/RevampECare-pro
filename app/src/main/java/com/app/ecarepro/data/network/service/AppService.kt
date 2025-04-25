@@ -3,21 +3,23 @@ package com.app.ecarepro.data.network.service
 import com.app.ecarepro.data.network.SaveSkillDto
 import com.app.ecarepro.data.network.SaveSkillResponse
 import com.app.ecarepro.data.network.model.AppLayoutDto
+import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
-import com.app.ecarepro.data.network.model.FavouritesDto
-import com.app.ecarepro.data.network.model.LMSAppLayoutDto
 import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
+import com.app.ecarepro.data.network.model.FavouritesDto
+import com.app.ecarepro.data.network.model.FavouritesUpdateDto
+import com.app.ecarepro.data.network.model.LMSAppLayoutDto
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
 import com.app.ecarepro.data.network.model.SyncDataDto
-import retrofit2.http.Body
 import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface AppService {
@@ -26,11 +28,6 @@ interface AppService {
         @Query("Device") device: Int = 1,
     ): AppLayoutDto
 
-    @GET
-    suspend fun getLMSAppLayout(
-        @Url url: String,
-        @Query("Platform") platform: Int = 1,
-    ): LMSAppLayoutDto
 
     @GET("App/Notifications")
     suspend fun getNotifications(): NotificationsDto
@@ -55,8 +52,21 @@ interface AppService {
         @Query("ID") id: String
     ): CommonResponse
 
+
+    @GET("User/NotificationCount")
+    suspend fun getNotificationCount():BadgeCountResponse
+
     @GET("App/Sync")
     suspend fun syncData(): SyncDataDto
+
+
+    /*LMS API */
+
+    @GET
+    suspend fun getLMSAppLayout(
+        @Url url: String,
+        @Query("Platform") platform: Int = 1,
+    ): LMSAppLayoutDto
 
     @GET
     suspend fun getSkillCategories(

@@ -15,13 +15,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
+import com.app.ecarepro.utils.badge_count.NotificationSyncManager
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     val appRepository: AppRepository,
+    private val syncManager: NotificationSyncManager,
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
+    val badgeCountFlow: StateFlow<Int> get() = syncManager.badgeCountFlow
     private val refresh = MutableLiveData(false)
     val uiState =
         refresh.asFlow().flatMapLatest { refresh ->
@@ -48,6 +52,12 @@ class NotificationViewModel @Inject constructor(
     fun markNotificationAsSeen(id: String) {
         viewModelScope.launch {
             appRepository.notificationSeen(id)
+        }
+    }
+
+    fun updateBadgeCount() {
+        viewModelScope.launch {
+            syncManager.fetchAndUpdateBadgeCount()
         }
     }
 

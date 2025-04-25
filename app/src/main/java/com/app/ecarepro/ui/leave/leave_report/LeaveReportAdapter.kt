@@ -197,6 +197,18 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 load(data.studentPhoto)
                     .placeholder(R.drawable.default_profile)
                     .  into(binding .userImg)
+
+                llAttPer.isVisible=true
+                if (data.attPer!=null){
+                    tvAttPer.text= buildString {
+                        append(data.attPer)
+                        append("%")
+                    }
+                }else{
+                    llAttPer.isVisible=false
+                }
+
+
             }
 
         }

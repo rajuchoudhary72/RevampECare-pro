@@ -11,6 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_dashboard"
+        android:focusable="true"
+        android:clickable="true"
+        android:importantForAccessibility="yes"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <fragment
@@ -96,7 +99,7 @@
                         android:id="@+id/search_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                         android:text="Global Search"
+                         android:text="@string/global_search"
                         android:textColor="@color/grey_40"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/iv_search"
@@ -105,12 +108,14 @@
 
                     <ImageView
                         android:id="@+id/iv_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="25dp"
-                        android:layout_marginEnd="20dp"
+                        android:contentDescription="@string/setting_screen_open"
+                        android:padding="@dimen/_14sdp"
+                        android:layout_marginEnd="10dp"
                         android:src="@drawable/ic_setting_new"
                         app:tint="@color/brand_color" />
 

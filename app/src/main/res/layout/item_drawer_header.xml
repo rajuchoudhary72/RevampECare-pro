@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="50dp"
-        app:cardPreventCornerOverlap="false"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.TopRoundedCorner3"
+        app:strokeWidth="@dimen/_1sdp"
         app:strokeColor="@color/brand_color"
-        app:strokeWidth="@dimen/_1sdp">
+
+        app:cardPreventCornerOverlap="false">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,7 +43,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
-                app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/img_user_avatar"
                 tools:text="Pooja Verma" />
@@ -53,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
-                app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_user_name"
                 tools:text="Student" />
@@ -70,4 +71,4 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-</layout>
+ </layout>

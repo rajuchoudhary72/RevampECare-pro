@@ -55,7 +55,7 @@
     </style>
 
     <style name="TextAppearance.ECarePro.Toolbar" parent="TextAppearance.ECarePro.TitleLarge">
-        <item name="android:fontFamily">@font/calibri_bold</item>
+        <item name="android:fontFamily">@font/ubuntu_medium</item>
         <item name="android:textSize">18sp</item>
         <item name="android:includeFontPadding">false</item>
     </style>

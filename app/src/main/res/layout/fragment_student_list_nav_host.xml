@@ -96,7 +96,7 @@
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/tabLayout"
+                android:layout_below="@+id/tabLayout"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
             <com.google.android.material.tabs.TabLayout
@@ -106,7 +106,6 @@
                 app:tabGravity="fill"
                 app:tabMode="scrollable"
                 app:tabIndicatorFullWidth="true"
-                android:layout_alignParentBottom="true"
                 />
 
 

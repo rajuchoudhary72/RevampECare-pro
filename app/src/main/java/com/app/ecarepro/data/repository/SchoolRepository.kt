@@ -30,6 +30,7 @@ import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.model.NetworkAppVersion
 
 interface SchoolRepository {
@@ -42,6 +43,7 @@ interface SchoolRepository {
     suspend fun getCirculars(pg: Int,yrID: Int,title :String): NetworkCircular
     suspend fun getNoticeDTL( ntID: String): NetworkNoticDetails
     suspend fun getCircularDTL( cirID: String): NetworkCircularDetails
+    suspend fun getContactDTL(): NetworkContactUrl
     suspend fun getClass(): ClassPromotionModel
     suspend fun getClassPromotions( classId: String): PromotionModel
     suspend fun submitClassPromotions( request: RequestClassPromotion): AppResponse

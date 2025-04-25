@@ -221,6 +221,30 @@ class Constant {
             return outputFormat.format(date!!)
         }
 
+
+        fun convertDateLongWeekDayToSort(inputDate: String): String {
+            return try {
+                // Step 1: Parse the original format
+                val inputFormat = SimpleDateFormat("dd MMM, yyyy EEEE", Locale.ENGLISH)
+                val date = inputFormat.parse(inputDate)
+
+                // Step 2: Format into the desired output
+                val outputFormat = SimpleDateFormat("dd/MM/yy, E", Locale.ENGLISH)
+                outputFormat.format(date!!)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                inputDate // fallback in case of error
+            }
+        }
+
+
+        fun apiToSystemDate(inputDateStr: String): String {
+            val inputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return outputFormat.format(date!!)
+        }
+
         fun dateToShowConn(inputDateStr: String): String {
             val inputFormat: DateFormat =
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())

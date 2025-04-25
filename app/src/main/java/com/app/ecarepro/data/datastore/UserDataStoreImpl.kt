@@ -287,19 +287,6 @@ class UserDataStoreImpl @Inject constructor(
             preferences[cityNameKey]
         }.first() ?: Locale.getDefault().displayName
     }
-
-    override fun isLMSEnabled(): Flow<Boolean> {
-        return context.dataStore.data.map { preferences ->
-            preferences[LMSEnabled]?:false
-        }
-    }
-
-    override suspend fun enableLMS(isEnabled: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[LMSEnabled] = isEnabled
-        }
-    }
-
     override suspend fun setCityName(city: String) {
         context.dataStore.edit { preferences ->
             preferences[cityNameKey] = city
@@ -341,7 +328,17 @@ class UserDataStoreImpl @Inject constructor(
             eCareProDatabase.schoolDao().nukeTable()
         }
     }
+    override fun isLMSEnabled(): Flow<Boolean> {
+        return context.dataStore.data.map { preferences ->
+            preferences[LMSEnabled]?:false
+        }
+    }
 
+    override suspend fun enableLMS(isEnabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[LMSEnabled] = isEnabled
+        }
+    }
 
     companion object {
         private val currentUserId = intPreferencesKey("currentUserId")
@@ -354,7 +351,6 @@ class UserDataStoreImpl @Inject constructor(
         private val slidesKey = stringPreferencesKey("slides")
         private val generalSettingsKey = stringPreferencesKey("generalSettings")
         private val messageSettingsKey = stringPreferencesKey("messageSettings")
-
         private val roleNameKey = stringPreferencesKey("roleName")
         private val userNameIdKey = stringPreferencesKey("userNameId")
         private val userTypeKey = intPreferencesKey("userType")
