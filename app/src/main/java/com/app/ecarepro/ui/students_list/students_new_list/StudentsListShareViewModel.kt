@@ -14,7 +14,7 @@ class StudentsListShareViewModel @Inject constructor() : ViewModel() {
     private val studentMutableLiveData = MutableLiveData<List<Student>>()
 
 
-    fun getStudentMutableLiveData(): LiveData<List<Student>>{
+    fun getStudentMutableLiveData(): LiveData<List<Student>> {
         return studentMutableLiveData
     }
 

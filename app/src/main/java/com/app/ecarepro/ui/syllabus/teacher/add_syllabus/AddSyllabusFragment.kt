@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -40,6 +41,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.postAssignment.ClassListAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.compose.AttachmentType
+import com.app.ecarepro.ui.syllabus.teacher.TeacherSyllabusViewModel
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.getFile
@@ -80,6 +82,8 @@ class AddSyllabusFragment : Fragment() {
     var selectAll: Boolean = false
     private var sectionIDs = StringBuilder()
     private var sylabussType=Constant.CLASS_WISE
+    private val teacherSyllabusViewModel: TeacherSyllabusViewModel by activityViewModels()
+
 
 
 
@@ -546,6 +550,8 @@ class AddSyllabusFragment : Fragment() {
         btn_submit = dialog.findViewById(R.id.btn_submit)
 
         btn_canel.setOnClickListener {
+            teacherSyllabusViewModel.isDataLoaded=false
+
             dialog.dismiss()
             findNavController().popBackStack()
         }
@@ -568,6 +574,7 @@ class AddSyllabusFragment : Fragment() {
                 ) {  isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
                     if (isSuccess){
+                        teacherSyllabusViewModel.isDataLoaded=false
                         mainActivity().showLoader(false)
                         mainActivity().showMessage("Notification Sent Successfully")
                         findNavController().popBackStack()

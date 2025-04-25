@@ -28,6 +28,9 @@
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}"
         android:paddingVertical="10dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:importantForAccessibility="yes"
         android:contentDescription='@{title + (hasChildMenu ? ", double tap to expand." : "")}'>
         <!-- Icon - decorative, so marked not important -->
         <ImageView

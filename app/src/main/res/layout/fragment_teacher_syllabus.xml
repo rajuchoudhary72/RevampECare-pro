@@ -84,15 +84,32 @@
         </LinearLayout>
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_syllabus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_below="@+id/ll_filter_by"
-             tools:listitem="@layout/teacher_syllabus_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            />
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tabLayout"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabGravity="fill"
+                app:tabMode="scrollable"
+                app:tabIndicatorFullWidth="true"
+                />
+
+
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_no_data"

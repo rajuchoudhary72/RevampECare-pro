@@ -389,6 +389,7 @@ class EditProfileFragment : Fragment() {
             driverClearanceCert.setText(transDetails?.driverClearanceNo)
             vehicleTypeID = transDetails?.vehicleTypeID!!
 
+
             if (transDetails?.vehicleUsingFrom != null) {
                 dateVechileFrom = transDetails?.vehicleUsingFrom
                 binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
@@ -652,5 +653,6 @@ class EditProfileFragment : Fragment() {
                 addTransportTextWatchers(view)  // Recursively check all child views
             }
         }
+
     }
 }

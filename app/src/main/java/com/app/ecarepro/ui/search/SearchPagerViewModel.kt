@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.search
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.repository.UserRepository
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.model.Student
@@ -17,9 +18,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
-import com.app.ecarepro.ui.views.menu.DrawerMenu
 import kotlinx.coroutines.flow.onEach
-
+import com.app.ecarepro.ui.views.menu.DrawerMenu
 
 @HiltViewModel
 class SearchPagerViewModel @Inject constructor(

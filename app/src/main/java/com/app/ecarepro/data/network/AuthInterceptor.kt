@@ -5,7 +5,6 @@ import android.util.Log
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -52,9 +51,7 @@ class AuthInterceptor @Inject constructor(
             )
         }
 
-
         val authToken = runBlocking {
-
             if (isLoginApi) {
                 Constant.AUTH_BEFORE_LOGIN_NEW
             } else
@@ -63,6 +60,7 @@ class AuthInterceptor @Inject constructor(
 
         Log.e(if (isLmsApi) AUTH_KEY else AUTH_TOKEN, authToken)
         requestBuilder.addHeader(if (isLmsApi) AUTH_KEY else AUTH_TOKEN, authToken)
+
 
         return chain.proceed(requestBuilder.build())
     }

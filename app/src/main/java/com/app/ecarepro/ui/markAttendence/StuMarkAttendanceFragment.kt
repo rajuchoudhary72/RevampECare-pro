@@ -207,8 +207,9 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
+
+
         binding.tvSortByAdmission.setOnClickListener {
             try {
                 admissionFilterAsc = !admissionFilterAsc

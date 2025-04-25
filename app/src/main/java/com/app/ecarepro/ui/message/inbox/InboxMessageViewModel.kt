@@ -16,16 +16,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import com.app.ecarepro.utils.badge_count.NotificationSyncManager
+import kotlinx.coroutines.flow.StateFlow
+
 @HiltViewModel
 class InboxMessageViewModel @Inject constructor(
     private val messageRepository: MessageRepository,
+    private val syncManager: NotificationSyncManager,
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private var page = DEFAULT_PAGE
     private var isLoading: Boolean = false
     private var isLastPage: Boolean = true
     private var totalPageCount: Int = DEFAULT_PAGE
-
+    val badgeCountFlow: StateFlow<Int> get() = syncManager.badgeCountMessageFlow
     val uiState = MutableStateFlow<InboxMessageUiState>(InboxMessageUiState.Loading)
 
     init {
@@ -37,6 +41,11 @@ class InboxMessageViewModel @Inject constructor(
     fun isLastPage() = isLastPage
 
     fun totalPageCount() = totalPageCount
+    fun updateBadgeCount() {
+        viewModelScope.launch {
+            syncManager.fetchAndUpdateBadgeCount()
+        }
+    }
 
     private fun fetchInboxMessages(isRefresh: Boolean = false) {
         viewModelScope.launch {

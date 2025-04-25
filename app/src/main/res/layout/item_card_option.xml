@@ -22,7 +22,10 @@
         android:onClick="@{clickListener}"
         android:orientation="vertical"
          android:gravity="center"
+        android:focusable="true"
+        android:clickable="true"
         android:contentDescription="@{`Menu option: ` + data.title}"
+        android:importantForAccessibility="yes"
          >
 
 

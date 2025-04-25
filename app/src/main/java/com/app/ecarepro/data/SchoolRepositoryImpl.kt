@@ -24,6 +24,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.model.WatchersDto
@@ -109,6 +110,10 @@ class SchoolRepositoryImpl @Inject constructor(
 
     override suspend fun getCircularDTL(cirID: String): NetworkCircularDetails {
         return schoolService.getCircularDTL(cirID)
+    }
+
+    override suspend fun getContactDTL(): NetworkContactUrl {
+        return schoolService.getContactDTL()
     }
 
     override suspend fun getClass(): ClassPromotionModel {
