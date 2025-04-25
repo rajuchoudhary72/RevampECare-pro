@@ -36,7 +36,7 @@
 
 
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <LinearLayout
@@ -90,7 +90,6 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/ubuntu_regular"
                             android:gravity="center"
-                            android:maxLines="4"
                             android:paddingStart="@dimen/_10sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingEnd="@dimen/_10sdp"
@@ -145,7 +144,7 @@
 
             </LinearLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
 
