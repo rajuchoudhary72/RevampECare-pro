@@ -12,11 +12,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.app.ecarepro.data.network.model.Category
+import com.app.ecarepro.data.network.model.Skill
 import com.app.ecarepro.databinding.FragmentCreateSkillBinding
+import com.app.ecarepro.ui.mainActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.time.delay
 
 @AndroidEntryPoint
 class CreateSkillBottomSheetFragment : BottomSheetDialogFragment() {
@@ -51,7 +54,23 @@ class CreateSkillBottomSheetFragment : BottomSheetDialogFragment() {
 
         binding.autoCategory.setOnItemClickListener { _, _, position, _ ->
             val selectedCategory = categories[position]
-            viewModel.loadSkillTypes(selectedCategory.sklCatID)
+            mainActivity().showLoader(true)
+            loadSkillTypes(selectedCategory.sklCatID)
+        }
+        viewModel.skill?.let {
+            binding.autoCategory.setText(categories.find { it.sklCatID == viewModel.skill?.sklCatID }?.category, false)
+            binding.etSkillName.setText(viewModel.skill?.skill)
+            loadSkillTypes(it.sklCatID)
+        }
+    }
+
+    private fun loadSkillTypes(sklCatID:Int) {
+        viewModel.loadSkillTypes(sklCatID) { message ->
+            mainActivity().showLoader(false)
+            binding.autoType.setText("")
+            message?.let {
+                mainActivity().showMessage(message)
+            }
         }
     }
 
@@ -69,8 +88,9 @@ class CreateSkillBottomSheetFragment : BottomSheetDialogFragment() {
                             typeNames
                         )
                     (binding.autoType as? AutoCompleteTextView)?.setAdapter(typeAdapter)
-                    binding.autoType.setOnItemClickListener { _, _, position, _ ->
-                        val selectedType = types[position]
+
+                    viewModel.skill?.let {skill ->
+                        binding.autoType.setText(types.firstOrNull { it.sklTypeID == skill.sklTypeID }?.type, false)
                     }
                 }
 
@@ -84,14 +104,17 @@ class CreateSkillBottomSheetFragment : BottomSheetDialogFragment() {
             val type = binding.autoType.text.toString()
             val skillName = binding.etSkillName.text.toString()
 
-            // Add validation if needed
             if (category.isBlank() || type.isBlank() || skillName.isBlank()) {
-                // Show error or toast
+                mainActivity().showMessage("Please fill in all fields.")
                 return@setOnClickListener
             }
 
-            // TODO: Trigger save action
-            dismiss()
+            viewModel.saveSkill(category, type, skillName) { success, message ->
+                mainActivity().showMessage(message)
+                if (success) {
+                    dismiss()
+                }
+            }
         }
 
         binding.btnCancel.setOnClickListener {
@@ -106,9 +129,10 @@ class CreateSkillBottomSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val SKILL_CATEGORIES = "skill_categories"
-        fun newInstance(skillCategories: List<Category>): CreateSkillBottomSheetFragment {
+        const val SKILL = "skill"
+        fun newInstance(skillCategories: List<Category>, skill: Skill?): CreateSkillBottomSheetFragment {
             return CreateSkillBottomSheetFragment().apply {
-                arguments = bundleOf(SKILL_CATEGORIES to skillCategories)
+                arguments = bundleOf(SKILL_CATEGORIES to skillCategories, SKILL to skill)
             }
         }
     }

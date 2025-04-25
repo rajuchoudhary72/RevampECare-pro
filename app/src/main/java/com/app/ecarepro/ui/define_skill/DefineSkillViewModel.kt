@@ -10,8 +10,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,23 +27,23 @@ class DefineSkillViewModel @Inject constructor(
     val searchQuery = MutableStateFlow("")
     private val selectedCategoryId = MutableStateFlow<Int?>(null) // null = show all
 
-    private val skillCategoriesFlow = appRepository.getSkillCategories()
-    private val skillListFlow = appRepository.getSkillList()
+    private val refreshData = MutableStateFlow(false)
 
-    private val rawData = combine(skillCategoriesFlow, skillListFlow) { categories, skills ->
-        if (categories.isSuccess && skills.isSuccess) {
-            DefineSkillUiState.Success(
-                skills = skills.getOrNull()?.skillList ?: emptyList(),
-                skillCategory = categories.getOrNull()?.categories ?: emptyList()
-            )
-        } else {
-            DefineSkillUiState.Error(Exception(UNKNOWN_ERROR_MESSAGE))
+    private val rawData = refreshData.flatMapLatest {
+        combine(
+            appRepository.getSkillCategories(),
+            appRepository.getSkillList()
+        ) { categories, skills ->
+            if (categories.isSuccess && skills.isSuccess) {
+                DefineSkillUiState.Success(
+                    skills = skills.getOrNull()?.skillList ?: emptyList(),
+                    skillCategory = categories.getOrNull()?.categories ?: emptyList()
+                )
+            } else {
+                DefineSkillUiState.Error(Exception(UNKNOWN_ERROR_MESSAGE))
+            }
         }
-    }.stateIn(
-        scope = viewModelScope,
-        initialValue = DefineSkillUiState.Loading,
-        started = SharingStarted.WhileSubscribed(5000L)
-    )
+    }
 
     val uiState: StateFlow<DefineSkillUiState> = combine(
         rawData,
@@ -86,8 +90,20 @@ class DefineSkillViewModel @Inject constructor(
         searchViewVisibility.value = !searchViewVisibility.value
     }
 
-    fun deleteSkill(skill: Skill){
-
+    fun deleteSkill(skill: Skill, onSuccess: (String) -> Unit) {
+        viewModelScope.launch {
+            appRepository
+                .deleteSkill(skill.id)
+                .collectLatest { result ->
+                    onSuccess(
+                        result.getOrNull() ?: result.exceptionOrNull()?.message
+                        ?: UNKNOWN_ERROR_MESSAGE
+                    )
+                    if (result.isSuccess) {
+                        refreshData.update { it.not() }
+                    }
+                }
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.app.ecarepro.data
 
 import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.data.network.SaveSkillDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.Notification
@@ -10,6 +11,7 @@ import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
+import com.app.ecarepro.data.network.model.SkillTypesDto
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.data.network.model.toAppLayout
 import com.app.ecarepro.data.network.service.AppService
@@ -158,6 +160,51 @@ class AppRepositoryImpl @Inject constructor(
                 val response = appService.getSkillList(lmsBasePath + "Skills/All")
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun deleteSkill(id: String): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = appService.deleteSkill(lmsBasePath + "Skills/DeleteSkill", id)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message?:"Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getSkillTypes(id: String): Flow<Result<SkillTypesDto>> {
+        return flow {
+            try {
+                val response = appService.getSkillTypes(lmsBasePath + "Skills/Types", id)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun saveSkill(saveSkillDto: SaveSkillDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = appService.saveSkill(lmsBasePath + "Skills/SaveSkill", saveSkillDto)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message?:"Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }

@@ -1,5 +1,7 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.SaveSkillDto
+import com.app.ecarepro.data.network.SaveSkillResponse
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
@@ -9,8 +11,10 @@ import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
+import com.app.ecarepro.data.network.model.SkillTypesDto
 import com.app.ecarepro.data.network.model.SyncDataDto
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -63,4 +67,22 @@ interface AppService {
     suspend fun getSkillList(
         @Url url: String
     ): SkillListDto
+
+    @DELETE
+    suspend fun deleteSkill(
+        @Url url: String,
+        @Query("ID") id: String
+    ): SkillListDto
+
+    @GET
+    suspend fun getSkillTypes(
+        @Url url: String,
+        @Query("SklCatID") id: String
+    ): SkillTypesDto
+
+    @POST
+    suspend fun saveSkill(
+        @Url url: String,
+        @Body request: SaveSkillDto
+    ): SaveSkillResponse
 }

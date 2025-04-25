@@ -31,6 +31,9 @@ class AuthInterceptor @Inject constructor(
         "Workspace/Layout",
         "Skills/Categories",
         "Skills/All",
+        "Skills/DeleteSkill",
+        "Skills/Types",
+        "Skills/SaveSkill",
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {

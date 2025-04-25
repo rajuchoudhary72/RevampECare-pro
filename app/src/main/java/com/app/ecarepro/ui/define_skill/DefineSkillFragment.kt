@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.Category
 import com.app.ecarepro.data.network.model.Skill
 import com.app.ecarepro.databinding.FragmentDefineSkillBinding
@@ -44,6 +45,8 @@ class DefineSkillFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpViews()
+
         viewLifecycleOwner.lifecycleScope.launch {
             defineSkillViewModel
                 .uiState
@@ -59,17 +62,26 @@ class DefineSkillFragment : Fragment() {
                 }
         }
 
-        binding.btnCreateSkill.setOnClickListener {
-            val uiState = defineSkillViewModel.uiState.value
-            if (uiState is DefineSkillUiState.Success) {
-                CreateSkillBottomSheetFragment
-                    .newInstance(uiState.skillCategory)
-                    .show(childFragmentManager, "CreateSkillBottomSheetFragment")
+    }
+
+    private fun setUpViews() {
+        binding.apply {
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
             }
 
+            btnCreateSkill.setOnClickListener {
+                openCreateSkillBottomSheet()
+            }
         }
+    }
 
-
+    private fun openCreateSkillBottomSheet(skill: Skill? = null) {
+        val uiState = defineSkillViewModel.uiState.value
+        if (uiState is DefineSkillUiState.Success)
+            CreateSkillBottomSheetFragment
+                .newInstance(uiState.skillCategory, skill)
+                .show(childFragmentManager, "CreateSkillBottomSheetFragment")
     }
 
     private fun handleLoadingAndErrorState(uiState: DefineSkillUiState) {
@@ -106,24 +118,26 @@ class DefineSkillFragment : Fragment() {
             skills.forEachIndexed { index, skill ->
                 defineSkill {
                     id(skill.id)
-                    index(index)
+                    index(index.plus(1))
                     skill(skill)
                     onClickEdit { _ ->
-                        // Handle edit click
+                        openCreateSkillBottomSheet(skill)
                     }
                     onClickDelete { _ ->
                         val alertDialogBuilder = AlertDialog.Builder(requireContext())
                         alertDialogBuilder.setTitle("Delete Skill")
                         alertDialogBuilder.setMessage("Are you sure you want to delete this skill?")
                         alertDialogBuilder.setPositiveButton("Yes") { dialog, _ ->
-                            defineSkillViewModel.deleteSkill(skill)
+                            defineSkillViewModel.deleteSkill(skill) {
+                                mainActivity().showMessage(it)
+                            }
+
                             dialog.dismiss()
                         }
                         alertDialogBuilder.setNegativeButton("No") { dialog, _ ->
                             dialog.dismiss()
                         }
                         alertDialogBuilder.create().show()
-
                     }
 
                 }

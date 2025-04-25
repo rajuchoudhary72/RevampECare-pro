@@ -1,6 +1,8 @@
 package com.app.ecarepro.data.network.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class SkillListDto(
     @SerializedName("errorCode")
@@ -13,6 +15,7 @@ data class SkillListDto(
     val status: String?
 )
 
+@Parcelize
 data class Skill(
     @SerializedName("category")
     val category: String?,
@@ -21,7 +24,7 @@ data class Skill(
     @SerializedName("createdOn")
     val createdOn: String?,
     @SerializedName("id")
-    val id: String?,
+    val id: String,
     @SerializedName("modifiedBy")
     val modifiedBy: String?,
     @SerializedName("modifiedOn")
@@ -29,11 +32,11 @@ data class Skill(
     @SerializedName("skill")
     val skill: String?,
     @SerializedName("sklCatID")
-    val sklCatID: Int?,
+    val sklCatID: Int,
     @SerializedName("sklTypeID")
     val sklTypeID: Int?,
     @SerializedName("type")
     val type: String?
-)
+) : Parcelable
 
 
