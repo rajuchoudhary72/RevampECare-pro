@@ -26,6 +26,8 @@ class PhotoAlbumDTLViewModel @Inject constructor(
 
     val photoAlbumStateFlow: LiveData<NetworkResult<NetworkAlbumPhotoDetails>> = _photoAlbumStateFlow
 
+    var scrollY: Int = 0
+
      var cachedData: NetworkAlbumPhotoDetails? = null
      var cachedPhotoList: ArrayList<Photo> = ArrayList()
     private var lastLoadedAlbumId: String? = null
