@@ -26,6 +26,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
@@ -116,8 +117,11 @@ class HomeFragment : Fragment() {
             LinearMarginDecoration.create(
                 margin = 8,
                 decorationLookup = object : DecorationLookup {
-                    override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
-                        return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_view_all_widget
+                    override fun shouldApplyDecoration(
+                        viewHolder: RecyclerView.ViewHolder,
+                        itemCount: Int
+                    ): Boolean {
+                        return binding.recyclerView.adapter?.getItemViewType(viewHolder.position) == R.layout.item_view_all_widget
                     }
                 }
             )
@@ -132,8 +136,11 @@ class HomeFragment : Fragment() {
 
                 },
                 decorationLookup = object : DecorationLookup {
-                    override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
-                        return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_card_option
+                    override fun shouldApplyDecoration(
+                        viewHolder: RecyclerView.ViewHolder,
+                        itemCount: Int
+                    ): Boolean {
+                        return binding.recyclerView.adapter?.getItemViewType(viewHolder.position) == R.layout.item_card_option
                     }
                 },
             )

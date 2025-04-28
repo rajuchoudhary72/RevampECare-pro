@@ -359,10 +359,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        intent?.extras?.let { data ->
+        intent.extras?.let { data ->
             handleNotificationClick(data)
         }
 
@@ -454,7 +454,7 @@ class MainActivity : AppCompatActivity() {
                         if (it.data != null) {
 
                             var versionCode = 0
-                            var versionName = ""
+                            var versionName: String? = ""
                             try {
                                 val pInfo: PackageInfo = packageManager
                                     .getPackageInfo(packageName, 0)
@@ -469,27 +469,29 @@ class MainActivity : AppCompatActivity() {
 
                             try {
                                 if (it.data.android.currentVersion != null) {
-                                    if (versionName < it.data.android.currentVersion) {
-                                        // open  dialog
-                                        if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
-                                            //soft  update
-                                            checkIsUpdateAvailable(false)
-                                            /*    UpdateAppVersionDialog(
-                                                    0,
-                                                    it.data.android.title,
-                                                    it.data.android.description
-                                                )*/
+                                    if (versionName != null) {
+                                        if (versionName < it.data.android.currentVersion) {
+                                            // open  dialog
+                                            if (versionName > it.data.android.criticalVersion && it.data.android.normalVersion < versionName) {
+                                                //soft  update
+                                                checkIsUpdateAvailable(false)
+                                                /*    UpdateAppVersionDialog(
+                                                                                    0,
+                                                                                    it.data.android.title,
+                                                                                    it.data.android.description
+                                                                                )*/
+                                            } else {
+                                                //force update
+                                                checkIsUpdateAvailable(true)
+                                                /*  UpdateAppVersionDialog(
+                                                                                  1,
+                                                                                  it.data.android.title,
+                                                                                  it.data.android.description
+                                                                              )*/
+                                            }
                                         } else {
-                                            //force update
-                                            checkIsUpdateAvailable(true)
-                                            /*  UpdateAppVersionDialog(
-                                                  1,
-                                                  it.data.android.title,
-                                                  it.data.android.description
-                                              )*/
+                                            // nothing  open  version  dialog
                                         }
-                                    } else {
-                                        // nothing  open  version  dialog
                                     }
                                 }
                             } catch (e: NullPointerException) {

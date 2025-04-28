@@ -389,8 +389,8 @@ class EditProfileFragment : Fragment() {
             driverClearanceCert.setText(transDetails?.driverClearanceNo)
             vehicleTypeID = transDetails?.vehicleTypeID!!
 
-            if (transDetails?.vehicleUsingFrom != null) {
-                dateVechileFrom = transDetails?.vehicleUsingFrom
+            if (transDetails.vehicleUsingFrom != null) {
+                dateVechileFrom = transDetails.vehicleUsingFrom
                 binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
             } else {
                 dateVechileFrom = getFormatedDate()

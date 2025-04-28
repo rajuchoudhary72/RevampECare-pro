@@ -292,7 +292,7 @@ fun TextView.setStyledText(text: String?) {
 
             val ssbbbitalic = SpannableStringBuilder(text)
 
-            val sentenceit: String = text
+            val sentenceit: String = text.orEmpty()
 
             val italicStartIndexes: List<Int> = Constant.italicFindStartIndexes(sentenceit)
             val italicEndIndexes: List<Int> = Constant.italicFindEndStarIndexes(sentenceit)
@@ -345,7 +345,7 @@ fun TextView.setStyledText(text: String?) {
 
             val ssbbbitalicstrikethrough = SpannableStringBuilder(text)
 
-            val sentenceStric: String = text
+            val sentenceStric: String = text.orEmpty()
 
             val strikethroughStartIndexes: List<Int> =
                 Constant.strikethroughFindStartIndexes(sentenceStric)

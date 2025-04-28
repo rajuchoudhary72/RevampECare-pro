@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.kotlinParcelize)
     id("com.google.devtools.ksp")
     id("com.google.firebase.firebase-perf")
-
+    alias(libs.plugins.compose.compiler)
 }
 
 kapt {
@@ -39,11 +39,11 @@ android {
         }
     }
     namespace = "com.app.ecarepro"
-    compileSdk = 34
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 322
         versionName = "3.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -95,14 +95,17 @@ android {
         viewBinding = true
         dataBinding = true
         buildConfig = true
+        compose = true
     }
     flavorDimensions += listOf("apps")
 
+
+
     productFlavors {
-        create("Franciscan e-Care") {
+        create("franciscanECare") { // Spaces replaced with camel case
             dimension = "apps"
             resValue("string", "app_name", "Franciscan e-Care")
-            signingConfig = signingConfigs.getByName("Franciscan e-Care")
+            signingConfig = signingConfigs.getByName("Franciscan e-Care")// Keep this name because that's a signingConfig, not a product flavor
         }
         create("MYSFHS") {
             dimension = "apps"
@@ -112,13 +115,13 @@ android {
             versionName = "2.0.15"
             signingConfig = signingConfigs.getByName("MYSFHS")
         }
-        create("MYSFPS Play") {
+        create("mysfpsPlay") { // Spaces replaced with camel case
             dimension = "apps"
             resValue("string", "app_name", "MYSFPS")
             applicationId = "com.franciscan.strawberry_play"
             versionCode = 5
             versionName = "1.0.4"
-            signingConfig = signingConfigs.getByName("MYSFPS Play")
+            signingConfig = signingConfigs.getByName("MYSFPS Play")// Keep this name because that's a signingConfig, not a product flavor
         }
     }
 
@@ -227,4 +230,20 @@ dependencies {
     // For Kotlin users also import the Kotlin extensions library for Play In-App Update:
     implementation("com.google.android.play:app-update-ktx:2.1.0")
 
+
+    /*Compose*/
+
+    val composeBom = platform("androidx.compose:compose-bom:2025.02.00")
+    implementation(composeBom)
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // Optional - Integration with activities
+    implementation("androidx.activity:activity-compose:1.10.0")
+    // Optional - Integration with ViewModels
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.5")
+    // Optional - Integration with LiveData
+    implementation("androidx.compose.runtime:runtime-livedata")
 }
