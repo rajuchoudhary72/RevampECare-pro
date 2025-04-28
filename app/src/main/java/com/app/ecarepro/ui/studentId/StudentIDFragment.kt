@@ -76,15 +76,16 @@ class StudentIDFragment : Fragment() {
 
         binding.ivFatherPicEdit.setOnClickListener {
             uploadImage = 1
-            selectImageOptionDialog()
+            startImagePicker()
         }
         binding.ivMotherPicEdit.setOnClickListener {
             uploadImage = 2
-            selectImageOptionDialog()
+            startImagePicker()
         }
         binding.ivEscortPicEdit.setOnClickListener {
             uploadImage = 3
-            selectImageOptionDialog()
+            startImagePicker()
+            //    selectImageOptionDialog()
         }
 
         binding.tvPhone.setOnClickListener {
@@ -204,7 +205,7 @@ class StudentIDFragment : Fragment() {
 
                     val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                     val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
-                  //  val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+                    //  val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
                     uploadPhoto(imageString, imageExt)
 
@@ -236,8 +237,8 @@ class StudentIDFragment : Fragment() {
     private fun startImagePicker() {
         ImagePicker.with(this)
             .crop(216F, 253F)
-            .compress(4096)
             .maxResultSize(216, 253)
+            // .maxResultSize(600, 800) // or higher depending on your use case
             .start()
     }
 
@@ -283,24 +284,25 @@ class StudentIDFragment : Fragment() {
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
-
-                        when (type) {
-                            "1" -> {
+                        when (uploadImage) {
+                            1 -> {//f
                                 binding.circleImageViewFather.setImageURI(uri)
                                 finalFatherFile = File(uri.path!!)
                             }
-
-                            "2" -> {
+                            2 -> {//m
                                 binding.circleImageViewMother.setImageURI(uri)
                                 finalMotherFile = File(uri.path!!)
                             }
-
-                            "3" -> {
+                            3 -> {//e
                                 binding.circleImageViewEscort.setImageURI(uri)
                                 finalEscortFile = File(uri.path!!)
                             }
                         }
+                        val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                        val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                        //  val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
 
+                        uploadPhoto(imageString, imageExt)
 
                     } else {
                         mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 252 pixels.")
@@ -397,19 +399,19 @@ class StudentIDFragment : Fragment() {
                                             binding.ivFatherPicEdit.isEnabled = false
                                         }
                                         "Approval pending" -> {
-                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
-                                             binding.ivFatherPicEdit.isEnabled = true
+                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                            binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                            binding.ivFatherPicEdit.isEnabled = true
                                         }
                                         "Rejected" -> {
-                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
-                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
-                                             binding.ivFatherPicEdit.isEnabled = true
+                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                            binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                            binding.ivFatherPicEdit.isEnabled = true
                                         }
                                         "Not uploded" -> {
-                                             binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
-                                             binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
-                                             binding.ivFatherPicEdit.isEnabled = true
+                                            binding.ivFatherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                            binding.framLFather.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                            binding.ivFatherPicEdit.isEnabled = true
                                         }
                                     }
 
@@ -421,18 +423,18 @@ class StudentIDFragment : Fragment() {
                                         }
                                         "Approval pending" -> {
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
-                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
-                                             binding.ivMotherPicEdit.isEnabled = true
+                                            binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
+                                            binding.ivMotherPicEdit.isEnabled = true
                                         }
                                         "Rejected" -> {
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
-                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
-                                             binding.ivMotherPicEdit.isEnabled = true
+                                            binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
+                                            binding.ivMotherPicEdit.isEnabled = true
                                         }
                                         "Not uploded" -> {
-                                             binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
+                                            binding.ivMotherPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
                                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
-                                             binding.ivMotherPicEdit.isEnabled = true
+                                            binding.ivMotherPicEdit.isEnabled = true
                                         }
                                     }
 
@@ -443,29 +445,29 @@ class StudentIDFragment : Fragment() {
                                             binding.ivEscortPicEdit.isEnabled = false
                                         }
                                         "Approval pending" -> {
-                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
+                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
                                             binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.studnet_pending_icon))
                                             binding.ivEscortPicEdit.isEnabled = true
                                         }
                                         "Rejected" -> {
-                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
+                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_red)
                                             binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.student_reject_icon))
                                             binding.ivEscortPicEdit.isEnabled = true
                                         }
                                         "Not uploded" -> {
                                             binding.ivEscortPicEdit.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
-                                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
+                                            binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_grry)
                                             binding.ivEscortPicEdit.isEnabled = true
                                         }
                                     }
 
                                     if (canChangeApprovedImg && browseImgEnable) {
-                                         binding.ivFatherPicEdit.apply {
+                                        binding.ivFatherPicEdit.apply {
                                             visibility = View.VISIBLE
                                             isEnabled = true
                                             setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
                                         }
-                                         binding.ivMotherPicEdit.apply {
+                                        binding.ivMotherPicEdit.apply {
                                             visibility = View.VISIBLE
                                             isEnabled = true
                                             setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.edit_icon_color))
@@ -516,11 +518,6 @@ class StudentIDFragment : Fragment() {
                                     R.drawable.studnet_pending_icon
                                 )
                             )
-                            Snackbar.make(
-                                binding.scParentLayout,
-                                "It will be uploaded after verification",
-                                Snackbar.LENGTH_LONG
-                            ).show()
                         } else if (uploadImage == 2) {
                             binding.framLMother.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
                             binding.ivMotherPicEdit.setImageDrawable(
@@ -529,11 +526,6 @@ class StudentIDFragment : Fragment() {
                                     R.drawable.studnet_pending_icon
                                 )
                             )
-                            Snackbar.make(
-                                binding.scParentLayout,
-                                "It will be uploaded after verification",
-                                Snackbar.LENGTH_LONG
-                            ).show()
                         } else if (uploadImage == 3) {
                             binding.framLEscort.setBackgroundResource(R.drawable.profile_image_circuler_bg_yellow)
                             binding.ivEscortPicEdit.setImageDrawable(
@@ -542,32 +534,14 @@ class StudentIDFragment : Fragment() {
                                     R.drawable.studnet_pending_icon
                                 )
                             )
-                            Snackbar.make(
-                                binding.scParentLayout,
-                                "It will be uploaded after verification",
-                                Snackbar.LENGTH_LONG
-                            ).show()
                         }
-                        mainActivity().showMessage(it.message?:"")
-
-
+                        if (it.data != null) {
+                            mainActivity().showMessage("${it.data.message}")
+                        }
                     }
                 }
             }
-
         }
         mViewModel.getMedicalCard()
     }
-
-
-    private fun showLoadingDialog() {
-        // Implement your loading dialog logic here
-    }
-
-    private fun hideLoadingDialog() {
-        // Implement your hiding loading dialog logic here
-    }
-
-    private fun Context.toast(message: CharSequence) =
-        mainActivity().showMessage(message.toString())
 }
