@@ -1039,6 +1039,6 @@
     </fragment>
     <fragment
         android:id="@+id/defineSkillFragment"
-        android:name="com.app.ecarepro.ui.define_skill.DefineSkillFragment"
+        android:name="com.app.ecarepro.compose.ui.skill.DefineSkillFragment"
         android:label="DefineSkillFragment" />
 </navigation>

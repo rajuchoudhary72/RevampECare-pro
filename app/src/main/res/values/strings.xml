@@ -930,5 +930,6 @@
     <string name="select_skill">Select Skill</string>
     <string name="collapse_all">Collapse All</string>
     <string name="expand_all">Expand All</string>
+    <string name="error">Error!</string>
 </resources>
 

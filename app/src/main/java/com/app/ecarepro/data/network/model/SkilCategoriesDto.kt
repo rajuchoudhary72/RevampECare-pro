@@ -23,7 +23,7 @@ data class Category(
     @SerializedName("sklCatID")
     val sklCatID: Int,
     @SerializedName("types")
-    val types: String?
+    val types: String? = null
 ) : Parcelable
 
 
