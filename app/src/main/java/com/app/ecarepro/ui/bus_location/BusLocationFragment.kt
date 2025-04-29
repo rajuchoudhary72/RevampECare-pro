@@ -36,36 +36,35 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class BusLocationFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var binding : FragmentBusLocationBinding
-    private val busLocationViewModel : BusLocationViewModel by viewModels()
-    private var busNumber =""
-    private var busSpeed =0
+    private lateinit var binding: FragmentBusLocationBinding
+    private val busLocationViewModel: BusLocationViewModel by viewModels()
+    private var busNumber = ""
+    private var busSpeed = 0
     private var mMap: GoogleMap? = null
 
-     override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-         binding= FragmentBusLocationBinding.inflate(inflater,container,false)
-         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding = FragmentBusLocationBinding.inflate(inflater, container, false)
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
-         return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ctvRefresh.setOnClickListener {
-            hitBusNumber( )
+            hitBusNumber()
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
 
 
-
     }
 
-    private fun getBusLocation(vehicleNumber: String ){
+    private fun getBusLocation(vehicleNumber: String) {
 
         lifecycleScope.launch {
             busLocationViewModel.busLocationStateFlowStateFlow.collectLatest {
@@ -73,24 +72,36 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
                     }
+
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
                     }
+
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        if (it.data!=null){
+                        if (it.data != null) {
 
-                            if (it.data.data!=null){
-                                binding.tvSpeed.text=it.data.data.speed+" Km/Hour"
-                                binding.tvUpdatedOn.text=it.data.data.date_time
+                            if (it.data.data != null) {
+                                binding.tvSpeed.text = it.data.data.speed + " Km/Hour"
+                                binding.tvUpdatedOn.text = it.data.data.date_time
                                 try {
-                                    busSpeed=it.data.data.speed.toInt()
-                                }catch (_:Exception){
+                                    busSpeed = it.data.data.speed.toInt()
+                                } catch (_: Exception) {
 
                                 }
+                                if (it.data.data.latitude!=null){
+                                    if (it.data.data.longitude!=null){
+                                        try {
+                                            setUpGoogleMapLocation(
+                                                it.data.data.latitude, it.data.data.longitude,
+                                                it.data.data.location_description
+                                            )
+                                        } catch (e: NullPointerException) {
+                                            e.printStackTrace()
+                                        }
+                                    }
 
-                                setUpGoogleMapLocation(it.data.data.latitude,it.data.data.longitude,
-                                    it.data.data.location_description)
+                                }
 
                             }
 
@@ -102,21 +113,21 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
                 }
             }
         }
-        busLocationViewModel.busLocation(vehicleNumber )
+        busLocationViewModel.busLocation(vehicleNumber)
 
 
     }
 
 
     private fun setUpGoogleMapLocation(
-        latitude: String,
-        longitude: String,
+        latitude: String?,
+        longitude: String?,
         locationDescription: String
     ) {
 
         val latLng = LatLng(
-           latitude.toDouble(),
-            longitude.toDouble()
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
         )
         mMap!!.addMarker(
             MarkerOptions().position(latLng)
@@ -135,10 +146,10 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-    private fun iconType(speed:Int) : Int {
-        return if (speed>0){
+    private fun iconType(speed: Int): Int {
+        return if (speed > 0) {
             R.drawable.ic_bus_location_green
-        }else
+        } else
             R.drawable.ic_bus_location_red
     }
 
@@ -149,17 +160,17 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         hitBusNumber()
 
         mMap!!.setInfoWindowAdapter(object : InfoWindowAdapter {
-             override fun getInfoWindow(arg0: Marker): View? {
+            override fun getInfoWindow(arg0: Marker): View? {
                 return null
             }
 
-             override fun getInfoContents(arg0: Marker): View? {
+            override fun getInfoContents(arg0: Marker): View? {
                 var v: View? = null
                 try {
 
-                     v = layoutInflater.inflate(R.layout.map_custom_marker, null)
+                    v = layoutInflater.inflate(R.layout.map_custom_marker, null)
 
-                     val addressTxt = v!!.findViewById<View>(R.id.tvAddress) as TextView
+                    val addressTxt = v!!.findViewById<View>(R.id.tvAddress) as TextView
                     addressTxt.text = arg0.title
                 } catch (ev: Exception) {
                     print(ev.message)
@@ -167,8 +178,6 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
                 return v
             }
         })
-
-
 
 
     }
@@ -191,13 +200,13 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data!=null){
-                            if (it.data.errorCode==0){
-                                binding.tvBusNumber.text=it.data.message
-                                busNumber=it.data.message
+                        if (it.data != null) {
+                            if (it.data.errorCode == 0) {
+                                binding.tvBusNumber.text = it.data.message
+                                busNumber = it.data.message
                                 getBusLocation(it.data.message)
-                            }else{
-                                binding.ctvNoData.isVisible=true
+                            } else {
+                                binding.ctvNoData.isVisible = true
                             }
 
                         }
@@ -209,7 +218,7 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        busLocationViewModel.getVehicleNumber( )
+        busLocationViewModel.getVehicleNumber()
 
     }
 
@@ -218,7 +227,7 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         context: BusLocationFragment,
         @DrawableRes vectorDrawableResourceId: Int
     ): BitmapDescriptor? {
-        val background = ContextCompat.getDrawable(requireContext(),  iconType(busSpeed))
+        val background = ContextCompat.getDrawable(requireContext(), iconType(busSpeed))
         background!!.setBounds(0, 0, background.intrinsicWidth, background.intrinsicHeight)
         val vectorDrawable = ContextCompat.getDrawable(requireContext(), vectorDrawableResourceId)
         vectorDrawable!!.setBounds(
