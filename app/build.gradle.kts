@@ -44,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 314
-        versionName = "3.0.2"
+        versionCode = 331
+        versionName = "3.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -140,7 +140,6 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.com.google.firebase.firebase.crashlytics)
-    implementation(libs.androidx.room.common.jvm)
     kapt(libs.hilt.android.compiler)
 
     /*    *//* Database *//*
