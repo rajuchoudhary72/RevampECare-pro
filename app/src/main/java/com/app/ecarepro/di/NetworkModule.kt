@@ -26,9 +26,6 @@ import java.util.concurrent.TimeUnit
 import com.app.ecarepro.di.annotations.SessionReCreate
 import com.app.ecarepro.data.network.InvalidSessionInterceptor
 import com.app.ecarepro.data.network.SessionAuthenticator
-import com.app.ecarepro.data.network.service.GoogleSheetsApiService
-import javax.inject.Singleton
-
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -130,11 +127,6 @@ fun provideRetrofit(
         return retrofit.create(FomApiService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideGoogleSheetsApiService(retrofit: Retrofit): GoogleSheetsApiService {
-        return retrofit.create(GoogleSheetsApiService::class.java)
-    }
 
     @Provides
     @SessionReCreate
