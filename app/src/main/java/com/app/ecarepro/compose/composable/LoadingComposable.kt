@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.ecarepro.R
-import com.app.ecarepro.compose.UiState
+import com.app.ecarepro.compose.model.UiState
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 
 @Composable

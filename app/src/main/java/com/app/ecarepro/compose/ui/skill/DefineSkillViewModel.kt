@@ -1,8 +1,8 @@
 package com.app.ecarepro.compose.ui.skill
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.compose.UiState
+import com.app.ecarepro.compose.model.UiState
+import com.app.ecarepro.compose.ui.base.BaseViewModel
 import com.app.ecarepro.data.network.model.Category
 import com.app.ecarepro.data.network.model.Skill
 import com.app.ecarepro.data.repository.AppRepository
@@ -23,9 +23,9 @@ import javax.inject.Inject
 @HiltViewModel
 class DefineSkillViewModel @Inject constructor(
     private val appRepository: AppRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
-    val searchViewVisibility = MutableStateFlow(false)
+    val searchViewActive = MutableStateFlow(false)
     val searchQuery = MutableStateFlow("")
     private val selectedCategoryId = MutableStateFlow<Int?>(null) // null = show all
 
@@ -86,30 +86,32 @@ class DefineSkillViewModel @Inject constructor(
         selectedCategoryId.value = categoryId
     }
 
-    fun clearSearchQuery() {
-        if (searchQuery.value.isEmpty()) {
-            toggleSearchView()
-        } else {
-            searchQuery.value = ""
+    fun setSearchViewActiveState(isActive: Boolean) {
+        viewModelScope.launch {
+            searchViewActive.update { isActive }
         }
     }
 
-    fun toggleSearchView() {
-        searchViewVisibility.value = !searchViewVisibility.value
+    fun onSearchQueryChange(query: String) {
+        viewModelScope.launch {
+            searchQuery.update { query }
+        }
     }
 
     fun deleteSkill(skill: Skill) {
         viewModelScope.launch {
             appRepository
                 .deleteSkill(skill.id)
+                .handleResultWithLoadState()
                 .collectLatest { result ->
-                    /*onSuccess(
-                        result.getOrNull() ?: result.exceptionOrNull()?.message
-                        ?: UNKNOWN_ERROR_MESSAGE
-                    )*/
-                    if (result.isSuccess) {
-                        retry()
-                    }
+                    result
+                        .onSuccess { message ->
+                            showMessage(message)
+                            retry()
+                        }
+                        .onFailure { error ->
+                            showError(error)
+                        }
                 }
         }
     }

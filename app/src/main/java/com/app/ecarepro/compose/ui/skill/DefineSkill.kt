@@ -9,7 +9,9 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -42,27 +45,36 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.app.ecarepro.R
 import com.app.ecarepro.compose.composable.LoadingComposable
+import com.app.ecarepro.compose.model.LoadState
+import com.app.ecarepro.compose.model.messageOrNull
+import com.app.ecarepro.compose.theme.ECareProTheme
+import com.app.ecarepro.compose.theme.white
 import com.app.ecarepro.data.network.model.Category
 import com.app.ecarepro.data.network.model.Skill
 
@@ -70,15 +82,32 @@ import com.app.ecarepro.data.network.model.Skill
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefineSkillScreen(
-    viewModel: DefineSkillViewModel = viewModel(),
+    viewModel: DefineSkillViewModel,
     onClickBack: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+    val isSearchActive by viewModel.searchViewActive.collectAsStateWithLifecycle()
+
+    val loadState by viewModel.loadState.collectAsStateWithLifecycle(LoadState.Nothing)
+
+    LaunchedEffect(loadState) {
+        /*loadState.messageOrNull()?.let{
+
+        }*/
+    }
 
     Scaffold(
-        topBar = { DefineSkillTopAppBar(onClickBack) }
+        topBar = {
+            DefineSkillTopAppBar(
+                searchQuery = searchQuery,
+                isSearchActive = isSearchActive,
+                onQueryChange = viewModel::onSearchQueryChange,
+                onSearchActiveChange = viewModel::setSearchViewActiveState,
+                onClickBack = onClickBack
+            )
+        }
     ) { innerPadding ->
-
         LoadingComposable(
             modifier = Modifier.padding(innerPadding),
             uiState = uiState,
@@ -137,10 +166,9 @@ fun DefineSkillContent(
 
         if (data.skills.isEmpty()) {
             item {
-                Text(
-                    modifier = Modifier.fillMaxSize(),
-                    text = "No Skill found for this category: \"${data.selectedSkillCategory?.category}\"" + if (data.searchQuery.isNotEmpty()) " and search query \"${data.searchQuery}\"" else "",
-                    textAlign = TextAlign.Center
+                NoSkillFoundText(
+                    selectedCategory = data.selectedSkillCategory?.category.orEmpty(),
+                    searchQuery = data.searchQuery
                 )
             }
         } else {
@@ -160,6 +188,65 @@ fun DefineSkillContent(
     }
 }
 
+/**
+ * Composable that displays a message when no skills are found.
+ *
+ * This composable shows a text indicating that no skills were found for the given
+ * selected category and/or search query. It highlights the category and query in bold.
+ *
+ * @param selectedCategory The category for which no skills were found.
+ * @param searchQuery The search query for which no skills were found.
+ */
+@Composable
+private fun NoSkillFoundText(
+    selectedCategory: String?,
+    searchQuery: String?,
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = buildAnnotatedString {
+                append("No Skill found for this category: ")
+                append(selectedCategory)
+                addStyle(
+                    SpanStyle(fontWeight = FontWeight.Bold),
+                    start = length - (selectedCategory?.length ?: 0) - 2,
+                    end = length
+                )
+
+                if (!searchQuery.isNullOrEmpty()) {
+                    append(" and search query: ")
+                    append(searchQuery)
+                    addStyle(
+                        SpanStyle(fontWeight = FontWeight.Bold),
+                        start = length - searchQuery.length - 2,
+                        end = length
+                    )
+                }
+            },
+            textAlign = TextAlign.Center
+        )
+    }
+
+}
+
+
+/**
+ * Composable that displays the header section for defining skills.
+ *
+ * This header includes a dropdown for selecting a skill category and buttons
+ * for creating a new skill or importing skills from a database.
+ *
+ * @param data The data containing the list of skill categories and the currently selected category.
+ * @param onCategorySelected Callback function triggered when a skill category is selected from the dropdown.
+ *                           It passes the ID of the selected category.
+ * @param onClickCreate Callback function triggered when the "Create New Skill" button is clicked.
+ * @param onClickImportFromDatabase Callback function triggered when the "Import From Database" button is clicked.
+ */
 @Composable
 private fun DefineSkillHeader(
     data: DefineSkillSuccessData,
@@ -188,21 +275,80 @@ private fun DefineSkillHeader(
     }
 }
 
+/**
+ * Composable function that creates a top app bar for the Define Skill screen.
+ * It includes a search bar when activated and a title with a back button.
+ *
+ * @param searchQuery The current text in the search query.
+ * @param isSearchActive Boolean indicating if the search bar is active (expanded).
+ * @param onQueryChange Callback triggered when the search query text changes.
+ * @param onSearchActiveChange Callback triggered when the search bar's active state changes.
+ * @param onClickBack Callback triggered when the back button is clicked.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefineSkillTopAppBar(
+    searchQuery: String,
+    isSearchActive: Boolean = false,
+    onQueryChange: (String) -> Unit = {},
+    onSearchActiveChange: (Boolean) -> Unit = {},
     onClickBack: () -> Unit = {}
 ) {
+
     TopAppBar(
-        title = { Text("Define Skill") },
+        title = {
+            if (isSearchActive) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(45.dp)
+                        .clip(RoundedCornerShape(120.dp))
+                        .background(Color.White),
+                    value = searchQuery,
+                    onValueChange = { newText -> onQueryChange(newText) },
+                    placeholder = { Text("Search...") },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                if (searchQuery.isEmpty()) {
+                                    onSearchActiveChange(false)
+                                } else {
+                                    onQueryChange("")
+                                }
+                            }
+                        ) {
+                            Icon(Icons.Filled.Clear, contentDescription = "Clear Search")
+                        }
+                    },
+                    singleLine = true,
+                    colors = TextFieldDefaults.colors().copy(
+                        focusedContainerColor = white,
+                        unfocusedContainerColor = white,
+                        focusedIndicatorColor = white,
+                        unfocusedIndicatorColor = white,
+                        disabledIndicatorColor = white,
+                        cursorColor = Color.Black
+
+                    ),
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                )
+
+            } else {
+                Text("Define Skill")
+            }
+        },
         navigationIcon = {
             IconButton(onClick = onClickBack) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
             }
         },
         actions = {
-            IconButton(onClick = { /* Handle search action */ }) {
-                Icon(Icons.Filled.Search, contentDescription = "Search")
+            if (isSearchActive) {
+                Spacer(modifier = Modifier.width(16.dp))
+            } else {
+                IconButton(onClick = { onSearchActiveChange(true) }) {
+                    Icon(Icons.Filled.Search, contentDescription = "Search")
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -214,11 +360,6 @@ fun DefineSkillTopAppBar(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefineSkillTopAppBarPreview() {
-    DefineSkillTopAppBar()
-}
 
 /**
  * Composable that displays a dropdown to select a skill category.
@@ -316,21 +457,6 @@ fun SkillCategorySelectionDropdown(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SkillSelectionDropdownPreview() {
-    var selectedSkill by remember { mutableStateOf("Cognitive and Creative Skills") }
-    val skills = listOf(
-        "Cognitive and Creative Skills",
-        "Technical Skills",
-        "Soft Skills"
-    )
-    SkillCategorySelectionDropdown(
-        selectedSkill,
-        { selectedSkill = it },
-        skills
-    )
-}
 
 /**
  * Composable that displays the buttons for creating a new skill or importing from the database.
@@ -345,7 +471,7 @@ fun CreateImportButtons(
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
         Button(
@@ -388,11 +514,6 @@ fun CreateImportButtons(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CreateImportButtonsPreview() {
-    CreateImportButtons()
-}
 
 /**
  * Composable that displays a single skill item in a list.
@@ -437,6 +558,44 @@ fun SkillItem(
     }
 }
 
+
+@Preview(showBackground = true)
+@Composable
+fun DefineSkillTopAppBarPreview() {
+    ECareProTheme {
+        DefineSkillTopAppBar(searchQuery = "")
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun SkillSelectionDropdownPreview() {
+    var selectedSkill by remember { mutableStateOf("Cognitive and Creative Skills") }
+    val skills = listOf(
+        "Cognitive and Creative Skills",
+        "Technical Skills",
+        "Soft Skills"
+    )
+    ECareProTheme {
+        SkillCategorySelectionDropdown(
+            selectedSkill,
+            { selectedSkill = it },
+            skills
+        )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun CreateImportButtonsPreview() {
+    ECareProTheme {
+        CreateImportButtons()
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun SkillItemPreview() {
@@ -452,7 +611,9 @@ fun SkillItemPreview() {
         sklTypeID = 1,
         type = "Critical thinking"
     )
-    SkillItem(dummySkill, 1)
+    ECareProTheme {
+        SkillItem(dummySkill, 1)
+    }
 }
 
 
@@ -497,17 +658,25 @@ fun DefineSkillContentPreview() {
         skillCategory = dummySkillCategories,
         selectedSkillCategory = dummySkillCategories.first()
     )
-    DefineSkillContent(
-        data = dummyUiState,
-        onCategorySelected = {},
-        onSkillDelete = {},
-        onClickCreate = {},
-        onClickImportFromDatabase = {}
-    )
+    ECareProTheme {
+        DefineSkillContent(
+            data = dummyUiState,
+            onCategorySelected = {},
+            onSkillDelete = {},
+            onClickCreate = {},
+            onClickImportFromDatabase = {}
+        )
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable
-fun DefineSkillScreenPreview() {
-    DefineSkillScreen()
+fun NoSkillFoundTextPreview() {
+    ECareProTheme {
+        NoSkillFoundText(
+            selectedCategory = "Cognitive and Creative Skills",
+            searchQuery = "Category"
+        )
+    }
 }

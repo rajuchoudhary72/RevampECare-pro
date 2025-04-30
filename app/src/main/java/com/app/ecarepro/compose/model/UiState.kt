@@ -1,4 +1,4 @@
-package com.app.ecarepro.compose
+package com.app.ecarepro.compose.model
 
 sealed interface UiState<out T> {
     object Loading : UiState<Nothing>

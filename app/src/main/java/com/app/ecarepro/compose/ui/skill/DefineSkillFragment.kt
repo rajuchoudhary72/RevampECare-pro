@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.compose.theme.ECareProTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,10 +24,12 @@ class DefineSkillFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                DefineSkillScreen(
-                    viewModel = defineSkillViewModel,
-                    onClickBack = { findNavController().popBackStack() }
-                )
+                ECareProTheme {
+                    DefineSkillScreen(
+                        viewModel = defineSkillViewModel,
+                        onClickBack = { findNavController().popBackStack() }
+                    )
+                }
             }
         }
     }
