@@ -95,7 +95,6 @@ import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.ui.language.LanguageManager
-import com.app.ecarepro.ui.language.LanguageRepository
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 import android.util.Base64

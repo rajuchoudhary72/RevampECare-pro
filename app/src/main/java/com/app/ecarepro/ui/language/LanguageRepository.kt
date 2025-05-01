@@ -11,7 +11,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LanguageRepository ( context: Context) {
+class LanguageRepository @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
