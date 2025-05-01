@@ -62,12 +62,13 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.utils.BaseFragment
 import kotlinx.coroutines.Dispatchers
 import java.util.Locale
 
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
     private var schoolData: NetworkSchool? = null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -91,6 +92,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpViews() {
+
+        //binding.tvWelcome.text=getString(R.string.welcome)
+
 
         binding.imgSync.setOnClickListener {
             mViewModel.refresh()

@@ -1,5 +1,6 @@
 package com.app.ecarepro.data
 
+import android.util.Log
 import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppLayoutDto
@@ -13,9 +14,10 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.NotificationsDto
-
+import retrofit2.HttpException
 
 import com.app.ecarepro.data.network.model.SyncData
+import com.app.ecarepro.ui.language.model.TranslationItem
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
@@ -139,4 +141,53 @@ class AppRepositoryImpl @Inject constructor(
     companion object {
         private const val NOTIFICATION_CACHE_KEY = "notifications"
     }
+
+    override suspend fun getTranslations(
+        spreadsheetId: String,
+        range: String
+    ): Flow<Result<List<TranslationItem>>> = flow {
+        try {
+            val apiKey = "AIzaSyAdGd2nT10vrag4zManlLI1PbZ1D4rBkBA" // Store your API key securely
+            val response = appService.getSheetValues(spreadsheetId, range, apiKey)
+
+            if (response.values.isNotEmpty()) {
+                val translations = parseTranslations(response.values)
+                // saveTranslations(translations)
+                Log.d("SheetAPI", "Translations retrieved successfully $translations")
+                emit(Result.success(translations))
+            } else {
+                emit(Result.failure(IllegalStateException("No data found in sheet")))
+                Log.d("SheetAPI", "Translations Exception  ${response.values}")
+
+            }
+        } catch (error: HttpException) {
+            val errorBody = error.response()?.errorBody()?.string()
+            Log.e("SheetAPI", "HTTP Error: ${error.code()}, Body: $errorBody")
+            emit(Result.failure(error))
+        } catch (error: Throwable) {
+            Log.e("SheetAPI", "Error: ${error.message}")
+            emit(Result.failure(error))
+        }
+    }
+
+    private fun parseTranslations(values: List<List<String>>): List<TranslationItem> {
+        // Skip header row if present
+        val dataRows = if (values.firstOrNull()?.firstOrNull() == "key") {
+            values.drop(1)
+        } else {
+            values
+        }
+
+        return dataRows.mapNotNull { row ->
+            if (row.size >= 3) {
+                TranslationItem(
+                    key = row[0],
+                    english = row[1],
+                    hindi = row[2]
+                )
+            } else null
+        }
+    }
+
+
 }

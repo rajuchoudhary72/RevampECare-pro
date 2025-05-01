@@ -98,13 +98,14 @@ import com.app.ecarepro.ui.language.LanguageManager
 import java.util.Locale
 import kotlin.time.Duration.Companion.seconds
 import android.util.Base64
+import com.app.ecarepro.utils.BaseActivity
 import java.security.MessageDigest
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.io.ByteArrayInputStream
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
