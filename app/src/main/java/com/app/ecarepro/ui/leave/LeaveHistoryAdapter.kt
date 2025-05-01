@@ -80,6 +80,12 @@ class LeaveHistoryAdapter(
                     binding.tvStatus.setBackgroundResource(R.drawable.tv_bg_rounded_status_red)
                     binding.dot.isVisible=false
 
+                    binding.tvRejectReason.isVisible=true
+                    binding.tvRejectReason.text= buildString {
+                        append("Rejection Reason: ")
+                        append(data.rejectionReason)
+                    }
+
                 }
                 Constant.LEAVE_PENDING -> {
                     binding.tvStatus.setBackgroundResource(R.drawable.tv_bg_rounded_status_blue)
