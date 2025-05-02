@@ -83,7 +83,7 @@ class LeaveHistoryAdapter(
 
                     binding.tvRejectReason.isVisible=true
                     binding.tvRejectReason.text= buildString {
-                        append("Rejection Reason: ")
+                        append(leaveHistoryFragment.getString(R.string.rejection_reason))
                         append(data.rejectionReason)
                     }
 
