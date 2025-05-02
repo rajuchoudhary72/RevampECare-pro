@@ -24,9 +24,9 @@ class CreateSkillViewModel @Inject constructor(
     val skillTypes = MutableStateFlow<List<SkillType>>(emptyList())
     val categories = savedStateHandle.get<List<Category>>(SKILL_CATEGORIES)
 
-    fun loadSkillTypes(id: Int, onResult: (String?) -> Unit) {
+    fun loadSkillTypes(id: String, onResult: (String?) -> Unit) {
         viewModelScope.launch {
-            appRepository.getSkillTypes(id.toString()).collect { result ->
+            appRepository.getSkillTypes(id).collect { result ->
                 result.onSuccess { response ->
                     skillTypes.value = response.types ?: emptyList()
                     onResult.invoke(null)
@@ -49,8 +49,8 @@ class CreateSkillViewModel @Inject constructor(
                 SaveSkillDto(
                     id = skill?.id,
                     skill = skillName,
-                    sklCatID = categories?.find { it.category == category }?.sklCatID,
-                    sklTypeID = skillTypes.value.find { it.type == type }?.sklTypeID
+                    sklCatID = categories?.find { it.category == category }?.sklCatID.orEmpty(),
+                    sklTypeID = skillTypes.value.find { it.type == type }?.sklTypeID.orEmpty()
                 )
             ).collect { result ->
                 result

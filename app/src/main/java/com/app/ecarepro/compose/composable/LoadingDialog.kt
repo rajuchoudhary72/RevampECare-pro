@@ -1,8 +1,9 @@
 package com.app.ecarepro.compose.composable
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,24 +16,33 @@ import com.app.ecarepro.compose.theme.ECareProTheme
 @Composable
 fun LoadingDialog() {
     Dialog(
-        onDismissRequest = {},
+        onDismissRequest = { },
         properties = DialogProperties(
             dismissOnBackPress = false,
-            dismissOnClickOutside = false
-        )
+            dismissOnClickOutside = false,
+            usePlatformDefaultWidth = false, // Crucial for removing default dialog padding
+        ),
     ) {
-        Box(
+        Surface(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f)),
-            contentAlignment = Alignment.Center
+                .fillMaxSize(),
+            color = Color.Black.copy(alpha = 0.2f)
         ) {
-            androidx.compose.material3.CircularProgressIndicator()
+
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
 
-@Preview
+
+@Preview(showBackground = true)
 @Composable
 fun LoadingDialogPreview() {
     ECareProTheme {

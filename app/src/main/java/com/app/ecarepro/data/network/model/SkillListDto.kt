@@ -30,13 +30,13 @@ data class Skill(
     @SerializedName("modifiedOn")
     val modifiedOn: String?,
     @SerializedName("skill")
-    val skill: String?,
+    val skill: String,
     @SerializedName("sklCatID")
-    val sklCatID: Int,
+    val sklCatID: String,
     @SerializedName("sklTypeID")
-    val sklTypeID: Int?,
+    val sklTypeID: String?,
     @SerializedName("type")
-    val type: String?
+    val type: String
 ) : Parcelable
 
 

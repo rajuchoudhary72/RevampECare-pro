@@ -6,11 +6,11 @@ data class SaveSkillDto(
     @SerializedName("id")
     val id: String? = null,
     @SerializedName("skill")
-    val skill: String?,
+    val skill: String,
     @SerializedName("sklCatID")
-    val sklCatID: Int?,
+    val sklCatID: String,
     @SerializedName("sklTypeID")
-    val sklTypeID: Int?
+    val sklTypeID: String
 )
 
 

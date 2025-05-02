@@ -25,7 +25,7 @@ class DefineSkillViewModel @Inject constructor(
 
     val searchViewVisibility = MutableStateFlow(false)
     val searchQuery = MutableStateFlow("")
-    private val selectedCategoryId = MutableStateFlow<Int?>(null) // null = show all
+    private val selectedCategoryId = MutableStateFlow<String?>(null) // null = show all
 
     private val refreshData = MutableStateFlow(false)
 
@@ -74,7 +74,7 @@ class DefineSkillViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000L)
     )
 
-    fun onCategorySelected(categoryId: Int) {
+    fun onCategorySelected(categoryId: String) {
         selectedCategoryId.value = categoryId
     }
 

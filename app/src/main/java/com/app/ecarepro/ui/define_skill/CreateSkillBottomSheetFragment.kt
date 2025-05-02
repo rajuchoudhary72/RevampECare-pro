@@ -64,7 +64,7 @@ class CreateSkillBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun loadSkillTypes(sklCatID:Int) {
+    private fun loadSkillTypes(sklCatID: String) {
         viewModel.loadSkillTypes(sklCatID) { message ->
             mainActivity().showLoader(false)
             binding.autoType.setText("")

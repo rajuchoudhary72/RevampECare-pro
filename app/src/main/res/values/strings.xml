@@ -931,5 +931,18 @@
     <string name="collapse_all">Collapse All</string>
     <string name="expand_all">Expand All</string>
     <string name="error">Error!</string>
+    <string name="create_new_skill">Create New Skill</string>
+    <string name="select_a_category">Select a Category</string>
+    <string name="enter_skill_name">Enter skill name</string>
+    <string name="save_skill">Save Skill</string>
+    <string name="no_skill_found_for_this_category">"No Skill found for this category: "</string>
+    <string name="and_search_query">" and search query: "</string>
+    <string name="clear_search">Clear Search</string>
+    <string name="back">Back</string>
+    <string name="co_search">Search</string>
+    <string name="open">Open</string>
+    <string name="import_from_db">Import from DB</string>
+    <string name="skill_type">Skill Type: %1$s</string>
+    <string name="skill_name">Skill Name: %1$s</string>
 </resources>
 

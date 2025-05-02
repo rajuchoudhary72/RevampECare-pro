@@ -3,8 +3,11 @@ package com.app.ecarepro.compose.ui.skill
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.compose.model.UiState
 import com.app.ecarepro.compose.ui.base.BaseViewModel
+import com.app.ecarepro.data.network.SaveSkillDto
 import com.app.ecarepro.data.network.model.Category
 import com.app.ecarepro.data.network.model.Skill
+import com.app.ecarepro.data.network.model.SkillType
+import com.app.ecarepro.data.network.model.SkillTypesDto
 import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
@@ -27,9 +31,13 @@ class DefineSkillViewModel @Inject constructor(
 
     val searchViewActive = MutableStateFlow(false)
     val searchQuery = MutableStateFlow("")
-    private val selectedCategoryId = MutableStateFlow<Int?>(null) // null = show all
+    private val selectedCategoryId = MutableStateFlow<String?>(null) // null = show all
 
     private val refreshData = MutableStateFlow(false)
+
+    private val _skillTypes = MutableStateFlow<List<SkillType>>(emptyList())
+    val skillTypes: StateFlow<List<SkillType>> = _skillTypes.asStateFlow()
+
 
     private val rawData: Flow<UiState<DefineSkillSuccessData>> = refreshData.flatMapLatest {
         combine(
@@ -82,7 +90,7 @@ class DefineSkillViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000L)
     )
 
-    fun onCategorySelected(categoryId: Int) {
+    fun onCategorySelected(categoryId: String) {
         selectedCategoryId.value = categoryId
     }
 
@@ -107,7 +115,7 @@ class DefineSkillViewModel @Inject constructor(
                     result
                         .onSuccess { message ->
                             showMessage(message)
-                            retry()
+                            refresh()
                         }
                         .onFailure { error ->
                             showError(error)
@@ -116,7 +124,55 @@ class DefineSkillViewModel @Inject constructor(
         }
     }
 
-    fun retry() {
+    fun loadSkillTypes(
+        sklCatID: String,
+    ) {
+        viewModelScope.launch {
+            appRepository
+                .getSkillTypes(sklCatID)
+                .handleResultWithLoadState()
+                .collect { result ->
+                    result
+                        .onSuccess { response: SkillTypesDto ->
+                            _skillTypes.update { response.types ?: emptyList() }
+                        }
+                        .onFailure { error ->
+                            showError(error)
+                        }
+                }
+        }
+    }
+
+    fun saveSkill(
+        id: String? = null,
+        skill: String,
+        sklCatID: String,
+        sklTypeID: String,
+    ) {
+        viewModelScope.launch {
+            appRepository.saveSkill(
+                SaveSkillDto(
+                    id = id,
+                    skill = skill,
+                    sklCatID = sklCatID,
+                    sklTypeID = sklTypeID
+                )
+            )
+                .handleResultWithLoadState()
+                .collect { result ->
+                    result
+                        .onSuccess { message ->
+                            showMessage(message)
+                            refresh()
+                        }
+                        .onFailure { error ->
+                            showError(error)
+                        }
+                }
+        }
+    }
+
+    fun refresh() {
         viewModelScope.launch {
             refreshData.update { it.not() }
         }

@@ -17,7 +17,7 @@ data class SkillType(
     @SerializedName("skills")
     val skills: Any?,
     @SerializedName("sklTypeID")
-    val sklTypeID: Int?,
+    val sklTypeID: String,
     @SerializedName("type")
     val type: String?
 )

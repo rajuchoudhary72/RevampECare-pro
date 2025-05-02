@@ -18,12 +18,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -40,15 +43,20 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,6 +70,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -70,13 +79,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.R
+import com.app.ecarepro.compose.composable.ECareExposedDropdownMenuBox
 import com.app.ecarepro.compose.composable.LoadingComposable
+import com.app.ecarepro.compose.composable.LoadingDialog
 import com.app.ecarepro.compose.model.LoadState
 import com.app.ecarepro.compose.model.messageOrNull
 import com.app.ecarepro.compose.theme.ECareProTheme
 import com.app.ecarepro.compose.theme.white
 import com.app.ecarepro.data.network.model.Category
 import com.app.ecarepro.data.network.model.Skill
+import com.app.ecarepro.data.network.model.SkillType
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,41 +102,186 @@ fun DefineSkillScreen(
     val isSearchActive by viewModel.searchViewActive.collectAsStateWithLifecycle()
 
     val loadState by viewModel.loadState.collectAsStateWithLifecycle(LoadState.Nothing)
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(loadState) {
-        /*loadState.messageOrNull()?.let{
-
-        }*/
+    val message = loadState.messageOrNull()
+    LaunchedEffect(message) {
+        message?.let {
+            snackbarHostState.showSnackbar(it)
+        }
     }
 
-    Scaffold(
-        topBar = {
-            DefineSkillTopAppBar(
-                searchQuery = searchQuery,
-                isSearchActive = isSearchActive,
-                onQueryChange = viewModel::onSearchQueryChange,
-                onSearchActiveChange = viewModel::setSearchViewActiveState,
-                onClickBack = onClickBack
-            )
-        }
-    ) { innerPadding ->
-        LoadingComposable(
-            modifier = Modifier.padding(innerPadding),
-            uiState = uiState,
-            onRetry = { viewModel.retry() }
-        ) { data ->
-            DefineSkillContent(
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    var skillToEdit: Skill? = null
+    val skillsTypes by viewModel.skillTypes.collectAsStateWithLifecycle()
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Scaffold(
+            topBar = {
+                DefineSkillTopAppBar(
+                    searchQuery = searchQuery,
+                    isSearchActive = isSearchActive,
+                    onQueryChange = viewModel::onSearchQueryChange,
+                    onSearchActiveChange = viewModel::setSearchViewActiveState,
+                    onClickBack = onClickBack
+                )
+            },
+
+            snackbarHost = {
+                SnackbarHost(snackbarHostState)
+            }
+        ) { innerPadding ->
+            LoadingComposable(
                 modifier = Modifier.padding(innerPadding),
-                data = data,
-                onCategorySelected = viewModel::onCategorySelected,
-                onSkillDelete = viewModel::deleteSkill,
-                onClickCreate = {
-                    // TODO("implement the action of the button Create new skill")
-                },
-                onClickImportFromDatabase = {
-                    // TODO("implement the action of the button Import From Database")
+                uiState = uiState,
+                onRetry = { viewModel.refresh() }
+            ) { data ->
+                DefineSkillContent(
+                    modifier = Modifier.padding(innerPadding),
+                    data = data,
+                    onCategorySelected = viewModel::onCategorySelected,
+                    onSkillDelete = viewModel::deleteSkill,
+                    onClickCreate = {
+                        skillToEdit = null
+                        showBottomSheet = true
+                    },
+                    editSkillRequest = { skill ->
+                        skillToEdit = skill
+                        viewModel.loadSkillTypes(skill.sklCatID)
+                        showBottomSheet = true
+                    },
+                    onClickImportFromDatabase = {
+                    }
+                )
+
+                if (showBottomSheet) {
+                    CreateSkillBottomSheet(
+                        onDismissRequest = { showBottomSheet = false },
+                        categories = data.skillCategory,
+                        skillToEdit = skillToEdit,
+                        skillTypes = skillsTypes,
+                        skillTypesLoadRequest = viewModel::loadSkillTypes,
+                        onSaveSkill = { id: String?, skill: String, sklCatID: String, sklTypeID: String ->
+                            showBottomSheet = false
+                            viewModel.saveSkill(
+                                id = id,
+                                skill = skill,
+                                sklCatID = sklCatID,
+                                sklTypeID = sklTypeID
+                            )
+                        },
+                        onCancel = { showBottomSheet = false }
+                    )
                 }
+            }
+        }
+
+        if (loadState.isLoading()) {
+            LoadingDialog()
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreateSkillBottomSheet(
+    sheetState: SheetState = rememberModalBottomSheetState(),
+    skillToEdit: Skill? = null,
+    categories: List<Category>,
+    skillTypes: List<SkillType>,
+    skillTypesLoadRequest: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+    onSaveSkill: (id: String?, skill: String, sklCatID: String, sklTypeID: String) -> Unit,
+    onCancel: () -> Unit
+) {
+    var category by remember { mutableStateOf(skillToEdit?.category ?: "") }
+    var type by remember { mutableStateOf(skillToEdit?.type ?: "") }
+    var skillName by remember { mutableStateOf(skillToEdit?.skill ?: "") }
+
+    val categoriesItem = categories.map { it.category ?: "" }
+    val typesItems = skillTypes.map { it.type ?: "" }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.create_new_skill),
+                style = MaterialTheme.typography.headlineSmall,
             )
+
+            // Category Dropdown
+            ECareExposedDropdownMenuBox(
+                modifier = Modifier.fillMaxWidth(),
+                value = category,
+                onValueChange = { value ->
+                    category = value
+                    skillTypesLoadRequest(categories.first { it.category == value }.sklCatID)
+                },
+                label = stringResource(R.string.select_a_category),
+                items = categoriesItem,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Type Dropdown
+            ECareExposedDropdownMenuBox(
+                modifier = Modifier.fillMaxWidth(),
+                value = type,
+                onValueChange = { type = it },
+                label = "Select a Type",
+                items = typesItems,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Skill Name Text Field
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = skillName,
+                onValueChange = { skillName = it },
+                label = { Text(stringResource(R.string.enter_skill_name)) },
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Buttons
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = {
+                        onSaveSkill(
+                            skillToEdit?.id,
+                            skillName,
+                            categories.first { it.category == category }.sklCatID,
+                            skillTypes.first { it.type == type }.sklTypeID,
+
+                            )
+                    },
+                ) {
+                    Text(stringResource(R.string.save_skill))
+                }
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = onCancel,
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
         }
     }
 }
@@ -144,8 +301,9 @@ fun DefineSkillScreen(
 fun DefineSkillContent(
     modifier: Modifier = Modifier,
     data: DefineSkillSuccessData,
-    onCategorySelected: (Int) -> Unit,
+    onCategorySelected: (String) -> Unit,
     onSkillDelete: (Skill) -> Unit,
+    editSkillRequest: (Skill) -> Unit,
     onClickCreate: () -> Unit,
     onClickImportFromDatabase: () -> Unit
 ) {
@@ -177,7 +335,7 @@ fun DefineSkillContent(
                     skill = skill,
                     index = index + 1,
                     onClickEdit = {
-                        // TODO("handle edit action")
+                        editSkillRequest(skill)
                     },
                     onClickDelete = {
                         onSkillDelete(skill)
@@ -210,7 +368,7 @@ private fun NoSkillFoundText(
         Text(
             modifier = Modifier.padding(16.dp),
             text = buildAnnotatedString {
-                append("No Skill found for this category: ")
+                append(stringResource(R.string.no_skill_found_for_this_category))
                 append(selectedCategory)
                 addStyle(
                     SpanStyle(fontWeight = FontWeight.Bold),
@@ -219,7 +377,7 @@ private fun NoSkillFoundText(
                 )
 
                 if (!searchQuery.isNullOrEmpty()) {
-                    append(" and search query: ")
+                    append(stringResource(R.string.and_search_query))
                     append(searchQuery)
                     addStyle(
                         SpanStyle(fontWeight = FontWeight.Bold),
@@ -250,7 +408,7 @@ private fun NoSkillFoundText(
 @Composable
 private fun DefineSkillHeader(
     data: DefineSkillSuccessData,
-    onCategorySelected: (Int) -> Unit,
+    onCategorySelected: (String) -> Unit,
     onClickCreate: () -> Unit,
     onClickImportFromDatabase: () -> Unit
 ) {
@@ -306,7 +464,7 @@ fun DefineSkillTopAppBar(
                         .background(Color.White),
                     value = searchQuery,
                     onValueChange = { newText -> onQueryChange(newText) },
-                    placeholder = { Text("Search...") },
+                    placeholder = { Text(stringResource(R.string.search)) },
                     trailingIcon = {
                         IconButton(
                             onClick = {
@@ -317,7 +475,10 @@ fun DefineSkillTopAppBar(
                                 }
                             }
                         ) {
-                            Icon(Icons.Filled.Clear, contentDescription = "Clear Search")
+                            Icon(
+                                Icons.Filled.Clear,
+                                contentDescription = stringResource(R.string.clear_search)
+                            )
                         }
                     },
                     singleLine = true,
@@ -339,7 +500,7 @@ fun DefineSkillTopAppBar(
         },
         navigationIcon = {
             IconButton(onClick = onClickBack) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
             }
         },
         actions = {
@@ -347,7 +508,10 @@ fun DefineSkillTopAppBar(
                 Spacer(modifier = Modifier.width(16.dp))
             } else {
                 IconButton(onClick = { onSearchActiveChange(true) }) {
-                    Icon(Icons.Filled.Search, contentDescription = "Search")
+                    Icon(
+                        Icons.Filled.Search,
+                        contentDescription = stringResource(R.string.co_search)
+                    )
                 }
             }
         },
@@ -383,14 +547,13 @@ fun SkillCategorySelectionDropdown(
         OutlinedTextField(
             value = selectedSkill,
             onValueChange = { /* Not editable here */ },
-
             readOnly = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .onFocusChanged { focusState ->
                     expanded = focusState.isFocused
                 },
-            label = { Text("Select Skill") },
+            label = { Text(stringResource(R.string.select_skill)) },
             singleLine = true,
             keyboardActions = KeyboardActions(
                 onDone = { focusManager.clearFocus() }
@@ -426,9 +589,15 @@ fun SkillCategorySelectionDropdown(
                     label = "Animated Icon"
                 ) { targetExpanded ->
                     if (targetExpanded) {
-                        Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Open")
+                        Icon(
+                            Icons.Filled.KeyboardArrowUp,
+                            contentDescription = stringResource(R.string.open)
+                        )
                     } else {
-                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Close")
+                        Icon(
+                            Icons.Filled.KeyboardArrowDown,
+                            contentDescription = stringResource(R.string.close)
+                        )
                     }
                 }
             }
@@ -476,6 +645,7 @@ fun CreateImportButtons(
 
         Button(
             modifier = Modifier
+                .weight(1f)
                 .padding(end = 4.dp),
             onClick = onClickCreate,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
@@ -488,6 +658,7 @@ fun CreateImportButtons(
         }
         OutlinedButton(
             modifier = Modifier
+                .weight(1f)
                 .padding(start = 4.dp),
             onClick = onClickImportFromDatabase,
             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
@@ -503,7 +674,7 @@ fun CreateImportButtons(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Import from DB",
+                    text = stringResource(R.string.import_from_db),
                     color = Color(0xFF4CAF50),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodySmall
@@ -544,9 +715,9 @@ fun SkillItem(
             Column(modifier = Modifier.weight(1f)) {
                 Text("$index. ${skill.category}", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Skill Type: ${skill.type}")
+                Text(stringResource(R.string.skill_type, skill.type))
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Skill Name: ${skill.skill}")
+                Text(stringResource(R.string.skill_name, skill.skill))
             }
             IconButton(onClick = onClickEdit) {
                 Icon(Icons.Filled.Edit, contentDescription = "Edit", tint = Color(0xFF1976D2))
@@ -607,8 +778,8 @@ fun SkillItemPreview() {
         modifiedBy = "Jane Smith",
         modifiedOn = "2023-09-02",
         skill = "Analysis",
-        sklCatID = 1,
-        sklTypeID = 1,
+        sklCatID = "1",
+        sklTypeID = "1",
         type = "Critical thinking"
     )
     ECareProTheme {
@@ -630,8 +801,8 @@ fun DefineSkillContentPreview() {
             modifiedBy = "Jane Smith",
             modifiedOn = "2023-09-02",
             skill = "Analysis",
-            sklCatID = 1,
-            sklTypeID = 1,
+            sklCatID = "1",
+            sklTypeID = "1",
             type = "Critical thinking"
         ),
         Skill(
@@ -642,16 +813,16 @@ fun DefineSkillContentPreview() {
             modifiedBy = "Jane Smith",
             modifiedOn = "2023-09-02",
             skill = "Problem Solving",
-            sklCatID = 1,
-            sklTypeID = 2,
+            sklCatID = "1",
+            sklTypeID = "2",
             type = "Critical thinking"
         ),
     )
 
     val dummySkillCategories = listOf(
-        Category(category = "Cognitive and Creative Skills", sklCatID = 1),
-        Category(category = "Technical Skills", sklCatID = 2),
-        Category(category = "Soft Skills", sklCatID = 3),
+        Category(category = "Cognitive and Creative Skills", sklCatID = "1"),
+        Category(category = "Technical Skills", sklCatID = "2"),
+        Category(category = "Soft Skills", sklCatID = "3"),
     )
     val dummyUiState = DefineSkillSuccessData(
         skills = dummySkills,
@@ -664,7 +835,8 @@ fun DefineSkillContentPreview() {
             onCategorySelected = {},
             onSkillDelete = {},
             onClickCreate = {},
-            onClickImportFromDatabase = {}
+            onClickImportFromDatabase = {},
+            editSkillRequest = {}
         )
     }
 }
