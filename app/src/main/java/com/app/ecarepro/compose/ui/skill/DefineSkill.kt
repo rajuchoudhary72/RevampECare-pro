@@ -113,7 +113,7 @@ fun DefineSkillScreen(
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
-    var skillToEdit: Skill? = null
+    var skillToEdit by remember { mutableStateOf<Skill?>(null) }
     val skillsTypes by viewModel.skillTypes.collectAsStateWithLifecycle()
 
     Box(
