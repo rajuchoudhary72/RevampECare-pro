@@ -23,6 +23,7 @@ data class Dtl(
     val reason: String,
     val sid: Int,
     val status: String,
+    val rejectionReason: String,
     val submittedOn: String,
     val teacherID: Int,
     val teacherName: String,
