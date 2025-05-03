@@ -155,6 +155,7 @@
     <string name="issue_by">Issue by:</string>
     <string name="category">"Category: "</string>
     <string name="admission_no">"Admission No: "</string>
+    <string name="installment_month">"installment Month: "</string>
     <string name="actual_no">"Actual Amount: "</string>
     <string name="concessionno">"Concession: "</string>
     <string name="received_amount">"Received Amount: "</string>

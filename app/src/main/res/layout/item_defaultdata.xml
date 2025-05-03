@@ -127,6 +127,12 @@
                         android:layout_height="wrap_content"
                         android:text='@{data.contactno}'
                         tools:text="@string/contact_no" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='@{@string/installment_month+" "+data.installmentname}'
+                        android:textColor="@color/black"
+                        tools:text="@string/admission_no" />
                 </LinearLayout>
 
                 <View
