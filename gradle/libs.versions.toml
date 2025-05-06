@@ -1,6 +1,6 @@
 [versions]
 activity-ktx = "1.10.1"
-agp = "8.9.2"
+agp = "8.6.1"
 datastore-preferences = "1.0.0"
 decorator = "2.1.0"
 dotsindicator = "5.1.0"
