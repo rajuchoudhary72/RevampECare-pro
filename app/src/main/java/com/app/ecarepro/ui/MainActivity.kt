@@ -1457,6 +1457,27 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            24 ->{
+
+                when(childMenuId){
+                    22 -> {
+                        when(childChildMenuId){
+                            17 -> {
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                                })
+                            }
+                            18 -> {
+                                navController.navigate(R.id.staffListFragment, Bundle().apply {
+                                    putString(Constant.TO, Constant.PROFILE_FRA_STAFF_INFRACTION)
+                                })
+                            }
+                        }
+                    }
+                }
+
+            }
+
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1503,6 +1524,8 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+
+
 
 
             /*for new development Infraction and  Appreciation */

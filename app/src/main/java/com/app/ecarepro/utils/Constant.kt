@@ -101,6 +101,8 @@ class Constant {
         const val APPRECIATION_FRAG = "AppreciationFragment"
         const val INFRECTION_FRAG = "INFRECTIONFragment"
         const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
+        const val PROFILE_FRA_STAFF_INFRACTION = "ProfileFragmentStaffInfraction"
+
         const val FRA_LEAVE = "FragmentLeave"
         const val FRA_ASSI = "FragmentAssignment"
         const val FRA_TIMETABLE = "FragmentTimeTable"

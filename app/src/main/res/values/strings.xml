@@ -152,7 +152,7 @@
     <string name="subcategory">Subcategory:</string>
     <string name="consequences">Consequences:</string>
     <string name="corrective_action">Corrective Action:</string>
-    <string name="issue_by">Issue by:</string>
+    <string name="issue_by">Issued by:</string>
     <string name="category">"Category: "</string>
     <string name="admission_no">"Admission No: "</string>
     <string name="actual_no">"Actual Amount: "</string>
@@ -905,6 +905,7 @@
     <string name="father_pan">Father PAN</string>
     <string name="add_attachment">Add Attachment</string>
     <string name="resolved">Resolved</string>
+    <string name="resolve">Resolve</string>
     <string name="save_compliance">Save Compliance</string>
     <string name="you_can_upload_the_attachment_for_compliance_if_any_from_here_png_jpg_jpeg_pdf_only_upto_5mb">You can upload the attachment for compliance (if any) from here. PNG, JPG, JPEG, PDF only. Upto 5MB</string>
     <string name="attach_pdf">Attach PDF</string>

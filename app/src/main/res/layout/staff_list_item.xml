@@ -93,6 +93,7 @@
                 android:orientation="horizontal"
                 android:layout_marginHorizontal="@dimen/_4sdp"
                 android:layout_marginBottom="@dimen/_4sdp"
+                android:visibility="gone"
                 >
 
                 <androidx.cardview.widget.CardView

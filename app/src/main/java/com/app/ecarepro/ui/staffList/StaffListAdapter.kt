@@ -2,8 +2,8 @@ package com.app.ecarepro.ui.staffList
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -11,11 +11,12 @@ import com.app.ecarepro.R
 import com.app.ecarepro.databinding.StaffListItemBinding
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.utils.Constant
-import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 
-class StaffListAdapter(private var staffList: List<Staff>,
-                       private var staffListFragment: StaffListFragment
+class StaffListAdapter(
+    private var staffList: List<Staff>,
+    private var staffListFragment: StaffListFragment,
+    private val toFragment: String
 ) :
     RecyclerView.Adapter<StaffListAdapter.StaffListViewHolder>() {
 
@@ -37,6 +38,10 @@ class StaffListAdapter(private var staffList: List<Staff>,
         val binding = DataBindingUtil.getBinding<StaffListItemBinding>(holder.itemView)
          with(binding!!) {
              staffData=staffList[position]
+
+
+             binding.llButton.isVisible=toFragment==Constant.PROFILE_FRA_STAFF_INFRACTION
+
             val data= staffList[position]
 
             tvClassName.text= buildString {
