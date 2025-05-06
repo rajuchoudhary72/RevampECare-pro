@@ -30,7 +30,7 @@
                     android:id="@+id/tvFromDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
                     android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}" />
 
 
@@ -55,7 +55,7 @@
                     android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}"
                     android:text="@string/to_small"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
                     />
 
 
@@ -78,7 +78,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@{dataActivity.working ? @color/md_theme_light_primary: @color/accent_color}"
-                    android:layout_marginHorizontal="25dp"
+                    android:layout_marginHorizontal="@dimen/_8sdp"
+
                     />
 
 

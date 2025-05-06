@@ -229,7 +229,7 @@ class Constant {
                 val date = inputFormat.parse(inputDate)
 
                 // Step 2: Format into the desired output
-                val outputFormat = SimpleDateFormat("dd/MM/yy, E", Locale.ENGLISH)
+                val outputFormat = SimpleDateFormat("dd MMM, yyyy, E", Locale.ENGLISH)
                 outputFormat.format(date!!)
             } catch (e: Exception) {
                 e.printStackTrace()
