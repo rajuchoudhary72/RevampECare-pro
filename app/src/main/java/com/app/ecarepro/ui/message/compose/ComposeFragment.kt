@@ -490,8 +490,7 @@ class ComposeFragment : Fragment() {
 
             setFragmentResultListener(SelectRecipientsFragment.SELECT_CONTACT_REQUEST_KEY) { requestKey, bundle ->
                 if (bundle.containsKey(SelectRecipientsFragment.SELECTED_CONTACT)) {
-                    val contacts: ContactsDto =
-                        bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
+                    val contacts: ContactsDto = bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
                     composeViewModel.setContacts(contacts.contacts)
                 }
             }

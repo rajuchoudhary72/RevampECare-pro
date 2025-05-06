@@ -29,8 +29,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -41,6 +44,7 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
     private var busNumber = ""
     private var busSpeed = 0
     private var mMap: GoogleMap? = null
+    private var autoRefreshJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,8 +64,37 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        // Start auto-refresh when fragment is visible
+        startAutoRefresh()
+    }
 
+    override fun onPause() {
+        super.onPause()
+        // Stop auto-refresh when fragment is not visible
+        stopAutoRefresh()
+    }
+
+    private fun startAutoRefresh() {
+        // Cancel any existing job before starting a new one
+        stopAutoRefresh()
+
+        autoRefreshJob = lifecycleScope.launch {
+            while (true) {
+                // Wait for 1 minute
+                delay(TimeUnit.MINUTES.toMillis(1))
+                // Refresh data
+                hitBusNumber()
+            }
+        }
+    }
+
+    private fun stopAutoRefresh() {
+        autoRefreshJob?.cancel()
+        autoRefreshJob = null
     }
 
     private fun getBusLocation(vehicleNumber: String) {
@@ -246,6 +279,5 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         vectorDrawable.draw(canvas)
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
-
 
 }

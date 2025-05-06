@@ -131,6 +131,7 @@
     <string name="done">Done</string>
     <string name="appley_for_leave">Apply For Leave</string>
     <string name="apply_for_leave">Apply For Leave</string>
+    <string name="apply_leave">Apply Leave</string>
     <string name="approved_by">Approved By:</string>
     <string name="lbl_message_create_new_inferaction">*Note : Please select Category, Subcategory and Consequences first</string>
     <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
