@@ -6,19 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.InboxMessage
 import com.app.ecarepro.databinding.FragmentInboxFragmentBinding
 import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.recentMessageCard
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.MessageViewModel
 import com.app.ecarepro.utils.E_MMM_DD_YYYY_HH_MM_A
 import com.app.ecarepro.utils.HH_MM_A
 import com.app.ecarepro.utils.PaginationScrollListener
@@ -26,7 +31,9 @@ import com.app.ecarepro.utils.formatDate
 import com.app.ecarepro.utils.stringFormat2String
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 
 @AndroidEntryPoint
@@ -38,9 +45,12 @@ class InboxMessageFragment : Fragment() {
 
     private val inboxMessageViewModel: InboxMessageViewModel by viewModels()
 
+    private val messageViewModel: MessageViewModel by activityViewModels()
+
     private fun onSomeNotificationAction() {
         inboxMessageViewModel.updateBadgeCount()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -62,6 +72,16 @@ class InboxMessageFragment : Fragment() {
                 handleUiState(uiState)
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED){
+                messageViewModel.inboxMessageUnreadCount.collectLatest {
+                    it?.let {
+                        inboxMessageViewModel.updateUnreadMessageCount(it.first, it.second)
+                    }
+                }
+            }
+        }
     }
 
     private fun setUpViews() {
@@ -70,11 +90,11 @@ class InboxMessageFragment : Fragment() {
             inboxMessageViewModel.refresh()
         }
         binding.recyclerView.apply {
-           /* addItemDecoration(
-                LinearMarginDecoration.create(
-                    margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
-                )
-            )*/
+            /* addItemDecoration(
+                 LinearMarginDecoration.create(
+                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
+                 )
+             )*/
 
             addOnScrollListener(object :
                 PaginationScrollListener(layoutManager as LinearLayoutManager) {
@@ -97,7 +117,7 @@ class InboxMessageFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is InboxMessageUiState.Success || uiState == InboxMessageUiState.EmptyInbox) {
@@ -110,24 +130,24 @@ class InboxMessageFragment : Fragment() {
                     }
 
                     is InboxMessageUiState.Success -> {
-                        uiState.messages.forEachIndexed {index,  message ->
+                        uiState.messages.forEachIndexed { index, message ->
                             recentMessageCard {
                                 id(message.id, index.toString())
                                 name(message.name)
-                                if (message.senderType==3){
+                                if (message.senderType == 3) {
                                     designation(message.designation)
-                                }else  if (message.senderType==1){
-                                    designation("Class :-"+message.className)
-                                }else  if (message.senderType==2){
+                                } else if (message.senderType == 1) {
+                                    designation("Class :-" + message.className)
+                                } else if (message.senderType == 2) {
                                     designation(
-                                        stringFormat2String((requireActivity() as MainActivity),
+                                        stringFormat2String(
+                                            (requireActivity() as MainActivity),
                                             R.string.InboxList,
                                             message.childName,
                                             message.className
                                         )
                                     )
-                                }
-                                else{
+                                } else {
                                     designation("N/A")
                                 }
                                 photo(message.photo)
@@ -135,10 +155,7 @@ class InboxMessageFragment : Fragment() {
                                 time(formatDate(message.sentOn, E_MMM_DD_YYYY_HH_MM_A, HH_MM_A))
                                 unReadMessageCount(message.unread)
                                 clickListener { _ ->
-                                    findNavController().navigate(
-                                        R.id.conversationFragment,
-                                        bundleOf("ID" to message.id)
-                                    )
+                                    navigateToConversation(message)
                                 }
                             }
                         }
@@ -162,11 +179,20 @@ class InboxMessageFragment : Fragment() {
         }
     }
 
+    private fun navigateToConversation(message: InboxMessage) {
+        messageViewModel.inboxMessageUnreadCount.update { null }
+        findNavController().navigate(
+            R.id.conversationFragment,
+            bundleOf("ID" to message.id)
+        )
+    }
+
     override fun onResume() {
         super.onResume()
         onSomeNotificationAction()
         inboxMessageViewModel.sendScreenEvent()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

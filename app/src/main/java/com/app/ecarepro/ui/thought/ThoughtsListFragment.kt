@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -46,7 +46,10 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
                 mThoughtsViewModel = thoughtsViewModel
 
             }
-        fragmentThoughtsListBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        fragmentThoughtsListBinding.includeToolbar.toolbar.setNavigationOnClickListener {
+            NavHostFragment.findNavController(
+                this
+            ).popBackStack() }
         fragmentThoughtsListBinding.includeToolbar.toolbarTitle.text = getString(R.string.thoughts)
 
         initRecycleView()
@@ -76,7 +79,7 @@ class ThoughtsListFragment : Fragment(), ItemListener<Thoughts> {
 
         fragmentThoughtsListBinding.fbAdd.setOnClickListener {
 
-            findNavController().navigate(R.id.addThoughtsBlankFragment)
+            NavHostFragment.findNavController(this).navigate(R.id.addThoughtsBlankFragment)
         }
 
         getThoughts(Constant.PAGE_INDEX, Constant.THOUGHTS_DIR,false)

@@ -29,7 +29,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.app.ecarepro.R
 import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
@@ -132,7 +132,7 @@ class ChatFragment : Fragment() {
     private fun setUpViews() {
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            NavHostFragment.findNavController(this).popBackStack()
         }
         binding.btnRecipient.setOnClickListener {
             showRecipients()
@@ -541,7 +541,7 @@ class ChatFragment : Fragment() {
             openPdfFromUrl(photo)
         } else {
             try {
-                findNavController().navigate(
+                NavHostFragment.findNavController(this).navigate(
                     R.id.photoViewFragmentFragment,
                     bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
                 )

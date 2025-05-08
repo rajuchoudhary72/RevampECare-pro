@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
@@ -98,25 +98,28 @@ class TeacherTimeTableFragment(private val teachers: List<Teacher>, private val 
 
         when (toFragment) {
             Constant.FRA_TIMETABLE -> {
-                this@TeacherTimeTableFragment. findNavController().
-                navigate(R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment, Bundle().apply {
-                    putString(Constant.ID, t.id)
-                    putString(Constant.TIME_TABLE_TYPE, Constant.TEACHER_TIME_TABLE)
-                    putString(Constant.NAME, t.name)
+                NavHostFragment.findNavController(this).navigate(
+                    R.id.action_classAndTeacherListFragment_to_timeTableNavHostFragment,
+                    Bundle().apply {
+                        putString(Constant.ID, t.id)
+                        putString(Constant.TIME_TABLE_TYPE, Constant.TEACHER_TIME_TABLE)
+                        putString(Constant.NAME, t.name)
 
-                })
+                    })
             }
             Constant.FRA_ASSI -> {
-                this@TeacherTimeTableFragment. findNavController().
-                navigate(R.id.action_classAndTeacherListFragment_to_staffAssignmentsListFragment,Bundle( ).apply {
-                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
-                })
+                NavHostFragment.findNavController(this).navigate(
+                    R.id.action_classAndTeacherListFragment_to_staffAssignmentsListFragment,
+                    Bundle().apply {
+                        putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                    })
             }
             Constant.FRA_LESSON_PLAN -> {
-                this@TeacherTimeTableFragment. findNavController().
-                navigate(R.id.action_classAndTeacherListFragment_to_lessonPlanListFragment5,Bundle( ).apply {
-                    putString(Constant.STAFF_ID_ARGUMENT, t.id)
-                })
+                NavHostFragment.findNavController(this).navigate(
+                    R.id.action_classAndTeacherListFragment_to_lessonPlanListFragment5,
+                    Bundle().apply {
+                        putString(Constant.STAFF_ID_ARGUMENT, t.id)
+                    })
             }
         }
 

@@ -20,7 +20,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
@@ -41,6 +40,7 @@ import kotlinx.coroutines.launch
 import java.io.Serializable
 import android.content.pm.PackageManager
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.NavHostFragment
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 
 
@@ -64,7 +64,8 @@ class SubmitAssignmentFragment : Fragment() {
             binding.assData=assignmentDetails
 
         }
-        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.toolbar.setNavigationOnClickListener {
+            NavHostFragment.findNavController(this).popBackStack() }
 
         return binding.root
     }
@@ -189,7 +190,7 @@ class SubmitAssignmentFragment : Fragment() {
 
                 ).invokeOnCompletion {
                     mainActivity().showMessage("Submitted Successfully!!!  " )
-                    findNavController().popBackStack()
+                    NavHostFragment.findNavController(this@SubmitAssignmentFragment).popBackStack()
                 }
             }
         }
@@ -385,32 +386,35 @@ class SubmitAssignmentFragment : Fragment() {
                         requireContext().startActivity(chooser)
                     } catch (e: Exception) {
                         // Handle the exception (if no app is available to open PDFs)
-                        findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                            putString(Constant.URL_ARGUMENT, fileSource)
-                        })
+                        NavHostFragment.findNavController(this)
+                            .navigate(R.id.openPdfFragment, Bundle().apply {
+                                putString(Constant.URL_ARGUMENT, fileSource)
+                            })
                     }
                 }else{
-                    findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                        putString(Constant.URL_ARGUMENT, fileSource)
-                    })
+                    NavHostFragment.findNavController(this)
+                        .navigate(R.id.openPdfFragment, Bundle().apply {
+                            putString(Constant.URL_ARGUMENT, fileSource)
+                        })
                 }
 
 
 
             }
             2 -> {
-                findNavController().navigate(
+                NavHostFragment.findNavController(this).navigate(
                     R.id.photoViewFragmentFragment,
                     bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
                 )
             }
             3 -> {
 
-                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
-                    putString(Constant.URL_ARGUMENT, fileSource)
-                })
+                NavHostFragment.findNavController(this)
+                    .navigate(R.id.openPdfFragment, Bundle().apply {
+                        putString(Constant.URL_ARGUMENT, fileSource)
+                    })
              }else -> {
-            findNavController().navigate(
+            NavHostFragment.findNavController(this).navigate(
                 R.id.photoViewFragmentFragment,
                 bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
             )

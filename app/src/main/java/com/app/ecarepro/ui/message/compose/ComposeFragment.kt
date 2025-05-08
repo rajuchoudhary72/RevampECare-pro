@@ -496,7 +496,7 @@ class ComposeFragment : Fragment() {
                     val scholarType: ScholarType =
                         ScholarType.getScholarType(bundle.getInt(SelectRecipientsFragment.SCHOLAR_TYPE))
                     composeViewModel.setContacts(contacts.contacts)
-                    composeViewModel.setScholarType(scholarType)
+                    composeViewModel.updateScholarType(scholarType)
                 }
             }
 

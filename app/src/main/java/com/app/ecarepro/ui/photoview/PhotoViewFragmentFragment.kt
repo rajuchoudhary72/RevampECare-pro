@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentPhotoViewBinding
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.imageUrl
@@ -27,6 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import androidx.navigation.fragment.NavHostFragment
 
 @AndroidEntryPoint
 class PhotoViewFragmentFragment : Fragment() {
@@ -48,7 +48,7 @@ class PhotoViewFragmentFragment : Fragment() {
         val photo = arguments?.getString(PHOTO)
 
         binding.btnClose.setOnClickListener {
-            findNavController().popBackStack()
+            NavHostFragment.findNavController(this).popBackStack()
         }
 
         photo?.let { url ->

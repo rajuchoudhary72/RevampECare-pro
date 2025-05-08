@@ -16,7 +16,7 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentNoticeDetailsBinding
@@ -49,7 +49,10 @@ class NoticeDetailsFragment : Fragment() {
             lifecycleOwner= viewLifecycleOwner
             noticeDetailsViewModel=_noticeDetailsViewModel
         }
-        noticeDetailsBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        noticeDetailsBinding.includeToolbar.toolbar.setNavigationOnClickListener {
+            NavHostFragment.findNavController(
+                this
+            ).popBackStack() }
         noticeDetailsBinding.includeToolbar.toolbarTitle.text = getString(R.string.notice_details)
         noticeID= requireArguments().getString(Constant.NOTICE_ID_ARGUMENT)
 
@@ -63,9 +66,10 @@ class NoticeDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         noticeDetailsBinding.relView.setOnClickListener {
-            findNavController().navigate(R.id.action_noticeDetailsFragment_to_openPdfFragment,Bundle( ).apply {
-                putString(Constant.URL_ARGUMENT, fileSource)
-            })
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_noticeDetailsFragment_to_openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
         }
 
         noticeDetailsBinding.relDownload.setOnClickListener {

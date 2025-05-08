@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -39,7 +39,10 @@ class FeeDefaulterUI : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentFeeDefaulterUIBinding.inflate(inflater,container,false)
-        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener {
+            NavHostFragment.findNavController(
+                this
+            ).popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.fee_defaulter)
         return binding.root
     }

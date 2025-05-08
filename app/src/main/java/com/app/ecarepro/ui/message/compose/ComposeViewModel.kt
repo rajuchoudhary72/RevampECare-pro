@@ -429,7 +429,7 @@ class ComposeViewModel @Inject constructor(
         return data
     }
 
-    fun setScholarType(scholarType: ScholarType) {
+    fun updateScholarType(scholarType: ScholarType) {
         this.scholarType = scholarType
     }
 }
