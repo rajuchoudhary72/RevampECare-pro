@@ -1472,6 +1472,11 @@ class MainActivity : AppCompatActivity() {
                                     putString(Constant.TO, Constant.PROFILE_FRA_STAFF_INFRACTION)
                                 })
                             }
+                            20 ->{
+                                navController.navigate(R.id.infractionListFragment, Bundle().apply {
+                                    putInt(Constant.USER_TYPE, Constant.STAFF_TYPE)
+                                })
+                            }
                         }
                     }
                 }
