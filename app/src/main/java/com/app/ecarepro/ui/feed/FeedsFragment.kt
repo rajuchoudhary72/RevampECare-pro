@@ -120,7 +120,7 @@ class FeedsFragment : Fragment() {
                                 feed(feed)
                                 clickListener { _->
                                     (requireActivity() as MainActivity).getFragmentId(
-                                        feed.menuID, feed.chMenuID
+                                        feed.menuID, feed.chMenuID, feed.id
                                     )
                                 }
                             }

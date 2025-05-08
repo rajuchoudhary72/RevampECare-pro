@@ -3,6 +3,7 @@ package com.app.ecarepro.data
 import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.AppLayoutDto
+import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.RegisterDevice
@@ -117,6 +118,11 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
+    override suspend fun getNotificationCount(): BadgeCountResponse {
+        return appService.getNotificationCount()
+    }
+
+
     override fun syncData(): Flow<Result<SyncData>> {
         return flow {
             try {
@@ -136,6 +142,7 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun notificationSeen(id: String): CommonResponse {
         return appService.notificationSeen(id)
     }
+
     companion object {
         private const val NOTIFICATION_CACHE_KEY = "notifications"
     }

@@ -29,6 +29,8 @@ data class Profile(
     val canChangeCoverImg: Boolean?,
     @SerializedName("canChangeProfileImg")
     val canChangeProfileImg: Boolean?,
+    @SerializedName("canChangeChildImg")
+    val canChangeChildImg: Boolean?,
     @SerializedName("coverImg")
     val coverImg: String?,
     @SerializedName("designation")

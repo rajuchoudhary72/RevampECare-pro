@@ -22,10 +22,10 @@ class CircularDetailsViewModel @Inject constructor(
     private val circularDTLStateFlow: MutableStateFlow<NetworkResult<NetworkCircularDetails>> = MutableStateFlow(
         NetworkResult.Loading())
     val _circularDTLStateFlow: StateFlow<NetworkResult<NetworkCircularDetails>> = circularDTLStateFlow
-    fun getCircularDTL(cirID: Int, iD: Int) = viewModelScope.launch {
+    fun getCircularDTL(cirID: String) = viewModelScope.launch {
         runCatching {
             circularDTLStateFlow.value = NetworkResult.Loading()
-            schoolRepository.getCircularDTL(cirID,iD)
+            schoolRepository.getCircularDTL(cirID)
 
         }.onSuccess {
             circularDTLStateFlow.value = NetworkResult.Success(it)

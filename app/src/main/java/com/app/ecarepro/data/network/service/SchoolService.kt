@@ -17,6 +17,7 @@ import com.app.ecarepro.model.FeedsDto
 import com.app.ecarepro.model.PromotionModel
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.GeneralSettingsDto
+import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.model.AssigneeDto
@@ -72,15 +73,16 @@ interface SchoolService {
 
     @GET("School/NoticeDTL")
     suspend fun getNoticeDTL(
-        @Query("NtID") ntID: Int,
-        @Query("ID") iD: Int,
+        @Query("ID") iD: String,
     ): NetworkNoticDetails
 
     @GET("School/CircularDTL")
     suspend fun getCircularDTL(
-        @Query("CirID") cirID: Int,
-        @Query("ID") iD: Int,
+        @Query("ID") iD: String,
     ): NetworkCircularDetails
+
+    @GET("School/Support")
+    suspend fun getContactDTL(): NetworkContactUrl
 
     @GET("Staff/ClassTeacherOf")
     suspend fun getClassTeacherOf(): ClassPromotionModel

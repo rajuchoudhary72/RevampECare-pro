@@ -30,11 +30,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="?actionBarSize"
-                android:background="@color/md_theme_light_primary"
                 android:gravity="center"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax"
+                android:background="@color/background_dashboard"
+
                 app:layout_scrollFlags="scroll|enterAlways">
 
                 <LinearLayout
@@ -51,8 +52,9 @@
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_marginTop="@dimen/_10sdp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:theme="@style/TextInputLayoutStyle"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        app:boxStrokeColor="@color/text_input_layout_stroke_color"
+
 
                         >
 
@@ -70,13 +72,13 @@
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:theme="@style/TextInputLayoutStyle"
                         android:layout_marginHorizontal="10dp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:visibility="visible"
-                        app:boxStrokeColor="@color/text_input_layout_stroke_color"
                         android:layout_marginBottom="10dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                        app:boxStrokeColor="@color/text_input_layout_stroke_color"
+
 
                         >
 
@@ -92,13 +94,15 @@
 
                 </LinearLayout>
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/bt_auto_assign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/auto_assign"
                     android:layout_gravity="start"
                     android:visibility="gone"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_marginStart="@dimen/_5sdp"
                     />
 
             </LinearLayout>

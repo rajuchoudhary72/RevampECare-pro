@@ -78,6 +78,7 @@ class AdmissionComparisonModel(val admissionComparisonModel: AdmissionComparison
                     ),
             )
         )
+
         .xAxisVisible(false)
         .yAxisVisible(false)
 

@@ -42,6 +42,7 @@ class Constant {
         const val NOTICE_ID_ARGUMENT = "NoticeID"
         const val STUDENT_ID_ARGUMENT = "StudentID"
         const val STAFF_ID_ARGUMENT = "StaffID"
+        var LESSONPLAN_HARDCCODE_KEY = ""
         const val TIME_TABLE_TYPE = "TimeTableType"
         const val ASSIGNMENT_TYPE = "AssignmentType"
         const val ALBUM_TYPE = "albumTypePassValue"
@@ -219,6 +220,30 @@ class Constant {
         fun toSystemDate(inputDateStr: String): String {
             val inputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date: Date? = inputFormat.parse(inputDateStr)
+            return outputFormat.format(date!!)
+        }
+
+
+        fun convertDateLongWeekDayToSort(inputDate: String): String {
+            return try {
+                // Step 1: Parse the original format
+                val inputFormat = SimpleDateFormat("dd MMM, yyyy EEEE", Locale.ENGLISH)
+                val date = inputFormat.parse(inputDate)
+
+                // Step 2: Format into the desired output
+                val outputFormat = SimpleDateFormat("dd/MM/yy, E", Locale.ENGLISH)
+                outputFormat.format(date!!)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                inputDate // fallback in case of error
+            }
+        }
+
+
+        fun apiToSystemDate(inputDateStr: String): String {
+            val inputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }

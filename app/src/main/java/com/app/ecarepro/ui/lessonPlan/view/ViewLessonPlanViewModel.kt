@@ -25,9 +25,24 @@ class ViewLessonPlanViewModel  @Inject constructor(
 
     private val viewLessonPlanMutableStateFlow: MutableStateFlow<NetworkResult<NetworkLessonPlanDTL>> = MutableStateFlow(
         NetworkResult.Loading())
+    private val viewLessonPlanActionMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
+        NetworkResult.Loading())
     val viewLessonPlanStateFlow: StateFlow<NetworkResult<NetworkLessonPlanDTL>> = viewLessonPlanMutableStateFlow
 
-
+    fun lessonPlanAction(
+        lPlnID: Int,
+        action: Int,
+        rejectionComments: String,
+    )=viewModelScope.launch {
+        runCatching {
+            viewLessonPlanActionMutableStateFlow.value =NetworkResult.Loading( )
+            userRepository.lessonPlanAction(lPlnID, action, rejectionComments )
+        }.onSuccess {
+            viewLessonPlanActionMutableStateFlow.value =NetworkResult.Success(it)
+        }.onFailure {
+            viewLessonPlanActionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+    }
     fun getLessonPlanDTL(
         id: String,
         teacherID: Int

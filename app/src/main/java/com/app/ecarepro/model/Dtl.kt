@@ -23,11 +23,13 @@ data class Dtl(
     val reason: String,
     val sid: Int,
     val status: String,
+    val rejectionReason: String,
     val submittedOn: String,
     val teacherID: Int,
     val teacherName: String,
     val cancelby: String?,
     val cancelledOn: String?,
     val showCancelButton: Boolean,
-    val tillDate: String
+    val tillDate: String,
+    val attPer: String
 )

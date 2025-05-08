@@ -137,7 +137,6 @@
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-
             android:text="@string/no_data"
             android:textSize="16sp"
             android:visibility="gone"

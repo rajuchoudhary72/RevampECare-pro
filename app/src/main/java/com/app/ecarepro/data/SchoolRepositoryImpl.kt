@@ -24,6 +24,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.model.WatchersDto
@@ -103,12 +104,16 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getCirculars(pg, yrID, title)
     }
 
-    override suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails {
-        return schoolService.getNoticeDTL(ntID, iD)
+    override suspend fun getNoticeDTL(ntID: String): NetworkNoticDetails {
+        return schoolService.getNoticeDTL(ntID)
     }
 
-    override suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails {
-        return schoolService.getCircularDTL(cirID, iD)
+    override suspend fun getCircularDTL(cirID: String): NetworkCircularDetails {
+        return schoolService.getCircularDTL(cirID)
+    }
+
+    override suspend fun getContactDTL(): NetworkContactUrl {
+        return schoolService.getContactDTL()
     }
 
     override suspend fun getClass(): ClassPromotionModel {

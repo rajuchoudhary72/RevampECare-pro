@@ -92,6 +92,7 @@ import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
@@ -134,6 +135,7 @@ import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
 import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
@@ -279,6 +281,12 @@ interface UserRepository {
          request: UpdateProfileModel
     ): CommonResponse
 
+    suspend fun updateTransportProfile(
+        request: UpdateTransportProfileModel
+    ): CommonResponse
+
+    suspend fun getUserTransportProfile(
+    ): NetworkTransportEditProfile
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
@@ -565,6 +573,7 @@ interface UserRepository {
     suspend fun getStaffList(): NetworkStaffList
 
     suspend fun teachersList(): NetworkStaffList
+    suspend fun reportLessonteachersList(): NetworkStaffList
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 

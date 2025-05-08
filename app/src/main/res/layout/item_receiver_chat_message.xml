@@ -22,7 +22,6 @@
             type="com.app.ecarepro.utils.FileClickListener" />
 
         <import type="java.util.List" />
-
         <variable
             name="files"
             type="List&lt;String>" />
@@ -53,7 +52,9 @@
             android:padding="17dp"
             android:textColor="@color/black"
             android:enabled="true"
-            app:formattedNewText="@{message}"
+            android:autoLink="none"
+            android:linksClickable="true"
+            app:formattedText="@{message}"
             android:textIsSelectable="true"
             android:focusable="true"
             android:longClickable="true"

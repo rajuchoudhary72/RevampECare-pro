@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="staffData"
+            type="com.app.ecarepro.model.Staff" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:padding="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:background="@color/white"
+        android:layout_marginStart="5dp"
+        >
+
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/circleImageViewProfile"
+            imageUrl="@{staffData.photo}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/green_10"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Circle"
+            tools:src="@drawable/img_message_user" />
+
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/calibri_bold"
+            android:text="@{staffData.name}"
+            app:layout_constraintBottom_toTopOf="@+id/tv_class_name"
+            app:layout_constraintStart_toEndOf="@id/circleImageViewProfile"
+            app:layout_constraintTop_toTopOf="@id/circleImageViewProfile"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Line One" />
+
+        <TextView
+            android:id="@+id/tv_class_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/calibri_light"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_subject_name"
+            app:layout_constraintStart_toEndOf="@id/circleImageViewProfile"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Line One" />
+
+        <TextView
+            android:id="@+id/tv_subject_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/calibri_light"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/textLine3"
+            app:layout_constraintStart_toEndOf="@id/circleImageViewProfile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_class_name"
+            tools:text="Line Two" />
+
+        <TextView
+            android:id="@+id/textLine3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/calibri_light"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/circleImageViewProfile"
+            app:layout_constraintStart_toEndOf="@id/circleImageViewProfile"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subject_name"
+            tools:text="Line Three" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_11sdp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subject_name"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+ </layout>

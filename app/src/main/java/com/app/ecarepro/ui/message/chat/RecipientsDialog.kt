@@ -39,7 +39,7 @@ class RecipientsDialog : BottomSheetDialogFragment() {
         binding.recyclerView.withModels {
             recipientDto.recipients.forEach { recipient ->
                 recipients {
-                    id(recipient.name)
+                    id(recipient.receiverID)
                     if (recipient.readAt==null){
 
                     }else{

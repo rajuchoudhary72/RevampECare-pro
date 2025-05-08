@@ -36,6 +36,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
+    private var isTextExpanded: Boolean=false
     private lateinit var albumSetting: AlbumSetting
     private lateinit var photoDetails: NetworkAlbumPhotoDetails
     private var photoAlbumId: String = ""
@@ -72,9 +73,19 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+       binding.nestedScrollView.post {
+           binding.nestedScrollView.scrollTo(0, photoAlbumDTLViewModel.scrollY)
+        }
+
+        // Save scroll position
+        binding.nestedScrollView.viewTreeObserver.addOnScrollChangedListener {
+            photoAlbumDTLViewModel.scrollY = binding.nestedScrollView.scrollY
+        }
+
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
             binding.tvMore.isVisible = false
+            isTextExpanded=true
         }
 
 
@@ -98,16 +109,16 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                       binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
 
-                      if (binding.tvDes.lineCount >= 4) {
-                          binding.tvMore.visibility = View.VISIBLE
-                      } else {
-                          binding.tvMore.visibility = View.GONE
+
+                      if (isTextExpanded){
+                          binding.tvMore.isVisible = false
+                      }else{
+                          binding.tvDes.maxLines = 4
+                          binding.tvMore.isVisible = true
                       }
                   }
               }
             }
-
-
 
 
 
@@ -120,12 +131,12 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                        binding.rvAlbum.isVisible = false
+                       // binding.rvAlbum.isVisible = false
                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        binding.rvAlbum.isVisible = false
+                    //    binding.rvAlbum.isVisible = false
                         isDataLoaded = true
                         Log.d("main", "Error$it")
                     }
@@ -147,6 +158,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                                 isLoading = true
 
                                 binding.tvHeading.text = it.data.title
+                                binding.tvDes.maxLines = 4
 
                                 binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                     fromHtml(it.data.description, Html.FROM_HTML_MODE_COMPACT)
@@ -157,11 +169,13 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                                 binding.tvDatePhoto.text =
                                     it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
 
-                                if (binding.tvDes.getLineCount() >= 4) {
-                                    binding.tvMore.setVisibility(View.VISIBLE)
-                                } else {
-                                    binding.tvMore.setVisibility(View.GONE)
-                                }
+
+                                   if (binding.tvDes.lineCount >= 4) {
+                                       binding.tvMore.visibility = View.VISIBLE
+                                   } else {
+                                       binding.tvMore.visibility = View.GONE
+                                   }
+
 
                                 if (pageIndex==1){
                                     photoAlbumAdapter.clearData()
