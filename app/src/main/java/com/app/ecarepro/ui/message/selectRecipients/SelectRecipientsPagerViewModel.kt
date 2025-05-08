@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.ClassContact
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.StaffType
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
-import com.app.ecarepro.data.datastore.UserDataStore
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
@@ -42,11 +42,11 @@ class SelectRecipientsPagerViewModel @Inject constructor(
     val showStaffTypeSpinner = combine(
         flow = recipientsType,
         flow2 = user
-    ){recipientsType, user ->
+    ) { recipientsType, user ->
         recipientsType == RecipientsType.STAFFS && user?.userType == 3
     }.asLiveData()
 
-    private val scholarType = MutableStateFlow(ScholarType.ALL)
+    val scholarType = MutableStateFlow(ScholarType.ALL)
 
     private val selectedStaffTypes = MutableStateFlow<List<StaffType>?>(null)
 
@@ -181,7 +181,11 @@ class SelectRecipientsPagerViewModel @Inject constructor(
 enum class ScholarType(val id: Int) {
     ALL(2),
     BOARDING(1),
-    DAY_SCHOLAR(0)
+    DAY_SCHOLAR(0);
+
+    companion object {
+        fun getScholarType(id: Int) = ScholarType.entries.firstOrNull { it.id == id } ?: ALL
+    }
 }
 
 

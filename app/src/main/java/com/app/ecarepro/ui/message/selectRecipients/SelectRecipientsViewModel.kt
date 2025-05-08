@@ -12,6 +12,8 @@ class SelectRecipientsViewModel @Inject constructor(
 
     private val selectedContacts = mutableListOf<Contact>()
 
+    var scholarType: ScholarType = ScholarType.ALL
+
     fun getSelectedContacts() = selectedContacts
 
     fun addContact(contact: Contact) {

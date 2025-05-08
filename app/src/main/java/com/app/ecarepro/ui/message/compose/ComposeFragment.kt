@@ -1,8 +1,8 @@
 package com.app.ecarepro.ui.message.compose
 
 import android.Manifest
-import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,9 +18,6 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.Html
 import android.text.Spannable
-import com.app.ecarepro.data.network.model.MessageSettings
-import android.app.ProgressDialog
-
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.CharacterStyle
@@ -52,12 +49,14 @@ import com.app.ecarepro.R
 import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.ContactsDto
+import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.databinding.FragmentComposeBinding
 import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.selectRecipients.ScholarType
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileUtils
@@ -375,6 +374,7 @@ class ComposeFragment : Fragment() {
             setUpSmsTypes(uiState.smsTypes)
         }
     }
+
     private fun handleAttachmentTypes(messageSettings: MessageSettings?) {
         messageSettings?.let { settings ->
             binding.btnCamera.isVisible = settings.media?.browseImg == true
@@ -384,6 +384,7 @@ class ComposeFragment : Fragment() {
             binding.btnBrowsePdf.isVisible = settings.media?.browsePDF == true
         }
     }
+
     private fun setUpSmsTypes(smsTypes: List<SmsType>) {
         binding.spinnerSmsTypeLayout.isVisible = smsTypes.isNotEmpty()
         if (smsTypes.isEmpty()) return
@@ -492,7 +493,10 @@ class ComposeFragment : Fragment() {
                 if (bundle.containsKey(SelectRecipientsFragment.SELECTED_CONTACT)) {
                     val contacts: ContactsDto =
                         bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
+                    val scholarType: ScholarType =
+                        ScholarType.getScholarType(bundle.getInt(SelectRecipientsFragment.SCHOLAR_TYPE))
                     composeViewModel.setContacts(contacts.contacts)
+                    composeViewModel.setScholarType(scholarType)
                 }
             }
 
@@ -553,7 +557,7 @@ class ComposeFragment : Fragment() {
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            if (result.resultCode == RESULT_OK) {
                 val bitmap = result.data?.extras?.get("data") as Bitmap
                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
                 file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
@@ -724,7 +728,7 @@ class ComposeFragment : Fragment() {
 
                                         // Update progress message
                                         withContext(Dispatchers.Main) {
-                                            progressDialog.setMessage("Compressing images... ${i+1}/${selectedImages.size}")
+                                            progressDialog.setMessage("Compressing images... ${i + 1}/${selectedImages.size}")
                                         }
 
                                         // Compress image in background
@@ -778,49 +782,49 @@ class ComposeFragment : Fragment() {
         }
 
     /*without  progess bar*/
-   /* private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val selectedImages = mutableListOf<Uri>()
-                result.data?.let { data ->
-                    val clipData = data.clipData
-                    if (clipData != null) {
-                        for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
-                                val imageUri = clipData.getItemAt(i).uri
-                                selectedImages.add(imageUri)
-                            }
-                        }
+    /* private val pickImagesLauncher =
+         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+             if (result.resultCode == RESULT_OK) {
+                 val selectedImages = mutableListOf<Uri>()
+                 result.data?.let { data ->
+                     val clipData = data.clipData
+                     if (clipData != null) {
+                         for (i in 0 until clipData.itemCount) {
+                             if (selectedImages.size < 7) {
+                                 val imageUri = clipData.getItemAt(i).uri
+                                 selectedImages.add(imageUri)
+                             }
+                         }
 
-                        // Check if total size exceeds the limit
-                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
-                            // Show compression dialog
-                            imageCompressionHelper.showCompressionDialog(
-                                parentFragmentManager,
-                                selectedImages
-                            ) { compressionOption ->
-                                // Process images with selected compression
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    val compressedUris = withContext(Dispatchers.IO) {
-                                        selectedImages.map { uri ->
-                                            imageCompressionHelper.compressImage(
-                                                uri,
-                                                compressionOption
-                                            )
-                                        }
-                                    }
+                         // Check if total size exceeds the limit
+                         if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
+                             // Show compression dialog
+                             imageCompressionHelper.showCompressionDialog(
+                                 parentFragmentManager,
+                                 selectedImages
+                             ) { compressionOption ->
+                                 // Process images with selected compression
+                                 viewLifecycleOwner.lifecycleScope.launch {
+                                     val compressedUris = withContext(Dispatchers.IO) {
+                                         selectedImages.map { uri ->
+                                             imageCompressionHelper.compressImage(
+                                                 uri,
+                                                 compressionOption
+                                             )
+                                         }
+                                     }
 
-                                    // Now we have compressed images, upload them
-                                    composeViewModel.setAttachments(compressedUris.map {
-                                        MiMedia(
-                                            path = it.toString(),
-                                            name = lastClickAttachmentType?.name
-                                        )
-                                    })
-                                }
-                            }
-                        } else {
-                            *//*  // Process images normally (still might want to compress slightly)
+                                     // Now we have compressed images, upload them
+                                     composeViewModel.setAttachments(compressedUris.map {
+                                         MiMedia(
+                                             path = it.toString(),
+                                             name = lastClickAttachmentType?.name
+                                         )
+                                     })
+                                 }
+                             }
+                         } else {
+                             *//*  // Process images normally (still might want to compress slightly)
                                composeViewModel.setAttachments(files)*//*
                             composeViewModel.setAttachments(selectedImages.map {
                                 MiMedia(
@@ -891,13 +895,13 @@ class ComposeFragment : Fragment() {
             AttachmentType.GALLERY -> {
                 openGallery()
             }
-           /* AttachmentType.GALLERY -> {
-                // Request necessary permissions and open the gallery
-                if (checkAndRequestPermissions()) {
-                    launchPhotoPicker()
-                }
-                //  launchPhotoPicker()
-            }*/
+            /* AttachmentType.GALLERY -> {
+                 // Request necessary permissions and open the gallery
+                 if (checkAndRequestPermissions()) {
+                     launchPhotoPicker()
+                 }
+                 //  launchPhotoPicker()
+             }*/
 
             AttachmentType.AUDIO -> {
                 launchAudioPicker()
@@ -1002,7 +1006,14 @@ class ComposeFragment : Fragment() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*" // Allow any file type
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+            putExtra(
+                Intent.EXTRA_MIME_TYPES,
+                arrayOf(
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
+            )
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
         pdfLauncher.launch(intent)
