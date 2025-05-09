@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -30,6 +29,8 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentAddInfractionBinding
 import com.app.ecarepro.model.InfractionConsequence
 import com.app.ecarepro.model.InfractionType
+import com.app.ecarepro.model.Staff
+import com.app.ecarepro.model.StudentDTL
 import com.app.ecarepro.model.Type
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionCatPopUpListAdapter
@@ -44,6 +45,7 @@ import com.lassi.data.media.MiMedia
 import com.lassi.domain.media.LassiOption
 import com.lassi.domain.media.MediaType
 import com.lassi.presentation.builder.Lassi
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,7 +54,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AddInfractionFragment : Fragment() {
 
-    private var studentID: Int = 0
+    private var userID: Int = 0
     private lateinit var subInfractionCatData: Type
     private   var subInfractionSubCateList= mutableListOf<Type>()
     private lateinit var infractionConsequence: InfractionConsequence
@@ -65,6 +67,7 @@ class AddInfractionFragment : Fragment() {
     private lateinit var binding: FragmentAddInfractionBinding
     private val addInfractionViewModel : AddInfractionViewModel by viewModels()
     private var lastClickAttachmentType: AttachmentType? = null
+    private var uType : Int= Constant.STUDENT_TYPE
 
 
 
@@ -74,7 +77,8 @@ class AddInfractionFragment : Fragment() {
     ): View  {
         binding=FragmentAddInfractionBinding.inflate(inflater,container,false)
         try {
-            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+            userID=  requireArguments().getInt(Constant.USER_ID)
+            uType=  requireArguments().getInt(Constant.USER_TYPE)
         } catch (_: Exception) { }
         return binding.root
     }
@@ -175,24 +179,14 @@ class AddInfractionFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            binding.studentData=it.data.studentDTL
 
-                            binding.tvAdmissionNo.text= buildString {
-                                append(getString(R.string.admission_no))
-                                append(it.data.studentDTL.admissionNo)
+                            if (uType==Constant.STUDENT_TYPE){
+                                bindStudentDetails(it.data.studentDTL)
+                            }else{
+                                bindStaffDetails(it.data.stafftDTL)
                             }
-                            binding.tvClassName.text= buildString {
-                                append(getString(R.string.classes))
-                                append(it.data.studentDTL.`class`)
-                            }
-                            binding.tvFatherName.text= buildString {
-                                append(getString(R.string.contact_person))
-                                append(it.data.studentDTL.contactPerson)
-                            }
-                            binding.tvContact.text= buildString {
-                                append(getString(R.string.contact_no))
-                                append(it.data.studentDTL.contactMob)
-                            }
+
+
                             infractionTypeList.clear()
                             infractionConsequencesList.clear()
                             if (!it.data.infractionTypes.isNullOrEmpty()){
@@ -210,8 +204,83 @@ class AddInfractionFragment : Fragment() {
             }
         }
 
-        addInfractionViewModel.addInfraction(studentID)
+        if (uType == Constant.STUDENT_TYPE){
+            addInfractionViewModel.addInfraction(userID)
+        }else{
+            addInfractionViewModel.addStaffInfraction(userID)
+        }
 
+    }
+
+    private fun bindStaffDetails(staffDTL: Staff) {
+
+        binding.tvStudentName.text= buildString {
+            append(staffDTL.name)
+        }
+
+        Picasso.get().
+        load(staffDTL.photo)
+            .placeholder(R.drawable.default_profile)
+            .  into(binding.circleImageViewProfile)
+
+        binding.tvAdmissionNo.text= buildString {
+            append(getString(R.string.designation_bold))
+            append(" ")
+            append(staffDTL.designation)
+        }
+        binding.tvClassName.text= buildString {
+            append(getString(R.string.mobile_pun_bold))
+            append(" ")
+            append(staffDTL.mobile)
+        }
+
+        binding.tvFatherName.text= buildString {
+            append(getString(R.string.doj_bold))
+            append(" ")
+            append(staffDTL.doj)
+        }
+
+        binding.tvContact.text= buildString {
+            append(getString(R.string.email_id_pun_bold))
+            append(" ")
+            append(staffDTL.emailID)
+        }
+        binding.tvGender.text= buildString {
+            append(getString(R.string.gender_pun_bold))
+            append(" ")
+            append(staffDTL.gender)
+        }
+
+
+    }
+
+    private fun bindStudentDetails(studentDTL: StudentDTL) {
+
+        Picasso.get().
+        load(studentDTL.photo)
+            .placeholder(R.drawable.default_profile)
+            .  into(binding.circleImageViewProfile)
+
+        binding.tvStudentName.text= buildString {
+            append(studentDTL.name)
+        }
+
+        binding.tvAdmissionNo.text= buildString {
+            append(getString(R.string.admission_no))
+            append(studentDTL.admissionNo)
+        }
+        binding.tvClassName.text= buildString {
+            append(getString(R.string.classes))
+            append(studentDTL.`class`)
+        }
+        binding.tvFatherName.text= buildString {
+            append(getString(R.string.contact_person))
+            append(studentDTL.contactPerson)
+        }
+        binding.tvContact.text= buildString {
+            append(getString(R.string.contact_no))
+            append(studentDTL.contactMob)
+        }
     }
 
     private fun popUpSelectInfractionCat(){
@@ -273,7 +342,7 @@ class AddInfractionFragment : Fragment() {
                  binding.tvSelectSubInfraction.text= subInfractionCatData .infraction
 
                  addInfractionViewModel.getinfractionInstance(infractionCatData.infrTypeID,
-                     subInfractionCatData.infrTypeID,studentID)
+                     subInfractionCatData.infrTypeID,userID,uType)
                  setInfrenceInstance()
                  builder.dismiss()
              }
@@ -384,9 +453,9 @@ class AddInfractionFragment : Fragment() {
 
         if (isValidate){
             addInfractionViewModel.saveInfraction(
-                uType = 1,
+                uType = uType,
                 action,
-                studentID,
+                userID,
                 subInfractionCatData.infrTypeID,
                 infractionConsequence.consID,
                 binding.tvInstance.text.toString().toInt(),

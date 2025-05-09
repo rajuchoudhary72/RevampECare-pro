@@ -284,14 +284,16 @@ class StudentListSubFragment() : Fragment(),
                         findNavController().navigate(
                             R.id.action_studentListFragment2_to_infractionListFragment,
                             Bundle().apply {
-                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                                putInt(Constant.USER_ID, t.stID!!)
+                                putInt(Constant.USER_TYPE, Constant.STUDENT_TYPE)
                             })
                     }
                     1->{
                         findNavController().navigate(
                             R.id.action_studentListFragment2_to_addInfractionFragment,
                             Bundle().apply {
-                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                                putInt(Constant.USER_ID, t.stID!!)
+                                putInt(Constant.USER_TYPE, Constant.STUDENT_TYPE)
                             })
                     }
                 }

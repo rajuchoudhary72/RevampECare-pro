@@ -39,9 +39,9 @@ class TeacherListAdapter(private var staffList: List<Staff>,
                 append(data.designation)
                 append(" )")
             }
-             tvSubjectName.isVisible=true
 
-                 tvSubjectName.text="Subject: ${data.teachersSubject}"
+             tvSubjectName.isVisible=true
+             tvSubjectName.text="Subject: ${data.teachersSubject}"
 
 
 
