@@ -46,7 +46,7 @@ class SelectRecipientsPagerViewModel @Inject constructor(
         recipientsType == RecipientsType.STAFFS && user?.userType == 3
     }.asLiveData()
 
-    private val scholarType = MutableStateFlow(ScholarType.ALL)
+    val scholarType = MutableStateFlow(ScholarType.ALL)
 
     private val selectedStaffTypes = MutableStateFlow<List<StaffType>?>(null)
 
@@ -178,12 +178,24 @@ class SelectRecipientsPagerViewModel @Inject constructor(
 
 }
 
+
 enum class ScholarType(val id: Int) {
     ALL(2),
     BOARDING(1),
-    DAY_SCHOLAR(0)
-}
+    DAY_SCHOLAR(0);
 
+    companion object {
+        fun getScholarType(id: Int): ScholarType {
+            // Loop through values manually instead of using firstOrNull
+            for (type in values()) {
+                if (type.id == id) {
+                    return type
+                }
+            }
+            return ALL
+        }
+    }
+}
 
 sealed interface SelectRecipientsUiState {
 

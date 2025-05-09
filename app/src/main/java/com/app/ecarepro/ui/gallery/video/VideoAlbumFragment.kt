@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -63,6 +64,21 @@ class VideoAlbumFragment : Fragment() , ItemListener<AlbumVideo> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        /*for  push notification  handling  condition  here where  we redirect  screen  respective  "refID" */
+        arguments?.let {args ->
+            if (args.getString("ID")=="Menu"){
+
+            }else{
+                if(args.getString("ID").isNullOrEmpty().not()){
+                    findNavController().navigate(
+                        R.id.action_videoAlbumFragment_to_videoAlbumDTLFragment,
+                        bundleOf(Constant.ID to args.getString("ID"))
+                    )
+                    args.remove("ID")
+                }
+            }
+        }
         lifecycleScope.launch {
             videoAlbumViewModel.photoAlbumStateFlow.collectLatest {
                 when (it) {

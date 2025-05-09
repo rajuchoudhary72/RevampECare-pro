@@ -152,7 +152,9 @@ class SelectRecipientPagerFragment : Fragment() {
             }
 
             launch {
-
+                selectRecipientsPagerViewModel.scholarType.collectLatest {
+                    selectRecipientsViewModel.scholarType = it
+                }
             }
 
         }
