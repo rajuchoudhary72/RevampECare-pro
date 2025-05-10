@@ -464,11 +464,14 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 }
             }
             else if (tripType == Constant.DOWN_TRIP) {
+                // before  ,OP  and ab  absent
                 studentListToMarkAtt[pos].dropStatus = action
+
 
                 /*condition for down trip count*/
                 if (studentListToMarkAtt[pos].pickupStatus == 1) {
                     if (action == 2 || action == 1) {
+
                         //countPresent = present -op
                         if (countPresnet > 0) {
                             countPresnet -= 1
