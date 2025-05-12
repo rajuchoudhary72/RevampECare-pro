@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.DisciplineViewListItemBinding
-import com.app.ecarepro.databinding.ProfileUpdateRecordItemBinding
 import com.app.ecarepro.model.RecentInfraction
 import com.app.ecarepro.ui.discipline_log.infraction.InfractionListFragment
+import com.app.ecarepro.utils.Constant
 
-class InfractionListAdapter(private var recentInfractions: List<RecentInfraction>,
-                            private var infractionListFragment: InfractionListFragment
+class InfractionListAdapter(
+    private var recentInfractions: List<RecentInfraction>,
+    private var infractionListFragment: InfractionListFragment,
+    private val uType: Int
 ) :
     RecyclerView.Adapter<InfractionListAdapter.CircularViewHolder>() {
 
@@ -78,7 +79,13 @@ class InfractionListAdapter(private var recentInfractions: List<RecentInfraction
              binding.tvReason.text= data.subInfraction
              binding.tvDiagnosis.text= data.consequences
              binding.tvRemark.text= data.correctiveAction
-             binding.tvAttdentName.text= data.staffName
+             if (uType== Constant.STUDENT_TYPE){
+                 binding.tvAttdentName.text= data.staffName
+
+             }else{
+                 binding.tvAttdentName.text= data.issueBy
+
+             }
 
              binding.tvRemark.setOnClickListener {
 
