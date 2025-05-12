@@ -442,6 +442,7 @@
     <string name="boarding">Boarding</string>
     <string name="day_scholar">Day Scholar</string>
     <string name="select_all">Select All</string>
+    <string name="show_per">Show Attendance(%)</string>
     <string name="select_staff_type">Select Staff Type</string>
     <string name="select_staff_types">Select staff types</string>
     <string name="subject_line">Subject Line…</string>
