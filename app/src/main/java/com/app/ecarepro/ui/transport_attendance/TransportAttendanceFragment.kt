@@ -454,14 +454,15 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
             if (tripType == Constant.UP_TRIP) {
                 studentListToMarkAtt[pos].pickupStatus = action
                 /*condition for   up trip  count  */
-                if (action === 1) {
+                setBusCount()
+              /*  if (action === 1) {
                     countPresnet += 1
                 } else {
                     if (countPresnet > 0) {
                         countPresnet -= 1
                     }
 
-                }
+                }*/
             }
             else if (tripType == Constant.DOWN_TRIP) {
 
@@ -616,7 +617,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 countPresnet += 1
             }
             if (tripType == Constant.DOWN_TRIP){
-                // already Done trip  finesh
+                // already Done trip  fines
                 if (transStudentList.dropStatus ==1 || transStudentList.dropStatus==2) {
                     if (countPresnet>0)
                         countPresnet -= 1

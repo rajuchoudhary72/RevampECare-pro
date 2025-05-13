@@ -63,7 +63,8 @@ class AllStaffListFragment : Fragment(), ItemListener<Staff> {
                         R.id.action_lessonPlanListFragment_to_viewLessonPlanFragment,
                         bundleOf(
                             Constant.LESSON_ID_ARGUMENT to args.getString("ID"),
-                            Constant.LESSONPLAN_HARDCCODE_KEY to args.getString("HARDCODE")
+                            Constant.LESSONPLAN_HARDCCODE_KEY to args.getString("HARDCODE"),
+                           "reportLessonPlan" to args.getString("HARDCODE")
                         )
                     )
                     args.remove("ID")

@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ViewLessonPlanFragment : Fragment() {
 
-
     private var lPlanId: String = ""
     private var lPlanPush: String = ""
     private var lPlanIdnew: Int = 0
@@ -117,7 +116,7 @@ class ViewLessonPlanFragment : Fragment() {
                     dialog.dismiss()
                 } else {
                     Toast.makeText(requireContext(),"Rejection Reason is mandatory field",Toast.LENGTH_SHORT).show()
-                   // textInputEditText.error = "Rejection Reason is mandatory field"
+                    // textInputEditText.error = "Rejection Reason is mandatory field"
                 }
             } else {
                 //do approve code here
@@ -268,10 +267,3 @@ class ViewLessonPlanFragment : Fragment() {
 
     }
 }
-
-
-
-
-
-
-

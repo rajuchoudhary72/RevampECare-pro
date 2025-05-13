@@ -464,7 +464,9 @@ class MainActivity : AppCompatActivity() {
                 if (childMenuId != null) {
                     if (SubCildMenuId != null) {
                         if (SubCildMenuId>0){
-                            getFragmentId(menuId,childMenuId, SubCildMenuId, refId)
+                            getFragmentId(menuId,childMenuId, SubCildMenuId, refId,
+                                userID.toString()
+                            )
                         }else{
                             Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
                             getFragmentId(menuId, childMenuId, refId)
@@ -1491,6 +1493,7 @@ class MainActivity : AppCompatActivity() {
         childMenuId: Int,
         childChildMenuId: Int,
         refId: String? = null,
+        userID: String? = null,
         from: String = "other"
     ) {
         systemViewModel.sendAnalyticEvent(
@@ -1586,8 +1589,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-
-
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1633,7 +1634,12 @@ class MainActivity : AppCompatActivity() {
                     0 -> {
                         when (childChildMenuId) {
                             15 -> {
-                                navController.navigate(R.id.allStaffListFragment, bundleOf("ID" to refId))
+                                if (refId!=null){
+                                    Constant.LESSONPLAN_HARDCCODE_KEY = "LessonList"
+                                    navController.navigate(R.id.viewLessonPlanFragment, bundleOf(Constant.LESSON_ID_ARGUMENT to refId))
+                                }else{
+                                    navController.navigate(R.id.allStaffListFragment)
+                                }
                             }
                         }
                     }
