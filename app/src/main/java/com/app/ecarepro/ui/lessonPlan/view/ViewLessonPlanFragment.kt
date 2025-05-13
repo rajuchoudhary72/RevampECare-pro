@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ViewLessonPlanFragment : Fragment() {
 
-
     private var lPlanId: String = ""
     private var lPlanPush: String = ""
     private var lPlanIdnew: Int = 0
