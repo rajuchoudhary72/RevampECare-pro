@@ -1555,6 +1555,18 @@ class MainActivity : AppCompatActivity() {
             24 ->{
 
                 when(childMenuId){
+
+                    21 ->{
+                        when(childChildMenuId){
+                            23 -> {
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.APPRECIATION_FRAG)
+                                })
+                            }
+                        }
+
+                    }
+
                     22 -> {
                         when(childChildMenuId){
                             17 -> {

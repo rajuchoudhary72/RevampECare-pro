@@ -94,6 +94,7 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
                                 val circularAdapter = InfractionListAdapter(
                                     it.data.records,
                                     this@InfractionListFragment,
+                                    uType
                                 )
 
                                 binding.recyclerInfractionList.apply {
