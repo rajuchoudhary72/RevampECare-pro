@@ -1590,7 +1590,6 @@ class MainActivity : AppCompatActivity() {
 
             }
 
-
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
