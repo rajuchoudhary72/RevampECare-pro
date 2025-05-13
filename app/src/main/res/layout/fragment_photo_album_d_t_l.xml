@@ -15,7 +15,6 @@
         tools:context=".ui.gallery.photo.photoAlbum.photoAlbumDTL.PhotoAlbumDTLFragment">
 
 
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

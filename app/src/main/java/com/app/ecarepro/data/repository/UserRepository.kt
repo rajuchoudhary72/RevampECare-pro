@@ -296,7 +296,8 @@ interface UserRepository {
         status: Int,
         ord: Int,
         applType: Int,
-        pg: Int
+        pg: Int,
+        attPer:Boolean
     ): NetworkLeaveReport
 
 
