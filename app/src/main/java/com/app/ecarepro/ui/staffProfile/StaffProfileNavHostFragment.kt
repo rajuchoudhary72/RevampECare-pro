@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import com.app.ecarepro.databinding.FragmentStaffProfileNavHostBinding
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileAttendanceFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileFeeSummaryFragment
@@ -36,6 +38,7 @@ import kotlinx.coroutines.launch
 class StaffProfileNavHostFragment : Fragment() {
 
     private var staffId: Int = 0
+    private var profilePhoto: String = ""
     private lateinit var binding: FragmentStaffProfileNavHostBinding
     private val staffProfileNavHostViewModel: StaffProfileNavHostViewModel by viewModels()
 
@@ -55,9 +58,17 @@ class StaffProfileNavHostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         staffProfile(staffId)
+binding.civStuPic.setOnClickListener {
+    try {
+        findNavController().navigate(
+            R.id.photoViewFragmentFragment,
+            bundleOf(PhotoViewFragmentFragment.PHOTO to profilePhoto)
+        )
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
 
     }
 
@@ -88,7 +99,7 @@ class StaffProfileNavHostFragment : Fragment() {
                                     .placeholder(R.drawable.default_profile)
                                     .  into(binding.civStuPic)
                             }
-
+                            profilePhoto =(it.data.details.photo)
                             val fragmentList: ArrayList<Fragment> = ArrayList()
                             val fragmentName= mutableListOf<String>()
 

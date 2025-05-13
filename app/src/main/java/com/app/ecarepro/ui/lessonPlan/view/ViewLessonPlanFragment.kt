@@ -117,7 +117,7 @@ class ViewLessonPlanFragment : Fragment() {
                     dialog.dismiss()
                 } else {
                     Toast.makeText(requireContext(),"Rejection Reason is mandatory field",Toast.LENGTH_SHORT).show()
-                   // textInputEditText.error = "Rejection Reason is mandatory field"
+                    // textInputEditText.error = "Rejection Reason is mandatory field"
                 }
             } else {
                 //do approve code here
@@ -268,10 +268,3 @@ class ViewLessonPlanFragment : Fragment() {
 
     }
 }
-
-
-
-
-
-
-
