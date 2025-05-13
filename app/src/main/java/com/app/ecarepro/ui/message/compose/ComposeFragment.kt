@@ -58,6 +58,7 @@ import com.app.ecarepro.databinding.FragmentComposeBinding
 import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.selectRecipients.ScholarType
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileUtils
@@ -491,7 +492,10 @@ class ComposeFragment : Fragment() {
             setFragmentResultListener(SelectRecipientsFragment.SELECT_CONTACT_REQUEST_KEY) { requestKey, bundle ->
                 if (bundle.containsKey(SelectRecipientsFragment.SELECTED_CONTACT)) {
                     val contacts: ContactsDto = bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
+                    val scholarType: ScholarType =
+                        ScholarType.getScholarType(bundle.getInt(SelectRecipientsFragment.SCHOLAR_TYPE))
                     composeViewModel.setContacts(contacts.contacts)
+                    composeViewModel.setScholarType(scholarType)
                 }
             }
 
@@ -1120,6 +1124,7 @@ class ComposeFragment : Fragment() {
         startLocationFetch()
     }
 
+    var locationPermissionDeniedDialogSeen = false
 
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
@@ -1128,39 +1133,72 @@ class ComposeFragment : Fragment() {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), 120
-            )
-            return
-        }
-        if (isGPSEnabled().not()) {
-            MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
-                .setCancelable(false)
-                .setMessage("GPS is disabled in your device. Would you like to enable it?")
-                .setPositiveButton("No") { d, _ ->
-                    d.dismiss()
-                    findNavController().popBackStack()
-                }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
-                    d.dismiss()
-                    val callGPSSettingIntent = Intent(
-                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
-                    )
-                    startActivity(callGPSSettingIntent)
-                }.show()
+            // Check if permission was denied before requesting
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .not() && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION).not()
+            ) {
+                // Permission is denied permanently, show a dialog and guide to settings
+                if (locationPermissionDeniedDialogSeen.not()) {
+                    showPermissionDeniedDialog()
+                    locationPermissionDeniedDialogSeen = true
+                }
+            } else {
+                // Permission is denied temporarily, request it
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ), 120
+                )
+
+            }
         } else {
-            fusedLocationClient
-                .lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    composeViewModel.currentLocation =
-                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
-                }
-                .addOnFailureListener {
-                    Log.e("MSG", "startLocationFetch: " + it.message)
-                }
+            if (isGPSEnabled().not()) {
+                MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
+                    .setCancelable(false)
+                    .setMessage("GPS is disabled in your device. Would you like to enable it?")
+                    .setPositiveButton("No") { d, _ ->
+                        d.dismiss()
+                        findNavController().popBackStack()
+                    }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                        d.dismiss()
+                        val callGPSSettingIntent = Intent(
+                            Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                        )
+                        startActivity(callGPSSettingIntent)
+                    }.show()
+            } else {
+                fusedLocationClient
+                    .lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        composeViewModel.currentLocation =
+                            Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+                    }
+                    .addOnFailureListener {
+                        Log.e("MSG", "startLocationFetch: " + it.message)
+
+                    }
+            }
         }
+    }
+
+    private fun showPermissionDeniedDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Location Permission Required")
+            .setMessage("Location permission is required to send your current location. Please enable it in app settings.")
+            .setPositiveButton("Settings") { dialog, _ ->
+                locationPermissionDeniedDialogSeen = false
+                dialog.dismiss()
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().onBackPressed()
+            }
+            .show()
     }
 
 

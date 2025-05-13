@@ -464,7 +464,7 @@ class MainActivity : AppCompatActivity() {
                 if (childMenuId != null) {
                     if (SubCildMenuId != null) {
                         if (SubCildMenuId>0){
-                            getFragmentId(menuId, SubCildMenuId, refId)
+                            getFragmentId(menuId,childMenuId, SubCildMenuId, refId)
                         }else{
                             Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
                             getFragmentId(menuId, childMenuId, refId)
@@ -1328,7 +1328,7 @@ class MainActivity : AppCompatActivity() {
                     14 -> navController.navigate(R.id.birthdayFragment)
 
                     15 -> {
-                        navController.navigate(R.id.allStaffListFragment)
+                        navController.navigate(R.id.allStaffListFragment, bundleOf("ID" to refId))
                       /*  lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
@@ -1449,14 +1449,22 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+            6 -> {
+                when (childMenuId) {
+                    7 -> navController.navigate(R.id.composeFragment)
+                    8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
+                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
+
+                }
+            }
             /*gallery*/
             34 -> {
                 when (childMenuId) {
-                    48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
-                    49 -> navController.navigate(R.id.videoAlbumFragment)
+                    48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment, bundleOf("ID" to refId))
+                    49 -> navController.navigate(R.id.videoAlbumFragment, bundleOf("ID" to refId))
                     50 -> navController.navigate(R.id.favoritesListFragment)
                     51 -> navController.navigate(R.id.mediaGalleryFragment)
-                    73 -> navController.navigate(R.id.kidCornerFragment)
+                    73 -> navController.navigate(R.id.kidCornerFragment, bundleOf("ID" to refId))
                 }
             }
 
@@ -1476,10 +1484,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
     fun getFragmentId(
         menuID: Int,
         childMenuId: Int,
         childChildMenuId: Int,
+        refId: String? = null,
         from: String = "other"
     ) {
         systemViewModel.sendAnalyticEvent(
@@ -1622,7 +1633,7 @@ class MainActivity : AppCompatActivity() {
                     0 -> {
                         when (childChildMenuId) {
                             15 -> {
-                                navController.navigate(R.id.allStaffListFragment)
+                                navController.navigate(R.id.allStaffListFragment, bundleOf("ID" to refId))
                             }
                         }
                     }

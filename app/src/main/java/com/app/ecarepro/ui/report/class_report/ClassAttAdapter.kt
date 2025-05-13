@@ -76,6 +76,10 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
                      tvStatus.text = "NA"
                      tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_na,null)
                  }
+                 7 -> {
+                     tvStatus.text = "WH"
+                     tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_wh,null)
+                 }
              }
          }
 

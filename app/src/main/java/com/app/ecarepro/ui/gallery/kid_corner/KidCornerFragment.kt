@@ -28,6 +28,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.gallery.kid_corner.kid_album_details.KidAlbumDetailsFragment
 import com.app.ecarepro.ui.gallery.kid_corner.model.Album
 import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
+import com.app.ecarepro.utils.Constant
 
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,6 +91,21 @@ class KidCornerFragment : Fragment(), ItemListener<Album> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /*for  push notification  handling  condition  here where  we redirect  screen  respective  "refID" */
+        arguments?.let {args ->
+            if (args.getString("ID")=="Menu"){
+
+            }else{
+                if(args.getString("ID").isNullOrEmpty().not()){
+                    findNavController().navigate(
+                        R.id.kidAlbumDetailsFragment,
+                        bundleOf(KidAlbumDetailsFragment.KidId to args.getString("ID"))
+                    )
+                    args.remove("ID")
+                }
+            }
+        }
         binding.edSearch.doAfterTextChanged { text ->
             val query = text?.toString()?.trim() ?: ""
             if (query != kidCornerViewModel.lastSearchQuery) {

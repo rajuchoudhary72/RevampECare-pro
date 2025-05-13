@@ -1035,6 +1035,9 @@
         <action
             android:id="@+id/action_allStaffListFragment_to_lessonPlanListFragment"
             app:destination="@id/lessonPlanListFragment" />
+        <action
+            android:id="@+id/action_lessonPlanListFragment_to_viewLessonPlanFragment"
+            app:destination="@id/viewLessonPlanFragment" />
         />
     </fragment>
 </navigation>

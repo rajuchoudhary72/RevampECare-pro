@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -23,6 +24,7 @@ import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.MessageViewModel
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.imageUrl
 import com.app.ecarepro.utils.stringFormat2String
@@ -38,6 +40,8 @@ class ConversationFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val conversationViewModel: ConversationViewModel by viewModels()
+    private val messageViewModel: MessageViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -151,6 +155,10 @@ class ConversationFragment : Fragment() {
                                         }
                                     )
                                     clickListener { _ ->
+                                        if(message.hasRead?.not() == true){
+                                            messageViewModel.updateUnreadMessageCount(conversationViewModel.getConversationId())
+                                        }
+                                        conversationViewModel.updateMessageReadStatus(message)
                                         findNavController().navigate(
                                             R.id.chatFragment,
                                             bundleOf("ID" to message.id)

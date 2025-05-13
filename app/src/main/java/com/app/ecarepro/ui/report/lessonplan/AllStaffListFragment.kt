@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.app.ecarepro.databinding.FragmentAllStaffListBinding
 import com.app.ecarepro.databinding.FragmentStaffListBinding
 import com.app.ecarepro.model.Staff
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.message.chat.MessageType
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +54,22 @@ class AllStaffListFragment : Fragment(), ItemListener<Staff> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        arguments?.let {args ->
+            if (args.getString("ID")=="Menu"){
 
+            }else{
+                if(args.getString("ID").isNullOrEmpty().not()){
+                    findNavController().navigate(
+                        R.id.action_lessonPlanListFragment_to_viewLessonPlanFragment,
+                        bundleOf(
+                            Constant.LESSON_ID_ARGUMENT to args.getString("ID"),
+                            Constant.LESSONPLAN_HARDCCODE_KEY to args.getString("HARDCODE")
+                        )
+                    )
+                    args.remove("ID")
+                }
+            }
+        }
         lifecycleScope.launch {
             staffListViewModel.searchQuery.collectLatest {
 

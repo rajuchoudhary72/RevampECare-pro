@@ -60,6 +60,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
     private var stopLSTList = mutableListOf<StopLST>()
 
     private var tripType = 0
+    private var countPresnet = 0
     private var p = 0
     private var a = 0
     private var l = 0
@@ -123,6 +124,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                     ) {
                         when (position) {
                             1 -> {
+                                binding.tvCount.isVisible = true
                                 tripType = Constant.UP_TRIP
                                 getStoppersList()
                                 binding.tvSave.isVisible = true
@@ -130,12 +132,14 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                             }
 
                             2 -> {
+                                binding.tvCount.isVisible = true
                                 tripType = Constant.DOWN_TRIP
                                 getStoppersList()
                                 binding.tvSave.isVisible = true
                             }
 
                             3 -> {
+                                binding.tvCount.isVisible = true
                                 tripType = Constant.DROP_STUDENT_TRIP
                                 binding.tvSave.isVisible = false
                             }
@@ -225,7 +229,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-
+                            countPresnet = 0
                             if (it.data.stuLst != null && it.data.stuLst.isNotEmpty()) {
 
                                 binding.recyclerStudentAttMark.isVisible = true
@@ -248,6 +252,20 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                                 }
 
                                 studentListToMarkAtt = it.data.stuLst
+                                        /*api success first time */
+                                for (transStudentList in studentListToMarkAtt) {
+                                        if (transStudentList.pickupStatus ==1) {
+                                            countPresnet += 1
+                                        }
+                                     if (tripType == Constant.DOWN_TRIP){
+                                        // already Done trip  finesh
+                                        if (transStudentList.dropStatus ==1 || transStudentList.dropStatus==2) {
+                                            if (countPresnet>0)
+                                                countPresnet -= 1
+                                        }
+                                    }
+                                }
+                                binding.tvCount.text = countPresnet.toString()
 
                             } else {
                                 binding.tvSave.isVisible = false
@@ -421,10 +439,10 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
     }
 
 
-    override fun onItemClick(t: StuLst, pos: Int, action: Int) {
+    override fun onItemClick(studlistPostion: StuLst, pos: Int, action: Int) {
         if (action == Constant.DROP_CONFORM) {
             transportAttendanceViewModel.dropToStudent(
-                t.stID,
+                studlistPostion.stID,
                 Constant.toSystemDate(Constant.currentDate()),
                 true
             ).invokeOnCompletion {
@@ -432,16 +450,49 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                     .show()
             }
         } else {
-
             studentListToMarkAtt[pos].isSelected = true
             if (tripType == Constant.UP_TRIP) {
                 studentListToMarkAtt[pos].pickupStatus = action
-            } else if (tripType == Constant.DOWN_TRIP) {
-                studentListToMarkAtt[pos].dropStatus = action
+                /*condition for   up trip  count  */
+                if (action === 1) {
+                    countPresnet += 1
+                } else {
+                    if (countPresnet > 0) {
+                        countPresnet -= 1
+                    }
+
+                }
             }
+            else if (tripType == Constant.DOWN_TRIP) {
 
+
+
+//                /*condition for down trip count*/
+//                if (studentListToMarkAtt[pos].pickupStatus == 1) {
+//                    if (action == 2 || action == 1) {
+//                        val ott= studentListToMarkAtt[pos].dropStatus
+//                        //countPresent = present -op
+//                        if (countPresnet > 0) {
+//                            if (action==1 && ott !=2){
+//                                countPresnet -= 1
+//                            }else if (action == 2 && ott != 1){
+//                                countPresnet -= 1
+//                            }
+//
+//                        }
+//                    } else {
+//                        countPresnet += 1
+//                    }
+//                }
+
+                // before  ,OP  and ab  absent
+                studentListToMarkAtt[pos].dropStatus = action
+
+                setBusCount()
+
+            }
         }
-
+        binding.tvCount.text =  countPresnet.toString()
     }
 
 
@@ -556,6 +607,23 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
         }
 
 
+    }
+
+    private fun setBusCount(){
+        countPresnet=0
+        for (transStudentList in studentListToMarkAtt) {
+            if (transStudentList.pickupStatus ==1) {
+                countPresnet += 1
+            }
+            if (tripType == Constant.DOWN_TRIP){
+                // already Done trip  finesh
+                if (transStudentList.dropStatus ==1 || transStudentList.dropStatus==2) {
+                    if (countPresnet>0)
+                        countPresnet -= 1
+                }
+            }
+        }
+        binding.tvCount.text = countPresnet.toString()
     }
 
 }

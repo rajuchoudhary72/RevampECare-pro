@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.message.inbox
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.InboxMessage
@@ -124,6 +125,22 @@ class InboxMessageViewModel @Inject constructor(
     }
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.INBOX_MESSAGE_LIST)
+    }
+    fun updateUnreadMessageCount(id: String, unReadMessageCount: Int) {
+        viewModelScope.launch {
+            Log.e("TAG", "updateUnreadMessageCount: $id , $unReadMessageCount" )
+            val currentState = uiState.value
+            if (currentState is InboxMessageUiState.Success) {
+                val updatedMessages = currentState.messages.map { message ->
+                    if (message.id == id) {
+                        message.copy(unread = message.unread?.minus(unReadMessageCount))
+                    } else {
+                        message
+                    }
+                }
+                uiState.update { currentState.copy(messages = updatedMessages) }
+            }
+        }
     }
 }
 

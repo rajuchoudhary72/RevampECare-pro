@@ -47,6 +47,7 @@ import java.io.InputStream
 import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import com.app.ecarepro.data.network.model.MessageSettings
+import com.app.ecarepro.ui.message.selectRecipients.ScholarType
 
 
 @HiltViewModel
@@ -58,9 +59,12 @@ class ComposeViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    //var scholarType: ScholarType = ScholarType.ALL
+    // Change to private property with a different name
+    private var _scholarType: ScholarType = ScholarType.ALL
+
     val composeMessageType =
         savedStateHandle.getStateFlow("composeMessageType", ComposeMessageType.ONLY_APP_MESSAGE)
-
 
     private val attachments = MutableStateFlow<List<MiMedia>>(emptyList())
     private val contacts = MutableStateFlow<List<Contact>>(emptyList())
@@ -209,7 +213,8 @@ class ComposeViewModel @Inject constructor(
                             recipientType = contacts.value.firstOrNull()?.receiverType,
                             msgType = getMessageType(),
                             attachment = null,
-                            multipleAttachments = getMultipleAttachment()
+                            multipleAttachments = getMultipleAttachment(),
+                            scholarType = _scholarType.id
                         )
                     )
                         .collectLatest { response ->
@@ -410,6 +415,11 @@ class ComposeViewModel @Inject constructor(
         }
 
         return data
+    }
+
+    // Keep your setter function
+    fun setScholarType(scholarType: ScholarType) {
+        this._scholarType = scholarType
     }
 }
 
