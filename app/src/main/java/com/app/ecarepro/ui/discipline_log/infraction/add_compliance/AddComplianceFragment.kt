@@ -54,6 +54,7 @@ class AddComplianceFragment : Fragment() {
     private val sharedViewModel: ShareViewModelDiscipline by activityViewModels()
     private var lastClickAttachmentType: AttachmentType? = null
     private var infractionId= ""
+    private var uType=0
 
 
     override fun onCreateView(
@@ -61,6 +62,12 @@ class AddComplianceFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentAddComplianceBinding.inflate(inflater,container,false)
+
+        try {
+            uType=  requireArguments().getInt(Constant.USER_TYPE)
+
+        }catch (e:Exception){}
+
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.add_compliance)
         return binding.root
@@ -237,7 +244,7 @@ class AddComplianceFragment : Fragment() {
                     findNavController().popBackStack()
                 }  }
             } }
-        addComplianceViewModel.postCompliance(binding.etCompline.toString(),infractionId)
+        addComplianceViewModel.postCompliance(uType,binding.etCompline.toString(),infractionId)
     }
 
     private fun resolvedCompliance() {
@@ -255,7 +262,7 @@ class AddComplianceFragment : Fragment() {
                     findNavController().popBackStack()
                 }  }
             } }
-        addComplianceViewModel.resolvedCompliance(infractionId)
+        addComplianceViewModel.resolvedCompliance(infractionId,uType)
     }
 
     private fun launchPdfPicker() {

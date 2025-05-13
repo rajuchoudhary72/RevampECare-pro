@@ -40,6 +40,18 @@ class InfractionListViewModel @Inject constructor(
 
     }
 
+    fun  getStaffInfractions( SID: Int  )=viewModelScope.launch {
+        runCatching {
+            addInfractionMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.getStaffInfractions(SID)
+        }.onSuccess {
+            addInfractionMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            addInfractionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
     fun  disciplineLogDeleteLog(
         id: String,
         type: Int

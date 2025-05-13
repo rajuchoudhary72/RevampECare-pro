@@ -13,6 +13,8 @@ data class Staff(
     val pending: Int,
     val photo: String,
     val qualification: String,
+    val doj: String,
+    val emailID: String,
     val sid: Int
 ){
     fun details() = "<b>Designation:</b> $designation<br>" +
