@@ -348,11 +348,11 @@ interface UserRepository {
     ): NetworkAppreciations
 
     suspend fun getInfractions(
-        stID: Int
+        stID: Int?
     ): NetworkInfractions
 
     suspend fun getStaffInfractions(
-        SID: Int
+        SID: Int?
     ): NetworkInfractions
 
     suspend fun disciplineLogDeleteLog(

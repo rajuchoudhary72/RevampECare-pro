@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
-    private var userID: Int = 0
+    private var userID: Int? = null
     private var uType=0
     private lateinit var binding: FragmentInfractionListBinding
     private  val infractionListViewModel: InfractionListViewModel by viewModels()
@@ -81,10 +81,15 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
                         if (it.data!=null){
 
-                            if (uType==Constant.STUDENT_TYPE){
+                            if (uType==Constant.STUDENT_TYPE||uType==Constant.PARENT_TYPE){
                                 bindStudentDetails(it.data.studentDTL)
                             }else{
-                                bindStaffDetails(it.data.stafftDTL)
+                                if (it.data.stafftDTL!=null){
+                                    bindStaffDetails(it.data.stafftDTL)
+                                }else{
+                                    binding.recyclerInfractionList.isVisible=false
+                                    binding.tvNoData.isVisible=true
+                                }
                             }
 
                             if (it.data.records!=null){
@@ -119,7 +124,7 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
         }
 
-        if (uType==Constant.STUDENT_TYPE){
+        if (uType==Constant.STUDENT_TYPE||uType==Constant.PARENT_TYPE){
             infractionListViewModel.getInfractions(userID)
         }else{
             infractionListViewModel.getStaffInfractions(userID)
@@ -215,7 +220,7 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
                         if (it.data!=null){
                             it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
-                            if (uType==Constant.STUDENT_TYPE){
+                            if (uType==Constant.STUDENT_TYPE||uType==Constant.PARENT_TYPE){
                                 infractionListViewModel.getInfractions(userID)
                             }else{
                                 infractionListViewModel.getStaffInfractions(userID)

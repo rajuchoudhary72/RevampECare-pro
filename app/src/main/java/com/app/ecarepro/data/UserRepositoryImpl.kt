@@ -583,11 +583,11 @@ class UserRepositoryImpl @Inject constructor(
         return userService.getAppreciations(stID)
     }
 
-    override suspend fun getInfractions(stID: Int): NetworkInfractions {
+    override suspend fun getInfractions(stID: Int?): NetworkInfractions {
         return userService.getInfractions(stID)
     }
 
-    override suspend fun getStaffInfractions(SID: Int): NetworkInfractions {
+    override suspend fun getStaffInfractions(SID: Int?): NetworkInfractions {
         return userService.getStaffInfractions(SID)
     }
 

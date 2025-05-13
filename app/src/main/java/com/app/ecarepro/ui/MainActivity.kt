@@ -1428,16 +1428,10 @@ class MainActivity : AppCompatActivity() {
 
                             }
 
-                            22 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
-                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                            22 ->
+                                navController.navigate(R.id.infractionListFragment, Bundle().apply {
+                                    putInt(Constant.USER_TYPE, userType)
                                 })
-
-                            } else {
-                                navController.navigate(R.id.infractionListFragment)
-
-                            }
-
                         }
                     }
                 }

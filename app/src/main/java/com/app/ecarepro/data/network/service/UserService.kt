@@ -385,12 +385,12 @@ interface UserService {
 
     @GET("DisciplineLog/Infractions")
     suspend fun getInfractions(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int?
     ): NetworkInfractions
 
     @GET("DisciplineLog/StaffInfractions")
     suspend fun getStaffInfractions(
-        @Query("SID") SID: Int
+        @Query("SID") SID: Int?
     ): NetworkInfractions
 
     @GET("DisciplineLog/DeleteLog")

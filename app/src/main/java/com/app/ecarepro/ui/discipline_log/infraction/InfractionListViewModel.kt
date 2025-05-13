@@ -28,7 +28,7 @@ class InfractionListViewModel @Inject constructor(
     val deleteLogStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteLogMutableStateFlow
 
 
-    fun  getInfractions( stID: Int  )=viewModelScope.launch {
+    fun  getInfractions( stID: Int?)=viewModelScope.launch {
         runCatching {
             addInfractionMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getInfractions(stID)
@@ -40,7 +40,7 @@ class InfractionListViewModel @Inject constructor(
 
     }
 
-    fun  getStaffInfractions( SID: Int  )=viewModelScope.launch {
+    fun  getStaffInfractions( SID: Int?  )=viewModelScope.launch {
         runCatching {
             addInfractionMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getStaffInfractions(SID)
