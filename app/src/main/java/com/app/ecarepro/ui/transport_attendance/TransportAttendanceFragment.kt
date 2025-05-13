@@ -464,22 +464,32 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 }
             }
             else if (tripType == Constant.DOWN_TRIP) {
+
+
+
+//                /*condition for down trip count*/
+//                if (studentListToMarkAtt[pos].pickupStatus == 1) {
+//                    if (action == 2 || action == 1) {
+//                        val ott= studentListToMarkAtt[pos].dropStatus
+//                        //countPresent = present -op
+//                        if (countPresnet > 0) {
+//                            if (action==1 && ott !=2){
+//                                countPresnet -= 1
+//                            }else if (action == 2 && ott != 1){
+//                                countPresnet -= 1
+//                            }
+//
+//                        }
+//                    } else {
+//                        countPresnet += 1
+//                    }
+//                }
+
                 // before  ,OP  and ab  absent
                 studentListToMarkAtt[pos].dropStatus = action
 
+                setBusCount()
 
-                /*condition for down trip count*/
-                if (studentListToMarkAtt[pos].pickupStatus == 1) {
-                    if (action == 2 || action == 1) {
-
-                        //countPresent = present -op
-                        if (countPresnet > 0) {
-                            countPresnet -= 1
-                        }
-                    } else {
-                            countPresnet += 1
-                    }
-                }
             }
         }
         binding.tvCount.text =  countPresnet.toString()
@@ -597,6 +607,23 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
         }
 
 
+    }
+
+    private fun setBusCount(){
+        countPresnet=0
+        for (transStudentList in studentListToMarkAtt) {
+            if (transStudentList.pickupStatus ==1) {
+                countPresnet += 1
+            }
+            if (tripType == Constant.DOWN_TRIP){
+                // already Done trip  finesh
+                if (transStudentList.dropStatus ==1 || transStudentList.dropStatus==2) {
+                    if (countPresnet>0)
+                        countPresnet -= 1
+                }
+            }
+        }
+        binding.tvCount.text = countPresnet.toString()
     }
 
 }

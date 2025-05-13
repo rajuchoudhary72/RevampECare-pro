@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.databinding.AcademicListItemBinding
 import com.app.ecarepro.databinding.ItemTransAttendanceBinding
 import com.app.ecarepro.model.Mark
 import com.app.ecarepro.model.Subject
@@ -19,20 +20,20 @@ class AcademicPerfListAdapter(
 ) :
     RecyclerView.Adapter<AcademicPerfListAdapter.AssignmentListAdapter>() {
 
-    private lateinit var bindingm: ItemTransAttendanceBinding
+    private lateinit var bindingm: AcademicListItemBinding
     private val expandedStateMap = mutableMapOf<String, Boolean>()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListAdapter {
-        bindingm = ItemTransAttendanceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm = AcademicListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AssignmentListAdapter(bindingm.root)
     }
 
     override fun getItemCount(): Int = markList.size
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
-         val binding = DataBindingUtil.getBinding<ItemTransAttendanceBinding>(holder.itemView)
+         val binding = DataBindingUtil.getBinding<AcademicListItemBinding>(holder.itemView)
         binding?.apply {
             tvStopName.text=markList[position].subjectName
             addLayout(binding.llView,markList[position].marks,position)
