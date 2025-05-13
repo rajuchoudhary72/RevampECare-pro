@@ -338,7 +338,8 @@ interface UserService {
         @Query("Status") status: Int,
         @Query("ord") ord: Int,
         @Query("ApplType") applType: Int,
-        @Query("pg") pg: Int
+        @Query("pg") pg: Int,
+        @Query("Attper") AttPer: Boolean,
     ): NetworkLeaveReport
 
     @POST("Leave/Action")

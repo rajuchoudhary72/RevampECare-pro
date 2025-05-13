@@ -109,13 +109,28 @@
 
         </LinearLayout>
 
-        <CheckBox
-            android:id="@+id/cb_all_select"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="@string/select_all"
-            />
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_all_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/select_all"
+                />
+
+            <CheckBox
+                android:id="@+id/cb_show_att_per"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/show_per"
+                />
+
+        </LinearLayout>
 
 
             <androidx.core.widget.NestedScrollView

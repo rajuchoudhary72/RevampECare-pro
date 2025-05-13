@@ -71,7 +71,6 @@ class AllStaffListFragment : Fragment(), ItemListener<Staff> {
                 }
             }
         }
-
         lifecycleScope.launch {
             staffListViewModel.searchQuery.collectLatest {
 
