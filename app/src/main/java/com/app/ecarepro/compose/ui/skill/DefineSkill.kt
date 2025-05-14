@@ -9,7 +9,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,13 +27,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -52,10 +48,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +57,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -80,12 +71,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.ecarepro.R
 import com.app.ecarepro.compose.composable.ECareExposedDropdownMenuBox
+import com.app.ecarepro.compose.composable.ECareTopAppBar
+import com.app.ecarepro.compose.composable.ItemDropdown
 import com.app.ecarepro.compose.composable.LoadingComposable
 import com.app.ecarepro.compose.composable.LoadingDialog
 import com.app.ecarepro.compose.model.LoadState
 import com.app.ecarepro.compose.model.messageOrNull
 import com.app.ecarepro.compose.theme.ECareProTheme
-import com.app.ecarepro.compose.theme.white
 import com.app.ecarepro.data.network.model.Category
 import com.app.ecarepro.data.network.model.Skill
 import com.app.ecarepro.data.network.model.SkillType
@@ -121,11 +113,10 @@ fun DefineSkillScreen(
     ) {
         Scaffold(
             topBar = {
-                DefineSkillTopAppBar(
+                ECareTopAppBar(
+                    title = "Define Skill",
                     searchQuery = searchQuery,
-                    isSearchActive = isSearchActive,
                     onQueryChange = viewModel::onSearchQueryChange,
-                    onSearchActiveChange = viewModel::setSearchViewActiveState,
                     onClickBack = onClickBack
                 )
             },
@@ -201,8 +192,8 @@ fun CreateSkillBottomSheet(
     var type by remember { mutableStateOf(skillToEdit?.type ?: "") }
     var skillName by remember { mutableStateOf(skillToEdit?.skill ?: "") }
 
-    val categoriesItem = categories.map { it.category ?: "" }
-    val typesItems = skillTypes.map { it.type ?: "" }
+    val categoriesItem = categories.map { ItemDropdown(it.sklCatID, it.category.orEmpty()) }
+    val typesItems = skillTypes.map { ItemDropdown(it.sklTypeID, it.type.orEmpty()) }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -226,8 +217,8 @@ fun CreateSkillBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 value = category,
                 onValueChange = { value ->
-                    category = value
-                    skillTypesLoadRequest(categories.first { it.category == value }.sklCatID)
+                    category = value.name
+                    skillTypesLoadRequest(value.id)
                 },
                 label = stringResource(R.string.select_a_category),
                 items = categoriesItem,
@@ -239,7 +230,7 @@ fun CreateSkillBottomSheet(
             ECareExposedDropdownMenuBox(
                 modifier = Modifier.fillMaxWidth(),
                 value = type,
-                onValueChange = { type = it },
+                onValueChange = { type = it.name },
                 label = "Select a Type",
                 items = typesItems,
             )
@@ -433,97 +424,6 @@ private fun DefineSkillHeader(
     }
 }
 
-/**
- * Composable function that creates a top app bar for the Define Skill screen.
- * It includes a search bar when activated and a title with a back button.
- *
- * @param searchQuery The current text in the search query.
- * @param isSearchActive Boolean indicating if the search bar is active (expanded).
- * @param onQueryChange Callback triggered when the search query text changes.
- * @param onSearchActiveChange Callback triggered when the search bar's active state changes.
- * @param onClickBack Callback triggered when the back button is clicked.
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DefineSkillTopAppBar(
-    searchQuery: String,
-    isSearchActive: Boolean = false,
-    onQueryChange: (String) -> Unit = {},
-    onSearchActiveChange: (Boolean) -> Unit = {},
-    onClickBack: () -> Unit = {}
-) {
-
-    TopAppBar(
-        title = {
-            if (isSearchActive) {
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(45.dp)
-                        .clip(RoundedCornerShape(120.dp))
-                        .background(Color.White),
-                    value = searchQuery,
-                    onValueChange = { newText -> onQueryChange(newText) },
-                    placeholder = { Text(stringResource(R.string.search)) },
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                if (searchQuery.isEmpty()) {
-                                    onSearchActiveChange(false)
-                                } else {
-                                    onQueryChange("")
-                                }
-                            }
-                        ) {
-                            Icon(
-                                Icons.Filled.Clear,
-                                contentDescription = stringResource(R.string.clear_search)
-                            )
-                        }
-                    },
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors().copy(
-                        focusedContainerColor = white,
-                        unfocusedContainerColor = white,
-                        focusedIndicatorColor = white,
-                        unfocusedIndicatorColor = white,
-                        disabledIndicatorColor = white,
-                        cursorColor = Color.Black
-
-                    ),
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                )
-
-            } else {
-                Text("Define Skill")
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = onClickBack) {
-                Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-            }
-        },
-        actions = {
-            if (isSearchActive) {
-                Spacer(modifier = Modifier.width(16.dp))
-            } else {
-                IconButton(onClick = { onSearchActiveChange(true) }) {
-                    Icon(
-                        Icons.Filled.Search,
-                        contentDescription = stringResource(R.string.co_search)
-                    )
-                }
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFF4CAF50),
-            titleContentColor = Color.White,
-            navigationIconContentColor = Color.White,
-            actionIconContentColor = Color.White
-        )
-    )
-}
-
 
 /**
  * Composable that displays a dropdown to select a skill category.
@@ -642,7 +542,6 @@ fun CreateImportButtons(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
         Button(
             modifier = Modifier
                 .weight(1f)
@@ -712,6 +611,7 @@ fun SkillItem(
             modifier = Modifier.padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+
             Column(modifier = Modifier.weight(1f)) {
                 Text("$index. ${skill.category}", fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
@@ -726,15 +626,6 @@ fun SkillItem(
                 Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red)
             }
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun DefineSkillTopAppBarPreview() {
-    ECareProTheme {
-        DefineSkillTopAppBar(searchQuery = "")
     }
 }
 

@@ -13,15 +13,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+
+data class ItemDropdown(
+    val id: String,
+    val name: String
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ECareExposedDropdownMenuBox(
     modifier: Modifier = Modifier,
     value: String,
-    onValueChange: (String) -> Unit,
+    onValueChange: (ItemDropdown) -> Unit,
     label: String,
-    items: List<String>,
+    items: List<ItemDropdown>,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -31,7 +37,7 @@ fun ECareExposedDropdownMenuBox(
     ) {
         OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = { onValueChange.invoke(items.first { it.name == value }) },
             readOnly = true,
             label = { Text(label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
@@ -46,7 +52,7 @@ fun ECareExposedDropdownMenuBox(
         ) {
             items.forEach { item ->
                 DropdownMenuItem(
-                    text = { Text(text = item) },
+                    text = { Text(text = item.name) },
                     onClick = {
                         onValueChange(item)
                         isExpanded = false
@@ -55,4 +61,19 @@ fun ECareExposedDropdownMenuBox(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ECareExposedDropdownMenuBoxPreview() {
+    ECareExposedDropdownMenuBox(
+        value = "Option 1",
+        onValueChange = { },
+        label = "Select Option",
+        items = listOf(
+            ItemDropdown("1", "Option 1"),
+            ItemDropdown("2", "Option 2"),
+            ItemDropdown("3", "Option 3")
+        )
+    )
 }
