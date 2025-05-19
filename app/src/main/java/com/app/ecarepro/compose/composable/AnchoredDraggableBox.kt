@@ -7,7 +7,7 @@ import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
-import androidx.compose.foundation.gestures.snapTo
+import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -28,8 +28,8 @@ fun AnchoredDraggableBox(
     modifier: Modifier,
     firstContent: @Composable (modifier: Modifier) -> Unit,
     secondContent: @Composable (modifier: Modifier) -> Unit,
-    offsetSize: Dp = 100.dp,
-    returnInitialState: Boolean
+    offsetSize: Dp = 180.dp,
+    dragAnchors: DragAnchors = DragAnchors.Start,
 ) {
     val density = LocalDensity.current
     val positionalThresholds: (totalDistance: Float) -> Float =
@@ -40,7 +40,7 @@ fun AnchoredDraggableBox(
 
     val state = remember {
         AnchoredDraggableState(
-            initialValue = DragAnchors.Start,
+            initialValue = dragAnchors,
             positionalThreshold = positionalThresholds,
             velocityThreshold = velocityThreshold,
             snapAnimationSpec = tween(),
@@ -58,42 +58,37 @@ fun AnchoredDraggableBox(
         }
     }
 
-    LaunchedEffect(key1 = returnInitialState) {
-        if (returnInitialState) {
-            state.snapTo(DragAnchors.Start)
+    LaunchedEffect(key1 = dragAnchors) {
+        if (dragAnchors == DragAnchors.End) {
+            state.animateTo(DragAnchors.End)
+        } else {
+            state.animateTo(DragAnchors.Start)
         }
     }
 
     Box(
         modifier = modifier
     ) {
-        firstContent(
-            Modifier
-                .fillMaxWidth()
-                .offset {
-                    IntOffset(
-                        state
-                            .requireOffset()
-                            .roundToInt(), 0
-                    )
-                }
-                .anchoredDraggable(state, Orientation.Horizontal)
-        )
-        secondContent(
-            Modifier
-                .align(Alignment.CenterEnd)
-                .offset {
-                    IntOffset(
-                        (state.requireOffset() + offsetSize.toPx()).roundToInt(), 0
-                    )
-                }
-                .anchoredDraggable(state, Orientation.Horizontal)
-        )
+        firstContent(Modifier
+            .fillMaxWidth()
+            .offset {
+                IntOffset(
+                    state.requireOffset().roundToInt(), 0
+                )
+            }
+            .anchoredDraggable(state, Orientation.Horizontal))
+        secondContent(Modifier
+            .align(Alignment.CenterEnd)
+            .offset {
+                IntOffset(
+                    (state.requireOffset() + offsetSize.toPx()).roundToInt(), 0
+                )
+            }
+            .anchoredDraggable(state, Orientation.Horizontal))
     }
 
 }
 
 enum class DragAnchors {
-    Start,
-    End,
+    Start, End,
 }

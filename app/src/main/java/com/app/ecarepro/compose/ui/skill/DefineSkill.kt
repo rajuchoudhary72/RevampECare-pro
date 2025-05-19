@@ -23,12 +23,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -37,7 +34,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
@@ -87,12 +83,10 @@ import com.app.ecarepro.data.network.model.SkillType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefineSkillScreen(
-    viewModel: DefineSkillViewModel,
-    onClickBack: () -> Unit = {}
+    viewModel: DefineSkillViewModel, onClickBack: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
-    val isSearchActive by viewModel.searchViewActive.collectAsStateWithLifecycle()
 
     val loadState by viewModel.loadState.collectAsStateWithLifecycle(LoadState.Nothing)
     val snackbarHostState = remember { SnackbarHostState() }
@@ -124,13 +118,11 @@ fun DefineSkillScreen(
 
             snackbarHost = {
                 SnackbarHost(snackbarHostState)
-            }
-        ) { innerPadding ->
+            }) { innerPadding ->
             LoadingComposable(
                 modifier = Modifier.padding(innerPadding),
                 uiState = uiState,
-                onRetry = { viewModel.refresh() }
-            ) { data ->
+                onRetry = { viewModel.refresh() }) { data ->
                 DefineSkillContent(
                     modifier = Modifier.padding(innerPadding),
                     data = data,
@@ -145,9 +137,7 @@ fun DefineSkillScreen(
                         viewModel.loadSkillTypes(skill.sklCatID)
                         showBottomSheet = true
                     },
-                    onClickImportFromDatabase = {
-                    }
-                )
+                    onClickImportFromDatabase = {})
 
                 if (showBottomSheet) {
                     CreateSkillBottomSheet(
@@ -159,14 +149,10 @@ fun DefineSkillScreen(
                         onSaveSkill = { id: String?, skill: String, sklCatID: String, sklTypeID: String ->
                             showBottomSheet = false
                             viewModel.saveSkill(
-                                id = id,
-                                skill = skill,
-                                sklCatID = sklCatID,
-                                sklTypeID = sklTypeID
+                                id = id, skill = skill, sklCatID = sklCatID, sklTypeID = sklTypeID
                             )
                         },
-                        onCancel = { showBottomSheet = false }
-                    )
+                        onCancel = { showBottomSheet = false })
                 }
             }
         }
@@ -197,16 +183,14 @@ fun CreateSkillBottomSheet(
     val typesItems = skillTypes.map { ItemDropdown(it.sklTypeID, it.type.orEmpty()) }
 
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState
+        onDismissRequest = onDismissRequest, sheetState = sheetState
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(R.string.create_new_skill),
@@ -322,17 +306,19 @@ fun DefineSkillContent(
                 )
             }
         } else {
-            itemsIndexed(data.skills) { index, skill ->
+            itemsIndexed(
+                items = data.skills,
+                key = { _, skill -> skill.id }
+            ) { index, skill ->
                 SkillItem(
-                    skill = skill,
-                    index = index + 1,
+                    id = index + 1,
+                    title = skill.category.orEmpty(),
+                    description = skill.skill + " | " + skill.type,
                     onClickEdit = {
                         editSkillRequest(skill)
-                    },
-                    onClickDelete = {
+                    }, onClickDelete = {
                         onSkillDelete(skill)
-                    }
-                )
+                    })
             }
         }
     }
@@ -353,13 +339,11 @@ private fun NoSkillFoundText(
     searchQuery: String?,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
 
     ) {
         Text(
-            modifier = Modifier.padding(16.dp),
-            text = buildAnnotatedString {
+            modifier = Modifier.padding(16.dp), text = buildAnnotatedString {
                 append(stringResource(R.string.no_skill_found_for_this_category))
                 append(selectedCategory)
                 addStyle(
@@ -377,8 +361,7 @@ private fun NoSkillFoundText(
                         end = length
                     )
                 }
-            },
-            textAlign = TextAlign.Center
+            }, textAlign = TextAlign.Center
         )
     }
 
@@ -413,12 +396,10 @@ private fun DefineSkillHeader(
                         data.skillCategory.first { it.category == selectedCategory }.sklCatID
                     )
                 },
-                skills = data.skillCategory.map { it.category.orEmpty() }
-            )
+                skills = data.skillCategory.map { it.category.orEmpty() })
             Spacer(modifier = Modifier.height(16.dp))
             CreateImportButtons(
-                onClickCreate = onClickCreate,
-                onClickImportFromDatabase = onClickImportFromDatabase
+                onClickCreate = onClickCreate, onClickImportFromDatabase = onClickImportFromDatabase
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -435,9 +416,7 @@ private fun DefineSkillHeader(
  */
 @Composable
 fun SkillCategorySelectionDropdown(
-    selectedSkill: String,
-    onSkillSelected: (String) -> Unit,
-    skills: List<String>
+    selectedSkill: String, onSkillSelected: (String) -> Unit, skills: List<String>
 ) {
 
     var expanded by remember { mutableStateOf(false) }
@@ -457,19 +436,16 @@ fun SkillCategorySelectionDropdown(
             label = { Text(stringResource(R.string.select_skill)) },
             singleLine = true,
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus() }
-            ),
+                onDone = { focusManager.clearFocus() }),
             trailingIcon = {
                 AnimatedContent(
-                    targetState = expanded,
-                    transitionSpec = {
+                    targetState = expanded, transitionSpec = {
                         if (targetState) {
                             (slideInVertically { height -> height } + fadeIn(
                                 animationSpec = tween(
                                     durationMillis = 200
                                 )
-                            )) togetherWith
-                                    slideOutVertically { height -> -height } + fadeOut(
+                            )) togetherWith slideOutVertically { height -> -height } + fadeOut(
                                 animationSpec = tween(
                                     durationMillis = 200
                                 )
@@ -479,15 +455,13 @@ fun SkillCategorySelectionDropdown(
                                 animationSpec = tween(
                                     durationMillis = 200
                                 )
-                            )) togetherWith
-                                    slideOutVertically { height -> height } + fadeOut(
+                            )) togetherWith slideOutVertically { height -> height } + fadeOut(
                                 animationSpec = tween(
                                     durationMillis = 200
                                 )
                             )
                         }
-                    },
-                    label = "Animated Icon"
+                    }, label = "Animated Icon"
                 ) { targetExpanded ->
                     if (targetExpanded) {
                         Icon(
@@ -501,27 +475,21 @@ fun SkillCategorySelectionDropdown(
                         )
                     }
                 }
-            }
-        )
+            })
         DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
+            expanded = expanded, onDismissRequest = {
                 focusManager.clearFocus()
                 expanded = false
-            },
-            modifier = Modifier
+            }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
             skills.forEach { skill ->
-                DropdownMenuItem(
-                    text = { Text(skill) },
-                    onClick = {
-                        onSkillSelected(skill)
-                        expanded = false
-                        focusManager.clearFocus()
-                    }
-                )
+                DropdownMenuItem(text = { Text(skill) }, onClick = {
+                    onSkillSelected(skill)
+                    expanded = false
+                    focusManager.clearFocus()
+                })
             }
         }
     }
@@ -540,8 +508,7 @@ fun CreateImportButtons(
     onClickImportFromDatabase: () -> Unit = {},
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Button(
             modifier = Modifier
@@ -551,9 +518,7 @@ fun CreateImportButtons(
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
         ) {
             Text(
-                "Create new skill",
-                color = Color.White,
-                style = MaterialTheme.typography.bodySmall
+                "Create new skill", color = Color.White, style = MaterialTheme.typography.bodySmall
             )
         }
         OutlinedButton(
@@ -586,23 +551,16 @@ fun CreateImportButtons(
 }
 
 
-
-
-
 @Preview(showBackground = true)
 @Composable
 fun SkillSelectionDropdownPreview() {
     var selectedSkill by remember { mutableStateOf("Cognitive and Creative Skills") }
     val skills = listOf(
-        "Cognitive and Creative Skills",
-        "Technical Skills",
-        "Soft Skills"
+        "Cognitive and Creative Skills", "Technical Skills", "Soft Skills"
     )
     ECareProTheme {
         SkillCategorySelectionDropdown(
-            selectedSkill,
-            { selectedSkill = it },
-            skills
+            selectedSkill, { selectedSkill = it }, skills
         )
     }
 }
@@ -665,8 +623,7 @@ fun DefineSkillContentPreview() {
             onSkillDelete = {},
             onClickCreate = {},
             onClickImportFromDatabase = {},
-            editSkillRequest = {}
-        )
+            editSkillRequest = {})
     }
 }
 
@@ -676,8 +633,7 @@ fun DefineSkillContentPreview() {
 fun NoSkillFoundTextPreview() {
     ECareProTheme {
         NoSkillFoundText(
-            selectedCategory = "Cognitive and Creative Skills",
-            searchQuery = "Category"
+            selectedCategory = "Cognitive and Creative Skills", searchQuery = "Category"
         )
     }
 }
