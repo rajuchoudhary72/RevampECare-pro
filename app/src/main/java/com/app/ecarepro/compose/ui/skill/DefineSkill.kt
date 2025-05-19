@@ -75,6 +75,7 @@ import com.app.ecarepro.compose.composable.ECareTopAppBar
 import com.app.ecarepro.compose.composable.ItemDropdown
 import com.app.ecarepro.compose.composable.LoadingComposable
 import com.app.ecarepro.compose.composable.LoadingDialog
+import com.app.ecarepro.compose.composable.SkillItem
 import com.app.ecarepro.compose.model.LoadState
 import com.app.ecarepro.compose.model.messageOrNull
 import com.app.ecarepro.compose.theme.ECareProTheme
@@ -585,49 +586,7 @@ fun CreateImportButtons(
 }
 
 
-/**
- * Composable that displays a single skill item in a list.
- *
- * @param skill The skill data to display.
- * @param index The index of the skill in the list.
- * @param onClickEdit Callback when the "Edit" icon is clicked.
- * @param onClickDelete Callback when the "Delete" icon is clicked.
- */
-@Composable
-fun SkillItem(
-    skill: Skill,
-    index: Int,
-    onClickEdit: () -> Unit = {},
-    onClickDelete: () -> Unit = {},
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 8.dp),
-        shape = RoundedCornerShape(8.dp),
-        color = Color.LightGray.copy(alpha = 0.3f), // Background color
-    ) {
-        Row(
-            modifier = Modifier.padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
 
-            Column(modifier = Modifier.weight(1f)) {
-                Text("$index. ${skill.category}", fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.skill_type, skill.type))
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.skill_name, skill.skill))
-            }
-            IconButton(onClick = onClickEdit) {
-                Icon(Icons.Filled.Edit, contentDescription = "Edit", tint = Color(0xFF1976D2))
-            }
-            IconButton(onClick = onClickDelete) {
-                Icon(Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red)
-            }
-        }
-    }
-}
 
 
 @Preview(showBackground = true)
@@ -654,27 +613,6 @@ fun SkillSelectionDropdownPreview() {
 fun CreateImportButtonsPreview() {
     ECareProTheme {
         CreateImportButtons()
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun SkillItemPreview() {
-    val dummySkill = Skill(
-        category = "Cognitive and Creative Skills",
-        createdBy = "John Doe",
-        createdOn = "2023-09-01",
-        id = "1",
-        modifiedBy = "Jane Smith",
-        modifiedOn = "2023-09-02",
-        skill = "Analysis",
-        sklCatID = "1",
-        sklTypeID = "1",
-        type = "Critical thinking"
-    )
-    ECareProTheme {
-        SkillItem(dummySkill, 1)
     }
 }
 
