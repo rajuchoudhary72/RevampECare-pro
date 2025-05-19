@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class BusLocationFragment : Fragment(), OnMapReadyCallback {
-
+    private var currentMarker: Marker? = null // Added to track the current marker
     private lateinit var binding: FragmentBusLocationBinding
     private val busLocationViewModel: BusLocationViewModel by viewModels()
     private var busNumber = ""
@@ -151,18 +151,21 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-
     private fun setUpGoogleMapLocation(
         latitude: String?,
         longitude: String?,
         locationDescription: String
     ) {
+        // First, remove any existing marker
+        currentMarker?.remove()
 
         val latLng = LatLng(
             latitude!!.toDouble(),
             longitude!!.toDouble()
         )
-        mMap!!.addMarker(
+
+        // Create new marker and save its reference
+        currentMarker = mMap!!.addMarker(
             MarkerOptions().position(latLng)
                 .title(locationDescription)
                 .icon(
@@ -176,8 +179,8 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18f))
 
         binding.llBusDetails.visibility = View.VISIBLE
-
     }
+
 
     private fun iconType(speed: Int): Int {
         return if (speed > 0) {
