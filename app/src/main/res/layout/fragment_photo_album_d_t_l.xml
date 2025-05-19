@@ -4,70 +4,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <!-- Add any binding variables here if needed -->
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:fitsSystemWindows="true"
         tools:context=".ui.gallery.photo.photoAlbum.photoAlbumDTL.PhotoAlbumDTLFragment">
 
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/md_theme_light_primary"
-            app:layout_collapseMode="pin"
-            app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:titleCentered="true"
-            android:elevation="8dp"
-            app:title="@string/photos"
-
-            app:titleTextAppearance="?attr/titleTextAppearance"
-            app:titleTextColor="@color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-
-        </com.google.android.material.appbar.MaterialToolbar>
-
-
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <LinearLayout
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@color/md_theme_light_primary">
 
                 <LinearLayout
-                    android:id="@+id/ll_toole"
+                    android:id="@+id/ll_header_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="?actionBarSize"
-                    android:gravity="center"
-                    android:fitsSystemWindows="true"
                     android:orientation="vertical"
-                    app:layout_collapseMode="parallax"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    android:paddingBottom="16dp"
+                    app:layout_collapseMode="parallax">
 
-
+                    <!-- Removed the blank view and adjusted toolbar layout -->
+                    <com.google.android.material.appbar.MaterialToolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/md_theme_light_primary"
+                        android:elevation="8dp"
+                        app:layout_collapseMode="pin"
+                        app:navigationIcon="@drawable/ic_arrow_back_24px"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                        app:title="@string/photos"
+                        app:titleCentered="true"
+                        app:titleTextAppearance="?attr/titleTextAppearance"
+                        app:titleTextColor="@color/white" />
                     <TextView
                         android:id="@+id/tv_heading"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:fontFamily="@font/ubuntu_medium"
-                        android:gravity="center"
-                        android:padding="@dimen/_7sdp"
-                        android:textColor="@color/module"
-                        android:textSize="@dimen/_17sdp" />
-
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:fontFamily="@font/ubuntu_medium"
+                    android:gravity="center"
+                    android:padding="@dimen/_7sdp"
+                    android:textColor="@color/module"
+                    android:textSize="@dimen/_17sdp" />
 
                     <LinearLayout
                         android:id="@+id/ll_aa_heading"
@@ -84,19 +73,25 @@
                             android:textColor="@color/light_gray_gallerytext"
                             android:textSize="@dimen/_10sdp" />
 
-                        <TextView
-                            android:id="@+id/tv_des"
+                        <!-- Added ScrollView just for description -->
+                        <androidx.core.widget.NestedScrollView
+                            android:id="@+id/nestedScrollView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_10sdp"
-                            android:paddingTop="@dimen/_10sdp"
-                            android:paddingEnd="@dimen/_10sdp"
-                            android:textColor="@color/grey_60"
-                            android:textSize="@dimen/_14sdp"
+                            android:maxHeight="200dp">
 
-                            />
+                            <TextView
+                                android:id="@+id/tv_des"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_regular"
+                                android:gravity="center"
+                                android:paddingStart="@dimen/_10sdp"
+                                android:paddingTop="@dimen/_10sdp"
+                                android:paddingEnd="@dimen/_10sdp"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </androidx.core.widget.NestedScrollView>
 
                         <TextView
                             android:id="@+id/tv_more"
@@ -108,47 +103,36 @@
                             android:textSize="@dimen/_13sdp"
                             android:visibility="gone" />
                     </LinearLayout>
-
-
-
-
-
                 </LinearLayout>
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_album"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-                    tools:listitem="@layout/photo_list_item"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
-                    />
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-                <TextView
-                    android:id="@+id/tv_no_album"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/ubuntu_medium"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    android:text="@string/no_record_found"
-                    android:textSize="16sp"
+        <!-- Main content area for the photos RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_album"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/photo_list_item" />
 
-                    />
-
-
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-
-
-
+        <!-- No records text -->
+        <TextView
+            android:id="@+id/tv_no_album"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="@font/ubuntu_medium"
+            android:gravity="center"
+            android:text="@string/no_record_found"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
