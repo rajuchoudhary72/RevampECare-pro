@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,19 +23,16 @@ import com.app.ecarepro.databinding.FragmentPhotoAlbumDTLBinding
 import com.app.ecarepro.model.Photo
 import com.app.ecarepro.model.photo_setting.AlbumSetting
 import com.app.ecarepro.ui.MainActivity
-import com.app.ecarepro.ui.gallery.photo.photo_slider.PhotoSliderFragment
-
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
-    private var isTextExpanded: Boolean=false
+    private var isTextExpanded: Boolean = false
     private lateinit var albumSetting: AlbumSetting
     private lateinit var photoDetails: NetworkAlbumPhotoDetails
     private var photoAlbumId: String = ""
@@ -53,9 +49,8 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View  {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         binding = FragmentPhotoAlbumDTLBinding.inflate(inflater, container, false)
         photoAlbumId = requireArguments().getString(Constant.ID).toString()
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -76,41 +71,36 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
             binding.tvMore.isVisible = false
-            isTextExpanded=true
+            isTextExpanded = true
         }
 
+        observeData()
 
-            if (!isDataLoaded){
-                observeData()
-                pageIndex = 1
-                getPhotoAlbumDTL()
-            }else{
-                pageIndex= photoAlbumDTLViewModel.lastPageIndex!!
-                photoAlbumAdapter.setData(photoAlbumDTLViewModel.cachedPhotoList)
-                setupRecycleViewPager()
-              photoAlbumDTLViewModel.cachedData.let {
-                  if (it != null) {
-                      binding.tvHeading.text = it.title
+        pageIndex = photoAlbumDTLViewModel.lastPageIndex!!
+        photoAlbumAdapter.setData(photoAlbumDTLViewModel.cachedPhotoList)
+        setupRecycleViewPager()
+        photoAlbumDTLViewModel.cachedData.let {
+            if (it != null) {
+                binding.tvHeading.text = it.title
 
-                      binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                          fromHtml(it.description, Html.FROM_HTML_MODE_COMPACT)
-                      } else {
-                          fromHtml(it.description)
-                      }
+                binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    fromHtml(it.description, Html.FROM_HTML_MODE_COMPACT)
+                } else {
+                    fromHtml(it.description)
+                }
 
-                      binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
+                binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
 
 
-                      if (isTextExpanded){
-                          binding.tvMore.isVisible = false
-                      }else{
-                          binding.tvDes.maxLines = 4
-                          binding.tvMore.isVisible = true
-                      }
-                  }
-              }
+                if (isTextExpanded) {
+                    binding.tvMore.isVisible = false
+                } else {
+                    binding.tvDes.maxLines = 4
+                    binding.tvMore.isVisible = true
+                }
+
             }
-
+        }
 
 
     }
@@ -122,12 +112,12 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                     is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                       // binding.rvAlbum.isVisible = false
+                        // binding.rvAlbum.isVisible = false
                     }
 
                     is NetworkResult.Error -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                    //    binding.rvAlbum.isVisible = false
+                        //    binding.rvAlbum.isVisible = false
                         isDataLoaded = true
                         Log.d("main", "Error$it")
                     }
@@ -151,28 +141,29 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                                 binding.tvHeading.text = it.data.title
                                 binding.tvDes.maxLines = 4
 
-                                binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                    fromHtml(it.data.description, Html.FROM_HTML_MODE_COMPACT)
-                                } else {
-                                    fromHtml(it.data.description)
-                                }
+                                binding.tvDes.text =
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                        fromHtml(it.data.description, Html.FROM_HTML_MODE_COMPACT)
+                                    } else {
+                                        fromHtml(it.data.description)
+                                    }
 
                                 binding.tvDatePhoto.text =
                                     it.data.eventDate + " | " + it.data.totalPhotos + " Photos"
 
 
-                                   if (binding.tvDes.lineCount >= 4) {
-                                       binding.tvMore.visibility = View.VISIBLE
-                                   } else {
-                                       binding.tvMore.visibility = View.GONE
-                                   }
+                                if (binding.tvDes.lineCount >= 4) {
+                                    binding.tvMore.visibility = View.VISIBLE
+                                } else {
+                                    binding.tvMore.visibility = View.GONE
+                                }
 
 
-                                if (pageIndex==1){
+                                if (pageIndex == 1) {
                                     photoAlbumAdapter.clearData()
                                 }
-                                albumSetting= it.data.setting!!
-                                photoDetails=it.data
+                                albumSetting = it.data.setting!!
+                                photoDetails = it.data
                                 photoAlbumAdapter.setData(it.data.photos!!.toMutableList())
                             } else {
                                 if (pageIndex == 1) {
@@ -204,8 +195,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
 
     private fun setupRecycleViewPager() {
-        binding.rvAlbum.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+        binding.rvAlbum.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -213,15 +203,15 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                 if (linearLayoutManager != null) {
                     if (dy > 0) {
-                        visibleItemCount = linearLayoutManager.childCount;
-                        totalItemCount = linearLayoutManager.itemCount;
+                        visibleItemCount = linearLayoutManager.childCount
+                        totalItemCount = linearLayoutManager.itemCount
                         pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
 
                         if (isLoading) {
                             if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                 isLoading = false
                                 pageIndex += 1
-                                photoAlbumDTLViewModel.lastPageIndex=pageIndex
+                                photoAlbumDTLViewModel.lastPageIndex = pageIndex
                                 photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
                             }
                         }
@@ -233,9 +223,9 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     }
 
     override fun onItemClick(t: List<Photo>, pos: Int, boolean: Boolean) {
-        photoDetails.photos=t
-        findNavController().navigate(R.id.photoSliderNavHostFragment ,
-            Bundle().apply {
+        photoDetails.photos = t
+        findNavController().navigate(
+            R.id.photoSliderNavHostFragment, Bundle().apply {
                 putParcelable("photoDetails", photoDetails)
                 putInt("photoPosition", pos)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
