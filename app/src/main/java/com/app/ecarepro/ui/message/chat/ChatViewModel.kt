@@ -248,7 +248,7 @@ class ChatViewModel @Inject constructor(
                     )
                 }
             } else {
-                val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
+                val bitmap = FileAccess.bitmapFromFileCamera(context, attachments.first().path!!)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
                 //  saveBitmapAndGetExtension(bitmap)
                 val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)

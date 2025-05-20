@@ -20,6 +20,7 @@ import android.text.Html
 import android.text.Spannable
 import com.app.ecarepro.data.network.model.MessageSettings
 import android.app.ProgressDialog
+import android.os.Environment
 
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
@@ -40,6 +41,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -94,7 +96,8 @@ class ComposeFragment : Fragment() {
     private var isFormatd = false
     private lateinit var imageCompressionHelper: ImageCompressionHelper
     private val composeViewModel: ComposeViewModel by viewModels()
-
+    private var capturedImageFile: File? = null
+    private var capturedImageUri: Uri? = null
     private var lastClickAttachmentType: AttachmentType? = null
     private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
 
@@ -541,26 +544,47 @@ class ComposeFragment : Fragment() {
                 hideAttachmentCard()
                 lastClickAttachmentType = AttachmentType.CAMERA
                 FileAccess.checkPermission(this@ComposeFragment)
-                // checkCameraPermissions()
+
+                val imageFile = File(
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "${UUID.randomUUID()}.jpg"
+                )
+                capturedImageFile = imageFile
+
+                val authority = "${requireContext().packageName}.myFileProvider"
+                capturedImageUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    authority,
+                    imageFile
+                )
+
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
-                    cameraLauncher.launch(FileAccess.cameraIntent())
+                    cameraLauncher.launch(FileAccess.cameraIntent(capturedImageUri!!))
                 }
             } catch (e: SecurityException) {
-                e.message
+                e.printStackTrace()
             }
-
-
         }
     }
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val bitmap = result.data?.extras?.get("data") as Bitmap
-                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
-                file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
-                composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
+                /* val bitmap = result.data?.extras?.get("data") as Bitmap
+                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                 file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
+
+                 composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))*/
+
+
+                capturedImageFile?.let { file ->
+                    if (file.exists()) {
+                        composeViewModel.setAttachments(
+                            listOf(MiMedia(path = file.absolutePath))
+                        )
+                    }
+                }
             }
         }
 

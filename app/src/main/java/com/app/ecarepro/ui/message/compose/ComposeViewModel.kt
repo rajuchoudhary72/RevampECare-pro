@@ -263,7 +263,7 @@ class ComposeViewModel @Inject constructor(
                     getBase64StringFromUri(file!!.toUri()) ?: ""
                 }
             } else {
-                FileAccess.bitmapToByteArrayBase64String(FileAccess.bitmapFromFile(context, attachment.path!!))
+                FileAccess.bitmapToByteArrayBase64String(FileAccess.bitmapFromFileCamera(context, attachment.path!!))
             }
         }
     }

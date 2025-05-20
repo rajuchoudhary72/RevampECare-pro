@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -90,7 +92,42 @@ class FileAccess {
         fun bitmapFromUri(context: Context, imgUri: Uri?): Bitmap {
             return MediaStore.Images.Media.getBitmap(context.contentResolver, imgUri)
         }
+        fun cameraIntent(uri: Uri): Intent {
+            return Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+                putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+        }
 
+        fun getCorrectlyOrientedBitmap(filePath: String): Bitmap {
+            val bitmap = BitmapFactory.decodeFile(filePath)
+            val exif = ExifInterface(filePath)
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            )
+
+            val matrix = Matrix()
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            }
+
+            return Bitmap.createBitmap(
+                bitmap,
+                0, 0,
+                bitmap.width, bitmap.height,
+                matrix,
+                true
+            )
+        }
+
+
+        fun bitmapFromFileCamera(context: Context, filePath: String): Bitmap {
+            return getCorrectlyOrientedBitmap(filePath)
+        }
           fun getImageExtFromUri(inContext: Context, inImage: Bitmap) : String? {
             val bytes = ByteArrayOutputStream()
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
