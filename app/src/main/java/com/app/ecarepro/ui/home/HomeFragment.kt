@@ -68,6 +68,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import kotlinx.coroutines.Dispatchers
+import org.json.JSONArray
 import java.util.Locale
 
 
@@ -88,8 +89,10 @@ class HomeFragment : Fragment() {
         return binding.root
 
     }
+
     private fun announce(message: String) {
-        val accessibilityManager = requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val accessibilityManager =
+            requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         if (accessibilityManager.isEnabled) {
             val event = AccessibilityEvent.obtain().apply {
                 eventType = AccessibilityEvent.TYPE_ANNOUNCEMENT
@@ -100,6 +103,7 @@ class HomeFragment : Fragment() {
             accessibilityManager.sendAccessibilityEvent(event)
         }
     }
+
     private fun getContactUrl() {
         lifecycleScope.launch {
             mViewModel._contactUrlDTLStateFlow.collectLatest {
@@ -125,6 +129,7 @@ class HomeFragment : Fragment() {
                         }
 
                     }
+
                     else -> {}
                 }
 
@@ -133,6 +138,7 @@ class HomeFragment : Fragment() {
         }
         mViewModel.getContactUrl()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
@@ -141,7 +147,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
 
-       /* binding.imgSync.setOnClickListener {
+        /* binding.imgSync.setOnClickListener {
             getContactUrl()
         }*/
         binding.swipeRefresh.setOnRefreshListener {
@@ -238,43 +244,86 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     private fun handleUndertaking(underTaking: String) {
         val jsonObject = JSONObject(underTaking)
-        if (jsonObject.getBoolean("showUserUndertaking")) {
-            val string = removeUTFCharacters(jsonObject.getString("htmlDecription"))
-            val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(string.toString(), Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                Html.fromHtml(string.toString())
-            }
-            val binding =
-                LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
-            binding.text.text = spannedString
+        val showUserUndertaking = jsonObject.getBoolean("showUserUndertaking")
+        if (!showUserUndertaking) return
 
-            val builder = MaterialAlertDialogBuilder(requireContext())
-                .setView(binding.root)
-                .setCancelable(false)
-                .show()
+        val userUndertakingList = jsonObject.getJSONArray("userundertakingList")
+        if (userUndertakingList.length() == 0) return
 
-            binding.btnSubmit.setOnClickListener {
-                if (binding.checkbox.isChecked) {
-                    (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
-                        (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage(message)
-                        if (isSuccess) {
-                            builder.dismiss()
-                        }
-                    }
-                } else {
-                    mainActivity().showMessage("Please go throw user undertaking and accept it")
-                }
-            }
+        showUndertakingDialog(userUndertakingList, 0)
+    }
 
 
+    private fun showUndertakingDialog(userUndertakingList: JSONArray, index: Int) {
+        val item = userUndertakingList.getJSONObject(index)
+        val htmlDescription = removeUTFCharacters(item.getString("htmlDecription"))
+
+        val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(htmlDescription.toString(), Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(htmlDescription.toString())
         }
 
+        val binding = LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+        binding.text.text = spannedString
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .setCancelable(false)
+            .create()
+
+        val isLast = index == userUndertakingList.length() - 1
+
+        binding.btnNext.visibility = if (isLast) View.GONE else View.VISIBLE
+        binding.btnSubmit.visibility = if (isLast) View.VISIBLE else View.GONE
+
+        binding.btnNext.setOnClickListener {
+            if (binding.checkbox.isChecked) {
+                dialog.dismiss()
+                showUndertakingDialog(userUndertakingList, index + 1)
+            } else {
+                mainActivity().showMessage("Please read and accept the undertaking before continuing.")
+            }
+        }
+
+        binding.btnSubmit.setOnClickListener {
+            if (binding.checkbox.isChecked) {
+                dialog.setCancelable(false)
+                (requireActivity() as MainActivity).showLoader(true)
+                submitAllUndertakings(userUndertakingList, 0) {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    mainActivity().showMessage(it)
+                    dialog.dismiss()
+                }
+            } else {
+                mainActivity().showMessage("Please read and accept the undertaking before submitting.")
+            }
+        }
+
+        dialog.show()
     }
+
+    private fun submitAllUndertakings(list: JSONArray, index: Int, onComplete: (String) -> Unit) {
+        if (index >= list.length()) {
+            onComplete("All undertakings submitted successfully.")
+            return
+        }
+
+        val utID = list.getJSONObject(index).getString("utID")
+
+        mViewModel.submitUserUndertaking(utID) { isSuccess, message ->
+            if (isSuccess) {
+                submitAllUndertakings(list, index + 1, onComplete)
+            } else {
+                onComplete("Failed to submit undertaking: $message")
+            }
+        }
+    }
+
+
 
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
