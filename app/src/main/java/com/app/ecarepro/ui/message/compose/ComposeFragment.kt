@@ -58,6 +58,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.ScholarType
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
+import com.app.ecarepro.utils.CameraHandler
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileUtils
 import com.app.ecarepro.utils.ImageCompressionHelper
@@ -95,6 +96,8 @@ class ComposeFragment : Fragment() {
 
     private var lastClickAttachmentType: AttachmentType? = null
     private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
+
+    private lateinit var cameraHandler: CameraHandler
 
     private val mPermissionSettingResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -176,6 +179,38 @@ class ComposeFragment : Fragment() {
         }
 
         setUpFontStyle()
+
+        setUpCameraHandler()
+    }
+
+    private fun setUpCameraHandler() {
+        cameraHandler = CameraHandler(this) { uri, bitmap, cachedFile ->
+            // This lambda is your callback, executed when the image is captured (or fails)
+            if (uri != null && (bitmap != null || cachedFile != null)) {
+                // Successfully captured image
+                // uri: The content URI of the full-size image (if successful)
+                // bitmap: The decoded Bitmap (if decoding was successful)
+                // cachedFile: The File object for the bitmap saved in your app's cache (if saving was successful)
+
+                mainActivity().showMessage("Photo captured: $uri")
+                Log.d("ComposeFragment", "Image URI: $uri, Bitmap: ${bitmap != null}, Cached File: ${cachedFile?.absolutePath}")
+
+                // Example: Update your ViewModel with the cached file path
+                cachedFile?.let {
+                    // Assuming MiMedia takes a file path
+                    composeViewModel.setAttachments(listOf(MiMedia(path = it.absolutePath)))
+                }
+
+                // Or if you need the Bitmap directly (and handled caching yourself)
+                // bitmap?.let {
+                //     // process the bitmap
+                // }
+
+            } else {
+                // Capture failed or was cancelled
+                mainActivity().showMessage("Photo capture failed or cancelled.")
+            }
+        }
     }
 
     private fun setUpFontStyle() {
@@ -545,7 +580,8 @@ class ComposeFragment : Fragment() {
                 // checkCameraPermissions()
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
-                    cameraLauncher.launch(FileAccess.cameraIntent())
+                    cameraHandler.dispatchTakePictureIntent()
+                    //cameraLauncher.launch(FileAccess.cameraIntent())
                 }
             } catch (e: SecurityException) {
                 e.message
