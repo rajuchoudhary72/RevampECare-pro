@@ -26,6 +26,7 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -46,10 +47,14 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
     private var isDataLoaded: Boolean = false
+    private var photoPosition: Int = -1
+
+    private var scrollYPosition: Int = 0
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentPhotoAlbumDTLBinding.inflate(inflater, container, false)
         photoAlbumId = requireArguments().getString(Constant.ID).toString()
@@ -68,37 +73,45 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            scrollYPosition = scrollY
+        }
+
         binding.tvMore.setOnClickListener {
             binding.tvDes.setLines(binding.tvDes.lineCount)
             binding.tvMore.isVisible = false
             isTextExpanded = true
         }
 
-        observeData()
 
-        pageIndex = photoAlbumDTLViewModel.lastPageIndex!!
-        photoAlbumAdapter.setData(photoAlbumDTLViewModel.cachedPhotoList)
-        setupRecycleViewPager()
-        photoAlbumDTLViewModel.cachedData.let {
-            if (it != null) {
-                binding.tvHeading.text = it.title
+        if (!isDataLoaded) {
+            observeData()
+            pageIndex = 1
+            getPhotoAlbumDTL()
+        } else {
+            pageIndex = photoAlbumDTLViewModel.lastPageIndex!!
+            photoAlbumAdapter.setData(photoAlbumDTLViewModel.cachedPhotoList)
+            setupRecycleViewPager()
+            photoAlbumDTLViewModel.cachedData.let {
+                if (it != null) {
+                    binding.tvHeading.text = it.title
 
-                binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    fromHtml(it.description, Html.FROM_HTML_MODE_COMPACT)
-                } else {
-                    fromHtml(it.description)
+                    binding.tvDes.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        fromHtml(it.description, Html.FROM_HTML_MODE_COMPACT)
+                    } else {
+                        fromHtml(it.description)
+                    }
+
+                    binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
+
+
+                    if (isTextExpanded) {
+                        binding.tvMore.isVisible = false
+                    } else {
+                        binding.tvDes.maxLines = 4
+                        binding.tvMore.isVisible = true
+                    }
                 }
-
-                binding.tvDatePhoto.text = it.eventDate + " | " + it.totalPhotos + " Photos"
-
-
-                if (isTextExpanded) {
-                    binding.tvMore.isVisible = false
-                } else {
-                    binding.tvDes.maxLines = 4
-                    binding.tvMore.isVisible = true
-                }
-
             }
         }
 
@@ -195,7 +208,8 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
 
     private fun setupRecycleViewPager() {
-        binding.rvAlbum.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvAlbum.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -203,8 +217,8 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
                 if (linearLayoutManager != null) {
                     if (dy > 0) {
-                        visibleItemCount = linearLayoutManager.childCount
-                        totalItemCount = linearLayoutManager.itemCount
+                        visibleItemCount = linearLayoutManager.childCount;
+                        totalItemCount = linearLayoutManager.itemCount;
                         pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition()
 
                         if (isLoading) {
@@ -223,14 +237,23 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     }
 
     override fun onItemClick(t: List<Photo>, pos: Int, boolean: Boolean) {
+        photoPosition = pos
         photoDetails.photos = t
         findNavController().navigate(
-            R.id.photoSliderNavHostFragment, Bundle().apply {
+            R.id.photoSliderNavHostFragment,
+            Bundle().apply {
                 putParcelable("photoDetails", photoDetails)
                 putInt("photoPosition", pos)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
             })
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.nestedScrollView.post {
+            binding.nestedScrollView.scrollTo(0, scrollYPosition)
+        }
     }
 
 }
