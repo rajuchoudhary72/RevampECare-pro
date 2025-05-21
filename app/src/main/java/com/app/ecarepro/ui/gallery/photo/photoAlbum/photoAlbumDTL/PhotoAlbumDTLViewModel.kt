@@ -26,12 +26,10 @@ class PhotoAlbumDTLViewModel @Inject constructor(
 
     val photoAlbumStateFlow: LiveData<NetworkResult<NetworkAlbumPhotoDetails>> = _photoAlbumStateFlow
 
-    var scrollY: Int = 0
-
-     var cachedData: NetworkAlbumPhotoDetails? = null
-     var cachedPhotoList: ArrayList<Photo> = ArrayList()
+    var cachedData: NetworkAlbumPhotoDetails? = null
+    var cachedPhotoList: ArrayList<Photo> = ArrayList()
     private var lastLoadedAlbumId: String? = null
-     var lastPageIndex: Int? = 0
+    var lastPageIndex: Int? = 0
 
     fun getPhotoAlbumDTL(iD: String, pg: Int) = viewModelScope.launch {
         runCatching {
