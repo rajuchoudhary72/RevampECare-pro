@@ -14,8 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkAlbumPhotoDetails
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -26,7 +24,6 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -53,8 +50,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentPhotoAlbumDTLBinding.inflate(inflater, container, false)
         photoAlbumId = requireArguments().getString(Constant.ID).toString()
@@ -73,8 +69,19 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+        binding.nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
             scrollYPosition = scrollY
+
+
+            // Check if the NestedScrollView has reached the bottom
+            if (binding.nestedScrollView.getChildAt(0).bottom <= (v.height + scrollY)) {
+                if (isLoading && isDataLoaded) { // Add isDataLoaded check to prevent initial multiple calls
+                    isLoading = false
+                    pageIndex += 1
+                    photoAlbumDTLViewModel.lastPageIndex = pageIndex
+                    photoAlbumDTLViewModel.getPhotoAlbumDTL(photoAlbumId, pageIndex)
+                }
+            }
         }
 
         binding.tvMore.setOnClickListener {
@@ -207,8 +214,7 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
     }
 
 
-    private fun setupRecycleViewPager() {
-        binding.rvAlbum.addOnScrollListener(object :
+    private fun setupRecycleViewPager() {/*  binding.rvAlbum.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -233,15 +239,14 @@ class PhotoAlbumDTLFragment : Fragment(), ItemListener<List<Photo>> {
                     }
                 }
             }
-        })
+        })*/
     }
 
     override fun onItemClick(t: List<Photo>, pos: Int, boolean: Boolean) {
         photoPosition = pos
         photoDetails.photos = t
         findNavController().navigate(
-            R.id.photoSliderNavHostFragment,
-            Bundle().apply {
+            R.id.photoSliderNavHostFragment, Bundle().apply {
                 putParcelable("photoDetails", photoDetails)
                 putInt("photoPosition", pos)
                 putInt(Constant.GALLERY_TYPE, Constant.GALLERY_TYPE_PHOTO)
