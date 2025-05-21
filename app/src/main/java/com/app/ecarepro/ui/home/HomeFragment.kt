@@ -256,7 +256,6 @@ class HomeFragment : Fragment() {
         showUndertakingDialog(userUndertakingList, 0)
     }
 
-
     private fun showUndertakingDialog(userUndertakingList: JSONArray, index: Int) {
         val item = userUndertakingList.getJSONObject(index)
         val htmlDescription = removeUTFCharacters(item.getString("htmlDecription"))
@@ -275,28 +274,27 @@ class HomeFragment : Fragment() {
             .setCancelable(false)
             .create()
 
-        val isLast = index == userUndertakingList.length() - 1
-
-        binding.btnNext.visibility = if (isLast) View.GONE else View.VISIBLE
-        binding.btnSubmit.visibility = if (isLast) View.VISIBLE else View.GONE
-
-        binding.btnNext.setOnClickListener {
-            if (binding.checkbox.isChecked) {
-                dialog.dismiss()
-                showUndertakingDialog(userUndertakingList, index + 1)
-            } else {
-                mainActivity().showMessage("Please read and accept the undertaking before continuing.")
-            }
-        }
+        // Always hide the Next button
+        binding.btnNext.visibility = View.GONE
+        binding.btnSubmit.visibility = View.VISIBLE
 
         binding.btnSubmit.setOnClickListener {
             if (binding.checkbox.isChecked) {
-                dialog.setCancelable(false)
+                val utID = item.getString("utID")
                 (requireActivity() as MainActivity).showLoader(true)
-                submitAllUndertakings(userUndertakingList, 0) {
+                mViewModel.submitUserUndertaking(utID) { isSuccess, message ->
                     (requireActivity() as MainActivity).showLoader(false)
-                    mainActivity().showMessage(it)
-                    dialog.dismiss()
+                    if (isSuccess) {
+                        dialog.dismiss()
+                        val nextIndex = index + 1
+                        if (nextIndex < userUndertakingList.length()) {
+                            showUndertakingDialog(userUndertakingList, nextIndex)
+                        } else {
+                            mainActivity().showMessage("All undertakings submitted successfully.")
+                        }
+                    } else {
+                        mainActivity().showMessage("Failed to submit undertaking: $message")
+                    }
                 }
             } else {
                 mainActivity().showMessage("Please read and accept the undertaking before submitting.")
@@ -306,22 +304,6 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
-    private fun submitAllUndertakings(list: JSONArray, index: Int, onComplete: (String) -> Unit) {
-        if (index >= list.length()) {
-            onComplete("All undertakings submitted successfully.")
-            return
-        }
-
-        val utID = list.getJSONObject(index).getString("utID")
-
-        mViewModel.submitUserUndertaking(utID) { isSuccess, message ->
-            if (isSuccess) {
-                submitAllUndertakings(list, index + 1, onComplete)
-            } else {
-                onComplete("Failed to submit undertaking: $message")
-            }
-        }
-    }
 
 
 
