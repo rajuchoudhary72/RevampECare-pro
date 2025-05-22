@@ -37,7 +37,9 @@ import com.app.ecarepro.compose.theme.ECareProTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ManageSkillScreen() {
+fun ManageSkillScreen(
+    val manageSkillViewModel: ManageSkillViewModel
+) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Manage Skill Category") })
@@ -99,13 +101,17 @@ fun SkillCategoryList(skillCategories: List<SkillCategory>) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text("#", modifier = Modifier, fontWeight = FontWeight.Bold)
-                VerticalDivider(modifier = Modifier.height(15.dp).padding(horizontal = 8.dp))
+                VerticalDivider(modifier = Modifier
+                    .height(15.dp)
+                    .padding(horizontal = 8.dp))
                 Text(
                     "Skill Category",
                     modifier = Modifier.weight(1f),
                     fontWeight = FontWeight.Bold
                 )
-                VerticalDivider(modifier = Modifier.height(15.dp).padding(horizontal = 8.dp))
+                VerticalDivider(modifier = Modifier
+                    .height(15.dp)
+                    .padding(horizontal = 8.dp))
                 Text("Actions", modifier = Modifier.weight(1f), fontWeight = FontWeight.Bold)
             }
 
