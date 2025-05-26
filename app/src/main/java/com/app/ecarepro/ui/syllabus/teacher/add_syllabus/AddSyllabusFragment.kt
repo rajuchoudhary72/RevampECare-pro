@@ -181,7 +181,7 @@ class AddSyllabusFragment : Fragment() {
 
         binding.tvBrowseFile.setOnClickListener {
             lastClickAttachmentType = AttachmentType.PDF
-            launchPicker()
+            launchPdfPicker()
         }
 
 
@@ -245,24 +245,6 @@ class AddSyllabusFragment : Fragment() {
 
     }
 
-    private fun launchPicker() {
-        when (lastClickAttachmentType) {
-            /* AttachmentType.GALLERY -> {
-                 // Request necessary permissions and open the gallery
-                 if (checkAndRequestPermissions()) {
-                     launchPhotoPicker()
-                 }
-                 //  launchPhotoPicker()
-             }*/
-
-
-            AttachmentType.PDF -> {
-                launchPdfPicker()
-            }
-
-            else -> {}
-        }
-    }
 
 
     private fun getMyClasses() {

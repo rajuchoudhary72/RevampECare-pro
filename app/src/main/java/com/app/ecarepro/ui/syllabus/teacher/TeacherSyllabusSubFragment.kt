@@ -227,7 +227,7 @@ class TeacherSyllabusSubFragment : Fragment(), ItemListener<Syllabuse> {
             when (Constant.isPdfUrl(fileSource)) {
                 1 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus))
                 }
 
                 2 -> {
@@ -237,7 +237,7 @@ class TeacherSyllabusSubFragment : Fragment(), ItemListener<Syllabuse> {
 
                 3 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                 }
 
                 else -> {
