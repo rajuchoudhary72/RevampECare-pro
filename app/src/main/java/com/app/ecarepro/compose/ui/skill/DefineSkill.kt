@@ -83,7 +83,10 @@ import com.app.ecarepro.data.network.model.SkillType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefineSkillScreen(
-    viewModel: DefineSkillViewModel, onClickBack: () -> Unit = {}
+    viewModel: DefineSkillViewModel,
+    onClickBack: () -> Unit = {},
+    onClickManageSkill: () -> Unit = {},
+
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
@@ -137,7 +140,9 @@ fun DefineSkillScreen(
                         viewModel.loadSkillTypes(skill.sklCatID)
                         showBottomSheet = true
                     },
-                    onClickImportFromDatabase = {})
+                    onClickImportFromDatabase = {},
+                    onClickManageSkill = onClickManageSkill,
+                )
 
                 if (showBottomSheet) {
                     CreateSkillBottomSheet(
@@ -281,7 +286,8 @@ fun DefineSkillContent(
     onSkillDelete: (Skill) -> Unit,
     editSkillRequest: (Skill) -> Unit,
     onClickCreate: () -> Unit,
-    onClickImportFromDatabase: () -> Unit
+    onClickImportFromDatabase: () -> Unit,
+    onClickManageSkill: () -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -294,7 +300,8 @@ fun DefineSkillContent(
                 data = data,
                 onCategorySelected = onCategorySelected,
                 onClickCreate = onClickCreate,
-                onClickImportFromDatabase = onClickImportFromDatabase
+                onClickImportFromDatabase = onClickImportFromDatabase,
+                onClickManageSkill = onClickManageSkill
             )
         }
 
@@ -385,10 +392,16 @@ private fun DefineSkillHeader(
     data: DefineSkillSuccessData,
     onCategorySelected: (String) -> Unit,
     onClickCreate: () -> Unit,
-    onClickImportFromDatabase: () -> Unit
+    onClickImportFromDatabase: () -> Unit,
+    onClickManageSkill: () -> Unit,
 ) {
     Surface {
         Column {
+            Button(
+                onClick = onClickManageSkill
+            ) {
+                Text("Manage Skill")
+            }
             SkillCategorySelectionDropdown(
                 selectedSkill = data.selectedSkillCategory?.category.orEmpty(),
                 onSkillSelected = { selectedCategory ->
@@ -623,7 +636,9 @@ fun DefineSkillContentPreview() {
             onSkillDelete = {},
             onClickCreate = {},
             onClickImportFromDatabase = {},
-            editSkillRequest = {})
+            editSkillRequest = {},
+            onClickManageSkill = {}
+        )
     }
 }
 

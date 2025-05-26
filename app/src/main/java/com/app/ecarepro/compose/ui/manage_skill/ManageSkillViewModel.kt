@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -68,6 +69,16 @@ class ManageSkillViewModel @Inject constructor(
         initialValue = UiState.Loading,
         started = SharingStarted.WhileSubscribed(5000L)
     )
+
+    fun refresh() {
+        refreshData.update { true }
+    }
+
+    fun onSearchQueryChange(query:String) {
+        searchQuery.update {
+            query
+        }
+    }
 }
 
 

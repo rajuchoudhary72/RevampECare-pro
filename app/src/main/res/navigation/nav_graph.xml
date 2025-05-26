@@ -1041,4 +1041,9 @@
         android:id="@+id/defineSkillFragment"
         android:name="com.app.ecarepro.compose.ui.skill.DefineSkillFragment"
         android:label="DefineSkillFragment" />
+
+    <fragment
+        android:id="@+id/manageSkillFragment"
+        android:name="com.app.ecarepro.compose.ui.manage_skill.ManageSkillFragment"
+        android:label="ManageSkillFragment" />
 </navigation>

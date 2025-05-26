@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.compose.theme.ECareProTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +26,7 @@ class ManageSkillFragment : Fragment() {
             setContent {
                 ECareProTheme {
                     ManageSkillScreen(
-                        manageSkillViewModel = mViewModel
+                        viewModel = mViewModel, onClickBack = { findNavController().popBackStack() }
                     )
                 }
             }
