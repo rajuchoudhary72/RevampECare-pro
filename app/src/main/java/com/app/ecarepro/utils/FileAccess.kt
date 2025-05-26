@@ -101,6 +101,23 @@ class FileAccess {
 
         }
 
+        fun getImageExtFromUriSec(inContext: Context, inImage: Bitmap): String? {
+            val bytes = ByteArrayOutputStream()
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+
+            // Add timestamp or UUID to make filename unique
+            val fileName = "Title_${System.currentTimeMillis()}.jpg"
+
+            val path = MediaStore.Images.Media.insertImage(
+                inContext.contentResolver,
+                inImage,
+                fileName,
+                null
+            )
+
+            return getRealPathFromURI(Uri.parse(path), inContext)
+        }
+
           private fun getRealPathFromURI(uri: Uri?, inContext: Context): String? {
             val cursor: Cursor? = inContext.contentResolver.query(uri!!, null, null, null, null)
             cursor?.moveToFirst()
