@@ -944,5 +944,8 @@
     <string name="collapse_all">Collapse All</string>
     <string name="expand_all">Expand All</string>
     <string name="rejection_reason">"<b>Rejection Reason: </b>"</string>
+    <string name="all_undertakings_submitted_successfully">All undertakings submitted successfully.</string>
+    <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
+    <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
 </resources>
 

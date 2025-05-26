@@ -290,14 +290,18 @@ class HomeFragment : Fragment() {
                         if (nextIndex < userUndertakingList.length()) {
                             showUndertakingDialog(userUndertakingList, nextIndex)
                         } else {
-                            mainActivity().showMessage("All undertakings submitted successfully.")
+                            mainActivity().showMessage(getString(R.string.all_undertakings_submitted_successfully))
                         }
                     } else {
-                        mainActivity().showMessage("Failed to submit undertaking: $message")
+                        mainActivity().showMessage(
+                            getString(
+                                R.string.failed_to_submit_undertaking,
+                                message
+                            ))
                     }
                 }
             } else {
-                mainActivity().showMessage("Please read and accept the undertaking before submitting.")
+                mainActivity().showMessage(getString(R.string.please_read_and_accept_the_undertaking_before_submitting))
             }
         }
 
