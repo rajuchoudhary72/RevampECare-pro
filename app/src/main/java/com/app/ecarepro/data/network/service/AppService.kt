@@ -1,7 +1,9 @@
 package com.app.ecarepro.data.network.service
 
+import com.app.ecarepro.data.network.SaveSkillCategoryRequest
 import com.app.ecarepro.data.network.SaveSkillDto
 import com.app.ecarepro.data.network.SaveSkillResponse
+import com.app.ecarepro.data.network.SaveSkillTypeRequest
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -94,5 +96,24 @@ interface AppService {
     suspend fun saveSkill(
         @Url url: String,
         @Body request: SaveSkillDto
+    ): SaveSkillResponse
+
+    @DELETE
+    suspend fun deleteSkillCategory(
+        @Url url: String,
+        @Query("sklCatID") sklCatID: String
+    ): SaveSkillResponse
+
+    @POST
+    suspend fun saveSkillType(
+        @Url url: String,
+        @Query("sklCatID") sklCatID: String,
+        @Body request: SaveSkillTypeRequest
+    ): SaveSkillResponse
+
+    @POST
+    suspend fun saveSkillCategory(
+        @Url url: String,
+        @Body request: SaveSkillCategoryRequest
     ): SaveSkillResponse
 }

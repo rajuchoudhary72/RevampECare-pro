@@ -945,5 +945,7 @@
     <string name="skill_type">Skill Type: %1$s</string>
     <string name="skill_name">Skill Name: %1$s</string>
     <string name="manage_skill_category">Manage Skill Category</string>
+    <string name="confirm_delete">Confirm Delete</string>
+    <string name="are_you_sure_you_want_to_delete_this_skill_category">Are you sure you want to delete this skill category?</string>
 </resources>
 

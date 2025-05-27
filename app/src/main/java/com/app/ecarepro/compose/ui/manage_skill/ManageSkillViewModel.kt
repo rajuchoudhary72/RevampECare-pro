@@ -11,11 +11,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,6 +64,7 @@ class ManageSkillViewModel @Inject constructor(
                     ),
                 )
             }
+
             else -> state
         }
     }.stateIn(
@@ -74,9 +77,63 @@ class ManageSkillViewModel @Inject constructor(
         refreshData.update { true }
     }
 
-    fun onSearchQueryChange(query:String) {
+    fun onSearchQueryChange(query: String) {
         searchQuery.update {
             query
+        }
+    }
+
+    fun deleteSkillCategory(sklCatID: String) {
+        viewModelScope.launch {
+            appRepository
+                .deleteSkillCategory(sklCatID)
+                .handleResultWithLoadState()
+                .collectLatest { result ->
+                    result
+                        .onSuccess { message ->
+                            showMessage(message)
+                            refresh()
+                        }
+                        .onFailure { error ->
+                            showError(error)
+                        }
+                }
+        }
+    }
+
+    fun saveSkillCategory(sklCatID: String?, category: String) {
+        viewModelScope.launch {
+            appRepository
+                .saveSkillCategory(sklCatID, category)
+                .handleResultWithLoadState()
+                .collectLatest { result ->
+                    result
+                        .onSuccess { message ->
+                            showMessage(message)
+                            refresh()
+                        }
+                        .onFailure { error ->
+                            showError(error)
+                        }
+                }
+        }
+    }
+
+    fun saveSkillType(sklCatID: String, type: String) {
+        viewModelScope.launch {
+            appRepository
+                .saveSkillType(sklCatID = sklCatID, value = type)
+                .handleResultWithLoadState()
+                .collectLatest { result ->
+                    result
+                        .onSuccess { message ->
+                            showMessage(message)
+                            refresh()
+                        }
+                        .onFailure { error ->
+                            showError(error)
+                        }
+                }
         }
     }
 }

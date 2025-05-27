@@ -26,6 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -33,6 +34,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -87,7 +89,7 @@ fun DefineSkillScreen(
     onClickBack: () -> Unit = {},
     onClickManageSkill: () -> Unit = {},
 
-) {
+    ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
@@ -118,7 +120,19 @@ fun DefineSkillScreen(
                     onClickBack = onClickBack
                 )
             },
-
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+                        skillToEdit = null
+                        showBottomSheet = true
+                    }
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "Add"
+                    )
+                }
+            },
             snackbarHost = {
                 SnackbarHost(snackbarHostState)
             }) { innerPadding ->
@@ -131,17 +145,13 @@ fun DefineSkillScreen(
                     data = data,
                     onCategorySelected = viewModel::onCategorySelected,
                     onSkillDelete = viewModel::deleteSkill,
-                    onClickCreate = {
-                        skillToEdit = null
-                        showBottomSheet = true
-                    },
+                    onClickManageSkill = onClickManageSkill,
                     editSkillRequest = { skill ->
                         skillToEdit = skill
                         viewModel.loadSkillTypes(skill.sklCatID)
                         showBottomSheet = true
                     },
-                    onClickImportFromDatabase = {},
-                    onClickManageSkill = onClickManageSkill,
+                    onClickImportFromDatabase = {}
                 )
 
                 if (showBottomSheet) {
@@ -274,7 +284,7 @@ fun CreateSkillBottomSheet(
  * @param data The data to display in the content area.
  * @param onCategorySelected Callback when a skill category is selected.
  * @param onSkillDelete Callback when a skill item is deleted.
- * @param onClickCreate Callback when the "Create New Skill" button is clicked.
+ * @param onClickManageSkill Callback when the "Create New Skill" button is clicked.
  * @param onClickImportFromDatabase Callback when the "Import From Database" button is clicked.
  */
 @OptIn(ExperimentalFoundationApi::class)
@@ -285,9 +295,8 @@ fun DefineSkillContent(
     onCategorySelected: (String) -> Unit,
     onSkillDelete: (Skill) -> Unit,
     editSkillRequest: (Skill) -> Unit,
-    onClickCreate: () -> Unit,
-    onClickImportFromDatabase: () -> Unit,
     onClickManageSkill: () -> Unit,
+    onClickImportFromDatabase: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -299,7 +308,6 @@ fun DefineSkillContent(
             DefineSkillHeader(
                 data = data,
                 onCategorySelected = onCategorySelected,
-                onClickCreate = onClickCreate,
                 onClickImportFromDatabase = onClickImportFromDatabase,
                 onClickManageSkill = onClickManageSkill
             )
@@ -384,24 +392,17 @@ private fun NoSkillFoundText(
  * @param data The data containing the list of skill categories and the currently selected category.
  * @param onCategorySelected Callback function triggered when a skill category is selected from the dropdown.
  *                           It passes the ID of the selected category.
- * @param onClickCreate Callback function triggered when the "Create New Skill" button is clicked.
  * @param onClickImportFromDatabase Callback function triggered when the "Import From Database" button is clicked.
  */
 @Composable
 private fun DefineSkillHeader(
     data: DefineSkillSuccessData,
     onCategorySelected: (String) -> Unit,
-    onClickCreate: () -> Unit,
     onClickImportFromDatabase: () -> Unit,
     onClickManageSkill: () -> Unit,
 ) {
     Surface {
         Column {
-            Button(
-                onClick = onClickManageSkill
-            ) {
-                Text("Manage Skill")
-            }
             SkillCategorySelectionDropdown(
                 selectedSkill = data.selectedSkillCategory?.category.orEmpty(),
                 onSkillSelected = { selectedCategory ->
@@ -412,7 +413,8 @@ private fun DefineSkillHeader(
                 skills = data.skillCategory.map { it.category.orEmpty() })
             Spacer(modifier = Modifier.height(16.dp))
             CreateImportButtons(
-                onClickCreate = onClickCreate, onClickImportFromDatabase = onClickImportFromDatabase
+                onClickManageSkill = onClickManageSkill,
+                onClickImportFromDatabase = onClickImportFromDatabase
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -512,12 +514,12 @@ fun SkillCategorySelectionDropdown(
 /**
  * Composable that displays the buttons for creating a new skill or importing from the database.
  *
- * @param onClickCreate Callback when the "Create New Skill" button is clicked.
+ * @param onClickManageSkill Callback when the "Create New Skill" button is clicked.
  * @param onClickImportFromDatabase Callback when the "Import From Database" button is clicked.
  */
 @Composable
 fun CreateImportButtons(
-    onClickCreate: () -> Unit = {},
+    onClickManageSkill: () -> Unit = {},
     onClickImportFromDatabase: () -> Unit = {},
 ) {
     Row(
@@ -527,11 +529,11 @@ fun CreateImportButtons(
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 4.dp),
-            onClick = onClickCreate,
+            onClick = onClickManageSkill,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
         ) {
             Text(
-                "Create new skill", color = Color.White, style = MaterialTheme.typography.bodySmall
+                "Manage Skill", color = Color.White
             )
         }
         OutlinedButton(
@@ -555,7 +557,6 @@ fun CreateImportButtons(
                     text = stringResource(R.string.import_from_db),
                     color = Color(0xFF4CAF50),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
@@ -634,10 +635,9 @@ fun DefineSkillContentPreview() {
             data = dummyUiState,
             onCategorySelected = {},
             onSkillDelete = {},
-            onClickCreate = {},
+            onClickManageSkill = {},
             onClickImportFromDatabase = {},
             editSkillRequest = {},
-            onClickManageSkill = {}
         )
     }
 }

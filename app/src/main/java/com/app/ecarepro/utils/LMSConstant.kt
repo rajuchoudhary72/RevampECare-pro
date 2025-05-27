@@ -24,5 +24,8 @@ class LMSConstant {
         const val SKILL_DELETE_SKILL = "Skills/DeleteSkill"
         const val SKILL_SKILL_TYPE = "Skills/Types"
         const val SKILL_SKILL_SAVE = "Skills/SaveSkill"
+        const val DELETE_SKILL_CATEGORY = "Skills/DeleteSkillCategory"
+        const val SAVE_SKILL_CATEGORY = "Skills/SaveSkillCategory"
+        const val SAVE_SKILL_TYPE = "Skills/SaveSkillType"
     }
 }

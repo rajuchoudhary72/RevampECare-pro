@@ -14,4 +14,16 @@ data class SaveSkillDto(
 )
 
 
+data class SaveSkillTypeRequest(
+    @SerializedName("sklTypeID")
+    val sklTypeID: String? = null,
+    @SerializedName("type")
+    val type: String
+)
 
+data class SaveSkillCategoryRequest(
+    @SerializedName("sklCatID")
+    val sklCatID: String? = null,
+    @SerializedName("category")
+    val category: String
+)

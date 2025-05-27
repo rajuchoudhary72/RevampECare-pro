@@ -27,7 +27,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     /**
      * The internal MutableSharedFlow that emits LoadState objects.
      */
-    private val _loadState = MutableSharedFlow<LoadState>(extraBufferCapacity = 1)
+    private val _loadState = MutableSharedFlow<LoadState>()
 
     /**
      * The public SharedFlow that the UI observes to get the current LoadState.
