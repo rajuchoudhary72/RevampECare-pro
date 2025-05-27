@@ -114,10 +114,12 @@ class AddSyllabusViewModel @Inject constructor(
         subID: Int,
         title: String,
         fileName: String?,
+        browsedFile: BrowsedFile,
+        isGallery:Boolean
     )=viewModelScope.launch {
         runCatching {
             saveSyllabusMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.saveSyllabus(PostSyllabus(getAttachment() ,classID,classIDs, id, subID, title,fileName))
+            userRepository.saveSyllabus(PostSyllabus(if (isGallery) browsedFile else getAttachment() ,classID,classIDs, id, subID, title,fileName))
         }.onSuccess {
             saveSyllabusMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {

@@ -5,8 +5,10 @@ import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -50,6 +52,7 @@ import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.ui.syllabus.teacher.TeacherSyllabusViewModel
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
+import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.getFile
 import com.app.ecarepro.utils.listener.ItemListener
 import com.lassi.common.utils.KeyUtils
@@ -68,6 +71,9 @@ import java.io.InputStream
 @AndroidEntryPoint
 class AddSyllabusFragment : Fragment() {
 
+    private var isGallery: Boolean=false
+    private  var imageExt: String =""
+    private  var imageString: String =""
     private lateinit var binding: FragmentAddSyllabusBinding
     private val addSyllabusViewModel: AddSyllabusViewModel by viewModels()
     private var classesList = mutableListOf<MyClasseItem>()
@@ -175,7 +181,7 @@ class AddSyllabusFragment : Fragment() {
         binding.tvBrowsePhoto.setOnClickListener {
             if (checkAndRequestPermissions()) {
                 lastClickAttachmentType = AttachmentType.GALLERY
-                launchPhotoPicker()
+                selectImageOptionDialog()
             }
         }
 
@@ -221,6 +227,11 @@ class AddSyllabusFragment : Fragment() {
                     subID,
                     binding.etDescription.text.toString(),
                     if (isFileAttached) fileName else null,
+                    BrowsedFile(
+                        attachment = imageString,
+                        fileExt = imageExt,
+                    ),
+                    isGallery
                 ).invokeOnCompletion {
                     mainActivity().showLoader(false)
                     mainActivity().showMessage("Submitted Successfully!!!")
@@ -629,36 +640,98 @@ class AddSyllabusFragment : Fragment() {
     }
 
 
+    private val galleryLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                // binding.ivAddedImage.setImageURI(imgUri)
+                try {
+                    val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
 
-    private fun launchPhotoPicker() {
+                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                     imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                    /*val imageExt =
+                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
+                    isFileAttached=true
+                    isGallery=true
+                    binding.llFile.isVisible=true
 
-        val intent = Lassi(requireContext())
-            .with(LassiOption.CAMERA_AND_GALLERY)
-            .setMediaType(MediaType.IMAGE)
-            .setMaxCount(1)
-            .setGridSize(3)
-            .setMinFileSize(0) // Restrict by minimum file size
-            .setMaxFileSize(65535) // Restrict by maximum file size
-            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
-            .setAlertDialogNegativeButtonColor(R.color.black)
-            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-            .setStatusBarColor(R.color.md_theme_light_primary)
-            .setToolbarColor(R.color.md_theme_light_primary)
-            .setToolbarResourceColor(android.R.color.white)
-            .setProgressBarColor(R.color.red)
-            .setGalleryBackgroundColor(R.color.white)
-            .build()
-        receiveData.launch(intent)
+
+                } catch (e: NullPointerException) {
+                    e.message
+                }
+
+
+            }
+        }
+
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
     }
 
-    private val receiveData =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                val selectedMedia =
-                    it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
-                addSyllabusViewModel.setAttachments(selectedMedia)
-                isFileAttached=true
-                binding.llFile.isVisible=true
+
+
+    private fun selectImageOptionDialog() {
+        val items = arrayOf<CharSequence>(
+            "Take Photo", "Choose from Library",
+            "Cancel"
+        )
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Photo!")
+        builder.setItems(items) { dialog, item ->
+            FileAccess.checkPermission(this)
+            if (items[item] == "Take Photo") {
+                if (isCameraPermissionGranted(requireContext())) {
+                    cameraLauncher.launch(FileAccess.cameraIntent())
+                } else {
+                    mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
+                }
+            } else if (items[item] == "Choose from Library") {
+                galleryLauncher.launch(FileAccess.galleryIntent())
+            } else if (items[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        }
+        builder.show()
+    }
+
+    fun isCameraPermissionGranted(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                if (result?.data != null) {
+                    val bitmap = result.data?.extras?.get("data") as Bitmap
+                    // binding.ivAddedImage.setImageBitmap(bitmap)
+                    try {
+                         imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                         imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                        /* val imageExt =
+                             FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
+                        isFileAttached=true
+                        isGallery=true
+                        binding.llFile.isVisible=true
+
+                    } catch (e: NullPointerException) {
+                        e.message
+                    }
+
+
+                }
             }
         }
 
@@ -692,6 +765,7 @@ class AddSyllabusFragment : Fragment() {
                         )
                         isFileAttached=true
                         binding.llFile.isVisible=true
+                        isGallery=false
                     } else {
                         if (data.clipData != null) {
                             val count: Int = data.clipData!!.itemCount
@@ -708,6 +782,7 @@ class AddSyllabusFragment : Fragment() {
                             isFileAttached=true
                             binding.llFile.isVisible=true
                             addSyllabusViewModel.setAttachments(files)
+                            isGallery=false
                         }
                     }
                 }
