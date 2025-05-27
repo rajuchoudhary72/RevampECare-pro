@@ -1,12 +1,16 @@
 package com.app.ecarepro.ui.syllabus.teacher.add_syllabus
 
+import android.Manifest
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -19,6 +23,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -46,6 +52,11 @@ import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.getFile
 import com.app.ecarepro.utils.listener.ItemListener
+import com.lassi.common.utils.KeyUtils
+import com.lassi.data.media.MiMedia
+import com.lassi.domain.media.LassiOption
+import com.lassi.domain.media.MediaType
+import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -57,7 +68,6 @@ import java.io.InputStream
 @AndroidEntryPoint
 class AddSyllabusFragment : Fragment() {
 
-    private   var pdfString: String=""
     private lateinit var binding: FragmentAddSyllabusBinding
     private val addSyllabusViewModel: AddSyllabusViewModel by viewModels()
     private var classesList = mutableListOf<MyClasseItem>()
@@ -83,6 +93,7 @@ class AddSyllabusFragment : Fragment() {
     private var sectionIDs = StringBuilder()
     private var sylabussType=Constant.CLASS_WISE
     private val teacherSyllabusViewModel: TeacherSyllabusViewModel by activityViewModels()
+    private var isFileAttached =false
 
 
 
@@ -125,7 +136,7 @@ class AddSyllabusFragment : Fragment() {
             }
             if (fileName.isNotEmpty()){
                 binding.llFile.isVisible=true
-                binding.tvAddAttac.isVisible=false
+                binding.llAttachemntFile.isVisible=false
                 binding.ivFileRemove.isVisible=false
             }
             isSubjectSelected=true
@@ -136,8 +147,9 @@ class AddSyllabusFragment : Fragment() {
 
         binding.ivFileRemove.setOnClickListener {
             binding.llFile.isVisible=false
-            binding.tvAddAttac.isVisible=true
-            pdfString=""
+            binding.llAttachemntFile.isVisible=true
+            isFileAttached=false
+            addSyllabusViewModel.removeAttachment()
         }
 
         getMyClasses()
@@ -160,9 +172,19 @@ class AddSyllabusFragment : Fragment() {
             }
         }
 
-        binding.tvAddAttac.setOnClickListener {
-            pickPdf()
+        binding.tvBrowsePhoto.setOnClickListener {
+            if (checkAndRequestPermissions()) {
+                lastClickAttachmentType = AttachmentType.GALLERY
+                launchPhotoPicker()
+            }
         }
+
+        binding.tvBrowseFile.setOnClickListener {
+            lastClickAttachmentType = AttachmentType.PDF
+            launchPdfPicker()
+        }
+
+
 
         binding.btnSubmit.setOnClickListener {
             var isValidated=true
@@ -178,7 +200,7 @@ class AddSyllabusFragment : Fragment() {
                 isValidated=false
                 binding.etDescription.error="Enter Title"
             } else if (!edit){
-                if (pdfString.isEmpty()){
+                if (!isFileAttached){
                     isValidated=false
                     mainActivity().showMessage("Select File")
                 }
@@ -198,8 +220,7 @@ class AddSyllabusFragment : Fragment() {
                     id,
                     subID,
                     binding.etDescription.text.toString(),
-                    if (pdfString.isNotEmpty()) BrowsedFile(pdfString,"pdf") else null,
-                    if (pdfString.isEmpty()) fileName else null,
+                    if (isFileAttached) fileName else null,
                 ).invokeOnCompletion {
                     mainActivity().showLoader(false)
                     mainActivity().showMessage("Submitted Successfully!!!")
@@ -223,6 +244,7 @@ class AddSyllabusFragment : Fragment() {
 
 
     }
+
 
 
     private fun getMyClasses() {
@@ -414,57 +436,6 @@ class AddSyllabusFragment : Fragment() {
 
 
 
-    fun pickPdf() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            type = "application/pdf"
-            addCategory(Intent.CATEGORY_OPENABLE)
-        }
-        pdfPickerLauncher.launch(intent)
-    }
-
-
-
-    private val pdfPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri: Uri? = result.data?.data
-            uri?.let { pdfUri ->
-                val file = requireContext().getFile(pdfUri)
-                pdfString = getBase64StringFromUri(file!!.toUri()).toString()
-                binding.llFile.isVisible=true
-
-             }
-        }
-    }
-
-    private fun getBase64StringFromUri(uri: Uri): String? {
-        val imageStream: InputStream
-        return try {
-            imageStream = requireNotNull(requireContext().contentResolver.openInputStream(uri))
-            val bytes: ByteArray = readBytes(
-                imageStream
-            )
-            Base64.encodeToString(bytes, Base64.NO_WRAP)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun readBytes(inputStream: InputStream): ByteArray {
-        val byteBuffer = ByteArrayOutputStream()
-        val bufferSize = 1024
-        val buffer = ByteArray(bufferSize)
-
-        var len: Int
-        while ((inputStream.read(buffer).also { len = it }) != -1) {
-            byteBuffer.write(buffer, 0, len)
-        }
-
-        return byteBuffer.toByteArray()
-    }
-
-
     private fun popUpSelectSection(){
 
         val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
@@ -534,6 +505,39 @@ class AddSyllabusFragment : Fragment() {
 
         builder.setCanceledOnTouchOutside(false)
         builder.show()
+    }
+
+
+    private fun checkAndRequestPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionList.toTypedArray(),
+                1001
+            )
+            false
+        } else {
+            true
+        }
     }
 
 
@@ -623,6 +627,92 @@ class AddSyllabusFragment : Fragment() {
         }
         dialog.show()
     }
+
+
+
+    private fun launchPhotoPicker() {
+
+        val intent = Lassi(requireContext())
+            .with(LassiOption.CAMERA_AND_GALLERY)
+            .setMediaType(MediaType.IMAGE)
+            .setMaxCount(7)
+            .setGridSize(3)
+            .setMinFileSize(0) // Restrict by minimum file size
+            .setMaxFileSize(65535) // Restrict by maximum file size
+            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
+            .setAlertDialogNegativeButtonColor(R.color.black)
+            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
+            .setStatusBarColor(R.color.md_theme_light_primary)
+            .setToolbarColor(R.color.md_theme_light_primary)
+            .setToolbarResourceColor(android.R.color.white)
+            .setProgressBarColor(R.color.red)
+            .setGalleryBackgroundColor(R.color.white)
+            .build()
+        receiveData.launch(intent)
+    }
+
+    private val receiveData =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val selectedMedia =
+                    it.data?.getSerializableExtra(KeyUtils.SELECTED_MEDIA) as ArrayList<MiMedia>
+                addSyllabusViewModel.setAttachments(selectedMedia)
+                isFileAttached=true
+                binding.llFile.isVisible=true
+            }
+        }
+
+
+    private fun launchPdfPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*" // Allow any file type
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        pdfLauncher.launch(intent)
+    }
+
+
+
+
+    private val pdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let { data ->
+                    if (data.data != null) {
+                        val mImageUri: Uri = data.data!!
+                        addSyllabusViewModel.setAttachments(
+                            listOf(
+                                MiMedia(
+                                    path = mImageUri.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            )
+                        )
+                        isFileAttached=true
+                        binding.llFile.isVisible=true
+                    } else {
+                        if (data.clipData != null) {
+                            val count: Int = data.clipData!!.itemCount
+                            val files = mutableListOf<MiMedia>()
+                            for (i in 0 until count) {
+                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                                files.add(
+                                    MiMedia(
+                                        path = imageUri.toString(),
+                                        name = lastClickAttachmentType?.name
+                                    )
+                                )
+                            }
+                            isFileAttached=true
+                            binding.llFile.isVisible=true
+                            addSyllabusViewModel.setAttachments(files)
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
