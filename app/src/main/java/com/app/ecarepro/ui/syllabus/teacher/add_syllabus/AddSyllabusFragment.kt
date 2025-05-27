@@ -635,7 +635,7 @@ class AddSyllabusFragment : Fragment() {
         val intent = Lassi(requireContext())
             .with(LassiOption.CAMERA_AND_GALLERY)
             .setMediaType(MediaType.IMAGE)
-            .setMaxCount(7)
+            .setMaxCount(1)
             .setGridSize(3)
             .setMinFileSize(0) // Restrict by minimum file size
             .setMaxFileSize(65535) // Restrict by maximum file size
