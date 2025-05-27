@@ -627,6 +627,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     )
                 )
             }
+            binding.includeToolbar.btnSave.isVisible = false
         }
 
         lifecycleScope.launch {
