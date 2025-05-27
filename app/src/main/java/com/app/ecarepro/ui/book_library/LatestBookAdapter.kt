@@ -3,9 +3,11 @@ package com.app.ecarepro.ui.book_library
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
+import com.app.ecarepro.databinding.CircularListItemBinding
 import com.app.ecarepro.databinding.LatestBookListItemBinding
 import com.app.ecarepro.model.LatestBook
 
@@ -27,17 +29,20 @@ class LatestBookAdapter(private var latestBookList: List<LatestBook>,
     override fun getItemCount(): Int = latestBookList.size
 
     override fun onBindViewHolder(holder: ThoughtsViewHolder, position: Int) {
+        val binding= DataBindingUtil.getBinding<LatestBookListItemBinding>(holder.itemView)
 
-        bindingm.latestBookData=latestBookList[position]
+        binding?.apply {
+            binding.latestBookData=latestBookList[position]
 
 
-        bindingm.ivI.setOnClickListener {
-            latestBookFragment.onItemClick(latestBookList[position],1,true)
+            binding.ivI.setOnClickListener {
+                latestBookFragment.onItemClick(latestBookList[position],1,true)
+            }
+
+            Picasso.get().load(latestBookList[position].coverImg).
+            placeholder(R.drawable.ic_library_big_image)
+                .into(binding.userImg)
         }
-
-        Picasso.get().load(latestBookList[position].coverImg).
-        placeholder(R.drawable.ic_library_big_image)
-            .into(bindingm.userImg)
 
     }
     class ThoughtsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
