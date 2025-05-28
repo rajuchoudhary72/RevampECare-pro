@@ -536,7 +536,6 @@ class ChatFragment : Fragment() {
             }
         }
     }
-
     private fun setUpToolbar(sender: Sender) {
         if (chatViewModel.messageType==MessageType.INBOX.value){
             binding.apply {

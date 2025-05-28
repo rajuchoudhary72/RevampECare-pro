@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentTeacherSyallabusSubBinding
 import com.app.ecarepro.model.Syllabuse
+import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
 import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
@@ -153,16 +155,12 @@ class TeacherSyllabusSubFragment : Fragment(), ItemListener<Syllabuse> {
     override fun onItemClick(t: Syllabuse, pos: Int, boolean: Boolean) {
         when (pos) {
             1 -> {
-                findNavController().navigate(R.id.openPdfFragment,
-                    Bundle().apply {
-                        putString(Constant.URL_ARGUMENT, t.filePath)
-                    })
+                openFile(t.filePath)
             }
 
             2 -> {
                 try {
-                    val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(t.filePath, getString(R.string.syallabus))
+                    downloadFile(t.filePath)
                 } catch (e: NullPointerException) {
                     e.printStackTrace()
                 }
@@ -191,6 +189,65 @@ class TeacherSyllabusSubFragment : Fragment(), ItemListener<Syllabuse> {
             }
         }
 
+    }
+
+
+    private fun openFile(fileSource: String) {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
+            }
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }else -> {
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
+        }
+        }
+
+
+
+    }
+
+
+    private fun downloadFile(fileSource: String) {
+        try {
+            when (Constant.isPdfUrl(fileSource)) {
+                1 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus))
+                }
+
+                2 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
+
+                3 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.syllabus),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                }
+
+                else -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
+                }
+            }
+        }catch (e:SecurityException){
+            e.printStackTrace()
+        }
     }
 
 

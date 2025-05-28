@@ -49,6 +49,10 @@ class AddSyllabusViewModel @Inject constructor(
         this@AddSyllabusViewModel.attachments.update { attachments }
     }
 
+    fun removeAttachment(){
+        this@AddSyllabusViewModel.attachments.value= emptyList()
+    }
+
     private val myClassMutableStateFlow: MutableStateFlow<NetworkResult<NetworkMyClass>> = MutableStateFlow(
         NetworkResult.Loading())
     val myClassStateFlow: StateFlow<NetworkResult<NetworkMyClass>> = myClassMutableStateFlow
@@ -64,6 +68,8 @@ class AddSyllabusViewModel @Inject constructor(
     private val saveSyllabusMutableStateFlow: MutableStateFlow<NetworkResult<CommonResponse>> = MutableStateFlow(
         NetworkResult.Loading())
     val saveSyllabusStateFlow: StateFlow<NetworkResult<CommonResponse>> = saveSyllabusMutableStateFlow
+
+
 
 
     fun getMyClass(subID: Int   )=viewModelScope.launch {
@@ -107,12 +113,13 @@ class AddSyllabusViewModel @Inject constructor(
         id: String,
         subID: Int,
         title: String,
-        browsedFile: BrowsedFile?,
-        fileName: String?
+        fileName: String?,
+        browsedFile: BrowsedFile,
+        isGallery:Boolean
     )=viewModelScope.launch {
         runCatching {
             saveSyllabusMutableStateFlow.value =NetworkResult.Loading( )
-            userRepository.saveSyllabus(PostSyllabus(browsedFile ,classID,classIDs, id, subID, title,fileName))
+            userRepository.saveSyllabus(PostSyllabus(if (isGallery) browsedFile else getAttachment() ,classID,classIDs, id, subID, title,fileName))
         }.onSuccess {
             saveSyllabusMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {
@@ -166,7 +173,7 @@ class AddSyllabusViewModel @Inject constructor(
             } else {
                 val bitmap = FileAccess.bitmapFromFile(context, attachments.first().path!!)
                 val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                val imageExt = FileAccess.getImageExtFromUri(context, bitmap).toString()
+                val imageExt = FileAccess.getImageExtFromUriSec(context, bitmap).toString()
                 BrowsedFile(
                     attachment = imageString,
                     fileExt = imageExt,

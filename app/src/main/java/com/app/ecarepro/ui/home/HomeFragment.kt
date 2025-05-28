@@ -68,6 +68,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import kotlinx.coroutines.Dispatchers
+import org.json.JSONArray
 import java.util.Locale
 
 
@@ -88,8 +89,10 @@ class HomeFragment : Fragment() {
         return binding.root
 
     }
+
     private fun announce(message: String) {
-        val accessibilityManager = requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val accessibilityManager =
+            requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         if (accessibilityManager.isEnabled) {
             val event = AccessibilityEvent.obtain().apply {
                 eventType = AccessibilityEvent.TYPE_ANNOUNCEMENT
@@ -100,6 +103,7 @@ class HomeFragment : Fragment() {
             accessibilityManager.sendAccessibilityEvent(event)
         }
     }
+
     private fun getContactUrl() {
         lifecycleScope.launch {
             mViewModel._contactUrlDTLStateFlow.collectLatest {
@@ -125,6 +129,7 @@ class HomeFragment : Fragment() {
                         }
 
                     }
+
                     else -> {}
                 }
 
@@ -133,6 +138,7 @@ class HomeFragment : Fragment() {
         }
         mViewModel.getContactUrl()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
@@ -141,7 +147,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpViews() {
 
-       /* binding.imgSync.setOnClickListener {
+        /* binding.imgSync.setOnClickListener {
             getContactUrl()
         }*/
         binding.swipeRefresh.setOnRefreshListener {
@@ -238,43 +244,72 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     private fun handleUndertaking(underTaking: String) {
         val jsonObject = JSONObject(underTaking)
-        if (jsonObject.getBoolean("showUserUndertaking")) {
-            val string = removeUTFCharacters(jsonObject.getString("htmlDecription"))
-            val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(string.toString(), Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                Html.fromHtml(string.toString())
-            }
-            val binding =
-                LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
-            binding.text.text = spannedString
+        val showUserUndertaking = jsonObject.getBoolean("showUserUndertaking")
+        if (!showUserUndertaking) return
 
-            val builder = MaterialAlertDialogBuilder(requireContext())
-                .setView(binding.root)
-                .setCancelable(false)
-                .show()
+        val userUndertakingList = jsonObject.getJSONArray("userundertakingList")
+        if (userUndertakingList.length() == 0) return
 
-            binding.btnSubmit.setOnClickListener {
-                if (binding.checkbox.isChecked) {
-                    (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
-                        (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage(message)
-                        if (isSuccess) {
-                            builder.dismiss()
-                        }
-                    }
-                } else {
-                    mainActivity().showMessage("Please go throw user undertaking and accept it")
-                }
-            }
+        showUndertakingDialog(userUndertakingList, 0)
+    }
 
+    private fun showUndertakingDialog(userUndertakingList: JSONArray, index: Int) {
+        val item = userUndertakingList.getJSONObject(index)
+        val htmlDescription = removeUTFCharacters(item.getString("htmlDecription"))
 
+        val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(htmlDescription.toString(), Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(htmlDescription.toString())
         }
 
+        val binding = LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+        binding.text.text = spannedString
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .setCancelable(false)
+            .create()
+
+        // Always hide the Next button
+        binding.btnNext.visibility = View.GONE
+        binding.btnSubmit.visibility = View.VISIBLE
+
+        binding.btnSubmit.setOnClickListener {
+            if (binding.checkbox.isChecked) {
+                val utID = item.getString("utID")
+                (requireActivity() as MainActivity).showLoader(true)
+                mViewModel.submitUserUndertaking(utID) { isSuccess, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (isSuccess) {
+                        dialog.dismiss()
+                        val nextIndex = index + 1
+                        if (nextIndex < userUndertakingList.length()) {
+                            showUndertakingDialog(userUndertakingList, nextIndex)
+                        } else {
+                            mainActivity().showMessage(getString(R.string.all_undertakings_submitted_successfully))
+                        }
+                    } else {
+                        mainActivity().showMessage(
+                            getString(
+                                R.string.failed_to_submit_undertaking,
+                                message
+                            ))
+                    }
+                }
+            } else {
+                mainActivity().showMessage(getString(R.string.please_read_and_accept_the_undertaking_before_submitting))
+            }
+        }
+
+        dialog.show()
     }
+
+
+
 
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(

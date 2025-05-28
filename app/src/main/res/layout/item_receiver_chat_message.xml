@@ -52,7 +52,7 @@
             android:padding="17dp"
             android:textColor="@color/black"
             android:enabled="true"
-            android:autoLink="none"
+            android:autoLink="all"
             android:linksClickable="true"
             app:formattedText="@{message}"
             android:textIsSelectable="true"

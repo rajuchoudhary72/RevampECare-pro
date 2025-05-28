@@ -96,6 +96,7 @@ import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
 import com.app.ecarepro.ui.notification.NotificationViewModel
+import com.app.ecarepro.ui.views.PaymentWebViewActivity
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -1090,7 +1091,6 @@ class MainActivity : AppCompatActivity() {
             35 -> navController.navigate(R.id.busLocationFragment)
             39 -> navController.navigate(R.id.fomGuardFragment)
             40 -> navController.navigate(R.id.teacherListFragment)
-
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -1178,8 +1178,14 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             try {
-                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(fallbackIntent)
+                // Fallback to WebView if Chrome is not installed or fails
+                val webViewIntent = Intent(this, PaymentWebViewActivity::class.java).apply {
+                    putExtra("payment_url", uri.toString())
+                }
+                startActivity(webViewIntent)
+
+               /* val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)*/
             } catch (e: ActivityNotFoundException) {
                 showMessage("No browser available to handle the URL")
             }

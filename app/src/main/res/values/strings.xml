@@ -183,8 +183,8 @@
     <string name="type_your_message_with_word_limit">Type Your Message(Word limit 200 Words)</string>
     <string name="camera_amp_browse_photo"><![CDATA[Camera & Browse Photo]]></string>
     <string name="browse_photo"><![CDATA[Browse Photo]]></string>
-    <string name="attach_photo_pdf_doc"><![CDATA[Attach PDF &amp; Doc (Max 5 MB)]]></string>
-    <string name="select_subject">"Select Subject "</string>
+    <string name="attach_photo_pdf_doc"><![CDATA[Attach PDF & Doc]]></string>
+    <string name="select_subject">"Select Subject "</string>e
     <string name="lbl_select_class">Select Class</string>
     <string name="lbl_forward_to">Forward to</string>
     <string name="lbl_select_Student">Select Student</string>
@@ -944,5 +944,8 @@
     <string name="collapse_all">Collapse All</string>
     <string name="expand_all">Expand All</string>
     <string name="rejection_reason">"<b>Rejection Reason: </b>"</string>
+    <string name="all_undertakings_submitted_successfully">All undertakings submitted successfully.</string>
+    <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
+    <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
 </resources>
 

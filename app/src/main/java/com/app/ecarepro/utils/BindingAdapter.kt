@@ -215,16 +215,17 @@ fun setFormattedText(textView: TextView, text: String?) {
     // val formattedText = text?.parseMarkdown()
 
 // Example of setting the formatted text in a TextView
-    textView.text = parseFormattedText(text.toString())
-
-    val pattern = Pattern.compile("https?://\\S+")
-    Linkify.addLinks(textView, pattern, null)
-    // CompleteTextFormate(text, textView)
+    textView.text = parseFormattedTextSimple(text.toString())
+    /*// Make URLs clickable
+    textView.autoLinkMask = Linkify.WEB_URLS
+    textView.movementMethod = android.text.method.LinkMovementMethod.getInstance()*/
 }
-fun parseFormattedText(input: String): SpannableStringBuilder {
+fun parseFormattedTextSimple(input: String): SpannableStringBuilder {
     val spannable = SpannableStringBuilder()
 
-    // Holds flags for open formatting
+    // Find all URLs first
+    val urlRanges = findUrlRanges(input)
+
     data class FormatFlag(var bold: Boolean = false, var italic: Boolean = false, var underline: Boolean = false)
 
     var i = 0
@@ -250,18 +251,33 @@ fun parseFormattedText(input: String): SpannableStringBuilder {
     }
 
     while (i < input.length) {
+        // Check if current position is inside a URL
+        val isInUrl = urlRanges.any { range -> i in range }
+
         when (input[i]) {
             '*' -> {
-                applyBuffer()
-                formatFlag.bold = !formatFlag.bold
+                if (!isInUrl) {
+                    applyBuffer()
+                    formatFlag.bold = !formatFlag.bold
+                } else {
+                    buffer.append(input[i])
+                }
             }
             '_' -> {
-                applyBuffer()
-                formatFlag.italic = !formatFlag.italic
+                if (!isInUrl) {
+                    applyBuffer()
+                    formatFlag.italic = !formatFlag.italic
+                } else {
+                    buffer.append(input[i])
+                }
             }
             '~' -> {
-                applyBuffer()
-                formatFlag.underline = !formatFlag.underline
+                if (!isInUrl) {
+                    applyBuffer()
+                    formatFlag.underline = !formatFlag.underline
+                } else {
+                    buffer.append(input[i])
+                }
             }
             else -> buffer.append(input[i])
         }
@@ -272,6 +288,18 @@ fun parseFormattedText(input: String): SpannableStringBuilder {
     applyBuffer()
 
     return spannable
+}
+
+private fun findUrlRanges(text: String): List<IntRange> {
+    val urlPattern = Pattern.compile("https?://[^\\s]+")
+    val matcher = urlPattern.matcher(text)
+    val ranges = mutableListOf<IntRange>()
+
+    while (matcher.find()) {
+        ranges.add(matcher.start() until matcher.end())
+    }
+
+    return ranges
 }
 private fun CompleteTextFormate(text: String?, textView: TextView) {
     if (text != null) {
