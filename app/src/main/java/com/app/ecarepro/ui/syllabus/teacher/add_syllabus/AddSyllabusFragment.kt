@@ -9,11 +9,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +30,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -64,8 +68,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -78,7 +86,7 @@ class AddSyllabusFragment : Fragment() {
     private val addSyllabusViewModel: AddSyllabusViewModel by viewModels()
     private var classesList = mutableListOf<MyClasseItem>()
     private  var sectionList= mutableListOf<ClassSection>()
-
+    private var imageUri: Uri? = null
     private var subjectList = mutableListOf<MySubject>()
     private lateinit var classData: MyClasseItem
     private lateinit var subjectData: MySubject
@@ -690,7 +698,7 @@ class AddSyllabusFragment : Fragment() {
             FileAccess.checkPermission(this)
             if (items[item] == "Take Photo") {
                 if (isCameraPermissionGranted(requireContext())) {
-                    cameraLauncher.launch(FileAccess.cameraIntent())
+                    launchCamera()
                 } else {
                     mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
                 }
@@ -703,6 +711,20 @@ class AddSyllabusFragment : Fragment() {
         builder.show()
     }
 
+    private fun launchCamera() {
+        val imageFile = createImageFile()
+        imageUri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.myFileProvider",
+            imageFile
+        )
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        cameraLauncher.launch(intent)
+    }
+
     fun isCameraPermissionGranted(context: Context): Boolean {
         return ContextCompat.checkSelfPermission(
             context,
@@ -713,24 +735,22 @@ class AddSyllabusFragment : Fragment() {
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                if (result?.data != null) {
-                    val bitmap = result.data?.extras?.get("data") as Bitmap
-                    // binding.ivAddedImage.setImageBitmap(bitmap)
-                    try {
-                         imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                         imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
-                        /* val imageExt =
-                             FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
-                        isFileAttached=true
-                        isGallery=true
-                        binding.llFile.isVisible=true
+            if (result.resultCode == Activity.RESULT_OK && imageUri != null) {
+                try {
+                    val inputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    inputStream?.close()
 
-                    } catch (e: NullPointerException) {
-                        e.message
-                    }
+                    imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                    imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
 
+                    isFileAttached = true
+                    isGallery = true
+                    binding.llFile.isVisible = true
+                    // binding.ivAddedImage.setImageBitmap(bitmap) // Optional: show preview
 
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -788,6 +808,13 @@ class AddSyllabusFragment : Fragment() {
                 }
             }
         }
+
+
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
+    }
 
     }
 
