@@ -1,5 +1,6 @@
 package com.app.ecarepro.compose.ui.base
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,10 +9,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +35,11 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     /**
      * The public SharedFlow that the UI observes to get the current LoadState.
      */
-    val loadState: SharedFlow<LoadState> = _loadState.asSharedFlow()
+    val loadState: SharedFlow<LoadState> = _loadState.shareIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        replay = 1
+    )
 
     /**
      * Updates the load state to show or hide the loading indicator.
@@ -84,7 +91,7 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     fun <T> Flow<Result<T>>.handleResultWithLoadState(): Flow<Result<T>> {
         return this
             .onStart { showLoading(true) }
-            .onCompletion { showLoading(false) }
+           // .onCompletion { showLoading(false) }
             .catch { showError(it) }
 
     }

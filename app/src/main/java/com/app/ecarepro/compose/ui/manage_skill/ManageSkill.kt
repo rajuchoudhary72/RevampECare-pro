@@ -75,17 +75,16 @@ fun ManageSkillScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
-    val loadState by viewModel.loadState.collectAsStateWithLifecycle(LoadState.Nothing)
+    val loadState by viewModel.loadState.collectAsStateWithLifecycle(initialValue = LoadState.Nothing)
     val snackbarHostState = remember { SnackbarHostState() }
 
-    var showDeleteConfirmationDialog by remember { mutableStateOf<String?>(null) }
-
-    var showAddEditBottomSheet by remember { mutableStateOf<Triple<String, String?, Boolean>?>(null) }
+    var manageSkillActions by remember { mutableStateOf<ManageSkillActions?>(null) }
 
     val message = loadState.messageOrNull()
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(it)
+
+    LaunchedEffect(loadState) {
+        message?.let { message ->
+            snackbarHostState.showSnackbar(message)
         }
     }
 
@@ -104,7 +103,8 @@ fun ManageSkillScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        showAddEditBottomSheet = Triple("Add Skill Category", null, false)
+                        manageSkillActions =
+                            ManageSkillActions.AddSkillCategory
                     }
                 ) {
                     Icon(
@@ -131,13 +131,16 @@ fun ManageSkillScreen(
                         .padding(top = 8.dp),
                     data = data,
                     onClickAdd = {
-                        showAddEditBottomSheet = Triple("Add Skill Type", it, true)
+                        manageSkillActions = ManageSkillActions.AddSkillType(it)
                     },
-                    onClickEdit = {
-                        showAddEditBottomSheet = Triple("Edit Skill Category", it, false)
+                    onClickEdit = { category ->
+                        manageSkillActions = ManageSkillActions.EditSkillCategory(
+                            skillCategoryId = category.sklCatID,
+                            category = category.category.orEmpty()
+                        )
                     },
                     onClickDelete = {
-                        showDeleteConfirmationDialog = it
+                        manageSkillActions = ManageSkillActions.DeleteSkillCategory(it)
                     }
                 )
             }
@@ -146,41 +149,62 @@ fun ManageSkillScreen(
             LoadingDialog()
         }
 
-        showDeleteConfirmationDialog?.let { skillId ->
-            AlertDialog(
-                onDismissRequest = { showDeleteConfirmationDialog = null },
-                title = { Text(stringResource(R.string.confirm_delete)) },
-                text = { Text(stringResource(R.string.are_you_sure_you_want_to_delete_this_skill_category)) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        viewModel.deleteSkillCategory(skillId)
-                        showDeleteConfirmationDialog = null
-                    }) { Text(stringResource(R.string.delete)) }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDeleteConfirmationDialog = null }) {
-                        Text(
-                            stringResource(R.string.cancel)
-                        )
-                    }
-                }
-            )
-        }
+        manageSkillActions?.let { action ->
 
-        showAddEditBottomSheet?.let { (title, skillId, isTypeAdd) ->
-            CreateSkillBottomSheet(
-                title = title,
-                onSaveSkill = {
-                    showAddEditBottomSheet = null
-                    if (isTypeAdd) {
-                        viewModel.saveSkillType(skillId.orEmpty(), it)
-                    } else {
-                        viewModel.saveSkillCategory(skillId, it)
+            if (action is ManageSkillActions.DeleteSkillCategory) {
+                AlertDialog(
+                    onDismissRequest = { manageSkillActions = null },
+                    title = { Text(stringResource(R.string.confirm_delete)) },
+                    text = { Text(stringResource(R.string.are_you_sure_you_want_to_delete_this_skill_category)) },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            viewModel.deleteSkillCategory(action.skillCategoryId)
+                            manageSkillActions = null
+                        }) { Text(stringResource(R.string.delete)) }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { manageSkillActions = null }) {
+                            Text(
+                                stringResource(R.string.cancel)
+                            )
+                        }
                     }
-                },
-                onDismissRequest = { showAddEditBottomSheet = null },
-                onCancel = { showAddEditBottomSheet = null }
-            )
+                )
+            } else {
+                val title =
+                    if (action == ManageSkillActions.AddSkillCategory) "Add Skill Category" else if (action is ManageSkillActions.EditSkillCategory) "Edit Skill Category" else "Add Skill Type"
+                CreateSkillBottomSheet(
+                    title = title,
+                    date = if (action is ManageSkillActions.EditSkillCategory) {
+                        action.category
+                    } else "",
+                    onSaveSkill = { value ->
+                        when (action) {
+                            ManageSkillActions.AddSkillCategory -> {
+                                viewModel.saveSkillCategory(category = value)
+                            }
+
+                            is ManageSkillActions.AddSkillType -> {
+                                viewModel.saveSkillType(action.skillCategoryId, value)
+                            }
+
+                            is ManageSkillActions.EditSkillCategory -> {
+                                viewModel.saveSkillCategory(
+                                    sklCatID = action.skillCategoryId,
+                                    category = value
+                                )
+                            }
+
+                            else -> {
+
+                            }
+                        }
+                        manageSkillActions = null
+                    },
+                    onDismissRequest = { manageSkillActions = null },
+                    onCancel = { manageSkillActions = null }
+                )
+            }
         }
 
     }
@@ -191,7 +215,7 @@ private fun ManageSkillScreenContent(
     modifier: Modifier = Modifier,
     data: ManageSkillSuccessData,
     onClickAdd: (String) -> Unit = {},
-    onClickEdit: (String) -> Unit = {},
+    onClickEdit: (Category) -> Unit = {},
     onClickDelete: (String) -> Unit = {}
 ) {
     SkillCategoryList(
@@ -209,7 +233,7 @@ fun SkillCategoryList(
     modifier: Modifier = Modifier,
     categories: List<Category>,
     onClickAdd: (String) -> Unit = {},
-    onClickEdit: (String) -> Unit = {},
+    onClickEdit: (Category) -> Unit = {},
     onClickDelete: (String) -> Unit = {}
 ) {
     LazyColumn(
@@ -233,7 +257,7 @@ fun SkillCategoryItem(
     index: Int,
     skillCategory: Category,
     onClickAdd: (String) -> Unit = {},
-    onClickEdit: (String) -> Unit = {},
+    onClickEdit: (Category) -> Unit = {},
     onClickDelete: (String) -> Unit = {}
 ) {
     var dragAnchors by remember { mutableStateOf(DragAnchors.Start) }
@@ -292,7 +316,7 @@ fun SkillCategoryItem(
                 },
                 onClickEdit = {
                     dragAnchors = DragAnchors.Start
-                    onClickEdit(skillCategory.sklCatID)
+                    onClickEdit(skillCategory)
                 },
                 onClickDelete = {
                     dragAnchors = DragAnchors.Start
@@ -345,11 +369,12 @@ fun SkillCategoryActions(
 fun CreateSkillBottomSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     title: String,
+    date: String = "",
     onSaveSkill: (String) -> Unit,
     onDismissRequest: () -> Unit,
     onCancel: () -> Unit
 ) {
-    var value by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf(date) }
 
     ModalBottomSheet(
         sheetState = sheetState,
@@ -360,7 +385,8 @@ fun CreateSkillBottomSheet(
                 .fillMaxWidth()
                 .imePadding()
                 .verticalScroll(rememberScrollState())
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp), horizontalAlignment = Alignment.CenterHorizontally
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
             Text(
@@ -453,4 +479,13 @@ fun SkillCategoryActionsPreview() {
     ECareProTheme {
         SkillCategoryActions(Modifier.height(50.dp))
     }
+}
+
+sealed interface ManageSkillActions {
+    data object AddSkillCategory : ManageSkillActions
+    data class EditSkillCategory(val skillCategoryId: String, val category: String) :
+        ManageSkillActions
+
+    data class DeleteSkillCategory(val skillCategoryId: String) : ManageSkillActions
+    data class AddSkillType(val skillCategoryId: String) : ManageSkillActions
 }

@@ -101,7 +101,7 @@ class ManageSkillViewModel @Inject constructor(
         }
     }
 
-    fun saveSkillCategory(sklCatID: String?, category: String) {
+    fun saveSkillCategory(sklCatID: String? = null, category: String) {
         viewModelScope.launch {
             appRepository
                 .saveSkillCategory(sklCatID, category)

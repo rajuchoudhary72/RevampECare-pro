@@ -106,10 +106,10 @@ class DefineSkillViewModel @Inject constructor(
         }
     }
 
-    fun deleteSkill(skill: Skill) {
+    fun deleteSkill(id: String) {
         viewModelScope.launch {
             appRepository
-                .deleteSkill(skill.id)
+                .deleteSkill(id)
                 .handleResultWithLoadState()
                 .collectLatest { result ->
                     result

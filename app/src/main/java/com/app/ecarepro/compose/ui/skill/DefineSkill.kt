@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -46,6 +47,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -108,6 +110,9 @@ fun DefineSkillScreen(
     var skillToEdit by remember { mutableStateOf<Skill?>(null) }
     val skillsTypes by viewModel.skillTypes.collectAsStateWithLifecycle()
 
+    var showDeleteConfirmationDialog by remember { mutableStateOf<String?>(null) }
+
+
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -144,7 +149,9 @@ fun DefineSkillScreen(
                     modifier = Modifier.padding(innerPadding),
                     data = data,
                     onCategorySelected = viewModel::onCategorySelected,
-                    onSkillDelete = viewModel::deleteSkill,
+                    onSkillDelete = {
+                        showDeleteConfirmationDialog = it.id
+                    },
                     onClickManageSkill = onClickManageSkill,
                     editSkillRequest = { skill ->
                         skillToEdit = skill
@@ -170,6 +177,27 @@ fun DefineSkillScreen(
                         onCancel = { showBottomSheet = false })
                 }
             }
+        }
+
+        showDeleteConfirmationDialog?.let { skillId ->
+            AlertDialog(
+                onDismissRequest = { showDeleteConfirmationDialog = null },
+                title = { Text(stringResource(R.string.confirm_delete)) },
+                text = { Text(stringResource(R.string.are_you_sure_you_want_to_delete_this_skill_category)) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        viewModel.deleteSkill(skillId)
+                        showDeleteConfirmationDialog = null
+                    }) { Text(stringResource(R.string.delete)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteConfirmationDialog = null }) {
+                        Text(
+                            stringResource(R.string.cancel)
+                        )
+                    }
+                }
+            )
         }
 
         if (loadState.isLoading()) {
