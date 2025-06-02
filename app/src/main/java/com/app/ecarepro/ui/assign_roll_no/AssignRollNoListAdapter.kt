@@ -41,7 +41,6 @@ class AssignRollNoListAdapter(
         fun bind(student: StudentRllNo) {
             binding.apply {
                 tvStuName.text = buildString {
-                    append("Name : ")
                     append(student.name)
                 }
                 tvAdmission.text = buildString {
@@ -49,6 +48,7 @@ class AssignRollNoListAdapter(
                     append(student.admissionNumber)
                 }
                 edtRoll.setText(student.rollNumber)
+
                 Picasso.get().load(student.photo)
                     .placeholder(R.drawable.default_profile)
                     .into(circleImageViewProfile)
