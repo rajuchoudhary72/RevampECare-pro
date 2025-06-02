@@ -17,9 +17,11 @@ import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.FavouritesDto
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.LMSAppLayoutDto
+import com.app.ecarepro.data.network.model.MasterCategory
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
+import com.app.ecarepro.data.network.model.SkillsFromMasterDto
 import com.app.ecarepro.data.network.model.SyncDataDto
 import retrofit2.http.DELETE
 import retrofit2.http.Url
@@ -115,5 +117,16 @@ interface AppService {
     suspend fun saveSkillCategory(
         @Url url: String,
         @Body request: SaveSkillCategoryRequest
+    ): SaveSkillResponse
+
+    @GET
+    suspend fun getSkillFromMaster(
+        @Url url: String
+    ): SkillsFromMasterDto
+
+    @POST
+    suspend fun importSkills(
+        @Url url: String,
+        @Body request: List<MasterCategory>
     ): SaveSkillResponse
 }

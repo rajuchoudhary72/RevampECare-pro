@@ -1,5 +1,6 @@
 package com.app.ecarepro.compose.ui.importfromdb
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -18,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -92,6 +93,7 @@ fun ImportSkillFromDatabase(
                     .fillMaxSize()
                     .padding(innerPadding),
                 uiState = uiState,
+                onRetry = viewModel::refresh
             ) { data ->
                 ImportSkillScreenContent(
                     modifier = Modifier
@@ -99,7 +101,9 @@ fun ImportSkillFromDatabase(
                         .fillMaxSize(),
                     data = data,
                     onCategoryClick = viewModel::onCategoryClicked,
-                    onSkillCheckedChange = viewModel::onSkillSelectionChanged
+                    onSkillCheckedChange = viewModel::onSkillSelectionChanged,
+                    onImportClick = { viewModel.importSkills(onClickBack) },
+                    onCancelClick = onClickBack
                 )
             }
         }
@@ -240,10 +244,13 @@ fun MasterCategoryItem(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = if (isExpanded) Icons.Filled.ArrowDropDown else Icons.Filled.KeyboardArrowRight,
-                contentDescription = if (isExpanded) "Collapse" else "Expand"
-            )
+            AnimatedContent(isExpanded) {
+                Icon(
+                    imageVector = if (it) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowRight,
+                    contentDescription = if (isExpanded) "Collapse" else "Expand"
+                )
+            }
+
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = masterCategory.category ?: "Unnamed Category",

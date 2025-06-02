@@ -1046,4 +1046,8 @@
         android:id="@+id/manageSkillFragment"
         android:name="com.app.ecarepro.compose.ui.manage_skill.ManageSkillFragment"
         android:label="ManageSkillFragment" />
+    <fragment
+        android:id="@+id/importSkillFromDatabaseFragment"
+        android:name="com.app.ecarepro.compose.ui.importfromdb.ImportSkillFromDatabaseFragment"
+        android:label="ImportSkillFromDatabaseFragment" />
 </navigation>

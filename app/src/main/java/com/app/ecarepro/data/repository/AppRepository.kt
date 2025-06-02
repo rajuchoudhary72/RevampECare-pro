@@ -4,11 +4,13 @@ import com.app.ecarepro.data.network.SaveSkillDto
 import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
+import com.app.ecarepro.data.network.model.MasterCategory
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
+import com.app.ecarepro.data.network.model.SkillsFromMasterDto
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.model.AppLayout
 import kotlinx.coroutines.flow.Flow
@@ -35,4 +37,6 @@ interface AppRepository {
         sklTypeID: String? = null,
         value: String
     ): Flow<Result<String>>
+    fun getSkillFromMaster(): Flow<Result<SkillsFromMasterDto>>
+    fun importSkills(categories: List<MasterCategory>): Flow<Result<String>>
 }

@@ -9,12 +9,14 @@ import com.app.ecarepro.data.network.SaveSkillTypeRequest
 import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
 import com.app.ecarepro.data.network.model.Favourites
+import com.app.ecarepro.data.network.model.MasterCategory
 import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.NotificationsDto
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
+import com.app.ecarepro.data.network.model.SkillsFromMasterDto
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.data.network.model.toAppLayout
 import com.app.ecarepro.data.network.service.AppService
@@ -30,7 +32,6 @@ class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
     private val jsonCache: JsonCache,
     private val userDataStore: UserDataStore
-
 ) : AppRepository {
     val lmsBasePath = LMSConstant.LMS_BASE_URL
     override fun getAppLayout(): Flow<Result<AppLayout>> {
@@ -283,6 +284,41 @@ class AppRepositoryImpl @Inject constructor(
                         sklTypeID = sklCatID,
                         value
                     )
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: "Success"))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun getSkillFromMaster(): Flow<Result<SkillsFromMasterDto>> {
+        return flow {
+            try {
+                val response = appService.getSkillFromMaster(
+                    lmsBasePath + LMSConstant.GET_SKILL_FROM_MASTER
+                )
+                if (response.errorCode == 0) {
+                    emit(Result.success(response))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
+    override fun importSkills(categories: List<MasterCategory>): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = appService.importSkills(
+                    lmsBasePath + LMSConstant.IMPORT_SKILLS,
+                    categories
                 )
                 if (response.errorCode == 0) {
                     emit(Result.success(response.message ?: "Success"))

@@ -1,4 +1,4 @@
-package com.app.ecarepro.compose.ui.skill
+package com.app.ecarepro.compose.ui.importfromdb
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +9,13 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.app.ecarepro.R
 import com.app.ecarepro.compose.theme.ECareProTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DefineSkillFragment : Fragment() {
+class ImportSkillFromDatabaseFragment : Fragment() {
 
-    private val defineSkillViewModel: DefineSkillViewModel by viewModels()
+    private val mViewModel: ImportSkillFromDatabaseViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,11 +25,9 @@ class DefineSkillFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 ECareProTheme {
-                    DefineSkillScreen(
-                        viewModel = defineSkillViewModel,
+                    ImportSkillFromDatabase(
+                        viewModel = mViewModel,
                         onClickBack = { findNavController().popBackStack() },
-                        onClickManageSkill = { findNavController().navigate(R.id.manageSkillFragment) },
-                        onClickImportFromDatabase = { findNavController().navigate(R.id.importSkillFromDatabaseFragment) },
                     )
                 }
             }
