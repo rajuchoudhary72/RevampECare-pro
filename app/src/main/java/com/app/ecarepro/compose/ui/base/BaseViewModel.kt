@@ -1,6 +1,5 @@
 package com.app.ecarepro.compose.ui.base
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,9 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
@@ -38,7 +35,6 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     val loadState: SharedFlow<LoadState> = _loadState.shareIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
-        replay = 1
     )
 
     /**

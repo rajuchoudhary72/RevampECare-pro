@@ -22,7 +22,7 @@ import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 fun <T> LoadingComposable(
     modifier: Modifier = Modifier,
     uiState: UiState<T>,
-    onRetry: () -> Unit,
+    onRetry: () -> Unit = {},
     content: @Composable (T) -> Unit
 ) {
     if (uiState.isLoading()) {

@@ -74,7 +74,7 @@ class ManageSkillViewModel @Inject constructor(
     )
 
     fun refresh() {
-        refreshData.update { true }
+        refreshData.update { it.not() }
     }
 
     fun onSearchQueryChange(query: String) {

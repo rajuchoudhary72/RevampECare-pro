@@ -206,7 +206,6 @@ fun ManageSkillScreen(
                 )
             }
         }
-
     }
 }
 
