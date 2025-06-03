@@ -131,7 +131,8 @@ class PostAssignmentViewModel @Inject constructor(
         lateSubmission: Boolean,
         attachments: List<Attachment>,
         classID_StID: List<ClassID_StID>,
-        stIDs: String?
+        stIDs: String?,
+        isGallery:Boolean
 
 
     )=viewModelScope.launch {
@@ -139,7 +140,7 @@ class PostAssignmentViewModel @Inject constructor(
             createAssignmentMutableStateFlow.value =NetworkResult.Loading( )
             userRepository.createAssignment( asgDate, asgID,   classID, classIDs,
                 data, file, id, isActive, isFileRemoved, multipleSubmission, subjectID, submitDate, title,
-                lateSubmission,getAttachment(),classID_StID,stIDs)
+                lateSubmission,getAttachment(isGallery),classID_StID,stIDs)
         }.onSuccess {
             createAssignmentMutableStateFlow.value =NetworkResult.Success(it)
         }.onFailure {
@@ -164,7 +165,7 @@ class PostAssignmentViewModel @Inject constructor(
     }
 
 
-    private fun getAttachment(): List<com.app.ecarepro.data.network.model.Attachment>? {
+    private fun getAttachment(isGallery: Boolean): List<com.app.ecarepro.data.network.model.Attachment>? {
         val attachments = attachments.value
         val attList= mutableListOf<com.app.ecarepro.data.network.model.Attachment>()
         return if (attachments.isEmpty()) {
@@ -181,19 +182,67 @@ class PostAssignmentViewModel @Inject constructor(
                     ))
                 } else {
 
-                    val bitmap = FileAccess.bitmapFromFile(context, attachment.path!!)
-                    val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-                    val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                    if (isGallery){
+                        val file = context.getFile(attachment.path?.toUri())
+                        val imageString =  getBase64StringFromUri(file!!.toUri()) ?: ""
 
-                    attList.add(com.app.ecarepro.data.network.model.Attachment(
-                        attachment = imageString,
-                        fileExt = imageExt,
-                        fileURL = null
-                    ))
+                        attList.add(com.app.ecarepro.data.network.model.Attachment(
+                            attachment = imageString,
+                            fileExt = "jpeg",
+                            fileURL = null
+                        ))
+                    }else{
+                        val bitmap = FileAccess.bitmapFromFile(context, attachment.path!!)
+                        val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                        val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+
+                        attList.add(com.app.ecarepro.data.network.model.Attachment(
+                            attachment = imageString,
+                            fileExt = imageExt,
+                            fileURL = null
+                        ))
+                    }
                 }
             }
 
             return attList
+        }
+    }
+
+    private fun getMultipleAttachment(): List<String>? {
+        val attachments = attachments.value
+        if (getMessageType()==1)
+            return null
+        /*  if (attachments.isEmpty() || attachments.size == 1)
+                    return null*/
+        return attachments.map { attachment ->
+            if (isPdf(attachment)) {
+                if (attachment.name == AttachmentType.RECORDING.name) {
+                    val file = File(attachment.path)
+                    getBase64StringFromUri(file) ?: ""
+                } else {
+                    val file = context.getFile(attachment.path?.toUri())
+                    getBase64StringFromUri(file!!.toUri()) ?: ""
+                }
+            } else {
+                FileAccess.bitmapToByteArrayBase64String(FileAccess.bitmapFromFileCamera(context, attachment.path!!))
+            }
+        }
+    }
+
+
+    private fun getMessageType(): Int {
+        val attachments = attachments.value
+        return if (attachments.isEmpty()) {
+            1
+        } else if (attachments.all { AttachmentType.PDF.name == it.name }) {
+            5
+        } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
+            3
+        } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
+            3
+        }else {
+            2
         }
     }
 
@@ -206,30 +255,7 @@ class PostAssignmentViewModel @Inject constructor(
         }
     }
 
-    private fun getMultipleAttachment(): List<String>? {
-        val attachments = attachments.value
-        if (attachments.isEmpty() || attachments.size > 0)
-            return null
 
-        return attachments.map { attachment ->
-            if (isPdf(attachment)) {
-                if (attachment.name == AttachmentType.RECORDING.name) {
-                    val file = File(attachment.path)
-                    getBase64StringFromUri(file) ?: ""
-                } else {
-                    val file = context.getFile(attachment.path?.toUri())
-                    getBase64StringFromUri(file!!.toUri()) ?: ""
-                }
-            } else {
-                FileAccess.bitmapToByteArrayBase64String(
-                    FileAccess.bitmapFromFile(
-                        context,
-                        attachment.path!!
-                    )
-                )
-            }
-        }
-    }
 
     private fun isPdf(attachment: MiMedia) =
         mutableListOf(
