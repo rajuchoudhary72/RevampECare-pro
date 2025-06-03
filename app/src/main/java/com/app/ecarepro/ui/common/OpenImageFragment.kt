@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentOpenImageBinding
 import com.app.ecarepro.utils.Constant
 import com.squareup.picasso.Callback
@@ -35,7 +35,7 @@ class OpenImageFragment : Fragment() {
             binding.pbIma.isVisible=true
 
             binding.ivBack.setOnClickListener {
-                NavHostFragment.findNavController(this).popBackStack()
+                findNavController().popBackStack()
             }
 
             Picasso.get()

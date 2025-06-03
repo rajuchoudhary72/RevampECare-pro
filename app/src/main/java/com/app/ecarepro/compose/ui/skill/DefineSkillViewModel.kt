@@ -135,6 +135,7 @@ class DefineSkillViewModel @Inject constructor(
                     result
                         .onSuccess { response: SkillTypesDto ->
                             _skillTypes.update { response.types ?: emptyList() }
+                            showMessage("Success")
                         }
                         .onFailure { error ->
                             showError(error)

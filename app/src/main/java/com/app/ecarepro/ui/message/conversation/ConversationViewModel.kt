@@ -56,8 +56,8 @@ class ConversationViewModel @Inject constructor(
                 }
         }
     }
-
     fun getConversationId() = id.value
+
 
     fun isLoading() = isLoading
 

@@ -91,7 +91,7 @@ fun DefineSkillScreen(
     onClickBack: () -> Unit = {},
     onClickManageSkill: () -> Unit = {},
     onClickImportFromDatabase: () -> Unit = {}
-    ) {
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 

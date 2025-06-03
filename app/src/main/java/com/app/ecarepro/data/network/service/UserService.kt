@@ -338,7 +338,8 @@ interface UserService {
         @Query("Status") status: Int,
         @Query("ord") ord: Int,
         @Query("ApplType") applType: Int,
-        @Query("pg") pg: Int
+        @Query("pg") pg: Int,
+        @Query("Attper") AttPer: Boolean,
     ): NetworkLeaveReport
 
     @POST("Leave/Action")
@@ -362,11 +363,13 @@ interface UserService {
         @Query("InfrTypeID") infrTypeID: Int
     ): NetworkSubInfractionTypes
 
+
     @GET("DisciplineLog/InfractionInstance")
     suspend fun infractionInstance(
         @Query("InfrTypeID") infrTypeID: Int,
         @Query("InfrSubTypeID") InfrSubTypeID: Int,
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int,
+        @Query("utype") utype: Int,
     ): NetworkInfractionInstance
 
 
@@ -375,9 +378,19 @@ interface UserService {
         @Query("StID") stID: Int
     ): NetworkAddInfraction
 
+    @GET("DisciplineLog/AddStaffInfraction")
+    suspend fun addStaffInfraction(
+        @Query("SID") stID: Int
+    ): NetworkAddInfraction
+
     @GET("DisciplineLog/Infractions")
     suspend fun getInfractions(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int?
+    ): NetworkInfractions
+
+    @GET("DisciplineLog/StaffInfractions")
+    suspend fun getStaffInfractions(
+        @Query("SID") SID: Int?
     ): NetworkInfractions
 
     @GET("DisciplineLog/DeleteLog")

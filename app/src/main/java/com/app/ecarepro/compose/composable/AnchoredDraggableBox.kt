@@ -9,7 +9,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -22,6 +21,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlin.math.roundToInt
+import androidx.compose.foundation.layout.fillMaxHeight
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -78,6 +79,7 @@ fun AnchoredDraggableBox(
                     state.requireOffset().roundToInt(), 0
                 )
             }
+
             .anchoredDraggable(state, Orientation.Horizontal))
         secondContent(Modifier
             .align(Alignment.CenterEnd)

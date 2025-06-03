@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -33,7 +32,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.getValue
 
 
 @AndroidEntryPoint
@@ -44,13 +42,10 @@ class InboxMessageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val inboxMessageViewModel: InboxMessageViewModel by viewModels()
-
     private val messageViewModel: MessageViewModel by activityViewModels()
-
     private fun onSomeNotificationAction() {
         inboxMessageViewModel.updateBadgeCount()
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -72,7 +67,6 @@ class InboxMessageFragment : Fragment() {
                 handleUiState(uiState)
             }
         }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED){
                 messageViewModel.inboxMessageUnreadCount.collectLatest {
@@ -90,11 +84,11 @@ class InboxMessageFragment : Fragment() {
             inboxMessageViewModel.refresh()
         }
         binding.recyclerView.apply {
-            /* addItemDecoration(
-                 LinearMarginDecoration.create(
-                     margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
-                 )
-             )*/
+           /* addItemDecoration(
+                LinearMarginDecoration.create(
+                    margin = resources.getDimensionPixelOffset(R.dimen.horizontal_margin)
+                )
+            )*/
 
             addOnScrollListener(object :
                 PaginationScrollListener(layoutManager as LinearLayoutManager) {
@@ -117,7 +111,7 @@ class InboxMessageFragment : Fragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message ?: "")
+            mainActivity().showMessage(error.message?:"")
         }
 
         if (uiState is InboxMessageUiState.Success || uiState == InboxMessageUiState.EmptyInbox) {
@@ -130,24 +124,24 @@ class InboxMessageFragment : Fragment() {
                     }
 
                     is InboxMessageUiState.Success -> {
-                        uiState.messages.forEachIndexed { index, message ->
+                        uiState.messages.forEachIndexed {index,  message ->
                             recentMessageCard {
                                 id(message.id, index.toString())
                                 name(message.name)
-                                if (message.senderType == 3) {
+                                if (message.senderType==3){
                                     designation(message.designation)
-                                } else if (message.senderType == 1) {
-                                    designation("Class :-" + message.className)
-                                } else if (message.senderType == 2) {
+                                }else  if (message.senderType==1){
+                                    designation("Class :-"+message.className)
+                                }else  if (message.senderType==2){
                                     designation(
-                                        stringFormat2String(
-                                            (requireActivity() as MainActivity),
+                                        stringFormat2String((requireActivity() as MainActivity),
                                             R.string.InboxList,
                                             message.childName,
                                             message.className
                                         )
                                     )
-                                } else {
+                                }
+                                else{
                                     designation("N/A")
                                 }
                                 photo(message.photo)
@@ -186,13 +180,11 @@ class InboxMessageFragment : Fragment() {
             bundleOf("ID" to message.id)
         )
     }
-
     override fun onResume() {
         super.onResume()
         onSomeNotificationAction()
         inboxMessageViewModel.sendScreenEvent()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

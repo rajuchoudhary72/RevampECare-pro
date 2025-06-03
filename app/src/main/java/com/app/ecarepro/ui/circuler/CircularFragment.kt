@@ -16,7 +16,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
@@ -69,10 +69,7 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
         savedInstanceState: Bundle?
     ): View {
         fragmentCircularBinding = FragmentCirculerBinding.inflate(inflater, container, false)
-        fragmentCircularBinding.includeToolbar.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(
-                this
-            ).popBackStack() }
+        fragmentCircularBinding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         fragmentCircularBinding.includeToolbar.toolbarTitle.text = getString(R.string.circular)
         return fragmentCircularBinding.root
 
@@ -196,10 +193,9 @@ class CircularFragment : Fragment(), ItemListener<Circular> {
     }
 
     override fun onItemClick(t: Circular, pos: Int, boolean: Boolean) {
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_circularFragment_to_circularDetailsFragment, Bundle().apply {
-                putString(Constant.CIRCULAR_ID, t.id)
-            })
+        findNavController().navigate(R.id.action_circularFragment_to_circularDetailsFragment,Bundle( ).apply {
+            putString(Constant.CIRCULAR_ID, t.id)
+        })
      }
 
     private fun popUpSelectAcademicYears(){

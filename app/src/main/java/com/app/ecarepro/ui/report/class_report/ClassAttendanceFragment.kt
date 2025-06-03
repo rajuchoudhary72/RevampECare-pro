@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassAttendanceBinding
@@ -42,8 +42,7 @@ class ClassAttendanceFragment : Fragment()  {
         savedInstanceState: Bundle?
     ): View? {
         binding=FragmentClassAttendanceBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(this).popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         classId= requireArguments().getString(Constant.CLASS_ID_ARGUMENT).toString()
         className= requireArguments().getString(Constant.NAME).toString()
         date= requireArguments().getString(Constant.DATE).toString()

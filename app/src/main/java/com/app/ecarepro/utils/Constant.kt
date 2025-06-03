@@ -62,6 +62,7 @@ class Constant {
         const val NOTICE_CLASS = "notice_class"
         const val NOTICE_SCHOOL = "notice_school"
         const val USER_TYPE = "user_type"
+        const val USER_ID = "user_id"
         const val USER_STAFF = "user_staff"
         const val USER_TEACHER = "user_teacher"
         const val IS_MINE = "isAssignmentIsMine"
@@ -101,6 +102,8 @@ class Constant {
         const val APPRECIATION_FRAG = "AppreciationFragment"
         const val INFRECTION_FRAG = "INFRECTIONFragment"
         const val PROFILE_FRA_STAFF = "ProfileFragmentStaff"
+        const val PROFILE_FRA_STAFF_INFRACTION = "ProfileFragmentStaffInfraction"
+
         const val FRA_LEAVE = "FragmentLeave"
         const val FRA_ASSI = "FragmentAssignment"
         const val FRA_TIMETABLE = "FragmentTimeTable"
@@ -229,7 +232,7 @@ class Constant {
                 val date = inputFormat.parse(inputDate)
 
                 // Step 2: Format into the desired output
-                val outputFormat = SimpleDateFormat("dd/MM/yy, E", Locale.ENGLISH)
+                val outputFormat = SimpleDateFormat("dd MMM, yyyy, E", Locale.ENGLISH)
                 outputFormat.format(date!!)
             } catch (e: Exception) {
                 e.printStackTrace()

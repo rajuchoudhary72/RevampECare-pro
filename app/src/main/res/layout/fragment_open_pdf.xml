@@ -24,7 +24,6 @@
                 app:navigationIcon="@drawable/ic_arrow_back_24px"
                 app:titleTextColor="@color/white"
                 app:titleCentered="true"
-                app:title="WebView"
                 android:background="@color/md_theme_light_primary"
                 />
             <androidx.constraintlayout.widget.ConstraintLayout

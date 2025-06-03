@@ -28,10 +28,22 @@ class InfractionListViewModel @Inject constructor(
     val deleteLogStateFlow: StateFlow<NetworkResult<CommonResponse>> = deleteLogMutableStateFlow
 
 
-    fun  getInfractions( stID: Int  )=viewModelScope.launch {
+    fun  getInfractions( stID: Int?)=viewModelScope.launch {
         runCatching {
             addInfractionMutableStateFlow.value = NetworkResult.Loading()
             userRepository.getInfractions(stID)
+        }.onSuccess {
+            addInfractionMutableStateFlow.value = NetworkResult.Success(it)
+        }.onFailure {
+            addInfractionMutableStateFlow.value = NetworkResult.Error(it.message)
+        }
+
+    }
+
+    fun  getStaffInfractions( SID: Int?  )=viewModelScope.launch {
+        runCatching {
+            addInfractionMutableStateFlow.value = NetworkResult.Loading()
+            userRepository.getStaffInfractions(SID)
         }.onSuccess {
             addInfractionMutableStateFlow.value = NetworkResult.Success(it)
         }.onFailure {

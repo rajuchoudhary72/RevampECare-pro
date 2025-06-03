@@ -40,8 +40,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ViewLessonPlanFragment : Fragment() {
 
-
     private var lPlanId: String = ""
+    private var lPlanPush: String = ""
     private var lPlanIdnew: Int = 0
     private lateinit var binding: FragmentViewLessonPlanBinding
     private val viewLessonPlanViewModel: ViewLessonPlanViewModel by viewModels()
@@ -52,6 +52,7 @@ class ViewLessonPlanFragment : Fragment() {
     ): View {
         binding = FragmentViewLessonPlanBinding.inflate(inflater, container, false)
         lPlanId = requireArguments().getString(Constant.LESSON_ID_ARGUMENT).toString()
+        lPlanPush = requireArguments().getString(Constant.LESSONPLAN_HARDCCODE_KEY ).toString()
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         if (Constant.LESSONPLAN_HARDCCODE_KEY.isEmpty()) {
@@ -115,7 +116,7 @@ class ViewLessonPlanFragment : Fragment() {
                     dialog.dismiss()
                 } else {
                     Toast.makeText(requireContext(),"Rejection Reason is mandatory field",Toast.LENGTH_SHORT).show()
-                   // textInputEditText.error = "Rejection Reason is mandatory field"
+                    // textInputEditText.error = "Rejection Reason is mandatory field"
                 }
             } else {
                 //do approve code here
@@ -214,10 +215,15 @@ class ViewLessonPlanFragment : Fragment() {
                                 } catch (e: NullPointerException) {
                                     e.printStackTrace()
                                 }
-                                binding.cvDetailsApprove.isVisible = it.data.lessonPlans.status ==0
+                                if (it.data.lessonPlans.status==0){
+                                    binding.cvDetailsApprove.isVisible = it.data.lessonPlans.status ==0
+                                }else{
+                                    binding.cvDetailsApprove.isVisible = false
+                                }
                             }
                         }
                     }
+
 
                 }
             }
@@ -261,10 +267,3 @@ class ViewLessonPlanFragment : Fragment() {
 
     }
 }
-
-
-
-
-
-
-

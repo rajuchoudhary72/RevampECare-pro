@@ -12,7 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentTeacherSyllabusBinding
@@ -49,10 +49,7 @@ class TeacherSyllabusFragment : Fragment() {
             viewModel = teacherSyllabusViewModel
             lifecycleOwner = viewLifecycleOwner
         }
-        binding.includeToolbar.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(
-                this
-            ).popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.syllabus)
         return binding.root
     }
@@ -61,7 +58,7 @@ class TeacherSyllabusFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fbAdd.setOnClickListener {
-            NavHostFragment.findNavController(this).navigate(R.id.addSyllabusFragment)
+            findNavController().navigate(R.id.addSyllabusFragment)
         }
 
         binding.spinnerSelectFilterType.onItemSelectedListener = object :

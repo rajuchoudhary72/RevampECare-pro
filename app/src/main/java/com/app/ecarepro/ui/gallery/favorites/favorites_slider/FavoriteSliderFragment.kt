@@ -14,7 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.FavList
 import com.app.ecarepro.databinding.FragmentPhotoSliderBinding
@@ -98,13 +98,9 @@ class FavoriteSliderFragment(
 
                          binding.ivVideoPlay.setOnClickListener {
                              val id =  YoutubeURL().getIDFromYoutubeURL(favList!!.fileName)
-                             NavHostFragment.findNavController(this).navigate(
+                             findNavController().navigate(
                                  R.id.youTubeVideoPlayerFragment,
-                                 bundleOf(
-                                     YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(
-                                         favList!!.fileName
-                                     )
-                                 )
+                                 bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList!!.fileName))
                              )
                          }
                          binding.rlShare.setOnClickListener {
@@ -118,14 +114,10 @@ class FavoriteSliderFragment(
 
                            binding.ivVideoPlay.setOnClickListener {
                              val id =  YoutubeURL().getIDFromYoutubeURL(favList!!.fileName)
-                               NavHostFragment.findNavController(this).navigate(
-                                   R.id.youTubeVideoPlayerFragment,
-                                   bundleOf(
-                                       YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(
-                                           favList!!.fileName
-                                       )
-                                   )
-                               )
+                             findNavController().navigate(
+                                 R.id.youTubeVideoPlayerFragment,
+                                 bundleOf(YouTubeVideoPlayerFragment.VIDEO_ID to YoutubeURL().getIDFromYoutubeURL(favList!!.fileName))
+                             )
                          }
                          binding.rlShare.setOnClickListener {
                              shareUrl(requireContext(), favList!!.fileName.toString())
@@ -174,7 +166,7 @@ class FavoriteSliderFragment(
 
 
         binding.btnClose.setOnClickListener {
-            NavHostFragment.findNavController(this).popBackStack()
+            findNavController().popBackStack()
         }
 
 

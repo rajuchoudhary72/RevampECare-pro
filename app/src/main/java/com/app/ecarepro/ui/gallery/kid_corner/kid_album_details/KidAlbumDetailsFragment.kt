@@ -11,7 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,8 +50,7 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentKidCornerDetailsBinding.inflate(inflater, container, false)
-        binding.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(this).popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.toolbar.isVisible = true
         kidCornerAdapter = KidAlbumDetailsAdapter(this@KidAlbumDetailsFragment)
 
@@ -202,8 +201,7 @@ class KidAlbumDetailsFragment : Fragment(), ItemListener<AlbumDetailX> {
     }
 
     override fun onItemClick(albumDetailX: AlbumDetailX, pos: Int, boolean: Boolean) {
-        NavHostFragment.findNavController(this).navigate(
-            R.id.kidCornerSliderNavHostFragment,
+        findNavController().navigate(R.id.kidCornerSliderNavHostFragment ,
             Bundle().apply {
                 putInt("photoPosition", pos)
             })

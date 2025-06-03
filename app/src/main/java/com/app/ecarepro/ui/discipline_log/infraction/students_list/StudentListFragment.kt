@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -35,8 +35,7 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
         savedInstanceState: Bundle?
     ): View  {
         binding= FragmentStudentListBinding.inflate(inflater,container,false)
-        binding.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(this).popBackStack() }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.toolbar.title="Students List"
         binding.rbGroupSchoolType.isVisible=false
          return binding.root
@@ -105,9 +104,8 @@ class StudentListFragment : Fragment() , ItemListener<Student> {
     }
 
     override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_studentListFragment_to_addInfractionFragment, Bundle().apply {
-                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
-            })
+        findNavController().navigate(R.id.action_studentListFragment_to_addInfractionFragment,Bundle( ).apply {
+            putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+        })
     }
 }

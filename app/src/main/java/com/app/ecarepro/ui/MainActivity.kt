@@ -97,6 +97,7 @@ import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.model.AppLayout
 import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
 import com.app.ecarepro.ui.notification.NotificationViewModel
+import com.app.ecarepro.ui.views.PaymentWebViewActivity
 import com.app.ecarepro.ui.views.menu.ECareDrawerMenu
 import com.app.ecarepro.ui.views.menu.MenuHeader
 import kotlin.time.Duration.Companion.seconds
@@ -194,6 +195,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+       /* *//*open profile page after click on  profile *//*
+        binding.itemDrawerHeader.imgUserAvatar.setOnClickListener {
+            navController.navigate(R.id.profileFragment)
+            systemViewModel.openDrawer(false)
+        }*/
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
@@ -214,6 +220,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpBottomNavigationView()
 
+        setUpMoreOptions()
         try {
             Picasso.setSingletonInstance(Picasso.Builder(this).build())
         } catch (e: RuntimeException) {
@@ -461,7 +468,9 @@ class MainActivity : AppCompatActivity() {
                 if (childMenuId != null) {
                     if (SubCildMenuId != null) {
                         if (SubCildMenuId>0){
-                            getFragmentId(menuId, SubCildMenuId, refId)
+                            getFragmentId(menuId,childMenuId, SubCildMenuId, refId,
+                                userID.toString()
+                            )
                         }else{
                             Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
                             getFragmentId(menuId, childMenuId, refId)
@@ -1169,7 +1178,7 @@ class MainActivity : AppCompatActivity() {
                             if (it.webSite == null) {
                                 showMessage("Website are currently unavailable for you!")
                             } else {
-                                it.webSite.let { url ->
+                                it.webSite?.let { url ->
                                     webViewCall(
                                         url,
                                         getString(R.string.website_txt)
@@ -1279,8 +1288,14 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             try {
-                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(fallbackIntent)
+                // Fallback to WebView if Chrome is not installed or fails
+                val webViewIntent = Intent(this, PaymentWebViewActivity::class.java).apply {
+                    putExtra("payment_url", uri.toString())
+                }
+                startActivity(webViewIntent)
+
+               /* val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)*/
             } catch (e: ActivityNotFoundException) {
                 showMessage("No browser available to handle the URL")
             }
@@ -1431,7 +1446,7 @@ class MainActivity : AppCompatActivity() {
                     14 -> navController.navigate(R.id.birthdayFragment)
 
                     15 -> {
-                        navController.navigate(R.id.allStaffListFragment)
+                        navController.navigate(R.id.allStaffListFragment, bundleOf("ID" to refId))
                       /*  lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
@@ -1529,16 +1544,10 @@ class MainActivity : AppCompatActivity() {
 
                             }
 
-                            22 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
-                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                            22 ->
+                                navController.navigate(R.id.infractionListFragment, Bundle().apply {
+                                    putInt(Constant.USER_TYPE, userType)
                                 })
-
-                            } else {
-                                navController.navigate(R.id.infractionListFragment)
-
-                            }
-
                         }
                     }
                 }
@@ -1552,14 +1561,22 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
+            6 -> {
+                when (childMenuId) {
+                    7 -> navController.navigate(R.id.composeFragment)
+                    8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
+                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
+
+                }
+            }
             /*gallery*/
             34 -> {
                 when (childMenuId) {
-                    48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
-                    49 -> navController.navigate(R.id.videoAlbumFragment)
+                    48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment, bundleOf("ID" to refId))
+                    49 -> navController.navigate(R.id.videoAlbumFragment, bundleOf("ID" to refId))
                     50 -> navController.navigate(R.id.favoritesListFragment)
                     51 -> navController.navigate(R.id.mediaGalleryFragment)
-                    73 -> navController.navigate(R.id.kidCornerFragment)
+                    73 -> navController.navigate(R.id.kidCornerFragment, bundleOf("ID" to refId))
                 }
             }
 
@@ -1579,10 +1596,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+
     fun getFragmentId(
         menuID: Int,
         childMenuId: Int,
         childChildMenuId: Int,
+        refId: String? = null,
+        userID: String? = null,
         from: String = "other"
     ) {
         systemViewModel.sendAnalyticEvent(
@@ -1639,6 +1660,45 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+
+            24 ->{
+
+                when(childMenuId){
+
+                    21 ->{
+                        when(childChildMenuId){
+                            23 -> {
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.APPRECIATION_FRAG)
+                                })
+                            }
+                        }
+
+                    }
+
+                    22 -> {
+                        when(childChildMenuId){
+                            17 -> {
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                                })
+                            }
+                            18 -> {
+                                navController.navigate(R.id.staffListFragment, Bundle().apply {
+                                    putString(Constant.TO, Constant.PROFILE_FRA_STAFF_INFRACTION)
+                                })
+                            }
+                            20 ->{
+                                navController.navigate(R.id.infractionListFragment, Bundle().apply {
+                                    putInt(Constant.USER_TYPE, Constant.STAFF_TYPE)
+                                })
+                            }
+                        }
+                    }
+                }
+
+            }
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1684,12 +1744,19 @@ class MainActivity : AppCompatActivity() {
                     0 -> {
                         when (childChildMenuId) {
                             15 -> {
-                                navController.navigate(R.id.allStaffListFragment)
+                                if (refId!=null){
+                                    Constant.LESSONPLAN_HARDCCODE_KEY = "LessonList"
+                                    navController.navigate(R.id.viewLessonPlanFragment, bundleOf(Constant.LESSON_ID_ARGUMENT to refId))
+                                }else{
+                                    navController.navigate(R.id.allStaffListFragment)
+                                }
                             }
                         }
                     }
                 }
             }
+
+
 
 
             /*for new development Infraction and  Appreciation */

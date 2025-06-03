@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.MessageViewModel
 import com.app.ecarepro.utils.PaginationScrollListener
 import com.app.ecarepro.utils.imageUrl
+import com.app.ecarepro.utils.stringFormat2String
 import com.rubensousa.decorator.LinearMarginDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -38,8 +40,8 @@ class ConversationFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val conversationViewModel: ConversationViewModel by viewModels()
-
     private val messageViewModel: MessageViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,9 +70,7 @@ class ConversationFragment : Fragment() {
     }
 
     private fun setUpViews() {
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
+        binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.swipeRefreshLayout.isRefreshing = false
@@ -106,7 +106,7 @@ class ConversationFragment : Fragment() {
             (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
             uiState.getErrorOrNull()?.let { error ->
-                mainActivity().showMessage(error.message ?: "")
+                mainActivity().showMessage(error.message?:"")
             }
 
             if (uiState is ConversationMessageUiState.Success || uiState == ConversationMessageUiState.EmptyInbox) {
@@ -135,7 +135,7 @@ class ConversationFragment : Fragment() {
                                             R.drawable.ic_audio
                                         } else if (message.msgType == 4) {
                                             R.drawable.ic_msg_type_sms
-                                        } else if (message.msgType == 5) {
+                                        }  else if (message.msgType == 5) {
                                             R.drawable.pdf
                                         } else {
                                             null
@@ -183,7 +183,7 @@ class ConversationFragment : Fragment() {
                     }
                 }
             }
-        } catch (e: IllegalStateException) {
+        }catch (e:IllegalStateException){
             e.message
         }
 
@@ -196,12 +196,12 @@ class ConversationFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.default_profile)
             )
             name.text = sender.name
-            if (sender.senderType == 3) {
+            if (sender.senderType==3){
                 designation.text = sender.designation
-            } else if (sender.senderType == 1) {
-                designation.text = "Class :- " + sender.className
-            } else if (sender.senderType == 2) {
-                designation.text = "P/O  " + sender.childName + " , " + sender.className
+            }else  if (sender.senderType==1){
+                designation.text = "Class :- "+ sender.className
+            } else  if (sender.senderType==2){
+                designation.text = "P/O  " + sender.childName+" , "+ sender.className
             }
 
         }

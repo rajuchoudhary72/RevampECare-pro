@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,7 +64,9 @@ fun ErrorView(modifier: Modifier = Modifier, message: String, onRetry: () -> Uni
             modifier = Modifier.padding(16.dp),
             style = MaterialTheme.typography.bodyMedium
         )
-        Button(onClick = onRetry) {
+        Button(onClick = onRetry,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))) {
+
             Text(text = stringResource(R.string.retry))
         }
     }

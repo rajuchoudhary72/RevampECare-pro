@@ -131,6 +131,7 @@
     <string name="done">Done</string>
     <string name="appley_for_leave">Apply For Leave</string>
     <string name="apply_for_leave">Apply For Leave</string>
+    <string name="apply_leave">Apply Leave</string>
     <string name="approved_by">Approved By:</string>
     <string name="lbl_message_create_new_inferaction">*Note : Please select Category, Subcategory and Consequences first</string>
     <string name="lbl_message_create_new_apprec">*Note : Please select Category, Subcategory and Reward first</string>
@@ -152,9 +153,10 @@
     <string name="subcategory">Subcategory:</string>
     <string name="consequences">Consequences:</string>
     <string name="corrective_action">Corrective Action:</string>
-    <string name="issue_by">Issue by:</string>
+    <string name="issue_by">Issued by:</string>
     <string name="category">"Category: "</string>
     <string name="admission_no">"Admission No: "</string>
+    <string name="installment_month">"installment Month: "</string>
     <string name="actual_no">"Actual Amount: "</string>
     <string name="concessionno">"Concession: "</string>
     <string name="received_amount">"Received Amount: "</string>
@@ -181,8 +183,8 @@
     <string name="type_your_message_with_word_limit">Type Your Message(Word limit 200 Words)</string>
     <string name="camera_amp_browse_photo"><![CDATA[Camera & Browse Photo]]></string>
     <string name="browse_photo"><![CDATA[Browse Photo]]></string>
-    <string name="attach_photo_pdf_doc"><![CDATA[Attach PDF &amp; Doc (Max 5 MB)]]></string>
-    <string name="select_subject">"Select Subject "</string>
+    <string name="attach_photo_pdf_doc"><![CDATA[Attach PDF & Doc]]></string>
+    <string name="select_subject">"Select Subject "</string>e
     <string name="lbl_select_class">Select Class</string>
     <string name="lbl_forward_to">Forward to</string>
     <string name="lbl_select_Student">Select Student</string>
@@ -281,8 +283,10 @@
     <string name="introductions">Introductions:</string>
     <string name="please_provide_the_introduction_of_the_topics_covered_in_this_lesson_plan">Please provide the introduction of the Topics covered in this Lesson Plan</string>
     <string name="direct_instruction">Direct Instruction:</string>
-    <string name="designation">Designation:</string>
-    <string name="doj">DOJ:</string>
+    <string name="designation">Designation: </string>
+    <string name="designation_bold"><b>Designation: </b></string>
+    <string name="doj">DOJ: </string>
+    <string name="doj_bold"><b>DOJ: </b></string>
     <string name="father_spouse_name">Father/Spouse Name</string>
     <string name="father_spouse_mobile_no">Father/Spouse Mobile No</string>
     <string name="aadhar_card_number">Aadhar Card Number</string>
@@ -440,6 +444,7 @@
     <string name="boarding">Boarding</string>
     <string name="day_scholar">Day Scholar</string>
     <string name="select_all">Select All</string>
+    <string name="show_per">Show Attendance(%)</string>
     <string name="select_staff_type">Select Staff Type</string>
     <string name="select_staff_types">Select staff types</string>
     <string name="subject_line">Subject Line…</string>
@@ -468,9 +473,13 @@
     <string name="spouse_name">Spouse Name</string>
     <string name="spouse_contact_number">Spouse Contact Number</string>
     <string name="gender">Gender</string>
+    <string name="gender_pun">Gender: </string>
+    <string name="gender_pun_bold"><b>Gender: </b></string>
     <string name="nationality">Nationality</string>
     <string name="religion">Religion</string>
     <string name="qualification">Qualification</string>
+    <string name="qualification_pun">Qualification: </string>
+    <string name="qualification_pun_bold"><b>Qualification: </b></string>
     <string name="address">Address</string>
     <string name="pAddress">Permanent Address</string>
     <string name="aadharCardNo">Aadhar Card Number</string>
@@ -488,6 +497,8 @@
 
     <string name="emergencyContactNo">emergency Contact No: </string>
     <string name="email_id">email ID</string>
+    <string name="email_id_pun">Email ID: </string>
+    <string name="email_id_pun_bold"><b>Email ID: </b></string>
     <string name="alt_email_id">Alternate Email ID</string>
     <string name="ward_details">Ward Details</string>
     <string name="admission_number">Admission Number</string>
@@ -667,6 +678,8 @@
     <string name="students_lists">Students List</string>
     <string name="staff_list">Staff List</string>
     <string name="mobile">Mobile</string>
+    <string name="mobile_pun">Mobile: </string>
+    <string name="mobile_pun_bold"><b>Mobile: </b></string>
     <string name="students_place_of_birth">Students Place of Birth</string>
     <string name="contact_email_id">Contact Email ID</string>
     <string name="anniversary_date">Anniversary Date</string>
@@ -895,6 +908,7 @@
     <string name="father_pan">Father PAN</string>
     <string name="add_attachment">Add Attachment</string>
     <string name="resolved">Resolved</string>
+    <string name="resolve">Resolve</string>
     <string name="save_compliance">Save Compliance</string>
     <string name="you_can_upload_the_attachment_for_compliance_if_any_from_here_png_jpg_jpeg_pdf_only_upto_5mb">You can upload the attachment for compliance (if any) from here. PNG, JPG, JPEG, PDF only. Upto 5MB</string>
     <string name="attach_pdf">Attach PDF</string>
@@ -945,7 +959,12 @@
     <string name="skill_type">Skill Type: %1$s</string>
     <string name="skill_name">Skill Name: %1$s</string>
     <string name="manage_skill_category">Manage Skill Category</string>
+    <string name="create_new_skill_">Create new skill</string>
     <string name="confirm_delete">Confirm Delete</string>
     <string name="are_you_sure_you_want_to_delete_this_skill_category">Are you sure you want to delete this skill category?</string>
+    <string name="rejection_reason">"<b>Rejection Reason: </b>"</string>
+    <string name="all_undertakings_submitted_successfully">All undertakings submitted successfully.</string>
+    <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
+    <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
 </resources>
 

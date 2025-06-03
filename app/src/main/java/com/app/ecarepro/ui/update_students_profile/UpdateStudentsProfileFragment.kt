@@ -3,8 +3,14 @@ package com.app.ecarepro.ui.update_students_profile
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.ExifInterface
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -29,9 +35,14 @@ import com.app.ecarepro.ui.birthday.BirthListAdapter
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FileAccess
+import com.github.dhaval2404.imagepicker.ImagePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 @AndroidEntryPoint
 class UpdateStudentsProfileFragment : Fragment() {
@@ -146,7 +157,7 @@ class UpdateStudentsProfileFragment : Fragment() {
 
                             if (it.data.students != null) {
 
-                                 binding.rvStudentsList.isVisible = true
+                                binding.rvStudentsList.isVisible = true
                                 binding.tvNoData.isVisible = false
 
 
@@ -163,7 +174,7 @@ class UpdateStudentsProfileFragment : Fragment() {
                                 }
 
                             } else {
-                                 binding.rvStudentsList.isVisible = false
+                                binding.rvStudentsList.isVisible = false
                                 binding.tvNoData.isVisible = true
                             }
 
@@ -179,9 +190,176 @@ class UpdateStudentsProfileFragment : Fragment() {
     }
 
     private fun uploadStudentPhoto(student: StudentRllNo) {
-        selectImageOptionDialog()
-        studentData=student
+        // selectImageOptionDialog()
+        startImagePicker()
+        studentData = student
     }
+
+
+    private fun startImagePicker() {
+        FileAccess.checkPermission(this)
+        ImagePicker.with(this)
+            .crop(216F, 253F)
+            .maxResultSize(216, 253)
+            // .maxResultSize(600, 800) // or higher depending on your use case
+            .start()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val uri: Uri? = data?.data
+            uri?.let { uri ->
+                try {
+                    val bitmap: Bitmap =
+                        MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+                    val h = bitmap.height
+                    val w = bitmap.width
+
+                    if (h >= 253 && w >= 216) {
+                        val baos = ByteArrayOutputStream()
+                        var fis: FileInputStream? = null
+                        try {
+                            fis = FileInputStream(File(uri.path))
+                            val buf = ByteArray(1024)
+                            var n: Int
+                            while (fis.read(buf).also { n = it } != -1) {
+                                baos.write(buf, 0, n)
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                        val imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                        val imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                        //  val imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
+
+                        uploadPhoto(imageString, imageExt)
+
+                    } else {
+                        mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 252 pixels.")
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+ /*   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val uri: Uri? = data?.data
+            uri?.let { uri ->
+                try {
+                    // Get original bitmap
+                    val originalBitmap: Bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+
+                    // Fix rotation if needed
+                    val rotatedBitmap = fixImageRotation(uri, originalBitmap)
+
+                    val originalHeight = rotatedBitmap.height
+                    val originalWidth = rotatedBitmap.width
+                    Log.d("before ", "originalHeight $originalHeight")
+                    Log.d("before ", "originalWidth $originalWidth")
+                    // Create a scaled bitmap based on size requirements
+                    val scaledBitmap = when {
+                        // If image is smaller than 216×253, keep original size
+                        originalWidth <= 216 && originalHeight <= 253 -> {
+                            rotatedBitmap // No change needed
+                        }
+                        // If image is between 216×253 and 432×506, scale to 216×253
+                        (originalWidth > 216 || originalHeight > 253) &&
+                                (originalWidth < 432 || originalHeight < 506) -> {
+                            Bitmap.createScaledBitmap(rotatedBitmap, 216, 253, true)
+                        }
+                        // If image is larger than or equal to 432×506, scale to 432×506
+                        else -> {
+                            Bitmap.createScaledBitmap(rotatedBitmap, 432, 506, true)
+                        }
+                    }
+
+                    // Convert the scaled bitmap to Base64 string
+                    val imageString = FileAccess.bitmapToByteArrayBase64String(scaledBitmap)
+                    val imageExt = getImageExtension(scaledBitmap, Bitmap.CompressFormat.JPEG)
+
+                    // Upload the processed image
+                    uploadPhoto(imageString, imageExt)
+
+                    // Recycle bitmaps to free memory (only if we created a new bitmap)
+                    if (originalBitmap != rotatedBitmap) {
+                        originalBitmap.recycle()
+                    }
+                    if (rotatedBitmap != scaledBitmap) {
+                        rotatedBitmap.recycle()
+                    }
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    mainActivity().showMessage("Error processing image: ${e.message}")
+                }
+            }
+        }
+    }
+
+    // Function to fix image rotation based on EXIF data
+    private fun fixImageRotation(uri: Uri, bitmap: Bitmap): Bitmap {
+        var rotatedBitmap = bitmap
+        try {
+            // Get orientation from EXIF data
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val exif = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                ExifInterface(inputStream!!)
+            } else {
+                val filePath = getRealPathFromURI(uri)
+                if (filePath != null) {
+                    ExifInterface(filePath)
+                } else {
+                    return bitmap // Can't get EXIF data, return original
+                }
+            }
+
+            val orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+
+            // Rotate bitmap if needed
+            rotatedBitmap = when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(bitmap, 90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(bitmap, 180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(bitmap, 270f)
+                else -> bitmap
+            }
+
+            inputStream?.close()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            // If anything goes wrong, return the original bitmap
+            return bitmap
+        }
+
+        return rotatedBitmap
+    }
+
+    // Helper function to rotate image
+    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(
+            source, 0, 0, source.width, source.height,
+            matrix, true
+        )
+    }
+
+    // Helper function to get real file path from URI
+    private fun getRealPathFromURI(uri: Uri): String? {
+        val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
+        return cursor?.use {
+            it.moveToFirst()
+            val idx = it.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+            if (idx >= 0) it.getString(idx) else null
+        }
+    }*/
+
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
@@ -224,16 +402,16 @@ class UpdateStudentsProfileFragment : Fragment() {
         lifecycleScope.launch {
             assignRollNoViewModel.uploadStudentPhotoStateFlow.collectLatest {
                 when (it) {
-                     is NetworkResult.Loading -> {
+                    is NetworkResult.Loading -> {
                         (requireActivity() as MainActivity).showLoader(true)
-                     } is NetworkResult.Error -> {
-                        (requireActivity() as MainActivity).showLoader(false)
-                         Log.d("main", "Error$it")
-                    } is NetworkResult.Success -> {
-                        (requireActivity() as MainActivity).showLoader(false)
+                    } is NetworkResult.Error -> {
+                    (requireActivity() as MainActivity).showLoader(false)
+                    Log.d("main", "Error$it")
+                } is NetworkResult.Success -> {
+                    (requireActivity() as MainActivity).showLoader(false)
                     mainActivity().showMessage("Photo uploaded successfully")
                     assignRollNoViewModel.getStudentListToAssignRollNo(selectedClassData.id, Constant.FILTER_NAME)
-                    } else -> {}
+                } else -> {}
                 }
             }
         }

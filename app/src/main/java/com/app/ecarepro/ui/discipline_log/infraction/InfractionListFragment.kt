@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -19,12 +17,14 @@ import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentInfractionListBinding
 import com.app.ecarepro.model.RecentInfraction
+import com.app.ecarepro.model.Staff
+import com.app.ecarepro.model.StudentDTL
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.discipline_log.infraction.adapter.InfractionListAdapter
 import com.app.ecarepro.ui.mainActivity
-import com.app.ecarepro.ui.studentProfile.share_data.SharedViewModelProfile
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.listener.ItemListener
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
-    private var studentID: Int = 0
+    private var userID: Int? = null
+    private var uType=0
     private lateinit var binding: FragmentInfractionListBinding
     private  val infractionListViewModel: InfractionListViewModel by viewModels()
     private val sharedViewModel: ShareViewModelDiscipline by activityViewModels()
@@ -45,7 +46,8 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
     ): View  {
         binding=FragmentInfractionListBinding.inflate(inflater,container,false)
         try {
-            studentID=  requireArguments().getInt(Constant.STUDENT_ID_ARGUMENT)
+            userID=  requireArguments().getInt(Constant.USER_ID)
+            uType=  requireArguments().getInt(Constant.USER_TYPE)
 
         }catch (e:Exception){}
 
@@ -79,26 +81,16 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
                         if (it.data!=null){
 
-                            binding.studentData=it.data.studentDTL
-
-                             if (it.data.studentDTL!=null){
-                                 binding.tvAdmissionNo.text= buildString {
-                                     append(getString(R.string.admission_no))
-                                     append(it.data.studentDTL.admissionNo)
-                                 }
-                                 binding.tvClassName.text= buildString {
-                                     append(getString(R.string.classes))
-                                     append(it.data.studentDTL.`class`)
-                                 }
-                                 binding.tvFatherName.text= buildString {
-                                     append(getString(R.string.contact_person))
-                                     append(it.data.studentDTL.contactPerson)
-                                 }
-                                 binding.tvContact.text= buildString {
-                                     append(getString(R.string.contact_no))
-                                     append(it.data.studentDTL.contactMob)
-                                 }
-                             }
+                            if (uType==Constant.STUDENT_TYPE||uType==Constant.PARENT_TYPE){
+                                bindStudentDetails(it.data.studentDTL)
+                            }else{
+                                if (it.data.stafftDTL!=null){
+                                    bindStaffDetails(it.data.stafftDTL)
+                                }else{
+                                    binding.recyclerInfractionList.isVisible=false
+                                    binding.tvNoData.isVisible=true
+                                }
+                            }
 
                             if (it.data.records!=null){
                                 binding.recyclerInfractionList.isVisible=true
@@ -107,6 +99,7 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
                                 val circularAdapter = InfractionListAdapter(
                                     it.data.records,
                                     this@InfractionListFragment,
+                                    uType
                                 )
 
                                 binding.recyclerInfractionList.apply {
@@ -130,9 +123,84 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
             }
 
         }
-        infractionListViewModel.getInfractions(studentID)
+
+        if (uType==Constant.STUDENT_TYPE||uType==Constant.PARENT_TYPE){
+            infractionListViewModel.getInfractions(userID)
+        }else{
+            infractionListViewModel.getStaffInfractions(userID)
+        }
+
+    }
+
+    private fun bindStaffDetails(staffDTL: Staff) {
+
+        binding.tvStudentName.text= buildString {
+            append(staffDTL.name)
+        }
+
+        Picasso.get().
+        load(staffDTL.photo)
+            .placeholder(R.drawable.default_profile)
+            .  into(binding.circleImageViewProfile)
+
+        binding.tvAdmissionNo.text= buildString {
+            append(getString(R.string.designation_bold))
+            append(" ")
+            append(staffDTL.designation)
+        }
+        binding.tvClassName.text= buildString {
+            append(getString(R.string.mobile_pun_bold))
+            append(" ")
+            append(staffDTL.mobile)
+        }
+
+        binding.tvFatherName.text= buildString {
+            append(getString(R.string.doj_bold))
+            append(" ")
+            append(staffDTL.doj)
+        }
+
+        binding.tvContact.text= buildString {
+            append(getString(R.string.email_id_pun_bold))
+            append(" ")
+            append(staffDTL.emailID)
+        }
+        binding.tvGender.text= buildString {
+            append(getString(R.string.gender_pun_bold))
+            append(" ")
+            append(staffDTL.gender)
+        }
 
 
+    }
+
+    private fun bindStudentDetails(studentDTL: StudentDTL) {
+
+        Picasso.get().
+        load(studentDTL.photo)
+            .placeholder(R.drawable.default_profile)
+            .  into(binding.circleImageViewProfile)
+
+        binding.tvStudentName.text= buildString {
+            append(studentDTL.name)
+        }
+
+        binding.tvAdmissionNo.text= buildString {
+            append(getString(R.string.admission_no))
+            append(studentDTL.admissionNo)
+        }
+        binding.tvClassName.text= buildString {
+            append(getString(R.string.classes))
+            append(studentDTL.`class`)
+        }
+        binding.tvFatherName.text= buildString {
+            append(getString(R.string.contact_person))
+            append(studentDTL.contactPerson)
+        }
+        binding.tvContact.text= buildString {
+            append(getString(R.string.contact_no))
+            append(studentDTL.contactMob)
+        }
     }
 
     override fun onItemClick(t: RecentInfraction, pos: Int, boolean: Boolean) {
@@ -152,7 +220,11 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
 
                         if (it.data!=null){
                             it.data.message?.let { it1 -> mainActivity().showMessage(it1) }
-                            infractionListViewModel.getInfractions(studentID)
+                            if (uType==Constant.STUDENT_TYPE||uType==Constant.PARENT_TYPE){
+                                infractionListViewModel.getInfractions(userID)
+                            }else{
+                                infractionListViewModel.getStaffInfractions(userID)
+                            }
                         }
 
                     }
@@ -161,7 +233,11 @@ class InfractionListFragment : Fragment(),ItemListener<RecentInfraction> {
             }
         } else if (pos==2){
             sharedViewModel.setRecentInfraction(t)
-            findNavController().navigate(R.id.addComplianceFragment)
+            findNavController().navigate(
+                R.id.addComplianceFragment,
+                Bundle().apply {
+                    putInt(Constant.USER_TYPE, uType)
+                })
             }
         }
 

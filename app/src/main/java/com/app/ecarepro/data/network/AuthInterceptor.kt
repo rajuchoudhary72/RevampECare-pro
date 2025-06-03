@@ -4,14 +4,13 @@ import android.content.Context
 import android.util.Log
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
-import com.app.ecarepro.utils.LMSConstant.Companion.GET_SKILL_FROM_MASTER
-import com.app.ecarepro.utils.LMSConstant.Companion.IMPORT_SKILLS
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
-
+import com.app.ecarepro.utils.LMSConstant.Companion.GET_SKILL_FROM_MASTER
+import com.app.ecarepro.utils.LMSConstant.Companion.IMPORT_SKILLS
 class AuthInterceptor @Inject constructor(
     @ApplicationContext val context: Context,
     private val userDataStore: UserDataStore

@@ -5,20 +5,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.InboxMessage
 import com.app.ecarepro.data.repository.MessageRepository
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import com.app.ecarepro.ui.message.sent.DEFAULT_PAGE
 import com.app.ecarepro.ui.message.sent.UNKNOWN_ERROR_MESSAGE
 import com.app.ecarepro.ui.message.sent.calculateTotalPages
-import com.app.ecarepro.utils.badge_count.NotificationSyncManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import com.app.ecarepro.utils.badge_count.NotificationSyncManager
+import kotlinx.coroutines.flow.StateFlow
 
 @HiltViewModel
 class InboxMessageViewModel @Inject constructor(
@@ -42,7 +42,6 @@ class InboxMessageViewModel @Inject constructor(
     fun isLastPage() = isLastPage
 
     fun totalPageCount() = totalPageCount
-
     fun updateBadgeCount() {
         viewModelScope.launch {
             syncManager.fetchAndUpdateBadgeCount()
@@ -124,11 +123,9 @@ class InboxMessageViewModel @Inject constructor(
         totalPageCount = DEFAULT_PAGE
         fetchInboxMessages(true)
     }
-
-    fun sendScreenEvent() {
+    fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.INBOX_MESSAGE_LIST)
     }
-
     fun updateUnreadMessageCount(id: String, unReadMessageCount: Int) {
         viewModelScope.launch {
             Log.e("TAG", "updateUnreadMessageCount: $id , $unReadMessageCount" )

@@ -1,8 +1,9 @@
 package com.app.ecarepro.compose.model
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import android.util.Log
+
 
 sealed interface LoadState {
     data object Loading : LoadState

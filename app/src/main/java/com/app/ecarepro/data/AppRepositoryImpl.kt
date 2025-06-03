@@ -1,37 +1,40 @@
 package com.app.ecarepro.data
 
-
 import com.app.ecarepro.data.cache.JsonCache
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.SaveSkillCategoryRequest
 import com.app.ecarepro.data.network.SaveSkillDto
 import com.app.ecarepro.data.network.SaveSkillTypeRequest
+import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
+import com.app.ecarepro.data.network.model.Notification
+import com.app.ecarepro.data.network.model.RegisterDevice
+import com.app.ecarepro.data.network.service.AppService
+import com.app.ecarepro.data.repository.AppRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.MasterCategory
-import com.app.ecarepro.data.network.model.Notification
 import com.app.ecarepro.data.network.model.NotificationsDto
-import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
 import com.app.ecarepro.data.network.model.SkillsFromMasterDto
+
+
 import com.app.ecarepro.data.network.model.SyncData
 import com.app.ecarepro.data.network.model.toAppLayout
-import com.app.ecarepro.data.network.service.AppService
-import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.model.AppLayout
 import com.app.ecarepro.utils.LMSConstant
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
     private val jsonCache: JsonCache,
     private val userDataStore: UserDataStore
+
 ) : AppRepository {
     val lmsBasePath = LMSConstant.LMS_BASE_URL
     override fun getAppLayout(): Flow<Result<AppLayout>> {
@@ -180,14 +183,12 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
-
     override fun deleteSkill(id: String): Flow<Result<String>> {
         return flow {
             try {
-                val response =
-                    appService.deleteSkill(lmsBasePath + LMSConstant.SKILL_DELETE_SKILL, id)
+                val response = appService.deleteSkill(lmsBasePath + LMSConstant.SKILL_DELETE_SKILL, id)
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: "Success"))
+                    emit(Result.success(response.message?:"Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
@@ -200,8 +201,7 @@ class AppRepositoryImpl @Inject constructor(
     override fun getSkillTypes(id: String): Flow<Result<SkillTypesDto>> {
         return flow {
             try {
-                val response =
-                    appService.getSkillTypes(lmsBasePath + LMSConstant.SKILL_SKILL_TYPE, id)
+                val response = appService.getSkillTypes(lmsBasePath + LMSConstant.SKILL_SKILL_TYPE, id)
                 if (response.errorCode == 0) {
                     emit(Result.success(response))
                 } else {
@@ -237,7 +237,7 @@ class AppRepositoryImpl @Inject constructor(
                     sklCatID
                 )
                 if (response.errorCode == 0) {
-                    emit(Result.success(response.message ?: "Success"))
+                    emit(Result.success(response.message?:"Success"))
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
                 }
@@ -246,7 +246,6 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
-
     override fun saveSkillCategory(
         sklCatID: String?,
         value: String
@@ -295,7 +294,9 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
-
+    override suspend fun notificationSeen(id: String): CommonResponse {
+        return appService.notificationSeen(id)
+    }
     override fun getSkillFromMaster(): Flow<Result<SkillsFromMasterDto>> {
         return flow {
             try {
@@ -330,11 +331,6 @@ class AppRepositoryImpl @Inject constructor(
             }
         }
     }
-
-    override suspend fun notificationSeen(id: String): CommonResponse {
-        return appService.notificationSeen(id)
-    }
-
     companion object {
         private const val NOTIFICATION_CACHE_KEY = "notifications"
     }

@@ -10,6 +10,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.text.SpannableStringBuilder
 import android.text.style.CharacterStyle
 import android.text.style.StyleSpan
@@ -21,6 +22,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
@@ -29,7 +31,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
@@ -72,7 +74,8 @@ class ChatFragment : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
-
+    private var capturedImageFile: File? = null
+    private var capturedImageUri: Uri? = null
     private val chatViewModel: ChatViewModel by viewModels()
     private var lastClickAttachmentType: AttachmentType? = null
 
@@ -132,7 +135,7 @@ class ChatFragment : Fragment() {
     private fun setUpViews() {
 
         binding.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(this).popBackStack()
+            findNavController().popBackStack()
         }
         binding.btnRecipient.setOnClickListener {
             showRecipients()
@@ -185,16 +188,33 @@ class ChatFragment : Fragment() {
         }
         FileAccess.checkPermission(this@ChatFragment)
         binding.btnCamera.setOnClickListener {
-            hideAttachmentCard()
-            lastClickAttachmentType = AttachmentType.CAMERA
-            FileAccess.checkPermission(this@ChatFragment)
-            if(checkCameraPermissions()){
+            try {
+                hideAttachmentCard()
+                lastClickAttachmentType = AttachmentType.CAMERA
+                FileAccess.checkPermission(this@ChatFragment)
+
+                val imageFile = File(
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "${UUID.randomUUID()}.jpg"
+                )
+                capturedImageFile = imageFile
+
+                val authority = "${requireContext().packageName}.myFileProvider"
+                capturedImageUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    authority,
+                    imageFile
+                )
+
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
-                    cameraLauncher.launch(FileAccess.cameraIntent())
+                    cameraLauncher.launch(FileAccess.cameraIntent(capturedImageUri!!))
                 }
+            } catch (e: SecurityException) {
+                e.printStackTrace()
             }
         }
+
 
 
 
@@ -211,19 +231,27 @@ class ChatFragment : Fragment() {
         }
 
     }
-
-
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val bitmap = result.data?.extras?.get("data") as Bitmap
-                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
-                file.writeBitmap(
-                    bitmap, Bitmap.CompressFormat.PNG, 100
-                )
-                chatViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
+            if (result.resultCode == Activity.RESULT_OK) {
+                /* val bitmap = result.data?.extras?.get("data") as Bitmap
+                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                 file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
+
+                 composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))*/
+
+
+                capturedImageFile?.let { file ->
+                    if (file.exists()) {
+                        chatViewModel.setAttachments(
+                            listOf(MiMedia(path = file.absolutePath))
+                        )
+                    }
+                }
             }
         }
+
+
 
     private fun File.writeBitmap(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int) {
         outputStream().use { out ->
@@ -508,7 +536,6 @@ class ChatFragment : Fragment() {
             }
         }
     }
-
     private fun setUpToolbar(sender: Sender) {
         if (chatViewModel.messageType==MessageType.INBOX.value){
             binding.apply {
@@ -541,7 +568,7 @@ class ChatFragment : Fragment() {
             openPdfFromUrl(photo)
         } else {
             try {
-                NavHostFragment.findNavController(this).navigate(
+                findNavController().navigate(
                     R.id.photoViewFragmentFragment,
                     bundleOf(PhotoViewFragmentFragment.PHOTO to photo)
                 )

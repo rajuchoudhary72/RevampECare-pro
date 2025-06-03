@@ -499,9 +499,10 @@ class UserRepositoryImpl @Inject constructor(
         status: Int,
         ord: Int,
         applType: Int,
-        pg: Int
+        pg: Int,
+        attPer:Boolean
     ): NetworkLeaveReport {
-        return userService.leaveReport(status, ord, applType, pg)
+        return userService.leaveReport(status, ord, applType, pg,attPer)
     }
 
     override suspend fun leaveAction(
@@ -564,21 +565,30 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun infractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        stID: Int
+        stID: Int,
+        uType: Int
     ): NetworkInfractionInstance {
-        return userService.infractionInstance(infrTypeID, InfrSubTypeID, stID)
+        return userService.infractionInstance(infrTypeID, InfrSubTypeID, stID,uType)
     }
 
     override suspend fun addInfraction(stID: Int): NetworkAddInfraction {
         return userService.addInfraction(stID)
     }
 
+    override suspend fun addStaffInfraction(stID: Int): NetworkAddInfraction {
+        return userService.addStaffInfraction(stID)
+    }
+
     override suspend fun getAppreciations(stID: Int): NetworkAppreciations {
         return userService.getAppreciations(stID)
     }
 
-    override suspend fun getInfractions(stID: Int): NetworkInfractions {
+    override suspend fun getInfractions(stID: Int?): NetworkInfractions {
         return userService.getInfractions(stID)
+    }
+
+    override suspend fun getStaffInfractions(SID: Int?): NetworkInfractions {
+        return userService.getStaffInfractions(SID)
     }
 
     override suspend fun disciplineLogDeleteLog(id: String, type: Int): CommonResponse {

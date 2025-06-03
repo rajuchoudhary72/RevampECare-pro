@@ -63,6 +63,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     private var isRejectionReasonReq: Boolean = false
     private var toFragment: String= ""
     private var leaveListIds = mutableListOf<Int>()
+    private var showAttPer=false
 
 
     override fun onCreateView(
@@ -107,7 +108,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     if (applType!=3){
                         binding.cbAllSelect.isVisible=true
                         binding.llAllApproveRej.isVisible=true
@@ -117,7 +118,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=1
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
                 }
@@ -125,7 +126,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=Constant.LEAVE_ACTION_CANCEL
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
                 }
@@ -134,7 +135,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=2
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
                 }
@@ -152,7 +153,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         leaveReportAdapter.clearData()
                         status=0
                         pageIndex=1
-                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     }
                     dialog.dismiss()
                 }
@@ -187,7 +188,10 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
           }
         }
 
-
+        binding.cbShowAttPer.setOnCheckedChangeListener { _, isChecked ->
+            showAttPer=isChecked
+            leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
+        }
 
     }
 
@@ -246,7 +250,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
             }
 
         }
-        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
     }
 
     override fun onItemClick(t: Dtl, pos: Int, boolean: Boolean) {
@@ -263,7 +267,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=0
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                 }
 
             }
@@ -289,7 +293,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                     leaveReportAdapter.clearData()
                     status=1
                     pageIndex=1
-                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                     binding.cbAllSelect.isVisible=false
                     binding.llAllApproveRej.isVisible=false
                 }
@@ -351,7 +355,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                 leaveReportAdapter.clearData()
                 status=0
                 pageIndex=1
-                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
             }
             dialog.dismiss()
         }
@@ -384,7 +388,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         leaveReportAdapter.clearData()
                         status=0
                         pageIndex=1
-                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                        leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                         showActionMessage()
 
                     }
@@ -470,7 +474,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                     leaveReportAdapter.clearData()
                                     status=0
                                     pageIndex=1
-                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                                 }
                         }else{
                             leaveReportViewModel.leaveAction(applType,
@@ -479,7 +483,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                     leaveReportAdapter.clearData()
                                     status=0
                                     pageIndex=1
-                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                                 }
                         }
 
@@ -497,7 +501,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 leaveReportAdapter.clearData()
                                 status=0
                                 pageIndex=1
-                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                             }
                     }else{
                         leaveReportViewModel.leaveAction(applType,
@@ -506,7 +510,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 leaveReportAdapter.clearData()
                                 status=0
                                 pageIndex=1
-                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                             }
                     }
 
@@ -539,7 +543,7 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                                 if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
                                     isLoading = false
                                     pageIndex += 1
-                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex)
+                                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
                                 }
                             }
 

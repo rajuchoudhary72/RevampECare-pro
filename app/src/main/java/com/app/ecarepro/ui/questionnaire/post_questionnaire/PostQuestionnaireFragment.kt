@@ -14,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.databinding.FragmentPostQustionnaireBinding
 import com.app.ecarepro.ui.mainActivity
@@ -35,10 +35,7 @@ class PostQuestionnaireFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPostQustionnaireBinding.inflate(inflater, container, false)
-        binding.includeToolbar.toolbar.setNavigationOnClickListener {
-            NavHostFragment.findNavController(
-                this
-            ).popBackStack() }
+        binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.add_question)
         return binding.root
     }
@@ -60,7 +57,7 @@ class PostQuestionnaireFragment : Fragment() {
                 imageString, "", imageExt
             ).invokeOnCompletion {
                 mainActivity().showMessage(getString(R.string .successfully))
-                NavHostFragment.findNavController(this).popBackStack()
+                findNavController().popBackStack()
             }
 
 

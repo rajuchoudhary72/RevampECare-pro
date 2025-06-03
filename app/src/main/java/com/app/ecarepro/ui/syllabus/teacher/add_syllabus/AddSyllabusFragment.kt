@@ -1,13 +1,22 @@
 package com.app.ecarepro.ui.syllabus.teacher.add_syllabus
 
+import android.Manifest
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +28,9 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -44,25 +56,37 @@ import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.ui.syllabus.teacher.TeacherSyllabusViewModel
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
+import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.getFile
 import com.app.ecarepro.utils.listener.ItemListener
+import com.lassi.common.utils.KeyUtils
+import com.lassi.data.media.MiMedia
+import com.lassi.domain.media.LassiOption
+import com.lassi.domain.media.MediaType
+import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
 class AddSyllabusFragment : Fragment() {
 
-    private   var pdfString: String=""
+    private var isGallery: Boolean=false
+    private  var imageExt: String =""
+    private  var imageString: String =""
     private lateinit var binding: FragmentAddSyllabusBinding
     private val addSyllabusViewModel: AddSyllabusViewModel by viewModels()
     private var classesList = mutableListOf<MyClasseItem>()
     private  var sectionList= mutableListOf<ClassSection>()
-
+    private var imageUri: Uri? = null
     private var subjectList = mutableListOf<MySubject>()
     private lateinit var classData: MyClasseItem
     private lateinit var subjectData: MySubject
@@ -83,6 +107,7 @@ class AddSyllabusFragment : Fragment() {
     private var sectionIDs = StringBuilder()
     private var sylabussType=Constant.CLASS_WISE
     private val teacherSyllabusViewModel: TeacherSyllabusViewModel by activityViewModels()
+    private var isFileAttached =false
 
 
 
@@ -125,7 +150,7 @@ class AddSyllabusFragment : Fragment() {
             }
             if (fileName.isNotEmpty()){
                 binding.llFile.isVisible=true
-                binding.tvAddAttac.isVisible=false
+                binding.llAttachemntFile.isVisible=false
                 binding.ivFileRemove.isVisible=false
             }
             isSubjectSelected=true
@@ -136,8 +161,9 @@ class AddSyllabusFragment : Fragment() {
 
         binding.ivFileRemove.setOnClickListener {
             binding.llFile.isVisible=false
-            binding.tvAddAttac.isVisible=true
-            pdfString=""
+            binding.llAttachemntFile.isVisible=true
+            isFileAttached=false
+            addSyllabusViewModel.removeAttachment()
         }
 
         getMyClasses()
@@ -160,9 +186,19 @@ class AddSyllabusFragment : Fragment() {
             }
         }
 
-        binding.tvAddAttac.setOnClickListener {
-            pickPdf()
+        binding.tvBrowsePhoto.setOnClickListener {
+            if (checkAndRequestPermissions()) {
+                lastClickAttachmentType = AttachmentType.GALLERY
+                selectImageOptionDialog()
+            }
         }
+
+        binding.tvBrowseFile.setOnClickListener {
+            lastClickAttachmentType = AttachmentType.PDF
+            launchPdfPicker()
+        }
+
+
 
         binding.btnSubmit.setOnClickListener {
             var isValidated=true
@@ -178,7 +214,7 @@ class AddSyllabusFragment : Fragment() {
                 isValidated=false
                 binding.etDescription.error="Enter Title"
             } else if (!edit){
-                if (pdfString.isEmpty()){
+                if (!isFileAttached){
                     isValidated=false
                     mainActivity().showMessage("Select File")
                 }
@@ -198,8 +234,12 @@ class AddSyllabusFragment : Fragment() {
                     id,
                     subID,
                     binding.etDescription.text.toString(),
-                    if (pdfString.isNotEmpty()) BrowsedFile(pdfString,"pdf") else null,
-                    if (pdfString.isEmpty()) fileName else null,
+                    if (isFileAttached) fileName else null,
+                    BrowsedFile(
+                        attachment = imageString,
+                        fileExt = imageExt,
+                    ),
+                    isGallery
                 ).invokeOnCompletion {
                     mainActivity().showLoader(false)
                     mainActivity().showMessage("Submitted Successfully!!!")
@@ -223,6 +263,7 @@ class AddSyllabusFragment : Fragment() {
 
 
     }
+
 
 
     private fun getMyClasses() {
@@ -414,57 +455,6 @@ class AddSyllabusFragment : Fragment() {
 
 
 
-    fun pickPdf() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            type = "application/pdf"
-            addCategory(Intent.CATEGORY_OPENABLE)
-        }
-        pdfPickerLauncher.launch(intent)
-    }
-
-
-
-    private val pdfPickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val uri: Uri? = result.data?.data
-            uri?.let { pdfUri ->
-                val file = requireContext().getFile(pdfUri)
-                pdfString = getBase64StringFromUri(file!!.toUri()).toString()
-                binding.llFile.isVisible=true
-
-             }
-        }
-    }
-
-    private fun getBase64StringFromUri(uri: Uri): String? {
-        val imageStream: InputStream
-        return try {
-            imageStream = requireNotNull(requireContext().contentResolver.openInputStream(uri))
-            val bytes: ByteArray = readBytes(
-                imageStream
-            )
-            Base64.encodeToString(bytes, Base64.NO_WRAP)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    @Throws(IOException::class)
-    private fun readBytes(inputStream: InputStream): ByteArray {
-        val byteBuffer = ByteArrayOutputStream()
-        val bufferSize = 1024
-        val buffer = ByteArray(bufferSize)
-
-        var len: Int
-        while ((inputStream.read(buffer).also { len = it }) != -1) {
-            byteBuffer.write(buffer, 0, len)
-        }
-
-        return byteBuffer.toByteArray()
-    }
-
-
     private fun popUpSelectSection(){
 
         val builder = AlertDialog.Builder(requireContext(),R.style.CustomAlertDialog) .create()
@@ -534,6 +524,39 @@ class AddSyllabusFragment : Fragment() {
 
         builder.setCanceledOnTouchOutside(false)
         builder.show()
+    }
+
+
+    private fun checkAndRequestPermissions(): Boolean {
+        val permissionList = mutableListOf<String>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_MEDIA_IMAGES
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_MEDIA_IMAGES)
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
+
+        return if (permissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                permissionList.toTypedArray(),
+                1001
+            )
+            false
+        } else {
+            true
+        }
     }
 
 
@@ -622,6 +645,175 @@ class AddSyllabusFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+
+    private val galleryLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                // binding.ivAddedImage.setImageURI(imgUri)
+                try {
+                    val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
+
+                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                     imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+                    /*val imageExt =
+                        FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()*/
+                    isFileAttached=true
+                    isGallery=true
+                    binding.llFile.isVisible=true
+
+
+                } catch (e: NullPointerException) {
+                    e.message
+                }
+
+
+            }
+        }
+
+    fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
+        return when (compressFormat) {
+            Bitmap.CompressFormat.JPEG -> "jpg"
+            Bitmap.CompressFormat.PNG -> "png"
+            Bitmap.CompressFormat.WEBP -> "webp"
+            else -> "unknown"
+        }
+    }
+
+
+
+    private fun selectImageOptionDialog() {
+        val items = arrayOf<CharSequence>(
+            "Take Photo", "Choose from Library",
+            "Cancel"
+        )
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Photo!")
+        builder.setItems(items) { dialog, item ->
+            FileAccess.checkPermission(this)
+            if (items[item] == "Take Photo") {
+                if (isCameraPermissionGranted(requireContext())) {
+                    launchCamera()
+                } else {
+                    mainActivity().showMessage("Please allow camera permission, go to settings and enable.")
+                }
+            } else if (items[item] == "Choose from Library") {
+                galleryLauncher.launch(FileAccess.galleryIntent())
+            } else if (items[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        }
+        builder.show()
+    }
+
+    private fun launchCamera() {
+        val imageFile = createImageFile()
+        imageUri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.myFileProvider",
+            imageFile
+        )
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        cameraLauncher.launch(intent)
+    }
+
+    fun isCameraPermissionGranted(context: Context): Boolean {
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK && imageUri != null) {
+                try {
+                    val inputStream = requireContext().contentResolver.openInputStream(imageUri!!)
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    inputStream?.close()
+
+                    imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
+                    imageExt = getImageExtension(bitmap, Bitmap.CompressFormat.JPEG)
+
+                    isFileAttached = true
+                    isGallery = true
+                    binding.llFile.isVisible = true
+                    // binding.ivAddedImage.setImageBitmap(bitmap) // Optional: show preview
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+
+    private fun launchPdfPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*" // Allow any file type
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        pdfLauncher.launch(intent)
+    }
+
+
+
+
+    private val pdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let { data ->
+                    if (data.data != null) {
+                        val mImageUri: Uri = data.data!!
+                        addSyllabusViewModel.setAttachments(
+                            listOf(
+                                MiMedia(
+                                    path = mImageUri.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            )
+                        )
+                        isFileAttached=true
+                        binding.llFile.isVisible=true
+                        isGallery=false
+                    } else {
+                        if (data.clipData != null) {
+                            val count: Int = data.clipData!!.itemCount
+                            val files = mutableListOf<MiMedia>()
+                            for (i in 0 until count) {
+                                val imageUri: Uri = data.clipData!!.getItemAt(i).uri
+                                files.add(
+                                    MiMedia(
+                                        path = imageUri.toString(),
+                                        name = lastClickAttachmentType?.name
+                                    )
+                                )
+                            }
+                            isFileAttached=true
+                            binding.llFile.isVisible=true
+                            addSyllabusViewModel.setAttachments(files)
+                            isGallery=false
+                        }
+                    }
+                }
+            }
+        }
+
+
+    private fun createImageFile(): File {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile("JPEG_${timeStamp}_", ".jpg", storageDir)
     }
 
     }

@@ -3,19 +3,19 @@ package com.app.ecarepro.ui.message
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.repository.MessageRepository
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.app.ecarepro.data.datastore.UserDataStore
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import kotlinx.coroutines.delay
 
 
 @HiltViewModel
@@ -36,7 +36,6 @@ class MessageViewModel @Inject constructor(
     val messageSettings = MutableStateFlow<MessageSettings?>(null)
 
     val isFilterApplied = MutableStateFlow(false)
-
     val inboxMessageUnreadCount = MutableStateFlow<Pair<String, Int>?>(null)
 
     fun updateUnreadMessageCount(id: String) {

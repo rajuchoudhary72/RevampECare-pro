@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.model.LatestBook
@@ -63,9 +63,8 @@ class LatestBookFragment(private val latestBook: List<LatestBook>? ) : Fragment(
     }
 
     override fun onItemClick(t: LatestBook, pos: Int, boolean: Boolean) {
-        NavHostFragment.findNavController(this)
-            .navigate(R.id.action_bookLibraryFragment_to_bookDetailsFragment, Bundle().apply {
-                putInt(Constant.BOOK_ID_ARGUMENT, t.bookID)
-            })
+        findNavController().navigate(R.id.action_bookLibraryFragment_to_bookDetailsFragment,Bundle( ).apply {
+            putInt(Constant.BOOK_ID_ARGUMENT, t.bookID)
+        })
      }
 }

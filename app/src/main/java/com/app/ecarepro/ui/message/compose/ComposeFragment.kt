@@ -1,8 +1,8 @@
 package com.app.ecarepro.ui.message.compose
 
 import android.Manifest
+import android.app.Activity
 import android.app.Activity.RESULT_OK
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +18,10 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.Html
 import android.text.Spannable
+import com.app.ecarepro.data.network.model.MessageSettings
+import android.app.ProgressDialog
+import android.os.Environment
+
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
 import android.text.style.CharacterStyle
@@ -37,6 +41,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -49,7 +54,6 @@ import com.app.ecarepro.R
 import com.app.ecarepro.attachment
 import com.app.ecarepro.data.network.model.Contact
 import com.app.ecarepro.data.network.model.ContactsDto
-import com.app.ecarepro.data.network.model.MessageSettings
 import com.app.ecarepro.data.network.model.SmsType
 import com.app.ecarepro.data.network.model.Template
 import com.app.ecarepro.databinding.FragmentComposeBinding
@@ -58,7 +62,6 @@ import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.selectRecipients.ScholarType
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
-import com.app.ecarepro.utils.CameraHandler
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileUtils
 import com.app.ecarepro.utils.ImageCompressionHelper
@@ -93,11 +96,10 @@ class ComposeFragment : Fragment() {
     private var isFormatd = false
     private lateinit var imageCompressionHelper: ImageCompressionHelper
     private val composeViewModel: ComposeViewModel by viewModels()
-
+    private var capturedImageFile: File? = null
+    private var capturedImageUri: Uri? = null
     private var lastClickAttachmentType: AttachmentType? = null
     private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
-
-    private lateinit var cameraHandler: CameraHandler
 
     private val mPermissionSettingResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -179,38 +181,6 @@ class ComposeFragment : Fragment() {
         }
 
         setUpFontStyle()
-
-        setUpCameraHandler()
-    }
-
-    private fun setUpCameraHandler() {
-        cameraHandler = CameraHandler(this) { uri, bitmap, cachedFile ->
-            // This lambda is your callback, executed when the image is captured (or fails)
-            if (uri != null && (bitmap != null || cachedFile != null)) {
-                // Successfully captured image
-                // uri: The content URI of the full-size image (if successful)
-                // bitmap: The decoded Bitmap (if decoding was successful)
-                // cachedFile: The File object for the bitmap saved in your app's cache (if saving was successful)
-
-                mainActivity().showMessage("Photo captured: $uri")
-                Log.d("ComposeFragment", "Image URI: $uri, Bitmap: ${bitmap != null}, Cached File: ${cachedFile?.absolutePath}")
-
-                // Example: Update your ViewModel with the cached file path
-                cachedFile?.let {
-                    // Assuming MiMedia takes a file path
-                    composeViewModel.setAttachments(listOf(MiMedia(path = it.absolutePath)))
-                }
-
-                // Or if you need the Bitmap directly (and handled caching yourself)
-                // bitmap?.let {
-                //     // process the bitmap
-                // }
-
-            } else {
-                // Capture failed or was cancelled
-                mainActivity().showMessage("Photo capture failed or cancelled.")
-            }
-        }
     }
 
     private fun setUpFontStyle() {
@@ -409,7 +379,6 @@ class ComposeFragment : Fragment() {
             setUpSmsTypes(uiState.smsTypes)
         }
     }
-
     private fun handleAttachmentTypes(messageSettings: MessageSettings?) {
         messageSettings?.let { settings ->
             binding.btnCamera.isVisible = settings.media?.browseImg == true
@@ -419,7 +388,6 @@ class ComposeFragment : Fragment() {
             binding.btnBrowsePdf.isVisible = settings.media?.browsePDF == true
         }
     }
-
     private fun setUpSmsTypes(smsTypes: List<SmsType>) {
         binding.spinnerSmsTypeLayout.isVisible = smsTypes.isNotEmpty()
         if (smsTypes.isEmpty()) return
@@ -526,12 +494,11 @@ class ComposeFragment : Fragment() {
 
             setFragmentResultListener(SelectRecipientsFragment.SELECT_CONTACT_REQUEST_KEY) { requestKey, bundle ->
                 if (bundle.containsKey(SelectRecipientsFragment.SELECTED_CONTACT)) {
-                    val contacts: ContactsDto =
-                        bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
+                    val contacts: ContactsDto = bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
                     val scholarType: ScholarType =
                         ScholarType.getScholarType(bundle.getInt(SelectRecipientsFragment.SCHOLAR_TYPE))
                     composeViewModel.setContacts(contacts.contacts)
-                    composeViewModel.updateScholarType(scholarType)
+                    composeViewModel.setScholarType(scholarType)
                 }
             }
 
@@ -577,27 +544,47 @@ class ComposeFragment : Fragment() {
                 hideAttachmentCard()
                 lastClickAttachmentType = AttachmentType.CAMERA
                 FileAccess.checkPermission(this@ComposeFragment)
-                // checkCameraPermissions()
+
+                val imageFile = File(
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "${UUID.randomUUID()}.jpg"
+                )
+                capturedImageFile = imageFile
+
+                val authority = "${requireContext().packageName}.myFileProvider"
+                capturedImageUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    authority,
+                    imageFile
+                )
+
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
-                    cameraHandler.dispatchTakePictureIntent()
-                    //cameraLauncher.launch(FileAccess.cameraIntent())
+                    cameraLauncher.launch(FileAccess.cameraIntent(capturedImageUri!!))
                 }
             } catch (e: SecurityException) {
-                e.message
+                e.printStackTrace()
             }
-
-
         }
     }
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val bitmap = result.data?.extras?.get("data") as Bitmap
-                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
-                file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
-                composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
+            if (result.resultCode == Activity.RESULT_OK) {
+                /* val bitmap = result.data?.extras?.get("data") as Bitmap
+                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                 file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
+
+                 composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))*/
+
+
+                capturedImageFile?.let { file ->
+                    if (file.exists()) {
+                        composeViewModel.setAttachments(
+                            listOf(MiMedia(path = file.absolutePath))
+                        )
+                    }
+                }
             }
         }
 
@@ -764,7 +751,7 @@ class ComposeFragment : Fragment() {
 
                                         // Update progress message
                                         withContext(Dispatchers.Main) {
-                                            progressDialog.setMessage("Compressing images... ${i + 1}/${selectedImages.size}")
+                                            progressDialog.setMessage("Compressing images... ${i+1}/${selectedImages.size}")
                                         }
 
                                         // Compress image in background
@@ -818,49 +805,49 @@ class ComposeFragment : Fragment() {
         }
 
     /*without  progess bar*/
-    /* private val pickImagesLauncher =
-         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-             if (result.resultCode == RESULT_OK) {
-                 val selectedImages = mutableListOf<Uri>()
-                 result.data?.let { data ->
-                     val clipData = data.clipData
-                     if (clipData != null) {
-                         for (i in 0 until clipData.itemCount) {
-                             if (selectedImages.size < 7) {
-                                 val imageUri = clipData.getItemAt(i).uri
-                                 selectedImages.add(imageUri)
-                             }
-                         }
+   /* private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedImages = mutableListOf<Uri>()
+                result.data?.let { data ->
+                    val clipData = data.clipData
+                    if (clipData != null) {
+                        for (i in 0 until clipData.itemCount) {
+                            if (selectedImages.size < 7) {
+                                val imageUri = clipData.getItemAt(i).uri
+                                selectedImages.add(imageUri)
+                            }
+                        }
 
-                         // Check if total size exceeds the limit
-                         if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
-                             // Show compression dialog
-                             imageCompressionHelper.showCompressionDialog(
-                                 parentFragmentManager,
-                                 selectedImages
-                             ) { compressionOption ->
-                                 // Process images with selected compression
-                                 viewLifecycleOwner.lifecycleScope.launch {
-                                     val compressedUris = withContext(Dispatchers.IO) {
-                                         selectedImages.map { uri ->
-                                             imageCompressionHelper.compressImage(
-                                                 uri,
-                                                 compressionOption
-                                             )
-                                         }
-                                     }
+                        // Check if total size exceeds the limit
+                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
+                            // Show compression dialog
+                            imageCompressionHelper.showCompressionDialog(
+                                parentFragmentManager,
+                                selectedImages
+                            ) { compressionOption ->
+                                // Process images with selected compression
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val compressedUris = withContext(Dispatchers.IO) {
+                                        selectedImages.map { uri ->
+                                            imageCompressionHelper.compressImage(
+                                                uri,
+                                                compressionOption
+                                            )
+                                        }
+                                    }
 
-                                     // Now we have compressed images, upload them
-                                     composeViewModel.setAttachments(compressedUris.map {
-                                         MiMedia(
-                                             path = it.toString(),
-                                             name = lastClickAttachmentType?.name
-                                         )
-                                     })
-                                 }
-                             }
-                         } else {
-                             *//*  // Process images normally (still might want to compress slightly)
+                                    // Now we have compressed images, upload them
+                                    composeViewModel.setAttachments(compressedUris.map {
+                                        MiMedia(
+                                            path = it.toString(),
+                                            name = lastClickAttachmentType?.name
+                                        )
+                                    })
+                                }
+                            }
+                        } else {
+                            *//*  // Process images normally (still might want to compress slightly)
                                composeViewModel.setAttachments(files)*//*
                             composeViewModel.setAttachments(selectedImages.map {
                                 MiMedia(
@@ -931,13 +918,13 @@ class ComposeFragment : Fragment() {
             AttachmentType.GALLERY -> {
                 openGallery()
             }
-            /* AttachmentType.GALLERY -> {
-                 // Request necessary permissions and open the gallery
-                 if (checkAndRequestPermissions()) {
-                     launchPhotoPicker()
-                 }
-                 //  launchPhotoPicker()
-             }*/
+           /* AttachmentType.GALLERY -> {
+                // Request necessary permissions and open the gallery
+                if (checkAndRequestPermissions()) {
+                    launchPhotoPicker()
+                }
+                //  launchPhotoPicker()
+            }*/
 
             AttachmentType.AUDIO -> {
                 launchAudioPicker()
@@ -1042,14 +1029,7 @@ class ComposeFragment : Fragment() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*" // Allow any file type
-            putExtra(
-                Intent.EXTRA_MIME_TYPES,
-                arrayOf(
-                    "application/pdf",
-                    "application/msword",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                )
-            )
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
         pdfLauncher.launch(intent)
@@ -1244,6 +1224,7 @@ class ComposeFragment : Fragment() {
             }
             .show()
     }
+
 
     private fun isGPSEnabled(): Boolean {
         val locationManager =

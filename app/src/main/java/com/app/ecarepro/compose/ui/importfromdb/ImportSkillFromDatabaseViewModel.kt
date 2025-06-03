@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class ImportSkillFromDatabaseViewModel @Inject constructor(
     private val appRepository: AppRepository
@@ -132,6 +132,7 @@ class ImportSkillFromDatabaseViewModel @Inject constructor(
                     result
                         .onSuccess { message ->
                             showMessage(message)
+                            delay(200)
                             onSuccess()
                         }
                         .onFailure { error ->

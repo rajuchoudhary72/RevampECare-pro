@@ -63,8 +63,13 @@ class OpenPdfFragment : Fragment() {
         }catch (e:IllegalStateException ){
             e.printStackTrace()
         }
+
         if (url.isNotEmpty()){
-            openPdfBinding.wvPdf.loadUrl("https://docs.google.com/viewer?url=$url&embedded=true")
+            if (url.contains("https://books.google.co")){
+                openPdfBinding.wvPdf.loadUrl(url)
+            }else{
+                openPdfBinding.wvPdf.loadUrl("https://docs.google.com/viewer?url=$url&embedded=true")
+            }
         }
 
 
