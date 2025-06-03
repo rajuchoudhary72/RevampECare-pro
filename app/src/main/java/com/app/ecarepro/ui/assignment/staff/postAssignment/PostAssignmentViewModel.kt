@@ -210,21 +210,6 @@ class PostAssignmentViewModel @Inject constructor(
     }
 
 
-    private fun getMessageType(): Int {
-        val attachments = attachments.value
-        return if (attachments.isEmpty()) {
-            1
-        } else if (attachments.all { AttachmentType.PDF.name == it.name }) {
-            5
-        } else if (attachments.all { AttachmentType.AUDIO.name == it.name }) {
-            3
-        } else if (attachments.all { AttachmentType.RECORDING.name == it.name }) {
-            3
-        }else {
-            2
-        }
-    }
-
     private fun getImageExtension(bitmap: Bitmap, compressFormat: Bitmap.CompressFormat): String {
         return when (compressFormat) {
             Bitmap.CompressFormat.JPEG -> "jpg"
