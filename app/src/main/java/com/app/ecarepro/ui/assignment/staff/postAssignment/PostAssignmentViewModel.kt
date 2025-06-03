@@ -209,27 +209,6 @@ class PostAssignmentViewModel @Inject constructor(
         }
     }
 
-    private fun getMultipleAttachment(): List<String>? {
-        val attachments = attachments.value
-        if (getMessageType()==1)
-            return null
-        /*  if (attachments.isEmpty() || attachments.size == 1)
-                    return null*/
-        return attachments.map { attachment ->
-            if (isPdf(attachment)) {
-                if (attachment.name == AttachmentType.RECORDING.name) {
-                    val file = File(attachment.path)
-                    getBase64StringFromUri(file) ?: ""
-                } else {
-                    val file = context.getFile(attachment.path?.toUri())
-                    getBase64StringFromUri(file!!.toUri()) ?: ""
-                }
-            } else {
-                FileAccess.bitmapToByteArrayBase64String(FileAccess.bitmapFromFileCamera(context, attachment.path!!))
-            }
-        }
-    }
-
 
     private fun getMessageType(): Int {
         val attachments = attachments.value
