@@ -6,6 +6,7 @@ import com.app.ecarepro.compose.ui.base.BaseViewModel
 import com.app.ecarepro.data.network.model.MasterCategory
 import com.app.ecarepro.data.repository.AppRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

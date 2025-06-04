@@ -39,7 +39,7 @@ import com.app.ecarepro.compose.theme.white
 @Composable
 fun ECareTopAppBar(
     title: String,
-    searchQuery: String,
+    searchQuery: String = "",
     onQueryChange: (String) -> Unit = {},
     onClickBack: () -> Unit = {}
 ) {
