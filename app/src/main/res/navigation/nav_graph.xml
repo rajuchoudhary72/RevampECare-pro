@@ -1052,4 +1052,8 @@
         android:id="@+id/importSkillFromDatabaseFragment"
         android:name="com.app.ecarepro.compose.ui.importfromdb.ImportSkillFromDatabaseFragment"
         android:label="ImportSkillFromDatabaseFragment" />
+    <fragment
+        android:id="@+id/pedagogyFragment"
+        android:name="com.app.ecarepro.compose.ui.pedagogy.PedagogyFragment"
+        android:label="PedagogyFragment" />
 </navigation>

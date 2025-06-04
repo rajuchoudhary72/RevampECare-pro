@@ -46,7 +46,7 @@ data class PedagogyStep(
     @SerializedName("pdgID")
     val pdgID: Int?,
     @SerializedName("pdgStpID")
-    val pdgStpID: Int?,
+    val pdgStpID: Int,
     @SerializedName("stepName")
     val stepName: String?,
     @SerializedName("stepNumber")

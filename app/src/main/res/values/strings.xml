@@ -962,6 +962,7 @@
     <string name="create_new_skill_">Create new skill</string>
     <string name="confirm_delete">Confirm Delete</string>
     <string name="are_you_sure_you_want_to_delete_this_skill_category">Are you sure you want to delete this skill category?</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
     <string name="rejection_reason">"<b>Rejection Reason: </b>"</string>
     <string name="all_undertakings_submitted_successfully">All undertakings submitted successfully.</string>
     <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>

@@ -18,6 +18,7 @@ import com.app.ecarepro.data.network.model.FavouritesDto
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.LMSAppLayoutDto
 import com.app.ecarepro.data.network.model.MasterCategory
+import com.app.ecarepro.data.network.model.PedagogyDto
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
@@ -128,5 +129,22 @@ interface AppService {
     suspend fun importSkills(
         @Url url: String,
         @Body request: List<MasterCategory>
+    ): SaveSkillResponse
+
+    @GET
+    suspend fun getPedagogy(
+        @Url url: String
+    ): PedagogyDto
+
+    @DELETE
+    suspend fun deletePedagogy(
+        @Url url: String,
+        @Query("pdgID") sklCatID: Int
+    ): SaveSkillResponse
+
+    @DELETE
+    suspend fun deletePedagogyStep(
+        @Url url: String,
+        @Query("pdgStpID") sklCatID: Int
     ): SaveSkillResponse
 }

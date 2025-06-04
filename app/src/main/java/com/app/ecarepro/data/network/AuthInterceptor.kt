@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.Log
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.LMSConstant.Companion.DELETE_PEDAGOGY
+import com.app.ecarepro.utils.LMSConstant.Companion.DELETE_PEDAGOGY_STEP
+import com.app.ecarepro.utils.LMSConstant.Companion.GET_PEDAGOGY
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -37,7 +40,11 @@ class AuthInterceptor @Inject constructor(
         "Skills/DeleteSkillCategory",
         "Skills/SaveSkillCategory",
         "Skills/SaveSkillType",
-        GET_SKILL_FROM_MASTER, IMPORT_SKILLS
+        GET_SKILL_FROM_MASTER,
+        IMPORT_SKILLS,
+        GET_PEDAGOGY,
+        DELETE_PEDAGOGY,
+        DELETE_PEDAGOGY_STEP,
     )
 
     override fun intercept(chain: Interceptor.Chain): Response {

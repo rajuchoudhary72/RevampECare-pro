@@ -11,6 +11,7 @@ import com.app.ecarepro.data.network.model.Favourites
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import com.app.ecarepro.data.network.model.MasterCategory
+import com.app.ecarepro.data.network.model.PedagogyDto
 import com.app.ecarepro.data.network.model.SkillCategoriesDto
 import com.app.ecarepro.data.network.model.SkillListDto
 import com.app.ecarepro.data.network.model.SkillTypesDto
@@ -42,4 +43,11 @@ interface AppRepository {
         sklTypeID: String? = null,
         value: String
     ): Flow<Result<String>>
+
+     fun getPedagogy(): Flow<Result<PedagogyDto>>
+
+    fun deletePedagogy(id: Int): Flow<Result<String>>
+
+    fun deletePedagogyStep(id:Int): Flow<Result<String>>
+
 }
