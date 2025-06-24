@@ -10,5 +10,6 @@ data class NetworkCreateLesson(
     val message: String,
     val requiredField: RequiredField,
     val status: String,
-    val subjects: List<MySubject>
+    val subjects: List<MySubject>,
+
 )

@@ -38,11 +38,13 @@ import com.app.ecarepro.utils.listener.ItemListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 
 @AndroidEntryPoint
 class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
+    private var backDate: Int=0
     private var isAuditorySelected: Boolean=false
     private lateinit var requiredFiled: RequiredField
     private var lPlanId: String= ""
@@ -59,6 +61,8 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     private   var imageString: String=""
     var selectAll: Boolean = false
     var classIds = StringBuilder()
+
+    var timestampOneDay = "86400000".toLong()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,17 +81,25 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ctvFromDate.setOnClickListener {
+            val toDayDateInLong=Constant.getLongTimeDate(Constant.currentDate())
+
+            val tempdate=backDate*timestampOneDay
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback  {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.ctvFromDate.text=date
                 }
-            })
+            },toDayDateInLong-tempdate,Constant.getLongTimeDate(Constant.currentDate()))
         }
+
+
         binding.ctvToDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), true, object : ECareDataPicker.PickerCallback  {
+            val toDayDateInLong=Constant.getLongTimeDate(Constant.currentDate())
+
+            val tempdate=backDate*timestampOneDay
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback  {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.ctvToDate.text=date
-                } }).setMinDate(Constant.getLongTimeDate(binding.ctvFromDate.text.toString()))
+                } }).setMinDate(toDayDateInLong-tempdate)
         }
 
         binding.ctvSelectSubject.setOnClickListener {
@@ -196,7 +208,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                      binding.requiredData = it.data.requiredField
                         subjectList=it.data.subjects
                        requiredFiled=it.data.requiredField
-
+                       backDate= abs(it.data.requiredField.backDate)
 
 
                        if (it.data.auditorLst != null) {
