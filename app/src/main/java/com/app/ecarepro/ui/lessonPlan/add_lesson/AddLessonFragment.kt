@@ -126,7 +126,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         binding.tvAddFile.setOnClickListener {
             selectImageOptionDialog()
         }
-        binding.llFile.setOnClickListener {
+        binding.ivFileRemove.setOnClickListener {
             binding.llFile.isVisible=false
             imageString=""
             imageExt=""
