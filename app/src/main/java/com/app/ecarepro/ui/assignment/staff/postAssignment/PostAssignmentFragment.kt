@@ -173,6 +173,7 @@ class PostAssignmentFragment : Fragment() {
             lastClickAttachmentType = AttachmentType.PDF
             launchPdfPicker()
         }
+        FileAccess.checkPermission(this)
         binding.tvBrowsePhoto.setOnClickListener {
             selectImageOptionDialog()
         }
@@ -714,7 +715,6 @@ class PostAssignmentFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Add Photo!")
         builder.setItems(items) { dialog, item ->
-            FileAccess.checkPermission(this)
             if (items[item] == "Take Photo") {
                 try {
 
