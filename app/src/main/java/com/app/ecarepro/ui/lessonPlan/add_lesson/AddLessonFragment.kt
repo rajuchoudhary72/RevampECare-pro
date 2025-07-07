@@ -1,10 +1,14 @@
 package com.app.ecarepro.ui.lessonPlan.add_lesson
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,13 +35,22 @@ import com.app.ecarepro.model.MySubject
 import com.app.ecarepro.model.RequiredField
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.assignment.staff.postAssignment.ClassListAdapter
+import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.listener.ItemListener
+import com.lassi.data.media.MiMedia
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.InputStream
+import android.webkit.MimeTypeMap
+
 
 
 @AndroidEntryPoint
@@ -111,8 +124,11 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
 
 
-        binding.tvAddFile.setOnClickListener {
+        binding.tvBrowsePhoto.setOnClickListener {
             selectImageOptionDialog()
+        }
+        binding.tvBrowseFile.setOnClickListener {
+            launchPdfPicker()
         }
         binding.llFile.setOnClickListener {
             binding.llFile.isVisible=false
@@ -179,6 +195,64 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
 
 
     }
+
+    private fun launchPdfPicker() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
+            putExtra(
+                Intent.EXTRA_MIME_TYPES,
+                arrayOf(
+                    "application/pdf",
+                    "application/msword",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
+            )
+            // Removed EXTRA_ALLOW_MULTIPLE for single file selection
+        }
+        pdfLauncher.launch(intent)
+    }
+
+    private val pdfLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    binding.llFile.isVisible = true
+
+                    val base64 = getBase64FromUri(uri)
+                    val ext = getFileExtensionFromUri(uri)
+
+                    if (base64 != null) {
+                        imageString = base64
+                        imageExt = ext.toString()
+                    }
+                }
+            }
+        }
+
+
+    private fun getBase64FromUri(uri: Uri): String? {
+        return try {
+            val inputStream =  requireContext(). contentResolver.openInputStream(uri)
+            val bytes = inputStream?.readBytes()
+            inputStream?.close()
+            if (bytes != null) Base64.encodeToString(bytes, Base64.NO_WRAP) else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun getFileExtensionFromUri(uri: Uri): String? {
+        return try {
+            val mime = requireContext().contentResolver.getType(uri)
+            MimeTypeMap.getSingleton().getExtensionFromMimeType(mime)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+
 
     private fun getCreateLessonDetails() {
 
@@ -571,6 +645,41 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         return isValidate
 
     }
+
+    private fun getBase64StringFromUri(file: File): String? {
+        val imageStream: InputStream
+        return try {
+            imageStream = FileInputStream(file)
+            val bytes: ByteArray = readBytes(
+                imageStream
+            )
+            Base64.encodeToString(bytes, Base64.NO_WRAP)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun readBytes(inputStream: InputStream): ByteArray {
+        val byteBuffer = ByteArrayOutputStream()
+        val bufferSize = 1024
+        val buffer = ByteArray(bufferSize)
+
+        var len: Int
+        while ((inputStream.read(buffer).also { len = it }) != -1) {
+            byteBuffer.write(buffer, 0, len)
+        }
+
+        return byteBuffer.toByteArray()
+    }
+
+    private fun isPdf(attachment: MiMedia) =
+        mutableListOf(
+            AttachmentType.PDF.name,
+            AttachmentType.AUDIO.name,
+            AttachmentType.RECORDING.name
+        ).contains(attachment.name)
 
 
 }
