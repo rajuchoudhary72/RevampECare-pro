@@ -13,5 +13,6 @@ data class RequiredField(
     val isOtherResourcesRequired: Boolean,
     val isResourcesRequired: Boolean,
     val isTopicRequired: Boolean,
-    val isYoutubeLinksRequired: Boolean
+    val isYoutubeLinksRequired: Boolean,
+    val backDate: Int
 )

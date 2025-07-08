@@ -45,7 +45,7 @@ class LessonPlanListAdapter(
             tvPlanClass.text = data.classesName
             tvPlanDuration.text = buildString {
                 append(data.fromDate)
-                append("to")
+                append(" to ")
                 append(data.tillDate)
             }
 
