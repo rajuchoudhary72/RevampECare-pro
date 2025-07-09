@@ -947,5 +947,6 @@
     <string name="all_undertakings_submitted_successfully">All undertakings submitted successfully.</string>
     <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
     <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
+    <string name="standard_wise_statistic">Standard  Wise Statistic</string>
 </resources>
 

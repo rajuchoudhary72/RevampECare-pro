@@ -28,7 +28,9 @@ class BusLocationViewModel  @Inject constructor(
         NetworkResult.Loading())
     val busLocationStateFlowStateFlow: StateFlow<NetworkResult<NetworkBusLocation>> = busLocationMutableStateFlow
 
-
+    init {
+        getVehicleNumber()
+    }
     fun getVehicleNumber( )=viewModelScope.launch {
        runCatching {
            vehicleNumberMutableStateFlow.value =NetworkResult.Loading()

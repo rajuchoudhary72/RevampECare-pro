@@ -3,6 +3,7 @@ package com.app.ecarepro.ui.bus_location
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +61,9 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         binding.ctvRefresh.setOnClickListener {
-            hitBusNumber()
+            lifecycleScope.launch {
+                getBusLocation(busNumber)
+            }
         }
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
@@ -84,10 +87,14 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
 
         autoRefreshJob = lifecycleScope.launch {
             while (true) {
-                // Wait for 1 minute
-                delay(TimeUnit.MINUTES.toMillis(1))
                 // Refresh data
                 hitBusNumber()
+                // Wait for 1 minute
+                delay(TimeUnit.MINUTES.toMillis(1))
+                /* // Wait for 10 seconds
+                 delay(TimeUnit.SECONDS.toMillis(10))*/
+
+
             }
         }
     }
@@ -122,8 +129,8 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
                                 } catch (_: Exception) {
 
                                 }
-                                if (it.data.data.latitude!=null){
-                                    if (it.data.data.longitude!=null){
+                                if (it.data.data.latitude != null) {
+                                    if (it.data.data.longitude != null) {
                                         try {
                                             setUpGoogleMapLocation(
                                                 it.data.data.latitude, it.data.data.longitude,
@@ -192,8 +199,10 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(p0: GoogleMap) {
 
         mMap = p0
+      /*  if (busNumber.isEmpty()) {
+            hitBusNumber()
+        }*/
 
-        hitBusNumber()
 
         mMap!!.setInfoWindowAdapter(object : InfoWindowAdapter {
             override fun getInfoWindow(arg0: Marker): View? {
@@ -208,6 +217,7 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
 
                     val addressTxt = v!!.findViewById<View>(R.id.tvAddress) as TextView
                     addressTxt.text = arg0.title
+                    arg0.title?.let { Log.d("locationAddress", arg0.toString()) }
                 } catch (ev: Exception) {
                     print(ev.message)
                 }
@@ -216,6 +226,11 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
         })
 
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopAutoRefresh()
     }
 
     private fun hitBusNumber() {
@@ -254,7 +269,7 @@ class BusLocationFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        busLocationViewModel.getVehicleNumber()
+        // busLocationViewModel.getVehicleNumber()
 
     }
 
