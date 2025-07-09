@@ -144,7 +144,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
         binding.tvBrowseFile.setOnClickListener {
             launchPdfPicker()
         }
-        binding.llFile.setOnClickListener {
+
 
         binding.ivFileRemove.setOnClickListener {
             binding.llFile.isVisible=false

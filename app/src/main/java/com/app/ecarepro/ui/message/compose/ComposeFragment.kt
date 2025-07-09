@@ -721,10 +721,12 @@ class ComposeFragment : Fragment() {
                     val clipData = data.clipData
                     if (clipData != null) {
                         for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
+                            /*if (selectedImages.size < 7) {
                                 val imageUri = clipData.getItemAt(i).uri
                                 selectedImages.add(imageUri)
-                            }
+                            }*/
+                            val imageUri = clipData.getItemAt(i).uri
+                            selectedImages.add(imageUri)
                         }
 
                         // Check if total size exceeds the limit
@@ -777,7 +779,8 @@ class ComposeFragment : Fragment() {
                                     })
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             /*  // Process images normally (still might want to compress slightly)
                                composeViewModel.setAttachments(files)*/
                             composeViewModel.setAttachments(selectedImages.map {
@@ -789,9 +792,10 @@ class ComposeFragment : Fragment() {
                         }
                     } else {
                         data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
+                            /*if (selectedImages.size < 7) {
                                 selectedImages.add(imageUri)
-                            }
+                            }*/
+                            selectedImages.add(imageUri)
                         }
                         composeViewModel.setAttachments(selectedImages.map {
                             MiMedia(
