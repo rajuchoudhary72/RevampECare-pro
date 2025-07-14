@@ -1,9 +1,5 @@
 package com.app.ecarepro.data.network.service
 
-import com.app.ecarepro.data.network.SaveSkillCategoryRequest
-import com.app.ecarepro.data.network.SaveSkillDto
-import com.app.ecarepro.data.network.SaveSkillResponse
-import com.app.ecarepro.data.network.SaveSkillTypeRequest
 import com.app.ecarepro.data.network.model.AppLayoutDto
 import com.app.ecarepro.data.network.model.BadgeCountResponse
 import com.app.ecarepro.data.network.model.CommonResponse
@@ -16,16 +12,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.FavouritesDto
 import com.app.ecarepro.data.network.model.FavouritesUpdateDto
-import com.app.ecarepro.data.network.model.LMSAppLayoutDto
-import com.app.ecarepro.data.network.model.MasterCategory
-import com.app.ecarepro.data.network.model.PedagogyDto
-import com.app.ecarepro.data.network.model.SkillCategoriesDto
-import com.app.ecarepro.data.network.model.SkillListDto
-import com.app.ecarepro.data.network.model.SkillTypesDto
-import com.app.ecarepro.data.network.model.SkillsFromMasterDto
 import com.app.ecarepro.data.network.model.SyncDataDto
-import retrofit2.http.DELETE
-import retrofit2.http.Url
 
 interface AppService {
     @GET("App/Layout")
@@ -63,88 +50,4 @@ interface AppService {
 
     @GET("App/Sync")
     suspend fun syncData(): SyncDataDto
-
-
-    /*LMS API */
-
-    @GET
-    suspend fun getLMSAppLayout(
-        @Url url: String,
-        @Query("Platform") platform: Int = 1,
-    ): LMSAppLayoutDto
-
-    @GET
-    suspend fun getSkillCategories(
-        @Url url: String
-    ): SkillCategoriesDto
-
-    @GET
-    suspend fun getSkillList(
-        @Url url: String
-    ): SkillListDto
-
-    @DELETE
-    suspend fun deleteSkill(
-        @Url url: String,
-        @Query("ID") id: String
-    ): SkillListDto
-
-    @GET
-    suspend fun getSkillTypes(
-        @Url url: String,
-        @Query("SklCatID") id: String
-    ): SkillTypesDto
-
-    @POST
-    suspend fun saveSkill(
-        @Url url: String,
-        @Body request: SaveSkillDto
-    ): SaveSkillResponse
-
-    @DELETE
-    suspend fun deleteSkillCategory(
-        @Url url: String,
-        @Query("sklCatID") sklCatID: String
-    ): SaveSkillResponse
-
-    @POST
-    suspend fun saveSkillType(
-        @Url url: String,
-        @Query("sklCatID") sklCatID: String,
-        @Body request: SaveSkillTypeRequest
-    ): SaveSkillResponse
-
-    @POST
-    suspend fun saveSkillCategory(
-        @Url url: String,
-        @Body request: SaveSkillCategoryRequest
-    ): SaveSkillResponse
-
-    @GET
-    suspend fun getSkillFromMaster(
-        @Url url: String
-    ): SkillsFromMasterDto
-
-    @POST
-    suspend fun importSkills(
-        @Url url: String,
-        @Body request: List<MasterCategory>
-    ): SaveSkillResponse
-
-    @GET
-    suspend fun getPedagogy(
-        @Url url: String
-    ): PedagogyDto
-
-    @DELETE
-    suspend fun deletePedagogy(
-        @Url url: String,
-        @Query("pdgID") sklCatID: Int
-    ): SaveSkillResponse
-
-    @DELETE
-    suspend fun deletePedagogyStep(
-        @Url url: String,
-        @Query("pdgStpID") sklCatID: Int
-    ): SaveSkillResponse
 }

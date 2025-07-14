@@ -3,8 +3,6 @@ package com.app.ecarepro.data.network.model
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import android.os.Parcelable
-import com.app.ecarepro.model.AppLayout
-import com.app.ecarepro.ui.views.menu.DrawerMenu
 
 
 data class AppLayoutDto(
@@ -45,7 +43,6 @@ data class SearchOption(
     @SerializedName("show")
     val show: Boolean
 ) : Parcelable
-
 data class Menu(
     @SerializedName("childMenus")
     val childMenus: List<ChildMenu>?,
@@ -106,62 +103,9 @@ data class ChildMenu(
     @SerializedName("menuID")
     val menuID: Int,
     @SerializedName("slNo")
-    val slNo: Int,
+    val slNo: Int?,
     @SerializedName("title")
     val title: String?,
     @SerializedName("url")
     val url: String?
 )
-
-
-fun AppLayoutDto.toAppLayout() = AppLayout(
-    errorCode = this.errorCode,
-    isAuthenticated = this.isAuthenticated,
-    logoURL = this.logoURL,
-    menus = this.menus?.map { it.toDrawerMenu() },
-    message = this.message,
-    smlLogoURL = this.smlLogoURL,
-    status = this.status,
-    userInfo = this.userInfo,
-    additionalAccounts = this.additionalAccounts,
-    erPAPPS = this.erPAPPS,
-    favoriteMenus = this.menus,
-    searchOptions = this.searchOptions,
-    notificationCount = this.notificationCount,
-    unreadMessageCount = this.unreadMessageCount
-)
-
-
-fun Menu.toDrawerMenu() =  DrawerMenu(
-    slNo = this.slNo,
-    title = this.title,
-    url = this.url,
-    icon = this.icon,
-    menuID = menuID,
-    chMenuID = chMenuID,
-    sbChMenuID = sbChMenuID,
-    childMenus = childMenus?.map { it.toDrawerMenu() }
-)
-
-fun ChildMenu.toDrawerMenu(maxDepth: Int = 10): DrawerMenu {
-    if (maxDepth == 0) return DrawerMenu(
-        slNo = slNo,
-        title = title,
-        url = url,
-        icon = icon,
-        menuID = menuID,
-        chMenuID = chMenuID,
-        sbChMenuID = sbChMenuID,
-        childMenus = null
-    )
-    return DrawerMenu(
-        slNo = slNo,
-        title = title,
-        url = url,
-        icon = icon,
-        menuID = menuID,
-        chMenuID = chMenuID,
-        sbChMenuID = sbChMenuID,
-        childMenus = childMenus?.map { it.toDrawerMenu(maxDepth - 1) }
-    )
-}

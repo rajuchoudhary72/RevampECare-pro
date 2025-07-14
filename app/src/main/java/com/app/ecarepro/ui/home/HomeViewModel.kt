@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import androidx.lifecycle.asLiveData
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.data.network.model.NetworkResult
@@ -63,7 +62,7 @@ class HomeViewModel @Inject constructor(
     val dashboardButtons = MutableLiveData<List<DashboardButtons>?>()
     var currentLocation: Pair<Double, Double>? = null
     private val favouriteData = MutableStateFlow<List<Menu>?>(null)
-    val isLmsEnables = userDataStore.isLMSEnabled().asLiveData()
+
     private val refresh = MutableLiveData(false)
 
     val uiState =
@@ -165,11 +164,6 @@ class HomeViewModel @Inject constructor(
     fun setCityName(city:String){
         viewModelScope.launch {
             userDataStore.setCityName(city)
-        }
-    }
-    fun toggleLMS() {
-        viewModelScope.launch {
-            userDataStore.enableLMS(isLmsEnables.value?.not()?:false)
         }
     }
     init {

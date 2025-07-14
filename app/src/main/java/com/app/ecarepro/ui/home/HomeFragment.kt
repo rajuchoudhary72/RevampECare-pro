@@ -30,7 +30,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.Carousel
 import com.app.ecarepro.R
 import com.app.ecarepro.addMoreFavourites
@@ -90,8 +89,10 @@ class HomeFragment : Fragment() {
         return binding.root
 
     }
+
     private fun announce(message: String) {
-        val accessibilityManager = requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val accessibilityManager =
+            requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
         if (accessibilityManager.isEnabled) {
             val event = AccessibilityEvent.obtain().apply {
                 eventType = AccessibilityEvent.TYPE_ANNOUNCEMENT
@@ -128,6 +129,7 @@ class HomeFragment : Fragment() {
                         }
 
                     }
+
                     else -> {}
                 }
 
@@ -136,26 +138,16 @@ class HomeFragment : Fragment() {
         }
         mViewModel.getContactUrl()
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
-        mViewModel.isLmsEnables.observe(viewLifecycleOwner) {
-            binding.textLms.text = if (it) "LMS" else "E-Care"
-        }
-
-        binding.textLms.setOnClickListener {
-            mViewModel.toggleLMS()
-           /* val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-            Runtime.getRuntime().exit(0)*/
-        }
     }
 
     private fun setUpViews() {
 
-       /* binding.imgSync.setOnClickListener {
+        /* binding.imgSync.setOnClickListener {
             getContactUrl()
         }*/
         binding.swipeRefresh.setOnRefreshListener {
@@ -185,11 +177,8 @@ class HomeFragment : Fragment() {
             LinearMarginDecoration.create(
                 margin = 8,
                 decorationLookup = object : DecorationLookup {
-                    override fun shouldApplyDecoration(
-                        viewHolder: RecyclerView.ViewHolder,
-                        itemCount: Int
-                    ): Boolean {
-                        return binding.recyclerView.adapter?.getItemViewType(viewHolder.position) == R.layout.item_view_all_widget
+                    override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
+                        return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_view_all_widget
                     }
                 }
             )
@@ -204,11 +193,8 @@ class HomeFragment : Fragment() {
 
                 },
                 decorationLookup = object : DecorationLookup {
-                    override fun shouldApplyDecoration(
-                        viewHolder: RecyclerView.ViewHolder,
-                        itemCount: Int
-                    ): Boolean {
-                        return binding.recyclerView.adapter?.getItemViewType(viewHolder.position) == R.layout.item_card_option
+                    override fun shouldApplyDecoration(position: Int, itemCount: Int): Boolean {
+                        return binding.recyclerView.adapter?.getItemViewType(position) == R.layout.item_card_option
                     }
                 },
             )
@@ -257,6 +243,7 @@ class HomeFragment : Fragment() {
             buildUiModels(uiState)
         }
     }
+
 
     private fun handleUndertaking(underTaking: String) {
         val jsonObject = JSONObject(underTaking)

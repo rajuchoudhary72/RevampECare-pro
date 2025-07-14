@@ -4,16 +4,12 @@ import android.content.Context
 import android.util.Log
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.utils.Constant
-import com.app.ecarepro.utils.LMSConstant.Companion.DELETE_PEDAGOGY
-import com.app.ecarepro.utils.LMSConstant.Companion.DELETE_PEDAGOGY_STEP
-import com.app.ecarepro.utils.LMSConstant.Companion.GET_PEDAGOGY
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
-import com.app.ecarepro.utils.LMSConstant.Companion.GET_SKILL_FROM_MASTER
-import com.app.ecarepro.utils.LMSConstant.Companion.IMPORT_SKILLS
+
 class AuthInterceptor @Inject constructor(
     @ApplicationContext val context: Context,
     private val userDataStore: UserDataStore
@@ -30,22 +26,6 @@ class AuthInterceptor @Inject constructor(
         "User/ResendOTP",
         "User/ValidateOTP",
     )
-    private val lmsApis = mutableListOf(
-        "Workspace/Layout",
-        "Skills/Categories",
-        "Skills/All",
-        "Skills/DeleteSkill",
-        "Skills/Types",
-        "Skills/SaveSkill",
-        "Skills/DeleteSkillCategory",
-        "Skills/SaveSkillCategory",
-        "Skills/SaveSkillType",
-        GET_SKILL_FROM_MASTER,
-        IMPORT_SKILLS,
-        GET_PEDAGOGY,
-        DELETE_PEDAGOGY,
-        DELETE_PEDAGOGY_STEP,
-    )
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
@@ -53,11 +33,6 @@ class AuthInterceptor @Inject constructor(
         requestBuilder.addHeader("Accept", "application/json")
 
         val isLoginApi = loginApis.any {
-            it.contains(
-                chain.request().url.pathSegments.take(2).joinToString("/")
-            )
-        }
-        val isLmsApi = lmsApis.any {
             it.contains(
                 chain.request().url.pathSegments.take(2).joinToString("/")
             )
@@ -70,16 +45,14 @@ class AuthInterceptor @Inject constructor(
                 userDataStore.getAuthToken() ?: Constant.AUTH_BEFORE_LOGIN_NEW
         }
 
-        Log.e(if (isLmsApi) AUTH_KEY else AUTH_TOKEN, authToken)
-        requestBuilder.addHeader(if (isLmsApi) AUTH_KEY else AUTH_TOKEN, authToken)
-
+        Log.e(AUTH_TOKEN, authToken)
+        requestBuilder.addHeader(AUTH_TOKEN, authToken)
 
         return chain.proceed(requestBuilder.build())
     }
 
     companion object {
         const val AUTH_TOKEN = "AuthToken"
-        const val AUTH_KEY = "AuthKey"
     }
 
 

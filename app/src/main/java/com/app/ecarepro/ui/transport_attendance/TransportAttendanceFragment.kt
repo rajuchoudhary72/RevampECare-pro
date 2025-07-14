@@ -37,6 +37,7 @@ import com.app.ecarepro.ui.transport_attendance.adapter.RouterPopUpListAdapter
 import com.app.ecarepro.ui.transport_attendance.adapter.StoppersPopUpListAdapter
 import com.app.ecarepro.ui.transport_attendance.adapter.StudentListToMarkAttAdapter
 import com.app.ecarepro.utils.Constant
+import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.listener.ItemListener
 import com.app.ecarepro.utils.listener.OnClickItemValue
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +47,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
-
+    private var dateSelect = ""
 
     private lateinit var studentListToMarkAtt: List<StuLst>
     private lateinit var stoppersSelectData: StopLST
@@ -64,6 +65,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
     private var p = 0
     private var a = 0
     private var l = 0
+    val ids = StringBuilder()
     var selectAll: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,7 +86,17 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        binding.tvDate.text = Constant.currentDate()
+        dateSelect = Constant.toSystemDate(binding.tvDate.text.toString())
+        binding.tvDate.setOnClickListener {
+            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                    binding.tvDate.text = Constant.dateToShow(date.toString())
+                    dateSelect = Constant.toSystemDate(binding.tvDate.text.toString())
+                    callApi()
+                }
+            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+        }
 
 
         binding.apply {
@@ -252,15 +264,15 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                                 }
 
                                 studentListToMarkAtt = it.data.stuLst
-                                        /*api success first time */
+                                /*api success first time */
                                 for (transStudentList in studentListToMarkAtt) {
-                                        if (transStudentList.pickupStatus ==1) {
-                                            countPresnet += 1
-                                        }
-                                     if (tripType == Constant.DOWN_TRIP){
+                                    if (transStudentList.pickupStatus == 1) {
+                                        countPresnet += 1
+                                    }
+                                    if (tripType == Constant.DOWN_TRIP) {
                                         // already Done trip  finesh
-                                        if (transStudentList.dropStatus ==1 || transStudentList.dropStatus==2) {
-                                            if (countPresnet>0)
+                                        if (transStudentList.dropStatus == 1 || transStudentList.dropStatus == 2) {
+                                            if (countPresnet > 0)
                                                 countPresnet -= 1
                                         }
                                     }
@@ -300,21 +312,26 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 transportAttendanceViewModel.getStudentToDrop(
                     routeID = routerSelectData.routeID,
                     stopID = stoppersSelectData.stopID,
-                    attDate = Constant.toSystemDate(Constant.currentDate().toString())
+                    attDate = dateSelect
                 )
             } else {
-                transportAttendanceViewModel.getStudentToMarkTransAttendance(
-                    routeIDs = routerSelectData.routeID.toString(),
-                    stopID = 0,
-                    trip = tripType,
-                    attDate = Constant.toSystemDate(Constant.currentDate()),
-                    stopIDs = ids.toString()
-
-                )
+                callApi()
             }
 
         }
 
+    }
+
+    private fun callApi() {
+        transportAttendanceViewModel.getStudentToMarkTransAttendance(
+            routeIDs = routerSelectData.routeID.toString(),
+            stopID = 0,
+            trip = tripType,
+            attDate = dateSelect,
+            //attDate = Constant.toSystemDate(Constant.currentDate()),
+            stopIDs = ids.toString()
+
+        )
     }
 
     private fun popUpRouter() {
@@ -400,7 +417,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
 
         relOk.setOnClickListener {
             if (stoppersSelected) {
-                val ids = StringBuilder()
+                // val ids = StringBuilder()
                 val name = StringBuilder()
 
                 if (tripType == Constant.UP_TRIP || tripType == Constant.DOWN_TRIP) {
@@ -455,17 +472,15 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
                 studentListToMarkAtt[pos].pickupStatus = action
                 /*condition for   up trip  count  */
                 setBusCount()
-              /*  if (action === 1) {
-                    countPresnet += 1
-                } else {
-                    if (countPresnet > 0) {
-                        countPresnet -= 1
-                    }
+                /*  if (action === 1) {
+                      countPresnet += 1
+                  } else {
+                      if (countPresnet > 0) {
+                          countPresnet -= 1
+                      }
 
-                }*/
-            }
-            else if (tripType == Constant.DOWN_TRIP) {
-
+                  }*/
+            } else if (tripType == Constant.DOWN_TRIP) {
 
 
 //                /*condition for down trip count*/
@@ -493,7 +508,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
 
             }
         }
-        binding.tvCount.text =  countPresnet.toString()
+        binding.tvCount.text = countPresnet.toString()
     }
 
 
@@ -597,7 +612,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
 
 
         transportAttendanceViewModel.postTransAttendance(
-            Constant.toSystemDate(Constant.currentDate().toString()),
+            dateSelect,
             routerSelectData.routeID,
             0,
             requestList,
@@ -610,16 +625,16 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
 
     }
 
-    private fun setBusCount(){
-        countPresnet=0
+    private fun setBusCount() {
+        countPresnet = 0
         for (transStudentList in studentListToMarkAtt) {
-            if (transStudentList.pickupStatus ==1) {
+            if (transStudentList.pickupStatus == 1) {
                 countPresnet += 1
             }
-            if (tripType == Constant.DOWN_TRIP){
+            if (tripType == Constant.DOWN_TRIP) {
                 // already Done trip  fines
-                if (transStudentList.dropStatus ==1 || transStudentList.dropStatus==2) {
-                    if (countPresnet>0)
+                if (transStudentList.dropStatus == 1 || transStudentList.dropStatus == 2) {
+                    if (countPresnet > 0)
                         countPresnet -= 1
                 }
             }

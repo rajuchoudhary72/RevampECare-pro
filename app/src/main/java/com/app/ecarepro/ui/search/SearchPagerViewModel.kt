@@ -19,7 +19,7 @@ import javax.inject.Inject
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
 import kotlinx.coroutines.flow.onEach
-import com.app.ecarepro.ui.views.menu.DrawerMenu
+
 
 @HiltViewModel
 class SearchPagerViewModel @Inject constructor(
@@ -170,7 +170,7 @@ class SearchPagerViewModel @Inject constructor(
         }
     }
 
-    fun setModules(modules: List<DrawerMenu>) {
+    fun setModules(modules: List<Menu>) {
         this.modules.apply {
             clear()
             val menus = mutableListOf<Module>()

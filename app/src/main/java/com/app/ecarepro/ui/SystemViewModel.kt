@@ -12,8 +12,7 @@ import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.GeneralSettingsDto
 import com.app.ecarepro.data.network.model.Menu
 import com.app.ecarepro.data.network.model.AppLayoutDto
-import com.app.ecarepro.data.network.model.toDrawerMenu
-import com.app.ecarepro.ui.views.menu.DrawerMenu
+
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.network.model.SearchOption
@@ -30,7 +29,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.GlobalScope
 import com.app.ecarepro.data.database.databases.UserDatabase
-import com.app.ecarepro.model.AppLayout
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -307,10 +305,10 @@ sealed interface MainActivityUiState {
 
     data class Success(
         val userInfo: UserInfo?,
-        val menus: List<DrawerMenu>,
+        val menus: List<Menu>,
         val favroiteMenus: List<Menu>,
         val searchOption: List<SearchOption> = emptyList(),
-        val appLayoutDto: AppLayout
+        val appLayoutDto: AppLayoutDto
     ) : MainActivityUiState
 
     data class Error(

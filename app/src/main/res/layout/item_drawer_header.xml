@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data />
+    <data>
+
+        <variable
+            name="user"
+            type="com.app.ecarepro.data.network.model.UserInfo" />
+    </data>
 
 
     <com.google.android.material.card.MaterialCardView
@@ -24,6 +29,7 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_user_avatar"
+                imageUrl="@{user.photo}"
                 placeholder="@{@drawable/img_school_placeholder}"
                 android:layout_width="88dp"
                 android:layout_height="88dp"
@@ -42,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
+                android:text="@{user.getFullName}"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                  app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="@{user.otherInfo}"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                  app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

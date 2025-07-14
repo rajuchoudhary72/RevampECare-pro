@@ -721,10 +721,12 @@ class ComposeFragment : Fragment() {
                     val clipData = data.clipData
                     if (clipData != null) {
                         for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
+                            /*if (selectedImages.size < 7) {
                                 val imageUri = clipData.getItemAt(i).uri
                                 selectedImages.add(imageUri)
-                            }
+                            }*/
+                            val imageUri = clipData.getItemAt(i).uri
+                            selectedImages.add(imageUri)
                         }
 
                         // Check if total size exceeds the limit
@@ -777,7 +779,8 @@ class ComposeFragment : Fragment() {
                                     })
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             /*  // Process images normally (still might want to compress slightly)
                                composeViewModel.setAttachments(files)*/
                             composeViewModel.setAttachments(selectedImages.map {
@@ -789,9 +792,10 @@ class ComposeFragment : Fragment() {
                         }
                     } else {
                         data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
+                            /*if (selectedImages.size < 7) {
                                 selectedImages.add(imageUri)
-                            }
+                            }*/
+                            selectedImages.add(imageUri)
                         }
                         composeViewModel.setAttachments(selectedImages.map {
                             MiMedia(
@@ -804,106 +808,6 @@ class ComposeFragment : Fragment() {
             }
         }
 
-    /*without  progess bar*/
-   /* private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val selectedImages = mutableListOf<Uri>()
-                result.data?.let { data ->
-                    val clipData = data.clipData
-                    if (clipData != null) {
-                        for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
-                                val imageUri = clipData.getItemAt(i).uri
-                                selectedImages.add(imageUri)
-                            }
-                        }
-
-                        // Check if total size exceeds the limit
-                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
-                            // Show compression dialog
-                            imageCompressionHelper.showCompressionDialog(
-                                parentFragmentManager,
-                                selectedImages
-                            ) { compressionOption ->
-                                // Process images with selected compression
-                                viewLifecycleOwner.lifecycleScope.launch {
-                                    val compressedUris = withContext(Dispatchers.IO) {
-                                        selectedImages.map { uri ->
-                                            imageCompressionHelper.compressImage(
-                                                uri,
-                                                compressionOption
-                                            )
-                                        }
-                                    }
-
-                                    // Now we have compressed images, upload them
-                                    composeViewModel.setAttachments(compressedUris.map {
-                                        MiMedia(
-                                            path = it.toString(),
-                                            name = lastClickAttachmentType?.name
-                                        )
-                                    })
-                                }
-                            }
-                        } else {
-                            *//*  // Process images normally (still might want to compress slightly)
-                               composeViewModel.setAttachments(files)*//*
-                            composeViewModel.setAttachments(selectedImages.map {
-                                MiMedia(
-                                    path = it.toString(),
-                                    name = lastClickAttachmentType?.name
-                                )
-                            })
-                        }
-                    } else {
-                        data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                        composeViewModel.setAttachments(selectedImages.map {
-                            MiMedia(
-                                path = it.toString(),
-                                name = lastClickAttachmentType?.name
-                            )
-                        })
-                    }
-
-                }
-            }
-        }*/
-
-    /*old code  without comporesion */
-    /*private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val selectedImages = mutableListOf<Uri>()
-                result.data?.let { data ->
-                    val clipData = data.clipData
-                    if (clipData != null) {
-                        for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
-                                val imageUri = clipData.getItemAt(i).uri
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                    } else {
-                        data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
-                                selectedImages.add(imageUri)
-                            }
-                        }
-                    }
-                    composeViewModel.setAttachments(selectedImages.map {
-                        MiMedia(
-                            path = it.toString(),
-                            name = lastClickAttachmentType?.name
-                        )
-                    })
-                }
-            }
-        }*/
     private fun openGallery() {
         val intent = Intent()
         intent.type = "image/*"
@@ -938,83 +842,6 @@ class ComposeFragment : Fragment() {
         }
     }
 
-    private fun launchPhotoPicker() {
-        /*    val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
-           receiveData.launch(intent)*/
-        val intent = Lassi(requireContext())
-            .with(LassiOption.CAMERA_AND_GALLERY)
-            .setMediaType(MediaType.IMAGE)
-            .setMaxCount(7)
-            .setAscSort(SortingOption.DESCENDING)
-            .setPlaceHolder(R.drawable.img_placeholder)
-            .setErrorDrawable(R.drawable.img_placeholder)
-            .setGridSize(3)
-            .setMinFileSize(0) // Restrict by minimum file size
-            .setMaxFileSize(12000) // Restrict by maximum file size
-            .setCompressionRatio(65) // compress image for single item selection (can be 0 to 100)
-            .setAlertDialogNegativeButtonColor(R.color.black)
-            .setSupportedFileTypes(
-                "jpg", "jpeg", "png", "webp", "gif", "mp4", "mkv", "webm", "avi", "flv", "3gp",
-                "pdf", "odt", "doc", "docs", "docx", "txt", "ppt", "pptx", "rtf", "xlsx", "xls"
-            )
-            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-            .setStatusBarColor(R.color.md_theme_light_primary)
-            .setToolbarColor(R.color.md_theme_light_primary)
-            .setToolbarResourceColor(android.R.color.white)
-            .setProgressBarColor(R.color.red)
-            .setGalleryBackgroundColor(R.color.white)
-            .build()
-        receiveData.launch(intent)
-        /*openGallery()*/
-
-    }
-
-    private var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val attachments = mutableListOf<MiMedia>()
-//   val data= result.data
-                val clipData = result.data?.clipData
-                if (clipData != null) {
-                    for (i in 0 until clipData.itemCount) {
-                        val imageUri: Uri = clipData.getItemAt(i).uri
-                        // Process each image URI here
-                        println("Selected Image URI: $imageUri")
-                        val miMedia = MiMedia(
-                            id = 0,
-                            name = imageUri.lastPathSegment,
-                            path = imageUri.toString(),
-                        )
-                        attachments.add(miMedia)
-                    }
-                    composeViewModel.setAttachments(attachments)
-                    /*  //val count = data.clipData!!.itemCount
-                      for (i in 0 until count){
-                          val imageUri = data.clipData!!.getItemAt(i).uri
-                          val miMedia = MiMedia(
-                              id = 0,
-                              name = imageUri.lastPathSegment,
-                              path = imageUri.toString(),
-                          )
-                          attachments.add(miMedia)
-                      }
-                      composeViewModel.setAttachments(attachments)*/
-                } else {
-                    // Single image selected
-                    val imageUri: Uri? = result.data?.data
-                    imageUri?.let {
-                        println("Selected Single Image URI: $it")
-                        val miMedia = MiMedia(
-                            id = 0,
-                            name = it.lastPathSegment,
-                            path = it.toString(),
-                        )
-                        attachments.add(miMedia)
-                    }
-                    composeViewModel.setAttachments(attachments)
-                }
-            }
-        }
 
     private fun launchAudioPicker() {
         val intent = Intent()
@@ -1035,14 +862,6 @@ class ComposeFragment : Fragment() {
         pdfLauncher.launch(intent)
     }
 
-    private fun getLasiIntent() =
-        Lassi(requireContext()).setStatusBarColor(R.color.md_theme_light_primary)
-            .setToolbarColor(R.color.md_theme_light_primary)
-            .setToolbarResourceColor(android.R.color.white)
-            .setAlertDialogNegativeButtonColor(R.color.black)
-            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-            .setGalleryBackgroundColor(R.color.white)
-            .setProgressBarColor(R.color.md_theme_light_primary).setGridSize(3)
 
     private fun checkCameraPermissions() {
         if (ContextCompat.checkSelfPermission(

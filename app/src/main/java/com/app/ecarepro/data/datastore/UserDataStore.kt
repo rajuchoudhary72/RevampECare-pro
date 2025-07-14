@@ -20,7 +20,7 @@ interface UserDataStore {
     fun getUsersFlow(): Flow<List<NetworkUserDetailsDto>>
     suspend fun setCurrentUserId(userId: Int)
     suspend fun saveMessageSettings(messageSettings: MessageSettings)
-    fun getMessageSettings(): Flow<MessageSettings?>
+     fun getMessageSettings(): Flow<MessageSettings?>
     suspend fun getCurrentUserId(): Int?
     fun getCurrentUserIdAsFlow(): Flow<Int?>
     suspend fun setCurrentSchoolCode(schoolCode: String)
@@ -37,12 +37,19 @@ interface UserDataStore {
     suspend fun saveDashboardData(school: UserDashboardDto)
     fun getDashboardData(): Flow<UserDashboardDto?>
     suspend fun saveAuthToken(token: String)
-    suspend fun getRoleName(): String?
+
+    suspend fun getRoleName( ): String?
+
     suspend fun saveRoleName(roleName: String)
     suspend fun saveUserNameID(userNameId: String)
-    suspend fun getUserNameID(): String?
+
+    suspend fun getUserNameID( ): String?
+
     suspend fun saveUserType(userType: Int)
+
     suspend fun getUserType(): Int?
+
+
     suspend fun setAsUserAuthenticated(isAuthenticated: Boolean)
     suspend fun isUserAuthenticated(): Boolean
     suspend fun getAuthToken(): String?
@@ -52,9 +59,5 @@ interface UserDataStore {
     fun getSlides(): Flow<List<Slide>>
     suspend fun clear()
     suspend fun setCityName(city: String)
-    suspend fun getCityName(): String
-
-    /*LMS trigger  point */
-    fun isLMSEnabled(): Flow<Boolean>
-    suspend fun enableLMS(isEnabled: Boolean)
+    suspend fun getCityName():String
 }

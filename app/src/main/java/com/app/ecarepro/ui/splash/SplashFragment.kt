@@ -54,7 +54,51 @@ class SplashFragment : Fragment() {
                 }
             }
         }
+        /*we comment this code due to we recent  stop user session  */
+        /* viewLifecycleOwner.lifecycleScope.launch {
+             try {
+                 if (splashViewModel.isUserAuthenticated()) {
+                     if (splashViewModel.isUserSessionAvailable()) {
+                         moveToHomeScreen()
+                     } else {
+                         mainActivity().showLoader(true)
+                         *//*if  existing  user logged  and  first time run App after implementation  of user session then
+                        need to pass session ID in header  so  call create session api  *//*
+                        systemViewModel.createUserSession { success, message ->
+                            viewLifecycleOwner.lifecycleScope.launch {
+                                mainActivity().showLoader(false)
+                                if (success) {
+                                    moveToHomeScreen()
+                                } else {
+                                    mainActivity().showMessage(message)
+                                    mainActivity().logout(true)
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+                    splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }*/
 
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                if (splashViewModel.isUserAuthenticated()) {
+                    moveToHomeScreen()
+                } else {
+                    splashViewModel.getSliders()
+                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private suspend fun moveToHomeScreen() {
@@ -70,22 +114,6 @@ class SplashFragment : Fragment() {
         val run = Runnable { anim.start() }
         binding.backgroundView.post(run)
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                if (splashViewModel.isUserAuthenticated()) {
-                    moveToHomeScreen()
-                } else {
-                    splashViewModel.getSliders()
-                    findNavController().navigate(R.id.action_splashFragment_to_onboardingFragment)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
     }
 
     override fun onDestroyView() {

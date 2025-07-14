@@ -39,35 +39,39 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/rl_user_details"
+        <RelativeLayout
+             android:id="@+id/rl_user_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
+            >
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_user_avatar"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:layout_marginTop="16dp"
                 android:contentDescription="User profile picture"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.ECarePro.ImageView.Round"
                 app:strokeColor="@color/brand_color"
                 app:strokeWidth="2dp"
-                tools:src="@drawable/ic_splash_hexagon" />
+                tools:src="@drawable/ic_splash_hexagon"
+
+
+                />
 
             <LinearLayout
                 android:id="@+id/ll_details"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_toEndOf="@+id/img_user_avatar"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -90,11 +94,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
-                        android:contentDescription="Welcome"
                         android:fontFamily="@font/calibri_bold"
-                        android:padding="@dimen/_5sdp"
                         android:textColor="@color/brand_color"
                         android:textSize="14sp"
+                        android:padding="@dimen/_5sdp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:clickable="true"
+                        android:importantForAccessibility="yes"
+                        android:contentDescription=""
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/rl_user_details"
@@ -108,24 +116,14 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:padding="@dimen/_4sdp"
-                    android:src="@drawable/ic_sync"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:src="@drawable/download" />
 
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textLms"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:padding="@dimen/_4sdp"
-                android:fontFamily="@font/calibri_bold"
-                android:paddingHorizontal="@dimen/_10sdp"
-                tools:text="LMS" />
 
-
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <FrameLayout

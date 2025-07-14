@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
-        classpath("com.android.tools.build:gradle:8.6.1")
-        classpath("com.google.gms:google-services:4.4.2")
+        classpath("com.android.tools.build:gradle:7.1.3")
+         classpath("com.google.gms:google-services:4.4.2")
         classpath("com.google.firebase:firebase-crashlytics-gradle:3.0.2")
         classpath("com.github.dcendents:android-maven-gradle-plugin:2.1")
     }
@@ -14,9 +14,8 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.firebaseCrashlytics) apply false
     id("com.google.gms.google-services") version "4.4.2" apply false
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+    id("com.google.devtools.ksp") version "1.8.21-1.0.11" apply false
     alias(libs.plugins.kotlinParcelize) apply false
     id("com.google.firebase.firebase-perf") version "1.4.2" apply false
-    alias(libs.plugins.compose.compiler) apply false
 }
 true // Needed to make the Suppress annotation work for the plugins block
