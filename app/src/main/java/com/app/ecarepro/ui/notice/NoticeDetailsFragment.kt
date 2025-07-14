@@ -2,6 +2,7 @@ package com.app.ecarepro.ui.notice
 
 import android.app.DownloadManager
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,9 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
@@ -94,18 +98,56 @@ class NoticeDetailsFragment : Fragment() {
                             noticeDetailsBinding.noticeDetailData=it.data.notice
                             if (it.data.notice.filePath!=null){
                                 fileSource= it.data.notice.filePath.toString()
-                            }else{
+                            }
+                            try {
 
+//                            val htmlWithLineWithNBreaks = it.data.circuler.message.replace("\n", "<br>")
+//                            val htmlWithLineWithNRBreaks = htmlWithLineWithNBreaks.replace("\r", "<br>")
+//                            val spanned = HtmlCompat.fromHtml(htmlWithLineWithNRBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
+//                            binding.tvNoticeDetails.text = spanned
+//
+//                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
+
+                                val formattedHtml = """
+    <html>
+    <head>
+        <style>
+            a { color: blue; text-decoration: underline; }
+        </style>
+    </head>
+    <body>
+        ${formatTextWithLinks(it.data.notice.detail)}
+    </body>
+    </html>
+""".trimIndent()
+
+
+                                noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
+                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                                        val url = request?.url.toString()
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                        startActivity(intent) // Opens in an external browser
+                                        return true
+                                    }
+                                }
+
+                                noticeDetailsBinding.wvDetails.settings.javaScriptEnabled = true
+                                noticeDetailsBinding.wvDetails.settings.domStorageEnabled = true
+                                noticeDetailsBinding.wvDetails.webViewClient = WebViewClient()
+                                noticeDetailsBinding.wvDetails.loadDataWithBaseURL(null, formattedHtml, "text/html", "UTF-8", null)
+                                noticeDetailsBinding.wvDetails.webViewClient = object : WebViewClient() {
+                                    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                                        val url = request?.url.toString()
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                        startActivity(intent) // Opens the link in the default browser
+                                        return true // Return true to prevent WebView from loading the URL
+                                    }
+                                }
+
+                            }catch (e:NullPointerException){
+                                e.message
                             }
 
-
-
-
-                            val htmlWithLineBreaks = it.data.notice.detail.replace("\n", "<br>")
-                            val spanned = HtmlCompat.fromHtml(htmlWithLineBreaks, HtmlCompat.FROM_HTML_MODE_LEGACY)
-                            noticeDetailsBinding.tvNoticeDetails.text = spanned
-
-                            noticeDetailsBinding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
 
                         }
                         }
@@ -117,5 +159,13 @@ class NoticeDetailsFragment : Fragment() {
 
         _noticeDetailsViewModel.getNoticeDTL(noticeID.orEmpty())
 
+    }
+
+
+    fun formatTextWithLinks(input: String): String {
+        val urlPattern = "(https?://[\\w\\-._~:/?#\\[\\]@!$&'()*+,;=]+)"
+        return input.replace(Regex(urlPattern)) {
+            "<a href='${it.value}'>${it.value}</a>"
+        }
     }
 }
