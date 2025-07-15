@@ -100,7 +100,9 @@ class SettingsFragment : Fragment() {
             }
         }
         generalSettings()
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
+        }
 
     }
     private fun FragmentSettingsBinding.setLastSyncTime() {
