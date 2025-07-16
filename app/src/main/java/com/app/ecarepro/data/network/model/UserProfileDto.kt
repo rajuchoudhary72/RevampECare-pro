@@ -254,6 +254,8 @@ data class StudentProfile(
     val billNumber: String?,
     @SerializedName("apaaR_ID")
     val apaaRID: String?,
+    @SerializedName("studentEmail")
+    val studentEmail: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("coverImg")
