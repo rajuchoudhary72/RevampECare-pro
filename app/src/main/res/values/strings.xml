@@ -587,6 +587,7 @@
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
+    <string name="assign_club">Assign Club</string>
     <string name="student_not_found">Student not found</string>
     <string name="recipients">Recipients</string>
     <string name="lbl_add">Add</string>
@@ -948,5 +949,6 @@
     <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
     <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
     <string name="standard_wise_statistic">Standard  Wise Statistic</string>
+    <string name="no_club_assign">No Club Assign</string>
 </resources>
 

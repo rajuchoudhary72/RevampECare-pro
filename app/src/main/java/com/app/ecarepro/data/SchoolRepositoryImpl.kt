@@ -36,6 +36,8 @@ import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import com.app.ecarepro.model.Title
 import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.model.Watcher
+import com.app.ecarepro.ui.assignClub.AssignClubRequest
+import com.app.ecarepro.ui.assignClub.StudentListAssignClub
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -281,8 +283,19 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getStudentListToAssignHouse(id,orderBy)
     }
 
+    override suspend fun getStudentListToAssignClub(
+        id: String,
+        orderBy: String
+    ): StudentListAssignClub {
+        return schoolService.getStudentListToAssignClub(id,orderBy)
+    }
+
     override suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse {
         return schoolService.assignHouse(request)
+    }
+
+    override suspend fun assignClub(request: List<AssignClubRequest>): CommonResponse {
+        return schoolService.assignClub(request)
     }
 
     override suspend fun getMedicalCard(): MedicalCardResponse {
