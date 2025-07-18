@@ -203,8 +203,11 @@ class ViewLessonPlanFragment : Fragment() {
                                 try {
                                     if (it.data.lessonPlans.attachment != null) {
                                         if (it.data.lessonPlans.attachment.fileURL != null) {
-                                            binding.llFile.setOnClickListener { _ ->
+                                            binding.llDownload.setOnClickListener { _ ->
                                                 downloadFile(it.data.lessonPlans.attachment.fileURL)
+                                            }
+                                            binding.llView.setOnClickListener { _ ->
+                                                openFile(it.data.lessonPlans.attachment.fileURL)
                                             }
                                         } else {
                                             binding.llFile.isVisible = false
@@ -229,6 +232,35 @@ class ViewLessonPlanFragment : Fragment() {
             }
         }
         viewLessonPlanViewModel.getLessonPlanDTL(id, teacherID)
+    }
+
+    private fun openFile(fileSource: String) {
+        when (Constant.isPdfUrl(fileSource)){
+            1 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+            2 -> {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
+            }
+            3 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }else -> {
+            findNavController().navigate(
+                R.id.photoViewFragmentFragment,
+                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+            )
+        }
+        }
+
+
+
     }
 
     private fun downloadFile(fileSource: String) {

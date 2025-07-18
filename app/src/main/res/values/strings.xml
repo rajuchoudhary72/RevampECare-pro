@@ -197,7 +197,7 @@
     <string name="allow_student_for_late_submission">Allow student for late submission</string>
     <string name="active">Active</string>
     <string name="lbl_submit">Submit</string>
-    <string name="attachment">attachment</string>
+    <string name="attachment">Attachment</string>
     <string name="syb">" : "</string>
     <string name="submitted">Submitted</string>
     <string name="not_submitted">Not Submitted</string>
