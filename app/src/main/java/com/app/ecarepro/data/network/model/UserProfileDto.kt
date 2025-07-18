@@ -129,6 +129,8 @@ data class Profile(
     val contactEmailID: String?,
     @SerializedName("contactMobile")
     val contactMobile: String?,
+    @SerializedName("studentEmail")
+    val studentEmail: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("diseNo")
@@ -254,6 +256,8 @@ data class StudentProfile(
     val billNumber: String?,
     @SerializedName("apaaR_ID")
     val apaaRID: String?,
+    @SerializedName("studentEmail")
+    val studentEmail: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("coverImg")

@@ -211,11 +211,13 @@ fun setFormattedNewText(textView: TextView, text1: String?) {
 }
 @BindingAdapter("formattedText")
 fun setFormattedText(textView: TextView, text: String?) {
-
+   /* textView.setTextIsSelectable(false) // Reset to avoid issues
+    textView.text = null                // Clear old content
+    textView.setTextIsSelectable(true)  // Re-enable selection*/
     // val formattedText = text?.parseMarkdown()
-
 // Example of setting the formatted text in a TextView
     textView.text = parseFormattedTextSimple(text.toString())
+    //textView.movementMethod = LinkMovementMethod.getInstance()
     /*// Make URLs clickable
     textView.autoLinkMask = Linkify.WEB_URLS
     textView.movementMethod = android.text.method.LinkMovementMethod.getInstance()*/

@@ -242,6 +242,6 @@
         android:gravity="center"
         android:textColor="#777777"
         android:textSize="14sp"
-        android:text="Last updated on: 13/04/2025 08:54 PM" />
+         />
 
 </LinearLayout>
