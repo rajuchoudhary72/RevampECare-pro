@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isExpanded"
+            type="java.lang.Boolean" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="24dp"
+        app:contentPadding="16dp"
+        app:strokeColor="#DFE5DB"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent=".5" />
+
+            <ImageView
+                android:id="@+id/image_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="@{isExpanded ? 90:0}"
+                android:src="@drawable/ic_arrow_right_black"
+                app:layout_constraintBottom_toBottomOf="@+id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:drawablePadding="6dp"
+                android:fontFamily="@font/ubuntu_medium"
+                android:gravity="center_vertical"
+                android:paddingVertical="5dp"
+                android:text="@string/classmates_birthdays"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_arrow"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_class"
+                android:visibility="gone"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
+
+                <AutoCompleteTextView
+                    android:padding="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="Class"
+                    android:inputType="none"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_section"
+                android:visibility="gone"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toEndOf="@+id/text_input_class"
+                app:layout_constraintTop_toTopOf="@id/text_input_class"
+                app:shapeAppearanceOverlay="?attr/shapeAppearanceCornerMedium">
+
+                <AutoCompleteTextView
+                    android:padding="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="Section"
+                    android:inputType="none"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.app.ecarepro.ui.views.CarouselNoSnap
+                android:id="@+id/carousel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/text_input_class"
+                tools:listitem="@layout/item_student_birthday_item_card" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

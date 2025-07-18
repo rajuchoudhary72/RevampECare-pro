@@ -657,6 +657,12 @@ class ProfileFragment : Fragment() {
             subTitle(profile.contactMobile)
         }
         profileItem {
+            id(R.string.student_email_id)
+            iconRes(R.drawable.ic_email_id)
+            title(getString(R.string.student_email_id))
+            subTitle(profile.studentEmail)
+        }
+        profileItem {
             id(R.string.aadharCardNo)
             iconRes(R.drawable.adhar_card_icon)
             title(getString(R.string.aadharCardNo))

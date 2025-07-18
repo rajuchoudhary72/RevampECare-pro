@@ -65,7 +65,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
     private var p = 0
     private var a = 0
     private var l = 0
-    val ids = StringBuilder()
+    var ids = StringBuilder()
     var selectAll: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -323,15 +323,20 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
     }
 
     private fun callApi() {
-        transportAttendanceViewModel.getStudentToMarkTransAttendance(
-            routeIDs = routerSelectData.routeID.toString(),
-            stopID = 0,
-            trip = tripType,
-            attDate = dateSelect,
-            //attDate = Constant.toSystemDate(Constant.currentDate()),
-            stopIDs = ids.toString()
+        if (ids.isEmpty()){
 
-        )
+        }else{
+            transportAttendanceViewModel.getStudentToMarkTransAttendance(
+                routeIDs = routerSelectData.routeID.toString(),
+                stopID = 0,
+                trip = tripType,
+                attDate = dateSelect,
+                //attDate = Constant.toSystemDate(Constant.currentDate()),
+                stopIDs = ids.toString()
+
+            )
+        }
+
     }
 
     private fun popUpRouter() {
@@ -414,7 +419,7 @@ class TransportAttendanceFragment : Fragment(), OnClickItemValue<StuLst> {
             stoppersPopUpListAdapter.notifyDataSetChanged()
             checkImage.setImageResource(if (selectAll) R.drawable.ic_baseline_check_box_24 else R.drawable.ic_baseline_check_box_unselectblank_24)
         }
-
+        ids = StringBuilder()
         relOk.setOnClickListener {
             if (stoppersSelected) {
                 // val ids = StringBuilder()
