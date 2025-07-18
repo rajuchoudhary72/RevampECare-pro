@@ -1548,7 +1548,6 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-
                     2 -> {
                         when (childChildMenuId) {
                             7 -> {
