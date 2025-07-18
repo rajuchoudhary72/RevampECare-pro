@@ -949,5 +949,9 @@
     <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
     <string name="standard_wise_statistic">Standard  Wise Statistic</string>
     <string name="classmates_birthdays">Classmates\' Birthdays</string>
+    <string name="fees_payment_reminder">Fees Payment Reminder</string>
+    <string name="access_blocked_due_to_unpaid_fees">⚠️ Access blocked due to unpaid fees</string>
+    <string name="please_pay_the_fee_or_contact_the_school">Please pay the fee or contact the school..</string>
+    <string name="pay_fees">Pay Fees</string>
 </resources>
 

@@ -9,6 +9,7 @@ data class NetworkStudentListToMarkAtt(
     val hasMarked: Boolean,
     val hasSMSSent: Boolean,
     val isLateEnable: Boolean,
+    val notificationOnBackDate: Boolean,
     val isSubAttendance: Boolean,
     val message: String,
     val msgAlertEnable: Boolean,
