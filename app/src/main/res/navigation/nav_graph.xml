@@ -1040,4 +1040,8 @@
             app:destination="@id/viewLessonPlanFragment" />
         />
     </fragment>
+    <fragment
+        android:id="@+id/assignClubStudentListFragment"
+        android:name="com.app.ecarepro.ui.assignClub.AssignClubStudentListFragment"
+        android:label="AssignClubStudentListFragment" />
 </navigation>

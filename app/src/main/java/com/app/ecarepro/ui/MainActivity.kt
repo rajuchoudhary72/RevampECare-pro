@@ -1542,6 +1542,9 @@ class MainActivity : AppCompatActivity() {
                             10 -> {
                                 navController.navigate(R.id.updateStudentsProfileFragment)
                             }
+                            26 -> {
+                                navController.navigate(R.id.assignClubStudentListFragment)
+                            }
                         }
                     }
 
