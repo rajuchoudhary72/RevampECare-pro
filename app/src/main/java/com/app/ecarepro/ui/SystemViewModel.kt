@@ -121,6 +121,9 @@ class SystemViewModel @Inject constructor(
                     if (response.isAuthenticated == false) {
                         _logout.emit(true)
                     }
+                    if (response.isDefaulter == true){
+                        MainActivity().extracted()
+                    }
                     MainActivityUiState.Success(
                         userInfo = response.userInfo,
                         menus = response.menus ?: emptyList(),
