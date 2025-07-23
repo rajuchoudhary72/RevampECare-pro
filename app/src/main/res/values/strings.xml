@@ -197,7 +197,7 @@
     <string name="allow_student_for_late_submission">Allow student for late submission</string>
     <string name="active">Active</string>
     <string name="lbl_submit">Submit</string>
-    <string name="attachment">attachment</string>
+    <string name="attachment">Attachment</string>
     <string name="syb">" : "</string>
     <string name="submitted">Submitted</string>
     <string name="not_submitted">Not Submitted</string>
@@ -587,6 +587,7 @@
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
+    <string name="assign_club">Assign Club</string>
     <string name="student_not_found">Student not found</string>
     <string name="recipients">Recipients</string>
     <string name="lbl_add">Add</string>
@@ -948,5 +949,12 @@
     <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
     <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
     <string name="standard_wise_statistic">Standard  Wise Statistic</string>
+    <string name="no_club_assign">No Club Assign</string>
+    <string name="classmates_birthdays">Classmates\' Birthdays</string>
+    <string name="fees_payment_reminder">Fees Payment Reminder</string>
+    <string name="access_blocked_due_to_unpaid_fees">⚠️ Access blocked due to unpaid fees</string>
+    <string name="please_pay_the_fee_or_contact_the_school">Please pay the fee or contact the school..</string>
+    <string name="pay_fees">Pay Fees</string>
+    <string name="swith_user">Switch Account</string>
 </resources>
 

@@ -29,6 +29,8 @@ import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.model.UpdateMedicalCardRequest
 import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.model.WatchersDto
+import com.app.ecarepro.ui.assignClub.AssignClubRequest
+import com.app.ecarepro.ui.assignClub.StudentListAssignClub
 import com.app.ecarepro.ui.assign_home.StudentList
 import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import retrofit2.http.Body
@@ -139,9 +141,20 @@ interface SchoolService {
         @Query("Orderby") orderBy: String
     ): StudentList
 
+    @GET("Admin/StudentListToAssignClub")
+    suspend fun getStudentListToAssignClub(
+        @Query("ID") id: String,
+        @Query("Orderby") orderBy: String
+    ): StudentListAssignClub
+
     @POST("Admin/AssignHouse")
     suspend fun assignHouse(
         @Body request: List<AssignHouseRequest>
+    ): CommonResponse
+
+    @POST("Admin/AssignClub")
+    suspend fun assignClub(
+        @Body request: List<AssignClubRequest>
     ): CommonResponse
 
     @POST("TaskManager/UpdateTask")

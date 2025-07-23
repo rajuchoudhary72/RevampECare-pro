@@ -10,6 +10,7 @@ import android.provider.Settings.Secure
 import androidx.appcompat.app.AppCompatDelegate
 import com.app.ecarepro.data.network.model.RegisterDevice
 import com.app.ecarepro.data.repository.AppRepository
+import com.app.ecarepro.ui.MainActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -76,5 +77,10 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
 
     override fun onActivityDestroyed(p0: Activity) {
      }
+
+    fun callMainActivityFunction() {
+
+        MainActivity().extracted()
+    }
 
 }

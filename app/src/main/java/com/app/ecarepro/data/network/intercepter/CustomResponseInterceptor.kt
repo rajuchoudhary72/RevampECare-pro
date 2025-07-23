@@ -6,9 +6,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.app.ecarepro.ECateProApp
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.ResponseBody
@@ -45,6 +45,7 @@ class CustomResponseInterceptor @Inject constructor(
 
 
             val errorCode = jsonObject.optInt("errorCode", -1)
+            val isDefaulter = jsonObject.optBoolean("isDefaulter", false)
             val message = jsonObject.optString("message", "An error occurred")
 
             when (errorCode) {
@@ -66,9 +67,11 @@ class CustomResponseInterceptor @Inject constructor(
                         }
                     }*/
                 }
-                2 -> showMessageDialog(message)
+                2 -> showMessageDialog(message,isDefaulter)
             }
-        } catch (_: Exception) { }
+        } catch (e: Exception) {
+                    Log.d("CustomResponseInterceptor", "Error parsing JSON: ${e.message}")
+        }
 
         return response.newBuilder()
             .body(ResponseBody.create(responseBody.contentType(), responseBodyString))
@@ -112,18 +115,24 @@ class CustomResponseInterceptor @Inject constructor(
             }
         }
     }
-    private fun showMessageDialog(message: String) {
-        handler.post {
-        val appContext =  context as ECateProApp
-        handler.post {
-            AlertDialog.Builder(appContext.getCurrentActivity())
-                .setTitle("Notice")
-                .setMessage(message)
-                .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-                .setCancelable(false)
-                .show()
+    private fun showMessageDialog(message: String, isDefaulter: Boolean) {
+        if (isDefaulter){
+            val appContext =  context as ECateProApp
+            appContext.callMainActivityFunction()
+        }else{
+            handler.post {
+                val appContext =  context as ECateProApp
+                handler.post {
+                    AlertDialog.Builder(appContext.getCurrentActivity())
+                        .setTitle("Notice")
+                        .setMessage(message)
+                        .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                        .setCancelable(false)
+                        .show()
+                }
+            }
         }
-    }
+
     }
 }
 

@@ -97,6 +97,7 @@ import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
 import com.app.ecarepro.ui.notification.NotificationViewModel
 import com.app.ecarepro.ui.views.PaymentWebViewActivity
+import com.app.ecarepro.utils.FeesBlockDialogFragment
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -687,6 +688,11 @@ class MainActivity : AppCompatActivity() {
                         buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
                         showBadgeCount(data.appLayoutDto)
+                        /*for Full  App Access blocked due to unpaid fees user only show  pay Fee popup  till  unpaid */
+                        if (data.appLayoutDto.isDefaulter == true){
+                            val dialog = FeesBlockDialogFragment()
+                            dialog.show(supportFragmentManager, "FeesBlockDialog")
+                        }
 
                     }
                 }
@@ -1393,18 +1399,7 @@ class MainActivity : AppCompatActivity() {
                     18 -> navController.navigate(R.id.attendanceFragment)
                     20 -> navController.navigate(R.id.paySlipFragment)
                     43 -> {
-                        lifecycleScope.launch {
-                            try {
-                                userDataStore.getSchoolData()?.run {
-                                    if (feePayemtURL.isNullOrEmpty()) {
-                                        showMessage("Fee Payment URL are currently not unavailable!")
-                                    } else {
-                                        webViewCallForPayment(feePayemtURL!!)
-                                    }
-                                }
-                            } catch (_: Exception) {
-                            }
-                        }
+                        extracted()
                     }
 
                     44 -> navController.navigate(R.id.feeReceiptFragment)
@@ -1486,6 +1481,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun extracted() {
+        lifecycleScope.launch {
+            try {
+                userDataStore.getSchoolData()?.run {
+                    if (feePayemtURL.isNullOrEmpty()) {
+                        showMessage("Fee Payment URL are currently not unavailable!")
+                    } else {
+                        webViewCallForPayment(feePayemtURL!!)
+                    }
+                }
+            } catch (_: Exception) {
+            }
+        }
+    }
 
 
     fun getFragmentId(
@@ -1532,9 +1541,11 @@ class MainActivity : AppCompatActivity() {
                             10 -> {
                                 navController.navigate(R.id.updateStudentsProfileFragment)
                             }
+                            26 -> {
+                                navController.navigate(R.id.assignClubStudentListFragment)
+                            }
                         }
                     }
-
 
                     2 -> {
                         when (childChildMenuId) {
