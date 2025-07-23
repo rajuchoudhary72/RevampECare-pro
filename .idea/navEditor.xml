@@ -325,6 +325,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="assignClubStudentListFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="assignHomeFragment">
                     <value>
                       <LayoutPositions>
@@ -772,18 +784,6 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="defineSkillFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
                   <entry key="editAssignmentFragment">
                     <value>
                       <LayoutPositions>
@@ -937,6 +937,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="feesBlockDialogFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1640" />
+                            <option name="y" value="-1650" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="fomGuardFragment">
                     <value>
                       <LayoutPositions>
@@ -1026,18 +1038,6 @@
                               </value>
                             </entry>
                           </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="importSkillFromDatabaseFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -1232,18 +1232,6 @@
                               </value>
                             </entry>
                           </map>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="manageSkillFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
-                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -1454,18 +1442,6 @@
                         <option name="myPosition">
                           <Point>
                             <option name="x" value="3900" />
-                            <option name="y" value="12" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="pedagogyFragment">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="12" />
                             <option name="y" value="12" />
                           </Point>
                         </option>
@@ -2199,6 +2175,18 @@
                           <Point>
                             <option name="x" value="255" />
                             <option name="y" value="1080" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="switchAccountFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1640" />
+                            <option name="y" value="-1100" />
                           </Point>
                         </option>
                       </LayoutPositions>
