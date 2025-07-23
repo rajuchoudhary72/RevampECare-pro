@@ -15,7 +15,6 @@ object LocalizationManager {
         this.repository = repository
         isInitialized = true
     }
-
     // Language toggle (connect to your existing language selection)
 
     // Get translation for a key
