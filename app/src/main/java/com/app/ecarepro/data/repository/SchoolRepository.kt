@@ -32,6 +32,8 @@ import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.model.NetworkAppVersion
+import com.app.ecarepro.ui.assignClub.AssignClubRequest
+import com.app.ecarepro.ui.assignClub.StudentListAssignClub
 
 interface SchoolRepository {
     suspend fun fetchWalkThroughData()
@@ -60,7 +62,11 @@ interface SchoolRepository {
     fun getTaskAssignee(tlId:Int): Flow<Result<List<Assignee>>>
 
     suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
+
+    suspend fun getStudentListToAssignClub(id: String, orderBy:String): StudentListAssignClub
+
     suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse
+    suspend fun assignClub(request: List<AssignClubRequest>): CommonResponse
     suspend fun getMedicalCard(): MedicalCardResponse
     suspend fun updateMedicalCard(request: UpdateMedicalCardRequest): CommonResponse
     fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>

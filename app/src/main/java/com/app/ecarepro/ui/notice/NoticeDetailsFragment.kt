@@ -108,11 +108,20 @@ class NoticeDetailsFragment : Fragment() {
 //
 //                            binding.tvNoticeDetails. movementMethod = LinkMovementMethod.getInstance()
 
+
                                 val formattedHtml = """
     <html>
     <head>
         <style>
             a { color: blue; text-decoration: underline; }
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
         </style>
     </head>
     <body>
