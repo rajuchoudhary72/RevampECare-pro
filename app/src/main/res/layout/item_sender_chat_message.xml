@@ -53,8 +53,7 @@
             android:fontFamily="@font/calibri_regular"
             android:padding="15dp"
             android:enabled="true"
-            android:autoLink="all"
-            android:linksClickable="true"
+
             app:formattedText="@{message}"
             android:textIsSelectable="true"
             android:focusable="true"

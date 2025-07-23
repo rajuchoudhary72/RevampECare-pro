@@ -690,8 +690,7 @@ class MainActivity : AppCompatActivity() {
                         showBadgeCount(data.appLayoutDto)
                         /*for Full  App Access blocked due to unpaid fees user only show  pay Fee popup  till  unpaid */
                         if (data.appLayoutDto.isDefaulter == true){
-                            val dialog = FeesBlockDialogFragment()
-                            dialog.show(supportFragmentManager, "FeesBlockDialog")
+                           navController.navigate(R.id.feesBlockDialogFragment)
                         }
 
                     }

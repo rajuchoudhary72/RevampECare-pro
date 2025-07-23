@@ -956,5 +956,6 @@
     <string name="please_pay_the_fee_or_contact_the_school">Please pay the fee or contact the school..</string>
     <string name="pay_fees">Pay Fees</string>
     <string name="swith_user">Switch Account</string>
+    <string name="switch_account">Switch Account</string>
 </resources>
 
