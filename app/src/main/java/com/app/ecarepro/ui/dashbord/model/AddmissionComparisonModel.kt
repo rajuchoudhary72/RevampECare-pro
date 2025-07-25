@@ -31,59 +31,94 @@ class AdmissionComparisonModel(val admissionComparisonModel: AdmissionComparison
     private fun getBarChartModel(admissionComparisonModel: AdmissionComparison) = AAChartModel()
         .chartType(AAChartType.Bar)
         .dataLabelsEnabled(false)
-        .margin(arrayOf(0, 0, 0, 0))
+        .margin(arrayOf(0, 0, 40, 2))
         .legendEnabled(true)
-        .tooltipEnabled(false)
+        .tooltipEnabled(true)
+        .categories(
+            arrayOf(
+                admissionComparisonModel.previousSession.orEmpty(),
+                admissionComparisonModel.currentSession.orEmpty(),
+                admissionComparisonModel.nextSession.orEmpty()
+            )
+        )
         .series(
             arrayOf(
                 AASeriesElement()
                     .borderRadius(10)
-                    .fillColor("#06BE7C")
-
+                    .fillColor(R.color.android_prvious_color)
+                    .name(admissionComparisonModel.previousSession)
                     .data(
                         arrayOf(
-                            4.0,
+                            admissionComparisonModel.studentCountStandardWise?.sumOf {
+                                it.previousSession ?: 0
+                            } ?: 0,
                         )
                     ),
                 AASeriesElement()
                     .borderRadius(10)
-                    .fillColor("#1993D9")
+                    .fillColor(R.color.android_current_color)
+                    .name(admissionComparisonModel.currentSession)
                     .data(
                         arrayOf(
-                            6.0,
+                            admissionComparisonModel.studentCountStandardWise?.sumOf {
+                                it.currentSession ?: 0
+                            } ?: 0,
                         )
                     ),
                 AASeriesElement()
                     .borderRadius(10)
-                    .fillColor("#1993D9")
+                    .fillColor(R.color.android_next_color)
+                    .name(admissionComparisonModel.nextSession)
                     .data(
                         arrayOf(
-                            6.0,
+                            admissionComparisonModel.studentCountStandardWise?.sumOf {
+                                it.nextSession ?: 0
+                            } ?: 0,
                         )
                     ),
             )
         )
+
         .xAxisVisible(false)
         .yAxisVisible(false)
 
     private fun getLineChartModel(admissionComparisonModel: AdmissionComparison) = AAChartModel()
-        .chartType(AAChartType.Bar)
+        .chartType(AAChartType.Column)
         .dataLabelsEnabled(false)
         .legendEnabled(true)
+        .categories(admissionComparisonModel.studentCountStandardWise?.map { it.standard.orEmpty() }
+            ?.toTypedArray() ?: emptyArray())
         .series(
-            admissionComparisonModel.studentCountStandardWise?.map { data ->
+            arrayOf(
                 AASeriesElement()
                     .borderRadiusTopLeft(10)
                     .borderRadiusTopRight(10)
-                    .name(data.standard)
-                    .fillColor("#06BE7C")
+                    .name(admissionComparisonModel.previousSession)
+                    .fillColor(R.color.android_prvious_color)
                     .data(
-                        arrayOf(
-                            data.previousSession ?: 0,
-                            data.currentSession ?: 0
-                        )
+                        admissionComparisonModel.studentCountStandardWise?.map {
+                            it.previousSession ?: 0
+                        }?.toTypedArray() ?: emptyArray()
+                    ), AASeriesElement()
+                    .borderRadiusTopLeft(10)
+                    .borderRadiusTopRight(10)
+                    .name(admissionComparisonModel.currentSession)
+                    .fillColor(R.color.android_current_color)
+                    .data(
+                        admissionComparisonModel.studentCountStandardWise?.map {
+                            it.currentSession ?: 0
+                        }?.toTypedArray() ?: emptyArray()
+                    ), AASeriesElement()
+                    .borderRadiusTopLeft(10)
+                    .borderRadiusTopRight(10)
+                    .name(admissionComparisonModel.nextSession)
+                    .fillColor(R.color.android_next_color)
+                    .data(
+                        admissionComparisonModel.studentCountStandardWise?.map {
+                            it.nextSession ?: 0
+                        }?.toTypedArray() ?: emptyArray()
                     )
-            }?.toTypedArray() ?: emptyArray()
+            )
 
         )
 

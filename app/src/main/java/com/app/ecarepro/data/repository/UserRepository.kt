@@ -92,6 +92,7 @@ import com.app.ecarepro.data.network.model.NetworkTeachersTimetable
 import com.app.ecarepro.data.network.model.NetworkThoughts
 import com.app.ecarepro.data.network.model.NetworkTimeTableViewer
 import com.app.ecarepro.data.network.model.NetworkTransAttendanceReport
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.data.network.model.NetworkVehicleNumber
 import com.app.ecarepro.data.network.model.NetworkVideoAlbum
@@ -124,6 +125,7 @@ import com.app.ecarepro.model.BrowsedFile
 import com.app.ecarepro.model.ClassID_StID
 import com.app.ecarepro.model.ClassMateResponse
 import com.app.ecarepro.model.FeeSummery
+import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.Staff
@@ -133,6 +135,8 @@ import com.app.ecarepro.ui.appuserreport.AppUserWebResponse
 import com.app.ecarepro.ui.attendance_section.AttendanceResponse
 import com.app.ecarepro.ui.award.ExcellenceAwardResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import com.app.ecarepro.ui.medicalcard.medical_class.StudentMedicalCardResponse
 import com.app.ecarepro.ui.medicine_issue.MedicineIsuueModel
 import com.app.ecarepro.ui.statical.StaticGraphResponse
@@ -277,6 +281,12 @@ interface UserRepository {
          request: UpdateProfileModel
     ): CommonResponse
 
+    suspend fun updateTransportProfile(
+        request: UpdateTransportProfileModel
+    ): CommonResponse
+
+    suspend fun getUserTransportProfile(
+    ): NetworkTransportEditProfile
     fun uploadProfileIMG(uploadPhotoRequest: UploadPhotoRequest): Flow<Result<String>>
 
     suspend fun leaveListStatus(): NetworkLeaveListStatus
@@ -286,7 +296,8 @@ interface UserRepository {
         status: Int,
         ord: Int,
         applType: Int,
-        pg: Int
+        pg: Int,
+        attPer:Boolean
     ): NetworkLeaveReport
 
 
@@ -324,17 +335,24 @@ interface UserRepository {
     suspend fun infractionInstance(
         infrTypeID: Int,
         InfrSubTypeID: Int,
-        StID: Int
+        StID: Int,
+        uType: Int
     ): NetworkInfractionInstance
 
     suspend fun addInfraction( stID: Int  ): NetworkAddInfraction
+
+    suspend fun addStaffInfraction( stID: Int  ): NetworkAddInfraction
 
     suspend fun getAppreciations(
         stID: Int
     ): NetworkAppreciations
 
     suspend fun getInfractions(
-        stID: Int
+        stID: Int?
+    ): NetworkInfractions
+
+    suspend fun getStaffInfractions(
+        SID: Int?
     ): NetworkInfractions
 
     suspend fun disciplineLogDeleteLog(
@@ -556,6 +574,7 @@ interface UserRepository {
     suspend fun getStaffList(): NetworkStaffList
 
     suspend fun teachersList(): NetworkStaffList
+    suspend fun reportLessonteachersList(): NetworkStaffList
 
     suspend fun getStaffProfile(sId: Int): NetworkStaffProfile
 
@@ -799,6 +818,21 @@ interface UserRepository {
           date: String,
          query: String
     ): NetworkMediaGallery
+
+    suspend fun getKidsCornerAlbums(
+         pg: Int
+    ): NetworkKidCornerModel
+
+    suspend fun getSearchKidsAlbum(
+         pg: Int,
+         yrID: Int,
+        keyword: String?
+    ): NetworkKidCornerModel
+
+    suspend fun getKidsAlbumDetails(
+         pg: Int,
+         id: String,
+    ): NetworkKidsAlbumDetailsModel
 
     suspend fun getMyQuestionBank(  ): NetworkQuestionBank
 

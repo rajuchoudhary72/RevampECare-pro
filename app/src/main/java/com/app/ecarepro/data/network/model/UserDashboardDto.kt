@@ -107,6 +107,10 @@ data class UserDashboardDto(
     val staffAttendanceSummary: StaffAttendance?,
     @SerializedName("admissionComparison")
     val admissionComparison: AdmissionComparison?,
+    @SerializedName("showstudentBDayCards")
+    val showstudentBDayCards: Boolean?,
+    @SerializedName("studBirthdayCards")
+    val studBirthdayCards: List<StudentBirthDayCard>?,
 )
 data class Workload(
     @SerializedName("id")
@@ -173,6 +177,19 @@ data class BirthDayCard(
     val month: String?
 ) {
     fun getIconUrl() = BASE_URL_COM + icon
+}
+
+data class StudentBirthDayCard(
+    @SerializedName("studentName")
+    val studentName: String?,
+    @SerializedName("photo")
+    val photo: String?,
+    @SerializedName("isToday")
+    val isToday: Boolean?,
+    @SerializedName("birthdayOn")
+    val birthdayOn: String?
+) {
+    fun getIconUrl() =  photo
 }
 
 data class Card(
@@ -323,6 +340,8 @@ data class AdmissionComparison(
     val currentSession: String?,
     @SerializedName("previousSession")
     val previousSession: String?,
+    @SerializedName("nextSession")
+    val nextSession: String?,
     @SerializedName("studentCountStandardWise")
     val studentCountStandardWise: List<StudentCountStandardWise>?
 )
@@ -332,6 +351,8 @@ data class StudentCountStandardWise(
     val currentSession: Int?,
     @SerializedName("previousSession")
     val previousSession: Int?,
+    @SerializedName("nextSession")
+    val nextSession: Int?,
     @SerializedName("standard")
     val standard: String?
 )

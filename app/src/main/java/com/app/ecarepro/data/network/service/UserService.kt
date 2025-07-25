@@ -140,6 +140,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.NetworkSection
 import com.app.ecarepro.data.network.model.NetworkSmsReportDetails
 import com.app.ecarepro.data.network.model.NetworkSmsReportModel
+import com.app.ecarepro.data.network.model.NetworkTransportEditProfile
 import com.app.ecarepro.data.network.model.NetworkWingReport
 import com.app.ecarepro.data.network.model.StaffAttendanceDto
 import com.app.ecarepro.data.network.model.StudentPhotoUploadModel
@@ -148,9 +149,12 @@ import com.app.ecarepro.data.network.model.ValidateOtpRequest
 import com.app.ecarepro.data.network.model.VisitorDetailsDto
 import com.app.ecarepro.data.network.model.create_assignment.AssignmentRemarkPost
 import com.app.ecarepro.data.network.model.submit_assignment.TwoFactorLoginResponseDto
+import com.app.ecarepro.model.NetworkKidCornerModel
 import com.app.ecarepro.model.PostComplianceData
 import com.app.ecarepro.model.NetworkUserSessionsResponse
 import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateProfileModel
+import com.app.ecarepro.ui.edit_profile.model.update_profile.UpdateTransportProfileModel
+import com.app.ecarepro.ui.gallery.kid_corner.model.NetworkKidsAlbumDetailsModel
 import okhttp3.RequestBody
 
 interface UserService {
@@ -334,7 +338,8 @@ interface UserService {
         @Query("Status") status: Int,
         @Query("ord") ord: Int,
         @Query("ApplType") applType: Int,
-        @Query("pg") pg: Int
+        @Query("pg") pg: Int,
+        @Query("Attper") AttPer: Boolean,
     ): NetworkLeaveReport
 
     @POST("Leave/Action")
@@ -358,11 +363,13 @@ interface UserService {
         @Query("InfrTypeID") infrTypeID: Int
     ): NetworkSubInfractionTypes
 
+
     @GET("DisciplineLog/InfractionInstance")
     suspend fun infractionInstance(
         @Query("InfrTypeID") infrTypeID: Int,
         @Query("InfrSubTypeID") InfrSubTypeID: Int,
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int,
+        @Query("utype") utype: Int,
     ): NetworkInfractionInstance
 
 
@@ -371,9 +378,19 @@ interface UserService {
         @Query("StID") stID: Int
     ): NetworkAddInfraction
 
+    @GET("DisciplineLog/AddStaffInfraction")
+    suspend fun addStaffInfraction(
+        @Query("SID") stID: Int
+    ): NetworkAddInfraction
+
     @GET("DisciplineLog/Infractions")
     suspend fun getInfractions(
-        @Query("StID") stID: Int
+        @Query("StID") stID: Int?
+    ): NetworkInfractions
+
+    @GET("DisciplineLog/StaffInfractions")
+    suspend fun getStaffInfractions(
+        @Query("SID") SID: Int?
     ): NetworkInfractions
 
     @GET("DisciplineLog/DeleteLog")
@@ -585,6 +602,11 @@ interface UserService {
     @GET("Staff/List")
     suspend fun teachersList(): NetworkStaffList
 
+    @GET("Staff/List")
+    suspend fun getReportLessonStaffProfile(
+        @Query("RptID") sId: Int
+    ): NetworkStaffList
+
     @GET("Report/StaffProfile")
     suspend fun getStaffProfile(
         @Query("SID") sId: Int
@@ -691,6 +713,11 @@ interface UserService {
     @POST("User/UpdateParentProfile")
     suspend fun updateParentProfile(
         @Body request: UpdateProfileModel
+    ): CommonResponse
+
+    @POST("Student/UpdateTransportDetails")
+    suspend fun updateTransportProfile(
+        @Body request: UpdateTransportProfileModel
     ): CommonResponse
 
     @POST("User/UploadProfileIMG")
@@ -953,6 +980,25 @@ interface UserService {
         @Query("Query") query: String
     ): NetworkMediaGallery
 
+    @GET("Gallery/KidsCornerAlbums")
+    suspend fun getKidsCornerAlbums(
+        @Query("pg") pg: Int
+    ): NetworkKidCornerModel
+
+    @GET("Gallery/SearchKidsAlbum")
+    suspend fun getSearchKidsAlbum(
+        @Query("pg") pg: Int,
+        @Query("YrID") yrID: Int,
+        @Query("keyword") keyword: String?
+    ): NetworkKidCornerModel
+
+    @GET("Gallery/KidsAlbumDetails")
+    suspend fun getKidsAlbumDetails(
+        @Query("pg") pg: Int,
+        @Query("ID") id: String,
+    ): NetworkKidsAlbumDetailsModel
+
+
     @GET("QuestionBank/MyQuestionBank")
     suspend fun getMyQuestionBank(  ): NetworkQuestionBank
 
@@ -1091,5 +1137,9 @@ interface UserService {
         @Query("ID") ID: String?,
         @Query("utype") utype: Int?
     ): CommonResponse
+
+    @GET("Student/TransportDetails")
+    suspend fun getUserTransportProfile(
+    ): NetworkTransportEditProfile
 
 }

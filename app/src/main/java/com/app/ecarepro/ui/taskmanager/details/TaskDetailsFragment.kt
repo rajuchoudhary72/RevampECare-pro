@@ -308,7 +308,8 @@ class TaskDetailsFragment : Fragment() {
                                     (requireActivity() as MainActivity).showLoader(false)
                                     mainActivity().showMessage(message ?: "")
                                     if (isSuccess) {
-                                        this@TaskDetailsFragment.comment = null
+                                        //this@TaskDetailsFragment.comment = null
+                                        this@TaskDetailsFragment.comment = ""
                                         mViewModel.refresh()
                                     }
                                 }

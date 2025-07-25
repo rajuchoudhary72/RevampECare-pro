@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.MenuHost
@@ -55,7 +54,7 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
     private var totalItemCount: Int = 0
     private var visibleItemCount: Int = 0
     private var isLoading: Boolean = true
-
+    private var staffId: String = ""
     private lateinit var lessonPlanListAdapter: LessonPlanListAdapter
 
 
@@ -76,6 +75,8 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         }
         try {
             teacherID = requireArguments().getString(Constant.STAFF_ID_ARGUMENT).toString()
+            staffId = requireArguments().getString("reportLessonPlan").toString()
+
 
         }catch (_:Exception){}
         val menuHost: MenuHost = requireActivity()
@@ -152,9 +153,9 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
         setSubjectFilter()
         setStatusFilter()
 
-        if ( lessonPlanListViewModel. userType == Constant.PRINCIPAL || lessonPlanListViewModel. userType ==  Constant.MANAGEMENT) {
-            binding.fbAdd.isVisible=false
-        }
+//        if ( lessonPlanListViewModel. userType == Constant.PRINCIPAL || lessonPlanListViewModel. userType ==  Constant.MANAGEMENT) {
+//            binding.fbAdd.isVisible=false
+//        }
 
     }
 
@@ -364,7 +365,16 @@ class LessonPlanListFragment : Fragment(), MenuProvider, ItemListener<LessonPlan
                 }
             }
         }
-        lessonPlanListViewModel.getLessonPlanList(pageIndex,teacherID)
+        if (staffId.isNotEmpty()){
+            Constant.LESSONPLAN_HARDCCODE_KEY = "LessonList"
+            binding.fbAdd.visibility = View.GONE
+            lessonPlanListViewModel.getLessonPlanList(pageIndex,staffId)
+        }else{
+            Constant.LESSONPLAN_HARDCCODE_KEY = ""
+            binding.fbAdd.visibility = View.VISIBLE
+            lessonPlanListViewModel.getLessonPlanList(pageIndex,teacherID)
+        }
+
         isNotFilterList = true
 
 

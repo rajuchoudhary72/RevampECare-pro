@@ -36,10 +36,17 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
          bindings?.apply {
 
                  tvName.text=data.name
-                 Picasso.get()
+              /*   Picasso.get()
                      .load( data.photo )
                      .placeholder(R.drawable.default_profile)
-                     .networkPolicy(NetworkPolicy.OFFLINE).into(imApproveBy )
+                     .networkPolicy(NetworkPolicy.OFFLINE).into(imApproveBy )*/
+
+
+             Picasso.get().
+             load(data.photo)
+                 .placeholder(R.drawable.default_profile)
+                 .into(imApproveBy)
+
 
                  llMain.setOnClickListener {
                      studentAttendanceReportFragment.onItemClick(data,1,false)
@@ -68,6 +75,10 @@ class ClassAttAdapter(private var classSummaryList: List<AttReport>,
                  4 ->  {
                      tvStatus.text = studentAttendanceReportFragment.getString(R.string.na)
                      tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_na,null)
+                 }
+                 7 -> {
+                     tvStatus.text = "WH"
+                     tvStatus.background = ResourcesCompat.getDrawable(studentAttendanceReportFragment.resources,R.drawable.circle_wh,null)
                  }
              }
          }

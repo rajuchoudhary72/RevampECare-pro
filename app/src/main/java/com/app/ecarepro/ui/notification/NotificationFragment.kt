@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -23,6 +24,8 @@ import com.app.ecarepro.data.network.model.Notification
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.noDataFoundView
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 
 @AndroidEntryPoint
@@ -34,6 +37,10 @@ class NotificationFragment : Fragment() {
 
     private val mViewModel: NotificationViewModel by viewModels()
 
+
+    private fun onSomeNotificationAction() {
+        mViewModel.updateBadgeCount()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,7 +99,9 @@ class NotificationFragment : Fragment() {
                             id(notification.id)
                             notification(notification)
                             clickListener { _ ->
-                                notification.id?.let { mViewModel.markNotificationAsSeen(it) }
+                                notification.id?.let {
+                                    mViewModel.markNotificationAsSeen(it)
+                                }
                                 notification.moduleID?.let {
                                     notification.chMenuID?.let { it1 ->
                                         (requireActivity() as MainActivity).getFragmentId(
@@ -111,6 +120,7 @@ class NotificationFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         mViewModel.sendScreenEvent()
+        onSomeNotificationAction()
     }
 
 

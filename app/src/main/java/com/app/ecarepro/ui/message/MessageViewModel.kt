@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.message
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.MessageSettings
@@ -14,6 +15,7 @@ import javax.inject.Inject
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import kotlinx.coroutines.delay
 
 
 @HiltViewModel
@@ -34,7 +36,23 @@ class MessageViewModel @Inject constructor(
     val messageSettings = MutableStateFlow<MessageSettings?>(null)
 
     val isFilterApplied = MutableStateFlow(false)
+    val inboxMessageUnreadCount = MutableStateFlow<Pair<String, Int>?>(null)
 
+    fun updateUnreadMessageCount(id: String) {
+        Log.e("TAG", "updateUnreadMessageCount ID: ${id}", )
+        inboxMessageUnreadCount.update { current ->
+            if (current == null)
+                Pair(id, 1)
+            else
+                current.copy(second = current.second + 1)
+        }
+
+        viewModelScope.launch {
+            delay(1000)
+
+            Log.e("TAG", "updateUnreadMessageCount: ${inboxMessageUnreadCount.value}")
+        }
+    }
 
     fun fetchMessageSettings() {
         viewModelScope.launch {

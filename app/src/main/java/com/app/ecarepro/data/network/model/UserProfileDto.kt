@@ -29,6 +29,8 @@ data class Profile(
     val canChangeCoverImg: Boolean?,
     @SerializedName("canChangeProfileImg")
     val canChangeProfileImg: Boolean?,
+    @SerializedName("canChangeChildImg")
+    val canChangeChildImg: Boolean?,
     @SerializedName("coverImg")
     val coverImg: String?,
     @SerializedName("designation")
@@ -127,6 +129,8 @@ data class Profile(
     val contactEmailID: String?,
     @SerializedName("contactMobile")
     val contactMobile: String?,
+    @SerializedName("studentEmail")
+    val studentEmail: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("diseNo")
@@ -252,6 +256,8 @@ data class StudentProfile(
     val billNumber: String?,
     @SerializedName("apaaR_ID")
     val apaaRID: String?,
+    @SerializedName("studentEmail")
+    val studentEmail: String?,
     @SerializedName("contactPerson")
     val contactPerson: String?,
     @SerializedName("coverImg")

@@ -27,8 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="@{clickListener}"
-        android:paddingVertical="10dp">
-
+        android:paddingVertical="10dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:importantForAccessibility="yes"
+        android:contentDescription='@{title + (hasChildMenu ? ", double tap to expand." : "")}'>
+        <!-- Icon - decorative, so marked not important -->
         <ImageView
             android:id="@+id/icon"
             app:tint="@color/black"

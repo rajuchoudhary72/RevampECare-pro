@@ -3,47 +3,72 @@ package com.app.ecarepro.ui.studentProfile.academic_performance
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
-import com.app.ecarepro.databinding.AcademicPerfListItemBinding
+import com.app.ecarepro.databinding.AcademicListItemBinding
 import com.app.ecarepro.databinding.ItemTransAttendanceBinding
 import com.app.ecarepro.model.Mark
-import com.app.ecarepro.model.StuLst
 import com.app.ecarepro.model.Subject
-import com.squareup.picasso.Picasso
 
 class AcademicPerfListAdapter(
-    private var markList: List<Subject>
+    private var markList: List<Subject>,
+    private var isExpanded: Boolean
 ) :
     RecyclerView.Adapter<AcademicPerfListAdapter.AssignmentListAdapter>() {
 
-    private lateinit var bindingm: ItemTransAttendanceBinding
+    private lateinit var bindingm: AcademicListItemBinding
+    private val expandedStateMap = mutableMapOf<String, Boolean>()
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignmentListAdapter {
-        bindingm = ItemTransAttendanceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        bindingm = AcademicListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AssignmentListAdapter(bindingm.root)
     }
 
     override fun getItemCount(): Int = markList.size
 
     override fun onBindViewHolder(holder: AssignmentListAdapter, position: Int) {
-         val binding = DataBindingUtil.getBinding<ItemTransAttendanceBinding>(holder.itemView)
+         val binding = DataBindingUtil.getBinding<AcademicListItemBinding>(holder.itemView)
         binding?.apply {
             tvStopName.text=markList[position].subjectName
             addLayout(binding.llView,markList[position].marks,position)
 
-        }
+            binding.llView.isVisible= isExpanded
+            if (isExpanded) {
+                ivExpandButton.setImageResource(R.drawable.keyboard_arrow_up_24dp)
+            } else {
+                ivExpandButton.setImageResource(R.drawable.keyboard_arrow_down_24dp)
+            }
+            rlHead.setOnClickListener {
+                if (llView.visibility == View.VISIBLE) {
+                    llView.visibility = View.GONE
+                    ivExpandButton.setImageResource(R.drawable.keyboard_arrow_down_24dp)
+                    } else {
+                    llView.visibility = View.VISIBLE
+                    ivExpandButton.setImageResource(R.drawable.keyboard_arrow_up_24dp)
+                }
+            }
 
+        }
 
 
      }
 
-    private fun addLayout(mLinearLayout: LinearLayout, items: List<Mark>?, position: Int) {
+    fun getSubject(position: Int): String {
+        return markList[position].subjectName.toString()
+    }
+
+    fun isFirstInGroup(position: Int): Boolean {
+        if (position == 0) return true
+        return markList[position].subjectName != markList[position - 1].subjectName
+    }
+
+     fun addLayout(mLinearLayout: LinearLayout, items: List<Mark>?, position: Int) {
         mLinearLayout.removeAllViews()
         if (!items.isNullOrEmpty()) {
             var i = 0
@@ -67,6 +92,8 @@ class AcademicPerfListAdapter(
             }
         }
     }
+
+
 
     class AssignmentListAdapter(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }

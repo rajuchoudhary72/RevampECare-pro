@@ -7,6 +7,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.databinding.CalenderListItemBinding
 import com.app.ecarepro.model.Activity
+import com.app.ecarepro.utils.Constant
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+
 
 class CalenderListAdapter(
     private var activityLST: List<Activity>,
@@ -38,14 +43,40 @@ class CalenderListAdapter(
     class NoticeViewHolder(val item: CalenderListItemBinding) : RecyclerView.ViewHolder(item.root) {
 
         fun bind(activity: Activity) {
+
             item.dataActivity=activity
-            item.relTo.isVisible = !activity.fromDate.equals(activity.tillDate)
-            item.relTo.isVisible = activity.tillDate != null
-            item.relEndDay.isVisible = !activity.fromDate.equals(activity.tillDate)
-            item.relEndDay.isVisible = activity.tillDate != null
+
+            if(!activity.fromDate.isNullOrEmpty()){
+                item.tvFromDate.text=Constant.convertDateLongWeekDayToSort(activity.fromDate.toString())
+            }
+
+            if(!activity.tillDate.isNullOrEmpty()){
+                item.endDay.text=Constant.convertDateLongWeekDayToSort(activity.tillDate.toString())
+
+                val days= daysExcludingStart(activity.fromDate.toString(),activity.tillDate.toString())
+                item.relTo.isVisible = days>=1
+                item.relEndDay.isVisible = days>=1
+            }
+
+        }
+
+        fun daysExcludingStart(startDateStr: String, endDateStr: String): Long {
+            val dateFormat = SimpleDateFormat("dd MMM, yyyy EEEE", Locale.ENGLISH)
+
+            val startDate: Date = dateFormat.parse(startDateStr)!!
+            val endDate: Date = dateFormat.parse(endDateStr)!!
+
+            val diffInMillis = endDate.time - startDate.time
+            val totalDays = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+
+            // Exclude start date by not subtracting 1
+            return maxOf(0, totalDays)
         }
 
     }
+
+
+
 
 
 }

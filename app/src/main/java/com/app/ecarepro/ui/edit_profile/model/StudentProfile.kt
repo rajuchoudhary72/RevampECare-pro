@@ -27,7 +27,7 @@ data class StudentProfile(
     var fatherAnnualIncome: String,
     var fatherDOB: String,
     var fatherDesignation: String,
-    var fatherDesignationID: Any,
+    var fatherDesignationID: String,
     var fatherEmail_1: String,
     var fatherEmail_2: String,
     var fatherMob_1: String,

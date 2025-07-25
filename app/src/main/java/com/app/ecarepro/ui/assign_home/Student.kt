@@ -9,6 +9,7 @@ data class Student(
     val fatherName: Any?,
     var houseID: Int?,
     val houseName: String?,
+    var clubName: String?,
     val isSelected: Boolean?,
 
     val photo: String?,
@@ -17,4 +18,5 @@ data class Student(
     val name: String?,
     val `class`: Any?,
     val rollNumber: String?,
+    var clubID: Int?,
 )

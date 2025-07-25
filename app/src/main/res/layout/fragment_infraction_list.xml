@@ -37,7 +37,9 @@
                 android:visibility="visible"
                 android:background="@color/white"
                 android:paddingVertical="13dp"
-                android:layout_height="wrap_content">
+            android:paddingHorizontal="@dimen/_13sdp"
+
+            android:layout_height="wrap_content">
 
 
                 <LinearLayout
@@ -81,7 +83,6 @@
                                 android:id="@+id/tv_student_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_light"
                                 android:text="@{studentData.name}"
                                 android:textStyle="bold" />
 
@@ -100,7 +101,6 @@
                                 android:id="@+id/tv_admission_no"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_light"
                                 />
 
                         </LinearLayout>
@@ -118,8 +118,7 @@
                             <TextView
                                 android:id="@+id/tv_class_name"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_light" />
+                                android:layout_height="wrap_content"/>
 
                         </LinearLayout>
 
@@ -135,7 +134,6 @@
                                 android:id="@+id/tv_father_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_light"
                                 />
 
                         </LinearLayout>
@@ -152,10 +150,26 @@
                                 android:id="@+id/tv_contact"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_light"
                                 />
 
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginVertical="5dp"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/tv_gender"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                />
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 

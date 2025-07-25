@@ -123,18 +123,18 @@ class StudentIDFragment : Fragment() {
     private fun selectImageOptionDialog() {
         try {
             val items = arrayOf<CharSequence>(
-                getString(R.string.take_photo), getString(R.string.choose_from_library),
-                getString(R.string.cancel)
+                "Take Photo", "Choose from Library",
+                "Cancel"
             )
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(R.string.add_photo))
+            builder.setTitle("Add Photo!")
             builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
                 FileAccess.checkPermission(this)
-                if (items[item] ==getString(R.string.take_photo)) {
+                if (items[item] == "Take Photo") {
                     cameraLauncher.launch(FileAccess.cameraIntent())
-                } else if (items[item] == getString(R.string.choose_from_library)) {
+                } else if (items[item] == "Choose from Library") {
                     galleryLauncher.launch(FileAccess.galleryIntent())
-                } else if (items[item] == getString(R.string.cancel)) {
+                } else if (items[item] == "Cancel") {
                     dialog.dismiss()
                 }
             })
@@ -255,7 +255,7 @@ class StudentIDFragment : Fragment() {
                 startImagePicker()
             } else {
                 // Permission denied, show a message to the user
-                mainActivity().showMessage(getString(R.string.permission_denied_cannot_pick_image))
+                mainActivity().showMessage("Permission denied, cannot pick image")
             }
         }
     }
@@ -305,7 +305,7 @@ class StudentIDFragment : Fragment() {
                         uploadPhoto(imageString, imageExt)
 
                     } else {
-                        mainActivity().showMessage(getString(R.string.oops_could_not_proceed_the_image_height_must_be_greater_than_252_pixels))
+                        mainActivity().showMessage("Oops...!!! could not proceed, the image height must be greater than 252 pixels.")
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()

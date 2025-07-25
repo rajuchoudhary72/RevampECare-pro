@@ -198,16 +198,10 @@ class ProfileFragment : Fragment() {
                     designation(if (profileViewModel.isParent()) "Parent" else if (profileViewModel.isStudent()) "Class " + uiState.profile.className else uiState.profile.designation)
                     username(uiState.profile.username)
                     contactNumber(uiState.profile.mobile)
-                    /*    canEditBannerImage(uiState.profile.canChangeCoverImg ?: false && uiState.profile.userImgReq?.coverImg != 1)
-                        canEditProfileImage(uiState.profile.canChangeProfileImg ?: false && uiState.profile.userImgReq?.profileImg != 1)*/
-
-                    canEditBannerImage(uiState.profile.canChangeCoverImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.coverImg != 1))
-                    if (UserTypeApp==1){
-
-                    }else{
-                        canEditProfileImage(uiState.profile.canChangeProfileImg ?: true && (uiState.profile.userImgReq == null || uiState.profile.userImgReq?.profileImg != 1))
+                    canEditBannerImage(uiState.profile.canChangeCoverImg ?: true)
+                    if (UserTypeApp != 1) {
+                        canEditProfileImage(uiState.profile.canChangeProfileImg ?: true)
                     }
-
                     profileImageStatus(uiState.profile.userImgReq?.profileImg)
                     bannerImageStatus(uiState.profile.userImgReq?.coverImg)
                     clickListener { v: View ->
@@ -663,6 +657,12 @@ class ProfileFragment : Fragment() {
             subTitle(profile.contactMobile)
         }
         profileItem {
+            id(R.string.student_email_id)
+            iconRes(R.drawable.ic_email_id)
+            title(getString(R.string.student_email_id))
+            subTitle(profile.studentEmail)
+        }
+        profileItem {
             id(R.string.aadharCardNo)
             iconRes(R.drawable.adhar_card_icon)
             title(getString(R.string.aadharCardNo))
@@ -724,6 +724,8 @@ class ProfileFragment : Fragment() {
         profileWardDetails {
             id(profile.name)
             studentProfile(profile.studentProfile)
+            childImageStatus(profile.userImgReq?.childProfileImg)
+            canEditPhoto(profile.canChangeChildImg)
             clickListener { _ ->
                 photoType = PhotoType.CHILD_PHOTO
                 selectImageOptionDialog()

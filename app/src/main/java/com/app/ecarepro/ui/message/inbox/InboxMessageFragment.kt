@@ -6,19 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
+import com.app.ecarepro.data.network.model.InboxMessage
 import com.app.ecarepro.databinding.FragmentInboxFragmentBinding
 import com.app.ecarepro.loadMoreView
 import com.app.ecarepro.noDataFoundView
 import com.app.ecarepro.recentMessageCard
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.MessageViewModel
 import com.app.ecarepro.utils.E_MMM_DD_YYYY_HH_MM_A
 import com.app.ecarepro.utils.HH_MM_A
 import com.app.ecarepro.utils.PaginationScrollListener
@@ -26,6 +30,7 @@ import com.app.ecarepro.utils.formatDate
 import com.app.ecarepro.utils.stringFormat2String
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -37,7 +42,10 @@ class InboxMessageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val inboxMessageViewModel: InboxMessageViewModel by viewModels()
-
+    private val messageViewModel: MessageViewModel by activityViewModels()
+    private fun onSomeNotificationAction() {
+        inboxMessageViewModel.updateBadgeCount()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -57,6 +65,15 @@ class InboxMessageFragment : Fragment() {
                 Lifecycle.State.CREATED
             ).collectLatest { uiState ->
                 handleUiState(uiState)
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED){
+                messageViewModel.inboxMessageUnreadCount.collectLatest {
+                    it?.let {
+                        inboxMessageViewModel.updateUnreadMessageCount(it.first, it.second)
+                    }
+                }
             }
         }
     }
@@ -132,10 +149,7 @@ class InboxMessageFragment : Fragment() {
                                 time(formatDate(message.sentOn, E_MMM_DD_YYYY_HH_MM_A, HH_MM_A))
                                 unReadMessageCount(message.unread)
                                 clickListener { _ ->
-                                    findNavController().navigate(
-                                        R.id.conversationFragment,
-                                        bundleOf("ID" to message.id)
-                                    )
+                                    navigateToConversation(message)
                                 }
                             }
                         }
@@ -159,8 +173,16 @@ class InboxMessageFragment : Fragment() {
         }
     }
 
+    private fun navigateToConversation(message: InboxMessage) {
+        messageViewModel.inboxMessageUnreadCount.update { null }
+        findNavController().navigate(
+            R.id.conversationFragment,
+            bundleOf("ID" to message.id)
+        )
+    }
     override fun onResume() {
         super.onResume()
+        onSomeNotificationAction()
         inboxMessageViewModel.sendScreenEvent()
     }
     override fun onDestroyView() {

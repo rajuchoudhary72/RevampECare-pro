@@ -149,6 +149,9 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                 tvPresentCount.text = buildString {
                     append(data.totalPresent)
                 }
+                tvPresentWorkingCount.text = buildString {
+                    append(data.totalPresent_WH)
+                }
                 tvNACount.text = buildString {
                     append(data.totalNA)
                 }
@@ -171,6 +174,12 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 
                         append("%")
                     }
+                tvPresentWorkingHoliday.text = buildString {
+
+                    append(setCalculatedPercentageToInt(data.totalPresent_WH, totalStudent))
+
+                    append("%")
+                }
 
                     tvAbsentPer.text = buildString {
 

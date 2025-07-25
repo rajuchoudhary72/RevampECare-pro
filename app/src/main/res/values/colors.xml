@@ -118,6 +118,7 @@
     <color name="category5">#9999CC</color>
     <color name="category6">#FFB99C</color>
     <color name="category7">#8E47B5</color>
+    <color name="present_wh">#638A64</color>
 
 
     <color name="att_na_color">#808080</color>
@@ -144,6 +145,10 @@
     <color name="noti_count_red_color">#ffE74C3C</color>
     <color name="light_hai">#e5e5e5</color>
     <color name="android">#00E3FF</color>
+    <color name="android_prvious_color">#ffc29e</color>
+    <color name="android_current_color">#9ef1b0</color>
+    <color name="android_next_color">#9ac8fd</color>
+
     <color name="ios">#363636</color>
     <color name="button_browse_green">#ff56B54C</color>
     <color name="windows">#0099FF</color>

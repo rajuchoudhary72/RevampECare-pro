@@ -68,6 +68,7 @@
             android:layout_height="wrap_content"
             android:text="@string/apply_short_leave"
             android:textStyle="bold"
+            android:visibility="gone"
             android:layout_margin="@dimen/_10sdp"
             android:visibility="gone"
             />

@@ -25,7 +25,9 @@ data class SendMessageRequest(
     @SerializedName("recipientType")
     val recipientType: Int?,
     @SerializedName("subject")
-    val subject: String?
+    val subject: String?,
+    @SerializedName("scholarType")
+    val scholarType: Int
 )
 
 data class Attachment(

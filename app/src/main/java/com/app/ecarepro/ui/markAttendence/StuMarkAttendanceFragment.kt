@@ -46,6 +46,8 @@ import java.util.Calendar
 class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
 
 
+    private var orderBY: Int=0
+    private var backDate: Int=0
     private var editMode: Boolean= false
     private var openPreviousDay: Boolean=false
     private var mIsCurrentDate: Boolean=true
@@ -81,6 +83,8 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     private var lt  = 0
     private var na  = 0
     private lateinit var   dialog  : Dialog
+    private val orderBYList = arrayOf("Roll No", "Name", "Admission No")
+    var timestampOneDay = "86400000".toLong()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -149,7 +153,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     binding.autoCompleteSub.setText(getString(R.string.select_subject),false)
                     classID=classesForClsTeaches[pos].classID
                     className=classesForClsTeaches[pos].className
-                    getStudentListToMarkAtt(classID,subID)
+                    getStudentListToMarkAtt(classID,subID,orderBY)
                 }
 
             }
@@ -158,7 +162,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
             AdapterView.OnItemClickListener { parent, view, pos, id ->
                 subID=mySubjectList[pos].subID
                 subjectName=mySubjectList[pos].subjectName
-                getStudentListToMarkAtt(classID,subID)
+                getStudentListToMarkAtt(classID,subID,orderBY)
             }
 
         getClassList()
@@ -167,6 +171,11 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
         mDate=Constant.currentDate()
         binding.startDate.setText(Constant.currentDate())
         binding.startDate.setOnClickListener {
+
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, backDate) // Subtracting days
+            val minDate = calendar.timeInMillis   // Convert to milliseconds
+
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.startDate.setText(Constant.dateToShow(date.toString()))
@@ -174,35 +183,44 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     mIsCurrentDate=isCurrentDate
                     if (from==getString(R.string.subject_attendance)){
                         if (classID!=0 && subID!=0){
-                            getStudentListToMarkAtt(classID,subID)
+                            getStudentListToMarkAtt(classID,subID,orderBY)
                         }
-
                     }else{
                         if (classID!=0  ){
-                            getStudentListToMarkAtt(classID,subID)
+                            getStudentListToMarkAtt(classID,subID,orderBY)
                         }
                     }
                 }
-            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+            }, minDate = minDate
+                , maxDate = Constant.getLongTimeDate(Constant.currentDate()))
         }
 
 
         binding.tvSortByRollNo.setOnClickListener {
-           try {
-               rollNoFilterAsc=!rollNoFilterAsc
-               studentListArrayList = if (rollNoFilterAsc) studentListArrayList.sortedBy  { it.otherDTL[1].value  }.toMutableList()
-               else  studentListArrayList.sortedByDescending { it.otherDTL[1].value  }.toMutableList()
-               setupRecyclerView(studentListArrayList)
-           }catch (_:Exception){}
-
+            try {
+                rollNoFilterAsc = !rollNoFilterAsc
+                studentListArrayList = studentListArrayList
+                    .sortedWith(compareBy { it.otherDTL.getOrNull(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE })
+                    .let { if (rollNoFilterAsc) it else it.reversed() }
+                    .toMutableList()
+                setupRecyclerView(studentListArrayList)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+
+
         binding.tvSortByAdmission.setOnClickListener {
             try {
-                admissionFilterAsc=!admissionFilterAsc
-                studentListArrayList = if (admissionFilterAsc) studentListArrayList.sortedBy  { it.otherDTL[0].value  }.toMutableList()
-                else  studentListArrayList.sortedByDescending { it.otherDTL[0].value  }.toMutableList()
+                admissionFilterAsc = !admissionFilterAsc
+                studentListArrayList = studentListArrayList
+                    .sortedWith(compareBy { it.otherDTL.getOrNull(0)?.value?.toIntOrNull() ?: Int.MAX_VALUE })
+                    .let { if (admissionFilterAsc) it else it.reversed() }
+                    .toMutableList()
                 setupRecyclerView(studentListArrayList)
-            }catch (_:Exception){}
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         binding.tvSortByName.setOnClickListener {
@@ -213,6 +231,19 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                setupRecyclerView(studentListArrayList)
            }catch (_:Exception){}
         }
+
+        val arrayAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            orderBYList
+        )
+        binding.autoCompleteOrder.setAdapter(arrayAdapter)
+
+        binding.autoCompleteOrder.onItemClickListener=
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+                orderBY=pos
+                getStudentListToMarkAtt(classID,subID,orderBY)
+            }
 
     }
 
@@ -237,7 +268,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
     }
 
 
-    private fun getStudentListToMarkAtt(classID: Int, subID: Int) {
+    private fun getStudentListToMarkAtt(classID: Int, subID: Int, orderBY: Int) {
 
         lifecycleScope.launch {
             stuMarkAttendanceViewModel.stuListToMarkAttStateFlow.collectLatest {  when (it) {
@@ -400,7 +431,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     } is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                          if (it.data != null) {
-
+                             backDate=it.data.backDate
                              binding.rbClassWise.isVisible=it.data.classAttendance
                              binding.rbStudentWise.isVisible=it.data.subjectAttendance
 
@@ -599,6 +630,7 @@ class StuMarkAttendanceFragment : Fragment(),    ItemListener<StudentAtt> {
                     )
                 )
             }
+            binding.includeToolbar.btnSave.isVisible = false
         }
 
         lifecycleScope.launch {

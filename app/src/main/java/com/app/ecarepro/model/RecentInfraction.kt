@@ -10,6 +10,7 @@ data class RecentInfraction(
     val infraction: String,
     val infractionOn: String,
     val instance: String,
+    val issueBy: String,
     val photo: Any,
     val point: Int,
     val stID: Int,

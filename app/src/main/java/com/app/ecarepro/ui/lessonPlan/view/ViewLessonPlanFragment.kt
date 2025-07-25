@@ -70,6 +70,7 @@ class ViewLessonPlanFragment : Fragment() {
         }
         return binding.root
     }
+
     private fun popUpRemark(optionalReason: Boolean) {
         val tv_done: TextView
         val tv_cancel: TextView
@@ -232,7 +233,6 @@ class ViewLessonPlanFragment : Fragment() {
         }
         viewLessonPlanViewModel.getLessonPlanDTL(id, teacherID)
     }
-
     private fun openFile(fileSource: String) {
         when (Constant.isPdfUrl(fileSource)){
             1 -> {

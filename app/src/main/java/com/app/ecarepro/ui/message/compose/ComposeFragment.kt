@@ -19,6 +19,8 @@ import android.text.Editable
 import android.text.Html
 import android.text.Spannable
 import com.app.ecarepro.data.network.model.MessageSettings
+import android.app.ProgressDialog
+import android.os.Environment
 
 import android.text.SpannableStringBuilder
 import android.text.TextWatcher
@@ -39,6 +41,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -57,9 +60,11 @@ import com.app.ecarepro.databinding.FragmentComposeBinding
 import com.app.ecarepro.recipientChip
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.mainActivity
+import com.app.ecarepro.ui.message.selectRecipients.ScholarType
 import com.app.ecarepro.ui.message.selectRecipients.SelectRecipientsFragment
 import com.app.ecarepro.utils.FileAccess
 import com.app.ecarepro.utils.FileUtils
+import com.app.ecarepro.utils.ImageCompressionHelper
 import com.asynctaskcoffee.audiorecorder.uikit.VoiceSenderDialog
 import com.asynctaskcoffee.audiorecorder.worker.AudioRecordListener
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -72,9 +77,11 @@ import com.lassi.domain.media.MediaType
 import com.lassi.domain.media.SortingOption
 import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.UUID
 
@@ -85,10 +92,12 @@ class ComposeFragment : Fragment() {
     private var _binding: FragmentComposeBinding? = null
     private val binding get() = _binding!!
     private var lvalue = "null"
+
     private var isFormatd = false
-
+    private lateinit var imageCompressionHelper: ImageCompressionHelper
     private val composeViewModel: ComposeViewModel by viewModels()
-
+    private var capturedImageFile: File? = null
+    private var capturedImageUri: Uri? = null
     private var lastClickAttachmentType: AttachmentType? = null
     private val fileUtils: FileUtils by lazy { FileUtils(requireContext()) }
 
@@ -467,6 +476,7 @@ class ComposeFragment : Fragment() {
     private fun setUpViews() {
         binding.btnAddAttachment.bringToFront()
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
+        imageCompressionHelper = ImageCompressionHelper(requireContext())
 
         binding.btnReplyMessage.setOnClickListener {
             (requireActivity() as MainActivity).showLoader(true)
@@ -484,9 +494,11 @@ class ComposeFragment : Fragment() {
 
             setFragmentResultListener(SelectRecipientsFragment.SELECT_CONTACT_REQUEST_KEY) { requestKey, bundle ->
                 if (bundle.containsKey(SelectRecipientsFragment.SELECTED_CONTACT)) {
-                    val contacts: ContactsDto =
-                        bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
+                    val contacts: ContactsDto = bundle.getSerializable(SelectRecipientsFragment.SELECTED_CONTACT) as ContactsDto
+                    val scholarType: ScholarType =
+                        ScholarType.getScholarType(bundle.getInt(SelectRecipientsFragment.SCHOLAR_TYPE))
                     composeViewModel.setContacts(contacts.contacts)
+                    composeViewModel.setScholarType(scholarType)
                 }
             }
 
@@ -532,28 +544,47 @@ class ComposeFragment : Fragment() {
                 hideAttachmentCard()
                 lastClickAttachmentType = AttachmentType.CAMERA
                 FileAccess.checkPermission(this@ComposeFragment)
-                // checkCameraPermissions()
+
+                val imageFile = File(
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                    "${UUID.randomUUID()}.jpg"
+                )
+                capturedImageFile = imageFile
+
+                val authority = "${requireContext().packageName}.myFileProvider"
+                capturedImageUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    authority,
+                    imageFile
+                )
+
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(300)
-                    cameraLauncher.launch(FileAccess.cameraIntent())
+                    cameraLauncher.launch(FileAccess.cameraIntent(capturedImageUri!!))
                 }
             } catch (e: SecurityException) {
-                e.message
+                e.printStackTrace()
             }
-
-
         }
     }
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val bitmap = result.data?.extras?.get("data") as Bitmap
-                val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
-                file.writeBitmap(
-                    bitmap, Bitmap.CompressFormat.PNG, 100
-                )
-                composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))
+                /* val bitmap = result.data?.extras?.get("data") as Bitmap
+                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                 file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
+
+                 composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))*/
+
+
+                capturedImageFile?.let { file ->
+                    if (file.exists()) {
+                        composeViewModel.setAttachments(
+                            listOf(MiMedia(path = file.absolutePath))
+                        )
+                    }
+                }
             }
         }
 
@@ -680,6 +711,8 @@ class ComposeFragment : Fragment() {
             }
         }
 
+
+    /*with  process base */
     private val pickImagesLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
@@ -688,27 +721,93 @@ class ComposeFragment : Fragment() {
                     val clipData = data.clipData
                     if (clipData != null) {
                         for (i in 0 until clipData.itemCount) {
-                            if (selectedImages.size < 7) {
+                            /*if (selectedImages.size < 7) {
                                 val imageUri = clipData.getItemAt(i).uri
                                 selectedImages.add(imageUri)
+                            }*/
+                            val imageUri = clipData.getItemAt(i).uri
+                            selectedImages.add(imageUri)
+                        }
+
+                        // Check if total size exceeds the limit
+                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
+                            // Show compression dialog
+                            imageCompressionHelper.showCompressionDialog(
+                                parentFragmentManager,
+                                selectedImages
+                            ) { compressionOption ->
+                                // Show progress dialog
+                                val progressDialog = ProgressDialog(requireContext()).apply {
+                                    setMessage("Compressing images... 0/${selectedImages.size}")
+                                    setCancelable(false)
+                                    show()
+                                }
+
+                                // Process images with selected compression
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val compressedUris = mutableListOf<Uri>()
+
+                                    // Process each image individually to track progress
+                                    for (i in selectedImages.indices) {
+                                        val uri = selectedImages[i]
+
+                                        // Update progress message
+                                        withContext(Dispatchers.Main) {
+                                            progressDialog.setMessage("Compressing images... ${i+1}/${selectedImages.size}")
+                                        }
+
+                                        // Compress image in background
+                                        val compressedUri = withContext(Dispatchers.IO) {
+                                            imageCompressionHelper.compressImage(
+                                                uri,
+                                                compressionOption
+                                            )
+                                        }
+
+                                        compressedUris.add(compressedUri)
+                                    }
+
+                                    // Dismiss progress dialog
+                                    progressDialog.dismiss()
+
+                                    // Now we have compressed images, upload them
+                                    composeViewModel.setAttachments(compressedUris.map {
+                                        MiMedia(
+                                            path = it.toString(),
+                                            name = lastClickAttachmentType?.name
+                                        )
+                                    })
+                                }
                             }
+                        }
+                        else {
+                            /*  // Process images normally (still might want to compress slightly)
+                               composeViewModel.setAttachments(files)*/
+                            composeViewModel.setAttachments(selectedImages.map {
+                                MiMedia(
+                                    path = it.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            })
                         }
                     } else {
                         data.data?.let { imageUri ->
-                            if (selectedImages.size < 7) {
+                            /*if (selectedImages.size < 7) {
                                 selectedImages.add(imageUri)
-                            }
+                            }*/
+                            selectedImages.add(imageUri)
                         }
+                        composeViewModel.setAttachments(selectedImages.map {
+                            MiMedia(
+                                path = it.toString(),
+                                name = lastClickAttachmentType?.name
+                            )
+                        })
                     }
-                    composeViewModel.setAttachments(selectedImages.map {
-                        MiMedia(
-                            path = it.toString(),
-                            name = lastClickAttachmentType?.name
-                        )
-                    })
                 }
             }
         }
+
     private fun openGallery() {
         val intent = Intent()
         intent.type = "image/*"
@@ -743,83 +842,6 @@ class ComposeFragment : Fragment() {
         }
     }
 
-    private fun launchPhotoPicker() {
-        /*    val intent = getLasiIntent().setMediaType(MediaType.IMAGE).setMaxCount(7).build()
-           receiveData.launch(intent)*/
-        val intent = Lassi(requireContext())
-            .with(LassiOption.CAMERA_AND_GALLERY)
-            .setMediaType(MediaType.IMAGE)
-            .setMaxCount(7)
-            .setAscSort(SortingOption.DESCENDING)
-            .setPlaceHolder(R.drawable.img_placeholder)
-            .setErrorDrawable(R.drawable.img_placeholder)
-            .setGridSize(3)
-            .setMinFileSize(0) // Restrict by minimum file size
-            .setMaxFileSize(12000) // Restrict by maximum file size
-            .setCompressionRatio(65) // compress image for single item selection (can be 0 to 100)
-            .setAlertDialogNegativeButtonColor(R.color.black)
-            .setSupportedFileTypes(
-                "jpg", "jpeg", "png", "webp", "gif", "mp4", "mkv", "webm", "avi", "flv", "3gp",
-                "pdf", "odt", "doc", "docs", "docx", "txt", "ppt", "pptx", "rtf", "xlsx", "xls"
-            )
-            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-            .setStatusBarColor(R.color.md_theme_light_primary)
-            .setToolbarColor(R.color.md_theme_light_primary)
-            .setToolbarResourceColor(android.R.color.white)
-            .setProgressBarColor(R.color.red)
-            .setGalleryBackgroundColor(R.color.white)
-            .build()
-        receiveData.launch(intent)
-        /*openGallery()*/
-
-    }
-
-    private var resultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val attachments = mutableListOf<MiMedia>()
-//   val data= result.data
-                val clipData = result.data?.clipData
-                if (clipData != null) {
-                    for (i in 0 until clipData.itemCount) {
-                        val imageUri: Uri = clipData.getItemAt(i).uri
-                        // Process each image URI here
-                        println("Selected Image URI: $imageUri")
-                        val miMedia = MiMedia(
-                            id = 0,
-                            name = imageUri.lastPathSegment,
-                            path = imageUri.toString(),
-                        )
-                        attachments.add(miMedia)
-                    }
-                    composeViewModel.setAttachments(attachments)
-                    /*  //val count = data.clipData!!.itemCount
-                      for (i in 0 until count){
-                          val imageUri = data.clipData!!.getItemAt(i).uri
-                          val miMedia = MiMedia(
-                              id = 0,
-                              name = imageUri.lastPathSegment,
-                              path = imageUri.toString(),
-                          )
-                          attachments.add(miMedia)
-                      }
-                      composeViewModel.setAttachments(attachments)*/
-                } else {
-                    // Single image selected
-                    val imageUri: Uri? = result.data?.data
-                    imageUri?.let {
-                        println("Selected Single Image URI: $it")
-                        val miMedia = MiMedia(
-                            id = 0,
-                            name = it.lastPathSegment,
-                            path = it.toString(),
-                        )
-                        attachments.add(miMedia)
-                    }
-                    composeViewModel.setAttachments(attachments)
-                }
-            }
-        }
 
     private fun launchAudioPicker() {
         val intent = Intent()
@@ -840,14 +862,6 @@ class ComposeFragment : Fragment() {
         pdfLauncher.launch(intent)
     }
 
-    private fun getLasiIntent() =
-        Lassi(requireContext()).setStatusBarColor(R.color.md_theme_light_primary)
-            .setToolbarColor(R.color.md_theme_light_primary)
-            .setToolbarResourceColor(android.R.color.white)
-            .setAlertDialogNegativeButtonColor(R.color.black)
-            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-            .setGalleryBackgroundColor(R.color.white)
-            .setProgressBarColor(R.color.md_theme_light_primary).setGridSize(3)
 
     private fun checkCameraPermissions() {
         if (ContextCompat.checkSelfPermission(
@@ -953,6 +967,7 @@ class ComposeFragment : Fragment() {
         startLocationFetch()
     }
 
+    var locationPermissionDeniedDialogSeen = false
 
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
@@ -961,39 +976,72 @@ class ComposeFragment : Fragment() {
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), 120
-            )
-            return
-        }
-        if (isGPSEnabled().not()) {
-            MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
-                .setCancelable(false)
-                .setMessage("GPS is disabled in your device. Would you like to enable it?")
-                .setPositiveButton("No") { d, _ ->
-                    d.dismiss()
-                    findNavController().popBackStack()
-                }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
-                    d.dismiss()
-                    val callGPSSettingIntent = Intent(
-                        Settings.ACTION_LOCATION_SOURCE_SETTINGS
-                    )
-                    startActivity(callGPSSettingIntent)
-                }.show()
+            // Check if permission was denied before requesting
+            if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .not() && shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION).not()
+            ) {
+                // Permission is denied permanently, show a dialog and guide to settings
+                if (locationPermissionDeniedDialogSeen.not()) {
+                    showPermissionDeniedDialog()
+                    locationPermissionDeniedDialogSeen = true
+                }
+            } else {
+                // Permission is denied temporarily, request it
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ), 120
+                )
+
+            }
         } else {
-            fusedLocationClient
-                .lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    composeViewModel.currentLocation =
-                        Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
-                }
-                .addOnFailureListener {
-                    Log.e("MSG", "startLocationFetch: " + it.message)
-                }
+            if (isGPSEnabled().not()) {
+                MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
+                    .setCancelable(false)
+                    .setMessage("GPS is disabled in your device. Would you like to enable it?")
+                    .setPositiveButton("No") { d, _ ->
+                        d.dismiss()
+                        findNavController().popBackStack()
+                    }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                        d.dismiss()
+                        val callGPSSettingIntent = Intent(
+                            Settings.ACTION_LOCATION_SOURCE_SETTINGS
+                        )
+                        startActivity(callGPSSettingIntent)
+                    }.show()
+            } else {
+                fusedLocationClient
+                    .lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        composeViewModel.currentLocation =
+                            Pair(location?.latitude ?: 0.0, location?.longitude ?: 0.0)
+                    }
+                    .addOnFailureListener {
+                        Log.e("MSG", "startLocationFetch: " + it.message)
+
+                    }
+            }
         }
+    }
+
+    private fun showPermissionDeniedDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Location Permission Required")
+            .setMessage("Location permission is required to send your current location. Please enable it in app settings.")
+            .setPositiveButton("Settings") { dialog, _ ->
+                locationPermissionDeniedDialogSeen = false
+                dialog.dismiss()
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", requireContext().packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+                requireActivity().onBackPressed()
+            }
+            .show()
     }
 
 

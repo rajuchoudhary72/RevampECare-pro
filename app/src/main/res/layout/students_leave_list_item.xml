@@ -144,6 +144,14 @@
             android:layout_marginHorizontal="@dimen/horizontal_margin"
              />
 
+        <TextView
+            android:id="@+id/tv_reject_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/horizontal_margin"
+            android:visibility="gone"
+            />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"

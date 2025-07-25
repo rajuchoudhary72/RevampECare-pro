@@ -289,28 +289,23 @@
                 android:orientation="vertical"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 tools:listitem="@layout/lesson_plan_list_item"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-
-                />
-
-
-
-
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
             <TextView
                 android:id="@+id/tv_no_data"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/iv_no_item"
-                android:fontFamily="@font/ubuntu_medium"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center"
                 android:visibility="gone"
                 android:text="@string/no_lesson_available"
                 android:textSize="16sp"
 
                 />
+
+
 
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

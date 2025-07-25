@@ -6,6 +6,7 @@ data class ProfileAttendanceDTL(
     val late: Int,
     val leave: Int,
     val present: Int,
+    val totalPresent: Int,
     val wh: Int,
     val summaryAttendance: List<SummaryAttendance>,
     val working: Int

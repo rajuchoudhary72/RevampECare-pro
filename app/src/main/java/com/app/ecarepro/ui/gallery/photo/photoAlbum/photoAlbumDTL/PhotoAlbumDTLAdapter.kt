@@ -9,6 +9,8 @@ import com.app.ecarepro.databinding.PhotoListItemBinding
 import com.app.ecarepro.model.Album
 import com.app.ecarepro.model.Photo
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class PhotoAlbumDTLAdapter(
     private var photoAlbumDTLFragment: PhotoAlbumDTLFragment
@@ -49,10 +51,14 @@ class PhotoAlbumDTLAdapter(
 
         fun bind(data: Photo) {
 
-
-            Picasso.get().load(data.photoPath)
+            Picasso.get()
+                .load(data.photoPath)
                 .placeholder(R.drawable.default_profile)
-                .into(item.ivPhoto)
+                .error(R.drawable.default_profile)
+                .resize(100, 100)        // Resize to your ImageView size
+                .centerCrop()            // Crop to fill the ImageView
+                .noFade()                // Disable fade-in animation for speed
+                .into(item.ivPhoto);
 
             item.ivPhoto.setOnClickListener {
                 photoAlbumDTLFragment.onItemClick(albumList, pos = position,false)

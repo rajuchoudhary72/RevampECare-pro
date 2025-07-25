@@ -86,6 +86,6 @@
             android:layout_height="@dimen/_35sdp"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="@dimen/_24sdp" />
+            android:textSize="@dimen/_18sdp" />
     </LinearLayout>
 </layout>

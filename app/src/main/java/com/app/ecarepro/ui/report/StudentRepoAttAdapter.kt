@@ -40,6 +40,10 @@ class StudentRepoAttAdapter(
                 append(studentAttendanceReportFragment.getString(R.string.total_students_pun))
                 append(data.present+data.absent+data.leave+data.wh+data.na)
             }
+            tvTotalPresentWorkingCount.text= buildString {
+                append("Total Present : ")
+                append(data.totalPresent)
+            }
             tvTotalAbsentCount.text= buildString {
                 append(studentAttendanceReportFragment.getString(R.string.general_absent_pun))
                 append(data.absent)

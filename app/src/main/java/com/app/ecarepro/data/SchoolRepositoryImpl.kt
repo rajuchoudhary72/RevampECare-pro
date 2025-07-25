@@ -24,6 +24,7 @@ import com.app.ecarepro.model.Slide
 import com.app.ecarepro.model.TaskDetails
 import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
+import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.data.network.model.SendCommentDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.model.WatchersDto
@@ -35,6 +36,8 @@ import com.app.ecarepro.ui.medicalcard.MedicalCardResponse
 import com.app.ecarepro.model.Title
 import com.app.ecarepro.model.UpdateTaskAttachmentDto
 import com.app.ecarepro.model.Watcher
+import com.app.ecarepro.ui.assignClub.AssignClubRequest
+import com.app.ecarepro.ui.assignClub.StudentListAssignClub
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -103,12 +106,16 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getCirculars(pg, yrID, title)
     }
 
-    override suspend fun getNoticeDTL(ntID: Int, iD: Int): NetworkNoticDetails {
-        return schoolService.getNoticeDTL(ntID, iD)
+    override suspend fun getNoticeDTL(ntID: String): NetworkNoticDetails {
+        return schoolService.getNoticeDTL(ntID)
     }
 
-    override suspend fun getCircularDTL(cirID: Int, iD: Int): NetworkCircularDetails {
-        return schoolService.getCircularDTL(cirID, iD)
+    override suspend fun getCircularDTL(cirID: String): NetworkCircularDetails {
+        return schoolService.getCircularDTL(cirID)
+    }
+
+    override suspend fun getContactDTL(): NetworkContactUrl {
+        return schoolService.getContactDTL()
     }
 
     override suspend fun getClass(): ClassPromotionModel {
@@ -276,8 +283,19 @@ class SchoolRepositoryImpl @Inject constructor(
         return schoolService.getStudentListToAssignHouse(id,orderBy)
     }
 
+    override suspend fun getStudentListToAssignClub(
+        id: String,
+        orderBy: String
+    ): StudentListAssignClub {
+        return schoolService.getStudentListToAssignClub(id,orderBy)
+    }
+
     override suspend fun assignHouse(request: List<AssignHouseRequest>): CommonResponse {
         return schoolService.assignHouse(request)
+    }
+
+    override suspend fun assignClub(request: List<AssignClubRequest>): CommonResponse {
+        return schoolService.assignClub(request)
     }
 
     override suspend fun getMedicalCard(): MedicalCardResponse {

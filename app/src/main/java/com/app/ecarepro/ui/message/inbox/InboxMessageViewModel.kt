@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.message.inbox
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.ecarepro.data.network.model.InboxMessage
@@ -16,16 +17,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsManager
+import com.app.ecarepro.utils.badge_count.NotificationSyncManager
+import kotlinx.coroutines.flow.StateFlow
+
 @HiltViewModel
 class InboxMessageViewModel @Inject constructor(
     private val messageRepository: MessageRepository,
+    private val syncManager: NotificationSyncManager,
     private val analyticsManager: AnalyticsManager
 ) : ViewModel() {
     private var page = DEFAULT_PAGE
     private var isLoading: Boolean = false
     private var isLastPage: Boolean = true
     private var totalPageCount: Int = DEFAULT_PAGE
-
+    val badgeCountFlow: StateFlow<Int> get() = syncManager.badgeCountMessageFlow
     val uiState = MutableStateFlow<InboxMessageUiState>(InboxMessageUiState.Loading)
 
     init {
@@ -37,6 +42,11 @@ class InboxMessageViewModel @Inject constructor(
     fun isLastPage() = isLastPage
 
     fun totalPageCount() = totalPageCount
+    fun updateBadgeCount() {
+        viewModelScope.launch {
+            syncManager.fetchAndUpdateBadgeCount()
+        }
+    }
 
     private fun fetchInboxMessages(isRefresh: Boolean = false) {
         viewModelScope.launch {
@@ -115,6 +125,22 @@ class InboxMessageViewModel @Inject constructor(
     }
     fun sendScreenEvent(){
         analyticsManager.trackScreen(AnalyticsConstants.Screens.INBOX_MESSAGE_LIST)
+    }
+    fun updateUnreadMessageCount(id: String, unReadMessageCount: Int) {
+        viewModelScope.launch {
+            Log.e("TAG", "updateUnreadMessageCount: $id , $unReadMessageCount" )
+            val currentState = uiState.value
+            if (currentState is InboxMessageUiState.Success) {
+                val updatedMessages = currentState.messages.map { message ->
+                    if (message.id == id) {
+                        message.copy(unread = message.unread?.minus(unReadMessageCount))
+                    } else {
+                        message
+                    }
+                }
+                uiState.update { currentState.copy(messages = updatedMessages) }
+            }
+        }
     }
 }
 

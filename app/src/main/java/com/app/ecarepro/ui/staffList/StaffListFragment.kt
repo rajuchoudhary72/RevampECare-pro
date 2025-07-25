@@ -129,7 +129,8 @@ class StaffListFragment : Fragment() , ItemListener<Staff> {
 
                 val circularAdapter = StaffListAdapter(
                      staffs,
-                    this@StaffListFragment
+                    this@StaffListFragment,
+                    toFragment
                 )
 
                 binding.rvStaffList.apply {

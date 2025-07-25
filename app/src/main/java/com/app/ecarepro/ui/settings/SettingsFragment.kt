@@ -29,10 +29,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.utils.BaseFragment
 
 @AndroidEntryPoint
-class SettingsFragment : BaseFragment() {
+class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -58,9 +57,6 @@ class SettingsFragment : BaseFragment() {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             cardChangePassword.setOnClickListener { findNavController().navigate(R.id.changePasswordFragment) }
             cardChangeUsername.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
-            cardChangeLang.setOnClickListener {
-                findNavController().navigate(R.id.languageSelect)
-            }
             cardSyncData.setOnClickListener {
                 /*sync  manually  from user click sync button  on setting screen */
                 lifecycleScope.launch {
@@ -191,7 +187,7 @@ class SettingsFragment : BaseFragment() {
                         if (it.data != null) {
                             if (it.data.errorCode == 0) {
                                 if (it.data.supprtURL != null) {
-                                    /*load  url on web view direct if  url is not null  or empty*/
+                                 /*load  url on web view direct if  url is not null  or empty*/
                                     webViewCall(it.data.supprtURL, "Contact US")
                                 }
                             }

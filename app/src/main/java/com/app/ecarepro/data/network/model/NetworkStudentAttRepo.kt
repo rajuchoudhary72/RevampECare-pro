@@ -14,6 +14,7 @@ data class NetworkStudentAttRepo(
     val message: String,
     val photo: String,
     val presentDays: Int,
+    val present_WH_Days: Int,
     val whDays: Int,
     val schoolDays: Int,
     val status: String,
@@ -22,6 +23,7 @@ data class NetworkStudentAttRepo(
     val totalLates: Int,
     val totalLeave: Int,
     val totalPresent: Int,
+    val totalPresent_WH: Int,
     val totalWH: Int,
     val workingDays: Int
 )

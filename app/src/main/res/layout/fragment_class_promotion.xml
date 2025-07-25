@@ -24,35 +24,39 @@
             android:id="@+id/llSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/green"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/include_toolbar">
+            app:layout_constraintTop_toBottomOf="@id/include_toolbar"
+            android:background="@color/background_dashboard"
+
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/autoInputClassInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/white"
-                    android:paddingEnd="5dp">
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
 
-                    <Spinner
-                        android:id="@+id/spClass"
+
+                    >
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteClass"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@drawable/spinner_drop_background"
-                        android:dropDownVerticalOffset="50dp"
-                        android:overlapAnchor="true"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
-                        android:spinnerMode="dropdown" />
-                </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:text="@string/select_class" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
 
             </LinearLayout>

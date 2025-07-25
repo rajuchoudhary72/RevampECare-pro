@@ -23,6 +23,8 @@ class CustomResponseInterceptor @Inject constructor(
 
     private val handler = Handler(Looper.getMainLooper())
     private var dialogShown = false // Prevent multiple dialogs
+    /*condition  on global search for student and  staff tab searching  */
+    private val ignoreItems = mutableListOf("Report/StudentList", "Report/StaffList")
 
     override fun intercept(chain: Interceptor.Chain): Response {
 
@@ -34,7 +36,9 @@ class CustomResponseInterceptor @Inject constructor(
     private fun handleResponse(chain: Interceptor.Chain, response: Response): Response {
         val responseBody = response.body
         val responseBodyString = responseBody .string() ?: ""
-
+        if (isUrlIgnored(response.request.url.toUri().toString()))
+            return response.newBuilder()
+                .body(ResponseBody.create(responseBody.contentType(), responseBodyString)).build()
         try {
 
              val jsonObject = JSONObject(responseBodyString)
@@ -70,7 +74,8 @@ class CustomResponseInterceptor @Inject constructor(
             .body(ResponseBody.create(responseBody.contentType(), responseBodyString))
             .build()
     }
-
+    private fun isUrlIgnored(url: String): Boolean =
+        ignoreItems.any { url.contains(it, ignoreCase = true) }
     private suspend fun showRetryDialog(): Boolean {
         return suspendCoroutine { continuation ->
             dialogShown=true

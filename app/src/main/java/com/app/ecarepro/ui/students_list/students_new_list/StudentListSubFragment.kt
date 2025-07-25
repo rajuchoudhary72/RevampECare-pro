@@ -1,10 +1,13 @@
 package com.app.ecarepro.ui.students_list.students_new_list
 
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -95,21 +98,64 @@ class StudentListSubFragment() : Fragment(),
                            }
 
 
+//                           binding.tvSortByRollNo.setOnClickListener {
+//                               rollNoFilterAsc = !rollNoFilterAsc
+//                               studentList =
+//                                   if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
+//                                   else studentList.sortedByDescending { it.rollNumber }.toMutableList()
+//                               setupRecycleViewStudentList(studentList)
+//                           }
+
+                           binding.llSortByRollNo.background.setTint(resources.getColor(R.color.app_color))
+                           binding.llSortByAdmission.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                           binding.llSortByName.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+
+                           binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.white,null))
+                           binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.black,null))
+                           binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.black,null))
+
+                           binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                           binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+                           binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+
+
                            binding.tvSortByRollNo.setOnClickListener {
-                               rollNoFilterAsc = !rollNoFilterAsc
-                               studentList =
-                                   if (rollNoFilterAsc) studentList.sortedBy { it.rollNumber }.toMutableList()
-                                   else studentList.sortedByDescending { it.rollNumber }.toMutableList()
-                               setupRecycleViewStudentList(studentList)
+                               try {
+                                   rollNoFilterAsc = !rollNoFilterAsc
+                                   studentList = studentList
+                                       .sortedWith(compareBy { it.rollNumber?.toIntOrNull() ?: Int.MAX_VALUE })
+                                       .let { if (rollNoFilterAsc) it else it.reversed() }
+                                       .toMutableList()
+                                   setupRecycleViewStudentList(studentList)
+                               } catch (e: Exception) {
+                                   e.printStackTrace()
+                               }
+                               sortButtonUi(1)
+                           }
+
+                           binding.tvSortByAdmission.setOnClickListener {
+                               try {
+                                   admissionFilterAsc = !admissionFilterAsc
+                                   studentList = studentList
+                                       .sortedWith(compareBy { it.admissionNumber?.toIntOrNull() ?: Int.MAX_VALUE })
+                                       .let { if (admissionFilterAsc) it else it.reversed() }
+                                       .toMutableList()
+                                   setupRecycleViewStudentList(studentList)
+                               } catch (e: Exception) {
+                                   e.printStackTrace()
+                               }
+                               sortButtonUi(2)
 
                            }
-                           binding.tvSortByAdmission.setOnClickListener {
-                               admissionFilterAsc = !admissionFilterAsc
-                               studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
-                                   .toMutableList()
-                               else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
-                               setupRecycleViewStudentList(studentList)
-                           }
+
+//                           binding.tvSortByAdmission.setOnClickListener {
+//                               admissionFilterAsc = !admissionFilterAsc
+//                               studentList = if (admissionFilterAsc) studentList.sortedBy { it.admissionNumber }
+//                                   .toMutableList()
+//                               else studentList.sortedByDescending { it.admissionNumber }.toMutableList()
+//                               setupRecycleViewStudentList(studentList)
+//                           }
+
 
                            binding.tvSortByName.setOnClickListener {
                                nameFilterAsc = !nameFilterAsc
@@ -117,6 +163,8 @@ class StudentListSubFragment() : Fragment(),
                                    .toMutableList()
                                else studentList.sortedByDescending { it.name!!.trim().lowercase() }.toMutableList()
                                setupRecycleViewStudentList(studentList)
+                               sortButtonUi(3)
+
                            }
 
 
@@ -134,6 +182,54 @@ class StudentListSubFragment() : Fragment(),
         }
 
 
+    }
+
+
+    fun sortButtonUi(pos:Int){
+        when(pos){
+            1 ->{
+                binding.llSortByRollNo.background.setTint(resources.getColor(R.color.app_color))
+                binding.llSortByAdmission.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByName.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+
+                binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.white,null))
+                binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.black,null))
+
+                binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+
+            }
+            2 ->{
+                binding.llSortByRollNo.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByAdmission.background.setTint(resources.getColor(R.color.app_color))
+                binding.llSortByName.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+
+                binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.white,null))
+                binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.black,null))
+
+                binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+
+            }
+            3 ->{
+                binding.llSortByRollNo.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByAdmission.background=resources.getDrawable(R.drawable.bg_rounded_corner_green,null)
+                binding.llSortByName.background.setTint(resources.getColor(R.color.app_color))
+
+                binding.tvSortByRollNo.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByAdmission.setTextColor(resources.getColorStateList(R.color.black,null))
+                binding.tvSortByName.setTextColor(resources.getColorStateList(R.color.white,null))
+
+                binding.ivSortByName.setColorFilter(ContextCompat.getColor(requireContext(), R.color.white), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByRollNo.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+                binding.ivSortByAdmission.setColorFilter(ContextCompat.getColor(requireContext(), R.color.black), PorterDuff.Mode.SRC_IN)
+
+            }
+        }
     }
 
     private fun setupRecycleViewStudentList(students: List<Student>) {
@@ -188,14 +284,16 @@ class StudentListSubFragment() : Fragment(),
                         findNavController().navigate(
                             R.id.action_studentListFragment2_to_infractionListFragment,
                             Bundle().apply {
-                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                                putInt(Constant.USER_ID, t.stID!!)
+                                putInt(Constant.USER_TYPE, Constant.STUDENT_TYPE)
                             })
                     }
                     1->{
                         findNavController().navigate(
                             R.id.action_studentListFragment2_to_addInfractionFragment,
                             Bundle().apply {
-                                putInt(Constant.STUDENT_ID_ARGUMENT, t.stID!!)
+                                putInt(Constant.USER_ID, t.stID!!)
+                                putInt(Constant.USER_TYPE, Constant.STUDENT_TYPE)
                             })
                     }
                 }

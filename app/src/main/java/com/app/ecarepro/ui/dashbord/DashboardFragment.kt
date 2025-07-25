@@ -37,6 +37,7 @@ import com.app.ecarepro.data.network.model.NetworkFeeDefaulter
 import com.app.ecarepro.data.network.model.Questionnaire
 import com.app.ecarepro.data.network.model.StaffAttendance
 import com.app.ecarepro.data.network.model.StatusWiseStatistics
+import com.app.ecarepro.data.network.model.StudentBirthDayCard
 import com.app.ecarepro.data.network.model.Timetable
 import com.app.ecarepro.data.network.model.UserDashboardDto
 import com.app.ecarepro.data.network.model.Workload
@@ -56,6 +57,7 @@ import com.app.ecarepro.ui.dashbord.model.ProCardCarouselModel
 import com.app.ecarepro.ui.dashbord.model.QuestionnaireCarouselModel
 import com.app.ecarepro.ui.dashbord.model.StaffAttendanceModel
 import com.app.ecarepro.ui.dashbord.model.StanderWiseStatisticModel
+import com.app.ecarepro.ui.dashbord.model.StudentBirthdayCardModel
 import com.app.ecarepro.ui.dashbord.model.StudentStatisticModel
 import com.app.ecarepro.ui.dashbord.model.TeacherWorkloadModel
 import com.app.ecarepro.ui.dashbord.model.TeachersBirthdayCarouselModel
@@ -133,7 +135,8 @@ class DashboardFragment : Fragment() {
                 buildActivitiesCard(data.upcomingActivities)
             if (data.showTeacherWorkLoad == true)
                 buildTeachersWorkLoad(data.teacherWorkLoad)
-
+            if (data.showstudentBDayCards == true)
+                buildStudentBirthCardLoad(data.studBirthdayCards)
             if (data.showFeeDafaulter == true)
                 buildFeeDefaulterCard(dashboardViewModel.feeDefaulter.value)
 
@@ -209,6 +212,36 @@ class DashboardFragment : Fragment() {
 
     }
 
+    private fun EpoxyController.buildStudentBirthCardLoad(studentBirthCardLoad: List<StudentBirthDayCard>?) {
+        if (studentBirthCardLoad.isNullOrEmpty()) return
+
+        StudentBirthdayCardModel(
+            workload = studentBirthCardLoad,
+            onClick = { workload ->
+               /* this@DashboardFragment.findNavController()
+                    .navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                        putString(Constant.ID, workload.id)
+                        putString(Constant.NAME, workload.teacherName)
+                    })
+
+                dashboardViewModel.sendAnalyticEvent(
+                    AnalyticsConstants.Events.TEACHER_WORKLOAD,
+                    mapOf(
+                        AnalyticsConstants.Attributes.TEACHER_ID to workload.id.toString(),
+                        AnalyticsConstants.Attributes.USER_NAME to workload.teacherName.toString(),
+                    )
+                )
+                *//* findNavController().navigate(
+                      R.id.timeTableNavHostFragment,
+                      bundleOf(Constant.ID to workload.id)
+
+                  )*/
+            }
+        )
+            .id("workload")
+            .addTo(this)
+
+    }
 
     private fun EpoxyController.buildProCard(cards: List<Card>) {
         if (cards.isEmpty()) return

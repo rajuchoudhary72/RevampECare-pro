@@ -56,6 +56,8 @@ class ConversationViewModel @Inject constructor(
                 }
         }
     }
+    fun getConversationId() = id.value
+
 
     fun isLoading() = isLoading
 
@@ -157,6 +159,35 @@ class ConversationViewModel @Inject constructor(
             searchQuery.update {
                 ""
             }
+    }
+
+    fun updateMessageReadStatus(msg: Conversation) {
+        viewModelScope.launch {
+            val currentUiState = uiState.value
+
+            if (currentUiState is ConversationMessageUiState.Success) {
+                val updatedMessage = currentUiState.messages.map {
+                    if (it.msgID == msg.msgID) {
+                        it.copy(hasRead = true)
+                    } else {
+                        it
+                    }
+                }
+
+                uiState.update {
+                    currentUiState.copy(messages = updatedMessage)
+                }
+            }
+        }
+    }
+
+    fun getUnReadMessageCount(): Int {
+        val currentUiState = uiState.value
+        return if (currentUiState is ConversationMessageUiState.Success) {
+            currentUiState.messages.count { it.hasRead == false }
+        } else {
+            0
+        }
     }
 }
 

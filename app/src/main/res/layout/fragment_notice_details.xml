@@ -40,7 +40,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
              android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
              >
 
             <TextView
@@ -125,23 +125,21 @@
 
             </LinearLayout>
 
-
-            <TextView
-                android:id="@+id/tv_notice_details"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <WebView
+                android:id="@+id/wv_details"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_update"
-                 android:layout_marginVertical="15dp"
-                android:autoLink="web"
-                 android:textColor="@color/grey_60"
-                android:textSize="@dimen/_12sdp"
-                   />
+                android:layout_marginVertical="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+
 
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/action_divider"
-                app:layout_constraintTop_toBottomOf="@+id/tv_notice_details"
+                app:layout_constraintTop_toBottomOf="@+id/wv_details"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_marginVertical="10dp" />

@@ -373,8 +373,8 @@ class FeeBookFragment : Fragment(), ItemListener<FeeBookModel> {
                 //  saveAndOpenPdf(base64String, "FeeReceipt", i, recdate) // Assuming you have the Base64 string available
             } else {
                 // Permission denied, handle accordingly (e.g., show a message)
-                Toast.makeText(requireContext(),
-                    getString(R.string.storage_permission_denied), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Storage permission denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

@@ -87,6 +87,7 @@ class DefaulterReportFragment : Fragment() {
             binding.groupFilter.isVisible = true
             binding.recyclerDefaulterReport.isVisible=false
             binding.tvNoData.isVisible=false
+            binding.totalLl.isVisible=false
         }
         binding.ivOrder.setOnClickListener {
             shortDescending = !shortDescending
@@ -339,13 +340,11 @@ class DefaulterReportFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerDefaulterReport.isVisible = true
-
                         if (it.data != null) {
-
-
                             binding.recyclerDefaulterReport.isVisible = it.data.isNotEmpty()
                             binding.tvNoData.isVisible = it.data.isEmpty()
-
+                            binding.totalLl.isVisible=it.data.isNotEmpty()
+                            binding.tvTotalDefaulter.setText("Total Defaulter Count :- "+it.data.size.toString())
                             binding.recyclerDefaulterReport.withModels {
 
                                 val list =

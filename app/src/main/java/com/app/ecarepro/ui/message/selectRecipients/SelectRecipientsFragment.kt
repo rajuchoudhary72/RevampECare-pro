@@ -63,7 +63,8 @@ class SelectRecipientsFragment : Fragment() {
         binding.btnDone.setOnClickListener {
             setFragmentResult(
                 SELECT_CONTACT_REQUEST_KEY, bundleOf(
-                    SELECTED_CONTACT to ContactsDto(selectRecipientsViewModel.getSelectedContacts())
+                    SELECTED_CONTACT to ContactsDto(selectRecipientsViewModel.getSelectedContacts()),
+                    SCHOLAR_TYPE to selectRecipientsViewModel.scholarType.id
                 )
             )
             findNavController().popBackStack()
@@ -101,6 +102,7 @@ class SelectRecipientsFragment : Fragment() {
 
     companion object {
         const val SELECTED_CONTACT = "selected_contact"
+        const val SCHOLAR_TYPE = "scholarType"
         const val SELECT_CONTACT_REQUEST_KEY = "select_contact"
     }
 }
