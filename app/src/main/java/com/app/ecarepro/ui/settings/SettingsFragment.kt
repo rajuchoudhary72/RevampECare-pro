@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,6 +23,7 @@ import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.sync.SyncManager
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.ui.SystemViewModel
+import com.app.ecarepro.ui.circuler.CircularDetailsViewModel
 import com.app.ecarepro.ui.mainActivity
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,7 +36,7 @@ class SettingsFragment : BaseFragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-
+    private val SettingViewModel: SettingViewModel by    viewModels()
     @Inject
     lateinit var usetDataStore: com.app.ecarepro.data.datastore.UserDataStore
 
@@ -54,13 +56,12 @@ class SettingsFragment : BaseFragment() {
 
         binding.apply {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-
             cardChangePassword.setOnClickListener { findNavController().navigate(R.id.changePasswordFragment) }
-
-            cardChangeUserName.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
-
-
-            cardSync.setOnClickListener {
+            cardChangeUsername.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
+            cardChangeLang.setOnClickListener {
+                findNavController().navigate(R.id.languageSelect)
+            }
+            cardSyncData.setOnClickListener {
                 /*sync  manually  from user click sync button  on setting screen */
                 lifecycleScope.launch {
                     mainActivity().showLoader(true)
@@ -85,7 +86,7 @@ class SettingsFragment : BaseFragment() {
                 }
             }
 
-            cardRateUs.setOnClickListener {
+            cardRatings.setOnClickListener {
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewModel.sendAnalyticEvent(
                         AnalyticsConstants.Events.RATE_US,
@@ -98,20 +99,19 @@ class SettingsFragment : BaseFragment() {
                 }
                 launchPlayStore()
             }
-
-            cardChangeLang.setOnClickListener {
-                findNavController().navigate(R.id.languageSelect)
+            cardContactUs.setOnClickListener {
+                getContactUrl()
             }
-
-            setLastSyncTime()
         }
         generalSettings()
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
+        }
 
     }
     private fun FragmentSettingsBinding.setLastSyncTime() {
         viewLifecycleOwner.lifecycleScope.launch {
-            lastSyncTime.text = getString(R.string.last_sync, usetDataStore.getUser()?.loginTime)
+            lastSyncTime.text = "Last Sync : ${usetDataStore.getUser()?.loginTime}"
         }
     }
 
@@ -153,7 +153,7 @@ class SettingsFragment : BaseFragment() {
                                     for (item in it.data.settings) {
                                         if (item.settingName=="ChangeUserName") {
 
-                                            binding.cardChangeUserName.isVisible = item.isEnabled!!
+                                            binding.cardChangeUsername.isVisible = item.isEnabled!!
                                             break
 
                                         }
@@ -171,5 +171,58 @@ class SettingsFragment : BaseFragment() {
             }
         }
         viewModel.appGeneralSettings()
+    }
+
+    private fun getContactUrl() {
+        lifecycleScope.launch {
+            SettingViewModel._contactUrlDTLStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (it.data.errorCode == 0) {
+                                if (it.data.supprtURL != null) {
+                                    /*load  url on web view direct if  url is not null  or empty*/
+                                    webViewCall(it.data.supprtURL, "Contact US")
+                                }
+                            }
+                        }
+
+                    }
+                    else -> {}
+                }
+
+
+            }
+        }
+        SettingViewModel.getContactUrl()
+    }
+    private fun webViewCall(url: String, title: String) {
+        val tabIntent =
+            CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green))
+                .build()
+        val bundle = Bundle()
+        bundle.putString("title", title)
+        bundle.putString("url", url)
+        openCustomTab(tabIntent, Uri.parse(url))
+        //  findNavController().navigate(R.id.webViewFragment, bundle)
+    }
+    fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
+        val packageName = "com.android.chrome"
+        if (packageName != null) {
+            customTabsIntent.intent.setPackage(packageName)
+            customTabsIntent.launchUrl(requireContext(), uri!!)
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }
     }
 }

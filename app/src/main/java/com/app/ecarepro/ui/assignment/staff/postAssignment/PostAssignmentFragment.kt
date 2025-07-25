@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -43,6 +46,7 @@ import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.ECareDataPicker
 import com.app.ecarepro.utils.FileAccess
+import com.app.ecarepro.utils.ImageCompressionHelper
 import com.app.ecarepro.utils.listener.ItemListener
 import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
@@ -50,16 +54,24 @@ import com.lassi.domain.media.LassiOption
 import com.lassi.domain.media.MediaType
 import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 
 @AndroidEntryPoint
 class PostAssignmentFragment : Fragment() {
 
+    private var isGallery: Boolean=false
     private var isClassWise: Boolean=true
     private var viewAssignmentData: NetworkViewAssignment? = null
      private var isClassSelected: Boolean = false
@@ -83,6 +95,10 @@ class PostAssignmentFragment : Fragment() {
     private var studentList = mutableListOf<Student>()
     private var lastClickAttachmentType: AttachmentType? = null
     var submitDate=""
+    private lateinit var imageCompressionHelper: ImageCompressionHelper
+    private var capturedImageFile: File? = null
+    private var capturedImageUri: Uri? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,6 +111,7 @@ class PostAssignmentFragment : Fragment() {
            assignmentId = requireArguments().getString(Constant.ASSIGNMENT_ID).toString()
            isEdit = requireArguments().getBoolean(Constant.EDIT.toString())
        }catch (e:Exception){}
+        imageCompressionHelper = ImageCompressionHelper(requireContext())
         return  binding.root
     }
 
@@ -144,9 +161,7 @@ class PostAssignmentFragment : Fragment() {
         binding.tvSelectSubject.setOnClickListener { popUpSelectSub() }
         binding.tvSelectClass.setOnClickListener {
              if (isSubjectSelected){
-                 if (classesList!=null){
-                     popUpSelectClass()
-                 }
+                 popUpSelectClass()
              }else{
                  mainActivity().showMessage("Select Subject")
              }
@@ -158,11 +173,9 @@ class PostAssignmentFragment : Fragment() {
             lastClickAttachmentType = AttachmentType.PDF
             launchPdfPicker()
         }
+        FileAccess.checkPermission(this)
         binding.tvBrowsePhoto.setOnClickListener {
-            if (checkAndRequestPermissions()) {
-                lastClickAttachmentType = AttachmentType.GALLERY
-               launchPhotoPicker()
-            }
+            selectImageOptionDialog()
         }
 
         binding.tvSelectstudent.setOnClickListener {
@@ -289,15 +302,15 @@ class PostAssignmentFragment : Fragment() {
 
        if (isValidate ){
 
-           if (!isEdit){
+
                submitDate = if (binding.isSubmitDate.isChecked){
                    Constant.toSystemDate( binding.tvSubmissionDt.text.toString())
                }else{
                    getCurrentYearLastDate()
                }
-           }
+
                 postAssignmentViewModel.createAssignment(
-                   asgDate =  if (isEdit) binding.ctvAssignmentDt.text.toString() else Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
+                   asgDate =   Constant.toSystemDate(binding.ctvAssignmentDt.text.toString()),
                    asgID =  if (isEdit) viewAssignmentData!!.asgID else 0 ,
                    classID = if (isEdit) ids.toString().toInt()   else 0,
                    classIDs =  if (isEdit)  "" else if (isClassWise)  ids.toString()   else "" ,
@@ -313,7 +326,8 @@ class PostAssignmentFragment : Fragment() {
                    lateSubmission = binding.cbLateSubmission.isChecked ,
                    attachments =attachmentsList,
                    classID_StID = classID_StID,
-                   stIDs =   null
+                   stIDs =   null,
+                    isGallery
                )
 
 
@@ -486,68 +500,6 @@ class PostAssignmentFragment : Fragment() {
     }
 
 
-    private fun selectImageOptionDialog() {
-        val items = arrayOf<CharSequence>(
-            getString(R.string.general_take_photo),
-            getString(R.string.general_choose_library),
-            getString(R.string.general_cancel)
-
-        )
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.general_add_photo))
-        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
-            FileAccess.checkPermission(this@PostAssignmentFragment)
-            if (items[item] == getString(R.string.general_take_photo)) {
-                cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.general_choose_library)) {
-                galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.general_cancel)) {
-                dialog.dismiss()
-            }
-        })
-        builder.show()
-    }
-
-    private val galleryLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                val data = it.data
-                val imgUri = data?.data
-                binding.llFile.isVisible=true
-
-
-                val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
-
-                imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-
-                imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-
-                attachmentsList.clear()
-                attachmentsList.add(Attachment(imageString,imageExt,""))
-
-            }
-        }
-
-    private val cameraLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                if (result?.data != null) {
-                    val bitmap = result.data?.extras?.get("data") as Bitmap
-                    binding.llFile.isVisible=true
-
-
-                    imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
-
-                    imageExt = FileAccess.getImageExtFromUri(requireContext(), bitmap).toString()
-                    attachmentsList.clear()
-                    attachmentsList.add(Attachment(imageString,imageExt,""))
-
-                }
-            }
-        }
-
 
     fun getStudentListByClass(
         recipientType: Int,
@@ -648,7 +600,7 @@ class PostAssignmentFragment : Fragment() {
 
 
 
-        val subjectListAdapter= StudentListAdapter(students, selectAll, this@PostAssignmentFragment , object : ItemListener<Student> {
+        val subjectListAdapter= StudentListAdapter(students, selectAll,  object : ItemListener<Student> {
             override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
                 isStudentSelected = true
             }
@@ -715,8 +667,8 @@ class PostAssignmentFragment : Fragment() {
                             submitDate=data.submitDate
                             binding.etTitle.setText(data.title)
                             binding.etDescription.setText(data.data)
-                            binding.ctvAssignmentDt.text= data.asgDate
-                            binding.tvSubmissionDt.text= data.submitDate
+                            binding.ctvAssignmentDt.text=  Constant.apiToSystemDate(data.asgDate)
+                            binding.tvSubmissionDt.text= Constant.apiToSystemDate(data.submitDate)
                             binding.tvSubmissionDt.isVisible = data.submitDate!=null && data.submitDate.isNotEmpty()
                             binding.cbActive.isChecked= data.isActive
                             binding.cbMultipleActive.isChecked= data.multipleSubmission
@@ -755,26 +707,180 @@ class PostAssignmentFragment : Fragment() {
 
         postAssignmentViewModel.viewAssignment(assignmentId)
     }
-    private fun launchPhotoPicker() {
+    private fun selectImageOptionDialog() {
+        val items = arrayOf<CharSequence>(
+            "Take Photo", "Choose from Library",
+            "Cancel"
+        )
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add Photo!")
+        builder.setItems(items) { dialog, item ->
+            if (items[item] == "Take Photo") {
+                try {
 
-        val intent = Lassi(requireContext())
-            .with(LassiOption.CAMERA_AND_GALLERY)
-            .setMediaType(MediaType.IMAGE)
-            .setMaxCount(7)
-            .setGridSize(3)
-            .setMinFileSize(0) // Restrict by minimum file size
-            .setMaxFileSize(65535) // Restrict by maximum file size
-            .setCompressionRatio(10) // compress image for single item selection (can be 0 to 100)
-            .setAlertDialogNegativeButtonColor(R.color.black)
-            .setAlertDialogPositiveButtonColor(R.color.md_theme_light_primary)
-            .setStatusBarColor(R.color.md_theme_light_primary)
-            .setToolbarColor(R.color.md_theme_light_primary)
-            .setToolbarResourceColor(android.R.color.white)
-            .setProgressBarColor(R.color.red)
-            .setGalleryBackgroundColor(R.color.white)
-            .build()
-        receiveData.launch(intent)
+                    lastClickAttachmentType = AttachmentType.CAMERA
+                    FileAccess.checkPermission(this@PostAssignmentFragment)
+
+                    val imageFile = File(
+                        requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                        "${UUID.randomUUID()}.jpg"
+                    )
+                    capturedImageFile = imageFile
+
+                    val authority = "${requireContext().packageName}.myFileProvider"
+                    capturedImageUri = FileProvider.getUriForFile(
+                        requireContext(),
+                        authority,
+                        imageFile
+                    )
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        delay(300)
+                        cameraLauncher.launch(FileAccess.cameraIntent(capturedImageUri!!))
+                    }
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
+                isGallery=false
+            } else if (items[item] == "Choose from Library") {
+                lastClickAttachmentType = AttachmentType.GALLERY
+                if (checkAndRequestPermissions()) {
+                    // Permission is already granted, start image picker
+                    openGallery()
+                }
+                isGallery=true
+            } else if (items[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        }
+        builder.show()
     }
+
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                /* val bitmap = result.data?.extras?.get("data") as Bitmap
+                 val file = File(requireContext().cacheDir, UUID.randomUUID().toString() + ".png")
+                 file.writeBitmap(bitmap, Bitmap.CompressFormat.PNG, 100)
+
+                 composeViewModel.setAttachments(listOf(MiMedia(path = file.absolutePath)))*/
+
+
+                capturedImageFile?.let { file ->
+                    if (file.exists()) {
+                        postAssignmentViewModel.setAttachments(
+                            listOf(MiMedia(path = file.absolutePath))
+                        )
+                        binding.llFile.isVisible=true
+                    }
+                }
+            }
+        }
+
+    private fun openGallery() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        pickImagesLauncher.launch(Intent.createChooser(intent, "Select Image(s)"))
+    }
+
+
+    /*with  process base */
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val selectedImages = mutableListOf<Uri>()
+                result.data?.let { data ->
+                    val clipData = data.clipData
+                    if (clipData != null) {
+                        for (i in 0 until clipData.itemCount) {
+                            if (selectedImages.size < 7) {
+                                val imageUri = clipData.getItemAt(i).uri
+                                selectedImages.add(imageUri)
+                            }
+                        }
+
+                        // Check if total size exceeds the limit
+                        if (imageCompressionHelper.exceedsPayloadLimit(selectedImages)) {
+                            // Show compression dialog
+                            imageCompressionHelper.showCompressionDialog(
+                                parentFragmentManager,
+                                selectedImages
+                            ) { compressionOption ->
+                                // Show progress dialog
+                                val progressDialog = ProgressDialog(requireContext()).apply {
+                                    setMessage("Compressing images... 0/${selectedImages.size}")
+                                    setCancelable(false)
+                                    show()
+                                }
+
+                                // Process images with selected compression
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val compressedUris = mutableListOf<Uri>()
+
+                                    // Process each image individually to track progress
+                                    for (i in selectedImages.indices) {
+                                        val uri = selectedImages[i]
+
+                                        // Update progress message
+                                        withContext(Dispatchers.Main) {
+                                            progressDialog.setMessage("Compressing images... ${i+1}/${selectedImages.size}")
+                                        }
+
+                                        // Compress image in background
+                                        val compressedUri = withContext(Dispatchers.IO) {
+                                            imageCompressionHelper.compressImage(
+                                                uri,
+                                                compressionOption
+                                            )
+                                        }
+
+                                        compressedUris.add(compressedUri)
+                                    }
+
+                                    // Dismiss progress dialog
+                                    progressDialog.dismiss()
+
+                                    // Now we have compressed images, upload them
+                                    postAssignmentViewModel.setAttachments(compressedUris.map {
+                                        MiMedia(
+                                            path = it.toString(),
+                                            name = lastClickAttachmentType?.name
+                                        )
+                                    })
+                                    binding.llFile.isVisible=true
+                                }
+                            }
+                        } else {
+                            /*  // Process images normally (still might want to compress slightly)
+                               composeViewModel.setAttachments(files)*/
+                            postAssignmentViewModel.setAttachments(selectedImages.map {
+                                MiMedia(
+                                    path = it.toString(),
+                                    name = lastClickAttachmentType?.name
+                                )
+                            })
+                            binding.llFile.isVisible=true
+                        }
+                    } else {
+                        data.data?.let { imageUri ->
+                            if (selectedImages.size < 7) {
+                                selectedImages.add(imageUri)
+                            }
+                        }
+                        postAssignmentViewModel.setAttachments(selectedImages.map {
+                            MiMedia(
+                                path = it.toString(),
+                                name = lastClickAttachmentType?.name
+                            )
+                        })
+                        binding.llFile.isVisible=true
+                    }
+                }
+            }
+        }
 
     private val receiveData =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
