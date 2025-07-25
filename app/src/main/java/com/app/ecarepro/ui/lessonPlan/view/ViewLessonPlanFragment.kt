@@ -70,7 +70,6 @@ class ViewLessonPlanFragment : Fragment() {
         }
         return binding.root
     }
-
     private fun popUpRemark(optionalReason: Boolean) {
         val tv_done: TextView
         val tv_cancel: TextView
