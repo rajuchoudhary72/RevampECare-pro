@@ -40,7 +40,7 @@ class TransportAttendanceReportFragment : Fragment() {
     private val transportAttReportViewModel: TransportAttReportViewModel by viewModels()
 
     private lateinit var routeLSTList: List<RouteLST>
-    private lateinit var stopLSTList: List<StopLST>
+    private  var stopLSTList = mutableListOf<StopLST>()
     private lateinit var stoppersSelectData: StopLST
     private var routeSelected: Boolean = false
     private var stoppersSelected: Boolean = false
@@ -80,10 +80,14 @@ class TransportAttendanceReportFragment : Fragment() {
 
             }
             tvSelectStoppage.setOnClickListener {
-                if (stopLSTList.isNotEmpty()) {
-                    popUpStoppers()
-                } else {
-                    mainActivity().showMessage(getString(R.string.no_stoppers_data))
+                if (routeSelected) {
+                    if (stopLSTList.isNotEmpty()) {
+                        popUpStoppers()
+                    } else {
+                        mainActivity().showMessage("No Stoppers Data")
+                    }
+                }else{
+                    mainActivity().showMessage("No Stoppers Data")
                 }
             }
 
@@ -134,7 +138,7 @@ class TransportAttendanceReportFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
-                            stopLSTList = it.data.stopLST
+                            stopLSTList = it.data.stopLST.toMutableList()
                         }
                     }
                 }
