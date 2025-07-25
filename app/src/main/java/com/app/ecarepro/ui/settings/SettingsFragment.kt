@@ -29,9 +29,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
+import com.app.ecarepro.utils.BaseFragment
 
 @AndroidEntryPoint
-class SettingsFragment : Fragment() {
+class SettingsFragment : BaseFragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -57,6 +58,9 @@ class SettingsFragment : Fragment() {
             toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             cardChangePassword.setOnClickListener { findNavController().navigate(R.id.changePasswordFragment) }
             cardChangeUsername.setOnClickListener { findNavController().navigate(R.id.changeUsernameFragment) }
+            cardChangeLang.setOnClickListener {
+                findNavController().navigate(R.id.languageSelect)
+            }
             cardSyncData.setOnClickListener {
                 /*sync  manually  from user click sync button  on setting screen */
                 lifecycleScope.launch {

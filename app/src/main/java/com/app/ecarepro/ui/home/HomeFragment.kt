@@ -10,12 +10,16 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -33,6 +37,7 @@ import com.app.ecarepro.cardOption
 import com.app.ecarepro.dashboardCard
 import com.app.ecarepro.data.network.model.Card
 import com.app.ecarepro.data.network.model.Menu
+import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.NetworkSchool
 import com.app.ecarepro.databinding.FragmentHomeBinding
 import com.app.ecarepro.databinding.LayoutUndertakingBinding
@@ -62,18 +67,19 @@ import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import com.app.ecarepro.ui.firebaseAnalytics.AnalyticsConstants
-import com.app.ecarepro.utils.BaseFragment
 import kotlinx.coroutines.Dispatchers
+import org.json.JSONArray
 import java.util.Locale
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class HomeFragment : Fragment() {
     private var schoolData: NetworkSchool? = null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val mViewModel: HomeViewModel by viewModels()
     private val systemViewModel: SystemViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,27 +90,89 @@ class HomeFragment : BaseFragment() {
 
     }
 
+    private fun announce(message: String) {
+        val accessibilityManager =
+            requireContext().getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        if (accessibilityManager.isEnabled) {
+            val event = AccessibilityEvent.obtain().apply {
+                eventType = AccessibilityEvent.TYPE_ANNOUNCEMENT
+                className = javaClass.name
+                packageName = requireContext().packageName
+                text.add(message)
+            }
+            accessibilityManager.sendAccessibilityEvent(event)
+        }
+    }
+
+    private fun getContactUrl() {
+        lifecycleScope.launch {
+            mViewModel._contactUrlDTLStateFlow.collectLatest {
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
+                    }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        Log.d("main", "Error" + it)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (it.data != null) {
+                            if (it.data.errorCode == 0) {
+                                if (it.data.supprtURL != null) {
+                                    /*load  url on web view direct if  url is not null  or empty*/
+                                    webViewCall(it.data.supprtURL, "Contact US")
+                                }
+                            }
+                        }
+
+                    }
+
+                    else -> {}
+                }
+
+
+            }
+        }
+        mViewModel.getContactUrl()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpObservers()
-
     }
 
     private fun setUpViews() {
 
-        //binding.tvWelcome.text=getString(R.string.welcome)
-
-
-        binding.imgSync.setOnClickListener {
-            mViewModel.refresh()
-        }
+        /* binding.imgSync.setOnClickListener {
+            getContactUrl()
+        }*/
         binding.swipeRefresh.setOnRefreshListener {
             mViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
-      binding.imgUserAvatar.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
-      binding.txtUserName.setOnClickListener { findNavController().navigate(R.id.profileFragment) }
+        binding.imgUserAvatar.apply {
+            isClickable = true
+            isFocusable = true
+            contentDescription = "Profile picture"
+            setOnClickListener {
+                findNavController().navigate(R.id.profileFragment)
+                announce("Opening profile")
+            }
+        }
+        binding.txtUserName.apply {
+            isClickable = true
+            isFocusable = true
+            contentDescription = "Your Name"
+            setOnClickListener {
+                announce("Opening profile")
+                // Optionally open a screen
+                findNavController().navigate(R.id.profileFragment)
+            }
+        }
         binding.recyclerView.addItemDecoration(
             LinearMarginDecoration.create(
                 margin = 8,
@@ -117,7 +185,7 @@ class HomeFragment : BaseFragment() {
         )
         binding.recyclerView.addItemDecoration(
             GridMarginDecoration.create(
-                margin =  8,
+                margin = 8,
                 columnProvider = object : ColumnProvider {
                     override fun getNumberOfColumns(): Int {
                         return 4
@@ -152,7 +220,6 @@ class HomeFragment : BaseFragment() {
                         uiState.userInfo?.let { user ->
                             binding.apply {
                                 imgUserAvatar.imageUrl(user.photo)
-                                // txtUserName.text = user.name
                                 txtUserName.text = user.getFullHomeScreenName()
                                 profilePrompt()
                             }
@@ -177,43 +244,73 @@ class HomeFragment : BaseFragment() {
         }
     }
 
+
     private fun handleUndertaking(underTaking: String) {
         val jsonObject = JSONObject(underTaking)
-        if (jsonObject.getBoolean("showUserUndertaking")) {
-            val string = removeUTFCharacters(jsonObject.getString("htmlDecription"))
-            val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Html.fromHtml(string.toString(), Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                Html.fromHtml(string.toString())
-            }
-            val binding =
-                LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
-            binding.text.text = spannedString
+        val showUserUndertaking = jsonObject.getBoolean("showUserUndertaking")
+        if (!showUserUndertaking) return
 
-            val builder = MaterialAlertDialogBuilder(requireContext())
-                .setView(binding.root)
-                .setCancelable(false)
-                .show()
+        val userUndertakingList = jsonObject.getJSONArray("userundertakingList")
+        if (userUndertakingList.length() == 0) return
 
-            binding.btnSubmit.setOnClickListener {
-                if (binding.checkbox.isChecked) {
-                    (requireActivity() as MainActivity).showLoader(true)
-                    mViewModel.submitUserUndertaking(jsonObject.getString("utID")) { isSuccess, message ->
-                        (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage(message)
-                        if (isSuccess) {
-                            builder.dismiss()
-                        }
-                    }
-                } else {
-                    mainActivity().showMessage("Please go throw user undertaking and accept it")
-                }
-            }
+        showUndertakingDialog(userUndertakingList, 0)
+    }
 
+    private fun showUndertakingDialog(userUndertakingList: JSONArray, index: Int) {
+        val item = userUndertakingList.getJSONObject(index)
+        val htmlDescription = removeUTFCharacters(item.getString("htmlDecription"))
 
+        val spannedString = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(htmlDescription.toString(), Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            Html.fromHtml(htmlDescription.toString())
         }
 
+        val binding = LayoutUndertakingBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+        binding.text.text = spannedString
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .setCancelable(false)
+            .create()
+
+        // Always hide the Next button
+        binding.btnNext.visibility = View.GONE
+        binding.btnSubmit.visibility = View.VISIBLE
+
+        binding.btnSubmit.setOnClickListener {
+            if (binding.checkbox.isChecked) {
+                val utID = item.getString("utID")
+                (requireActivity() as MainActivity).showLoader(true)
+                mViewModel.submitUserUndertaking(utID) { isSuccess, message ->
+                    (requireActivity() as MainActivity).showLoader(false)
+                    if (isSuccess) {
+                        dialog.dismiss()
+                        val nextIndex = index + 1
+                        if (nextIndex < userUndertakingList.length()) {
+                            showUndertakingDialog(userUndertakingList, nextIndex)
+                        } else {
+                            mainActivity().showMessage(getString(R.string.all_undertakings_submitted_successfully))
+                        }
+                    } else {
+                        mainActivity().showMessage(
+                            getString(
+                                R.string.failed_to_submit_undertaking,
+                                message
+                            ))
+                    }
+                }
+            } else {
+                mainActivity().showMessage(getString(R.string.please_read_and_accept_the_undertaking_before_submitting))
+            }
+        }
+
+        dialog.show()
     }
+
+
+
+
     private fun startLocationFetch() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
@@ -256,7 +353,11 @@ class HomeFragment : BaseFragment() {
                             if (location != null) {
                                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
                                 val addresses =
-                                    geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                                    geocoder.getFromLocation(
+                                        location.latitude,
+                                        location.longitude,
+                                        1
+                                    )
                                 if (!addresses.isNullOrEmpty()) {
                                     addresses[0].locality
                                 } else {
@@ -266,7 +367,7 @@ class HomeFragment : BaseFragment() {
                                 Locale.getDefault().displayName
                             }
 
-                        mViewModel.setCityName(cityName?:Locale.getDefault().displayName)
+                        mViewModel.setCityName(cityName ?: Locale.getDefault().displayName)
                     }
 
                 }
@@ -279,11 +380,13 @@ class HomeFragment : BaseFragment() {
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
     }
+
     private fun isGPSEnabled(): Boolean {
         val locationManager =
             requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
+
     private fun removeUTFCharacters(data: String): StringBuffer {
         val p: Pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})")
         val m: Matcher = p.matcher(data)
@@ -301,12 +404,12 @@ class HomeFragment : BaseFragment() {
         (requireActivity() as MainActivity).showLoader(uiState.isLoading())
 
         uiState.getErrorOrNull()?.let { error ->
-            mainActivity().showMessage(error.message?:"")
+            mainActivity().showMessage(error.message ?: "")
         }
 
         if (uiState is HomeUiState.Success) {
             binding.recyclerView.withModels {
-                try {
+                if (uiState.cards.isNotEmpty())
                     carouselNoSnapBuilder {
                         id("carousel")
                         numViewsToShowOnScreen(1.2f)
@@ -360,9 +463,7 @@ class HomeFragment : BaseFragment() {
                             }
                         }
                     }
-                }catch (E:IllegalStateException){
 
-                }
 
 
                 viewAllWidget {
@@ -374,29 +475,32 @@ class HomeFragment : BaseFragment() {
                            // bundleOf("cards" to (mViewModel.uiState.value as HomeUiState.Success).cards)
                         )*/
                         lifecycleScope.launch {
-                            var showDashboard=false
-                            var showAttendance=false
-                            var showFeeds=false
-                            for ( i in mViewModel.dashboardButtons.value!!){
+                            var showDashboard = false
+                            var showAttendance = false
+                            var showFeeds = false
+                            for (i in mViewModel.dashboardButtons.value!!) {
                                 when (i.buttonName) {
                                     "Dashboard" -> {
-                                        showDashboard= i.isShow!!
+                                        showDashboard = i.isShow!!
                                     }
+
                                     "Attendance" -> {
-                                        showAttendance= i.isShow!!
+                                        showAttendance = i.isShow!!
                                     }
+
                                     "Feed" -> {
-                                        showFeeds= i.isShow!!
+                                        showFeeds = i.isShow!!
                                     }
                                 }
                             }
-                            findNavController().navigate(R.id.homeViewPagerFragment,Bundle( ).apply {
-                                putBoolean( "Dashboard",showDashboard)
-                                putBoolean( "Attendance",showAttendance)
-                                putBoolean( "Feed",showFeeds)
-                            })
+                            findNavController().navigate(
+                                R.id.homeViewPagerFragment,
+                                Bundle().apply {
+                                    putBoolean("Dashboard", showDashboard)
+                                    putBoolean("Attendance", showAttendance)
+                                    putBoolean("Feed", showFeeds)
+                                })
                         }
-
 
 
                         //systemViewModel.showDashboard(true)
@@ -437,7 +541,7 @@ class HomeFragment : BaseFragment() {
                                     )
                                 } else {
                                     if (favouriteSlider.title!!.contains(
-                                            getString(R.string.assessment_title),
+                                            getString(R.string.assessment),
                                             true
                                         )
                                     ) {
@@ -498,7 +602,12 @@ class HomeFragment : BaseFragment() {
                 }
             }
         }
+        binding.root.setOnClickListener {
+            // Trigger accessibility focus and announcement
+            binding.root.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED)
+        }
     }
+
     fun openCustomTab(customTabsIntent: CustomTabsIntent, uri: Uri?) {
         val packageName = "com.android.chrome"
         if (packageName != null) {
@@ -510,12 +619,14 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun webViewCall(url: String, title: String) {
-        val tabIntent = CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green)).build()
+        val tabIntent =
+            CustomTabsIntent.Builder().setToolbarColor(requireContext().getColor(R.color.green))
+                .build()
         val bundle = Bundle()
         bundle.putString("title", title)
         bundle.putString("url", url)
         openCustomTab(tabIntent, Uri.parse(url))
-      //  findNavController().navigate(R.id.webViewFragment, bundle)
+        //  findNavController().navigate(R.id.webViewFragment, bundle)
     }
 
     override fun onDestroyView() {
@@ -527,9 +638,10 @@ class HomeFragment : BaseFragment() {
         super.onResume()
         systemViewModel.refreshAppLayout()
         systemViewModel.fetchSettings()
-       // startLocationFetch()
+        // startLocationFetch()
 
     }
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
@@ -537,52 +649,49 @@ class HomeFragment : BaseFragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 120) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-              //  startLocationFetch()
+                //  startLocationFetch()
             } else {
                 mainActivity().showMessage("GPS permission denied")
             }
         }
     }
 
-    private fun dashboardPrompt( ) {
+    private fun dashboardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_dashboard_link)
-            .setPrimaryText(getString(R.string.dashboard))
+            .setPrimaryText("Dashboard")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
-            .setSecondaryText(getString(R.string.click_here_to_access_dashboards))
+            .setSecondaryText("Click here to access Dashboards")
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     addMorePrompt()
                 }
             }
             .show()
     }
 
-    private fun addMorePrompt( ) {
+    private fun addMorePrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_add_more)
-            .setPrimaryText(getString(R.string.favourites))
+            .setPrimaryText("Favourites")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
-            .setSecondaryText(getString(R.string.click_here_to_add_your_favourite_menus))
+            .setSecondaryText("Click here to add your Favourite menus ")
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     systemViewModel.startShowPrompt(true)
                 }
             }
             .show()
     }
 
-    private fun cardPrompt( ) {
+    private fun cardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.cv_dashboard_card)
-            .setPrimaryText(getString(R.string.information_cards))
-            .setSecondaryText(getString(R.string.slide_left_to_check_out_all_the_cards))
+            .setPrimaryText(" Information Cards")
+            .setSecondaryText("Slide left to check out all the cards")
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
-                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                {
+                if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     dashboardPrompt()
                 }
             }
@@ -591,18 +700,19 @@ class HomeFragment : BaseFragment() {
 
     private fun profilePrompt() {
 
-        val sharedPreference = requireActivity(). getSharedPreferences(Constant.SHARED_PREF_NAME_PROMPT,
-            Context.MODE_PRIVATE)
+        val sharedPreference = requireActivity().getSharedPreferences(
+            Constant.SHARED_PREF_NAME_PROMPT,
+            Context.MODE_PRIVATE
+        )
 
         if (!sharedPreference.getBoolean(Constant.SHARED_PREF_SHOW_PROMPT, false)) {
             MaterialTapTargetPrompt.Builder(requireActivity())
                 .setTarget(binding.imgUserAvatar)
-                .setPrimaryText(getString(R.string.profile))
-                .setSecondaryText(getString(R.string.click_here_to_check_out_your_profile_and_transport_details))
+                .setPrimaryText("Profile")
+                .setSecondaryText("Click here to check out your profile and Transport Details")
                 .setBackgroundColour(requireContext().getColor(R.color.brand_color))
                 .setPromptStateChangeListener { prompt, state ->
-                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED)
-                    {
+                    if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                         cardPrompt()
 
                         try {
@@ -610,7 +720,8 @@ class HomeFragment : BaseFragment() {
                             val editor = sharedPreference.edit()
                             editor.putBoolean(Constant.SHARED_PREF_SHOW_PROMPT, true)
                             editor.apply()
-                        }catch (e: Exception){}
+                        } catch (e: Exception) {
+                        }
 
                     }
                 }
