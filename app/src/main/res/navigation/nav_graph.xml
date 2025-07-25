@@ -1013,7 +1013,41 @@
         android:name="com.app.ecarepro.ui.discipline_log.infraction.add_compliance.AddComplianceFragment"
         android:label="AddComplianceFragment" />
     <fragment
+        android:id="@+id/kidAlbumDetailsFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_album_details.KidAlbumDetailsFragment"
+        android:label="KidAlbumDetailsFragment" />
+    <fragment
+        android:id="@+id/kidCornerImageViewFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerImageViewFragment"
+        android:label="KidCornerImageViewFragment" />
+    <fragment
+        android:id="@+id/kidCornerFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.KidCornerFragment"
+        android:label="KidCornerFragment" />
+    <fragment
+        android:id="@+id/kidCornerSliderNavHostFragment"
+        android:name="com.app.ecarepro.ui.gallery.kid_corner.kid_corner_image_details.KidCornerSliderNavHostFragment"
+        android:label="KidCornerSliderNavHostFragment" />
+    <fragment
+        android:id="@+id/allStaffListFragment"
+        android:name="com.app.ecarepro.ui.report.lessonplan.AllStaffListFragment"
+        android:label="StaffListFragment" >
+        <action
+            android:id="@+id/action_allStaffListFragment_to_lessonPlanListFragment"
+            app:destination="@id/lessonPlanListFragment" />
+        <action
+            android:id="@+id/action_lessonPlanListFragment_to_viewLessonPlanFragment"
+            app:destination="@id/viewLessonPlanFragment" />
+        />
+    </fragment>
+    <fragment
+        android:id="@+id/assignClubStudentListFragment"
+        android:name="com.app.ecarepro.ui.assignClub.AssignClubStudentListFragment"
+        android:label="AssignClubStudentListFragment" />
+
+    <fragment
         android:id="@+id/languageSelect"
         android:name="com.app.ecarepro.ui.language.LanguageSelect"
         android:label="LanguageSelect" />
+
 </navigation>

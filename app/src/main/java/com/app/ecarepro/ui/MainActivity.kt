@@ -94,28 +94,22 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
-import com.app.ecarepro.ui.language.LanguageManager
-import java.util.Locale
+import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
+import com.app.ecarepro.ui.notification.NotificationViewModel
+import com.app.ecarepro.ui.views.PaymentWebViewActivity
 import kotlin.time.Duration.Companion.seconds
-import android.util.Base64
-import com.app.ecarepro.utils.BaseActivity
-import java.security.MessageDigest
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
-import java.io.ByteArrayInputStream
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
-
+class MainActivity : AppCompatActivity() {
+    private val viewModel: NotificationViewModel by viewModels()
+    private val viewMessageModel: InboxMessageViewModel by viewModels()
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var userData: NetworkUserDetailsDto
     private val systemViewModel: SystemViewModel by viewModels()
-    private var isImmediatepopup: Boolean = false
     private val navController: NavController by lazy {
         findNavController(R.id.nav_host_fragment_content_main)
     }
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var loader: AlertDialog? = null
 
     private var expandedMenuId: Int = -1
@@ -346,12 +340,50 @@ class MainActivity : BaseActivity() {
             enableNotificationPermission()
         }
         askNotificationPermission()
-
-        val sha1 = getSHA1Fingerprint(this@MainActivity)
-        Log.d("SHA1 Fingerprint", sha1 ?: "Unavailable")
-
+        observeBadgeCount()
+        observeBadgeMessageCount()
     }
 
+    private fun observeBadgeCount() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.badgeCountFlow.collect { count: Int ->
+                showBadgeCount1(count)
+            }
+        }
+    }
+    private fun observeBadgeMessageCount() {
+        lifecycleScope.launchWhenStarted {
+            viewMessageModel.badgeCountFlow.collect { count: Int ->
+                showBadgeCount2(count)
+            }
+        }
+    }
+
+    private fun showBadgeCount1(count: Int) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+            if (count > 0) {
+                getOrCreateBadge(R.id.notification).apply {
+                    isVisible = true
+                    number = count
+                }
+            } else {
+                removeBadge(R.id.notification)
+            }
+        }
+    }
+
+    private fun showBadgeCount2(messageCount: Int) {
+        binding.appBarMain.contentMain.bottomNavigationView.apply {
+             if (messageCount > 0) {
+                 getOrCreateBadge(R.id.message).apply {
+                     isVisible = true
+                     number = messageCount
+                 }
+             } else {
+                 removeBadge(R.id.message)
+             }
+        }
+    }
     private fun askNotificationPermission() {
         // This is only necessary for API level >= 33 (TIRAMISU)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -428,8 +460,9 @@ class MainActivity : BaseActivity() {
             val userType = data.getString("UserType")?.toInt() ?: return@launch
             val menuId = data.getString("MenuId")?.toInt()
             val childMenuId = data.getString("ChMenuID")?.toInt()
+            val SubCildMenuId = data.getString("SbChMenuID")?.toInt()
             val refId = data.getString("refID")
-            Log.e("Note", "$schCode $userID $menuId $childMenuId $refId")
+            Log.e("Note", "$schCode $userID $menuId $childMenuId $SubCildMenuId  $refId")
 
             if (userDataStore.getUsersFlow().first()
                     .firstOrNull { it.userId == userID && it.schoolCode == schCode } == null
@@ -454,8 +487,19 @@ class MainActivity : BaseActivity() {
 
             if (menuId != null) {
                 if (childMenuId != null) {
-                    Log.e("Note", "getFragmentId(menuId, childMenuId)")
-                    getFragmentId(menuId, childMenuId, refId)
+                    if (SubCildMenuId != null) {
+                        if (SubCildMenuId>0){
+                            getFragmentId(menuId,childMenuId, SubCildMenuId, refId,
+                                userID.toString()
+                            )
+                        }else{
+                            Log.e("Note", "getFragmentId(menuId, SubCildMenuId)")
+                            getFragmentId(menuId, childMenuId, refId)
+                        }
+                    }else{
+                        Log.e("Note", "getFragmentId(menuId, childMenuId)")
+                        getFragmentId(menuId, childMenuId, refId)
+                    }
                 }
             }
             showLoader(false)
@@ -1072,7 +1116,6 @@ class MainActivity : BaseActivity() {
             35 -> navController.navigate(R.id.busLocationFragment)
             39 -> navController.navigate(R.id.fomGuardFragment)
             40 -> navController.navigate(R.id.teacherListFragment)
-
             51 -> navController.navigate(R.id.excellenceAwardFragment)
 
         }
@@ -1160,8 +1203,14 @@ class MainActivity : BaseActivity() {
             }
         } else {
             try {
-                val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(fallbackIntent)
+                // Fallback to WebView if Chrome is not installed or fails
+                val webViewIntent = Intent(this, PaymentWebViewActivity::class.java).apply {
+                    putExtra("payment_url", uri.toString())
+                }
+                startActivity(webViewIntent)
+
+               /* val fallbackIntent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(fallbackIntent)*/
             } catch (e: ActivityNotFoundException) {
                 showMessage("No browser available to handle the URL")
             }
@@ -1252,11 +1301,38 @@ class MainActivity : BaseActivity() {
 
             7 -> {
                 when (childMenuId) {
-                    10 -> navController.navigate(R.id.circularFragment)
+                    10 -> {
+                        Log.e("refId1", ""+refId)
 
-                    11 -> navController.navigate(R.id.noticeListFragment, Bundle().apply {
-                        putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
-                    })
+                        if (refId != null) {
+                            if (refId=="Menu"){
+                                Log.e("refId2", ""+refId)
+                                navController.navigate(R.id.circularFragment)
+                            }else{
+                                Log.e("refId3", ""+refId)
+                                navController.navigate(
+                                    R.id.circularDetailsFragment,
+                                    bundleOf(Constant.CIRCULAR_ID to refId)
+                                )
+                            }
+                        } else {
+                            navController.navigate(R.id.circularFragment)
+                        }
+
+                    }
+
+                    11 -> {
+                        if (refId.isNullOrEmpty() || refId=="Menu" ) {
+                            navController.navigate(R.id.noticeListFragment, Bundle().apply {
+                                putString(Constant.NOTICE_TYPE, Constant.NOTICE_SCHOOL)
+                            })
+                        } else {
+                            navController.navigate(R.id.noticeDetailsFragment, Bundle().apply {
+                                putString(Constant.NOTICE_ID_ARGUMENT, refId)
+                            })
+                        }
+
+                    }
 
                     12 -> {
                         lifecycleScope.launch {
@@ -1285,7 +1361,8 @@ class MainActivity : BaseActivity() {
                     14 -> navController.navigate(R.id.birthdayFragment)
 
                     15 -> {
-                        lifecycleScope.launch {
+                        navController.navigate(R.id.allStaffListFragment, bundleOf("ID" to refId))
+                      /*  lifecycleScope.launch {
                             userDataStore.getUser()?.run {
                                 if (userType == Constant.STAFF_TYPE) {
                                     if (roleName == "Principal" || roleName == "Management") {
@@ -1295,11 +1372,11 @@ class MainActivity : BaseActivity() {
                                                 putString(Constant.TO, Constant.FRA_LESSON_PLAN)
                                             })
                                     } else {
-                                        navController.navigate(R.id.lessonPlanListFragment)
+                                        navController.navigate(R.id.allStaffListFragment)
                                     }
                                 }
                             }
-                        }
+                        }*/
                     }
 
                     16 -> navController.navigate(R.id.questionPaperFragment)
@@ -1382,16 +1459,10 @@ class MainActivity : BaseActivity() {
 
                             }
 
-                            22 -> if (userType == Constant.STAFF_TYPE) {
-                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
-                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                            22 ->
+                                navController.navigate(R.id.infractionListFragment, Bundle().apply {
+                                    putInt(Constant.USER_TYPE, userType)
                                 })
-
-                            } else {
-                                navController.navigate(R.id.infractionListFragment)
-
-                            }
-
                         }
                     }
                 }
@@ -1405,13 +1476,22 @@ class MainActivity : BaseActivity() {
 
                 }
             }
+            6 -> {
+                when (childMenuId) {
+                    7 -> navController.navigate(R.id.composeFragment)
+                    8 -> navController.navigate(R.id.messageFragment, bundleOf("ID" to refId))
+                    9 -> navController.navigate(R.id.messageFragment,  bundleOf("openSend" to true))
 
+                }
+            }
+            /*gallery*/
             34 -> {
                 when (childMenuId) {
-                    48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
-                    49 -> navController.navigate(R.id.videoAlbumFragment)
+                    48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment, bundleOf("ID" to refId))
+                    49 -> navController.navigate(R.id.videoAlbumFragment, bundleOf("ID" to refId))
                     50 -> navController.navigate(R.id.favoritesListFragment)
                     51 -> navController.navigate(R.id.mediaGalleryFragment)
+                    73 -> navController.navigate(R.id.kidCornerFragment, bundleOf("ID" to refId))
                 }
             }
 
@@ -1420,21 +1500,25 @@ class MainActivity : BaseActivity() {
                     40 -> navController.navigate(R.id.calenderActivityNavHost)
                 }
             }
-            /*gallery*/
+           /* *//*gallery*//*
             34 -> {
                 when (childMenuId) {
                     48 -> navController.navigate(R.id.photoAlbumTypeNavHostFragment)
                     49 -> navController.navigate(R.id.videoAlbumFragment)
                     50 -> navController.navigate(R.id.videoAlbumFragment)
                 }
-            }
+            }*/
         }
     }
+
+
 
     fun getFragmentId(
         menuID: Int,
         childMenuId: Int,
         childChildMenuId: Int,
+        refId: String? = null,
+        userID: String? = null,
         from: String = "other"
     ) {
         systemViewModel.sendAnalyticEvent(
@@ -1473,6 +1557,9 @@ class MainActivity : BaseActivity() {
                             10 -> {
                                 navController.navigate(R.id.updateStudentsProfileFragment)
                             }
+                            26 -> {
+                                navController.navigate(R.id.assignClubStudentListFragment)
+                            }
                         }
                     }
 
@@ -1492,6 +1579,44 @@ class MainActivity : BaseActivity() {
                 }
             }
 
+
+            24 ->{
+
+                when(childMenuId){
+
+                    21 ->{
+                        when(childChildMenuId){
+                            23 -> {
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.APPRECIATION_FRAG)
+                                })
+                            }
+                        }
+
+                    }
+
+                    22 -> {
+                        when(childChildMenuId){
+                            17 -> {
+                                navController.navigate(R.id.studentListFragment2, Bundle().apply {
+                                    putString(Constant.TO, Constant.INFRECTION_FRAG)
+                                })
+                            }
+                            18 -> {
+                                navController.navigate(R.id.staffListFragment, Bundle().apply {
+                                    putString(Constant.TO, Constant.PROFILE_FRA_STAFF_INFRACTION)
+                                })
+                            }
+                            20 ->{
+                                navController.navigate(R.id.infractionListFragment, Bundle().apply {
+                                    putInt(Constant.USER_TYPE, Constant.STAFF_TYPE)
+                                })
+                            }
+                        }
+                    }
+                }
+
+            }
             8 -> {
                 when (childMenuId) {
                     /*sms report*/
@@ -1534,10 +1659,22 @@ class MainActivity : BaseActivity() {
                             }
                         }
                     }
-
-
+                    0 -> {
+                        when (childChildMenuId) {
+                            15 -> {
+                                if (refId!=null){
+                                    Constant.LESSONPLAN_HARDCCODE_KEY = "LessonList"
+                                    navController.navigate(R.id.viewLessonPlanFragment, bundleOf(Constant.LESSON_ID_ARGUMENT to refId))
+                                }else{
+                                    navController.navigate(R.id.allStaffListFragment)
+                                }
+                            }
+                        }
+                    }
                 }
             }
+
+
 
 
             /*for new development Infraction and  Appreciation */
@@ -2003,9 +2140,6 @@ class MainActivity : BaseActivity() {
     companion object {
         private const val MY_REQUEST_CODE = 123
     }
-
-
-
 }
 
 fun Fragment.mainActivity(): MainActivity {

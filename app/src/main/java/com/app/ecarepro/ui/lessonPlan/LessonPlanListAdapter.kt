@@ -18,12 +18,10 @@ class LessonPlanListAdapter(
     RecyclerView.Adapter<LessonPlanListAdapter.NoticeViewHolder>() {
 
 
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
-       val  binding =LessonPlanListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            LessonPlanListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NoticeViewHolder(binding)
-
 
 
     }
@@ -32,64 +30,94 @@ class LessonPlanListAdapter(
 
     override fun onBindViewHolder(holder: NoticeViewHolder, position: Int) {
         val binding = DataBindingUtil.getBinding<LessonPlanListItemBinding>(holder.itemView)
-         val data = lessonPlanList[position]
+        val data = lessonPlanList[position]
 
         with(binding!!) {
 
-            if (   userType == Constant.PRINCIPAL ||  userType ==  Constant.MANAGEMENT) {
-                 llDelete.isVisible=false
-                llEdit.isVisible=false
+
+            if (userType == Constant.PRINCIPAL || userType == Constant.MANAGEMENT) {
+                llDelete.isVisible = false
+                llEdit.isVisible = false
             }
 
-            tvHeading.text=data.topic
-            tvPlanSubj.text=data.subject
-            tvPlanClass.text=data.classesName
+            tvHeading.text = data.topic
+            tvPlanSubj.text = data.subject
+            tvPlanClass.text = data.classesName
             tvPlanDuration.text = buildString {
                 append(data.fromDate)
-                append(" ")
-                append(lessonPlanListFragment.getString(R.string.to))
-                append(" ")
+                append(" to ")
                 append(data.tillDate)
             }
 
-            if (data.status==0){
-                tvStatus.setTextColor( lessonPlanListFragment.resources.getColor(R.color.att_late_color,null))
-                 tvStatus.text=lessonPlanListFragment.getString(R.string.pending)
-                llEdit.isVisible=true
-                llDelete.isVisible=true
-            }else{
-                tvStatus.setTextColor( lessonPlanListFragment.resources.getColor(R.color.green,null))
-                 tvStatus.text=lessonPlanListFragment.getString(R.string.approve)
-                llEdit.isVisible=false
-                llDelete.isVisible=false
+            if (data.status == 0) {
+                tvStatus.setTextColor(
+                    lessonPlanListFragment.resources.getColor(
+                        R.color.att_late_color,
+                        null
+                    )
+                )
+                tvStatus.text = "Pending"
+                llEdit.isVisible = true
+                llDelete.isVisible = true
+            }else  if (data.status == 2) {
+                tvStatus.setTextColor(
+                    lessonPlanListFragment.resources.getColor(
+                        R.color.red,
+                        null
+                    )
+                )
+                tvStatus.text = "Rejected"
+                llEdit.isVisible = false
+                llDelete.isVisible = false
+            }
+            else {
+                tvStatus.setTextColor(
+                    lessonPlanListFragment.resources.getColor(
+                        R.color.green,
+                        null
+                    )
+                )
+                tvStatus.text = "Approved"
+                llEdit.isVisible = false
+                llDelete.isVisible = false
             }
 
             llView.setOnClickListener {
-                lessonPlanListFragment.onItemClick(data,1,false)
+                lessonPlanListFragment.onItemClick(data, 1, false)
             }
-             llEdit.setOnClickListener {
-                 lessonPlanListFragment.onItemClick(data,2,false)
+            llEdit.setOnClickListener {
+                lessonPlanListFragment.onItemClick(data, 2, false)
             }
-             llDelete.setOnClickListener {
-                lessonPlanListFragment.onItemClick(data,3,false)
+            llDelete.setOnClickListener {
+                lessonPlanListFragment.onItemClick(data, 3, false)
             }
-        }  }
+            if (Constant.LESSONPLAN_HARDCCODE_KEY.isEmpty()) {
+                llEdit.isVisible = true
+                llDelete.isVisible = true
+            } else {
+                llEdit.isVisible = false
+                llDelete.isVisible = false
+            }
+
+        }
+
+    }
 
 
-    fun setData(lessonList: MutableList<LessonPlan>){
+    fun setData(lessonList: MutableList<LessonPlan>) {
         lessonPlanList.addAll(lessonList)
         notifyDataSetChanged()
     }
-    fun clearData(){
+
+    fun clearData() {
         lessonPlanList.clear()
         notifyDataSetChanged()
     }
 
 
-
-
-    class NoticeViewHolder(itemView: LessonPlanListItemBinding) : RecyclerView.ViewHolder(itemView.root){
-  }
+    class NoticeViewHolder(itemView: LessonPlanListItemBinding) :
+        RecyclerView.ViewHolder(itemView.root) {
+    }
 
 
 }
