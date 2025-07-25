@@ -1,127 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F5F5F5">
 
-    <com.google.android.material.appbar.MaterialToolbar
+    <!-- Green Toolbar -->
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-         app:navigationIcon="@drawable/ic_arrow_back_24px"
-        app:title="@string/settings"
-        app:titleTextAppearance="?attr/textAppearanceTitleMedium"
-        app:titleTextColor="@color/white" />
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardChangeUserName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/horizontal_margin"
-        app:cardCornerRadius="8dp"
-        app:contentPadding="12dp">
+        android:background="#5AB03F"
+        app:navigationIcon="@drawable/ic_arrow_back_24px"
+        app:titleTextColor="@android:color/white">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:layout_gravity="center_vertical"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Cards for each option with modern styling -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardRatings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
-            android:text="@string/change_username"
-            android:textSize="17sp"
-            app:drawableEndCompat="@drawable/ic_user"
-            app:drawableTint="@color/black" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/rateing"
+                app:tint="#333333" />
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Ratings"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardChangeUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_user"
+                app:tint="#333333" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Change Username"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_back_24px"
+                android:rotation="180"
+                app:tint="#333333" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardChangePassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/horizontal_margin"
-        app:cardCornerRadius="8dp"
-        app:contentPadding="12dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
-            android:text="@string/change_password"
-            android:textSize="17sp"
-            app:drawableEndCompat="@drawable/ic_pwd"
-            app:drawableTint="@color/black" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_pwd"
+                app:tint="#333333" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardSync"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Change Password"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_back_24px"
+                android:rotation="180"
+                app:tint="#333333" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardLanguageChange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/horizontal_margin"
-        app:cardCornerRadius="8dp"
-        app:contentPadding="12dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
-            android:text="@string/sync"
-            android:textSize="17sp"
-            app:drawableEndCompat="@drawable/ic_sync"
-            app:drawableTint="@color/black" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sync"
+                app:tint="#333333" />
 
-    <com.google.android.material.card.MaterialCardView
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="Language Change"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardContactUs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:visibility="gone"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_user"
+                app:tint="#333333" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Contact Us"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/cardChangeLang"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/horizontal_margin"
-        app:cardCornerRadius="8dp"
-        app:contentPadding="12dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
 
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
-            android:text="@string/change_language"
-            android:textSize="17sp" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sync"
+                app:tint="#333333" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardRateUs"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/change_language"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardSyncData"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:layout_marginTop="@dimen/horizontal_margin"
-        app:cardCornerRadius="8dp"
-        app:contentPadding="12dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="0dp">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/calibri_regular"
-            android:text="@string/rate_us"
-            android:textSize="17sp" />
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_sync"
+                app:tint="#333333" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Sync Data"
+                android:textColor="#333333"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/lastSyncTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/calibri_regular"
+        android:layout_marginTop="20dp"
         android:gravity="center"
-        tools:text="Last Sync : 12 Jan 2020 4:31 PM" />
+        android:textColor="#777777"
+        android:textSize="14sp"
+        />
 
 </LinearLayout>

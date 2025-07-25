@@ -56,7 +56,59 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_200sdp"
                         />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_10sdp">
 
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:srcCompat="@drawable/circle_wh_present" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="@string/total_present"
+                            android:textColor="@color/present_wh"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvPresentWorkingHoliday"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvPresentWorkingCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -110,7 +162,63 @@
 
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/llWH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_10sdp"
+                        android:visibility="visible">
 
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:srcCompat="@drawable/circle_wh" />
+
+
+                        <TextView
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/ubuntu_regular"
+                            android:text="WH "
+                            android:textColor="@color/grey_60"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvWHPer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tvWHCount"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/ubuntu_bold"
+                                android:gravity="end"
+                                android:textColor="@color/grey_60"
+                                android:textSize="@dimen/_14sdp" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -128,7 +236,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/general_absent"
+                            android:text="@string/absent"
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -241,7 +349,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/late"
+                            android:text="Late "
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -299,7 +407,7 @@
                             android:layout_gravity="center"
                             android:layout_weight="2"
                             android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/na"
+                            android:text="NA "
                             android:textColor="@color/grey_60"
                             android:textSize="@dimen/_14sdp" />
 
@@ -336,63 +444,7 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/llWH"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/_10sdp"
-                        android:visibility="visible">
 
-                        <ImageView
-                            android:layout_width="@dimen/_20sdp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:padding="@dimen/_5sdp"
-                            app:srcCompat="@drawable/circle_wh" />
-
-
-                        <TextView
-
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="2"
-                            android:fontFamily="@font/ubuntu_regular"
-                            android:text="@string/wh"
-                            android:textColor="@color/grey_60"
-                            android:textSize="@dimen/_14sdp" />
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/tvWHPer"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_bold"
-                                android:gravity="end"
-                                android:textColor="@color/grey_60"
-                                android:textSize="@dimen/_14sdp" />
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1">
-
-                            <TextView
-                                android:id="@+id/tvWHCount"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/ubuntu_bold"
-                                android:gravity="end"
-                                android:textColor="@color/grey_60"
-                                android:textSize="@dimen/_14sdp" />
-                        </RelativeLayout>
-
-
-                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -415,7 +467,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/general_no_data_found"
+            android:text="@string/no_data_found"
             android:textSize="16sp"
 
             />
