@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.FragmentSwitchAccountBinding
+import com.app.ecarepro.profileAddAccount
 import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -71,6 +75,16 @@ class SwitchAccountFragment : Fragment() {
                             restartApp()
                         }
                     }
+                }
+            }
+
+            profileAddAccount {
+                id(23)
+                clickListener { _ ->
+                    findNavController().navigate(
+                        R.id.schoolCodeFragment,
+                        bundleOf("add_account" to true)
+                    )
                 }
             }
         }
