@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassPromotionBinding
 import com.app.ecarepro.model.MyClasseX
+import com.app.ecarepro.model.Student
 import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentPromotedClass
 import com.app.ecarepro.ui.MainActivity
@@ -28,12 +30,11 @@ class ClassPromotionFragment : Fragment() {
     private var classModel: MyClasseX? = null
     private lateinit var binding: FragmentClassPromotionBinding
     private var studentListArrayList = mutableListOf<StudentPro>()
-    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList,this@ClassPromotionFragment) }
-    private val classAdapter by lazy {
-        ArrayAdapter<MyClasseX>(requireContext(), R.layout.simple_spinner_item).apply {
-            this.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        }
-    }
+    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList) }
+    private var mMyClassDataString: ArrayList<String> = ArrayList()
+    private var classListData: ArrayList<MyClasseX> = ArrayList()
+
+
     private val classPromotionModel: ClassPromotionsViewModel by viewModels()
 
     override fun onCreateView(
@@ -46,7 +47,6 @@ class ClassPromotionFragment : Fragment() {
         }
         with(binding) {
             rvStuAtt.adapter = mStudentAdapter
-            spClass.adapter = classAdapter
             btnSubmit.setOnClickListener { submitDetails() }
         }
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -58,7 +58,13 @@ class ClassPromotionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        spinnerAdapter()
+        binding.autoCompleteClass.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, pos, id ->
+                studentListArrayList.clear()
+                mStudentAdapter.notifyDataSetChanged()
+                classPromotionModel.getClassPromotions(classListData[pos].id.toString())
+            }
+
         classPromotionModel.getClassList()
 
         lifecycleScope.launch {
@@ -128,7 +134,17 @@ class ClassPromotionFragment : Fragment() {
                         if (it.data != null) {
                             it.data.myClasses?.let { list ->
                                 studentListArrayList.clear()
-                                classAdapter.addAll(list)
+                                classListData.clear()
+                                mMyClassDataString.clear()
+
+                                list.forEach { item ->
+                                    mMyClassDataString.add(item.className.toString())
+                                }
+                                classListData= list as ArrayList<MyClasseX>
+
+                                val arrayAdapter = ArrayAdapter(requireContext(), R.layout.simple_list_item_1 , mMyClassDataString)
+                                binding.autoCompleteClass.setAdapter(arrayAdapter)
+                                binding.autoCompleteClass.setText("Select Calss", false)
                             }
 
 
@@ -170,27 +186,7 @@ class ClassPromotionFragment : Fragment() {
 
     }
 
-    private fun spinnerAdapter() {
-        binding.spClass.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                classModel = parent.getItemAtPosition(position) as MyClasseX
-                classModel?.let {
-                    studentListArrayList.clear()
-                    mStudentAdapter.notifyDataSetChanged()
-                    classPromotionModel.getClassPromotions(it.id ?: "")
-                }
 
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-    }
 
 
     private fun submitDetails() {

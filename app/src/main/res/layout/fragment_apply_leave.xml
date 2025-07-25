@@ -330,8 +330,7 @@
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/general_submit"
-            android:textAllCaps="true"
+            android:text="@string/apply_leave"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             />

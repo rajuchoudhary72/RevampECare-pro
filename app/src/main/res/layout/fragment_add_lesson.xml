@@ -1058,25 +1058,54 @@
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tvAddFile"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginRight="@dimen/_10sdp"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:fontFamily="@font/ubuntu_medium"
-                            android:gravity="center_vertical"
-                            android:paddingTop="@dimen/_10sdp"
-                            android:paddingBottom="@dimen/_10sdp"
-                            android:text="@string/browse_file"
-                            android:textSize="@dimen/_14sdp"
-                            android:visibility="visible"
-                            app:drawableRightCompat="@drawable/ic_add_green_fil" />
-
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/grey_light"
+                        android:layout_marginBottom="@dimen/_15sdp"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_browse_photo"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.8"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="3dp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:padding="5dp"
+                                android:text="@string/browse_photo"
+                                app:drawableTopCompat="@drawable/ic_camera"
+                                android:gravity="bottom|center" />
+
+                            <View
+                                android:layout_width="2dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/grey_light"
+                                android:layout_marginVertical="3dp" />
+
+                            <TextView
+                                android:layout_weight="1"
+                                android:id="@+id/tv_browse_file"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="3dp"
+                                android:fontFamily="@font/ubuntu_medium"
+                                android:padding="5dp"
+                                android:text="@string/attach_photo_pdf_doc"
+                                app:drawableTopCompat="@drawable/ic_add_account"
+                                android:gravity="bottom|center" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:id="@+id/ll_check"
