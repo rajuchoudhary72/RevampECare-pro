@@ -44,8 +44,8 @@ android {
         applicationId = "com.franciscan.ecare_pro"
         minSdk = 23
         targetSdk = 34
-        versionCode = 331
-        versionName = "3.2.0"
+        versionCode = 352
+        versionName = "3.4.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         //add this in the build.gradle.kts(app) file
         javaCompileOptions {
@@ -201,7 +201,7 @@ dependencies {
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("com.intuit.sdp:sdp-android:1.0.5")
     implementation("de.hdodenhof:circleimageview:2.2.0")
-    implementation("com.github.Mindinventory:Lassi:1.3.0")
+    implementation("com.github.Mindinventory:Lassi:1.4.2")
     implementation("com.github.AsynctaskCoffee:VoiceRecorder:beta-0.5")
     implementation("com.github.dhaval2404:imagepicker:2.1")
     implementation("com.github.PhilJay:MPAndroidChart:v3.0.3")
