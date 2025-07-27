@@ -79,7 +79,6 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -687,7 +686,10 @@ class MainActivity : AppCompatActivity() {
                         buildFavoriteMenusModels(data.menus)
                         binding.itemDrawerHeader.user = data.userInfo
                         showBadgeCount(data.appLayoutDto)
-
+                        /*for Full  App Access blocked due to unpaid fees user only show  pay Fee popup  till  unpaid */
+                        if (data.appLayoutDto.isDefaulter == true){
+                            navController.navigate(R.id.feesBlockDialogFragment)
+                        }
                     }
                 }
         }
@@ -1393,18 +1395,7 @@ class MainActivity : AppCompatActivity() {
                     18 -> navController.navigate(R.id.attendanceFragment)
                     20 -> navController.navigate(R.id.paySlipFragment)
                     43 -> {
-                        lifecycleScope.launch {
-                            try {
-                                userDataStore.getSchoolData()?.run {
-                                    if (feePayemtURL.isNullOrEmpty()) {
-                                        showMessage("Fee Payment URL are currently not unavailable!")
-                                    } else {
-                                        webViewCallForPayment(feePayemtURL!!)
-                                    }
-                                }
-                            } catch (_: Exception) {
-                            }
-                        }
+                        extracted()
                     }
 
                     44 -> navController.navigate(R.id.feeReceiptFragment)
@@ -1486,6 +1477,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun extracted() {
+        lifecycleScope.launch {
+            try {
+                userDataStore.getSchoolData()?.run {
+                    if (feePayemtURL.isNullOrEmpty()) {
+                        showMessage("Fee Payment URL are currently not unavailable!")
+                    } else {
+                        webViewCallForPayment(feePayemtURL!!)
+                    }
+                }
+            } catch (_: Exception) {
+            }
+        }
+    }
 
 
     fun getFragmentId(
@@ -1537,7 +1542,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
-
 
                     2 -> {
                         when (childChildMenuId) {

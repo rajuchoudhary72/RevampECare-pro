@@ -233,7 +233,6 @@ class ViewLessonPlanFragment : Fragment() {
         }
         viewLessonPlanViewModel.getLessonPlanDTL(id, teacherID)
     }
-
     private fun openFile(fileSource: String) {
         when (Constant.isPdfUrl(fileSource)){
             1 -> {

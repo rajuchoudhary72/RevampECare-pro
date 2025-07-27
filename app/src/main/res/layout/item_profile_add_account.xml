@@ -29,7 +29,7 @@
             android:drawablePadding="8dp"
             android:fontFamily="@font/calibri_regular"
             android:gravity="center"
-            android:text="Add Account"
+            android:text="@string/add_account"
             android:textColor="@color/black"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"

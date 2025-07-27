@@ -45,6 +45,7 @@ fun View.showOrHide(invisible: Boolean) {
 }
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
+    Log.d("ImageDebug1", "Loading image: $url")
     load(url) {
         if (url?.contains("svg") == true)
             decoderFactory { result, options, _ -> SvgDecoder(result.source, options) }
