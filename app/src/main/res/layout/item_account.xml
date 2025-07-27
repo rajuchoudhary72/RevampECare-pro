@@ -17,7 +17,9 @@
         <variable
             name="isCurrentUser"
             type="java.lang.Boolean" />
-
+        <variable
+            name="hideEndButton"
+            type="java.lang.Boolean" />
         <variable
             name="name"
             type="java.lang.String" />
@@ -92,6 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="@{!isCurrentUser}"
+            isVisible="@{!hideEndButton}"
             android:onClick="@{removeAccountListener}"
             android:src="@{isCurrentUser ? @drawable/ic_check : @drawable/ic_close}"
             app:layout_constraintBottom_toBottomOf="parent"

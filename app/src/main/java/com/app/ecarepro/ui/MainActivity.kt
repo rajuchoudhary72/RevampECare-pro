@@ -79,7 +79,6 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 import com.rubensousa.decorator.ColumnProvider
 import com.rubensousa.decorator.GridMarginDecoration
@@ -97,7 +96,6 @@ import com.app.ecarepro.data.AppSessionManager
 import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
 import com.app.ecarepro.ui.notification.NotificationViewModel
 import com.app.ecarepro.ui.views.PaymentWebViewActivity
-import com.app.ecarepro.utils.FeesBlockDialogFragment
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -690,10 +688,8 @@ class MainActivity : AppCompatActivity() {
                         showBadgeCount(data.appLayoutDto)
                         /*for Full  App Access blocked due to unpaid fees user only show  pay Fee popup  till  unpaid */
                         if (data.appLayoutDto.isDefaulter == true){
-                            val dialog = FeesBlockDialogFragment()
-                            dialog.show(supportFragmentManager, "FeesBlockDialog")
+                            navController.navigate(R.id.feesBlockDialogFragment)
                         }
-
                     }
                 }
         }
