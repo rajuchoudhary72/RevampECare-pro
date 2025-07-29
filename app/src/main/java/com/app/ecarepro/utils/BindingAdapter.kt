@@ -11,6 +11,7 @@ import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
 import android.text.util.Linkify
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -23,7 +24,7 @@ import java.util.regex.Pattern
 
 @BindingAdapter("imageUrl")
 fun loadImage(imageView: ImageView, url: String) {
-
+    Log.d("ImageDebug", "Loading image: $url")
     Picasso.get().load(url).placeholder(R.drawable.default_profile)
         .into(imageView)
 }

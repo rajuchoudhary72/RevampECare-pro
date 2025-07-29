@@ -26,6 +26,7 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Title : </string>
     <string name="notice">Notice</string>
     <string name="compliance">compliance</string>
     <string name="report_card">Report Card</string>
@@ -1315,6 +1316,14 @@
     <string name="slide_left_to_check_out_all_the_cards">Slide left to check out all the cards</string>
     <string name="click_here_to_check_out_your_profile_and_transport_details">Click here to check out your profile and Transport Details</string>
     <string name="view_dashboard">View dashboard</string>
+
+    <string name="fees_payment_reminder">Fees Payment Reminder</string>
+    <string name="access_blocked_due_to_unpaid_fees">⚠️ Access blocked due to unpaid fees</string>
+    <string name="please_pay_the_fee_or_contact_the_school">Please pay the fee or contact the school..</string>
+    <string name="pay_fees">Pay Fees</string>
+    <string name="switch_account">Switch Account</string>
+    <string name="add_account">Add Account</string>
+
 
 </resources>
 

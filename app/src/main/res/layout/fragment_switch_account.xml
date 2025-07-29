@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        topWindowInsetToPadding="@{true}"
+        android:background="@color/white"
+        bottomWindowInsetToPadding="@{true}"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/switch_account"
+            android:text="@string/switch_account"
+            android:fontFamily="@font/calibri_bold"
+            android:textSize="@dimen/_18sdp"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:layout_marginTop="@dimen/_16sdp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:id="@+id/recycler_accounts"
+            tools:listitem="@layout/item_account"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_account"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

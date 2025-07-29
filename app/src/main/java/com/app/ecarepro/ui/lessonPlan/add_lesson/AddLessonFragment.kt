@@ -101,8 +101,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
             ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback  {
                 override fun onSelect(date: String?, isCurrentDate: Boolean) {
                     binding.ctvFromDate.text=date
-                }
-            },toDayDateInLong-tempdate,Constant.getLongTimeDate(Constant.currentDate()))
+                }  }).setMinDate(toDayDateInLong-tempdate)
         }
 
 

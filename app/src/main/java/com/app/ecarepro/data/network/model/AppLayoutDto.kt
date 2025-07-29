@@ -14,6 +14,8 @@ data class AppLayoutDto(
     val errorCode: Int?,
     @SerializedName("isAuthenticated")
     val isAuthenticated: Boolean?,
+    @SerializedName("isDefaulter")
+    val isDefaulter: Boolean?,
     @SerializedName("logoURL")
     val logoURL: String?,
     @SerializedName("menus")

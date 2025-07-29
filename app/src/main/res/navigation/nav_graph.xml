@@ -1044,6 +1044,14 @@
         android:id="@+id/assignClubStudentListFragment"
         android:name="com.app.ecarepro.ui.assignClub.AssignClubStudentListFragment"
         android:label="AssignClubStudentListFragment" />
+    <fragment
+        android:id="@+id/switchAccountFragment"
+        android:name="com.app.ecarepro.ui.feedefulter_user.SwitchAccountFragment"
+        android:label="SwitchAccountFragment" />
+    <fragment
+        android:id="@+id/feesBlockDialogFragment"
+        android:name="com.app.ecarepro.ui.feedefulter_user.FeesBlockDialogFragment"
+        android:label="FeesBlockDialogFragment" />
 
     <fragment
         android:id="@+id/languageSelect"

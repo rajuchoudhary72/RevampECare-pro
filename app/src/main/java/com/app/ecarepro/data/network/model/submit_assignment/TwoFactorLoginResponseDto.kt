@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class TwoFactorLoginResponseDto(
     @SerializedName("authenticated")
     val authenticated: Boolean?,
+    @SerializedName("isDefaulter")
+    val isDefaulter: Boolean?,
     @SerializedName("errorCode")
     val errorCode: Int?,
     @SerializedName("isOTPEnabled")

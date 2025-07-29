@@ -12,6 +12,7 @@ import com.app.ecarepro.data.repository.TranslationRepository
 import com.app.ecarepro.ui.language.LanguageManager
 import com.app.ecarepro.ui.language.LocalizationManager
 import com.app.ecarepro.utils.LocalizedContext
+import com.app.ecarepro.ui.MainActivity
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -106,6 +107,11 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
     override fun attachBaseContext(base: Context) {
         // Add this method to wrap the application context
         super.attachBaseContext(LocalizedContext(base))
+    }
+
+    fun callMainActivityFunction() {
+
+        MainActivity().extracted()
     }
 
 }

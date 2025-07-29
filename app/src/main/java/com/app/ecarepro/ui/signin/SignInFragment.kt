@@ -247,6 +247,9 @@ class SignInFragment : Fragment() {
 
             try {
                 findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                /*if (it.isDefaulter == true){
+                    mainActivity().unPaidClass()
+                }*/
             } catch (e: Exception) {
                 e.printStackTrace()
             }

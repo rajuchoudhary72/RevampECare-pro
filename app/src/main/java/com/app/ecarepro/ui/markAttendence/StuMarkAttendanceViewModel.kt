@@ -121,6 +121,7 @@ class StuMarkAttendanceViewModel  @Inject constructor(
         uploadStudentList: MutableList<StudentListMarkAtt>,
         className: String,
         rbType: Int,
+        attDate:String,
         result: (Boolean, String) -> Unit
     ) {
         viewModelScope.launch {
@@ -128,7 +129,7 @@ class StuMarkAttendanceViewModel  @Inject constructor(
                 messageRepository
                     .sendBulkMessage(
                         BulkMessageRequestDto(
-                            data = generateDataFromSelectedContacts(markAttModel,uploadStudentList,className),
+                            data = generateDataFromSelectedContacts(markAttModel,uploadStudentList,className,attDate),
                             iPAddress = context.getDeviceIpAddress(),
                             schCode = userDataStore.getSchoolData()?.schoolCode,
                             isBulk = null,
@@ -164,7 +165,7 @@ class StuMarkAttendanceViewModel  @Inject constructor(
                             device = 1,
                             ipAddress = context.getDeviceIpAddress(),
                             msgType =1,
-                            recipient = generateDataFromSelectedMessage(markAttModel,uploadStudentList,className),
+                            recipient = generateDataFromSelectedMessage(markAttModel,uploadStudentList,className,attDate),
                             subject ="Absentee Message"
 
                         )
@@ -190,7 +191,8 @@ class StuMarkAttendanceViewModel  @Inject constructor(
     private fun  generateDataFromSelectedMessage(
         markAttModel: NetworkStudentListToMarkAtt,
         uploadStudentList: MutableList<StudentListMarkAtt>,
-        className: String
+        className: String,
+        attDate: String
     ): List<Recipient>  {
         val data = mutableListOf<Recipient>()
 
@@ -200,6 +202,7 @@ class StuMarkAttendanceViewModel  @Inject constructor(
                     Recipient(
                         receiverID = contact.stID,
                         body = markAttModel.smS_Temp .replace("S____", contact.stName ?: "")
+                            .replace("Date____", attDate ?: "")
                             .replace("C____", className ?: ""),
                         receiverType = 2
                     )
@@ -214,7 +217,8 @@ class StuMarkAttendanceViewModel  @Inject constructor(
     private fun generateDataFromSelectedContacts   (
         markAttModel: NetworkStudentListToMarkAtt,
         uploadStudentList: MutableList<StudentListMarkAtt>,
-        className: String
+        className: String,
+        attDate: String
     ): List<Data>? {
         val data = mutableListOf<Data>()
 
@@ -228,8 +232,7 @@ class StuMarkAttendanceViewModel  @Inject constructor(
                          templateID = markAttModel.templateID.toString(),
                          sMS = markAttModel.smS_Temp .replace("S____", contact.stName ?: "")
                              .replace("C____", className ?: "")
-
-
+                             .replace("Date____", attDate ?: "")
                      )
                  )
              }
