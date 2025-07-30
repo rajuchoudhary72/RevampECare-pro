@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.net.wifi.WifiManager
 import android.util.Base64
+import android.util.Log
 import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
@@ -254,17 +255,23 @@ class ComposeViewModel @Inject constructor(
         /*  if (attachments.isEmpty() || attachments.size == 1)
                     return null*/
         return attachments.map { attachment ->
-            if (isPdf(attachment)) {
+            (if (isPdf(attachment)) {
                 if (attachment.name == AttachmentType.RECORDING.name) {
                     val file = File(attachment.path)
                     getBase64StringFromUri(file) ?: ""
                 } else {
                     val file = context.getFile(attachment.path?.toUri())
-                    getBase64StringFromUri(file!!.toUri()) ?: ""
+                    val  extenstion:String = file?.let { getFileExtension(it) }.toString()
+                    if (extenstion == "xlsx"){
+                        getBase64StringFromCacheFile(file!!.toUri())?.trim()
+                    }else{
+                        getBase64StringFromUri(file!!.toUri()) ?: ""
+                    }
+
                 }
             } else {
                 FileAccess.bitmapToByteArrayBase64String(FileAccess.bitmapFromFileCamera(context, attachment.path!!))
-            }
+            }).toString()
         }
     }
 
@@ -345,7 +352,28 @@ class ComposeViewModel @Inject constructor(
         }
         return name.substring(lastIndexOf + 1)
     }
+    private fun getBase64StringFromCacheFile(uri: Uri): String? {
+        return try {
+            // Extract the file path from URI
+            val filePath = uri.path
+            if (filePath != null) {
+                val file = File(filePath)
+                if (file.exists() && file.canRead()) {
+                    val bytes = file.readBytes()
+                    return Base64.encodeToString(bytes, Base64.NO_WRAP)
+                }
+            }
 
+            // Fallback to content resolver
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                val bytes = inputStream.readBytes()
+                Base64.encodeToString(bytes, Base64.NO_WRAP)
+            }
+        } catch (e: Exception) {
+            Log.e("Base64Conversion", "Error converting file to Base64", e)
+            null
+        }
+    }
     private fun getBase64StringFromUri(uri: Uri): String? {
         val imageStream: InputStream
         return try {

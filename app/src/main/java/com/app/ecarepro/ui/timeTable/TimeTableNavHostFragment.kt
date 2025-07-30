@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -28,31 +29,32 @@ import java.util.Locale
 @AndroidEntryPoint
 class TimeTableNavHostFragment : Fragment() {
 
-    private lateinit var binding : FragmentTimeTableNavHostBinding
-    private val timeTableNavHostViewModel : TimeTableNavHostViewModel by viewModels()
-    private   var id: String=""
-    private   var toFragment: String=""
-    private   var name: String=""
+    private lateinit var binding: FragmentTimeTableNavHostBinding
+    private val timeTableNavHostViewModel: TimeTableNavHostViewModel by viewModels()
+    private var id: String = ""
+    private var toFragment: String = ""
+    private var name: String = ""
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding=FragmentTimeTableNavHostBinding.inflate(inflater,container,false)
+    ): View {
+        binding = FragmentTimeTableNavHostBinding.inflate(inflater, container, false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         try {
-            id= requireArguments().getString(Constant.ID).toString()
-            toFragment= requireArguments().getString(Constant.TIME_TABLE_TYPE).toString()
-            name= requireArguments().getString(Constant.NAME).toString()
+            id = requireArguments().getString(Constant.ID).toString()
+            toFragment = requireArguments().getString(Constant.TIME_TABLE_TYPE).toString()
+            name = requireArguments().getString(Constant.NAME).toString()
 
-             if (name.isEmpty() || name=="null"){
-                 binding.includeToolbar.toolbarTitle.text=getString(R.string.timetable)
-             }else{
-                 binding.includeToolbar.toolbarTitle.text = getString(R.string.timetable_of, name)
-             }
+            if (name.isEmpty() || name == "null") {
+                binding.includeToolbar.toolbarTitle.text = getString(R.string.timetable)
+            } else {
+                binding.includeToolbar.toolbarTitle.text = getString(R.string.timetable_of, name)
+            }
 
-        }catch (_:Exception){}
+        } catch (_: Exception) {
+        }
         return binding.root
     }
 
@@ -77,24 +79,27 @@ class TimeTableNavHostFragment : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        if (it.data!=null){
+                        if (it.data != null) {
 
                             val data = it.data.data
 
-                            if (data!=null){
+                            if (data != null) {
 
-                                if (data.isNotEmpty()){
+                                if (data.isNotEmpty()) {
 
-                                    binding.tabLayout.visibility=View.VISIBLE
-                                    binding.viewPager.visibility=View.VISIBLE
-                                    binding.tvNoData.visibility=View.GONE
+                                    binding.tabLayout.visibility = View.VISIBLE
+                                    binding.viewPager.visibility = View.VISIBLE
+                                    binding.tvNoData.visibility = View.GONE
 
-                                    val fragmentList : ArrayList<Fragment> = ArrayList()
+                                    val fragmentList: ArrayList<Fragment> = ArrayList()
 
                                     data.forEach { itemDat ->
-                                        fragmentList.add(DayWiseTimeTableFragment.newInstance(itemDat,
-                                            toFragment
-                                        ))
+                                        fragmentList.add(
+                                            DayWiseTimeTableFragment.newInstance(
+                                                itemDat,
+                                                toFragment
+                                            )
+                                        )
                                     }
 
                                     val viewPagerAdapter = ViewPagerAdapter(
@@ -111,26 +116,38 @@ class TimeTableNavHostFragment : Fragment() {
                                         tab.text = data[position].day
                                     }.attach()
 
+                                      // Now set the default tab to today
+                                    val today = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+                                    val tabIndex = when (today) {
+                                        Calendar.MONDAY -> 0
+                                        Calendar.TUESDAY -> 1
+                                        Calendar.WEDNESDAY -> 2
+                                        Calendar.THURSDAY -> 3
+                                        Calendar.FRIDAY -> 4
+                                        Calendar.SATURDAY -> 5
+                                        Calendar.SUNDAY -> 6
+                                        else -> 0
+                                    }
+
+                                    binding.viewPager.setCurrentItem(tabIndex, false)
 
 
-
-                                }else{
-                                    binding.tabLayout.visibility=View.GONE
-                                    binding.viewPager.visibility=View.GONE
-                                    binding.tvNoData.visibility=View.VISIBLE
+                                } else {
+                                    binding.tabLayout.visibility = View.GONE
+                                    binding.viewPager.visibility = View.GONE
+                                    binding.tvNoData.visibility = View.VISIBLE
                                 }
 
-                            }else{
-                                binding.tabLayout.visibility=View.GONE
-                                binding.viewPager.visibility=View.GONE
-                                binding.tvNoData.visibility=View.VISIBLE
+                            } else {
+                                binding.tabLayout.visibility = View.GONE
+                                binding.viewPager.visibility = View.GONE
+                                binding.tvNoData.visibility = View.VISIBLE
                             }
-                        }else{
-                            binding.tabLayout.visibility=View.GONE
-                            binding.viewPager.visibility=View.GONE
-                            binding.tvNoData.visibility=View.VISIBLE
+                        } else {
+                            binding.tabLayout.visibility = View.GONE
+                            binding.viewPager.visibility = View.GONE
+                            binding.tvNoData.visibility = View.VISIBLE
                         }
-
 
 
                     }
@@ -141,32 +158,36 @@ class TimeTableNavHostFragment : Fragment() {
             }
         }
 
-        if (toFragment==Constant.CLASS_TIME_TABLE){
-            if (id=="null"){
+        if (toFragment == Constant.CLASS_TIME_TABLE) {
+            if (id == "null") {
                 timeTableNavHostViewModel.classTimetable(null)
-            }else{
+            } else {
                 timeTableNavHostViewModel.classTimetable(id)
             }
 
-         }else{
+        } else {
 
             timeTableNavHostViewModel.teachersTimetable(id)
 
         }
 
 
+        /*to redirect  tab  at today day*/
+
+
     }
 
-    private fun todayData(data: List<TimeTableData>) : TimeTableData {
+    private fun todayData(data: List<TimeTableData>): TimeTableData {
         val sdf = SimpleDateFormat("EEEE", Locale.getDefault())
         val d = Date()
         val dayOfTheWeek: String = sdf.format(d)
-        lateinit var  timeTableData : TimeTableData
+        lateinit var timeTableData: TimeTableData
 
-        data.forEach {itemData ->
-            if (dayOfTheWeek==itemData.day){
-                timeTableData=itemData
-            } }
+        data.forEach { itemData ->
+            if (dayOfTheWeek == itemData.day) {
+                timeTableData = itemData
+            }
+        }
         return timeTableData
     }
 }

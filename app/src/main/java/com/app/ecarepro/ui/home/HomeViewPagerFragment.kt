@@ -19,7 +19,6 @@ import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.dashbord.DashboardFragment
 import com.app.ecarepro.ui.feed.FeedsFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
-import com.app.ecarepro.ui.timeTable.TimeTableDayWiseNavHostFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
