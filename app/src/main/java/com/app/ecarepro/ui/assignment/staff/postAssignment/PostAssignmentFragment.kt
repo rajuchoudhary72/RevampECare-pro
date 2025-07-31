@@ -600,7 +600,7 @@ class PostAssignmentFragment : Fragment() {
 
 
 
-        val subjectListAdapter= StudentListAdapter(students, selectAll,  object : ItemListener<Student> {
+        val subjectListAdapter= StudentListAdapter(students, selectAll, this@PostAssignmentFragment, object : ItemListener<Student> {
             override fun onItemClick(t: Student, pos: Int, boolean: Boolean) {
                 isStudentSelected = true
             }

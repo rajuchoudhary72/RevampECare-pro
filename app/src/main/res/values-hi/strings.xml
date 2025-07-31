@@ -604,7 +604,7 @@
     <string name="general_photo">फोटो</string>
     <string name="general_video">वीडियो</string>
     <string name="favourate">पसंदीदा</string>
-    <string name="general_from...">और...</string>
+    <string name="general_more">और...</string>
     <string name="general_from_small">और</string>
     <string name="add_favourites">पसंदीदा में जोड़ें</string>
     <string name="gallery">गैलरी</string>
@@ -1281,40 +1281,59 @@
     <string name="global_search">वैश्विक खोज</string>
     <string name="view_dashboard">डैशबोर्ड देखें</string>
 
-    <string name="auto_assign">Auto Assign</string>
-    <string name="enter_title">Enter Title</string>
+    <string name="auto_assign">स्वतः असाइन</string>
+    <string name="enter_title">शीर्षक दर्ज करें</string>
 
-    <string name="mobile_pun">Mobile: </string>
-    <string name="mobile_pun_bold"><b>Mobile: </b></string>
+    <string name="mobile_pun">मोबाइल: </string>
+    <string name="mobile_pun_bold"><b>मोबाइल: </b></string>
+
+    <string name="total_present_working_holiday">कुल\nउपस्थिति</string>
+    <string name="order_by">क्रमबद्ध करें</string>
+    <string name="kid_corner_title">बच्चों का कोना</string>
+    <string name="event_on">"इवेंट तिथि: "</string>
+    <string name="total_memories">"कुल यादें: "</string>
+    <string name="year_name">वर्ष का नाम:</string>
+    <string name="attedancedetail_year_count_total_present">कुल उपस्थित दिन</string>
+    <string name="reject_plan">योजना अस्वीकृत करें</string>
+    <string name="are_you_sure_you_want_to_reject_the_lesson_plan">क्या आप वास्तव में पाठ योजना को अस्वीकार करना चाहते हैं?</string>
+    <string name="approve_plan">योजना स्वीकृत करें</string>
+    <string name="are_you_sure_you_want_to_approve_the_lesson_plan">क्या आप वास्तव में पाठ योजना को स्वीकृत करना चाहते हैं?</string>
+    <string name="vehicle_details">वाहन विवरण</string>
+    <string name="update_transport_details">परिवहन विवरण अपडेट करें</string>
+    <string name="summit_transport_details">परिवहन विवरण जमा करें</string>
+    <string name="summit_profile_details">प्रोफ़ाइल विवरण जमा करें</string>
+    <string name="select_vehicle">वाहन चुनें</string>
+    <string name="date_from_which_the_student_is_using_the_vehicle">जिस दिन से छात्र वाहन का उपयोग कर रहा है</string>
+    <string name="setting_screen_open">सेटिंग स्क्रीन खुली</string>
+    <string name="collapse_all">सभी संक्षिप्त करें</string>
+    <string name="expand_all">सभी विस्तृत करें</string>
+    <string name="rejection_reason">"<b>अस्वीकृति का कारण: </b>"</string>
+    <string name="all_undertakings_submitted_successfully">सभी शपथ-पत्र सफलतापूर्वक जमा किए गए।</string>
+    <string name="failed_to_submit_undertaking">शपथ-पत्र जमा करने में विफल: %1$s</string>
+    <string name="please_read_and_accept_the_undertaking_before_submitting">कृपया शपथ-पत्र पढ़ें और जमा करने से पहले स्वीकार करें।</string>
+    <string name="standard_wise_statistic">कक्षा अनुसार सांख्यिकी</string>
+    <string name="no_club_assign">कोई क्लब असाइन नहीं किया गया</string>
+    <string name="classmates_birthdays">सहपाठियों के जन्मदिन</string>
+
+    <string name="show_per">उपस्थिति दिखाएं (%)</string>
+    <string name="assign_club">क्लब असाइन करें</string>
+    <string name="resolve">सुलझाएं</string>
+
+    <string name="attach_photo_pdf_doc"><![CDATA[PDF और दस्तावेज़ संलग्न करें]]></string>
+    <string name="apply_leave">छुट्टी के लिए आवेदन करें</string>
+
+    <string name="designation_bold"><b>पदनाम: </b></string>
+    <string name="doj_bold"><b>कार्यग्रहण तिथि: </b></string>
+    <string name="email_id_pun_bold"><b>ईमेल ID: </b></string>
+    <string name="gender_pun_bold"><b>लिंग: </b></string>
+
+    <string name="qualification_pun_bold"><b>योग्यता: </b></string>
+    <string name="student_attedance_present">उपस्थित दिन</string>
+
+    <string name="ratings">रेटिंग्स</string>
+    <string name="sync_data">डेटा सिंक करें</string>
 
 
-    <string name="total_present_working_holiday">Total\nPresent</string>
-    <string name="order_by">Order By</string>
-    <string name="kid_corner_title">Kid Corner</string>
-    <string name="event_on">"Event On: "</string>
-    <string name="total_memories">"Total Memories: "</string>
-    <string name="year_name">Year Name:</string>
-    <string name="attedancedetail_year_count_total_present">Total present Days</string>
-    <string name="reject_plan">Reject Plan</string>
-    <string name="are_you_sure_you_want_to_reject_the_lesson_plan">Are you sure, you want to Reject the Lesson Plan?</string>
-    <string name="approve_plan">Approve Plan</string>
-    <string name="are_you_sure_you_want_to_approve_the_lesson_plan">Are you sure, you want to Approve the Lesson Plan?</string>
-    <string name="vehicle_details">Vehicle Details</string>
-    <string name="update_transport_details">Update Transport Details</string>
-    <string name="summit_transport_details">Submit Transport Details</string>
-    <string name="summit_profile_details">Submit Profile Details</string>
-    <string name="select_vehicle">Select Vehicle</string>
-    <string name="date_from_which_the_student_is_using_the_vehicle">Date from which the student is using the vehicle</string>
-    <string name="setting_screen_open">Setting Screen Open</string>
-    <string name="collapse_all">Collapse All</string>
-    <string name="expand_all">Expand All</string>
-    <string name="rejection_reason">"<b>Rejection Reason: </b>"</string>
-    <string name="all_undertakings_submitted_successfully">All undertakings submitted successfully.</string>
-    <string name="failed_to_submit_undertaking">Failed to submit undertaking: %1$s</string>
-    <string name="please_read_and_accept_the_undertaking_before_submitting">Please read and accept the undertaking before submitting.</string>
-    <string name="standard_wise_statistic">Standard  Wise Statistic</string>
-    <string name="no_club_assign">No Club Assign</string>
-    <string name="classmates_birthdays">Classmates\' Birthdays</string>
 
 
 

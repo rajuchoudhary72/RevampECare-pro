@@ -30,8 +30,8 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
     @Inject
     lateinit var appRepository: AppRepository
 
-    @Inject
-    lateinit var translationRepository: TranslationRepository
+//    @Inject
+//    lateinit var translationRepository: TranslationRepository
 
 
 
@@ -39,23 +39,23 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
         super.onCreate()
 
 
-        // Initialize localization manager
-        LocalizationManager.initialize(translationRepository)
-
-        // Load translations when app starts
-        CoroutineScope(Dispatchers.IO).launch {
-            val spreadsheetId = "1cMpRUMhNa7ecB_ijAYyc3bbuFUqQuUrZhEB17AUvj8U"
-            val range = "Sheet1!A:C" // Use your actual sheet name
-            val apiKey = "AIzaSyAdGd2nT10vrag4zManlLI1PbZ1D4rBkBA"
-
-            LocalizationManager.loadTranslations(spreadsheetId, range, apiKey)
-                .onSuccess {
-                    // Notify all activities to refresh
-                    LocalizationManager.notifyTranslationsChanged()
-                }
-            Log.e("TranslationRepo", "Fetching data from google sheet")
-        }
-
+//        // Initialize localization manager
+//        LocalizationManager.initialize(translationRepository)
+//
+//        // Load translations when app starts
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val spreadsheetId = "1cMpRUMhNa7ecB_ijAYyc3bbuFUqQuUrZhEB17AUvj8U"
+//            val range = "Sheet1!A:C" // Use your actual sheet name
+//            val apiKey = "AIzaSyAdGd2nT10vrag4zManlLI1PbZ1D4rBkBA"
+//
+//            LocalizationManager.loadTranslations(spreadsheetId, range, apiKey)
+//                .onSuccess {
+//                    // Notify all activities to refresh
+//                    LocalizationManager.notifyTranslationsChanged()
+//                }
+//            Log.e("TranslationRepo", "Fetching data from google sheet")
+//        }
+//
 
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

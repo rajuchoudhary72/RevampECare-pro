@@ -31,7 +31,8 @@ class LanguageSelect : Fragment() {
 
     private val languageList = mutableListOf<LanguageModel>(
         LanguageModel("English" ,"en"),
-        LanguageModel("Hindi" ,"hi")
+        LanguageModel("Hindi" ,"hi"),
+        LanguageModel("Gujarati" ,"gu")
     )
 
 

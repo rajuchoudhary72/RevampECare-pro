@@ -30,7 +30,7 @@ class ClassPromotionFragment : Fragment() {
     private var classModel: MyClasseX? = null
     private lateinit var binding: FragmentClassPromotionBinding
     private var studentListArrayList = mutableListOf<StudentPro>()
-    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList) }
+    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList,this@ClassPromotionFragment) }
     private var mMyClassDataString: ArrayList<String> = ArrayList()
     private var classListData: ArrayList<MyClasseX> = ArrayList()
 

@@ -93,9 +93,14 @@ import java.io.IOException
 import java.util.concurrent.ExecutionException
 import javax.inject.Inject
 import com.app.ecarepro.data.AppSessionManager
+import com.app.ecarepro.ui.language.LanguageManager
 import com.app.ecarepro.ui.message.inbox.InboxMessageViewModel
 import com.app.ecarepro.ui.notification.NotificationViewModel
 import com.app.ecarepro.ui.views.PaymentWebViewActivity
+import java.io.ByteArrayInputStream
+import java.security.MessageDigest
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint

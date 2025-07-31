@@ -26,7 +26,6 @@
     <string name="i_would_like_to_send_password_to_my_registered">I would like to send password to my registered</string>
     <string name="would_you_like_to_receive_credentials_of_login">Would you like to receive credentials of Login</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title">Title : </string>
     <string name="notice">Notice</string>
     <string name="compliance">compliance</string>
     <string name="report_card">Report Card</string>
@@ -418,16 +417,15 @@
     </string-array>
 
     <string-array name="filterTypeSyllabus">
-        <item>All</item>
-        <item>Class</item>
-        <item>Title</item>
         <item>Subject</item>
+        <item>Title</item>
     </string-array>
 
     <string name="all">All</string>
     <string name="boarding">Boarding</string>
     <string name="day_scholar">Day Scholar</string>
     <string name="select_all">Select All</string>
+    <string name="show_per">Show Attendance(%)</string>
     <string name="select_staff_type">Select Staff Type</string>
     <string name="select_staff_types">Select staff types</string>
     <string name="subject_line">Subject Line…</string>
@@ -569,6 +567,7 @@
     <string name="change_school_college"><u>Change School</u>></string>
     <string name="medicine_issue">Medicine Issue</string>
     <string name="assign_house">Assign House</string>
+    <string name="assign_club">Assign Club</string>
     <string name="student_not_found">Student not found</string>
     <string name="recipients">Recipients</string>
     <string name="lbl_add">Add</string>
@@ -584,6 +583,8 @@
     <string name="updated_on">Updated On:</string>
     <string name="school_days">School Days: </string>
     <string name="present_days">Present Days:</string>
+    <string name="student_attedance_present">Present Days</string>
+
     <string name="late_days">Late days:</string>
     <string name="absent_days">Absent days:</string>
     <string name="attendance_in_session">Attendance in session: %s</string>
@@ -617,7 +618,7 @@
     <string name="general_photo">Photo</string>
     <string name="general_video">Video</string>
     <string name="favourate">Favorite</string>
-    <string name="general_from...">more…</string>
+    <string name="general_more">more…</string>
     <string name="general_from_small">more</string>
     <string name="add_favourites">Add Favourites</string>
     <string name="gallery">gallery</string>
@@ -972,7 +973,7 @@
     <string name="general_select_Student">Select Student</string>
     <string name="general_classes_pun">"Class: "</string>
     <string name="general_classes">"Class"</string>
-    <string name="general_rollNo">"Roll No: "</string>
+    <string name="general_rollNo">"Roll No "</string>
     <string name="general_offline">Offline</string>
     <string name="general_online">Online</string>
     <string name="general_submitted">Submitted</string>
@@ -1323,6 +1324,18 @@
     <string name="pay_fees">Pay Fees</string>
     <string name="switch_account">Switch Account</string>
     <string name="add_account">Add Account</string>
+
+    <string name="attach_photo_pdf_doc"><![CDATA[Attach PDF & Doc]]></string>
+    <string name="apply_leave">Apply Leave</string>
+
+    <string name="designation_bold"><b>Designation: </b></string>
+    <string name="doj_bold"><b>DOJ: </b></string>
+    <string name="email_id_pun_bold"><b>Email ID: </b></string>
+    <string name="gender_pun_bold"><b>Gender: </b></string>
+
+    <string name="qualification_pun_bold"><b>Qualification: </b></string>
+    <string name="ratings">Ratings</string>
+    <string name="sync_data">Sync Data</string>
 
 
 </resources>

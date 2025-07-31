@@ -805,39 +805,51 @@ class StuMarkAttendanceFragment : Fragment(), ItemListener<StudentAtt> {
                 Toast.makeText(context,
                     getString(R.string.please_select_notification_type), Toast.LENGTH_SHORT)
                     .show()
-             } else   {
-                 if (rbType==1){
-                     if (studentListWithData.templateID!=null){
-                         dialog.dismiss()
-                         (requireActivity() as MainActivity).showLoader(true)
-                         stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
-                             (requireActivity() as MainActivity).showLoader(false)
-                             if (isSuccess){
-                                 mainActivity().showMessage(getString(R.string.sms_sent_successfully))
-                             }else{
-                                 mainActivity().showMessage(message)
-                             }
-                         }
-                     }else{
-                         Toast.makeText(context,
-                             getString(R.string.sms_template_not_defined), Toast.LENGTH_SHORT).show()
-                     }
-                 }else{
-                     dialog.dismiss()
-                     (requireActivity() as MainActivity).showLoader(true)
-                     stuMarkAttendanceViewModel.sendMessage(markAttModel,studentListArrayList,className,rbType) {  isSuccess, message ->
-                         (requireActivity() as MainActivity).showLoader(false)
-                         if (isSuccess){
-                             mainActivity().showMessage(message)
-                         }else{
-                             mainActivity().showMessage(message)
-                         }
-                     }
-                 }
+            } else {
+                if (rbType == 1) {
+                    if (studentListWithData.templateID != null) {
+                        dialog.dismiss()
+                        (requireActivity() as MainActivity).showLoader(true)
+                        stuMarkAttendanceViewModel.sendMessage(
+                            markAttModel,
+                            studentListArrayList,
+                            className,
+                            rbType,
+                            Constant.toSystemDate(mDate)
+                        ) { isSuccess, message ->
+                            (requireActivity() as MainActivity).showLoader(false)
+                            if (isSuccess) {
+                                mainActivity().showMessage(getString(R.string.sms_sent_successfully))
+                            } else {
+                                mainActivity().showMessage(message)
+                            }
+                        }
+                    } else {
+                        Toast.makeText(context, R.string.sms_template_not_defined, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                } else {
+                    dialog.dismiss()
+                    (requireActivity() as MainActivity).showLoader(true)
+                    stuMarkAttendanceViewModel.sendMessage(
+                        markAttModel,
+                        studentListArrayList,
+                        className,
+                        rbType,
+                        mDate
+                    ) { isSuccess, message ->
+                        (requireActivity() as MainActivity).showLoader(false)
+                        if (isSuccess) {
+                            mainActivity().showMessage(message)
+                        } else {
+                            mainActivity().showMessage(message)
+                        }
+                    }
+                }
 
 
             }
-            })
+        })
         tv_done.setOnClickListener {
             dialog.dismiss()
 

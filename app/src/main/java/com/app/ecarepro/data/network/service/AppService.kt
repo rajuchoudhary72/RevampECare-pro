@@ -20,6 +20,7 @@ interface AppService {
     @GET("App/Layout")
     suspend fun getAppLayout(
         @Query("Device") device: Int = 1,
+        @Query("language") language: String ,
     ): AppLayoutDto
 
 

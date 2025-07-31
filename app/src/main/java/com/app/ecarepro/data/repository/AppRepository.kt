@@ -11,6 +11,7 @@ import com.app.ecarepro.data.network.model.FavouritesUpdateDto
 import com.app.ecarepro.data.network.model.LoginResponseDto
 import retrofit2.http.Query
 import com.app.ecarepro.data.network.model.SyncData
+import com.app.ecarepro.ui.language.model.TranslationItem
 
 interface AppRepository {
     fun getAppLayout(): Flow<Result<AppLayoutDto>>
@@ -21,4 +22,5 @@ interface AppRepository {
     suspend fun notificationSeen(  id: String ): CommonResponse
     fun syncData(): Flow<Result<SyncData>>
     suspend fun getNotificationCount(): BadgeCountResponse
+    suspend fun getTranslations(spreadsheetId: String, range: String): Flow<Result<List<TranslationItem>>>
 }

@@ -18,18 +18,20 @@ import com.app.ecarepro.data.network.model.NotificationsDto
 import retrofit2.HttpException
 
 import com.app.ecarepro.data.network.model.SyncData
+import com.app.ecarepro.ui.language.LanguageRepository
 import com.app.ecarepro.ui.language.model.TranslationItem
 
 class AppRepositoryImpl @Inject constructor(
     private val appService: AppService,
     private val jsonCache: JsonCache,
-    private val userDataStore: UserDataStore
+    private val userDataStore: UserDataStore,
+    private val languageRepository: LanguageRepository
 
 ) : AppRepository {
     override fun getAppLayout(): Flow<Result<AppLayoutDto>> {
         return flow {
             try {
-                val response = appService.getAppLayout()
+                val response = appService.getAppLayout(1,languageRepository.getSavedLanguage())
                 emit(Result.success(response))
                /* if (response.errorCode == 0) {
                     *//*response.userInfo.let {
