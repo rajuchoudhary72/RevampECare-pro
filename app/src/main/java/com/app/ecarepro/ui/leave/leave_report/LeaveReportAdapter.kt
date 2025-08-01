@@ -180,13 +180,14 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 load(data.applicantPhoto)
                     .placeholder(R.drawable.default_profile)
                     .  into(binding .userImg)
-                }else{
 
                 if (data.duration>1){
                     tvPartialApprove.isVisible=true
                 }else{
                     tvPartialApprove.isVisible=false
                 }
+
+                }else{
 
                 textUserName.text= buildString {
                     append(data.studentName)
