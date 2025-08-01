@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.databinding.FragmentOpenPdfBinding
 import com.app.ecarepro.ui.MainActivity
+import java.net.URLEncoder
 
 
 class OpenPdfFragment : Fragment() {
@@ -67,11 +68,14 @@ class OpenPdfFragment : Fragment() {
         if (url.isNotEmpty()){
             if (url.contains("https://books.google.co")){
                 openPdfBinding.wvPdf.loadUrl(url)
-            }else{
+            }else if (url.contains("xlsx")){
+                val encodedUrl = URLEncoder.encode(url, "UTF-8")
+                openPdfBinding.wvPdf.loadUrl("https://view.officeapps.live.com/op/view.aspx?src=$encodedUrl")
+              //  openPdfBinding.wvPdf.loadUrl(url)
+            }
+            else{
                 openPdfBinding.wvPdf.loadUrl("https://docs.google.com/viewer?url=$url&embedded=true")
             }
         }
-
-
     }
 }

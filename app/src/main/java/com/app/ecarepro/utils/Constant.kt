@@ -653,6 +653,7 @@ class Constant {
                 "pdf" -> 1
                 "jpg" -> 2
                 "docx" -> 3
+                "xlsx" -> 5
                 else -> 2
             }
 
