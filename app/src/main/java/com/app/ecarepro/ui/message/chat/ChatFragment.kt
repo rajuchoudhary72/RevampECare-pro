@@ -591,8 +591,9 @@ class ChatFragment : Fragment() {
         val pdfExtension = "pdf"
         val doc = "doc"
         val docx = "docx"
+        val xlsx = "xlsx"
         val extension = url.substringAfterLast(".", "").lowercase()
-        return pdfExtension == extension || doc == extension || docx == extension
+        return pdfExtension == extension || doc == extension || docx == extension|| xlsx == extension
     }
 
    /* fun isAudioUrl(url: String): Boolean {

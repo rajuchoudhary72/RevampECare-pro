@@ -381,6 +381,11 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
                     putString(Constant.URL_ARGUMENT, fileSource)
                 })
+            }
+            5 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
             }else -> {
             findNavController().navigate(
                 R.id.photoViewFragmentFragment,
@@ -409,6 +414,10 @@ class ViewAssignmentFragment : Fragment() , ItemListener<AssignSubmitStudent> {
                 3 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
                     androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                }
+                5 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                 }
 
                 else -> {
