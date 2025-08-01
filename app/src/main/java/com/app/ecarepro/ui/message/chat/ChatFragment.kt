@@ -442,12 +442,7 @@ class ChatFragment : Fragment() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "*/*" // Allow any file type
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf",
-                "application/msword",
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",// .docx
-                //  "application/vnd.ms-excel", // .xls
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
-            ))
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
         pdfLauncher.launch(intent)

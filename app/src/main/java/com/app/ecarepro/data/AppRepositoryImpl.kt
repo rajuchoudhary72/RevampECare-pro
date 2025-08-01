@@ -28,9 +28,9 @@ class AppRepositoryImpl @Inject constructor(
         return flow {
             try {
                 val response = appService.getAppLayout()
-                if (response.errorCode == 0) {
-                    emit(Result.success(response))
-                    /*response.userInfo.let {
+                emit(Result.success(response))
+               /* if (response.errorCode == 0) {
+                    *//*response.userInfo.let {
                         userDataStore.getUser()?.copy(
                             photo = it.photo,
                             userId = it.userID
@@ -39,11 +39,11 @@ class AppRepositoryImpl @Inject constructor(
                                 it1
                             )
                         }
-                    }*/
+                    }*//*
 
                 } else {
                     emit(Result.failure(IllegalArgumentException(response.message)))
-                }
+                }*/
             } catch (error: Throwable) {
                 emit(Result.failure(error))
             }
