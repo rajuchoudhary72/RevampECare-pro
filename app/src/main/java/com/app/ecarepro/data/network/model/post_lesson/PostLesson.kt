@@ -10,7 +10,7 @@ data class PostLesson(
     val fromDate: String,
     val introduction: String,
     val kinestheticActivity: String,
-    val lPlnID: Int,
+    val lPlnID: Int?,
     val learningOutcomes: String,
     val objective: String,
     val otherResources: String,
