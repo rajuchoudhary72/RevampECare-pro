@@ -1367,6 +1367,34 @@
 </string>
     <string name="goto_settings_to_enable_gps">जीपीएस सक्षम करने के लिए सेटिंग्स पर जाएं</string>
 
+    <string name="estimated_collection">अनुमानित संग्रह</string>
+    <string name="till_today">आज तक</string>
+    <string name="estimated">अनुमानित</string>
+    <string name="_3_43_90_000">₹3,43,90,000</string> <!-- No translation needed for number -->
+    <string name="due">बाकी</string>
+    <string name="daily_mode_wise_collection">दैनिक मोड अनुसार संग्रह</string>
+    <string name="total">कुल</string>
+    <string name="activity_calender">गतिविधि कैलेंडर</string>
+    <string name="oct">अक्टूबर</string>
+    <string name="teacher_workload">शिक्षक कार्यभार</string>
+    <string name="section">सेक्शन</string>
+    <string name="bank_balance">बैंक शेष</string>
+    <string name="staff_attendance">कर्मचारी उपस्थिति</string>
+    <string name="new_admission_comparison_previous_year">पिछले वर्ष की तुलना में नए प्रवेश</string>
+    <string name="left">छोड़ा</string>
+    <string name="repeater">पुनः दोहराने वाला</string>
+    <string name="studying">अध्ययनरत</string>
+    <string name="tc">टीसी</string> <!-- TC (Transfer Certificate) can stay as is, or written as "स्थानांतरण प्रमाणपत्र" -->
+    <string name="online_vs_offline_admission">ऑनलाइन बनाम ऑफलाइन प्रवेश</string>
+    <string name="online">ऑनलाइन</string>
+    <string name="offline">ऑफलाइन</string>
+    <string name="student_statistic">छात्र आंकड़े</string>
+    <string name="religion_wise">धर्म अनुसार</string>
+    <string name="hindu">हिंदू</string>
+    <string name="muslim">मुस्लिम</string>
+    <string name="christian">ईसाई</string>
+    <string name="library_book_status">पुस्तकालय पुस्तक स्थिति</string>
+    <string name="birthday">जन्मदिन</string>
 
 
 
