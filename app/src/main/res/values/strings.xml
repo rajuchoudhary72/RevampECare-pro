@@ -521,6 +521,7 @@
     <string name="print">Print</string>
 
     <string name="driver_name">Driver Name</string>
+    <string name="driver_mobile">Driver Mobile</string>
     <string name="vehicle_name">Vehicle Name</string>
     <string name="route_no">Route No</string>
     <string name="route_incharge_name">Route In-charge Name</string>

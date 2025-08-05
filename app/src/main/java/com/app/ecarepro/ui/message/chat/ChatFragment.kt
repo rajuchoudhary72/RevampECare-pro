@@ -479,6 +479,7 @@ class ChatFragment : Fragment() {
                     is ChatUiState.Success -> {
                       //  handleAttachmentTypes(uiState.messageSettings)
                         buildAttachmentModels(uiState.attachments)
+
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
                         }
@@ -489,6 +490,11 @@ class ChatFragment : Fragment() {
                         binding.btnRecipient.isVisible = uiState.recipients.isNullOrEmpty().not()
 
                         uiState.messages.forEach { message ->
+                            if (message.senderDTL!=null){
+                                if (chatViewModel.messageType==MessageType.CONV.value){
+                                    setUpToolbar(message.senderDTL)
+                                }
+                            }
                             if (message.isMine) {
                                 senderChatMessage {
                                     id(message.msgID.toString() + message.body + message.sentOn)
@@ -537,7 +543,7 @@ class ChatFragment : Fragment() {
         }
     }
     private fun setUpToolbar(sender: Sender) {
-        if (chatViewModel.messageType==MessageType.INBOX.value){
+        if (chatViewModel.messageType==MessageType.INBOX.value || chatViewModel.messageType==MessageType.CONV.value){
             binding.apply {
                 headerView.isVisible = true
                 photo.imageUrl(
