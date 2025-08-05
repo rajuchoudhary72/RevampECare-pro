@@ -160,7 +160,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     imageString,
                     imageExt,
                     "",
-                    audID,
+                    if (!auditor.isNullOrEmpty()) auditor else "",
                     classIds = classIds.toString(),
                     binding.etClosure.text.toString(),
                     binding.etExtension.text.toString(),
