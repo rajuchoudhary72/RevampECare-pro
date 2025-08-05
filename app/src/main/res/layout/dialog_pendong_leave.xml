@@ -27,7 +27,7 @@
         android:id="@+id/tv_pending_leave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pending Leave: "
+        android:text="@string/pending_leave"
         android:textSize="@dimen/_16sdp"
         android:layout_gravity="center"
         android:gravity="center"
@@ -39,7 +39,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Please take action (either accept or reject) on the pending leave request!"
+        android:text="@string/please_take_action_either_accept_or_reject_on_the_pending_leave_request"
         android:layout_gravity="center"
         android:gravity="center"
         android:fontFamily="@font/ubuntu_light"
@@ -78,7 +78,7 @@
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:gravity="center"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="View"
+                    android:text="@string/view"
                     android:textColor="@color/white"
                     />
 
@@ -110,7 +110,7 @@
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:gravity="center"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="Skip"
+                    android:text="@string/skip"
                     android:textColor="@color/white"
                     />
 
@@ -142,7 +142,7 @@
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:gravity="center"
-                    android:text="Close"
+                    android:text="@string/close"
                     android:fontFamily="@font/ubuntu_medium"
                     android:textColor="@color/white"
                     />

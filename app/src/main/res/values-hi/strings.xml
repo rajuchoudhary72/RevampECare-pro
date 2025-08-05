@@ -1334,6 +1334,42 @@
     <string name="sync_data">डेटा सिंक करें</string>
 
 
+    <string name="fees_payment_reminder">शुल्क भुगतान अनुस्मारक</string>
+    <string name="access_blocked_due_to_unpaid_fees">बकाया शुल्क के कारण पहुंच अवरुद्ध</string>
+    <string name="please_pay_the_fee_or_contact_the_school">कृपया शुल्क का भुगतान करें या स्कूल से संपर्क करें।</string>
+    <string name="pay_fees">शुल्क का भुगतान करें</string>
+    <string name="switch_account">खाता बदलें</string>
+    <string name="add_account">खाता जोड़ें</string>
+
+
+    <string name="submitted_date">प्रस्तुत करने की तिथि :</string>
+    <string name="this_message_is_2_2_mb_you_can_reduce_message_size_by_scaling_the_image_to_one_of_the_sizes_below">
+यह संदेश 2.2 एमबी का है। आप नीचे दिए गए आकारों में से किसी एक में छवि को स्केल करके संदेश का आकार कम कर सकते हैं।
+</string>
+    <string name="small_45_6_kb">छोटा (45.6 केबी)</string>
+    <string name="medium_114_kb">मध्यम (114 केबी)</string>
+    <string name="large_787_kb">बड़ा (787 केबी)</string>
+    <string name="actual_size_2_2_mb">वास्तविक आकार (2.2 एमबी)</string>
+    <string name="compressing_images">छवियाँ संकुचित की जा रही हैं...</string>
+    <string name="_0_0">0/0</string>
+    <string name="please_take_action_either_accept_or_reject_on_the_pending_leave_request">
+कृपया लंबित अवकाश अनुरोध पर कार्रवाई करें (स्वीकृत करें या अस्वीकार करें)।
+</string>
+    <string name="skip">छोड़ें</string>
+    <string name="collapes_all">सभी समेटें</string>
+    <string name="infraction_category">उल्लंघन श्रेणी:</string>
+    <string name="infraction_subcategory">उल्लंघन उपश्रेणी:</string>
+    <string name="consequences">परिणाम:</string>
+    <string name="gps_permission_denied">जीपीएस अनुमति अस्वीकृत</string>
+    <string name="turn_on_gps">जीपीएस चालू करें</string>
+    <string name="gps_is_disabled_in_your_device_would_you_like_to_enable_it">
+आपके डिवाइस में जीपीएस अक्षम है। क्या आप इसे सक्षम करना चाहेंगे?
+</string>
+    <string name="goto_settings_to_enable_gps">जीपीएस सक्षम करने के लिए सेटिंग्स पर जाएं</string>
+
+
+
+
 
 
 

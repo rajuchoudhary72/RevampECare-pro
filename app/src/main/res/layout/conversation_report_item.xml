@@ -97,7 +97,6 @@
                 android:layout_below="@+id/tv_sub_abbre"
                 app:drawableLeftCompat="@drawable/ic_green_right_double"
                 android:drawablePadding="@dimen/_5sdp"
-                android:text="Read by 20 (33%) recipient(s)"
                 android:fontFamily="@font/ubuntu_italic"
                 android:textColor="@color/brand_color"
                 android:textSize="@dimen/_10sdp"
@@ -125,7 +124,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:fontFamily="@font/ubuntu_light"
-                android:text="2 Min Ao"
                 android:textColor="@color/grey_40"
                 android:textSize="@dimen/_8sdp"
                 app:fontFamily="@font/ubuntu_light" />

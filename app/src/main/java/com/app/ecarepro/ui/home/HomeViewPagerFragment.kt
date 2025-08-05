@@ -19,7 +19,6 @@ import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.dashbord.DashboardFragment
 import com.app.ecarepro.ui.feed.FeedsFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
-import com.app.ecarepro.ui.timeTable.TimeTableDayWiseNavHostFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
@@ -45,6 +44,7 @@ class HomeViewPagerFragment : Fragment() {
 
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,9 +52,9 @@ class HomeViewPagerFragment : Fragment() {
         _binding = FragmentHomeViewPagerBinding.inflate(inflater, container, false)
 
         try {
-            showDashboard =  requireArguments().getBoolean(getString(R.string.dashboard_title))
-            showAttendance =  requireArguments().getBoolean(getString(R.string.attendance_title))
-            showFeeds =  requireArguments().getBoolean(getString(R.string.feed_title))
+            showDashboard =  requireArguments().getBoolean("Dashboard")
+            showAttendance =  requireArguments().getBoolean("Attendance")
+            showFeeds =  requireArguments().getBoolean("Feed")
         }catch (e:Exception){}
 
         return binding.root
@@ -70,11 +70,11 @@ class HomeViewPagerFragment : Fragment() {
 
         if (showDashboard){
             fragmentList.add(DashboardFragment() )
-            fragmentName.add(getString(R.string.dashboard_title))
+            fragmentName.add(getString(R.string.dashboard))
         }
         if (showAttendance){
             fragmentList.add(AttendanceFragment() )
-            fragmentName.add(getString(R.string.attendance_title))
+            fragmentName.add(getString(R.string.attendance))
         }
         if (showFeeds){
             fragmentList.add(FeedsFragment() )

@@ -1336,6 +1336,42 @@
     <string name="sync_data">ડેટા સમન્વય કરો</string>
 
 
+    <string name="fees_payment_reminder">ફી ચુકવણીની યાદી</string>
+    <string name="access_blocked_due_to_unpaid_fees">બાકી ફી miatt પ્રવેશ અવરોધિત છે</string>
+    <string name="please_pay_the_fee_or_contact_the_school">કૃપા કરીને ફી ચૂકવો અથવા શાળાની સંપર્ક કરો.</string>
+    <string name="pay_fees">ફી ચુકવો</string>
+    <string name="switch_account">એકાઉન્ટ બદલો</string>
+    <string name="add_account">એકાઉન્ટ ઉમેરો</string>
+
+    <string name="this_message_is_2_2_mb_you_can_reduce_message_size_by_scaling_the_image_to_one_of_the_sizes_below">
+આ સંદેશ 2.2 એમબી છે. તમે નીચે આપેલા કદમાં છબીના માપને ઘટાડીને સંદેશનો કદ ઓછો કરી શકો છો.
+</string>
+    <string name="small_45_6_kb">નાનું (45.6 કેબી)</string>
+    <string name="medium_114_kb">મધ્યમ (114 કેબી)</string>
+    <string name="large_787_kb">મોટું (787 કેબી)</string>
+    <string name="actual_size_2_2_mb">વાસ્તવિક કદ (2.2 એમબી)</string>
+    <string name="compressing_images">છબીઓ સંકોચી રહ્યા છીએ...</string>
+    <string name="_0_0">0/0</string>
+    <string name="please_take_action_either_accept_or_reject_on_the_pending_leave_request">
+કૃપા કરીને બાકી રહેલા રજા વિનંતી પર સ્વીકારે અથવા નકારીને alguma ક્રિયા કરો!
+</string>
+    <string name="skip">છોડી દો</string>
+    <string name="collapes_all">બધું સંકોચો</string>
+    <string name="infraction_category">ભંગની શ્રેણી:</string>
+    <string name="infraction_subcategory">ભંગની ઉપશ્રેણી:</string>
+    <string name="consequences">પરિણામો:</string>
+    <string name="gps_permission_denied">GPS પરવાનગી નકારાઈ</string>
+    <string name="turn_on_gps">GPS ચાલુ કરો</string>
+    <string name="gps_is_disabled_in_your_device_would_you_like_to_enable_it">
+તમારા ઉપકરણમાં GPS નિષ્ક્રિય છે. શું તમે તેને સક્રિય કરવા માંગો છો?
+</string>
+    <string name="goto_settings_to_enable_gps">GPS સક્રિય કરવા માટે સેટિંગ્સમાં જાઓ</string>
+
+    <string name="submitted_date">સબમિટ તારીખ :</string>
+
+
+
+
 
 
 </resources>

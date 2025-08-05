@@ -125,7 +125,6 @@
                    android:layout_height="wrap_content"
                    android:ellipsize="end"
                    android:gravity="center"
-                   android:text="03 May 2018"
                    android:textSize="@dimen/_11sdp"
                    android:fontFamily="@font/ubuntu_bold"
                    android:textColor="@color/module" />
