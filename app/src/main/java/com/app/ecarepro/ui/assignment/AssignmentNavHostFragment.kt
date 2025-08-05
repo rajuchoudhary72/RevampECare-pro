@@ -80,40 +80,45 @@ class AssignmentNavHostFragment : Fragment() {
                                  it.data.subjectAssignments.forEach { assignmentsData ->
                                      fragmentList.add(AssignmentListFragment.newInstance(assignmentsData.assignments, isClassAssignment))
                                  }
+                                try {
+                                    val viewPagerAdapter = ViewPagerAdapter(
+                                        fragmentList,
+                                        activity?.supportFragmentManager!!,
+                                        lifecycle
+                                    )
+                                    binding.viewPager.adapter = viewPagerAdapter
 
-                                val viewPagerAdapter = ViewPagerAdapter(
-                                    fragmentList,
-                                    activity?.supportFragmentManager!!,
-                                    lifecycle
-                                )
-                                binding.viewPager.adapter = viewPagerAdapter
 
-
-                                TabLayoutMediator(
-                                    binding.tabLayout,
-                                    binding.viewPager,
-                                ) { tab, position ->
+                                    TabLayoutMediator(
+                                        binding.tabLayout,
+                                        binding.viewPager,
+                                    ) { tab, position ->
 
                                         tab.text = it.data.subjectAssignments[position].subject
-                                      val badgeDrawable : BadgeDrawable = tab.orCreateBadge
+                                        val badgeDrawable : BadgeDrawable = tab.orCreateBadge
 
-                                     badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
-                                     badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
-                                     if (it.data.subjectAssignments[position].assignments!=null){
-                                         var count=0
-                                         for (assignment in it.data.subjectAssignments[position].assignments){
-                                             if (assignment.isSubmitted!!){
-                                                 count++
-                                             }
-                                         }
-                                         badgeDrawable.badgeGravity=BadgeDrawable.TOP_START
+                                        badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
+                                        badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
+                                        if (it.data.subjectAssignments[position].assignments!=null){
+                                            var count=0
+                                            for (assignment in it.data.subjectAssignments[position].assignments){
+                                                if (assignment.isSubmitted!!){
+                                                    count++
+                                                }
+                                            }
+                                            badgeDrawable.badgeGravity=BadgeDrawable.TOP_START
 
-                                         badgeDrawable.number = it.data.subjectAssignments[position].assignments.size-count
+                                            badgeDrawable.number = it.data.subjectAssignments[position].assignments.size-count
 
-                                     }
+                                        }
 
 
-                                }.attach()
+                                    }.attach()
+
+
+                                }catch (e:IllegalStateException){
+                                    e.printStackTrace()
+                                }
 
 
 

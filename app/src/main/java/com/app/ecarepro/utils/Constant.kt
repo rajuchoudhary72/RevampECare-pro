@@ -22,6 +22,7 @@ class Constant {
 
         /*new  base Url*/
          //const val BASE_URL = "https://androidapi.franciscanecare.net/"
+
          const val BASE_URL = "https://api.franciscanecare.net/"
          const val REPORT_BASE_URL = "https://pay.franciscanwebsolutions.com/"
         const val BASE_DEV_URL = "https://apiuat.franciscanecare.net/"
@@ -653,6 +654,7 @@ class Constant {
                 "pdf" -> 1
                 "jpg" -> 2
                 "docx" -> 3
+                "xlsx" -> 5
                 else -> 2
             }
 

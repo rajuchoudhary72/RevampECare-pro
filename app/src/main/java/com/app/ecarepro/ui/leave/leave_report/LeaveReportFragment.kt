@@ -64,6 +64,10 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     private var toFragment: String= ""
     private var leaveListIds = mutableListOf<Int>()
     private var showAttPer=false
+    private var scrollYPosition: Int = 0
+    private var isDataLoaded: Boolean = false
+
+
 
 
     override fun onCreateView(
@@ -98,9 +102,23 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pageIndex=1
-        setupRecycleViewPager()
+        binding.nestedScrollView.setOnScrollChangeListener { v, _, scrollY, _, _ ->
+            scrollYPosition = scrollY
+
+
+            // Check if the NestedScrollView has reached the bottom
+            if (binding.nestedScrollView.getChildAt(0).bottom <= (v.height + scrollY)) {
+                if (isLoading && isDataLoaded) { // Add isDataLoaded check to prevent initial multiple calls
+                    isLoading = false
+                    pageIndex += 1
+                    leaveReportViewModel.leaveReport(status,order,applType,pageIndex,showAttPer)
+                }
+            }
+        }
+
         getLeaveReport()
+      //  setupRecycleViewPager()
+
 
         binding.toggleButtonTypeLeave.addOnButtonCheckedListener { _, checkedId, isChecked ->
             when (binding.toggleButtonTypeLeave.checkedButtonId) {
@@ -209,13 +227,16 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
                         (requireActivity() as MainActivity).showLoader(false)
                         binding.recyclerLeaveReport.isVisible = false
                         Log.d("main", "Error$it")
+                        isDataLoaded=true
                     }
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
+                        isDataLoaded=true
                         binding.recyclerLeaveReport.isVisible = true
 
                         if (it.data!!.dtl != null) {
+                            isLoading=true
                             binding.recyclerLeaveReport.isVisible = true
                             binding.tvNoData.isVisible = false
                             isRejectionReasonReq=it.data .isRejectionReasonReq
@@ -555,6 +576,13 @@ class LeaveReportFragment  : Fragment(), ItemListener<Dtl> {
 
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.nestedScrollView.post {
+            binding.nestedScrollView.scrollTo(0, scrollYPosition)
+        }
     }
 
 }

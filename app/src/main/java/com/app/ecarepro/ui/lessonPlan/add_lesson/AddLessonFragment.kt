@@ -62,6 +62,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
     private var isAuditorySelected: Boolean=false
     private lateinit var requiredFiled: RequiredField
     private var lPlanId: String= ""
+    private var lPlanIntId: Int ?= null
     private var audID= ""
     private var auditor= ""
     private lateinit var classData: NetworkMyClass
@@ -159,7 +160,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     imageString,
                     imageExt,
                     "",
-                    audID,
+                    if (!auditor.isNullOrEmpty()) auditor else "",
                     classIds = classIds.toString(),
                     binding.etClosure.text.toString(),
                     binding.etExtension.text.toString(),
@@ -167,7 +168,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                     binding.ctvFromDate.text.toString(),
                     binding.etIntroduction.text.toString(),
                     binding.etActivity.text.toString(),
-                    0,
+                    lPlanIntId,
                     binding.etLearningOutcomes.text.toString(),
                     binding.etObjective.text.toString(),
                     binding.etOtherResources.text.toString(),
@@ -559,7 +560,7 @@ class AddLessonFragment : Fragment(), ItemListener<AuditorLst> {
                             classIds = StringBuilder(data.classIds)
                             binding.etClosure.setText(data.closure)
                             binding.etExtension.setText(data.extensionTopic)
-                            lPlanId=data.id
+                            lPlanIntId=data.lPlnID
                             binding.ctvFromDate.text=data.fromDate
                             binding.etIntroduction.setText(data.introduction)
                             binding.etActivity.setText(data.kinestheticActivity)

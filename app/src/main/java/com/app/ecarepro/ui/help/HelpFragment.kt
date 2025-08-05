@@ -62,7 +62,7 @@ class HelpFragment : Fragment() {
             val intent = Intent(Intent.ACTION_DIAL).apply {
                 data = Uri.parse("tel:${binding.textContactNumber.text}")
             }
-            requireContext().startActivity(intent)
+           startActivity(intent)
         }
 
         binding.textEmail.setOnClickListener {

@@ -38,7 +38,7 @@ class FeeDefaulterUI : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding=FragmentFeeDefaulterUIBinding.inflate(inflater,container,false)
+        binding = FragmentFeeDefaulterUIBinding.inflate(inflater, container, false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
         binding.includeToolbar.toolbarTitle.text = getString(R.string.fee_defaulter)
         return binding.root
@@ -49,8 +49,10 @@ class FeeDefaulterUI : Fragment() {
         getFeeDefaulters(feeTypeId, installIds)
     }
 
-    private fun getFeeDefaulters(feeTypeId: Int?,
-                                 installIds: String?) {
+    private fun getFeeDefaulters(
+        feeTypeId: Int?,
+        installIds: String?
+    ) {
 
         lifecycleScope.launch {
             feeDefaulterViewModel.feeDefaulterStateFlow.collectLatest {
@@ -67,44 +69,48 @@ class FeeDefaulterUI : Fragment() {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
                         if (it.data != null) {
+                            try {
+                                binding.tvTotalStudent.text = it.data.totalStudent.toString()
+                                binding.tvTotalDefaulter.text = it.data.totalDefaulter.toString()
+                                binding.defaultAmount.text = it.data.totalAmount
 
-                            binding.tvTotalStudent.text=it.data.totalStudent.toString()
-                            binding.tvTotalDefaulter.text=it.data.totalDefaulter.toString()
-                            binding.defaultAmount.text= it.data.totalAmount
+                                if (it.data.feeTypes.isNotEmpty()) {
+                                    buildFeeType(it.data.feeTypes)
+                                }
+                                if (it.data.installments.isNotEmpty()) {
+                                    buildFeeInstallment(it.data.installments)
+                                }
 
-                            if (it.data.feeTypes!=null){
-                                buildFeeType(it.data.feeTypes)
-                            }
-                            if (it.data.installments!=null){
-                                buildFeeInstallment(it.data.installments)
-                            }
-
-                            if (it.data.feeDefaulters!=null) {
                                 if (it.data.feeDefaulters.isNotEmpty()) {
+                                    if (it.data.feeDefaulters.isNotEmpty()) {
 
-                                    binding.rvFeeDefaulter.isVisible = true
-                                    binding.tvNoData.isVisible = false
+                                        binding.rvFeeDefaulter.isVisible = true
+                                        binding.tvNoData.isVisible = false
 
                                     val outPassReportAdapter = FeeDefaulterAdapter(
                                         it.data.feeDefaulters,
                                         this@FeeDefaulterUI
                                     )
 
-                                    binding.rvFeeDefaulter.apply {
-                                        setHasFixedSize(true)
-                                        layoutManager = LinearLayoutManager(activity)
-                                        adapter = outPassReportAdapter
+                                        binding.rvFeeDefaulter.apply {
+                                            setHasFixedSize(true)
+                                            layoutManager = LinearLayoutManager(activity)
+                                            adapter = outPassReportAdapter
+                                        }
+
+
+                                    } else {
+                                        binding.rvFeeDefaulter.isVisible = false
+                                        binding.tvNoData.isVisible = true
                                     }
-
-
                                 } else {
                                     binding.rvFeeDefaulter.isVisible = false
                                     binding.tvNoData.isVisible = true
                                 }
-                            } else {
-                                binding.rvFeeDefaulter.isVisible = false
-                                binding.tvNoData.isVisible = true
+                            } catch (e: NullPointerException) {
+                                e.message
                             }
+
 
                         }
                     }
@@ -125,7 +131,7 @@ class FeeDefaulterUI : Fragment() {
         binding.feeType.setAdapter(adapter)
 
         binding.feeType.setOnItemClickListener { _, _, position, _ ->
-            feeTypeId=feeType[position].feeTypeID
+            feeTypeId = feeType[position].feeTypeID
             getFeeDefaulters(feeTypeId, installIds)
         }
     }
@@ -155,8 +161,12 @@ class FeeDefaulterUI : Fragment() {
 
             builder.setPositiveButton(R.string.general_ok) { _, _ ->
                 binding.installments.setText(selectedInstallmentType.joinToString(", "))  // Show selected items
-                 installIds = selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
-                getFeeDefaulters(feeTypeId, installIds.trim()) // Fetch defaulters based on selection
+                installIds =
+                    selectedInstallmentIds.joinToString(",") // Convert list to "34,23,65" format
+                getFeeDefaulters(
+                    feeTypeId,
+                    installIds.trim()
+                ) // Fetch defaulters based on selection
             }
 
             builder.setNegativeButton(R.string.general_cancel, null)

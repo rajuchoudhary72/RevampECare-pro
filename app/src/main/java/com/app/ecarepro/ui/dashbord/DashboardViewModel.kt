@@ -45,22 +45,30 @@ class DashboardViewModel @Inject constructor(
 
         if (feeCollection != null) {
             Log.e("Dashboard Fee 1", data?.feeCollection.toString())
-            data = dashboardData?.copy(
-                feeCollection = feeCollection.copy()
-            )
-            Log.e("Dashboard Fee 2", data?.feeCollection.toString())
+            if (data?.feeCollection!=null){
+                data = dashboardData?.copy(
+                    feeCollection = feeCollection.copy()
+                )
+                Log.e("Dashboard Fee 2", data?.feeCollection.toString())
+            }
+
         }
         if (feeDefaulter != null) {
-            Log.e("Dashboard Fee 1", data?.feeDafaulter.toString())
+            Log.e("Dashboard Fee 3", data?.feeDafaulter.toString())
+            if (data?.feeDafaulter!=null)
             data = dashboardData?.copy(
                 feeDafaulter = feeDefaulter.copy()
             )
-            Log.e("Dashboard Fee 2", data?.feeCollection.toString())
+            Log.e("Dashboard Fee 4", data?.feeCollection.toString())
         }
 
 
         if (modelWiseColl != null) {
-            data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
+            if (modelWiseColl.transactionDetails!=null){
+                Log.e("Dashboard Data 1", data?.collectionModeWise.toString())
+                data = dashboardData?.copy(collectionModeWise = CollectionModeWise(modelWiseColl.transactionDetails))
+            }
+
         }
         Log.e("Dashboard Data", data?.feeCollection.toString())
 
