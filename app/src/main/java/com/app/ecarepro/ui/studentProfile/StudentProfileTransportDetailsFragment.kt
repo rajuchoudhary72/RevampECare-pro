@@ -39,7 +39,7 @@ class StudentProfileTransportDetailsFragment : Fragment() {
         sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
             if (it.transDetails!=null){
                 binding.transDetails=it.transDetails
-                if (it.transDetails.transportType.isNotEmpty()) {
+                if (!it.transDetails.transportType.isNullOrEmpty()) {
                     if (it.transDetails.transportType == "Self") {
                         binding.vehType.text = it.transDetails.vehicleType
                         binding.vehNumber.text = it.transDetails.vehicleNumber
@@ -61,7 +61,6 @@ class StudentProfileTransportDetailsFragment : Fragment() {
                     }
                 }
             }
-
         }
 
     }
