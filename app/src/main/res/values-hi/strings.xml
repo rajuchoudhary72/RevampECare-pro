@@ -1396,9 +1396,7 @@
     <string name="library_book_status">पुस्तकालय पुस्तक स्थिति</string>
     <string name="birthday">जन्मदिन</string>
 
-
-
-
+    <string name="attach_doc"><![CDATA[दस्तावेज़ ब्राउज़ करें (.pdf,.doc,.docx, .xlsx)]]></string>
 
 
 </resources>

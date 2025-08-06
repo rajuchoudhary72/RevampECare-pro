@@ -493,6 +493,7 @@
     <string name="logout">Logout</string>
     <string name="are_you_sure_to_logout">Are you sure to logout?</string>
     <string name="no">No</string>
+    <string name="attach_doc"><![CDATA[Browse Documents (.pdf,.doc,.docx, .xlsx)]]></string>
 
     <string name="print">Print</string>
 

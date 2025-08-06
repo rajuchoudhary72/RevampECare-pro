@@ -471,7 +471,7 @@ class SubmitAssignmentFragment : Fragment() {
                     val androidDownloader = AndroidDownloader(requireContext())
                     androidDownloader.downloadFile(
                         fileSource,
-                        getString(R.string.assessment),
+                        getString(R.string.assessment_title),
                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
                 }

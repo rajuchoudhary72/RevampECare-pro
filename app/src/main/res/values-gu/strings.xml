@@ -1397,10 +1397,7 @@
     <string name="christian">ઈસાઈ</string>
     <string name="library_book_status">લાઇબ્રેરી પુસ્તક સ્થિતિ</string>
     <string name="birthday">જન્મદિન</string>
-
-
-
-
+    <string name="attach_doc"><![CDATA[દસ્તાવેજો બ્રાઉઝ કરો (.pdf,.doc,.docx, .xlsx)]]></string>
 
 
 </resources>
