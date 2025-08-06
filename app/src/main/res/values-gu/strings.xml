@@ -1400,4 +1400,15 @@
     <string name="attach_doc"><![CDATA[દસ્તાવેજો બ્રાઉઝ કરો (.pdf,.doc,.docx, .xlsx)]]></string>
 
 
+    <string name="message">સંદેશ</string>
+    <string name="inbox">ઇનબોક્સ</string>
+    <string name="sent">મોકલેલા</string>
+    <string name="compose">લખો</string>
+    <string name="compose_message">સંદેશ લખો</string>
+    <string name="add_recipients">પ્રાપ્તકર્તાઓ ઉમેરો</string>
+    <string name="subject">વિષય</string>
+    <string name="add_recipient_s">પ્રાપ્તકર્તા(ઓ) ઉમેરો</string>
+
+
+
 </resources>

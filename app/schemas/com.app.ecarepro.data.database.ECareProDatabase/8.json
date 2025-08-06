@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 8,
-    "identityHash": "c9f592271dd9876a2ad5c031665559d0",
+    "identityHash": "a9fd639b8035eaf9cac52c5fd0430143",
     "entities": [
       {
         "tableName": "users",
@@ -278,50 +278,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "localizations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `englishValue` TEXT NOT NULL, `hindiValue` TEXT NOT NULL, `lastUpdated` INTEGER NOT NULL, PRIMARY KEY(`key`))",
-        "fields": [
-          {
-            "fieldPath": "key",
-            "columnName": "key",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "englishValue",
-            "columnName": "englishValue",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "hindiValue",
-            "columnName": "hindiValue",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastUpdated",
-            "columnName": "lastUpdated",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "key"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c9f592271dd9876a2ad5c031665559d0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a9fd639b8035eaf9cac52c5fd0430143')"
     ]
   }
 }

@@ -1383,6 +1383,14 @@
     <string name="christian">Christian</string>
     <string name="library_book_status">Library Book Status</string>
     <string name="birthday">Birthday</string>
+    <string name="message">Message</string>
+    <string name="inbox">Inbox</string>
+    <string name="sent">Sent</string>
+    <string name="compose">Compose</string>
+    <string name="compose_message">Compose Message</string>
+    <string name="add_recipients">Add Recipients</string>
+    <string name="subject">Subject</string>
+    <string name="add_recipient_s">Add Recipient(s)</string>
 
 
 </resources>

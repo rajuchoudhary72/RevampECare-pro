@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/round_close_24"
                 app:navigationIconTint="@color/white"
-                app:title="Add Recipient(s)"
+                app:title="@string/add_recipient_s"
                 app:titleCentered="true"
                 app:titleTextAppearance="?attr/textAppearanceTitleMedium"
                 app:titleTextColor="@color/white"

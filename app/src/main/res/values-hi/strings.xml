@@ -1398,6 +1398,16 @@
 
     <string name="attach_doc"><![CDATA[दस्तावेज़ ब्राउज़ करें (.pdf,.doc,.docx, .xlsx)]]></string>
 
+    <string name="message">संदेश</string>
+    <string name="inbox">इनबॉक्स</string>
+    <string name="sent">भेजे गए</string>
+    <string name="compose">लिखें</string>
+    <string name="compose_message">संदेश लिखें</string>
+    <string name="add_recipients">प्राप्तकर्ता जोड़ें</string>
+    <string name="subject">विषय</string>
+    <string name="add_recipient_s">प्राप्तकर्ता(गण) जोड़ें</string>
+
+
 
 </resources>
 
