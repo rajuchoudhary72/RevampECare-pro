@@ -229,6 +229,9 @@ fun TextView.rupeeText(rupee: String?) {
 interface FileClickListener {
     fun onClick(file: String)
 }
+interface MessageClickListener {
+    fun onClick(file: String)
+}
 
 
 @BindingAdapter("htmlText")
