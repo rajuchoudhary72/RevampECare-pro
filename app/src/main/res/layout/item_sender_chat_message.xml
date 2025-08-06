@@ -20,6 +20,9 @@
         <variable
             name="onClickPhoto"
             type="com.app.ecarepro.utils.FileClickListener" />
+        <variable
+            name="onClickMessage"
+            type="com.app.ecarepro.utils.MessageClickListener" />
 
         <import type="java.util.List" />
 
@@ -55,8 +58,8 @@
             android:focusable="true"
             android:fontFamily="@font/calibri_regular"
             android:linksClickable="true"
-            android:longClickable="true"
             android:padding="15dp"
+            android:onClick="@{v -> onClickMessage.onClick(message)}"
             android:textColor="@color/black"
             android:textIsSelectable="true"
             app:formattedText="@{message}"

@@ -12,7 +12,9 @@
         <variable
             name="image"
             type="java.lang.String" />
-
+        <variable
+            name="onClickMessage"
+            type="com.app.ecarepro.utils.MessageClickListener" />
         <variable
             name="date"
             type="java.lang.String" />
@@ -53,6 +55,7 @@
             android:textColor="@color/black"
             android:enabled="true"
             android:autoLink="all"
+            android:onClick="@{v -> onClickMessage.onClick(message)}"
             app:formattedText="@{message}"
             android:textIsSelectable="true"
             android:focusable="true"
