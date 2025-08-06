@@ -9,11 +9,9 @@ import com.app.ecarepro.data.database.model.UserEntity
 import androidx.room.AutoMigration
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.app.ecarepro.data.database.dao.LocalizationDao
-import com.app.ecarepro.data.database.model.LocalizationEntity
 
 @Database(
-    entities = [UserEntity::class, SchoolEntity::class, LocalizationEntity::class],
+    entities = [UserEntity::class, SchoolEntity::class],
     version = 8,
     exportSchema = true,
     autoMigrations = [
@@ -27,7 +25,6 @@ import com.app.ecarepro.data.database.model.LocalizationEntity
 abstract class ECareProDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun schoolDao(): SchoolDao
-    abstract fun localizationDao(): LocalizationDao
 }
 
 
