@@ -37,28 +37,31 @@ class StudentProfileTransportDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sharedViewModel.getNetworkStudentProfile().observe(this.viewLifecycleOwner){
-            binding.transDetails=it.transDetails
-            if (!it.transDetails.transportType.isNullOrEmpty()) {
-                if (it.transDetails.transportType == "Self") {
-                    binding.vehType.text = it.transDetails.vehicleType
-                    binding.vehNumber.text = it.transDetails.vehicleNumber
-                    binding.driver.isVisible = false
-                    binding.vehicle.isVisible = false
-                    binding.contact.isVisible = false
-                    binding.route.isVisible = false
-                    binding.inchargeName.isVisible = false
-                    binding.inchargeMob.isVisible = false
-                } else {
-                    binding.vehType.text = it.transDetails.schoolTransport.vehicleType
-                    binding.vehNumber.text = it.transDetails.schoolTransport.vehicleNumber
-                    binding.driver.isVisible = true
-                    binding.vehicle.isVisible = true
-                    binding.contact.isVisible = true
-                    binding.route.isVisible = true
-                    binding.inchargeName.isVisible = true
-                    binding.inchargeMob.isVisible = true
+            if (it.transDetails!=null){
+                binding.transDetails=it.transDetails
+                if (it.transDetails.transportType.isNotEmpty()) {
+                    if (it.transDetails.transportType == "Self") {
+                        binding.vehType.text = it.transDetails.vehicleType
+                        binding.vehNumber.text = it.transDetails.vehicleNumber
+                        binding.driver.isVisible = false
+                        binding.vehicle.isVisible = false
+                        binding.contact.isVisible = false
+                        binding.route.isVisible = false
+                        binding.inchargeName.isVisible = false
+                        binding.inchargeMob.isVisible = false
+                    } else {
+                        binding.vehType.text = it.transDetails.schoolTransport.vehicleType
+                        binding.vehNumber.text = it.transDetails.schoolTransport.vehicleNumber
+                        binding.driver.isVisible = true
+                        binding.vehicle.isVisible = true
+                        binding.contact.isVisible = true
+                        binding.route.isVisible = true
+                        binding.inchargeName.isVisible = true
+                        binding.inchargeMob.isVisible = true
+                    }
                 }
             }
+
         }
 
     }

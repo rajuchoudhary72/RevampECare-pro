@@ -1408,7 +1408,8 @@
     <string name="add_recipients">પ્રાપ્તકર્તાઓ ઉમેરો</string>
     <string name="subject">વિષય</string>
     <string name="add_recipient_s">પ્રાપ્તકર્તા(ઓ) ઉમેરો</string>
-
+    <string name="location_permission_required">Location Permission Required</string>
+    <string name="location_permission_is_required_to_send_your_current_location_please_enable_it_in_app_settings">Location permission is required to send your current location. Please enable it in app settings.</string>
 
 
 </resources>

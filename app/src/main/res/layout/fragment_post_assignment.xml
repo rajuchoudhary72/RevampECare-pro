@@ -285,7 +285,7 @@
                             android:drawablePadding="3dp"
                             android:fontFamily="@font/ubuntu_medium"
                             android:padding="5dp"
-                            android:text="@string/general_attach_photo_pdf_doc"
+                            android:text="@string/attach_doc"
                             app:drawableTopCompat="@drawable/ic_add_account"
                             android:gravity="bottom|center" />
 

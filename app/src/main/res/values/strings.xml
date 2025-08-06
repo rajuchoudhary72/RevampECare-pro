@@ -1391,6 +1391,8 @@
     <string name="add_recipients">Add Recipients</string>
     <string name="subject">Subject</string>
     <string name="add_recipient_s">Add Recipient(s)</string>
+    <string name="location_permission_required">Location Permission Required</string>
+    <string name="location_permission_is_required_to_send_your_current_location_please_enable_it_in_app_settings">Location permission is required to send your current location. Please enable it in app settings.</string>
 
 
 </resources>
