@@ -97,7 +97,7 @@ class AppRepositoryImpl @Inject constructor(
     override fun getFavourites(): Flow<Result<List<Favourites>>> {
         return flow {
             try {
-                val response = appService.getFavourites()
+                val response = appService.getFavourites(1,languageRepository.getSavedLanguage())
                 if (response.errorCode == 0) {
                     emit(Result.success(response.allMenus?: emptyList()))
                 } else {

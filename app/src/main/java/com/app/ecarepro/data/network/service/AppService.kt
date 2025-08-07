@@ -35,6 +35,7 @@ interface AppService {
     @GET("App/FavoriteMenus")
     suspend fun getFavourites(
         @Query("Device") device: Int = 1,
+        @Query("language") language: String ,
     ): FavouritesDto
 
     @POST("App/UpdateFavoriteMenus")

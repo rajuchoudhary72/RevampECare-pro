@@ -22,7 +22,7 @@
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
             android:padding="@dimen/_10sdp"
-            android:text="Fee Summary"
+            android:text="@string/fee_summary"
             android:textColor="@color/grey_60"
             android:textSize="@dimen/_14sdp" />
 
