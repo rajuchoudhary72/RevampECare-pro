@@ -23,8 +23,7 @@ class AddTaskListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val task: Title =
-        savedStateHandle.get<Title>("task") ?: throw IllegalArgumentException("task not found")
+    val task: Title? = savedStateHandle.get<Title>("task")
 
     val loading = MutableSharedFlow<Boolean>()
     val error = MutableSharedFlow<String>()
@@ -33,8 +32,20 @@ class AddTaskListViewModel @Inject constructor(
     val staffTypes = MutableStateFlow<List<StaffType>>(emptyList())
     val assignees = MutableStateFlow<List<Assignee>>(emptyList())
 
+    var selectedStaffTypes: List<StaffType>? = null
+    var selectedAssignees: List<Assignee> = emptyList()
 
-    fun getStaffTypes() {
+    init {
+        getStaffTypes {
+            if (task != null) {
+
+               // selectedStaffTypes = task?.staffTypes
+            }
+        }
+    }
+
+
+    fun getStaffTypes(onSuccess: () -> Unit) {
         viewModelScope.launch {
             loading.emit(true)
             messageRepository.getStaffTypes()
@@ -43,6 +54,7 @@ class AddTaskListViewModel @Inject constructor(
                     it
                         .onSuccess {
                             staffTypes.value = it
+                            onSuccess()
                         }.onFailure {
                             error.emit(it.message ?: UNKNOWN_ERROR_MESSAGE)
                         }
@@ -51,15 +63,17 @@ class AddTaskListViewModel @Inject constructor(
         }
     }
 
-    fun getStaffAssignee(staffId: Int) {
+    fun getStaffAssignee() {
         viewModelScope.launch {
             loading.emit(true)
-            schoolRepository.getTaskAssignee(staffId)
+            schoolRepository.getTaskAssignee(
+                null,
+                selectedStaffTypes?.joinToString(separator = ",") { it.staffTypeID.toString() })
                 .collect {
                     loading.emit(false)
                     it
-                        .onSuccess {
-                            assignees.value = it
+                        .onSuccess { assignees ->
+                            this@AddTaskListViewModel.assignees.value = assignees
                         }.onFailure {
                             error.emit(it.message ?: UNKNOWN_ERROR_MESSAGE)
                         }
@@ -73,8 +87,8 @@ class AddTaskListViewModel @Inject constructor(
             schoolRepository.saveTaskList(
                 AddTaskListDto(
                     title = name.value,
-                    id = task.tlId.toString(),
-                    assignee = ""
+                    id = task?.tlId?.toString(),
+                    assignee = selectedAssignees.joinToString(separator = ",") { it.userID.toString() },
                 )
             )
                 .collect {

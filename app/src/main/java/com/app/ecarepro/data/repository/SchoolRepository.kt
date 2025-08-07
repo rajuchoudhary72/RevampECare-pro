@@ -60,7 +60,11 @@ interface SchoolRepository {
     fun updateTaskImage(request: UpdateTaskAttachmentDto): Flow<Result<String>>
     fun updateTask(request: UpdateTaskDto): Flow<Result<String>>
     fun getWatchers(): Flow<Result<WatchersDto>>
-    fun getTaskAssignee(tlId:Int): Flow<Result<List<Assignee>>>
+    fun getTaskAssignee(
+        tlId:Int?,
+        tlIds: String? = null,
+
+        ): Flow<Result<List<Assignee>>>
 
     suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
 

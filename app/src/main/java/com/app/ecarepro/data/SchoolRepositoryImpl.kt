@@ -279,10 +279,10 @@ class SchoolRepositoryImpl @Inject constructor(
             }
         }
     }
-    override fun getTaskAssignee(tlId:Int): Flow<Result<List<Assignee>>> {
+    override fun getTaskAssignee(tlId:Int? , ids: String?): Flow<Result<List<Assignee>>> {
         return flow {
             try {
-                val response = schoolService.getTaskAssignee(tlId)
+                val response = if(tlId != null)schoolService.getTaskAssignee(tlId) else schoolService.getTaskAssignee(ids.orEmpty())
                 if (response.errorCode == 0) {
                     emit(Result.success(response.assignees?: emptyList()))
                 } else {

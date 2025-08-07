@@ -56,7 +56,12 @@ interface SchoolService {
 
     @GET("TaskManager/TaskListAssigne")
     suspend fun getTaskAssignee(
-        @Query("tlId") tlId: Int,
+        @Query("tlId") tlId: Int
+    ): AssigneeDto
+
+    @GET("TaskManager/TaskListAssigne")
+    suspend fun getTaskAssignee(
+        @Query("StaffTypIDs") staffTypIDs: String,
     ): AssigneeDto
 
     @GET("School/Notices")
@@ -175,7 +180,7 @@ interface SchoolService {
     @GET("School/AppVersion")
     suspend fun checkAppVersion( ): NetworkAppVersion
 
-    @POST("School/AppVersion")
+    @POST("TaskManager/SaveTaskList")
     suspend fun saveTaskList(@Body task: AddTaskListDto ): NetworkAppVersion
 
 }

@@ -17,10 +17,10 @@ class TaskListViewModel @Inject constructor(
 
     val uiState =
         schoolRepository
-            .getWatchers()
+            .getTasks()
             .map {
                 if (it.isSuccess) {
-                    val tasks = it.getOrNull()?.taskList ?: emptyList()
+                    val tasks = it.getOrNull() ?: emptyList()
                     if (tasks.isEmpty()) {
                         TaskListUiState.Empty
                     } else {
