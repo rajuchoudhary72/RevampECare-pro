@@ -479,7 +479,7 @@ class ChatFragment : Fragment() {
                     ChatUiState.EmptyInbox -> {
                         noDataFoundView {
                             id(R.id.empty_view)
-                            binding.toolbar.title = "Message"
+                            binding.toolbar.title = getString(R.string.message)
                         }
                     }
                     is ChatUiState.Success -> {
@@ -489,7 +489,7 @@ class ChatFragment : Fragment() {
                         uiState.senderDTL?.let {
                             setUpToolbar(it)
                         }
-                        binding.toolbar.title = "Message"
+                        binding.toolbar.title = getString(R.string.message)
                         binding.tvSubject.text = "Sub: ${uiState.subject}"
                         setUpFontStyle(binding)
                         binding.sendMessageLayout.isVisible = uiState.canReply ?: false
@@ -587,7 +587,7 @@ class ChatFragment : Fragment() {
             }
         }else{
             binding.headerView.isVisible =false
-            binding.toolbar.setTitle("Message")
+            binding.toolbar.setTitle( getString(R.string.message))
         }
 
     }
