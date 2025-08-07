@@ -182,6 +182,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="addTaskListFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="1790" />
+                            <option name="y" value="-2060" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="addThoughtsBlankFragment">
                     <value>
                       <LayoutPositions>
@@ -2199,6 +2211,18 @@
                           <Point>
                             <option name="x" value="4872" />
                             <option name="y" value="724" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="taskListFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="2390" />
+                            <option name="y" value="-1920" />
                           </Point>
                         </option>
                       </LayoutPositions>

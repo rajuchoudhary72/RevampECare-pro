@@ -1052,4 +1052,12 @@
         android:id="@+id/feesBlockDialogFragment"
         android:name="com.app.ecarepro.utils.FeesBlockDialogFragment"
         android:label="FeesBlockDialogFragment" />
+    <fragment
+        android:id="@+id/taskListFragment"
+        android:name="com.app.ecarepro.ui.taskmanager.tasklist.TaskListFragment"
+        android:label="TaskListFragment" />
+    <fragment
+        android:id="@+id/addTaskListFragment"
+        android:name="com.app.ecarepro.ui.taskmanager.tasklist.AddTaskListFragment"
+        android:label="AddTaskListFragment" />
 </navigation>

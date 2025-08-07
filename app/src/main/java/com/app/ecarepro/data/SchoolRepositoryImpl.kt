@@ -26,6 +26,7 @@ import com.app.ecarepro.model.TasksDto
 import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.NetworkContactUrl
 import com.app.ecarepro.data.network.model.SendCommentDto
+import com.app.ecarepro.model.AddTaskListDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.model.WatchersDto
 import com.app.ecarepro.model.Assignee
@@ -203,6 +204,22 @@ class SchoolRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun saveTaskList(task: AddTaskListDto): Flow<Result<String>> {
+        return flow {
+            try {
+                val response = schoolService.saveTaskList(task)
+                if (response.errorCode == 0) {
+                    emit(Result.success(response.message ?: ""))
+                } else {
+                    emit(Result.failure(IllegalArgumentException(response.message)))
+                }
+            } catch (error: Throwable) {
+                emit(Result.failure(error))
+            }
+        }
+    }
+
     override fun addTask(request: AddTaskDto): Flow<Result<String>> {
         return flow {
             try {

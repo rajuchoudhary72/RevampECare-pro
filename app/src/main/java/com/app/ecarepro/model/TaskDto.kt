@@ -1,6 +1,8 @@
 package com.app.ecarepro.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 
 data class TaskDto(
@@ -14,6 +16,7 @@ data class TaskDto(
     val titles: List<Title>?
 )
 
+@Parcelize
 data class Title(
     @SerializedName("assignees")
     val assignees: List<Assignee>?,
@@ -25,8 +28,9 @@ data class Title(
     val title: String?,
     @SerializedName("tlId")
     val tlId: Int?
-)
+) : Parcelable
 
+@Parcelize
 data class Assignee(
     @SerializedName("designation")
     val designation: String?,
@@ -43,4 +47,4 @@ data class Assignee(
     @SerializedName("userID")
     val userID: Int?,
     var isSelected: Boolean = false
-)
+) : Parcelable
