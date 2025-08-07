@@ -38,8 +38,7 @@ class AddTaskListViewModel @Inject constructor(
     init {
         getStaffTypes {
             if (task != null) {
-
-               // selectedStaffTypes = task?.staffTypes
+                name.value= task.title?:""
             }
         }
     }
