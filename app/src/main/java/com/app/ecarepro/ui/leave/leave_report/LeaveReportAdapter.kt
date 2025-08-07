@@ -73,7 +73,6 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 tvHolderApproveOn.text= buildString {
                     append(leaveReportFragment.getString(R.string.rejected_on))
             }}
-
             if (status==-1) {
                 llCancel.isVisible=true
             }else{
