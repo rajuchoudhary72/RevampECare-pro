@@ -1408,12 +1408,13 @@
     <string name="add_recipients">પ્રાપ્તકર્તાઓ ઉમેરો</string>
     <string name="subject">વિષય</string>
     <string name="add_recipient_s">પ્રાપ્તકર્તા(ઓ) ઉમેરો</string>
-    <string name="location_permission_required">Location Permission Required</string>
-    <string name="location_permission_is_required_to_send_your_current_location_please_enable_it_in_app_settings">Location permission is required to send your current location. Please enable it in app settings.</string>
-    <string name="attendance_report">Attendance Report</string>
-    <string name="add_another_account">Add another account</string>
-    <string name="mother_aadhaar_no">Mother Aadhaar No</string>
-    <string name="mother_pan">Mother PAN</string>
+    <string name="location_permission_required">સ્થાન પરવાનગી જરૂરી છે</string>
+    <string name="location_permission_is_required_to_send_your_current_location_please_enable_it_in_app_settings">તમારા વર્તમાન સ્થાનને મોકલવા માટે સ્થાન પરવાનગી જરૂરી છે. કૃપા કરીને તેને એપ્લિકેશન સેટિંગ્સમાં સક્ષમ કરો.</string>
+    <string name="attendance_report">હાજરી અહેવાલ</string>
+    <string name="add_another_account">બીજું એકાઉન્ટ ઉમેરો</string>
+    <string name="mother_aadhaar_no">માતા આધાર નં</string>
+    <string name="mother_pan">માતા PAN</string>
+    <string name="add_more">વધુ ઉમેરો</string>
 
 
 </resources>
