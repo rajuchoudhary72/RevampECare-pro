@@ -51,6 +51,7 @@
         android:orientation="vertical"
        >
 
+
         <TextView
             android:id="@+id/per_present"
             android:layout_width="match_parent"
