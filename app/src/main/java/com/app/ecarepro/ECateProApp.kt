@@ -11,7 +11,6 @@ import com.app.ecarepro.data.repository.AppRepository
 import com.app.ecarepro.data.repository.TranslationRepository
 import com.app.ecarepro.ui.language.LanguageManager
 import com.app.ecarepro.ui.language.LocalizationManager
-import com.app.ecarepro.utils.LocalizedContext
 import com.app.ecarepro.ui.MainActivity
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
@@ -104,10 +103,10 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
     override fun onActivityDestroyed(p0: Activity) {
      }
 
-    override fun attachBaseContext(base: Context) {
-        // Add this method to wrap the application context
-        super.attachBaseContext(LocalizedContext(base))
-    }
+//    override fun attachBaseContext(base: Context) {
+//        // Add this method to wrap the application context
+//        super.attachBaseContext(LocalizedContext(base))
+//    }
 
     fun callMainActivityFunction() {
 
