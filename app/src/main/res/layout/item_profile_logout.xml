@@ -31,7 +31,7 @@
             android:drawableTint="@color/red"
             android:fontFamily="@font/calibri_regular"
             android:gravity="center"
-            android:text="Logout"
+            android:text="@string/logout"
             android:textColor="@color/red"
             android:textSize="17sp"
             app:layout_constraintEnd_toEndOf="parent"

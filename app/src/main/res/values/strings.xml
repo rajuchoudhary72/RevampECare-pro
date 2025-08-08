@@ -1405,6 +1405,10 @@
     <string name="applied_on">"Applied On : "</string>
     <string name="rejected_by">"Rejected By : "</string>
     <string name="rejected_on">"Rejected On : "</string>
+    <string name="attendance_report">Attendance Report</string>
+    <string name="add_another_account">Add another account</string>
+    <string name="mother_aadhaar_no">Mother Aadhaar No</string>
+    <string name="mother_pan">Mother PAN</string>
 
 
 </resources>

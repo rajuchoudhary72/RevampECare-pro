@@ -27,7 +27,7 @@
                 app:navigationIcon="@drawable/ic_navigate"
                 app:contentInsetStartWithNavigation="0dp"
                 app:titleTextAppearance="@style/TextAppearance.ECarePro.Toolbar"
-                app:title="Help"
+                app:title="@string/help"
                 app:topWindowInsetToPadding="@{true}">
 
                 <com.google.android.material.button.MaterialButton

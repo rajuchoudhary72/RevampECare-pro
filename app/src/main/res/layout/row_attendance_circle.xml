@@ -36,7 +36,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="Total Present"
+            android:text="@string/total_present"
             android:fontFamily="@font/ubuntu_regular"
             android:textColor="@color/present_wh"
             android:textSize="@dimen/_10sdp" />

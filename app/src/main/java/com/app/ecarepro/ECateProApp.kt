@@ -104,10 +104,7 @@ class ECateProApp : Application(),Application.ActivityLifecycleCallbacks  {
     override fun onActivityDestroyed(p0: Activity) {
      }
 
-    override fun attachBaseContext(base: Context) {
-        // Add this method to wrap the application context
-        super.attachBaseContext(LocalizedContext(base))
-    }
+
 
     fun callMainActivityFunction() {
 
