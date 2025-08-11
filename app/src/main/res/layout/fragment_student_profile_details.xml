@@ -1073,7 +1073,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="Mother Aadhaar No"
+                    android:text="@string/mother_aadhaar_no"
                     android:textColor="@color/grey_40"
                     android:textSize="@dimen/_12sdp" />
 
@@ -1082,7 +1082,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="Mother PAN"
+                    android:text="@string/mother_pan"
                     android:textColor="@color/grey_40"
                     android:textSize="@dimen/_12sdp" />
             </LinearLayout>
