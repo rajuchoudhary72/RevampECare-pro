@@ -70,15 +70,18 @@ class HomeViewPagerFragment : Fragment() {
 
         if (showDashboard){
             fragmentList.add(DashboardFragment() )
-            fragmentName.add(getString(R.string.dashboard))
+            fragmentName.add("Dashboard")
+            //fragmentName.add(getString(R.string.dashboard))
         }
         if (showAttendance){
             fragmentList.add(AttendanceFragment() )
-            fragmentName.add(getString(R.string.attendance))
+            fragmentName.add("Attendance")
+            //fragmentName.add(getString(R.string.attendance))
         }
         if (showFeeds){
             fragmentList.add(FeedsFragment() )
-            fragmentName.add(getString(R.string.feed_title))
+            fragmentName.add("Feed")
+            //fragmentName.add(getString(R.string.feed_title))
         }
 
 
