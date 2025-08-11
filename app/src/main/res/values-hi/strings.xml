@@ -1427,6 +1427,11 @@
     <string name="rejected_by">"अस्वीकृत करने वाला : "</string>
     <string name="rejected_on">"अस्वीकृत तिथि : "</string>
 
+    <string name="assignment_details">असाइनमेंट विवरण</string>
+    <string name="att_date">उपस्थिति तिथि</string>
+    <string name="status">स्थिति</string>
+    <string name="photo_album">फोटो एलबम</string>
+
 
 </resources>
 

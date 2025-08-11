@@ -1428,6 +1428,11 @@
     <string name="applied_on">"અરજીની તારીખ : "</string>
     <string name="rejected_by">"અસ્વીકાર કરનાર : "</string>
     <string name="rejected_on">"અસ્વીકાર તારીખ : "</string>
+    <string name="assignment_details">અસાઇનમેન્ટ વિગતો</string>
+    <string name="att_date">હાજરી તારીખ</string>
+    <string name="status">સ્થિતિ</string>
+    <string name="photo_album">ફોટો આલ્બમ</string>
+
 
 
 </resources>
