@@ -30,7 +30,7 @@
             android:theme="@style/MyThemeOverlay_Toolbar"
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
-            app:title="Assignment Details"
+            app:title="@string/assignment_details"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />

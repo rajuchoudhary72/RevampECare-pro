@@ -22,7 +22,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:titleCentered="true"
             android:elevation="8dp"
-            app:title="Lesson Plan"
+            app:title="@string/lesson_plan"
 
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white"

@@ -1411,5 +1411,18 @@
     <string name="location_permission_required">Location Permission Required</string>
     <string name="location_permission_is_required_to_send_your_current_location_please_enable_it_in_app_settings">Location permission is required to send your current location. Please enable it in app settings.</string>
 
+    <string name="fee_details">ફી વિગત</string>
+    <string name="infirmary">ઔષધાલય</string>
+    <string name="library">લાઇબ્રેરી</string>
+    <string name="transport_details">પરિવહન વિગત</string>
+    <string name="infraction_details">ઉલ્લંઘન વિગત</string>
+    <string name="appreciation_details">પ્રશંસા વિગત</string>
+    <string name="medical_card">મેડિકલ કાર્ડ</string>
+    <string name="fee_summary">ફી સારાંશ</string>
+    <string name="guard_app">ગાર્ડ એપ</string>
+    <string name="applied_on">"અરજીની તારીખ : "</string>
+    <string name="rejected_by">"અસ્વીકાર કરનાર : "</string>
+    <string name="rejected_on">"અસ્વીકાર તારીખ : "</string>
+
 
 </resources>
