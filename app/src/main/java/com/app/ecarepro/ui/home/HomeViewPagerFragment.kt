@@ -84,7 +84,6 @@ class HomeViewPagerFragment : Fragment() {
             //fragmentName.add(getString(R.string.feed_title))
         }
 
-
         val viewPagerAdapter = ViewPagerAdapter(
             fragmentList,
             activity?.supportFragmentManager!!,
