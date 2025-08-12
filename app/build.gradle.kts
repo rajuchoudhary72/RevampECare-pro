@@ -57,6 +57,7 @@ android {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
+        resConfigs("en", "hi", "gu")
     }
 
     buildTypes {
@@ -119,6 +120,12 @@ android {
             versionCode = 5
             versionName = "1.0.4"
             signingConfig = signingConfigs.getByName("MYSFPS Play")
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = false
         }
     }
 
