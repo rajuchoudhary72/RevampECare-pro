@@ -20,9 +20,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.Album
+import com.app.ecarepro.data.network.model.FavList
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentMediaGalleryBinding
+import com.app.ecarepro.databinding.FragmentPhotoAlbumBinding
+import com.app.ecarepro.model.FeeReceiptSession
 import com.app.ecarepro.ui.MainActivity
+import com.app.ecarepro.ui.fee.fee_receipt.FeeReceiptPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.adapter.SearchByPopUpAdapter
 import com.app.ecarepro.ui.gallery.mediaGallery.mediaDetails.MediaDetailsFragment
 
@@ -55,10 +59,7 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     private var searchJob: Job? = null  // Job to handle debounce logic
     private val debounceTime = 300L  // 300ms delay
 
-    private val searchByList =
-        mutableListOf<String>(getString(R.string.mediaGallery_search_all_search),
-            getString(R.string.mediaGallery_search_newspaper), getString(R.string.mediaGallery_search_headline),
-            getString(R.string.mediaGallery_search_publish_date), getString(R.string.mediaGallery_search_year))
+
 
     private var yearList = mutableListOf<String>()
 
@@ -266,6 +267,11 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     }
 
     private fun popUpSearchBy() {
+
+         val searchByList =
+            mutableListOf<String>(getString(R.string.mediaGallery_search_all_search),
+                getString(R.string.mediaGallery_search_newspaper), getString(R.string.mediaGallery_search_headline),
+                getString(R.string.mediaGallery_search_publish_date), getString(R.string.mediaGallery_search_year))
 
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog).create()
         val view = layoutInflater.inflate(R.layout.custom_popup_select_class, null)
