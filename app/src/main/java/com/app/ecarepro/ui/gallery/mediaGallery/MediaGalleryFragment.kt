@@ -267,7 +267,6 @@ class MediaGalleryFragment : Fragment(), ItemListener<Album> {
     }
 
     private fun popUpSearchBy() {
-
          val searchByList =
             mutableListOf<String>(getString(R.string.mediaGallery_search_all_search),
                 getString(R.string.mediaGallery_search_newspaper), getString(R.string.mediaGallery_search_headline),
