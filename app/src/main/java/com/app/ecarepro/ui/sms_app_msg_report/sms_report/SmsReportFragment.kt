@@ -139,7 +139,6 @@ import java.util.Locale
          getSMSReport( )
 
      }
-
      private fun getSMSReport() {
          val inputString = binding.tvDateRange.text.toString()
          val pattern = "(\\d{2} \\w{3} \\d{4}) - (\\d{2} \\w{3} \\d{4})".toRegex()
