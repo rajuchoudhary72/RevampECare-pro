@@ -144,7 +144,7 @@ class StudentProfileNavHostFragment : Fragment() {
                                                 if (i.isShow){
                                                     fragmentList.add(StudentProfileFeeSummaryFragment.newInstance(studentID))
                                                     fragmentName.add("Fee Details")
-                                                    fragmentName.add(getString(R.string.fee_details))
+                                                   // fragmentName.add(getString(R.string.fee_details))
                                                 }
                                             }
                                             "Infirmary" -> {
@@ -191,7 +191,7 @@ class StudentProfileNavHostFragment : Fragment() {
                                                 if (i.isShow){
                                                     fragmentList.add(MedicalCardFragment())
                                                     fragmentName.add("Medical Card")
-                                                    fragmentName.add(getString(R.string.medical_card))
+                                                   // fragmentName.add(getString(R.string.medical_card))
                                                 }
                                             }
                                         }
