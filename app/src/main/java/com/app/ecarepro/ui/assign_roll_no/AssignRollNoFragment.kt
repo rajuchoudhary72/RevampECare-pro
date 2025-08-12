@@ -39,8 +39,7 @@ class AssignRollNoFragment : Fragment()  {
     private   var mMyClass= mutableListOf<MyClasseTeacherOf>()
     private var isClassSelected=false
     private var mMyClassDataString: ArrayList<String> = ArrayList()
-    private val nameFilter = listOf(getString(R.string.general_name), getString(R.string.general_roll_no_pun),
-        getString(R.string.general_admission))
+
 
 
     override fun onCreateView(
@@ -65,6 +64,9 @@ class AssignRollNoFragment : Fragment()  {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+         val nameFilter = listOf(getString(R.string.general_name), getString(R.string.general_roll_no_pun),
+            getString(R.string.general_admission))
 
         val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1 , nameFilter)
         binding.autoCompleteFilter.setAdapter(arrayAdapter)

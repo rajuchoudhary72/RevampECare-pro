@@ -13,6 +13,7 @@ import com.app.ecarepro.utils.getDateTimeFormatted
 
 class SurveyAdapter(
     private var syllabusLST: List<AllSurvey>,
+    private var  surveyListFragment: SurveyListFragment,
     val callback: (poss: Int, data: AllSurvey) -> Unit
 ) : RecyclerView.Adapter<SurveyAdapter.NoticeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
@@ -49,17 +50,17 @@ class SurveyAdapter(
                 }
                 binding.tvDescription.setText(surveyModel.description)
                 binding.tvTitle.setText(surveyModel.title)
-                binding.tvPublishedOn.setText("Published on: " + surveyModel.publishedOn?.let {
+                binding.tvPublishedOn.setText(surveyListFragment.getString(R.string.published_on) + surveyModel.publishedOn?.let {
                     getDateTimeFormatted(
                         it
                     )
                 })
-                if (surveyModel.isOpen) binding.tvOpenClose.setText("Open till: " + surveyModel.openEndDate) else binding.tvOpenClose.setText(
-                    "Closed on: " + surveyModel.openEndDate
+                if (surveyModel.isOpen) binding.tvOpenClose.setText(surveyListFragment.getString(R.string.open_till) + surveyModel.openEndDate) else binding.tvOpenClose.setText(
+                    surveyListFragment.getString(R.string.closed_on) + surveyModel.openEndDate
                 )
                 if (surveyModel.isResponded) {
                     binding.tvRespondedOn.setText(
-                        "RESPONDED ON: " + surveyModel.respondedOn?.let {
+                        surveyListFragment.getString(R.string.responded_on) + surveyModel.respondedOn?.let {
                             (
                                     it
                                     )
@@ -72,11 +73,11 @@ class SurveyAdapter(
 
             binding.tvMore.setOnClickListener(View.OnClickListener {
                 if (binding.tvMore.getText().toString().equals("more", ignoreCase = true)) {
-                    binding.tvMore.setText("Less")
+                    binding.tvMore.setText(surveyListFragment.getString(R.string.less))
                     binding.tvDescription.setLines(binding.tvTest.lineCount)
                     binding.tvDescription.setEllipsize(null)
                 } else {
-                    binding.tvMore.setText("More")
+                    binding.tvMore.setText(surveyListFragment.getString(R.string.more))
                     binding.tvDescription.setLines(2)
                     binding.tvDescription.setEllipsize(TextUtils.TruncateAt.END)
                 }

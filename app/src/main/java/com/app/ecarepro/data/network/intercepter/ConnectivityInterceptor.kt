@@ -8,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
  import android.util.Log
  import com.app.ecarepro.ECateProApp
+ import com.app.ecarepro.R
  import dagger.hilt.android.qualifiers.ApplicationContext
  import kotlinx.coroutines.runBlocking
  import okhttp3.Interceptor
@@ -56,9 +57,9 @@ class ConnectivityInterceptor @Inject constructor(
         dialogShown = true
         handler.post {
             val dialog = AlertDialog.Builder((context as ECateProApp).getCurrentActivity())
-                .setTitle("No Internet Connection")
-                .setMessage("Please check your internet connection and try again.")
-                .setPositiveButton("Retry") { _, _ ->
+                .setTitle(context.getString(R.string.no_internet_connection))
+                .setMessage(context.getString(R.string.please_check_your_internet_connection_and_try_again))
+                .setPositiveButton(context.getString(R.string.retry)) { _, _ ->
                     dialogShown = false // Allow new dialog if needed
                 }
                 .setCancelable(false)

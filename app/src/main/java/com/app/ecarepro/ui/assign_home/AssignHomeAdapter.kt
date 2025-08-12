@@ -29,7 +29,7 @@ class AssignHomeAdapter(private var leaveList: List<Student>,private var houseLi
         val studentList=leaveList[position]
         val mainBinding= DataBindingUtil.getBinding<ItemAssignHomeBinding>(holder.itemView)
         with(mainBinding!!){
-            tvStuName.text = getContext.getString(R.string.general_name)+ studentList.name
+            tvStuName.text = getContext.getString(R.string.general_name)+" "+ studentList.name
             tvKeyValue1.text = "Class: " + studentList.`class`
             tvKeyValue2.text = "Roll No.:" + studentList.rollNumber
             tvKeyValue3.text = "Admission No.:" + studentList.admissionNumber
@@ -43,7 +43,7 @@ class AssignHomeAdapter(private var leaveList: List<Student>,private var houseLi
                         if (studentList.houseName!!.isNotEmpty()) {
                             edtHouseName.text = house.houseName
                         } else {
-                            edtHouseName.text = "No House Assign"
+                            edtHouseName.text = getContext.getString(R.string.no_house_assign)
                         }
                     }
                 }

@@ -186,8 +186,8 @@ class AssignHomeFragment : Fragment(), ItemListener<Dtl> {
 
 
         // orderAdapter.add(new OrderModel(-1, "select"));
-        selectedAdapter.add(OrderDropDown(0, "Student Name"))
-        selectedAdapter.add(OrderDropDown(1, "Admission Number"))
+        selectedAdapter.add(OrderDropDown(0, getString(R.string.student_name)))
+        selectedAdapter.add(OrderDropDown(1, getString(R.string.admission_number)))
     }
 
 

@@ -899,7 +899,7 @@
     <string name="general_parent">अभिभावक</string>
     <string name="general_staff">कर्मचारी</string>
     <string name="general_student">छात्र</string>
-    <string name="general_name">नाम</string>
+    <string name="general_name">नाम </string>
     <string name="general_name_pun">"नाम: "</string>
     <string name="general_no_data_found">कोई रिकॉर्ड नहीं मिला</string>
     <string name="general_roll_no_pun">रोल नंबर :</string>
@@ -1432,6 +1432,22 @@
     <string name="status">स्थिति</string>
     <string name="photo_album">फोटो एलबम</string>
     <string name="view_all">सभी को देखें</string>
+
+    <string name="request_failed">अनुरोध विफल हुआ</string>
+    <string name="something_went_wrong_please_try_again_later">कुछ गलत हो गया। कृपया बाद में पुनः प्रयास करें।</string>
+    <string name="an_error_occurred_would_you_like_to_retry">कोई त्रुटि हुई। क्या आप पुनः प्रयास करना चाहेंगे?</string>
+    <string name="total_response_s">"कुल प्रतिक्रिया(एं) :- "</string>
+    <string name="survey_result">सर्वेक्षण परिणाम</string>
+    <string name="thanks_for_your_response_your_response_has_already_been_recorded">आपकी प्रतिक्रिया के लिए धन्यवाद। आपकी प्रतिक्रिया पहले ही दर्ज की जा चुकी है।</string>
+    <string name="survey_closed">सर्वेक्षण बंद हो गया</string>
+    <string name="less">कम</string>
+    <string name="more">अधिक</string>
+    <string name="responded_on">"प्रतिक्रिया दी गई तिथि: "</string>
+    <string name="open_till">"खुला रहेगा: "</string>
+    <string name="closed_on">"बंद हुआ: "</string>
+    <string name="collection_report">संग्रह रिपोर्ट</string>
+    <string name="no_house_assign">कोई घर आवंटित नहीं</string>
+
 
 
 </resources>

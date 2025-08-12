@@ -933,7 +933,7 @@
     <string name="general_parent">અભિવાવક</string>
     <string name="general_staff">સ્ટાફ</string>
     <string name="general_student">વિદ્યાર્થી</string>
-    <string name="general_name">નામ</string>
+    <string name="general_name">નામ </string>
     <string name="general_name_pun">નામ: </string>
     <string name="general_no_data_found">કોઈ રેકોર્ડ મળ્યો નહીં</string>
     <string name="general_roll_no_pun">રોલ નં :</string>
@@ -1433,6 +1433,22 @@
     <string name="status">સ્થિતિ</string>
     <string name="photo_album">ફોટો આલ્બમ</string>
     <string name="view_all">બધા જુઓ</string>
+
+    <string name="request_failed">વિનંતી નિષ્ફળ ગઈ</string>
+    <string name="something_went_wrong_please_try_again_later">કંઈક ખોટું થયું. કૃપા કરીને પછીથી ફરી પ્રયાસ કરો.</string>
+    <string name="an_error_occurred_would_you_like_to_retry">એક ભૂલ થઈ. શું તમે ફરી પ્રયાસ કરવા માંગો છો?</string>
+    <string name="total_response_s">"કુલ પ્રતિસાદ(ઓ) :- "</string>
+    <string name="survey_result">સર્વે પરિણામ</string>
+    <string name="thanks_for_your_response_your_response_has_already_been_recorded">તમારા પ્રતિસાદ માટે આભાર. તમારો પ્રતિસાદ પહેલેથી જ નોંધાયો છે.</string>
+    <string name="survey_closed">સર્વે બંધ થયો</string>
+    <string name="less">ઓછું</string>
+    <string name="more">વધુ</string>
+    <string name="responded_on">"પ્રતિસાદ આપેલ તારીખ: "</string>
+    <string name="open_till">"ખુલ્લું રહેશે: "</string>
+    <string name="closed_on">"બંધ થયું: "</string>
+    <string name="collection_report">સંગ્રહ અહેવાલ</string>
+    <string name="no_house_assign">કોઈ ઘર ફાળવાયેલું નથી</string>
+
 
 
 </resources>

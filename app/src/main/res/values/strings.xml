@@ -1415,6 +1415,22 @@
     <string name="status">Status</string>
     <string name="photo_album">Photo Album</string>
     <string name="view_all">View All</string>
+    <string name="request_failed">Request Failed</string>
+    <string name="something_went_wrong_please_try_again_later">Something went wrong. Please try again later.</string>
+    <string name="an_error_occurred_would_you_like_to_retry">An error occurred. Would you like to retry?</string>
+    <string name="total_response_s">"Total Response(s) :- "</string>
+    <string name="survey_result">Survey Result</string>
+    <string name="thanks_for_your_response_your_response_has_already_been_recorded">Thanks for your response. Your response has already been recorded.</string>
+    <string name="survey_closed">Survey Closed</string>
+    <string name="less">Less</string>
+    <string name="more">More</string>
+    <string name="responded_on">"RESPONDED ON: "</string>
+    <string name="open_till">"Open till: "</string>
+    <string name="closed_on">"Closed on: "</string>
+    <string name="collection_report">Collection Report</string>
+    <string name="no_house_assign">No House Assign</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="please_check_your_internet_connection_and_try_again">Please check your internet connection and try again.</string>
 
 
 </resources>
