@@ -10,7 +10,7 @@ object LanguageManager {
     private const val PREF_NAME = "app_locale_pref"
     private const val SELECTED_LANGUAGE = "selected_language"
 
-    fun setLocale(context: Context): Context {
+    fun  setLocale(context: Context): Context {
         return updateResources(context, getLanguage(context))
     }
 
