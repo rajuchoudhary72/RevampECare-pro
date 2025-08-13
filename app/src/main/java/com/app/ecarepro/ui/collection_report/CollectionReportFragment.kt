@@ -146,8 +146,8 @@ class CollectionReportFragment : Fragment() {
             }
         }
         collectionFeeReportViewModel.feeCollectionReport(
-            binding.tvFrom.text.toString().changeDateFormat(),
-            binding.tvTo.text.toString().changeDateFormat()
+            normalizeDate(binding.tvFrom.text.toString().changeDateFormat()),
+            normalizeDate( binding.tvTo.text.toString().changeDateFormat())
         )
     }
 
@@ -158,4 +158,47 @@ class CollectionReportFragment : Fragment() {
         val date = inputFormat.parse(inputDateStr)
         return date?.let { outputFormat.format(it) } ?: this
     }
+
+
+    fun normalizeDate(dateStr: String): String {
+        val monthMap = mapOf(
+            "जनवरी" to "Jan",
+            "फ़रवरी" to "Feb",
+            "फरवरी" to "Feb", // without nukta
+            "मार्च" to "Mar",
+            "अप्रैल" to "Apr",
+            "मई" to "May",
+            "जून" to "Jun",
+            "जुलाई" to "Jul",
+            "अगस्त" to "Aug",
+            "अग" to "Aug", // short form
+            "सितम्बर" to "Sep",
+            "सितंबर" to "Sep",
+            "अक्तूबर" to "Oct",
+            "अक्टूबर" to "Oct",
+            "नवम्बर" to "Nov",
+            "नवंबर" to "Nov",
+            "दिसम्बर" to "Dec",
+            "दिसंबर" to "Dec"
+        )
+
+        val parts = dateStr.trim().split("\\s+".toRegex())
+        if (parts.size < 3) return dateStr // not a valid date format
+
+        val monthHindi = parts[1]
+        return if (monthMap.containsKey(monthHindi)) {
+            parts.toMutableList().apply { this[1] = monthMap[monthHindi]!! }.joinToString(" ")
+        } else {
+            dateStr // already English or unsupported month
+        }
+    }
+
+    // Example usage:
+
+
+
+
+
+
 }
+
