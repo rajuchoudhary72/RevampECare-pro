@@ -159,7 +159,6 @@ class CollectionReportFragment : Fragment() {
         return date?.let { outputFormat.format(it) } ?: this
     }
 
-
     fun normalizeDate(dateStr: String): String {
         val monthMap = mapOf(
             "जनवरी" to "Jan",
