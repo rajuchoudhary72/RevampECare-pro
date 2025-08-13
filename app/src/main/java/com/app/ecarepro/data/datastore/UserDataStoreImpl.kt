@@ -285,7 +285,7 @@ class UserDataStoreImpl @Inject constructor(
     override suspend fun getCityName(): String {
         return context.dataStore.data.map { preferences ->
             preferences[cityNameKey]
-        }.first() ?: Locale.getDefault().displayName
+        }.first() ?: Locale.ENGLISH.displayName
     }
     override suspend fun setCityName(city: String) {
         context.dataStore.edit { preferences ->

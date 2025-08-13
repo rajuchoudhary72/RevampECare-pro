@@ -178,7 +178,7 @@ class TimeTableNavHostFragment : Fragment() {
     }
 
     private fun todayData(data: List<TimeTableData>): TimeTableData {
-        val sdf = SimpleDateFormat("EEEE", Locale.getDefault())
+        val sdf = SimpleDateFormat("EEEE", Locale.ENGLISH)
         val d = Date()
         val dayOfTheWeek: String = sdf.format(d)
         lateinit var timeTableData: TimeTableData
