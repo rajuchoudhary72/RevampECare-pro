@@ -63,6 +63,7 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable? = null) {
 }
 const val MIME_TYPE_PDF = "application/pdf"
 const val MIME_TYPE_MSWORD = "application/msword"
+const val MIME_TYPE_XLS = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 fun getResourcePlaceholder(context: Context, url: String?): Int {
     if (url == null) {
         return R.drawable.img_placeholder
@@ -72,6 +73,7 @@ fun getResourcePlaceholder(context: Context, url: String?): Int {
         when (url.substringAfterLast(".", "").lowercase()) {
             "pdf" -> MIME_TYPE_PDF
             "doc", "docx" -> MIME_TYPE_MSWORD
+            "xlsx" -> MIME_TYPE_XLS
             "mp3", "wav", "ogg", "flac", "aac", "m4a", "m4b", "m4p", "alac", "aiff",
             "ape", "wv", "mpc", "tak", "opus", "spx", "gsm", "dts", "wma", "au", "aiff", "audio" -> "audio/*"
 
@@ -84,7 +86,9 @@ fun getResourcePlaceholder(context: Context, url: String?): Int {
     return when (mimeType) {
         MIME_TYPE_PDF -> R.drawable.baseline_file_present_24
         MIME_TYPE_MSWORD -> R.drawable.doc
+        MIME_TYPE_XLS -> R.drawable.excelicon
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> R.drawable.doc
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" -> R.drawable.excelicon
         "image/*" -> R.drawable.img_placeholder
         "audio/*" -> R.drawable.baseline_audio_file_24
         else -> R.drawable.img_placeholder // Placeholder for unknown types
@@ -223,6 +227,9 @@ fun TextView.rupeeText(rupee: String?) {
     text = "₹$rupee"
 }
 interface FileClickListener {
+    fun onClick(file: String)
+}
+interface MessageClickListener {
     fun onClick(file: String)
 }
 

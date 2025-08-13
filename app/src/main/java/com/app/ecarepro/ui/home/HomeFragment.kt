@@ -327,13 +327,13 @@ class HomeFragment : Fragment() {
             return
         }
         if (isGPSEnabled().not()) {
-            MaterialAlertDialogBuilder(requireContext()).setTitle("Turn On GPS")
+            MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.turn_on_gps))
                 .setCancelable(false)
-                .setMessage("GPS is disabled in your device. Would you like to enable it?")
-                .setPositiveButton("No") { d, _ ->
+                .setMessage(getString(R.string.gps_is_disabled_in_your_device_would_you_like_to_enable_it))
+                .setPositiveButton(getString(R.string.no)) { d, _ ->
                     d.dismiss()
                     findNavController().popBackStack()
-                }.setPositiveButton("Goto Settings, To Enable GPS") { d, _ ->
+                }.setPositiveButton(getString(R.string.goto_settings_to_enable_gps)) { d, _ ->
                     d.dismiss()
                     val callGPSSettingIntent = Intent(
                         Settings.ACTION_LOCATION_SOURCE_SETTINGS
@@ -541,7 +541,7 @@ class HomeFragment : Fragment() {
                                     )
                                 } else {
                                     if (favouriteSlider.title!!.contains(
-                                            getString(R.string.assessment),
+                                            getString(R.string.assessment_headling),
                                             true
                                         )
                                     ) {
@@ -651,7 +651,7 @@ class HomeFragment : Fragment() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //  startLocationFetch()
             } else {
-                mainActivity().showMessage("GPS permission denied")
+                mainActivity().showMessage(getString(R.string.gps_permission_denied))
             }
         }
     }
@@ -659,9 +659,9 @@ class HomeFragment : Fragment() {
     private fun dashboardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_dashboard_link)
-            .setPrimaryText("Dashboard")
+            .setPrimaryText(getString(R.string.dashboard))
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
-            .setSecondaryText("Click here to access Dashboards")
+            .setSecondaryText(getString(R.string.click_here_to_access_dashboards))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     addMorePrompt()
@@ -673,9 +673,9 @@ class HomeFragment : Fragment() {
     private fun addMorePrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.ll_add_more)
-            .setPrimaryText("Favourites")
+            .setPrimaryText(getString(R.string.favourites))
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
-            .setSecondaryText("Click here to add your Favourite menus ")
+            .setSecondaryText(getString(R.string.click_here_to_add_your_favourite_menus))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
                     systemViewModel.startShowPrompt(true)
@@ -687,8 +687,8 @@ class HomeFragment : Fragment() {
     private fun cardPrompt() {
         MaterialTapTargetPrompt.Builder(requireActivity())
             .setTarget(R.id.cv_dashboard_card)
-            .setPrimaryText(" Information Cards")
-            .setSecondaryText("Slide left to check out all the cards")
+            .setPrimaryText(getString(R.string.information_cards))
+            .setSecondaryText(getString(R.string.slide_left_to_check_out_all_the_cards))
             .setBackgroundColour(requireContext().getColor(R.color.brand_color))
             .setPromptStateChangeListener { prompt, state ->
                 if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {
@@ -708,8 +708,8 @@ class HomeFragment : Fragment() {
         if (!sharedPreference.getBoolean(Constant.SHARED_PREF_SHOW_PROMPT, false)) {
             MaterialTapTargetPrompt.Builder(requireActivity())
                 .setTarget(binding.imgUserAvatar)
-                .setPrimaryText("Profile")
-                .setSecondaryText("Click here to check out your profile and Transport Details")
+                .setPrimaryText(getString(R.string.profile))
+                .setSecondaryText(getString(R.string.click_here_to_check_out_your_profile_and_transport_details))
                 .setBackgroundColour(requireContext().getColor(R.color.brand_color))
                 .setPromptStateChangeListener { prompt, state ->
                     if (state == MaterialTapTargetPrompt.STATE_FOCAL_PRESSED || state == MaterialTapTargetPrompt.STATE_NON_FOCAL_PRESSED) {

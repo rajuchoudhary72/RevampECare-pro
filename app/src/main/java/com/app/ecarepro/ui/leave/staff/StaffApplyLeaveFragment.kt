@@ -72,7 +72,8 @@ class StaffApplyLeaveFragment : Fragment() {
     private   var imageExt: String =""
     private   var imageString: String =""
     private   var halfdayDTL = mutableListOf<HalfdayDTL>()
-    private val sessionList = listOf<String> ("First Half","Second Half")
+    private val sessionList = listOf<String> (getString(R.string.first_half),
+        getString(R.string.second_half))
     var timestampBack: Long = System.currentTimeMillis()
     var timestampforward: Long = 0
 
@@ -174,7 +175,7 @@ class StaffApplyLeaveFragment : Fragment() {
 
 
             } else
-                mainActivity().showMessage("Select To Date")
+                mainActivity().showMessage(getString(R.string.select_to_date))
         }
 
 
@@ -243,23 +244,27 @@ class StaffApplyLeaveFragment : Fragment() {
                        if ( days>=selectedLeaveTypeData.minimumLimit){
                            leaveApplicationDialog()
                        }else{
-                           mainActivity().showMessage("${selectedLeaveTypeData.leaveType} requires a minimum of ${selectedLeaveTypeData.minimumLimit} days. Please select at least ${selectedLeaveTypeData.minimumLimit} consecutive days to proceed.")
+                           mainActivity().showMessage("${selectedLeaveTypeData.leaveType}"+ getString(
+                               R.string.requires_a_minimum_of
+                           ) + "${selectedLeaveTypeData.minimumLimit} "+ getString(R.string.days_please_select_at_least)+"${selectedLeaveTypeData.minimumLimit} "+ getString(
+                               R.string.consecutive_days_to_proceed
+                           ))
                        }
                    }else{
                        leaveApplicationDialog()
                    }
                    }else{
-                       mainActivity().showMessage("Sorry, you don't have sufficient leave balance!")
+                       mainActivity().showMessage(getString(R.string.sorry_you_don_t_have_sufficient_leave_balance))
                    }
 
                }else{
-                   mainActivity().showMessage("Please Select Valid Date")
+                   mainActivity().showMessage(getString(R.string.please_select_valid_date))
                }
 
 
             }
             }else{
-                mainActivity().showMessage("Sorry, your leave is not as per the leave policy")
+                mainActivity().showMessage(getString(R.string.sorry_your_leave_is_not_as_per_the_leave_policy))
             }
         }
 
@@ -299,7 +304,7 @@ class StaffApplyLeaveFragment : Fragment() {
             binding.llEndDate.isVisible=false
             binding.view2.isVisible=false
             days=shortLeaveValue
-            binding.tvFrom.text=getString(R.string.date)
+            binding.tvFrom.text=getString(R.string.general_date_pun)
         } else{
             days=1.0
             binding.llSessionSection.isVisible=true
@@ -386,20 +391,20 @@ class StaffApplyLeaveFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo),
-            getString(R.string.choose_library),
-            getString(R.string.cancel)
+            getString(R.string.general_take_photo),
+            getString(R.string.general_choose_library),
+            getString(R.string.general_cancel)
 
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo))
+        builder.setTitle(getString(R.string.general_add_photo))
         builder.setItems(items) { dialog, item ->
             FileAccess.checkPermission(this@StaffApplyLeaveFragment)
-            if (items[item] == getString(R.string.take_photo)) {
+            if (items[item] == getString(R.string.general_take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
+            } else if (items[item] == getString(R.string.general_choose_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
+            } else if (items[item] == getString(R.string.general_cancel)) {
                 dialog.dismiss()
             }
         }
@@ -448,40 +453,40 @@ class StaffApplyLeaveFragment : Fragment() {
         var validate = true
         if (binding.tvStartDate.text.toString().isEmpty()) {
             validate = false
-            mainActivity().showMessage("Select From Date")
+            mainActivity().showMessage(getString(R.string.select_from_date))
         }
         if (!isSortLeaveEnable){
             if (binding.tvEndDate.text.toString().isEmpty()) {
                 validate = false
-                mainActivity().showMessage("Select To Date")
+                mainActivity().showMessage(getString(R.string.select_to_date))
 
             }
         }
 
         if (binding.textFiledReason.text.toString().isEmpty()) {
             validate = false
-            mainActivity().showMessage("Enter Reason")
+            mainActivity().showMessage(getString(R.string.enter_reason))
         }
         if (!binding.cbLeaveTc.isChecked) {
             validate = false
-            mainActivity().showMessage("Please Check Term and Condition")
+            mainActivity().showMessage(getString(R.string.please_check_term_and_condition))
 
         }
         if (selectedLeaveTypeData.attachmentMandatory){
              if (imageString==""){
                  validate = false
 
-                 mainActivity().showMessage("Attachment is mandatory")
+                 mainActivity().showMessage(getString(R.string.attachment_is_mandatory))
              }
          }
         if (!isSortLeaveEnable){
             if (!isSessionFromSelected){
                 validate = false
-                mainActivity().showMessage("Select From session ")
+                mainActivity().showMessage(getString(R.string.select_from_session))
             }
             if (!isSessionToSelected){
                 validate = false
-                mainActivity().showMessage("Select To session ")
+                mainActivity().showMessage(getString(R.string.select_to_session))
             }
         }
 
@@ -547,9 +552,9 @@ class StaffApplyLeaveFragment : Fragment() {
         tv_end_date = dialog.findViewById(R.id.tv_end_date)
         tv_end_date.text = binding.tvEndDate.text.toString()
         tv_ttl_leaves = dialog.findViewById(R.id.tv_ttl_leaves)
-        tv_ttl_leaves.text = "Total Leave(s): $days"
+        tv_ttl_leaves.text = getString(R.string.total_leave_s)+" $days"
         tv_reason = dialog.findViewById(R.id.tv_reason)
-        tv_reason.text = "Reason: " +  binding.textFiledReason.text.toString()
+        tv_reason.text = getString(R.string.general_reason_pun) +  binding.textFiledReason.text.toString()
         tv_submit = dialog.findViewById<TextView>(R.id.tv_submit)
         tv_cancel = dialog.findViewById(R.id.tv_cancel)
 

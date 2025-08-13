@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Collection Report"
+            app:title="@string/collection_report"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white">
@@ -41,7 +41,6 @@
             android:id="@+id/llDateRange"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -65,7 +64,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Start Date" />
+                        android:text="@string/start_date" />
 
                     <TextView
                         android:id="@+id/tvFrom"
@@ -99,7 +98,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="End Date" />
+                        android:text="@string/end_date" />
 
                     <TextView
                         android:id="@+id/tvTo"
@@ -135,7 +134,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/bottomAmount"

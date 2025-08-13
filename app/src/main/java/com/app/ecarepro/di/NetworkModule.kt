@@ -1,7 +1,9 @@
 package com.app.ecarepro.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.app.ecarepro.BuildConfig
+import com.app.ecarepro.data.TranslationRepositoryImpl
 import com.app.ecarepro.data.network.AuthInterceptor
 import com.app.ecarepro.data.network.PerformanceMonitorInterceptor
 import com.app.ecarepro.data.network.intercepter.ConnectivityInterceptor
@@ -26,6 +28,10 @@ import java.util.concurrent.TimeUnit
 import com.app.ecarepro.di.annotations.SessionReCreate
 import com.app.ecarepro.data.network.InvalidSessionInterceptor
 import com.app.ecarepro.data.network.SessionAuthenticator
+import com.app.ecarepro.data.repository.TranslationRepository
+import javax.inject.Singleton
+
+
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -126,6 +132,8 @@ fun provideRetrofit(
     ): FomApiService {
         return retrofit.create(FomApiService::class.java)
     }
+
+
     @Provides
     @SessionReCreate
     fun provideSessionUserService(
@@ -154,4 +162,21 @@ fun provideRetrofit(
             Constant.BASE_DEV_URL
         }
     }
+
+    @Provides
+    @Singleton
+    fun provideTranslationRepository(
+        appService: AppService,
+        sharedPreferences: SharedPreferences,
+        @ApplicationContext context: Context
+    ): TranslationRepository {
+        return TranslationRepositoryImpl(appService, sharedPreferences,context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("translations_prefs", Context.MODE_PRIVATE)
+    }
+
 }

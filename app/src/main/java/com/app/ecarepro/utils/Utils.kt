@@ -11,6 +11,7 @@ import androidx.annotation.ColorRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.app.ecarepro.R
 import com.app.ecarepro.ui.MainActivity
@@ -199,3 +200,5 @@ fun getDateTimeFormatted(DateTime: String): String {
     val shareIntent = Intent.createChooser(sendIntent, null)
     context.startActivity(shareIntent)
 }
+
+val Context.dataStore by preferencesDataStore(name = "settings")

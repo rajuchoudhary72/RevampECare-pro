@@ -24,7 +24,7 @@
                 android:layout_height="80dp"
                 android:src="@drawable/ic_no_report_card"
                 android:layout_gravity="center"
-                android:contentDescription="@string/not_submitted" />
+                android:contentDescription="@string/general_not_submitted" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
-                    android:text="@string/classes"
+                    android:text="@string/general_classes_pun"
                     android:textColor="#C7C7C7"
                     app:fontFamily="@font/ubuntu_light" />
 
@@ -233,7 +233,7 @@
                         android:fontFamily="@font/ubuntu_medium"
                         android:gravity="center"
                         android:padding="5dp"
-                        android:text="@string/download"
+                        android:text="@string/general_download"
                         android:textColor="@color/brand_color"
                         app:drawableTint="@color/brand_color"
                         app:drawableLeftCompat="@drawable/download_24px" />

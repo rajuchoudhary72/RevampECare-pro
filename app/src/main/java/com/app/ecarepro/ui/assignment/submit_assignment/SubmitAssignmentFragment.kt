@@ -14,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -23,7 +22,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.app.ecarepro.AddMoreFavouritesBindingModelBuilder
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentSubmitAssignmentBinding
@@ -38,30 +36,34 @@ import com.app.ecarepro.utils.FileAccess
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.Serializable
 import android.content.pm.PackageManager
+import android.util.Base64
+import android.util.Log
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
+import com.app.ecarepro.utils.getFile
+import java.io.File
 
 
 @AndroidEntryPoint
 class SubmitAssignmentFragment : Fragment() {
 
     private lateinit var assignmentDetails: Assignment
-    private lateinit var binding : FragmentSubmitAssignmentBinding
-    private val submitAssignmentViewModel : SubmitAssignmentViewModel  by viewModels( )
-    private   var imageExt: String= ""
-    private   var imageString: String=""
-    private var studentSubmission= mutableListOf<AssignSubmitStudent>()
+    private lateinit var binding: FragmentSubmitAssignmentBinding
+    private val submitAssignmentViewModel: SubmitAssignmentViewModel by viewModels()
+    private var imageExt: String = ""
+    private var imageString: String = ""
+    private var studentSubmission = mutableListOf<AssignSubmitStudent>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View  {
-        binding = FragmentSubmitAssignmentBinding.inflate(inflater,container,false)
+    ): View {
+        binding = FragmentSubmitAssignmentBinding.inflate(inflater, container, false)
         arguments?.getParcelable<Assignment>(Constant.ASSIGNMENT_ID).let { data ->
-            assignmentDetails= data!!
-            binding.assData=assignmentDetails
+            assignmentDetails = data!!
+            binding.assData = assignmentDetails
 
         }
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
@@ -72,12 +74,12 @@ class SubmitAssignmentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.llView.isVisible= assignmentDetails.hasAttachment!!
+        binding.llView.isVisible = assignmentDetails.hasAttachment!!
         binding.llView.setOnClickListener {
-            if (assignmentDetails!=null){
-            if (assignmentDetails .asgFileNames!=null){
-                popUpFileList(assignmentDetails .asgFileNames!!)
-            }
+            if (assignmentDetails != null) {
+                if (assignmentDetails.asgFileNames != null) {
+                    popUpFileList(assignmentDetails.asgFileNames!!)
+                }
             }
 
         }
@@ -85,13 +87,13 @@ class SubmitAssignmentFragment : Fragment() {
             popUpSubmitList()
         }
         binding.postAnswer.setOnClickListener {
-            if (assignmentDetails.isSubmissionOpened==true){
+            if (assignmentDetails.isSubmissionOpened == true) {
                 submitAssignment()
-            }else{
-                if (assignmentDetails.lateSubmission ){
+            } else {
+                if (assignmentDetails.lateSubmission) {
                     val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("Are you sure ?")
-                    builder.setMessage("The submission deadline for this assignment has passed. You may still submit your assignment, but it will be marked as a late submission")
+                    builder.setTitle(getString(R.string.general_are_you_sure))
+                    builder.setMessage(getString(R.string.assignment_submission_deadline_for_this_assignment_has_passed_still_want_to_apply))
 
                     builder.setPositiveButton(android.R.string.yes) { dialog, which ->
                         submitAssignment()
@@ -103,9 +105,10 @@ class SubmitAssignmentFragment : Fragment() {
 
                     builder.show()
                 }else{
-                    mainActivity().showMessage("The submission deadline for this assignment has passed. ")
+                    mainActivity().showMessage(getString(R.string.assignment_submission_deadline_has_passed))
 
-                }}
+                }
+            }
 
 
         }
@@ -115,13 +118,12 @@ class SubmitAssignmentFragment : Fragment() {
 
         binding.etAnswer.doAfterTextChanged {
             if (it != null) {
-                if (it.isNotEmpty()){
+                if (it.isNotEmpty()) {
                     binding.postAnswer.isEnabled = true
                     binding.postAnswer.setImageResource(R.drawable.send_icon_enable)
 
-                    
 
-                }else{
+                } else {
                     binding.postAnswer.isEnabled = false
                     binding.postAnswer.setImageResource(R.drawable.send_icon_light)
                 }
@@ -133,9 +135,9 @@ class SubmitAssignmentFragment : Fragment() {
 
 
         binding.llFile.setOnClickListener {
-            binding.llFile.isVisible=false
-            imageString=""
-            imageExt=""
+            binding.llFile.isVisible = false
+            imageString = ""
+            imageExt = ""
 
         }
 
@@ -145,7 +147,7 @@ class SubmitAssignmentFragment : Fragment() {
 
         binding.tvBrowseFile.setOnClickListener {
             pdfLauncher.launch(FileAccess.pickPdfFileIntent())
-         }
+        }
 
         viewAssignmentDetails()
 
@@ -156,39 +158,47 @@ class SubmitAssignmentFragment : Fragment() {
 
         lifecycleScope.launch {
             submitAssignmentViewModel.viewAssignmentStateFlow.collectLatest {
-                when (it) {  is NetworkResult.Loading -> {
-                    (requireActivity() as MainActivity).showLoader(true)
-                }  is NetworkResult.Error -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-                } is NetworkResult.Success -> {
-                    (requireActivity() as MainActivity).showLoader(false)
-
-                    if (it.data !=null){
-                        if(it.data.studentSubmission !=null){
-                            studentSubmission= it.data.studentSubmission as MutableList<AssignSubmitStudent>
-                        }
-                        binding.llSubmitReport.isVisible=studentSubmission.isNotEmpty()
-                        binding.llPostAnswer.isVisible=it.data.isSubmissionOpened
+                when (it) {
+                    is NetworkResult.Loading -> {
+                        (requireActivity() as MainActivity).showLoader(true)
                     }
-               }  }
-            } }
+
+                    is NetworkResult.Error -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+                    }
+
+                    is NetworkResult.Success -> {
+                        (requireActivity() as MainActivity).showLoader(false)
+
+                        if (it.data != null) {
+                            if (it.data.studentSubmission != null) {
+                                studentSubmission =
+                                    it.data.studentSubmission as MutableList<AssignSubmitStudent>
+                            }
+                            binding.llSubmitReport.isVisible = studentSubmission.isNotEmpty()
+                            binding.llPostAnswer.isVisible = it.data.isSubmissionOpened
+                        }
+                    }
+                }
+            }
+        }
 
     }
 
-    private fun submitAssignment(){
-        if (binding.etAnswer.text.isNotEmpty()){
+    private fun submitAssignment() {
+        if (binding.etAnswer.text.isNotEmpty()) {
             lifecycleScope.launch {
                 submitAssignmentViewModel.submitAssignment(
-                    id= assignmentDetails.id.toString(),
+                    id = assignmentDetails.id.toString(),
                     asgID = assignmentDetails.asgID!!,
                     data = binding.etAnswer.text.toString(),
-                    attachment =  imageString,
+                    attachment = imageString,
                     fileName = "",
                     fileURL = "",
                     fileExt = imageExt
 
                 ).invokeOnCompletion {
-                    mainActivity().showMessage("Submitted Successfully!!!  " )
+                    mainActivity().showMessage(getString(R.string.general_submitted_successfully) )
                     findNavController().popBackStack()
                 }
             }
@@ -198,30 +208,30 @@ class SubmitAssignmentFragment : Fragment() {
     private fun selectImageOptionDialog() {
         try {
             val items = arrayOf<CharSequence>(
-                getString(R.string.take_photo),
-                getString(R.string.choose_library),
-                getString(R.string.cancel)
+                getString(R.string.general_take_photo),
+                getString(R.string.general_choose_library),
+                getString(R.string.general_cancel)
 
             )
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle(getString(R.string.add_photo))
+            builder.setTitle(getString(R.string.general_add_photo))
             builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
                 FileAccess.checkPermission(this@SubmitAssignmentFragment)
                 try {
-                    if (items[item] == getString(R.string.take_photo)) {
+                    if (items[item] == getString(R.string.general_take_photo)) {
                         cameraLauncher.launch(FileAccess.cameraIntent())
-                    } else if (items[item] == getString(R.string.choose_library)) {
+                    } else if (items[item] == getString(R.string.general_choose_library)) {
                         galleryLauncher.launch(FileAccess.galleryIntent())
-                    } else if (items[item] == getString(R.string.cancel)) {
+                    } else if (items[item] == getString(R.string.general_cancel)) {
                         dialog.dismiss()
                     }
-                }catch (e:SecurityException){
+                } catch (e: SecurityException) {
                     e.message
                 }
 
             })
             builder.show()
-        }catch (e:SecurityException){
+        } catch (e: SecurityException) {
             e.printStackTrace()
         }
 
@@ -234,7 +244,7 @@ class SubmitAssignmentFragment : Fragment() {
             if (it.resultCode == Activity.RESULT_OK) {
                 val data = it.data
                 val imgUri = data?.data
-                binding.llFile.isVisible=true
+                binding.llFile.isVisible = true
 
 
                 val bitmap = FileAccess.bitmapFromUri(requireContext(), imgUri)
@@ -254,8 +264,8 @@ class SubmitAssignmentFragment : Fragment() {
             if (it.resultCode == Activity.RESULT_OK) {
                 val data = it.data
                 val imgUri = data?.data
-                binding.llFile.isVisible=true
-                imageString = FileAccess.convertPdfToBase64(imgUri!!,requireContext())
+                binding.llFile.isVisible = true
+                imageString = FileAccess.convertPdfToBase64(imgUri!!, requireContext())
 
                 imageExt = "pdf"
 
@@ -267,7 +277,7 @@ class SubmitAssignmentFragment : Fragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 if (result?.data != null) {
                     val bitmap = result.data?.extras?.get("data") as Bitmap
-                    binding.llFile.isVisible=true
+                    binding.llFile.isVisible = true
 
 
                     imageString = FileAccess.bitmapToByteArrayBase64String(bitmap)
@@ -286,21 +296,23 @@ class SubmitAssignmentFragment : Fragment() {
         val  rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
         val  ivCross = view.findViewById<ImageView>(R.id.ivCross)
         val  tvHeading = view.findViewById<TextView>(R.id.tvHeading)
-        tvHeading.text="View File"
+        tvHeading.text=getString(R.string.general_view_file)
 
         builder.setView(view)
 
 
-        val popUpFileListAdapter= PopUpFileListAdapter(filelist ){ t, pos ->
+        val popUpFileListAdapter = PopUpFileListAdapter(filelist) { t, pos ->
             builder.dismiss()
-            when(pos){
+            when (pos) {
                 1 -> {
                     openFile(t)
                 }
+
                 2 -> {
                     downloadFile(t)
                 }
-            }}
+            }
+        }
         rvDetails.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
@@ -316,28 +328,30 @@ class SubmitAssignmentFragment : Fragment() {
     }
 
 
-    private fun popUpSubmitList( ) {
+    private fun popUpSubmitList() {
 
         val builder = AlertDialog.Builder(requireContext(), R.style.CustomAlertDialog) .create()
         val view = layoutInflater.inflate(R.layout.popup_file_list,null)
         val  rvDetails = view.findViewById<RecyclerView>(R.id.rvDetails)
         val  ivCross = view.findViewById<ImageView>(R.id.ivCross)
         val  tvHeading = view.findViewById<TextView>(R.id.tvHeading)
-        tvHeading.text=" Submitted Report"
+        tvHeading.text= getString(R.string.assignment_submitted_report)
 
         builder.setView(view)
 
 
-        val submitReportAdapter= SubmitReportAdapter(studentSubmission ){ t, pos ->
+        val submitReportAdapter= SubmitReportAdapter(studentSubmission,this@SubmitAssignmentFragment ){ t, pos ->
             builder.dismiss()
-            when(pos){
+            when (pos) {
                 1 -> {
                     openFile(t.asgFile)
                 }
+
                 2 -> {
                     downloadFile(t.asgFile)
                 }
-            }}
+            }
+        }
         rvDetails.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
@@ -358,14 +372,15 @@ class SubmitAssignmentFragment : Fragment() {
         pdfIntent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
 
         val packageManager: PackageManager = context.packageManager
-        val resolvedActivities = packageManager.queryIntentActivities(pdfIntent, PackageManager.MATCH_DEFAULT_ONLY)
+        val resolvedActivities =
+            packageManager.queryIntentActivities(pdfIntent, PackageManager.MATCH_DEFAULT_ONLY)
 
         // Return true if there is at least one app that can handle PDF
         return resolvedActivities.isNotEmpty()
     }
 
     private fun openFile(fileSource: String) {
-        when (Constant.isPdfUrl(fileSource)){
+        when (Constant.isPdfUrl(fileSource)) {
             1 -> {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.setDataAndType(Uri.parse(fileSource), "application/pdf")
@@ -374,7 +389,7 @@ class SubmitAssignmentFragment : Fragment() {
                 // Check if there's an app that can handle PDFs
                 val chooser = Intent.createChooser(intent, "Open PDF")
                 requireContext().startActivity(chooser)
-                if (isPdfViewerAvailable(requireContext())){
+                if (isPdfViewerAvailable(requireContext())) {
                     try {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.setDataAndType(Uri.parse(fileSource), "application/pdf")
@@ -389,34 +404,42 @@ class SubmitAssignmentFragment : Fragment() {
                             putString(Constant.URL_ARGUMENT, fileSource)
                         })
                     }
-                }else{
+                } else {
                     findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
                         putString(Constant.URL_ARGUMENT, fileSource)
                     })
                 }
 
 
-
             }
+
             2 -> {
                 findNavController().navigate(
                     R.id.photoViewFragmentFragment,
                     bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
                 )
             }
+
             3 -> {
 
                 findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
                     putString(Constant.URL_ARGUMENT, fileSource)
                 })
-             }else -> {
-            findNavController().navigate(
-                R.id.photoViewFragmentFragment,
-                bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
-            )
-        }
-        }
+            }
 
+            5 -> {
+                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
+                    putString(Constant.URL_ARGUMENT, fileSource)
+                })
+            }
+
+            else -> {
+                findNavController().navigate(
+                    R.id.photoViewFragmentFragment,
+                    bundleOf(PhotoViewFragmentFragment.PHOTO to fileSource)
+                )
+            }
+        }
 
 
     }
@@ -426,27 +449,39 @@ class SubmitAssignmentFragment : Fragment() {
             when (Constant.isPdfUrl(fileSource)) {
                 1 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment))
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title))
                 }
+
                 2 -> {
                     val androidDownloader = AndroidDownloader(requireContext())
                     androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
                 }
+
                 3 -> {
 
                     val androidDownloader = AndroidDownloader(requireContext())
-                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                    androidDownloader.downloadFile(fileSource, getString(R.string.assessment_title),"application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
 //                findNavController().navigate(R.id.openPdfFragment, Bundle().apply {
 //                    putString(Constant.URL_ARGUMENT, fileSource)
 //                })
                 }
+
+                5 -> {
+                    val androidDownloader = AndroidDownloader(requireContext())
+                    androidDownloader.downloadFile(
+                        fileSource,
+                        getString(R.string.assessment_title),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                }
+
                 else -> {
                     val androidDownloader = AndroidDownloader(requireContext())
                     androidDownloader.downloadFile(fileSource, "Photo", "image/jpeg")
                 }
             }
-        }catch (e:SecurityException){
+        } catch (e: SecurityException) {
             e.printStackTrace()
         }
     }

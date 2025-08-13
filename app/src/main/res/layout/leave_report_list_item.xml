@@ -88,7 +88,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/from_" />
+                    android:text="@string/general_from_pun" />
 
 
                 <TextView
@@ -122,7 +122,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/to_" />
+                    android:text="@string/general_to_pun" />
 
 
                 <TextView
@@ -189,7 +189,7 @@
             android:layout_marginLeft="@dimen/_10sdp"
             android:fontFamily="@font/ubuntu_regular"
             android:padding="@dimen/_2sdp"
-            android:text="@string/reason"
+            android:text="@string/general_reason_pun"
             android:textSize="@dimen/_12sdp" />
 
         <TextView
@@ -462,7 +462,7 @@
                 android:lines="1"
                 android:paddingStart="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_5sdp"
-                android:text="@string/attachment"
+                android:text="@string/general_attachment"
                 android:textColor="#545454"
                 android:textSize="@dimen/_10sdp" />
 
@@ -472,7 +472,7 @@
                 android:layout_height="@dimen/_25sdp"
                 android:visibility="visible"
                 app:srcCompat="@drawable/view"
-                android:contentDescription="@string/attachment" />
+                android:contentDescription="@string/general_attachment" />
 
         </LinearLayout>
 

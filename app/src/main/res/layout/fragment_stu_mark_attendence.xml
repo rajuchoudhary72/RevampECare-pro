@@ -249,7 +249,7 @@
                                 android:gravity="center"
                                 android:paddingHorizontal="@dimen/_15sdp"
                                 android:paddingVertical="@dimen/_7sdp"
-                                android:text="@string/roll_no"
+                                android:text="@string/general_roll_no_pun"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 app:drawableStartCompat="@drawable/descending" />
@@ -267,7 +267,7 @@
                                 android:gravity="center"
                                 android:paddingHorizontal="@dimen/_15sdp"
                                 android:paddingVertical="@dimen/_7sdp"
-                                android:text="@string/name"
+                                android:text="@string/general_name"
                                 android:textColor="@color/black"
                                 android:textSize="13sp"
                                 app:drawableStartCompat="@drawable/descending" />
@@ -315,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_medium"
                     android:layout_centerInParent="true"
-                    android:text="@string/no_record_found"
+                    android:text="@string/general_no_record_found"
                     android:textSize="16sp"
                     android:visibility="gone"
                     />

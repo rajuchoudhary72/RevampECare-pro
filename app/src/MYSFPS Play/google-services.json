@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "809649159132",
     "project_id": "strawberry-fields-play-school",
-    "storage_bucket": "strawberry-fields-play-school.appspot.com"
+    "storage_bucket": "strawberry-fields-play-school.firebasestorage.app"
   },
   "client": [
     {
@@ -22,8 +22,12 @@
           }
         },
         {
-          "client_id": "809649159132-4s91rl45u12391tj9o7hki4pbe08es7a.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "809649159132-uj8mlqe5fe1aeu3h3t73vj1clvujqcot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.franciscan.strawberry_play",
+            "certificate_hash": "23e2bdecdf9b90cc6fa134cbb028132527ab4bfa"
+          }
         }
       ],
       "api_key": [
@@ -33,20 +37,7 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "809649159132-4s91rl45u12391tj9o7hki4pbe08es7a.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "809649159132-e0kuo0n4ifen4lk3euhuhj33ih62po4q.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.franciscan.MYSFPS",
-                "app_store_id": "25280"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

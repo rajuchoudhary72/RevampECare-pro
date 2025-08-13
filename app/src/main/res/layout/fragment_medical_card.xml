@@ -31,7 +31,7 @@
                 android:layout_gravity="end"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingRight="@dimen/_10sdp"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_14sdp"
                 app:fontFamily="@font/ubuntu_medium"
@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="Parents must be careful while filling up this form and ensure that accurate information is provided. It is in the interest of the child and the School that a true and detailed picture is given of the child's health every year."
+                    android:text="@string/parents_must_be_careful_while_filling_up_this_form_and_ensure_that_accurate_information_is_provided_it_is_in_the_interest_of_the_child_and_the_school_that_a_true_and_detailed_picture_is_given_of_the_child_s_health_every_year"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -68,7 +68,7 @@
                     android:layout_below="@+id/tvHeading"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="1.  Is your ward suffering  from any ailment which the school should be aware of (please give details)"
+                    android:text="@string/_1_is_your_ward_suffering_from_any_ailment_which_the_school_should_be_aware_of_please_give_details"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -98,7 +98,7 @@
                     android:layout_below="@+id/etSufferingFrom"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="2.  In the event of your child falling ill in school whom should we contact:( please provide more than one contact number)"
+                    android:text="@string/_2_in_the_event_of_your_child_falling_ill_in_school_whom_should_we_contact_please_provide_more_than_one_contact_number"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -120,7 +120,7 @@
                         android:background="@drawable/shape_line"
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
-                        android:hint="Name"
+                        android:hint="@string/name"
                         android:paddingStart="@dimen/_10sdp"
                         android:paddingLeft="@dimen/_10sdp"
                         android:paddingEnd="@dimen/_10sdp"
@@ -140,7 +140,7 @@
                         android:background="@drawable/shape_line"
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
-                        android:hint="Address"
+                        android:hint="@string/address"
                         android:paddingStart="@dimen/_10sdp"
                         android:paddingLeft="@dimen/_10sdp"
                         android:paddingEnd="@dimen/_10sdp"
@@ -160,7 +160,7 @@
                         android:background="@drawable/shape_line"
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
-                        android:hint="Mob. No"
+                        android:hint="@string/mob_no"
                         android:inputType="phone"
                         android:paddingStart="@dimen/_10sdp"
                         android:paddingLeft="@dimen/_10sdp"
@@ -180,7 +180,7 @@
                     android:layout_below="@+id/llEmrInfo"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="3.  Is your child allergic to any drugs (medication) If yes, please specify"
+                    android:text="@string/_3_is_your_child_allergic_to_any_drugs_medication_if_yes_please_specify"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -210,7 +210,7 @@
                     android:layout_below="@+id/etDrugName"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="N.B The school only provides first aid. However, if the child is in need of immediate hospitalization accurate information must be provided and regularly updated."
+                    android:text="@string/n_b_the_school_only_provides_first_aid_however_if_the_child_is_in_need_of_immediate_hospitalization_accurate_information_must_be_provided_and_regularly_updated"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -221,7 +221,7 @@
                     android:layout_below="@+id/tvPoint4"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="4.(a)  Is your child physically fit to participated in physical exercise/games &amp; related fields of activity"
+                    android:text="@string/_4_a_is_your_child_physically_fit_to_participated_in_physical_exercise_games_amp_related_fields_of_activity"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -242,7 +242,7 @@
                         android:layout_margin="@dimen/_3sdp"
                         android:layout_weight="1"
                         android:padding="@dimen/_4sdp"
-                        android:text="Yes"
+                        android:text="@string/yes"
                         android:textColor="@color/grey_light_compose_msg_headr_txt"
                         android:textSize="@dimen/_14sdp" />
 
@@ -258,7 +258,7 @@
                         android:checked="true"
                         android:fontFamily="@font/ubuntu_medium"
                         android:padding="@dimen/_4sdp"
-                        android:text="No"
+                        android:text="@string/no"
                         android:textColor="@color/brand_color"
                         android:textSize="@dimen/_14sdp" />
                 </RadioGroup>
@@ -270,7 +270,7 @@
                     android:layout_below="@+id/rgYesNo"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="(b)  If deemed not fit to participate than parent must provide details in writing and Seek exemption in writing form the principal."
+                    android:text="@string/b_if_deemed_not_fit_to_participate_than_parent_must_provide_details_in_writing_and_seek_exemption_in_writing_form_the_principal"
                     android:textColor="@color/module"
                     android:textSize="@dimen/_14sdp" />
 
@@ -286,7 +286,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="Note: "
+                        android:text="@string/note"
                         android:textColor="@color/brand_color"
                         android:textSize="@dimen/_12sdp" />
 
@@ -294,7 +294,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/ubuntu_medium_italic"
-                        android:text="I,declare that I am the above student’s parent/ local guardian/ hostel supdt and I do affix my signature below in testimony of the fact that in details. I have given above are correct."
+                        android:text="@string/i_declare_that_i_am_the_above_student_s_parent_local_guardian_hostel_supdt_and_i_do_affix_my_signature_below_in_testimony_of_the_fact_that_in_details_i_have_given_above_are_correct"
                         android:textColor="@color/module"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>

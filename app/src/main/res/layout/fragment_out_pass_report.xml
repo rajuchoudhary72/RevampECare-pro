@@ -22,7 +22,7 @@
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Out Pass Attendance"
+            app:title="@string/out_pass_attendance"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />
@@ -76,7 +76,7 @@
                             android:fontFamily="@font/ubuntu_medium"
                             android:gravity="center_vertical"
                             android:padding="13dp"
-                            android:text="@string/select_date"
+                            android:text="@string/general_select_date"
                               />
 
 
@@ -106,7 +106,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center"
-                android:text="@string/no_data_found"
+                android:text="@string/general_no_data_found"
                 android:textSize="16sp"
                 android:visibility="gone"
 

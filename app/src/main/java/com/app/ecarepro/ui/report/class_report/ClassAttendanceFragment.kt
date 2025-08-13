@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.MyClasseItem
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassAttendanceBinding
@@ -158,19 +159,19 @@ class ClassAttendanceFragment : Fragment()  {
                                 ) { tab, position ->
                                     when (position) {
                                         0 -> {
-                                            tab.text = "All"
+                                            tab.text = getString(R.string.all)
                                         }
                                         1 -> {
-                                            tab.text = "Present"
+                                            tab.text = getString(R.string.present)
                                         }
                                         2 -> {
-                                            tab.text = "Absent"
+                                            tab.text = getString(R.string.general_absent)
                                         }
                                         3 -> {
-                                            tab.text = "Leave"
+                                            tab.text = getString(R.string.leave)
                                         }
                                         4 -> {
-                                            tab.text = "Late"
+                                            tab.text = getString(R.string.late)
                                         }
                                     }
                                 }.attach()

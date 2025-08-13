@@ -181,7 +181,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/calibri_regular"
-                        android:text="@string/roll_no_"
+                        android:text="@string/general_rollNo"
                         android:textColor="@color/black"
                         />
                 </LinearLayout>

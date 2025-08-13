@@ -48,7 +48,7 @@ class FavoritesListFragment : Fragment() , ItemListener<FavList> {
     ): View? {
         binding=FragmentPhotoAlbumBinding.inflate(inflater,container,false)
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.toolbar.title= "Favorites"
+        binding.toolbar.title= getString(R.string.favorites)
         binding.toolbar.isVisible=true
         favoritesListAdapter =    FavoritesListAdapter(this@FavoritesListFragment)
 

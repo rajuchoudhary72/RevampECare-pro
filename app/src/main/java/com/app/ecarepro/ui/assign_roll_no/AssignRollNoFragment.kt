@@ -4,29 +4,21 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.data.network.model.post_roll_no.AssignRollNoBodyItem
 import com.app.ecarepro.databinding.FragmentAssignRollNoBinding
 import com.app.ecarepro.model.MyClasseTeacherOf
-import com.app.ecarepro.model.StudentPro
 import com.app.ecarepro.model.StudentRllNo
 import com.app.ecarepro.ui.MainActivity
 import com.app.ecarepro.utils.Constant
@@ -47,7 +39,7 @@ class AssignRollNoFragment : Fragment()  {
     private   var mMyClass= mutableListOf<MyClasseTeacherOf>()
     private var isClassSelected=false
     private var mMyClassDataString: ArrayList<String> = ArrayList()
-    private val nameFilter = listOf("Name", "Roll No", "Admission")
+
 
 
     override fun onCreateView(
@@ -73,10 +65,13 @@ class AssignRollNoFragment : Fragment()  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+         val nameFilter = listOf(getString(R.string.general_name), getString(R.string.general_roll_no_pun),
+            getString(R.string.general_admission))
+
         val arrayAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1 , nameFilter)
         binding.autoCompleteFilter.setAdapter(arrayAdapter)
 
-        binding.autoCompleteFilter.setText("Name", false)
+        binding.autoCompleteFilter.setText(getString(R.string.general_name), false)
 
         binding.btAutoAssign.setOnClickListener {
             var rollNo=1
@@ -246,7 +241,8 @@ binding.includeToolbar.btnSave.setOnClickListener {
             requestList.add(AssignRollNoBodyItem(d.houseID, d.rollNumber, d.stID))
         }
         assignRollNoViewModel.assignRollNumber(requestList).invokeOnCompletion {
-            Toast.makeText(requireContext(), "Roll Number Assign Successfully", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),
+                getString(R.string.assignRollNumber_successfully_assign), Toast.LENGTH_SHORT)
                 .show()
             binding.includeToolbar.btnSave.isVisible=false
         }

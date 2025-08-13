@@ -96,7 +96,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/ubuntu_regular"
-                    android:text="@string/cancel"
+                    android:text="@string/general_cancel"
                     android:textSize="11sp"
                     app:strokeColor="@color/white"
                     app:rippleColor="@color/white"
@@ -134,6 +134,7 @@
 
 
             <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
@@ -216,7 +217,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_data_found"
+            android:text="@string/general_no_data_found"
             android:textSize="16sp"
 
             />

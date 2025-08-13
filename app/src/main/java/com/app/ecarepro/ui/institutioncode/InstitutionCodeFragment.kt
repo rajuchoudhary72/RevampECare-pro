@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -138,7 +136,7 @@ class InstitutionCodeFragment : Fragment() {
                     navigateToSignFragment(it.schoolCode, it.isStudentLoginBlocked ?: false)
                 } else {
                     textInstitutionCode.setItemBackground(resources.getDrawable(R.drawable.bg_outline_round_corner_red))
-                    mainActivity().showMessage("Please enter a valid school code.")
+                    mainActivity().showMessage(getString(R.string.login_invalid_user_name_password))
                 }
             }
         }

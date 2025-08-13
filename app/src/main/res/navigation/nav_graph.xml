@@ -1046,18 +1046,16 @@
         android:label="AssignClubStudentListFragment" />
     <fragment
         android:id="@+id/switchAccountFragment"
-        android:name="com.app.ecarepro.ui.profile.SwitchAccountFragment"
+        android:name="com.app.ecarepro.ui.feedefulter_user.SwitchAccountFragment"
         android:label="SwitchAccountFragment" />
     <fragment
         android:id="@+id/feesBlockDialogFragment"
-        android:name="com.app.ecarepro.utils.FeesBlockDialogFragment"
+        android:name="com.app.ecarepro.ui.feedefulter_user.FeesBlockDialogFragment"
         android:label="FeesBlockDialogFragment" />
+
     <fragment
-        android:id="@+id/taskListFragment"
-        android:name="com.app.ecarepro.ui.taskmanager.tasklist.TaskListFragment"
-        android:label="TaskListFragment" />
-    <fragment
-        android:id="@+id/addTaskListFragment"
-        android:name="com.app.ecarepro.ui.taskmanager.tasklist.AddTaskListFragment"
-        android:label="AddTaskListFragment" />
+        android:id="@+id/languageSelect"
+        android:name="com.app.ecarepro.ui.language.LanguageSelect"
+        android:label="LanguageSelect" />
+
 </navigation>

@@ -118,7 +118,7 @@
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center_vertical"
                     android:padding="10dp"
-                    android:text="@string/lbl_select_Student"
+                    android:text="@string/general_select_Student"
 
                     android:visibility="gone"
                     app:drawableRightCompat="@drawable/ic_dropdown_spinner" />
@@ -139,7 +139,7 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="@string/assignment_date"
+                        android:text="@string/assignment_assignment_date"
 
                         android:visibility="visible" />
 
@@ -155,7 +155,7 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:padding="10dp"
-                        android:text="@string/submission_date"
+                        android:text="@string/assignment_submission_date"
 
                         android:visibility="gone" />
                 </LinearLayout>
@@ -173,7 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:text="@string/submission_date"
+                        android:text="@string/assignment_submission_date"
 
                         />
 
@@ -190,7 +190,7 @@
                     android:background="@drawable/shape_line"
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center_vertical"
-                    android:hint="@string/title"
+                    android:hint="@string/general_title_pun"
                     android:lines="1"
                     android:padding="10dp"
                     android:visibility="visible" />
@@ -204,7 +204,7 @@
                     android:background="@drawable/shape_line"
                     android:fontFamily="@font/ubuntu_light"
                     android:gravity="center_vertical"
-                    android:hint="@string/type_your_assignment"
+                    android:hint="@string/assignment_type_your_assignment"
                     android:lines="4"
                     android:maxLines="6"
                     android:padding="10dp"
@@ -232,7 +232,7 @@
                             android:fontFamily="@font/ubuntu_medium"
                             android:lines="1"
                             android:padding="7dp"
-                            android:text="@string/attachment"
+                            android:text="@string/general_attachment"
                             android:textColor="#545454" />
 
                         <ImageView
@@ -255,6 +255,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
@@ -283,7 +285,7 @@
                             android:drawablePadding="3dp"
                             android:fontFamily="@font/ubuntu_medium"
                             android:padding="5dp"
-                            android:text="@string/attach_photo_pdf_doc"
+                            android:text="@string/attach_doc"
                             app:drawableTopCompat="@drawable/ic_add_account"
                             android:gravity="bottom|center" />
 
@@ -299,7 +301,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:fontFamily="@font/ubuntu_light"
-                    android:text="@string/lbl_assignment_support_file_details" />
+                    android:text="@string/assignment_support_file_size" />
 
                 <CheckBox
                     android:id="@+id/cbMultipleActive"
@@ -308,7 +310,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/allow_student_for_multiple_submission"
+                    android:text="@string/assignment_allow_student_for_multiple_submission"
 
                     android:textSize="16sp" />
 
@@ -329,7 +331,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/ubuntu_medium"
-                    android:text="@string/active" />
+                    android:text="@string/general_active" />
 
                 <Button
                     android:id="@+id/btnSubmit"

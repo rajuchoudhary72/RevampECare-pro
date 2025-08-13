@@ -31,7 +31,6 @@ import com.app.ecarepro.model.Watcher
 import kotlinx.coroutines.flow.Flow
 import com.app.ecarepro.data.network.Setting
 import com.app.ecarepro.data.network.model.NetworkContactUrl
-import com.app.ecarepro.model.AddTaskListDto
 import com.app.ecarepro.model.NetworkAppVersion
 import com.app.ecarepro.ui.assignClub.AssignClubRequest
 import com.app.ecarepro.ui.assignClub.StudentListAssignClub
@@ -60,11 +59,7 @@ interface SchoolRepository {
     fun updateTaskImage(request: UpdateTaskAttachmentDto): Flow<Result<String>>
     fun updateTask(request: UpdateTaskDto): Flow<Result<String>>
     fun getWatchers(): Flow<Result<WatchersDto>>
-    fun getTaskAssignee(
-        tlId:Int?,
-        tlIds: String? = null,
-
-        ): Flow<Result<List<Assignee>>>
+    fun getTaskAssignee(tlId:Int): Flow<Result<List<Assignee>>>
 
     suspend fun getStudentListToAssignHouse(id: String, orderBy:String): StudentList
 
@@ -77,5 +72,4 @@ interface SchoolRepository {
     fun updateTaskStatus(id: String?, statusId: Int):Flow<Result<String>>
     suspend fun checkAppVersion( ): NetworkAppVersion
     suspend fun sendComment(id: String, comment: String): Flow<Result<String>>
-    suspend fun saveTaskList(task: AddTaskListDto): Flow<Result<String>>
 }

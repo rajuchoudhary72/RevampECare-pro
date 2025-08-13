@@ -154,7 +154,7 @@ class StudentProfileFeeSummaryFragment(
         val relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text = "Select Academic Year"
+        tvHeading.text = getString(R.string.select_academic_year)
         builder.setView(view)
 
         relOk.setOnClickListener {

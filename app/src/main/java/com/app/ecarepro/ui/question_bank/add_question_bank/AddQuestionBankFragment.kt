@@ -107,20 +107,20 @@ class AddQuestionBankFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            getString(R.string.take_photo),
-            getString(R.string.choose_library),
-            getString(R.string.cancel)
+            getString(R.string.general_take_photo),
+            getString(R.string.general_choose_library),
+            getString(R.string.general_cancel)
 
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle(getString(R.string.add_photo))
+        builder.setTitle(getString(R.string.general_add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this@AddQuestionBankFragment)
-            if (items[item] == getString(R.string.take_photo)) {
+            if (items[item] == getString(R.string.general_take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == getString(R.string.choose_library)) {
+            } else if (items[item] == getString(R.string.general_choose_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == getString(R.string.cancel)) {
+            } else if (items[item] == getString(R.string.general_cancel)) {
                 dialog.dismiss()
             }
         })
@@ -166,19 +166,20 @@ class AddQuestionBankFragment : Fragment() {
         var isValidate=true
 
         if (!isChapterSelected){
-            Toast.makeText(requireContext(),"Select Chapter",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),getString(R.string.select_chapter),Toast.LENGTH_SHORT).show()
             isValidate=false
         }
         if (!isQuestType){
-            Toast.makeText(requireContext(),"Select Question Type",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),
+                getString(R.string.select_question_type),Toast.LENGTH_SHORT).show()
             isValidate=false
         }
         if (!isClassSelected){
-            Toast.makeText(requireContext(),"Select Class",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),getString(R.string.select_class),Toast.LENGTH_SHORT).show()
             isValidate=false
         }
         if (!isSubjectSelected){
-            Toast.makeText(requireContext(),"Select Subject",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),getString(R.string.select_subject),Toast.LENGTH_SHORT).show()
             isValidate=false
         }
 
@@ -352,7 +353,7 @@ class AddQuestionBankFragment : Fragment() {
         val  relOk = view.findViewById<RelativeLayout>(R.id.rel_ok)
         val  rvYears = view.findViewById<RecyclerView>(R.id.rv_year)
         val  tvHeading = view.findViewById<TextView>(R.id.tv_heading)
-        tvHeading.text=getString(R.string.select_class)
+        tvHeading.text=getString(R.string.general_select_class)
         builder.setView(view)
 
         relOk.setOnClickListener {

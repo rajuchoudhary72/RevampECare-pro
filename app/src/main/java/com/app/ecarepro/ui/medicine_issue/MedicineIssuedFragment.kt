@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentMedicineIssueBinding
 import com.app.ecarepro.model.Dtl
@@ -102,15 +103,15 @@ class MedicineIssuedFragment : Fragment() , ItemListener<Dtl> {
     private fun setHeaderData(data: MedicineIsuueModel)= with(binding){
         tvStudentName.text = data.name
         data.designation?.let {
-            tvAdmissionNo.text = "Designation: $it"
+            tvAdmissionNo.text = getString(R.string.general_designation_pun)+" $it"
             tvClassName.text = ""
             linPro.visibility = View.VISIBLE
         }?:run {
             data.admissionNo?.let {
-                tvAdmissionNo.text = "Admission No: $it"
+                tvAdmissionNo.text = getString(R.string.admission_no)+" $it"
             }
             data.className?.let {
-                tvClassName.text = "Class: $it"
+                tvClassName.text = getString(R.string.general_classes_pun)+" $it"
             }
             linPro.visibility = View.VISIBLE
         }

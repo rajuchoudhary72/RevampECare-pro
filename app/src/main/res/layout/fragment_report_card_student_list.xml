@@ -24,7 +24,7 @@
             app:layout_collapseMode="pin"
             app:navigationIcon="@drawable/ic_arrow_back_24px"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Students"
+            app:title="@string/students"
             app:titleCentered="true"
             app:titleTextAppearance="?attr/titleTextAppearance"
             app:titleTextColor="@color/white" />

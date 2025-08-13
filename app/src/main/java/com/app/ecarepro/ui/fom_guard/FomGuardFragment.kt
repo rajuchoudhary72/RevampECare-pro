@@ -123,8 +123,8 @@ class FomGuardFragment : Fragment() , ItemListener<Data> {
     override fun onItemClick(t: Data, pos: Int, boolean: Boolean) {
 
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Are you sure ?")
-        builder.setMessage("Are you sure, You want to check out")
+        builder.setTitle(getString(R.string.general_are_you_sure))
+        builder.setMessage(getString(R.string.are_you_sure_you_want_to_check_out))
 
         builder.setPositiveButton(android.R.string.yes) { dialog, which ->
             viewModel.updateappointmentcheckout(t.appointmentid.toString()).invokeOnCompletion {

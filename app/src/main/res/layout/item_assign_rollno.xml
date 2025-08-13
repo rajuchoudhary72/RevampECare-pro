@@ -85,7 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:gravity="center"
-                    android:text="@string/roll_no" />
+                    android:text="@string/general_roll_no_pun" />
 
                 <EditText
                     android:id="@+id/edtRoll"
@@ -95,7 +95,7 @@
                     android:background="@drawable/edit_text_box_round_app_color"
                     android:gravity="center"
                     android:textColorHint="@color/grey_40"
-                    android:hint="@string/roll_no"
+                    android:hint="@string/general_roll_no_pun"
                     android:inputType="number"
                      android:textColor="@color/grey_40" />
 

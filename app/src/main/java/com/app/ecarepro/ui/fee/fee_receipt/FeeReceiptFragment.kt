@@ -165,7 +165,8 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                         0
                     )
                 }else{
-                    Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.payment_url_not_found), Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -252,7 +253,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                         yearID
                     )
                 }else{
-                    Toast.makeText(requireContext(), "Payment Url not found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.payment_url_not_found), Toast.LENGTH_SHORT).show()
                 }
 
             }
@@ -323,7 +324,7 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
             try {
                 startActivity(chooserIntent)
             } catch (e: ActivityNotFoundException) {
-                Log.e("TAG", "Failed to open PDF  ${e.localizedMessage}")
+                Log.e("TAG", getString(R.string.failed_to_open_pdf, e.localizedMessage))
             }
         }
     }
@@ -356,14 +357,15 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
                     outputStream.write(decodedBytes)
                     outputStream.close()
                     if (i==2){
-                        mainActivity().showMessage("Download started, check you status bar for more information.")
+                        mainActivity().showMessage(getString(R.string.download_started_check_you_status_bar_for_more_information))
                         showDownloadNotification(file, "FeeReceipt$recdate$currentTime.pdf")
 
                     }
 
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
-                    Toast.makeText(requireContext(), "Error saving image", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),
+                        getString(R.string.error_saving_image), Toast.LENGTH_SHORT).show()
                 }
                 if (i!=2){
                     val intent = Intent(Intent.ACTION_VIEW)
@@ -466,8 +468,8 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
 
         // Create a notification channel for Android 8+ (Oreo and above)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Download Notifications"
-            val descriptionText = "Notifications for downloaded files"
+            val name = getString(R.string.download_notifications)
+            val descriptionText = getString(R.string.notifications_for_downloaded_files)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance).apply {
                 description = descriptionText
@@ -480,8 +482,8 @@ class FeeReceiptFragment : Fragment() , ItemListener <FeeReceipt> {
         // Build the notification
         val notification = NotificationCompat.Builder(requireContext(), channelId)
             .setSmallIcon(R.drawable.ic_download) // Replace with your app's download icon
-            .setContentTitle("File Downloaded")
-            .setContentText("Tap to open $fileName")
+            .setContentTitle(getString(R.string.file_downloaded))
+            .setContentText(getString(R.string.tap_to_open, fileName))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true) // Dismiss the notification when tapped

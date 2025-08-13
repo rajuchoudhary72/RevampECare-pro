@@ -75,7 +75,7 @@ class TransportAttendanceReportFragment : Fragment() {
                 if (routeLSTList.isNotEmpty()) {
                     popUpRouter()
                 } else {
-                    mainActivity().showMessage("No Route Data")
+                    mainActivity().showMessage(getString(R.string.no_route_data))
                 }
 
             }
@@ -192,15 +192,15 @@ class TransportAttendanceReportFragment : Fragment() {
         }
         var isValidate = true
         if (!routeSelected) {
-            mainActivity().showMessage("Please Select Route")
+            mainActivity().showMessage(getString(R.string.please_select_route))
             isValidate = false
         }
         if (!stoppersSelected) {
-            mainActivity().showMessage("Please Select Route")
+            mainActivity().showMessage(getString(R.string.please_select_route))
             isValidate = false
         }
-        if (binding. tvSelectDate.text.toString() == getString(R.string.select_date)) {
-            mainActivity().showMessage("Please Select Date")
+        if (binding. tvSelectDate.text.toString() == getString(R.string.general_select_date)) {
+            mainActivity().showMessage(getString(R.string.please_select_date))
             isValidate = false
         }
 

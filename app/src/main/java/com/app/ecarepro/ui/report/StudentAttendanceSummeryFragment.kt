@@ -1,5 +1,6 @@
 package com.app.ecarepro.ui.report
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -37,6 +38,7 @@ import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> {
+    private var selectedDate: String? = null
 
     private lateinit var binding: FragmentStudentAttedanceReportBinding
     private val studentAttRepoViewModel: StudentAttSummeryViewModel by viewModels()
@@ -51,26 +53,56 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
     }
 
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvDate.text = Constant.currentDate()
 
         binding.tvDate.setOnClickListener {
-            ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
-                override fun onSelect(date: String?, isCurrentDate: Boolean) {
-                    binding.tvDate.text = Constant.dateToShow(date.toString())
-                    studentAttRepoViewModel.getAttendanceSummary(Constant.toSystemDate(binding.tvDate.text.toString()))
+// When opening the picker:
+            val picker =
+                ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                    override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                        selectedDate = date // store selected date
+                        binding.tvDate.text = Constant.dateToShow(date.toString())
+                        studentAttRepoViewModel.getAttendanceSummary(
+                            Constant.toSystemDate(binding.tvDate.text.toString())
+                        )
+                    }
+                })
+
+// Set max date
+            picker.setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+
+// Now use reflection to get access to the private dpd field
+            try {
+                val field = picker.javaClass.getDeclaredField("dpd")
+                field.isAccessible = true
+                val datePickerDialog = field.get(picker) as DatePickerDialog
+
+                // If we have previously selected date, set it manually
+                selectedDate?.let {
+                    val parts = it.split("-")
+                    val year = parts[0].toInt()
+                    val month = parts[1].toInt() - 1
+                    val day = parts[2].toInt()
+                    datePickerDialog.updateDate(year, month, day)
                 }
-            }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            /*  ECareDataPicker(requireActivity(), false, object : ECareDataPicker.PickerCallback {
+                  override fun onSelect(date: String?, isCurrentDate: Boolean) {
+                      selectedDate = date // 🔐 Save for later
+                      binding.tvDate.text = Constant.dateToShow(date.toString())
+                      studentAttRepoViewModel.getAttendanceSummary(Constant.toSystemDate(binding.tvDate.text.toString()))
+                  }
+              }).setMaxDate(Constant.getLongTimeDate(Constant.currentDate()))*/
         }
 
         getStudentAttRepo()
 
     }
-
 
 
     private fun getStudentAttRepo() {
@@ -115,7 +147,7 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                                     }
                                 } else {
                                     binding.nestedScrollView.isVisible = false
-                                    binding.tvNoData.isVisible=true
+                                    binding.tvNoData.isVisible = true
 
                                 }
                             }
@@ -130,7 +162,8 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
     }
 
     private fun setupAttDeatils(data: NetworkAttedanceSummary) {
-        val totalStudent: Int = data.totalPresent + data.totalAbsent + data.totalLeave  + data.totalNA + data.totalWH
+        val totalStudent: Int =
+            data.totalPresent + data.totalAbsent + data.totalLeave + data.totalNA + data.totalWH
 
 
         if (totalStudent > 0) {
@@ -159,14 +192,14 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
                     append(data.totalWH)
                 }
 
-            try {
+                try {
 
-                tvWHPer.text = buildString {
+                    tvWHPer.text = buildString {
 
-                    append(setCalculatedPercentageToInt(data.totalWH, totalStudent))
+                        append(setCalculatedPercentageToInt(data.totalWH, totalStudent))
 
-                    append("%")
-                }
+                        append("%")
+                    }
 
                     tvPresentPer.text = buildString {
 
@@ -174,12 +207,12 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 
                         append("%")
                     }
-                tvPresentWorkingHoliday.text = buildString {
+                    tvPresentWorkingHoliday.text = buildString {
 
-                    append(setCalculatedPercentageToInt(data.totalPresent_WH, totalStudent))
+                        append(setCalculatedPercentageToInt(data.totalPresent_WH, totalStudent))
 
-                    append("%")
-                }
+                        append("%")
+                    }
 
                     tvAbsentPer.text = buildString {
 
@@ -215,7 +248,8 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 //
 //                            )
 //                    )
-                    showPieChart(data.isLateEnabled,
+                    showPieChart(
+                        data.isLateEnabled,
                         data.totalPresent,
                         data.totalAbsent,
                         data.totalLeave,
@@ -231,14 +265,15 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
 
 
             }
-        }else{
+        } else {
             binding.llMain.isVisible = false
-         }
+        }
 
 
     }
 
-    private fun getBarChartModel(present: Double, leave: Double, absent: Double, late: Double) = AAChartModel()
+    private fun getBarChartModel(present: Double, leave: Double, absent: Double, late: Double) =
+        AAChartModel()
 
         .chartType(AAChartType.Pie)
         .dataLabelsEnabled(true)
@@ -248,17 +283,17 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         .series(
             arrayOf(
                 AASeriesElement()
-                    .name("Student")
+                    .name(getString(R.string.student))
                     .size("80%")
                     .innerSize("70%")
                     .borderWidth(0)
                     .allowPointSelect(false)
                     .data(
                         arrayOf(
-                            arrayOf("Present", present),
-                            arrayOf("Absent", absent),
-                            arrayOf("Leave", leave),
-                            arrayOf("Late", late)
+                            arrayOf(getString(R.string.present), present),
+                            arrayOf(getString(R.string.general_absent), absent),
+                            arrayOf(getString(R.string.leave), leave),
+                            arrayOf(getString(R.string.late), late)
                         )
                     )
             )
@@ -335,17 +370,15 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
             resources.getColor(R.color.att_na_color),
             resources.getColor(R.color.category7),
 
-        )
+            )
 
         data.setValueTextSize(13f)
         data.setDrawValues(false)
         binding.pieChart.legend.isEnabled = false
         binding.pieChart.animateXY(1400, 1400)
 
-        val s = """
-            ${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}
-            Student(s)
-            """.trimIndent()
+        val s = "${totalPresent + totalAbsent + totalLeave  + totalNA+ totalWH}"+ getString(R.string.student_s).trimIndent()
+
         val length = (totalPresent + totalAbsent + totalLeave + totalNA + totalWH).toString() + ""
         val ss1 = SpannableString(s)
         ss1.setSpan(RelativeSizeSpan(2f), 0, length.length, 0) // set size
@@ -362,8 +395,6 @@ class StudentAttendanceSummeryFragment : Fragment(), ItemListener<ClassSummary> 
         binding.pieChart.holeRadius = 70f
         binding.pieChart.description = null
     }
-
-
 
 
 }

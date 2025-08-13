@@ -63,19 +63,44 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Logout button at bottom-right -->
-    <Button
-        android:id="@+id/logout"
+    <!-- Container for bottom buttons -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/swith_user"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#F44336"
+        android:orientation="horizontal"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:textAllCaps="false"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp" />
+        android:layout_marginBottom="60dp"
+        android:layout_marginEnd="30dp">
+
+        <!-- Add Account button -->
+        <Button
+            android:id="@+id/addAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_account"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2196F3"
+            android:textAllCaps="false"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginRight="12dp" />
+
+        <!-- Switch Account button -->
+        <Button
+            android:id="@+id/switchAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/switch_account"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#F44336"
+            android:textAllCaps="false"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+    </LinearLayout>
+
 </FrameLayout>

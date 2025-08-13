@@ -860,8 +860,8 @@ class ComposeFragment : Fragment() {
                 "application/pdf",
                 "application/msword",// .doc
                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document",// .docx
-               /* "application/vnd.ms-excel", // .xls
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx*/
+              //  "application/vnd.ms-excel", // .xls
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
                 ))
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
@@ -1033,9 +1033,9 @@ class ComposeFragment : Fragment() {
 
     private fun showPermissionDeniedDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Location Permission Required")
-            .setMessage("Location permission is required to send your current location. Please enable it in app settings.")
-            .setPositiveButton("Settings") { dialog, _ ->
+            .setTitle(getString(R.string.location_permission_required))
+            .setMessage(getString(R.string.location_permission_is_required_to_send_your_current_location_please_enable_it_in_app_settings))
+            .setPositiveButton(getString(R.string.settings)) { dialog, _ ->
                 locationPermissionDeniedDialogSeen = false
                 dialog.dismiss()
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -1043,7 +1043,7 @@ class ComposeFragment : Fragment() {
                 intent.data = uri
                 startActivity(intent)
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
                 requireActivity().onBackPressed()
             }

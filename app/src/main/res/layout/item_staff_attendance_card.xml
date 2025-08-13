@@ -55,7 +55,7 @@
                 android:fontFamily="@font/ubuntu_medium"
                 android:gravity="center_vertical"
                 android:paddingVertical="5dp"
-                android:text="Staff Attendance"
+                android:text="@string/staff_attendance"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_arrow"
@@ -75,7 +75,7 @@
                 app:lv_image="@drawable/ic_person"
                 app:lv_image_tint="@color/category1"
                 app:lv_sub_text="600"
-                app:lv_text="Present" />
+                app:lv_text="@string/present" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/lv_absent"
@@ -90,7 +90,7 @@
                 app:lv_image="@drawable/ic_person"
                 app:lv_image_tint="@color/category2"
                 app:lv_sub_text="1011"
-                app:lv_text="Absent" />
+                app:lv_text="@string/absent" />
 
             <com.app.ecarepro.ui.views.LegendView
                 android:id="@+id/lv_leave"
@@ -105,7 +105,7 @@
                 app:lv_image="@drawable/ic_person"
                 app:lv_image_tint="@color/category3"
                 app:lv_sub_text="1011"
-                app:lv_text="Leave" />
+                app:lv_text="@string/leave" />
 
             <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
                 android:id="@+id/chartView"

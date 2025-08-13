@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.SurveyQuestionBinding
 import com.app.ecarepro.ui.MainActivity
@@ -113,8 +114,9 @@ class SurveyQuestionFragment : Fragment() {
 
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
-                        mainActivity().showMessage("Your response has been recorded \n" +
-                                " Thanks for your response.")
+                        mainActivity().showMessage(
+                            getString(R.string.your_response_has_been_recorded) +
+                                getString(R.string.thanks_for_your_response))
                         findNavController().popBackStack()
                     }
 
@@ -135,7 +137,7 @@ class SurveyQuestionFragment : Fragment() {
                 }
                 if (!check) {
                     binding.rvSurveyList.smoothScrollToPosition(i)
-                    mainActivity().showMessage("Please attempt all the mandatory questions.")
+                    mainActivity().showMessage(getString(R.string.please_attempt_all_the_mandatory_questions))
                     return
                 }
             }

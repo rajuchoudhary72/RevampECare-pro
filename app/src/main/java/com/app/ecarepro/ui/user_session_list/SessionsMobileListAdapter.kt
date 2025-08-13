@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.SessionListItemBinding
 import com.app.ecarepro.model.AppSession
 
@@ -33,13 +34,13 @@ class SessionsMobileListAdapter(
            val sessionData=appSessions[position]
             tvDeviceName.text= buildString {
                 append(sessionData.model)
-                append("(OS:")
+                append(userSessionListFragment.getString(R.string.os))
                 append(sessionData.operatingSystem)
                 append(")")
             }
             tvLocation.text=sessionData.locationCity
             tvLastActive.text= buildString {
-                append("Last Active: ")
+                append(userSessionListFragment.getString(R.string.last_active))
                 append(sessionData.lastActivityTime)
             }
            llCurrentSession.isVisible=sessionData.isThisDevice

@@ -63,7 +63,7 @@
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="@string/date"
+                  android:text="@string/general_date_pun"
                   android:layout_gravity="center"
                   android:fontFamily="@font/ubuntu_bold"
                   android:layout_marginHorizontal="5dp"
@@ -99,7 +99,7 @@
               <TextView
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="@string/update_on"
+                  android:text="@string/general_update_on_pun"
                   android:layout_gravity="center"
                   android:fontFamily="@font/ubuntu_bold"
 
@@ -256,7 +256,7 @@
                               android:layout_below="@+id/download"
                               android:layout_centerHorizontal="true"
                               android:layout_marginTop="5dp"
-                              android:text="Download" />
+                              android:text="@string/general_download" />
                       </RelativeLayout>
                   </LinearLayout>
               </RelativeLayout>

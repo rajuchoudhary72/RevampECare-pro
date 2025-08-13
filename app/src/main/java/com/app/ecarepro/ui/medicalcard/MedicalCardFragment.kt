@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -41,7 +40,7 @@ class MedicalCardFragment : Fragment(), ItemListener<Dtl> {
             binding.edit.visibility = View.GONE
             binding.btnSubmit.visibility = View.VISIBLE
         }
-        binding.toolbar.title = "Medical History"
+        binding.toolbar.title = getString(R.string.medical_history_title)
         binding.btnSubmit.setOnClickListener {
             var isYesNo = false
             if (binding.rb1.isChecked)
@@ -125,7 +124,7 @@ class MedicalCardFragment : Fragment(), ItemListener<Dtl> {
                     is NetworkResult.Success -> {
                         (requireActivity() as MainActivity).showLoader(false)
 
-                        mainActivity().showMessage("Updated successfully")
+                        mainActivity().showMessage(getString(R.string.updated_successfully))
 
                     }
                 }

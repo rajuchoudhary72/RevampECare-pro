@@ -113,7 +113,7 @@ class LeaveSettingFragment : Fragment() {
                         putDouble(Constant.LEAVE_SHORT_VALUE, sortLeaveValue)
                     })
             }else{
-                mainActivity().showMessage("Select Leave Type")
+                mainActivity().showMessage(getString(R.string.select_leave_type))
             }
 
         }

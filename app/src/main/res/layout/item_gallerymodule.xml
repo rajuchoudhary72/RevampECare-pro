@@ -70,7 +70,7 @@
                         android:fontFamily="@font/ubuntu_light"
                         android:gravity="center_vertical"
                         android:lines="1"
-                        android:text="@string/newspaper"
+                        android:text="@string/general_newspaper_pun"
                         android:textColor="@color/blue_headline"
                         android:textSize="@dimen/_9sdp"
                         tools:ignore="RtlSymmetry" />

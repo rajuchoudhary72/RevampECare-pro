@@ -173,12 +173,12 @@ class EditProfileFragment : Fragment() {
 
 
             textAnniversaryDate.setOnClickListener {
-                selectDatePro("Select Anniversary date") {
+                selectDatePro(getString(R.string.select_anniversary_date)) {
                     textAnniversaryDate.setText(it)
                 }
             }
             textAdmissionDate.setOnClickListener {
-                selectDatePro("Select Admission date") {
+                selectDatePro(getString(R.string.select_admission_date)) {
                     textAdmissionDate.setText(it)
                 }
             }
@@ -344,137 +344,148 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun setupTransView(profile: NetworkTransportEditProfile?) {
-        if (profile == null) return
-        binding.apply {
-            binding.btnSelectDate.setOnClickListener {
-                selectDate()
-            }
-            if (profile.transDetails != null) {
-                binding.vechLL.isVisible = true
-            }
-
-            val adapterparentsStatus = profile.transVehicles.let {
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_list_item_1,
-                    it.map { it.vehicleType })
-            }
-            binding.vechicleTypes.setAdapter(adapterparentsStatus)
-            binding.vechicleTypes.setOnItemClickListener { _, _, position, _ ->
-                if (profile != null) {
-                    vehicleTypeID = profile.transVehicles[position].vehicleTypeID
+        try {
+            if (profile == null) return
+            binding.apply {
+                binding.btnSelectDate.setOnClickListener {
+                    selectDate()
                 }
-            }
-            binding.transType.setOnItemClickListener { _, _, position, _ ->
-                transportID = position
+                if (profile.transDetails != null) {
+                    binding.vechLL.isVisible = true
+                }
 
-                if (transportID != 0) {
-                    if (transportID == 1) {
-                        binding.vechLL.isVisible = false
-                    } else {
-                        binding.vechLL.isVisible = true
+                val adapterparentsStatus = profile.transVehicles.let {
+                    ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_list_item_1,
+                        it.map { it.vehicleType })
+                }
+                binding.vechicleTypes.setAdapter(adapterparentsStatus)
+                binding.vechicleTypes.setOnItemClickListener { _, _, position, _ ->
+                    if (profile != null) {
+                        vehicleTypeID = profile.transVehicles[position].vehicleTypeID
                     }
-                } else {
-                    binding.vechLL.isVisible = false
                 }
-            }
+                binding.transType.setOnItemClickListener { _, _, position, _ ->
+                    transportID = position
 
-            val transDetails = profile.transDetails
-            tvDriver.setText(transDetails?.driverName)
-            driverMob.setText(transDetails?.driverMob)
-            driverVehicleNo.setText(transDetails?.vehicleNumber)
-            driverLicese.setText(transDetails?.driverDrivingLNo)
-            driverAddress.setText(transDetails?.driverAdd)
-            driverAadhar.setText(transDetails?.driverAadharNumber)
-            driverClearanceCert.setText(transDetails?.driverClearanceNo)
-            vehicleTypeID = transDetails?.vehicleTypeID!!
+                    if (transportID != 0) {
+                        if (transportID == 1) {
+                            binding.vechLL.isVisible = false
+                        } else {
+                            binding.vechLL.isVisible = true
+                        }
+                    } else {
+                        binding.vechLL.isVisible = false
+                    }
+                }
 
+                val transDetails = profile.transDetails
+                tvDriver.setText(transDetails?.driverName)
+                driverMob.setText(transDetails?.driverMob)
+                driverVehicleNo.setText(transDetails?.vehicleNumber)
+                driverLicese.setText(transDetails?.driverDrivingLNo)
+                driverAddress.setText(transDetails?.driverAdd)
+                driverAadhar.setText(transDetails?.driverAadharNumber)
+                driverClearanceCert.setText(transDetails?.driverClearanceNo)
+                if (profile.transDetails!=null){
+                    if (transDetails != null) {
+                        if (transDetails.vehicleTypeID==0){
 
-            if (transDetails?.vehicleUsingFrom != null) {
-                dateVechileFrom = transDetails?.vehicleUsingFrom
-                binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
-            } else {
-                dateVechileFrom = getFormatedDate()
-                binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
-            }
+                        }
+                        vehicleTypeID = transDetails?.vehicleTypeID!!
+                    }
+                }
 
-            /*guard  helper in  bus*/
-            // Get the string array from resources
-            val taskArray = resources.getStringArray(R.array.task3)
-            // Create an ArrayAdapter
-            val adapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                taskArray
-            )
+                if (transDetails?.vehicleUsingFrom != null) {
+                    dateVechileFrom = transDetails?.vehicleUsingFrom
+                    binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
+                } else {
+                    dateVechileFrom = getFormatedDate()
+                    binding.btnSelectDate.setText(dateVechileFrom) // ✅ Correct way to set text
+                }
 
-            // Set the adapter to AutoCompleteTextView
-            availablityHelper.setAdapter(adapter)
+                /*guard  helper in  bus*/
+                // Get the string array from resources
+                val taskArray = resources.getStringArray(R.array.task3)
+                // Create an ArrayAdapter
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    taskArray
+                )
 
-            // Optional: Set default selection
+                // Set the adapter to AutoCompleteTextView
+                availablityHelper.setAdapter(adapter)
 
-            if (transDetails?.isLadyGuardAvailabile == true) {
-                gouradHelper = true
-                availablityHelper.setText(taskArray[1], false)
-            } else {
-                gouradHelper = false
-                availablityHelper.setText(taskArray[2], false)
-            }
-            // Handle gourd  helper item click
-            availablityHelper.setOnItemClickListener { parent, _, position, _ ->
-                helperSlectedName = parent.getItemAtPosition(position).toString()
-                if (helperSlectedName.equals("Yes")) {
+                // Optional: Set default selection
+
+                if (transDetails?.isLadyGuardAvailabile == true) {
                     gouradHelper = true
+                    availablityHelper.setText(taskArray[1], false)
                 } else {
                     gouradHelper = false
+                    availablityHelper.setText(taskArray[2], false)
                 }
-            }
-            /*transport Type  ==*/
-            // Get the string array from resources
-            val TransportArray = resources.getStringArray(R.array.task2)
-            // Create an ArrayAdapter
-            val transporAdapter = ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                TransportArray
-            )
-
-            // Set the adapter to AutoCompleteTextView
-            transType.setAdapter(transporAdapter)
-
-            // Optional: Set default selection
-
-            if (profile.transportType == 1) {
-                transType.setText(TransportArray[1], false)
-            } else if (profile.transportType == 2) {
-                transType.setText(TransportArray[2], false)
-            } else if (profile.transportType == 3) {
-                transType.setText(TransportArray[3], false)
-            } else if (profile.transportType == 4) {
-                transType.setText(TransportArray[4], false)
-            }
-        }
-
-        // Filter for vehicleTypeID
-        val selectedVehicle =
-            profile.transDetails?.let {
-                profile.transVehicles.let { it1 ->
-                    it.vehicleTypeID.let { it2 ->
-                        filterVehicleById(
-                            it1,
-                            it2
-                        )
+                // Handle gourd  helper item click
+                availablityHelper.setOnItemClickListener { parent, _, position, _ ->
+                    helperSlectedName = parent.getItemAtPosition(position).toString()
+                    if (helperSlectedName.equals("Yes")) {
+                        gouradHelper = true
+                    } else {
+                        gouradHelper = false
                     }
                 }
+                /*transport Type  ==*/
+                // Get the string array from resources
+                val TransportArray = resources.getStringArray(R.array.task2)
+                // Create an ArrayAdapter
+                val transporAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    TransportArray
+                )
+
+                // Set the adapter to AutoCompleteTextView
+                transType.setAdapter(transporAdapter)
+
+                // Optional: Set default selection
+
+                if (profile.transportType == 1) {
+                    transType.setText(TransportArray[1], false)
+                } else if (profile.transportType == 2) {
+                    transType.setText(TransportArray[2], false)
+                } else if (profile.transportType == 3) {
+                    transType.setText(TransportArray[3], false)
+                } else if (profile.transportType == 4) {
+                    transType.setText(TransportArray[4], false)
+                }
             }
 
-        // Set the filtered value into AutoCompleteTextView
-        selectedVehicle?.let {
-            binding.vechicleTypes.setText(it, false)
-        }
-        isUpdatingFromApi = false  // Reset flag after UI update
+            // Filter for vehicleTypeID
+            val selectedVehicle =
+                profile.transDetails?.let {
+                    profile.transVehicles.let { it1 ->
+                        it.vehicleTypeID.let { it2 ->
+                            filterVehicleById(
+                                it1,
+                                it2
+                            )
+                        }
+                    }
+                }
 
-        isScreenLoaded = true  // Now we start tracking user changes
+            // Set the filtered value into AutoCompleteTextView
+            selectedVehicle?.let {
+                binding.vechicleTypes.setText(it, false)
+            }
+            isUpdatingFromApi = false  // Reset flag after UI update
+
+            isScreenLoaded = true  // Now we start tracking user changes
+        }catch (e:NullPointerException){
+            e.message
+        }
+
 
     }
 

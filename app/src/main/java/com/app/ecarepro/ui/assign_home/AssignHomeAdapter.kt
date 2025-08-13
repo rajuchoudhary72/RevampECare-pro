@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.app.ecarepro.R
 import com.app.ecarepro.databinding.ItemAssignHomeBinding
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
-class AssignHomeAdapter(private var leaveList: List<Student>,private var houseList: List<House>,val callback: (poss:Int,student:Student) -> Unit) :
+class AssignHomeAdapter(private var leaveList: List<Student>,private var houseList: List<House>,
+                        private val getContext: AssignHomeFragment,
+                        val callback: (poss:Int,student:Student) -> Unit) :
     RecyclerView.Adapter<AssignHomeAdapter.AssignHomeViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AssignHomeViewHolder {
@@ -26,7 +29,7 @@ class AssignHomeAdapter(private var leaveList: List<Student>,private var houseLi
         val studentList=leaveList[position]
         val mainBinding= DataBindingUtil.getBinding<ItemAssignHomeBinding>(holder.itemView)
         with(mainBinding!!){
-            tvStuName.text = "Name: " + studentList.name
+            tvStuName.text = getContext.getString(R.string.general_name)+" "+ studentList.name
             tvKeyValue1.text = "Class: " + studentList.`class`
             tvKeyValue2.text = "Roll No.:" + studentList.rollNumber
             tvKeyValue3.text = "Admission No.:" + studentList.admissionNumber
@@ -40,7 +43,7 @@ class AssignHomeAdapter(private var leaveList: List<Student>,private var houseLi
                         if (studentList.houseName!!.isNotEmpty()) {
                             edtHouseName.text = house.houseName
                         } else {
-                            edtHouseName.text = "No House Assign"
+                            edtHouseName.text = getContext.getString(R.string.no_house_assign)
                         }
                     }
                 }

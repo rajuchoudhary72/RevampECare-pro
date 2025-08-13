@@ -63,12 +63,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_task_list"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Task List"
-                    app:layout_constraintEnd_toStartOf="@+id/btnAddTask"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:hint="@string/task_list"
                     app:layout_constraintTop_toBottomOf="@+id/til_priority">
 
                     <AutoCompleteTextView
@@ -79,21 +77,6 @@
                         tools:ignore="LabelFor" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <ImageView
-                    android:id="@+id/btnAddTask"
-                    android:layout_width="55dp"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="@dimen/horizontal_margin"
-                    android:background="@drawable/bg_rounded_corner_green"
-                    android:padding="@dimen/_6sdp"
-                    android:src="@drawable/baseline_add_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/til_task_list"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/til_task_list"
-                    app:layout_constraintTop_toTopOf="@+id/til_task_list"
-                    app:tint="@color/white" />
 
                 <LinearLayout
                     android:id="@+id/til_assign_to"
@@ -141,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Task Name"
+                    android:hint="@string/task_name"
                     app:layout_constraintEnd_toStartOf="@+id/til_start_date"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Task Description"
+                    android:hint="@string/task_description"
                     app:layout_constraintTop_toBottomOf="@+id/til_task_name">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -181,7 +164,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="Start Date"
+                    android:hint="@string/start_date"
                     app:layout_constraintEnd_toStartOf="@+id/til_end_date"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/til_task_name"
@@ -203,7 +186,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
-                    android:hint="End Date"
+                    android:hint="@string/end_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/til_start_date"
                     app:layout_constraintTop_toBottomOf="@+id/til_task_description">
@@ -239,7 +222,7 @@
                         android:background="@color/transparent"
                         android:focusable="false"
                         android:inputType="none"
-                        android:text="Select attachment"
+                        android:text="@string/select_attachment"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         app:drawableEndCompat="@drawable/ic_arrow_right_black" />
 
@@ -279,7 +262,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/horizontal_margin"
                     android:checked="@={viewModel.makePublic}"
-                    android:text="Make it public"
+                    android:text="@string/make_it_public"
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@+id/til_before" />
 
@@ -306,7 +289,7 @@
                         android:background="@color/transparent"
                         android:focusable="false"
                         android:inputType="none"
-                        android:text="Select Watchers"
+                        android:text="@string/select_watchers"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         app:drawableEndCompat="@drawable/ic_arrow_right_black" />
 
@@ -330,7 +313,7 @@
                     android:layout_height="50dp"
                     android:layout_margin="@dimen/horizontal_margin"
                     android:backgroundTint="@color/green"
-                    android:text="Add Task"
+                    android:text="@string/add_task"
                     android:textColor="@color/white"
                     android:visibility="visible"
                     app:layout_constraintTop_toBottomOf="@+id/til_watchers"

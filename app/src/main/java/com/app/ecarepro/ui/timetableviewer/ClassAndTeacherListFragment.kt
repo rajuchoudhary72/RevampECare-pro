@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.R
 import com.app.ecarepro.data.network.model.NetworkResult
 import com.app.ecarepro.databinding.FragmentClassAndTeacherListBinding
 import com.app.ecarepro.ui.MainActivity
@@ -35,9 +36,9 @@ class ClassAndTeacherListFragment : Fragment() {
         try {
             toFragment= requireArguments().getString(Constant.TO).toString()
             if (toFragment==Constant.FRA_ASSI){
-                binding.toolbar.title="Assignment"
+                binding.toolbar.title= getString(R.string.assignment)
             }else if (toFragment==Constant.FRA_LESSON_PLAN){
-                binding.toolbar.title="Lesson Plan"
+                binding.toolbar.title= getString(R.string.lesson_plan)
             }
         }catch (_:Exception){}
         return binding.root
@@ -99,10 +100,10 @@ class ClassAndTeacherListFragment : Fragment() {
 
                                     if (position==0){
 
-                                        tab.text =  "Teacher"
+                                        tab.text = getString(R.string.teacher)
                                     }else   if (toFragment!=Constant.FRA_LESSON_PLAN){
                                         if (position==1) {
-                                            tab.text =  "Class"
+                                            tab.text = getString(R.string.general_classes)
                                         }
 
                                     }

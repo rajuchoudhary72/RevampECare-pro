@@ -39,7 +39,7 @@ class LeaveHistoryFragment : Fragment() , ItemListener<Dtl>{
     ): View {
         binding = FragmentLeaveListBinding.inflate(inflater, container, false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.my_leave)
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.my_leave_title)
         return binding.root
     }
 

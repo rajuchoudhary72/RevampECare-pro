@@ -217,20 +217,20 @@ class DashboardFragment : Fragment() {
         StudentBirthdayCardModel(
             workload = studentBirthCardLoad,
             onClick = { workload ->
-               /* this@DashboardFragment.findNavController()
-                    .navigate(R.id.timeTableNavHostFragment, Bundle().apply {
-                        putString(Constant.ID, workload.id)
-                        putString(Constant.NAME, workload.teacherName)
-                    })
+                /* this@DashboardFragment.findNavController()
+                     .navigate(R.id.timeTableNavHostFragment, Bundle().apply {
+                         putString(Constant.ID, workload.id)
+                         putString(Constant.NAME, workload.teacherName)
+                     })
 
-                dashboardViewModel.sendAnalyticEvent(
-                    AnalyticsConstants.Events.TEACHER_WORKLOAD,
-                    mapOf(
-                        AnalyticsConstants.Attributes.TEACHER_ID to workload.id.toString(),
-                        AnalyticsConstants.Attributes.USER_NAME to workload.teacherName.toString(),
-                    )
-                )
-                *//* findNavController().navigate(
+                 dashboardViewModel.sendAnalyticEvent(
+                     AnalyticsConstants.Events.TEACHER_WORKLOAD,
+                     mapOf(
+                         AnalyticsConstants.Attributes.TEACHER_ID to workload.id.toString(),
+                         AnalyticsConstants.Attributes.USER_NAME to workload.teacherName.toString(),
+                     )
+                 )
+                 *//* findNavController().navigate(
                       R.id.timeTableNavHostFragment,
                       bundleOf(Constant.ID to workload.id)
 
@@ -282,7 +282,7 @@ class DashboardFragment : Fragment() {
         collectionModeWise: CollectionModeWise?,
         sessionStartDate: String?
     ) {
-       collectionModeWise ?: return
+        collectionModeWise ?: return
         todayModeWiseCollectionCard {
             id(R.id.today_mode_collection)
             isExpanded(isExpanded)
@@ -317,12 +317,13 @@ class DashboardFragment : Fragment() {
             }
         }
     }
+
     private fun showDatePickerDialog(
         context: Context,
         minDateString: String?,
         onDateSelected: (String) -> Unit
     ) {
-        val options = arrayOf("Today", "Yesterday", "Select Date")
+        val options = arrayOf(getString(R.string.general_today), getString(R.string.general_yesterday), getString(R.string.general_select_date))
         val dateFormat = "yyyy-MM-dd"
 
         // Parse the minDateString to a Long value
@@ -364,7 +365,7 @@ class DashboardFragment : Fragment() {
                             .build()
 
                         val datePicker = MaterialDatePicker.Builder.datePicker()
-                            .setTitleText("Select date")
+                            .setTitleText(getString(R.string.general_select_date))
                             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                             .setCalendarConstraints(constraintsBuilder)
                             .build()
@@ -420,6 +421,7 @@ class DashboardFragment : Fragment() {
             .id("11")
             .addTo(this)
     }
+
     private fun updateFeeCollection(feeTypeId: Int, fromDate: String, tillDate: String) {
         dashboardViewModel.getFeeCollection(
             feeTypeId,
@@ -444,12 +446,13 @@ class DashboardFragment : Fragment() {
             }
         }
     }
+
     private fun showDateRangePicker(callback: (String, String) -> Unit) {
         val constraintsBuilder =
             CalendarConstraints.Builder() // You can add constraints here if needed
 
         val datePicker = MaterialDatePicker.Builder.dateRangePicker()
-            .setTitleText("Select Date Range")
+            .setTitleText(getString(R.string.select_date_range))
             .setCalendarConstraints(
                 constraintsBuilder.setValidator(DateValidatorPointBackward.now()).build()
             )
@@ -468,6 +471,7 @@ class DashboardFragment : Fragment() {
             datePicker.toString()
         )
     }
+
     private fun getDateRange(
         filterType: DateFilterType,
         sessionStartDate: String?,
@@ -481,6 +485,7 @@ class DashboardFragment : Fragment() {
                 val formattedDate = currentDate.format(formatter)
                 Pair(formatDate(sessionStartDate!!), formattedDate)
             }
+
             DateFilterType.THIS_YEAR -> {
                 Pair(formatDate(sessionStartDate!!), formatDate(sessionEndDate!!))
             }
@@ -497,23 +502,28 @@ class DashboardFragment : Fragment() {
 
     private fun EpoxyController.buildFeeDefaulterCard(feeDefaulter: NetworkFeeDefaulter?) {
 
-       /* //feeDefaulter ?: return
-        FeeDefaulterModel(feeDefaulter)
-            .id("121")
-            .addTo(this)*/
+        /* //feeDefaulter ?: return
+         FeeDefaulterModel(feeDefaulter)
+             .id("121")
+             .addTo(this)*/
+        if (feeDefaulter != null) {
+            FeeDefaulterModel(
+                feeDefaulter = feeDefaulter,
+                onClick = { ->
+                    findNavController().navigate(
+                        R.id.feeDefaulterUI
+                    )
+                    /*this@DashboardFragment.findNavController()
+                        .navigate(R.id.feeDefaulterUI.apply {
+                        })*/
+                }
+            )
+                .id("121")
+                .addTo(this)
+        } else {
 
-        FeeDefaulterModel(
-            feeDefaulter = feeDefaulter,
-            onClick = {  ->
-                 findNavController().navigate(
-                            R.id.feeDefaulterUI)
-                /*this@DashboardFragment.findNavController()
-                    .navigate(R.id.feeDefaulterUI.apply {
-                    })*/
-            }
-        )
-            .id("121")
-            .addTo(this)
+        }
+
 
     }
 

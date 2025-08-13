@@ -1,4 +1,4 @@
-package com.app.ecarepro.ui.profile
+package com.app.ecarepro.ui.feedefulter_user
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,18 +9,18 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.app.ecarepro.R
 import com.app.ecarepro.account
 import com.app.ecarepro.data.datastore.UserDataStore
 import com.app.ecarepro.data.network.model.NetworkUserDetailsDto
 import com.app.ecarepro.databinding.FragmentSwitchAccountBinding
-import com.app.ecarepro.profileAddAccount
 import com.app.ecarepro.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import androidx.navigation.fragment.findNavController
+import com.app.ecarepro.profileAddAccount
 
 @AndroidEntryPoint
 class SwitchAccountFragment : Fragment() {
@@ -77,8 +77,7 @@ class SwitchAccountFragment : Fragment() {
                     }
                 }
             }
-
-            profileAddAccount {
+           /* profileAddAccount {
                 id(23)
                 clickListener { _ ->
                     findNavController().navigate(
@@ -86,7 +85,8 @@ class SwitchAccountFragment : Fragment() {
                         bundleOf("add_account" to true)
                     )
                 }
-            }
+            }*/
+
         }
     }
 

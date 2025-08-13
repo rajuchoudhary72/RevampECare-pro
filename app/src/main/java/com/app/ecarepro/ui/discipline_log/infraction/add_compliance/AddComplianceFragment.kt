@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,7 +30,6 @@ import com.app.ecarepro.ui.discipline_log.infraction.ShareViewModelDiscipline
 import com.app.ecarepro.ui.mainActivity
 import com.app.ecarepro.ui.message.compose.AttachmentType
 import com.app.ecarepro.ui.photoview.PhotoViewFragmentFragment
-import com.app.ecarepro.utils.AndroidDownloader
 import com.app.ecarepro.utils.Constant
 import com.lassi.common.utils.KeyUtils
 import com.lassi.data.media.MiMedia
@@ -41,7 +39,6 @@ import com.lassi.presentation.builder.Lassi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.net.URL
 import kotlin.text.lowercase
 import kotlin.text.substringAfterLast
 
@@ -96,7 +93,7 @@ class AddComplianceFragment : Fragment() {
 
 
 
-                       tvComplianceStaus.text="Active"
+                       tvComplianceStaus.text=getString(R.string.general_active)
                        llComplineSection.visibility=View.VISIBLE
                        rlButtons.isVisible=!infraction.isResolved
 
@@ -120,17 +117,17 @@ class AddComplianceFragment : Fragment() {
                            }
 
                        binding.tvComplianceUpdate.text= buildString {
-        append("Compliance Modified by ")
+        append(getString(R.string.compliance_modified_by))
         append(infraction.staffName)
         append(", ")
         append(infraction.designation)
-        append(" Modified on ")
+        append(getString(R.string.modified_on))
         append(infraction.compCreatedOn)
         append(".")
     }
 
                    }else{
-                       tvComplianceStaus.text="Inactive"
+                       tvComplianceStaus.text= getString(R.string.general_inactive)
                        llComplineSection.visibility=View.GONE
                    }
 
@@ -158,13 +155,13 @@ class AddComplianceFragment : Fragment() {
 
     private fun showAlertDialogToResolved() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Are you sure?")
-        builder.setMessage("Are you sure to you want to resolve?")
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setTitle(getString(R.string.general_are_you_sure))
+        builder.setMessage(getString(R.string.are_you_sure_to_you_want_to_resolve))
+        builder.setPositiveButton(getString(R.string.general_ok)) { dialog, which ->
             resolvedCompliance()
             dialog.dismiss()
         }
-        builder.setNegativeButton("CANCEL"){ dialog, which ->
+        builder.setNegativeButton(getString(R.string.general_cancel)){ dialog, which ->
             dialog.dismiss()
         }
         builder.show()

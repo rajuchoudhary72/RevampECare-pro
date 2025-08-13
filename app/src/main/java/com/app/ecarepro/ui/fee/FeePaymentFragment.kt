@@ -97,7 +97,7 @@ class FeePaymentFragment : Fragment() {
                 startActivity(Intent(Intent.ACTION_VIEW, uri))
             }
         }else{
-            mainActivity().showMessage("Chrome is not installed")
+            mainActivity().showMessage(getString(R.string.chrome_is_not_installed))
         }
 
     }

@@ -56,24 +56,23 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
              }
 
              tvAppliedOn.text= buildString {
-                append("Applied On : ")
+                append(leaveReportFragment.getString(R.string.applied_on))
                 append(data.submittedOn)
             }
             if (status==1){
                 tvHolderApproveBy.text= buildString {
-                    append("Approved By : ")
+                    append(leaveReportFragment.getString(R.string.approved_by))
                 }
                 tvHolderApproveOn.text= buildString {
-                    append("Approved On : ")
+                    append(leaveReportFragment.getString(R.string.approved_on))
                 }
             }else if (status==2){
                 tvHolderApproveBy.text= buildString {
-                    append("Rejected By : ")
+                    append(leaveReportFragment.getString(R.string.rejected_by))
                 }
                 tvHolderApproveOn.text= buildString {
-                    append("Rejected On : ")
+                    append(leaveReportFragment.getString(R.string.rejected_on))
             }}
-
             if (status==-1) {
                 llCancel.isVisible=true
             }else{
@@ -180,13 +179,14 @@ class LeaveReportAdapter(private var leaveList: MutableList<Dtl>,
                 load(data.applicantPhoto)
                     .placeholder(R.drawable.default_profile)
                     .  into(binding .userImg)
-                }else{
 
                 if (data.duration>1){
                     tvPartialApprove.isVisible=true
                 }else{
                     tvPartialApprove.isVisible=false
                 }
+
+                }else{
 
                 textUserName.text= buildString {
                     append(data.studentName)

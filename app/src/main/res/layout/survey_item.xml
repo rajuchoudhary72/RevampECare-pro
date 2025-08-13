@@ -55,7 +55,7 @@
             android:paddingTop="@dimen/_5sdp"
             android:paddingEnd="@dimen/_10sdp"
             android:paddingBottom="@dimen/_5sdp"
-            android:text="More"
+            android:text="@string/more"
             android:textColor="@color/brand_color"
             android:visibility="gone" />
 

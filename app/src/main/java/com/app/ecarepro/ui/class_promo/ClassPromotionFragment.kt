@@ -30,7 +30,7 @@ class ClassPromotionFragment : Fragment() {
     private var classModel: MyClasseX? = null
     private lateinit var binding: FragmentClassPromotionBinding
     private var studentListArrayList = mutableListOf<StudentPro>()
-    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList) }
+    private val mStudentAdapter by lazy { ClassPromotionsAdapter(studentListArrayList,this@ClassPromotionFragment) }
     private var mMyClassDataString: ArrayList<String> = ArrayList()
     private var classListData: ArrayList<MyClasseX> = ArrayList()
 
@@ -204,7 +204,7 @@ class ClassPromotionFragment : Fragment() {
         }
 
         if (requestList.isEmpty()) {
-            mainActivity().showMessage("Add Message here")
+            mainActivity().showMessage(getString(com.app.ecarepro.R.string.classPromotion_add_message_here))
             return
         }
 

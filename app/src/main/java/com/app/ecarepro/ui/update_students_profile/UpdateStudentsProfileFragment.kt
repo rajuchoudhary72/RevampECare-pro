@@ -363,18 +363,19 @@ class UpdateStudentsProfileFragment : Fragment() {
 
     private fun selectImageOptionDialog() {
         val items = arrayOf<CharSequence>(
-            "Take Photo", "Choose from Library",
-            "Cancel"
+            getString(R.string.take_photo),
+            getString(R.string.choose_from_library),
+            getString(R.string.cancel),
         )
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Add Photo!")
+        builder.setTitle(getString(R.string.add_photo))
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             FileAccess.checkPermission(this)
-            if (items[item] == "Take Photo") {
+            if (items[item] == getString(R.string.take_photo)) {
                 cameraLauncher.launch(FileAccess.cameraIntent())
-            } else if (items[item] == "Choose from Library") {
+            } else if (items[item] == getString(R.string.choose_from_library)) {
                 galleryLauncher.launch(FileAccess.galleryIntent())
-            } else if (items[item] == "Cancel") {
+            } else if (items[item] == getString(R.string.cancel)) {
                 dialog.dismiss()
             }
         })

@@ -64,7 +64,7 @@
             android:layout_weight="1"
             android:fontFamily="@font/ubuntu_medium"
             android:gravity="center"
-            android:text="@string/status"
+            android:text="@string/general_status"
             android:textSize="@dimen/_12sdp" />
 
 

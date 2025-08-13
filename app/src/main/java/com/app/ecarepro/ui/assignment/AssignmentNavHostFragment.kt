@@ -2,12 +2,10 @@ package com.app.ecarepro.ui.assignment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,7 +18,6 @@ import com.app.ecarepro.utils.Constant
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
@@ -40,7 +37,7 @@ class AssignmentNavHostFragment : Fragment() {
 
         binding=FragmentAssignmentNavHostBinding.inflate(inflater,container,false)
         binding.includeToolbar.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        binding.includeToolbar.toolbarTitle.text = getString(R.string.assignment)
+        binding.includeToolbar.toolbarTitle.text = getString(R.string.assignment_title)
 
         try {
             assignmentType= requireArguments().getString(Constant.ASSIGNMENT_TYPE).toString()
@@ -83,40 +80,45 @@ class AssignmentNavHostFragment : Fragment() {
                                  it.data.subjectAssignments.forEach { assignmentsData ->
                                      fragmentList.add(AssignmentListFragment.newInstance(assignmentsData.assignments, isClassAssignment))
                                  }
+                                try {
+                                    val viewPagerAdapter = ViewPagerAdapter(
+                                        fragmentList,
+                                        activity?.supportFragmentManager!!,
+                                        lifecycle
+                                    )
+                                    binding.viewPager.adapter = viewPagerAdapter
 
-                                val viewPagerAdapter = ViewPagerAdapter(
-                                    fragmentList,
-                                    activity?.supportFragmentManager!!,
-                                    lifecycle
-                                )
-                                binding.viewPager.adapter = viewPagerAdapter
 
-
-                                TabLayoutMediator(
-                                    binding.tabLayout,
-                                    binding.viewPager,
-                                ) { tab, position ->
+                                    TabLayoutMediator(
+                                        binding.tabLayout,
+                                        binding.viewPager,
+                                    ) { tab, position ->
 
                                         tab.text = it.data.subjectAssignments[position].subject
-                                      val badgeDrawable : BadgeDrawable = tab.orCreateBadge
+                                        val badgeDrawable : BadgeDrawable = tab.orCreateBadge
 
-                                     badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
-                                     badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
-                                     if (it.data.subjectAssignments[position].assignments!=null){
-                                         var count=0
-                                         for (assignment in it.data.subjectAssignments[position].assignments){
-                                             if (assignment.isSubmitted!!){
-                                                 count++
-                                             }
-                                         }
-                                         badgeDrawable.badgeGravity=BadgeDrawable.TOP_START
+                                        badgeDrawable.backgroundColor=resources.getColor(R.color.att_leave_color)
+                                        badgeDrawable.isVisible=it.data.subjectAssignments[position].showAlert
+                                        if (it.data.subjectAssignments[position].assignments!=null){
+                                            var count=0
+                                            for (assignment in it.data.subjectAssignments[position].assignments){
+                                                if (assignment.isSubmitted!!){
+                                                    count++
+                                                }
+                                            }
+                                            badgeDrawable.badgeGravity=BadgeDrawable.TOP_START
 
-                                         badgeDrawable.number = it.data.subjectAssignments[position].assignments.size-count
+                                            badgeDrawable.number = it.data.subjectAssignments[position].assignments.size-count
 
-                                     }
+                                        }
 
 
-                                }.attach()
+                                    }.attach()
+
+
+                                }catch (e:IllegalStateException){
+                                    e.printStackTrace()
+                                }
 
 
 

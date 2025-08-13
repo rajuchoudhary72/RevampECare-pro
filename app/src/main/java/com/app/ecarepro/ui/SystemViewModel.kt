@@ -118,6 +118,7 @@ class SystemViewModel @Inject constructor(
             .map { result ->
                 if (result.isSuccess) {
                     val response = result.getOrNull()!!
+                    // if error  code  ==0
                     if (response.isAuthenticated == false) {
                         _logout.emit(true)
                     }

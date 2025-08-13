@@ -19,7 +19,6 @@ import com.app.ecarepro.ui.calender.ViewPagerAdapter
 import com.app.ecarepro.ui.dashbord.DashboardFragment
 import com.app.ecarepro.ui.feed.FeedsFragment
 import com.app.ecarepro.ui.studentProfile.StudentProfileDetailsFragment
-import com.app.ecarepro.ui.timeTable.TimeTableDayWiseNavHostFragment
 import com.app.ecarepro.utils.Constant
 import com.app.ecarepro.utils.FadeOutTransformation
 import com.app.ecarepro.utils.SwipeControlTouchListener
@@ -71,17 +70,19 @@ class HomeViewPagerFragment : Fragment() {
 
         if (showDashboard){
             fragmentList.add(DashboardFragment() )
-            fragmentName.add(" Dashboard")
+            fragmentName.add("Dashboard")
+            //fragmentName.add(getString(R.string.dashboard))
         }
         if (showAttendance){
             fragmentList.add(AttendanceFragment() )
             fragmentName.add("Attendance")
+            //fragmentName.add(getString(R.string.attendance))
         }
         if (showFeeds){
             fragmentList.add(FeedsFragment() )
             fragmentName.add("Feed")
+            //fragmentName.add(getString(R.string.feed_title))
         }
-
 
         val viewPagerAdapter = ViewPagerAdapter(
             fragmentList,
