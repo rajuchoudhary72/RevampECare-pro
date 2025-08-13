@@ -171,7 +171,7 @@ class Constant {
 
 
         fun getLongTimeDate(sessionStart: String?): Long {
-            val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val simpleDateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
             try {
                 val parse = simpleDateFormat.parse(sessionStart.toString())
                 return parse!!.time
@@ -182,7 +182,7 @@ class Constant {
         }
 
         fun getLongTimeDateSec(sessionStart: String?): Long {
-            val simpleDateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+            val simpleDateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
             try {
                 val parse = simpleDateFormat.parse(sessionStart.toString())
                 return parse!!.time
@@ -205,22 +205,22 @@ class Constant {
         }
 
         fun dateToShow(inputDateStr: String): String {
-            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }
 
         fun dateToShowSec(inputDateStr: String): String {
-            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            val outputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+            val inputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            val outputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }
 
         fun toSystemDate(inputDateStr: String): String {
-            val inputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val inputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+            val outputFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }
@@ -243,16 +243,16 @@ class Constant {
 
 
         fun apiToSystemDate(inputDateStr: String): String {
-            val inputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
-            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val inputFormat: DateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }
 
         fun dateToShowConn(inputDateStr: String): String {
             val inputFormat: DateFormat =
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
+            val outputFormat: DateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
             val date: Date? = inputFormat.parse(inputDateStr)
             return outputFormat.format(date!!)
         }
@@ -344,7 +344,7 @@ class Constant {
             var result = false
 
             try {
-                val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val sdf = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                 val start = sdf.parse(start_date)
                 val end = sdf.parse(end_date)
                 val holiday = sdf.parse(holiDay)
@@ -373,7 +373,7 @@ class Constant {
             var result = false
 
             try {
-                val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val sdf = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
                 val holi_day = sdf.parse(holiday_date)
                 val sele_day = sdf.parse(selected_day)
                 checkNotNull(holi_day)
@@ -393,20 +393,20 @@ class Constant {
 
         fun currentDate(): String {
             val c: Date = Calendar.getInstance().time
-            val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val df = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
             return df.format(c)
         }
 
 //        fun getCurrentDateTime():String{
 //            val c: Date = Calendar.getInstance().time
-//            val df = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
+//            val df = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.ENGLISH)
 //            return df.format(c)
 //        }
 
         fun getCurrentDateTime(): String {
             val calendar = Calendar.getInstance()
             val currentDate = calendar.time
-            val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("dd-MMM-yy HH:mm", Locale.ENGLISH)
             return dateFormat.format(currentDate)
         }
 
@@ -432,7 +432,7 @@ class Constant {
         /* fun incrementDateByDay( noOfDays:Int): Date? {
              val c = Calendar.getInstance()
              c.time = Calendar.getInstance().time
-             val df = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+             val df = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
              df.format(c)
              c.add(Calendar.DATE, noOfDays)
              return c.time

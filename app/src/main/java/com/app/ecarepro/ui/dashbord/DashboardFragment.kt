@@ -342,7 +342,7 @@ class DashboardFragment : Fragment() {
                         modeByCollectionFilter = "Today"
                         val today = Calendar.getInstance().time
                         val formattedDate =
-                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(today)
+                            SimpleDateFormat(dateFormat, Locale.ENGLISH).format(today)
                         onDateSelected(formattedDate)
                     }
 
@@ -352,7 +352,7 @@ class DashboardFragment : Fragment() {
                         calendar.add(Calendar.DAY_OF_YEAR, -1)
                         val yesterday = calendar.time
                         val formattedDate =
-                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(yesterday)
+                            SimpleDateFormat(dateFormat, Locale.ENGLISH).format(yesterday)
                         onDateSelected(formattedDate)
                     }
 
@@ -372,7 +372,7 @@ class DashboardFragment : Fragment() {
 
                         datePicker.addOnPositiveButtonClickListener {
                             val selectedDate =
-                                SimpleDateFormat(dateFormat, Locale.getDefault()).format(it)
+                                SimpleDateFormat(dateFormat, Locale.ENGLISH).format(it)
                             modeByCollectionFilter = selectedDate
                             onDateSelected(selectedDate)
                         }
@@ -460,9 +460,9 @@ class DashboardFragment : Fragment() {
 
         datePicker.addOnPositiveButtonClickListener { selection ->
             val startDate =
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.first)
+                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(selection.first)
             val endDate =
-                SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selection.second)
+                SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(selection.second)
             callback(startDate, endDate)
         }
 
@@ -494,7 +494,7 @@ class DashboardFragment : Fragment() {
 
     private fun formatDate(inputDate: String): String {
         val inputFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
 
         val date = inputFormat.parse(inputDate)
         return outputFormat.format(date)
